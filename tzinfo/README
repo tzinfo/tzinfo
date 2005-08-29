@@ -1,0 +1,83 @@
+= TZInfo -- Daylight-savings aware timezone support for Ruby
+
+TZInfo uses the tz database (http://www.twinsun.com/tz/tz-link.htm) to provide
+daylight-savings aware transformations between times in different timezones.
+This is the same database as used for zoneinfo on Unix machines.
+
+The tz database has been imported (using TZDataParser) and turned into a set of
+Ruby classes (which are packaged with this release).
+
+
+== Example usage
+
+To convert a time in UTC, to a local time in the America/New_York timezone, you
+can do the following:
+
+  require_gem 'tzinfo'
+  include TZInfo
+  
+  tz = Timezone.get('America/New_York')
+  local = tz.utc_to_local(DateTime.new(2005,8,29,15,35,0))
+  
+To convert from a local time to UTC, the local_to_utc method can be used:
+
+  utc = tz.local_to_utc(local)
+  
+To get information about the rules in force at a particular UTC or local time,
+the Timezone.period_for_utc and Timezone.period_for_local methods can be used.
+Both of these methods return TimezonePeriod objects. The following gets the 
+identifier for the period (in this case EDT).
+
+  period = tz.period_for_utc(DateTime.new(2005,8,29,15,35,0))
+  id = period.zone_identifier
+  
+In all the above examples, instances of Time can be used instead of DateTime.
+Timezone.utc_to_local and Timezone.local_to_utc both return the type they are 
+passed.
+
+You can get the current local time in a Timezone with the Timezone.now method:
+
+  now = tz.now
+  
+You can also access Timezones by Country (ISO 3166 country code). The following 
+gets all the Timezone identifiers for the US:
+
+  us = Country.get('US')
+  timezones = us.all_codes
+  
+The above covers the most common uses of Timezone and Country. For more detail,
+see their individual class documentation.
+
+
+== Download
+
+The latest version of TZInfo can be found at
+
+* http://rubyforge.org/project/showfiles.php?group_id=*****************************************************************
+
+Documentation can be found at 
+
+* http://**********************************************************
+
+
+== Installation
+
+The preferred method of installing TZInfo is through its GEM file. 
+
+  % gem install tzinfo-0.0.1.gem
+  
+
+== License
+
+TZInfo is released under the MIT[http://opensource.org/licenses/mit-license.html] license.
+
+
+== Issues
+
+* It currently takes an extremely long time to generate all the Ruby Timezone classes from the tz data. This process could do with some optimization.
+* Test cases need to be written.
+
+== Support
+
+Please contact Philip Ross (philip@ross.org.uk) if you require assistance or have
+any suggestions.
