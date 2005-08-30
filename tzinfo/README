@@ -53,18 +53,22 @@ see their individual class documentation.
 
 The latest version of TZInfo can be found at
 
-* http://rubyforge.org/project/showfiles.php?group_id=*****************************************************************
+* http://rubyforge.org/frs/?group_id=894
 
 Documentation can be found at 
 
-* http://**********************************************************
+* http://tzinfo.rubyforge.org/doc/
 
 
 == Installation
 
-The preferred method of installing TZInfo is through its GEM file. 
+The preferred method of installing TZInfo is through its GEM file (RubyGems[http://docs.rubygems.org/] required):
 
   % gem install tzinfo-0.0.1.gem
+  
+or to automatically download and install:
+
+  % gem install tzinfo --remote
   
 
 == License
@@ -79,5 +83,5 @@ TZInfo is released under the MIT[http://opensource.org/licenses/mit-license.html
 
 == Support
 
-Please contact Philip Ross (philip@ross.org.uk) if you require assistance or have
+Please contact Philip Ross (phil.ross@gmail.com) if you require assistance or have
 any suggestions.

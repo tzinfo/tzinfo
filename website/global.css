@@ -1,0 +1,36 @@
+body
+{
+  font-family: Arial, sans-serif;  
+  font-size: 0.9em;
+}
+
+input
+{
+  font-family: Arial, sans-serif;    
+}
+
+textarea
+{
+  font-family: Arial, sans-serif;
+  font-size: 1em;
+}
+
+select
+{
+  font-family: Arial, sans-serif; 
+}
+
+th
+{
+  text-align: left;
+}
+
+a img
+{
+  border: 0px;
+}
+
+a:hover
+{
+  color: #ff0000;
+}
