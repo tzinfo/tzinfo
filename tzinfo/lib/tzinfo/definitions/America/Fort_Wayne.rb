@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Fort_Wayne < Definitions::America::Indiana::Indianapolis #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('America/Fort_Wayne')
 end
 end
 end

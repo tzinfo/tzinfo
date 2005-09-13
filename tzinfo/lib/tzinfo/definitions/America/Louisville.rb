@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Louisville < Definitions::America::Kentucky::Louisville #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('America/Louisville')
 end
 end
 end

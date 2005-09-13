@@ -3,15 +3,9 @@ module TZInfo
 module Definitions #:nodoc:
 module Pacific #:nodoc:
 class Johnston < Timezone #:nodoc:
-def initialize
-  super
+setup
 set_identifier('Pacific/Johnston')
-add_period(TimezonePeriod.new(nil,nil,-36000,0,'HST'))
-end
-@@instance = new
-def self.instance
-   @@instance
-end
+add_period(TimezonePeriod.new(nil,nil,-36000,0,:'HST'))
 end
 end
 end

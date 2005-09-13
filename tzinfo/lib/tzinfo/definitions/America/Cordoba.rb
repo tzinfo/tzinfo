@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Cordoba < Definitions::America::Argentina::Cordoba #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('America/Cordoba')
 end
 end
 end

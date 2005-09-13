@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Europe #:nodoc:
 class Mariehamn < Definitions::Europe::Helsinki #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Europe/Mariehamn')
 end
 end
 end

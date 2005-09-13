@@ -3,10 +3,7 @@ require 'tzinfo/definitions/Europe/Istanbul'
 module TZInfo
 module Definitions #:nodoc:
 class Turkey < Definitions::Europe::Istanbul #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Turkey')
 end
 end
 end

@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module US #:nodoc:
 class Samoa < Definitions::Pacific::Pago_Pago #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('US/Samoa')
 end
 end
 end

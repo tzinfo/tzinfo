@@ -3,15 +3,9 @@ module TZInfo
 module Definitions #:nodoc:
 module Etc #:nodoc:
 class GMT__m__2 < Timezone #:nodoc:
-def initialize
-  super
+setup
 set_identifier('Etc/GMT-2')
-add_period(TimezonePeriod.new(nil,nil,7200,0,'GMT-2'))
-end
-@@instance = new
-def self.instance
-   @@instance
-end
+add_period(TimezonePeriod.new(nil,nil,7200,0,:'GMT-2'))
 end
 end
 end

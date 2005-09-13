@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Virgin < Definitions::America::St_Thomas #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('America/Virgin')
 end
 end
 end

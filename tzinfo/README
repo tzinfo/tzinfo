@@ -43,7 +43,7 @@ You can also access Timezones by Country (ISO 3166 country code). The following
 gets all the Timezone identifiers for the US:
 
   us = Country.get('US')
-  timezones = us.all_codes
+  timezones = us.zone_identifiers
   
 The above covers the most common uses of Timezone and Country. For more detail,
 see their individual class documentation.
@@ -64,7 +64,7 @@ Documentation can be found at
 
 The preferred method of installing TZInfo is through its GEM file (RubyGems[http://docs.rubygems.org/] required):
 
-  % gem install tzinfo-0.0.1.gem
+  % gem install tzinfo-0.0.2.gem
   
 or to automatically download and install:
 

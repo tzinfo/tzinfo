@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Pacific #:nodoc:
 class Yap < Definitions::Pacific::Truk #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Pacific/Yap')
 end
 end
 end

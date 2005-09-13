@@ -1,4 +1,23 @@
+Version 0.0.2 (tzdata v2005m) - 13-Sep-2005 
+-------------------------------------------
+
+* Country and Timezone data is now loaded into class rather than instance 
+  variables. This makes Timezone links more efficient and saves memory if
+  creating specific Timezone and Country classes directly.
+* TimezonePeriod zone_identifier is now defined as a symbol to save memory
+  (was previously a string).
+* TimezonePeriod zone_identifiers that were previously '' are now :Unknown.
+* Timezones and Countries can now be returned using Timezone.new(identifier)
+  and Country.new(identifier). When passed an identifier, the new method
+  calls get to return an instance of the specified timezone or country.
+* Added new class methods to Timezone to return sets of zones and identifiers.
+
+Thanks to Scott Barron of Lunchbox Software for the suggestions in his
+article about using TZInfo with Rails 
+(http://lunchroom.lunchboxsoftware.com/pages/tzinfo_rails)
+
+
 Version 0.0.1 (tzdata v2005m) - 29-Aug-2005 
 -------------------------------------------
 
-First release.
+* First release.

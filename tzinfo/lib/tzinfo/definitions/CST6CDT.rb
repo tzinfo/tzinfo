@@ -3,10 +3,7 @@ require 'tzinfo/definitions/America/Chicago'
 module TZInfo
 module Definitions #:nodoc:
 class CST6CDT < Definitions::America::Chicago #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('CST6CDT')
 end
 end
 end

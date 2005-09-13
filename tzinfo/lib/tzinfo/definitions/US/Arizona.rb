@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module US #:nodoc:
 class Arizona < Definitions::America::Phoenix #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('US/Arizona')
 end
 end
 end

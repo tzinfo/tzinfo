@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Mendoza < Definitions::America::Argentina::Mendoza #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('America/Mendoza')
 end
 end
 end

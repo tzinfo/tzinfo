@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module SystemV #:nodoc:
 class EST5 < Definitions::America::Indianapolis #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('SystemV/EST5')
 end
 end
 end

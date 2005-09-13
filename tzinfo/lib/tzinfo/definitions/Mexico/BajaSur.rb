@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Mexico #:nodoc:
 class BajaSur < Definitions::America::Mazatlan #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Mexico/BajaSur')
 end
 end
 end

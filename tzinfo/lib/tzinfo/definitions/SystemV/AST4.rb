@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module SystemV #:nodoc:
 class AST4 < Definitions::America::Puerto_Rico #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('SystemV/AST4')
 end
 end
 end

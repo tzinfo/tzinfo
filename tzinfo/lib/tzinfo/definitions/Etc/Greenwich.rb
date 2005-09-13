@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Etc #:nodoc:
 class Greenwich < Definitions::Etc::GMT #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Etc/Greenwich')
 end
 end
 end

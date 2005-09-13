@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Europe #:nodoc:
 class Ljubljana < Definitions::Europe::Belgrade #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Europe/Ljubljana')
 end
 end
 end

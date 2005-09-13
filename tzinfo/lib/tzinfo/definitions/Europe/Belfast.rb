@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Europe #:nodoc:
 class Belfast < Definitions::Europe::London #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Europe/Belfast')
 end
 end
 end

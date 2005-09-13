@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Canada #:nodoc:
 class East__m__Saskatchewan < Definitions::America::Regina #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Canada/East-Saskatchewan')
 end
 end
 end

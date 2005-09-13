@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module US #:nodoc:
 class Pacific__m__New < Definitions::America::Los_Angeles #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('US/Pacific-New')
 end
 end
 end

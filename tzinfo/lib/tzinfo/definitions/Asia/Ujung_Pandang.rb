@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Asia #:nodoc:
 class Ujung_Pandang < Definitions::Asia::Makassar #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Asia/Ujung_Pandang')
 end
 end
 end

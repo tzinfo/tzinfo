@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Brazil #:nodoc:
 class West < Definitions::America::Manaus #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Brazil/West')
 end
 end
 end

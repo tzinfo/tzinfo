@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Canada #:nodoc:
 class Central < Definitions::America::Winnipeg #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Canada/Central')
 end
 end
 end

@@ -3,10 +3,7 @@ require 'tzinfo/definitions/Asia/Taipei'
 module TZInfo
 module Definitions #:nodoc:
 class ROC < Definitions::Asia::Taipei #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('ROC')
 end
 end
 end

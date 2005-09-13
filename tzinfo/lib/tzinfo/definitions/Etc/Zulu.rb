@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Etc #:nodoc:
 class Zulu < Definitions::Etc::UTC #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Etc/Zulu')
 end
 end
 end

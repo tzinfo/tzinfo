@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Asia #:nodoc:
 class Thimbu < Definitions::Asia::Thimphu #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Asia/Thimbu')
 end
 end
 end

@@ -3,10 +3,7 @@ require 'tzinfo/definitions/Africa/Tripoli'
 module TZInfo
 module Definitions #:nodoc:
 class Libya < Definitions::Africa::Tripoli #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Libya')
 end
 end
 end

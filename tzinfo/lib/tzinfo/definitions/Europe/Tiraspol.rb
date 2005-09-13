@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Europe #:nodoc:
 class Tiraspol < Definitions::Europe::Chisinau #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Europe/Tiraspol')
 end
 end
 end

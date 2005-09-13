@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Australia #:nodoc:
 class LHI < Definitions::Australia::Lord_Howe #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Australia/LHI')
 end
 end
 end

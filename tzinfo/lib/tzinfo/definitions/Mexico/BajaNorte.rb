@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Mexico #:nodoc:
 class BajaNorte < Definitions::America::Tijuana #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Mexico/BajaNorte')
 end
 end
 end

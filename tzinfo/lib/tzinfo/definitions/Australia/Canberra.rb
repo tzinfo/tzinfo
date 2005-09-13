@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Australia #:nodoc:
 class Canberra < Definitions::Australia::Sydney #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Australia/Canberra')
 end
 end
 end

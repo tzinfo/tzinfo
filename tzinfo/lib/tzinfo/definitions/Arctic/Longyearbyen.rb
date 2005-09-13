@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Arctic #:nodoc:
 class Longyearbyen < Definitions::Europe::Oslo #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Arctic/Longyearbyen')
 end
 end
 end

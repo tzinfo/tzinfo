@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Antarctica #:nodoc:
 class South_Pole < Definitions::Antarctica::McMurdo #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Antarctica/South_Pole')
 end
 end
 end

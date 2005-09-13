@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module SystemV #:nodoc:
 class YST9 < Definitions::Pacific::Gambier #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('SystemV/YST9')
 end
 end
 end

@@ -3,10 +3,7 @@ require 'tzinfo/definitions/Asia/Seoul'
 module TZInfo
 module Definitions #:nodoc:
 class ROK < Definitions::Asia::Seoul #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('ROK')
 end
 end
 end

@@ -3,10 +3,7 @@ require 'tzinfo/definitions/Asia/Tehran'
 module TZInfo
 module Definitions #:nodoc:
 class Iran < Definitions::Asia::Tehran #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Iran')
 end
 end
 end

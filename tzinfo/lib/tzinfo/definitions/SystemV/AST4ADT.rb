@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module SystemV #:nodoc:
 class AST4ADT < Definitions::America::Halifax #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('SystemV/AST4ADT')
 end
 end
 end

@@ -5,10 +5,7 @@ module Definitions #:nodoc:
 module America #:nodoc:
 module Argentina #:nodoc:
 class ComodRivadavia < Definitions::America::Argentina::Catamarca #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('America/Argentina/ComodRivadavia')
 end
 end
 end

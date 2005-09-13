@@ -3,10 +3,7 @@ require 'tzinfo/definitions/Etc/GMT'
 module TZInfo
 module Definitions #:nodoc:
 class Greenwich < Definitions::Etc::GMT #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Greenwich')
 end
 end
 end

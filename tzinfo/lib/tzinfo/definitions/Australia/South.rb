@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Australia #:nodoc:
 class South < Definitions::Australia::Adelaide #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Australia/South')
 end
 end
 end

@@ -3,10 +3,7 @@ require 'tzinfo/definitions/Asia/Tokyo'
 module TZInfo
 module Definitions #:nodoc:
 class Japan < Definitions::Asia::Tokyo #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Japan')
 end
 end
 end

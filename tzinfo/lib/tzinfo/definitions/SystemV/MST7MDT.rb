@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module SystemV #:nodoc:
 class MST7MDT < Definitions::America::Denver #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('SystemV/MST7MDT')
 end
 end
 end

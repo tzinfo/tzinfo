@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Brazil #:nodoc:
 class Acre < Definitions::America::Rio_Branco #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Brazil/Acre')
 end
 end
 end

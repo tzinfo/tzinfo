@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module US #:nodoc:
 class Eastern < Definitions::America::New_York #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('US/Eastern')
 end
 end
 end

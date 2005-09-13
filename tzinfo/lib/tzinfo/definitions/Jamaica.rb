@@ -3,10 +3,7 @@ require 'tzinfo/definitions/America/Jamaica'
 module TZInfo
 module Definitions #:nodoc:
 class Jamaica < Definitions::America::Jamaica #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Jamaica')
 end
 end
 end

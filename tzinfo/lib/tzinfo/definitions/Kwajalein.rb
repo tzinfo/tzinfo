@@ -3,10 +3,7 @@ require 'tzinfo/definitions/Pacific/Kwajalein'
 module TZInfo
 module Definitions #:nodoc:
 class Kwajalein < Definitions::Pacific::Kwajalein #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Kwajalein')
 end
 end
 end

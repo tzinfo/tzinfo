@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module US #:nodoc:
 class Alaska < Definitions::America::Anchorage #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('US/Alaska')
 end
 end
 end

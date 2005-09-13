@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Buenos_Aires < Definitions::America::Argentina::Buenos_Aires #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('America/Buenos_Aires')
 end
 end
 end

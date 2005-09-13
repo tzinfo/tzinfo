@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Asia #:nodoc:
 class Ashkhabad < Definitions::Asia::Ashgabat #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Asia/Ashkhabad')
 end
 end
 end

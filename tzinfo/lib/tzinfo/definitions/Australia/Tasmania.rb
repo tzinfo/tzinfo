@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Australia #:nodoc:
 class Tasmania < Definitions::Australia::Hobart #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Australia/Tasmania')
 end
 end
 end

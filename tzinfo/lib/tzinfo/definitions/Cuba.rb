@@ -3,10 +3,7 @@ require 'tzinfo/definitions/America/Havana'
 module TZInfo
 module Definitions #:nodoc:
 class Cuba < Definitions::America::Havana #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Cuba')
 end
 end
 end

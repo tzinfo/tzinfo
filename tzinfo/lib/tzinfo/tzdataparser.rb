@@ -39,7 +39,7 @@ module TZInfo
       }
       
       load_countries
-            
+      
       @zones.each_value {|zone|
         zone.write_class(@output_dir)
       }
@@ -254,8 +254,16 @@ module TZInfo
     protected
       # Writes a period of time with the same utc and std offsets to the file.
       def write_period(file, utc_start, utc_end, period, std_offset, letter)
-        file.puts "add_period(TimezonePeriod.new(#{datetime_constructor(utc_start)},#{datetime_constructor(utc_end)},#{period.utc_offset.to_seconds},#{std_offset.to_seconds},#{quote_str(period.format.expand(std_offset, letter))}))"
-        puts "Period from #{utc_start} to #{utc_end}, utc_offset=#{period.utc_offset.to_seconds}, std_offset=#{std_offset.to_seconds}, name=#{period.format.expand(std_offset, letter)}"
+        # The tzdata neglects to define the identifier for certain periods
+        # These have %s as the Zone format, but don't start with at the same
+        # time as a rule is defined to fill in %s.
+        zone_id = period.format.expand(std_offset, letter)
+        if zone_id.empty?
+          zone_id = 'Unknown'
+        end
+        
+        file.puts "add_period(TimezonePeriod.new(#{datetime_constructor(utc_start)},#{datetime_constructor(utc_end)},#{period.utc_offset.to_seconds},#{std_offset.to_seconds},:#{quote_str(zone_id)}))"
+        #puts "Period from #{utc_start} to #{utc_end}, utc_offset=#{period.utc_offset.to_seconds}, std_offset=#{std_offset.to_seconds}, name=#{period.format.expand(std_offset, letter)}"
       end
       
     private
@@ -616,10 +624,10 @@ module TZInfo
       
         yield file
         
-        file.puts('@@instance = new')
-        file.puts('def self.instance')
-        file.puts('   @@instance')
-        file.puts('end')        
+        #file.puts('@@instance = new')
+        #file.puts('def self.instance')
+        #file.puts('   @@instance')
+        #file.puts('end')        
         
         file.puts('end') # end class
         
@@ -662,6 +670,7 @@ module TZInfo
       puts "writing link #{name}"
       
       create_file(output_dir) {|file|
+        file.puts("set_identifier('#{@name.gsub(/'/, '\\\'')}')")
       }
     end
   end
@@ -691,8 +700,7 @@ module TZInfo
       
       create_file(output_dir) {|file|        
                
-        file.puts('def initialize')
-        file.puts('  super')
+        file.puts('setup')
         file.puts("set_identifier('#{@name.gsub(/'/, '\\\'')}')")
         
         utc_start = nil
@@ -705,9 +713,7 @@ module TZInfo
           utc_start = result[0]
           std_offset = result[1]
           last_utc_offset = period.utc_offset
-        }
-        
-        file.puts('end')                
+        }                                
       }      
     end
   end
@@ -962,23 +968,16 @@ module TZInfo
         
         file.puts("class #{@code} < Country #:nodoc:")
       
-        file.puts('def initialize')
-        file.puts('  super')
-        file.puts("  set_code('#{code.gsub(/'/, '\\\'')}')")
-        file.puts("  set_name('#{name.gsub(/'/, '\\\'')}')")
+        file.puts('setup')
+        file.puts("set_code('#{code.gsub(/'/, '\\\'')}')")
+        file.puts("set_name('#{name.gsub(/'/, '\\\'')}')")
         
         @zones.each_value {|zone|          
-          file.puts("  add_zone('#{zone.name.gsub(/'/, '\\\'')}')")
+          file.puts("add_zone('#{zone.name.gsub(/'/, '\\\'')}')")
         }
         
-        file.puts('  zones_added')
-        
-        file.puts('end')
-        
-        file.puts('@@instance = new')
-        file.puts('def self.instance')
-        file.puts('   @@instance')
-        file.puts('end')        
+        file.puts('zones_added')
+                
         
         file.puts('end') # end class
         

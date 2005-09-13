@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Canada #:nodoc:
 class Yukon < Definitions::America::Whitehorse #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Canada/Yukon')
 end
 end
 end

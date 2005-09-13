@@ -3,10 +3,7 @@ require 'tzinfo/definitions/Europe/Dublin'
 module TZInfo
 module Definitions #:nodoc:
 class Eire < Definitions::Europe::Dublin #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Eire')
 end
 end
 end

@@ -3,10 +3,7 @@ require 'tzinfo/definitions/America/Denver'
 module TZInfo
 module Definitions #:nodoc:
 class Navajo < Definitions::America::Denver #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Navajo')
 end
 end
 end

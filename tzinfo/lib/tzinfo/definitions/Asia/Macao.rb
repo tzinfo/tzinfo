@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Asia #:nodoc:
 class Macao < Definitions::Asia::Macau #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Asia/Macao')
 end
 end
 end

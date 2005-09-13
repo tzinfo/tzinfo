@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Mideast #:nodoc:
 class Riyadh89 < Definitions::Asia::Riyadh89 #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Mideast/Riyadh89')
 end
 end
 end

@@ -8,15 +8,21 @@ module TZInfo
   #  puts us.zone_identifiers
   #  puts us.zones    
   class Country
-    # Array of Timezone identifiers for the country.
-    attr_reader :zone_names
-    
     # Gets a Country by its ISO 3166 code. Raising an exception if it couldn't
     # be found.
     def self.get(identifier)
       raise 'Invalid identifier' if identifier !~ /^[A-Z]{2}$/
       require "tzinfo/countries/#{identifier}"
       Countries.const_get(identifier).instance      
+    end
+    
+    # If identifier is nil calls super(), else calls get(identifier).
+    def self.new(identifier = nil)
+      if identifier
+        get(identifier)
+      else
+        super()
+      end
     end
     
     # Returns an Array of all the valid country codes.
@@ -34,20 +40,22 @@ module TZInfo
     
     # Initializes the Country.
     def initialize
-      super
-      @zone_names = []
-      @code = nil
-      @name = nil      
+            
     end
     
     # The country code.
     def code
-      @code
+      'Unknown'
     end
     
     # The name of the country.
     def name
-      @name
+      'Unknown'
+    end
+    
+    # Array of Timezone identifiers for the country.
+    def zone_names
+      []
     end
     
     # Array of Timezone identifiers for the country.
@@ -57,26 +65,48 @@ module TZInfo
     
     # An array of all the Timezones for this country.
     def zones
-      @zone_names.collect {|zone_name|
+      zone_names.collect {|zone_name|
         Timezone.get(zone_name)
       }
     end
             
     protected
-      def add_zone(zone_name)
-        @zone_names << zone_name
-      end
-      
-      def zones_added
-        @zone_names.freeze
-      end
-      
-      def set_code(code)
-        @code = code
-      end
-      
-      def set_name(name)
-        @name = name
-      end            
+      def self.setup
+        class_eval <<CODE
+            @@zone_names = []
+            def self.add_zone(zone_name)              
+              @@zone_names << zone_name
+            end
+            
+            def self.zones_added
+              @@zone_names.freeze
+            end
+            
+            def self.set_code(code)
+              @@code = code
+            end
+            
+            def self.set_name(name)
+              @@name = name
+            end
+                        
+            def zone_names
+              @@zone_names
+            end            
+            
+            def code
+              @@code
+            end
+            
+            def name
+              @@name
+            end
+            
+            @@instance = new
+            def self.instance
+              @@instance
+            end          
+CODE
+      end           
   end    
 end

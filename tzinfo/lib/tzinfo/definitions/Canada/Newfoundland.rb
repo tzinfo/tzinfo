@@ -4,10 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Canada #:nodoc:
 class Newfoundland < Definitions::America::St_Johns #:nodoc:
-@@instance = new
-def self.instance
-   @@instance
-end
+set_identifier('Canada/Newfoundland')
 end
 end
 end
