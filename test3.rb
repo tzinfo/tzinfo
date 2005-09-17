@@ -58,5 +58,40 @@ puts gb.code
 puts gb.name
 puts us.code
 puts us.name
+puts gb.to_s
 
-puts Timezone.all.inspect
+puts tz.identifier
+puts tz.name
+puts tz
+
+puts tz == Definitions::Europe::London.new
+
+puts gb
+puts gb == Countries::GB.new
+
+
+tzp = TimezoneProxy.new('Europe/London')
+puts tzp
+puts tzp.inspect
+puts tzp == tz
+puts tzp.now
+puts tzp.inspect
+puts tz.utc_to_local(DateTime.new(2005,8,29,10,0,0))
+puts tzp.utc_to_local(DateTime.new(2005,8,29,10,0,0))
+
+
+#puts '^^'
+#puts us.zones.inspect
+#puts us.zones[5].inspect
+#puts us.zones[5].now
+#puts us.zones[5].current_period.zone_identifier
+
+#puts Timezone.all.inspect
+#puts Timezone.all[5].inspect
+#puts Timezone.all[5].now
+#puts Timezone.all[5].current_period.zone_identifier
+
+['Pacific/Port_Moresby', 'America/Indiana/Marengo', 'Africa/Dar_es_Salaam', 'Antarctica/McMurdo', 'Antarctica/DumontDUrville'].each {|zone|
+  puts Timezone.get(zone).to_s
+}
+

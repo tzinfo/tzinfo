@@ -64,7 +64,7 @@ Documentation can be found at
 
 The preferred method of installing TZInfo is through its GEM file (RubyGems[http://docs.rubygems.org/] required):
 
-  % gem install tzinfo-0.0.2.gem
+  % gem install tzinfo-0.0.3.gem
   
 or to automatically download and install:
 

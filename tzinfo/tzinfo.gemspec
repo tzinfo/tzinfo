@@ -1,7 +1,7 @@
 require 'rubygems'
 SPEC = Gem::Specification.new do |s|
   s.name = "tzinfo"
-  s.version = "0.0.2"
+  s.version = "0.0.3"
   s.author = "Philip Ross"
   s.email = "philip@ross.org.uk"
   s.homepage = "http://tzinfo.rubyforge.org/"

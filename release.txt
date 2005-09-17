@@ -4,9 +4,9 @@
 * Update version number in tzinfo.gemspec
 * Build new gem
 * Copy tzinfo directory (within trunk). Rename tzinfo-version. Remove all .svn and doc directories. Remove gems, zips and tar.gzs.  zip and tar.gz.
-    find tzinfo-0.0.2 -type d -name .svn -print0 | xargs --null rm -rf
-    tar c tzinfo-0.0.2 | gzip -9 > tzinfo-0.0.2.tar.gz
-    zip -r9 tzinfo-0.0.2.zip tzinfo-0.0.2
+    find tzinfo-0.0.x -type d -name .svn -print0 | xargs --null rm -rf
+    tar c tzinfo-0.0.x | gzip -9 > tzinfo-0.0.x.tar.gz
+    zip -r9 tzinfo-0.0.x.zip tzinfo-0.0.x
 * Upload gem, tar.gz, zip.
 * Upload documentation.
 * Write news item.

@@ -1,3 +1,27 @@
+Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
+-------------------------------------------
+
+* Reduced visibility of some methods added in Timezone#setup and Country#setup.
+* Added name method to Timezone (returns the identifier).
+* Added friendly_identifier method to Timezone. Returns a more friendly version
+  of the identifier.
+* Added to_s method to Timezone. Returns the friendly identifier.
+* Added == and <=> operators to Timezone (compares identifiers).
+* Timezone now includes Comparable.
+* Added to_s method to Country.
+* Added == and <=> operators to Country (compares ISO 3166 country codes).
+* Country now includes Comparable.
+* New TimezoneProxy class that behaves the same as a Timezone but doesn't
+  actually load in its definition until it is actually required.
+* Modified Timezone and Country methods that return Timezones to return
+  TimezoneProxy instances instead. This makes these methods much quicker.
+  
+  In Ruby on Rails, you can now show a drop-down list of all timezones using the
+  Rails time_zone_select helper method:
+  
+  <%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %>
+
+
 Version 0.0.2 (tzdata v2005m) - 13-Sep-2005 
 -------------------------------------------
 

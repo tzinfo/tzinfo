@@ -16,6 +16,8 @@ module TZInfo
   # The timezone information all comes from the tz database
   # (see http://www.twinsun.com/tz/tz-link.htm)
   class Timezone
+    include Comparable
+    
     # Returns a timezone by its identifier (e.g. "Europe/London", 
     # "America/Chicago" or "UTC").
     #
@@ -35,6 +37,7 @@ module TZInfo
     # If identifier is nil calls super(), else calls get(identifier).
     def self.new(identifier = nil)
       if identifier
+        puts 'getting'
         get(identifier)
       else
         super()
@@ -58,11 +61,9 @@ module TZInfo
     # Returns all the Timezones defined for all Countries. This is not the
     # complete set of Timezones as some are not country specific (e.g. 
     # 'Etc/GMT').
-    #
-    # This method will take a substantial time to return the first time it is
-    # called as all the Timezone classes will have to be loaded by Ruby. If 
-    # you just want the zone identifiers use all_country_zone_identifiers
-    # instead.    
+    # 
+    # Returns TimezoneProxy objects to avoid the overhead of loading Timezone
+    # definitions until a conversion is actually required.        
     def self.all_country_zones
       Country.all_codes.inject([]) {|zones,country|
         zones += Country.get(country).zones
@@ -80,8 +81,10 @@ module TZInfo
     end
     
     # Returns all US Timezone instances. A shortcut for 
-    # TZInfo::Country.get('US').zones. If you only need the zone identifiers,
-    # use us_zone_identifiers instead.
+    # TZInfo::Country.get('US').zones.
+    #
+    # Returns TimezoneProxy objects to avoid the overhead of loading Timezone
+    # definitions until a conversion is actually required.
     def self.us_zones
       Country.get('US').zones
     end
@@ -95,6 +98,54 @@ module TZInfo
     # The identifier of the timezone, e.g. "Europe/Paris".
     def identifier
       'Unknown'
+    end
+    
+    # An alias for identifier.
+    def name
+      # Don't use alias, as identifier gets overridden.
+      identifier
+    end
+    
+    # Returns a friendlier version of the idenfitifer.
+    def to_s
+      friendly_identifier
+    end   
+    
+    # Returns a friendlier version of the idenfitifer. Set skip_first_part to 
+    # omit the first part of the identifier (typically a region name) where
+    # there is more than one part.
+    def friendly_identifier(skip_first_part = false)
+      parts = identifier.split('/')
+      if parts.empty?
+        # shouldn't happen
+        identifier
+      elsif parts.length == 1        
+        parts[0]
+      else
+        if skip_first_part
+          result = ''
+        else
+          result = parts[0] + ' - '
+        end
+        
+        parts[1, parts.length - 1].reverse_each {|part|
+          part.gsub!(/_/, ' ')
+          
+          # Missing a space if a lower case followed by an upper case and the
+          # name isn't McXxxx.
+          part.gsub!(/[^M]([a-z])([A-Z])/, '\1 \2')
+          part.gsub!(/[M]([a-bd-z])([A-Z])/, '\1 \2')
+          
+          # Missing an apostrophe if two consecutive upper case characters.
+          part.gsub!(/([A-Z])([A-Z])/, '\1\'\2')
+          
+          result << part
+          result << ', '
+        }
+        
+        result.slice!(result.length - 2, 2)
+        result
+      end
     end
     
     # Returns the TimezonePeriod for the given UTC time. utc can either be
@@ -207,31 +258,43 @@ module TZInfo
       [utc_to_local(utc), period_for_utc(utc)]
     end
     
+    # Two Timezones are considered to be equal if their identifiers are the same.
+    def ==(tz)
+      identifier == tz.identifier
+    end
+    
+    # Compare two Timezones based on their identifier. Returns -1 if tz is less
+    # than self, 0 if tz is equal to self and +1 if tz is greater than self.
+    def <=>(tz)
+      identifier <=> tz.identifier
+    end
+    
     protected
       def self.setup
         class_eval <<CODE
             @@periods = []
-            def self.add_period(period)              
-              @@periods << period
-            end
-            
-            def self.set_identifier(identifier)
-              @@identifier = identifier
-            end
-                        
-            def periods
-              @@periods
-            end
-            protected :periods
+            @@instance = new
             
             def identifier
               @@identifier
-            end
+            end            
             
-            @@instance = new
             def self.instance
               @@instance
-            end          
+            end
+            
+            def periods
+              @@periods.freeze
+            end
+            
+            protected
+              def self.add_period(period)              
+                @@periods << period
+              end            
+              
+              def self.set_identifier(identifier)
+                @@identifier = identifier
+              end              
 CODE
       end
     
@@ -251,6 +314,40 @@ CODE
         end
       end            
   end 
+  
+  # A proxy class representing a timezone with a given identifier. It can be
+  # constructed with an identifier and behaves almost identically to a Timezone 
+  # loaded through Timezone.get. The first time an attempt is made to perform
+  # a conversion on the proxy, the real Timezone class is loaded. If the
+  # proxy's identifier was not valid, then an exception will be thrown at this
+  # point.    
+  class TimezoneProxy < Timezone
+    # Construct a new TimezoneProxy for the given identifier. The identifier
+    # is not checked when constructing the proxy. It will be validated on the
+    # first conversion.
+    def self.new(identifier)
+      # Need to override new to undo the behaviour introduced in Timezone#new.
+      tzp = super()
+      tzp.instance_eval <<CODE
+        @identifier = identifier
+        @real_tz = nil
+CODE
+      tzp
+    end
+        
+    # The identifier of the timezone, e.g. "Europe/Paris".
+    def identifier
+      @real_tz.nil? ? @identifier : @real_tz.identifier
+    end
+    
+    def periods #:nodoc:
+      if @real_tz.nil?
+        # We now need the actual data. Load in the real timezone.
+        @real_tz = Timezone.get(@identifier)
+      end
+      @real_tz.periods      
+    end        
+  end
   
   # A period of time in a timezone where the same offset from UTC applies.
   class TimezonePeriod
