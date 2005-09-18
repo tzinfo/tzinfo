@@ -1,3 +1,14 @@
+Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
+-------------------------------------------
+
+* Removed debug output accidentally included in the previous release.
+* Fixed a bug in the generation of friendly zone identifiers (was inserting
+  apostrophes into UTC, GMT, etc).
+* Fixed Country <=> operator (was comparing non-existent attribute)
+* Fixed Timezone.period_for_local error when period not found.
+* Added testcases for Timezone, TimezoneProxy, TimezonePeriod, Country and
+  some selected timezones.
+
 Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
 -------------------------------------------
 

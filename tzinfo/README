@@ -64,7 +64,7 @@ Documentation can be found at
 
 The preferred method of installing TZInfo is through its GEM file (RubyGems[http://docs.rubygems.org/] required):
 
-  % gem install tzinfo-0.0.3.gem
+  % gem install tzinfo-0.0.4.gem
   
 or to automatically download and install:
 
@@ -75,11 +75,6 @@ or to automatically download and install:
 
 TZInfo is released under the MIT[http://opensource.org/licenses/mit-license.html] license.
 
-
-== Issues
-
-* It currently takes an extremely long time to generate all the Ruby Timezone classes from the tz data. This process could do with some optimization.
-* Test cases need to be written.
 
 == Support
 

@@ -1,7 +1,12 @@
 require 'tzinfo/country'
 
 module TZInfo
+  # Thrown to indicate that no TimezonePeriod matching a given time could be found.
   class PeriodNotFound < StandardError
+  end
+  
+  # Thrown by Timezone#get if the identifier given is not valid.
+  class InvalidTimezoneIdentifier < StandardError
   end
   
   # Timezone is the base class of all timezones. It provides a factory method
@@ -23,21 +28,25 @@ module TZInfo
     #
     # Raises an exception of the timezone couldn't be found.
     def self.get(identifier)
-      raise 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
+      raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
       identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
-      require "tzinfo/definitions/#{identifier}"
-      
-      m = Definitions
-      identifier.split(/\//).each {|part|
-        m = m.const_get(part)
-      }
-      m.instance      
+      begin
+        require "tzinfo/definitions/#{identifier}"
+        
+        m = Definitions
+        identifier.split(/\//).each {|part|
+          m = m.const_get(part)
+        }
+        m.instance
+      rescue LoadError, NameError => e
+        raise InvalidTimezoneIdentifier, e
+      end
     end
     
-    # If identifier is nil calls super(), else calls get(identifier).
+    # If identifier is nil calls super(), else calls get(identifier). An
+    # identfier should always be passed in when called externally.
     def self.new(identifier = nil)
-      if identifier
-        puts 'getting'
+      if identifier        
         get(identifier)
       else
         super()
@@ -131,13 +140,15 @@ module TZInfo
         parts[1, parts.length - 1].reverse_each {|part|
           part.gsub!(/_/, ' ')
           
-          # Missing a space if a lower case followed by an upper case and the
-          # name isn't McXxxx.
-          part.gsub!(/[^M]([a-z])([A-Z])/, '\1 \2')
-          part.gsub!(/[M]([a-bd-z])([A-Z])/, '\1 \2')
-          
-          # Missing an apostrophe if two consecutive upper case characters.
-          part.gsub!(/([A-Z])([A-Z])/, '\1\'\2')
+          if part.index(/[a-z]/)
+            # Missing a space if a lower case followed by an upper case and the
+            # name isn't McXxxx.
+            part.gsub!(/([^M][a-z])([A-Z])/, '\1 \2')
+            part.gsub!(/([M][a-bd-z])([A-Z])/, '\1 \2')
+            
+            # Missing an apostrophe if two consecutive upper case characters.
+            part.gsub!(/([A-Z])([A-Z])/, '\1\'\2')
+          end
           
           result << part
           result << ', '
@@ -208,11 +219,11 @@ module TZInfo
             if first.local_before_end?(local)
               first
             else
-              raise PeriodNotFound, "No time period found for #{utc}. This could be because a change to daylight savings time caused an hour to be skipped."
+              raise PeriodNotFound, "No time period found for #{local}. This could be because a change to daylight savings time caused an hour to be skipped."
             end
           end
         else
-          raise PeriodNotFound, "No time period found for #{utc}. This could be because a change to daylight savings time caused an hour to be skipped."
+          raise PeriodNotFound, "No time period found for #{local}. This could be because a change to daylight savings time caused an hour to be skipped."
         end
       }
     end
@@ -252,11 +263,13 @@ module TZInfo
       period_for_utc(Time.now.utc)
     end
     
-    # Returns the current time and TimezonePeriod as an array.
+    # Returns the current Time and TimezonePeriod as an array.
     def current_period_and_time
       utc = Time.now.utc
       [utc_to_local(utc), period_for_utc(utc)]
     end
+    
+    alias :current_time_and_period :current_period_and_time
     
     # Two Timezones are considered to be equal if their identifiers are the same.
     def ==(tz)
@@ -408,12 +421,12 @@ CODE
       utc_after_start?(utc) && utc_before_end?(utc) 
     end
     
-    # true if the given utc DateTime is after the start of the period; otherwise false.
+    # true if the given utc DateTime is after the start of the period (inclusive); otherwise false.
     def utc_after_start?(utc)
       @utc_start.nil? || @utc_start <= utc
     end
     
-    # true if the given utc DateTime is before the end of the period; otherwise false.
+    # true if the given utc DateTime is before the end of the period (exclusive); otherwise false.
     def utc_before_end?(utc)
       @utc_end.nil? || @utc_end > utc
     end
@@ -423,12 +436,12 @@ CODE
       local_after_start?(local) && local_before_end?(local) 
     end
     
-    # true if the given local DateTime is after the start of the period; otherwise false.
+    # true if the given local DateTime is after the start of the period (inclusive); otherwise false.
     def local_after_start?(local)
       @local_start.nil? || @local_start <= local
     end
     
-    # true if the given local DateTime is before the end of the period; otherwise false.
+    # true if the given local DateTime is before the end of the period (exclusive); otherwise false.
     def local_before_end?(local)
       @local_end.nil? || @local_end > local
     end

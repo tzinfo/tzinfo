@@ -1,6 +1,10 @@
 require 'tzinfo/timezone'
 
 module TZInfo
+  # Thrown by Country#get if the code given is not valid.
+  class InvalidCountryCode < StandardError
+  end
+  
   # An ISO 3166 country. Can be used to get a list of Timezones for a country.
   # For example:
   #
@@ -13,9 +17,13 @@ module TZInfo
     # Gets a Country by its ISO 3166 code. Raising an exception if it couldn't
     # be found.
     def self.get(identifier)
-      raise 'Invalid identifier' if identifier !~ /^[A-Z]{2}$/
-      require "tzinfo/countries/#{identifier}"
-      Countries.const_get(identifier).instance      
+      raise InvalidCountryCode.new, 'Invalid identifier' if identifier !~ /^[A-Z]{2}$/
+      begin
+        require "tzinfo/countries/#{identifier}"
+        Countries.const_get(identifier).instance
+      rescue LoadError, NameError => e
+        raise InvalidCountryCode, e
+      end
     end
     
     # If identifier is nil calls super(), else calls get(identifier).
@@ -38,12 +46,7 @@ module TZInfo
       all_codes.collect {|code|
         get(code)
       }
-    end
-    
-    # Initializes the Country.
-    def initialize
-            
-    end
+    end       
     
     # The ISO 3166 country code.
     def code
@@ -87,7 +90,7 @@ module TZInfo
     # Compare two Countries based on their code. Returns -1 if tz is less
     # than self, 0 if tz is equal to self and +1 if tz is greater than self.
     def <=>(tz)
-      identifier <=> tz.identifier
+      code <=> tz.code
     end
             
     protected

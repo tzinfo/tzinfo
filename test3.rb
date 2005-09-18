@@ -1,4 +1,5 @@
-#require 'definitions/Europe/London'
+#require 'tzinfo/definitions/Europe/London'
+require 'tzinfo/definitions/Europe/london'
 require 'tzinfo/timezone'
 require 'tzinfo/country'
 include TZInfo
@@ -74,6 +75,7 @@ tzp = TimezoneProxy.new('Europe/London')
 puts tzp
 puts tzp.inspect
 puts tzp == tz
+puts tzp.equal?(tz)
 puts tzp.now
 puts tzp.inspect
 puts tz.utc_to_local(DateTime.new(2005,8,29,10,0,0))

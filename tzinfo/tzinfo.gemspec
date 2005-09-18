@@ -1,7 +1,7 @@
 require 'rubygems'
 SPEC = Gem::Specification.new do |s|
   s.name = "tzinfo"
-  s.version = "0.0.3"
+  s.version = "0.0.4"
   s.author = "Philip Ross"
   s.email = "philip@ross.org.uk"
   s.homepage = "http://tzinfo.rubyforge.org/"
@@ -14,5 +14,5 @@ SPEC = Gem::Specification.new do |s|
   s.require_path = "lib"
   s.autorequire = "tzinfo"  
   s.has_rdoc = false
-  s.extra_rdoc_files = ["README"]  
+  s.extra_rdoc_files = ["README","CHANGES"]  
 end
