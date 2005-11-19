@@ -17,20 +17,25 @@ class TCTimezoneMelbourne < Test::Unit::TestCase
     assert_equal(DateTime.new(2004,10,31,1,59,59), tz.utc_to_local(DateTime.new(2004,10,30,15,59,59)))
     assert_equal(DateTime.new(2004,10,31,3,0,0), tz.utc_to_local(DateTime.new(2004,10,30,16,0,0)))
     
-    assert_equal(DateTime.new(2004,3,27,15,59,59), tz.local_to_utc(DateTime.new(2004,3,28,2,59,59)))
-    assert_equal(DateTime.new(2004,3,27,15,0,0), tz.local_to_utc(DateTime.new(2004,3,28,2,0,0))) # returns first possible utc time
+    assert_equal(DateTime.new(2004,3,27,15,59,59), tz.local_to_utc(DateTime.new(2004,3,28,2,59,59), true))
+    assert_equal(DateTime.new(2004,3,27,16,59,59), tz.local_to_utc(DateTime.new(2004,3,28,2,59,59), false))
+    assert_equal(DateTime.new(2004,3,27,15,0,0), tz.local_to_utc(DateTime.new(2004,3,28,2,0,0), true))
+    assert_equal(DateTime.new(2004,3,27,16,0,0), tz.local_to_utc(DateTime.new(2004,3,28,2,0,0), false))   
     assert_equal(DateTime.new(2004,10,30,15,59,59), tz.local_to_utc(DateTime.new(2004,10,31,1,59,59)))
     assert_equal(DateTime.new(2004,10,30,16,0,0), tz.local_to_utc(DateTime.new(2004,10,31,3,0,0)))
     
     assert_raise(PeriodNotFound) { tz.local_to_utc(DateTime.new(2004,10,31,2,0,0)) }
+    assert_raise(AmbiguousTime) { tz.local_to_utc(DateTime.new(2004,3,28,2,0,0)) }
     
     assert_equal(:EST, tz.period_for_utc(DateTime.new(2004,3,27,15,59,59)).zone_identifier)
     assert_equal(:EST, tz.period_for_utc(DateTime.new(2004,3,27,16,0,0)).zone_identifier)
     assert_equal(:EST, tz.period_for_utc(DateTime.new(2004,10,30,15,59,59)).zone_identifier)
     assert_equal(:EST, tz.period_for_utc(DateTime.new(2004,10,30,16,0,0)).zone_identifier)
     
-    assert_equal(:EST, tz.period_for_local(DateTime.new(2004,3,28,2,59,59)).zone_identifier)
-    assert_equal(:EST, tz.period_for_local(DateTime.new(2004,3,28,2,0,0)).zone_identifier)
+    assert_equal(:EST, tz.period_for_local(DateTime.new(2004,3,28,2,59,59), true).zone_identifier)
+    assert_equal(:EST, tz.period_for_local(DateTime.new(2004,3,28,2,59,59), false).zone_identifier)
+    assert_equal(:EST, tz.period_for_local(DateTime.new(2004,3,28,2,0,0), true).zone_identifier)
+    assert_equal(:EST, tz.period_for_local(DateTime.new(2004,3,28,2,0,0), false).zone_identifier)
     assert_equal(:EST, tz.period_for_local(DateTime.new(2004,10,31,1,59,59)).zone_identifier)
     assert_equal(:EST, tz.period_for_local(DateTime.new(2004,10,31,3,0,0)).zone_identifier)
     
@@ -39,8 +44,10 @@ class TCTimezoneMelbourne < Test::Unit::TestCase
     assert_equal(36000, tz.period_for_utc(DateTime.new(2004,10,30,15,59,59)).utc_total_offset)
     assert_equal(39600, tz.period_for_utc(DateTime.new(2004,10,30,16,0,0)).utc_total_offset)
     
-    assert_equal(39600, tz.period_for_local(DateTime.new(2004,3,28,2,59,59)).utc_total_offset)
-    assert_equal(39600, tz.period_for_local(DateTime.new(2004,3,28,2,0,0)).utc_total_offset)
+    assert_equal(39600, tz.period_for_local(DateTime.new(2004,3,28,2,59,59), true).utc_total_offset)
+    assert_equal(36000, tz.period_for_local(DateTime.new(2004,3,28,2,59,59), false).utc_total_offset)
+    assert_equal(39600, tz.period_for_local(DateTime.new(2004,3,28,2,0,0), true).utc_total_offset)
+    assert_equal(36000, tz.period_for_local(DateTime.new(2004,3,28,2,0,0), false).utc_total_offset)
     assert_equal(36000, tz.period_for_local(DateTime.new(2004,10,31,1,59,59)).utc_total_offset)
     assert_equal(39600, tz.period_for_local(DateTime.new(2004,10,31,3,0,0)).utc_total_offset)
   end    

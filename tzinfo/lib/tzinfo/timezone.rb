@@ -5,6 +5,14 @@ module TZInfo
   class PeriodNotFound < StandardError
   end
   
+  # Indicate a specified time in a local timezone has more than one
+  # possible time in UTC. This happens when switching from daylight savings time 
+  # to normal time where the clocks are rolled back. Thrown by period_for_local
+  # and local_to_utc when using an ambiguous time and not specifying any 
+  # means to resolve the ambiguity.
+  class AmbiguousTime < StandardError
+  end
+  
   # Thrown by Timezone#get if the identifier given is not valid.
   class InvalidTimezoneIdentifier < StandardError
   end
@@ -165,15 +173,19 @@ module TZInfo
     #
     # If no TimezonePeriod could be found, PeriodNotFound is raised.
     def period_for_utc(utc)
-      run_on_datetime(utc) {|utc|
-        # dumb search for now      
-        periods.each {|period|
-          if period.valid_for_utc?(utc)
-            return period          
-          end
-        }
-          
-        # if nothing found, assume the first and last periods are unbounded
+      utc = as_datetime(utc)
+      
+      # dumb search for now
+      result = nil            
+      periods.each {|period|
+        if period.valid_for_utc?(utc)
+          result = period
+          break          
+        end
+      }
+        
+      # if nothing found, assume the first and last periods are unbounded
+      if result.nil?
         if periods.length > 0
           
           last = periods[periods.length - 1] 
@@ -190,42 +202,109 @@ module TZInfo
         else
           raise PeriodNotFound, "No time period found for #{utc}"
         end
-      }
+      else
+        result
+      end
     end
     
     # Returns the TimezonePeriod for the given local time. local can either be
     # a DateTime or a Time. Any timezone information in local is ignored (it is
     # treated as a time in the current timezone).
     #
-    # If no TimezonePeriod could be found, PeriodNotFound is raised. This will
-    # happen when a change to daylight savings occurs and an hour is skipped.
-    def period_for_local(local)  
-      run_on_datetime(local) {|local|
-        # dumb search for now      
-        periods.each {|period|
-          if period.valid_for_local?(local)
-            return period          
-          end
-        }
-          
-        # if nothing found, assume the first and last periods are unbounded
+    # Warning: There are local times that have no equivalent UTC times (e.g.
+    # in the transition from standard time to daylight savings time). There are
+    # also local times that have more than one UTC equivalent (e.g. in the
+    # transition from daylight savings time to standard time).
+    #
+    # In the first case (no equivalent UTC time), a PeriodNotFound exception
+    # will be thrown.
+    #
+    # In the second case (more than one equivalent UTC time), an AmbiguousTime
+    # exception will be thrown unless the optional dst parameter or block
+    # handles the ambiguity. 
+    #
+    # If the ambiguity is due to a transition from daylight savings time to
+    # standard time, the dst parameter can be used to select whether the 
+    # daylight savings time or local time is used. For example,
+    #
+    #   Timezone.get('America/New_York').period_for_local(DateTime.new(2004,10,31,1,30,0))
+    #
+    # would raise an AmbiguousTime exception.
+    #
+    # Specifying dst=true would the daylight savings period from April to 
+    # October 2004. Specifying dst=false would return the standard period
+    # from October 2004 to April 2005.
+    #
+    # If the dst parameter does not resolve the ambiguity, and a block is 
+    # specified, it is called. The block must take a single parameter - an
+    # array of the periods that need to be resolved. The block can select and
+    # return a single period or return nil or an empty array
+    # to cause an AmbiguousTime exception to be raised.
+    def period_for_local(local, dst = nil)
+      local = as_datetime(local)
+      
+      # dumb search for now
+      results = []      
+      periods.each {|period|
+        if period.valid_for_local?(local)
+          results << period
+        elsif !results.empty?
+          # periods are ordered by UTC start time
+          # if we've found some results and then found an invalid period we've
+          # found all the relevant useful ones
+          break          
+        end
+      }
+        
+      # if nothing found, assume the first and last periods are unbounded
+      if results.empty?
         if periods.length > 0
           
           last = periods[periods.length - 1] 
           if last.local_after_start?(local)
-            last
+            results << last
           else
             first = periods[0]
             if first.local_before_end?(local)
-              first
+              results << first
             else
-              raise PeriodNotFound, "No time period found for #{local}. This could be because a change to daylight savings time caused an hour to be skipped."
+              raise PeriodNotFound, "No time period found for #{local}."
             end
           end
         else
-          raise PeriodNotFound, "No time period found for #{local}. This could be because a change to daylight savings time caused an hour to be skipped."
+          raise PeriodNotFound, "No time period found for #{local}."
         end
-      }
+      end
+      
+      # by this point, results must contain at least one period
+      if results.size < 2
+        results.first
+      else
+        # ambiguous result try to resolve
+        
+        if !dst.nil?
+          matches = results.find_all {|period| period.dst? == dst}
+          results = matches if !matches.empty?            
+        end
+        
+        if results.size < 2
+          results.first
+        else
+          # still ambiguous, try the block
+                    
+          if block_given?
+            results = yield results
+          end
+          
+          if results.is_a?(TimezonePeriod)
+            results
+          elsif !results.nil? && results.size == 1
+            results.first
+          else          
+            raise AmbiguousTime, "#{local} is an ambiguous local time."
+          end
+        end
+      end      
     end
     
     # Converts a time in UTC to the local timezone. utc can either be
@@ -241,15 +320,43 @@ module TZInfo
     # a DateTime or a Time. The returned time has the same type as local.
     # Any timezone information in local is ignored (it is treated as a local time).
     #
-    # During the period when daylight savings reverts to standard time and there
-    # are two possible UTC times for each local time, local_to_utc returns the
-    # earlier time.
+    # Warning: There are local times that have no equivalent UTC times (e.g.
+    # in the transition from standard time to daylight savings time). There are
+    # also local times that have more than one UTC equivalent (e.g. in the
+    # transition from daylight savings time to standard time).
     #
-    # For times skipped during a change to daylight savings, PeriodNotFound is
-    # raised.
-    def local_to_utc(local)
-      run_on_datetime(local) {|local|      
-        period_for_local(local).to_utc(local)
+    # In the first case (no equivalent UTC time), a PeriodNotFound exception
+    # will be thrown.
+    #
+    # In the second case (more than one equivalent UTC time), an AmbiguousTime
+    # exception will be thrown unless the optional dst parameter or block
+    # handles the ambiguity. 
+    #
+    # If the ambiguity is due to a transition from daylight savings time to
+    # standard time, the dst parameter can be used to select whether the 
+    # daylight savings time or local time is used. For example,
+    #
+    #   Timezone.get('America/New_York').local_to_utc(DateTime.new(2004,10,31,1,30,0))
+    #
+    # would raise an AmbiguousTime exception.
+    #
+    # Specifying dst=true would return 2004-10-31 5:30:00. Specifying dst=false
+    # would return 2004-10-31 6:30:00.
+    #
+    # If the dst parameter does not resolve the ambiguity, and a block is 
+    # specified, it is called. The block must take a single parameter - an
+    # array of the periods that need to be resolved. The block can return a
+    # single period to use to convert the time or return nil or an empty array
+    # to cause an AmbiguousTime exception to be raised.
+    def local_to_utc(local, dst = nil)
+      run_on_datetime(local) {|local|
+        if block_given?
+          period = period_for_local(local, dst) {|periods| yield periods }
+        else
+          period = period_for_local(local, dst)
+        end
+        
+        period.to_utc(local)
       }
     end
     
@@ -312,6 +419,16 @@ CODE
       end
     
     private
+      # If called with a Time, returns an equivalent DateTime; otherwise returns
+      # the datetime paramter.
+      def as_datetime(datetime)
+        if datetime.instance_of?(Time)
+          DateTime.new(datetime.year, datetime.mon, datetime.mday, datetime.hour, datetime.min, datetime.sec)
+        else
+          datetime
+        end
+      end
+    
       # Executes a block with a DateTime. If datetime is a Time it will be
       # converted to a DateTime before yielding to the block and the result of
       # the block will be converted back to a Time.

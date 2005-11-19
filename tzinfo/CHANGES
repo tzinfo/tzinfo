@@ -1,3 +1,10 @@
+Version ????? (tzdata v?????) - ???????????
+-------------------------------------------
+
+* period_for_local and local_to_utc now allow resolution of ambiguous
+  times (e.g. when switching from daylight savings to standard time). Thanks
+  to Cliff Matthews for the suggestion.
+
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------
 

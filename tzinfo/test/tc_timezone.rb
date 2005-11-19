@@ -4,6 +4,9 @@ require 'tzinfo/timezone'
 
 include TZInfo
 
+class TCTimezoneBlockCalled < StandardError
+end
+
 class TCTimezone < Test::Unit::TestCase
   def test_get_valid_1
     tz = Timezone.get('Europe/London')
@@ -195,6 +198,129 @@ class TCTimezone < Test::Unit::TestCase
     assert_equal('UTC', Timezone.get('UTC').to_s)
   end    
   
+  def test_period_for_utc
+    dt = DateTime.new(2005,2,18,16,24,23)
+    t = Time.utc(2005,2,18,16,24,23)
+        
+    dt_period = Timezone.get('Europe/London').period_for_utc(dt)
+    t_period = Timezone.get('Europe/London').period_for_utc(t)
+    
+    assert_equal(DateTime.new(2004,10,31,1,0,0), dt_period.utc_start)
+    assert_equal(DateTime.new(2005,3,27,1,0,0), dt_period.utc_end)
+    
+    assert_equal(DateTime.new(2004,10,31,1,0,0), t_period.utc_start)
+    assert_equal(DateTime.new(2005,3,27,1,0,0), t_period.utc_end)
+  end
+  
+  def test_period_for_local
+    dt = DateTime.new(2005,2,18,16,24,23)
+    t = Time.utc(2005,2,18,16,24,23)
+    
+    dt_period = Timezone.get('Europe/London').period_for_local(dt)
+    t_period = Timezone.get('Europe/London').period_for_local(t)
+    
+    assert_equal(DateTime.new(2004,10,31,1,0,0), dt_period.utc_start)
+    assert_equal(DateTime.new(2005,3,27,1,0,0), dt_period.utc_end)
+    
+    assert_equal(DateTime.new(2004,10,31,1,0,0), t_period.utc_start)
+    assert_equal(DateTime.new(2005,3,27,1,0,0), t_period.utc_end)
+  end
+  
+  def test_period_for_local_invalid
+    assert_raise(PeriodNotFound) {
+      Timezone.get('America/New_York').period_for_local(DateTime.new(2004,4,4,2,30,0))
+    }
+  end
+  
+  def test_period_for_local_ambiguous
+    assert_raise(AmbiguousTime) {
+      Timezone.get('America/New_York').period_for_local(DateTime.new(2004,10,31,1,30,0))
+    }
+  end
+  
+  def test_period_for_local_dst_flag_resolved
+    dt = DateTime.new(2004,10,31,1,30,0)
+    tz = Timezone.get('America/New_York')
+    
+    assert_period_for(DateTime.new(2004,4,4,7,0,0), DateTime.new(2004,10,31,6,0,0), true, tz.period_for_local(dt, true))
+    assert_period_for(DateTime.new(2004,10,31,6,0,0), DateTime.new(2005,4,3,7,0,0), false, tz.period_for_local(dt, false))
+    assert_period_for(DateTime.new(2004,4,4,7,0,0), DateTime.new(2004,10,31,6,0,0), true, tz.period_for_local(dt, true) {|periods| raise TCTimezoneBlockCalled, 'should not be called' })
+    assert_period_for(DateTime.new(2004,10,31,6,0,0), DateTime.new(2005,4,3,7,0,0), false, tz.period_for_local(dt, false) {|periods| raise TCTimezoneBlockCalled, 'should not be called' })
+  end
+  
+  def test_period_for_local_dst_block_called
+    dt = DateTime.new(2004,10,31,1,30,0)
+    tz = Timezone.get('America/New_York')
+    
+    assert_raise(TCTimezoneBlockCalled) {
+      tz.period_for_local(dt) {|periods|
+        assert_equal(2, periods.size)
+        assert_period_for(DateTime.new(2004,4,4,7,0,0), DateTime.new(2004,10,31,6,0,0), true, periods[0])
+        assert_period_for(DateTime.new(2004,10,31,6,0,0), DateTime.new(2005,4,3,7,0,0), false, periods[1])
+        
+        # raise exception to test that the block was called
+        raise TCTimezoneBlockCalled, 'should be raised'
+      }
+    }
+    
+    assert_period_for(DateTime.new(2004,4,4,7,0,0), DateTime.new(2004,10,31,6,0,0), true, tz.period_for_local(dt) {|periods| periods.first})
+    assert_period_for(DateTime.new(2004,10,31,6,0,0), DateTime.new(2005,4,3,7,0,0), false,  tz.period_for_local(dt) {|periods| periods.last})
+    assert_period_for(DateTime.new(2004,4,4,7,0,0), DateTime.new(2004,10,31,6,0,0), true, tz.period_for_local(dt) {|periods| [periods.first]})
+    assert_period_for(DateTime.new(2004,10,31,6,0,0), DateTime.new(2005,4,3,7,0,0), false,  tz.period_for_local(dt) {|periods| [periods.last]})
+  end
+  
+  def test_period_for_local_dst_cannot_resolve
+    # At midnight local time on Aug 5 1915 in Warsaw, the clocks were put back
+    # 24 minutes and both periods were non-DST. Hence the block should be
+    # called regardless of the value of the Boolean dst parameter.
+    
+    dt = DateTime.new(1915,8,4,23,40,0)
+    tz = Timezone.get('Europe/Warsaw')
+    
+    assert_raise(TCTimezoneBlockCalled) {
+      tz.period_for_local(dt, true) {|periods|
+        assert_equal(2, periods.size)
+        assert_equal(DateTime.new(1915,8,4,22,36,0), periods[0].utc_end)        
+        assert_equal(false, periods[0].dst?)        
+        assert_period_for(DateTime.new(1915,8,4,22,36,0), DateTime.new(1916,4,30,22,0,0), false, periods[1])
+        
+        raise TCTimezoneBlockCalled, 'should be raised'
+      }
+    }
+    
+    assert_raise(TCTimezoneBlockCalled) {
+      tz.period_for_local(dt, false) {|periods|
+        assert_equal(2, periods.size)
+        assert_equal(DateTime.new(1915,8,4,22,36,0), periods[0].utc_end)        
+        assert_equal(false, periods[0].dst?)        
+        assert_period_for(DateTime.new(1915,8,4,22,36,0), DateTime.new(1916,4,30,22,0,0), false, periods[1])
+        
+        raise TCTimezoneBlockCalled, 'should be raised'
+      }
+    }    
+  end
+  
+  def test_period_for_local_block_ambiguous
+    dt = DateTime.new(2004,10,31,1,30,0)
+    tz = Timezone.get('America/New_York')
+    
+    assert_raise(AmbiguousTime) {
+      tz.period_for_local(dt) {|periods| nil}
+    }
+    
+    assert_raise(AmbiguousTime) {
+      tz.period_for_local(dt) {|periods| periods}
+    }
+    
+    assert_raise(AmbiguousTime) {
+      tz.period_for_local(dt) {|periods| []}
+    }
+    
+    assert_raise(AmbiguousTime) {
+      tz.period_for_local(dt) {|periods| raise AmbiguousTime, 'Ambiguous time'}
+    }
+  end
+   
   def test_utc_to_local
     dt = DateTime.new(2005,2,18,16,24,23)
     t = Time.utc(2005,2,18,16,24,23)
@@ -213,6 +339,102 @@ class TCTimezone < Test::Unit::TestCase
     assert_not_equal(t, Timezone.get('Europe/London').local_to_utc(dt))
     assert_equal(t, Timezone.get('Europe/London').local_to_utc(t))
     assert_not_equal(dt, Timezone.get('Europe/London').local_to_utc(t))
+  end
+  
+  def test_local_to_utc_invalid
+    assert_raise(PeriodNotFound) {
+      Timezone.get('America/New_York').local_to_utc(DateTime.new(2004,4,4,2,30,0))
+    }
+  end
+  
+  def test_local_to_utc_ambiguous
+    assert_raise(AmbiguousTime) {
+      Timezone.get('America/New_York').local_to_utc(DateTime.new(2004,10,31,1,30,0))
+    }
+  end
+  
+  def test_local_to_utc_dst_flag_resolved
+    dt = DateTime.new(2004,10,31,1,30,0)
+    tz = Timezone.get('America/New_York')
+    
+    assert_equal(DateTime.new(2004,10,31,5,30,0), tz.local_to_utc(dt, true))
+    assert_equal(DateTime.new(2004,10,31,6,30,0), tz.local_to_utc(dt, false))
+    assert_equal(DateTime.new(2004,10,31,5,30,0), tz.local_to_utc(dt, true) {|periods| raise TCTimezoneBlockCalled, 'should not be called' })
+    assert_equal(DateTime.new(2004,10,31,6,30,0), tz.local_to_utc(dt, false) {|periods| raise TCTimezoneBlockCalled, 'should not be called' })
+  end
+  
+  def test_local_to_utc_dst_block_called
+    dt = DateTime.new(2004,10,31,1,30,0)
+    tz = Timezone.get('America/New_York')
+    
+    assert_raise(TCTimezoneBlockCalled) {
+      tz.local_to_utc(dt) {|periods|
+        assert_equal(2, periods.size)
+        assert_period_for(DateTime.new(2004,4,4,7,0,0), DateTime.new(2004,10,31,6,0,0), true, periods[0])
+        assert_period_for(DateTime.new(2004,10,31,6,0,0), DateTime.new(2005,4,3,7,0,0), false, periods[1])        
+        
+        # raise exception to test that the block was called
+        raise TCTimezoneBlockCalled, 'should be raised'
+      }
+    }
+    
+    assert_equal(DateTime.new(2004,10,31,5,30,0), tz.local_to_utc(dt) {|periods| periods.first})
+    assert_equal(DateTime.new(2004,10,31,6,30,0), tz.local_to_utc(dt) {|periods| periods.last})
+  end
+  
+  def test_local_to_utc_dst_cannot_resolve
+    # At midnight local time on Aug 5 1915 in Warsaw, the clocks were put back
+    # 24 minutes and both periods were non-DST. Hence the block should be
+    # called regardless of the value of the Boolean dst parameter.
+    
+    dt = DateTime.new(1915,8,4,23,40,0)
+    tz = Timezone.get('Europe/Warsaw')
+    
+    assert_raise(TCTimezoneBlockCalled) {
+      tz.local_to_utc(dt, true) {|periods|
+        assert_equal(2, periods.size)
+        assert_equal(DateTime.new(1915,8,4,22,36,0), periods[0].utc_end)        
+        assert_equal(false, periods[0].dst?)        
+        assert_period_for(DateTime.new(1915,8,4,22,36,0), DateTime.new(1916,4,30,22,0,0), false, periods[1])
+        
+        raise TCTimezoneBlockCalled, 'should be raised'
+      }
+    }
+    
+    assert_raise(TCTimezoneBlockCalled) {
+      tz.local_to_utc(dt, false) {|periods|
+        assert_equal(2, periods.size)
+        assert_equal(DateTime.new(1915,8,4,22,36,0), periods[0].utc_end)        
+        assert_equal(false, periods[0].dst?)        
+        assert_period_for(DateTime.new(1915,8,4,22,36,0), DateTime.new(1916,4,30,22,0,0), false, periods[1])
+        
+        raise TCTimezoneBlockCalled, 'should be raised'
+      }
+    }
+    
+    assert_equal(DateTime.new(1915,8,4,22,16,0), tz.local_to_utc(dt) {|periods| periods.first})
+    assert_equal(DateTime.new(1915,8,4,22,40,0), tz.local_to_utc(dt) {|periods| periods.last})
+  end
+  
+  def test_local_to_utc_block_ambiguous
+    dt = DateTime.new(2004,10,31,1,30,0)
+    tz = Timezone.get('America/New_York')
+    
+    assert_raise(AmbiguousTime) {
+      tz.local_to_utc(dt) {|periods| nil}
+    }
+    
+    assert_raise(AmbiguousTime) {
+      tz.local_to_utc(dt) {|periods| periods}
+    } 
+    
+    assert_raise(AmbiguousTime) {
+      tz.local_to_utc(dt) {|periods| []}
+    }
+    
+    assert_raise(AmbiguousTime) {
+      tz.local_to_utc(dt) {|periods| raise AmbiguousTime, 'Ambiguous time'}
+    }
   end
   
   def test_now
@@ -259,4 +481,11 @@ class TCTimezone < Test::Unit::TestCase
     assert((Timezone.get('America/New_York') <=> Timezone.get('Europe/Paris')) < 0)
     assert((Timezone.get('Europe/Paris') <=> Timezone.get('America/New_York')) > 0)
   end
+  
+  private
+    def assert_period_for(utc_start, utc_end, dst, period)
+      assert_equal(utc_start, period.utc_start)
+      assert_equal(utc_end, period.utc_end)
+      assert_equal(dst, period.dst?)
+    end
 end
