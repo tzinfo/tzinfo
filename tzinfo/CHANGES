@@ -6,6 +6,8 @@ Version ????? (tzdata v?????) - ???????????
   to Cliff Matthews for the suggestion.
 * Added require 'date' to timezone.rb (date isn't loaded by default in all
   environments).
+* Use rake to build packages and documentation.
+* License file is now included in gem distribution.
 
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------

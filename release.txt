@@ -1,13 +1,8 @@
+* Regenerate Timezone classes if necessary (rake build_tz_classes)
 * Update CHANGES
-* Update README (version number in installation section)
-* Regenerate rdoc
-* Update version number in tzinfo.gemspec
-* Build new gem
-* Copy tzinfo directory (within trunk). Rename tzinfo-version. Remove all .svn and doc directories. Remove gems, zips and tar.gzs.  zip and tar.gz.
-    find tzinfo-0.0.x -type d -name .svn -print0 | xargs --null rm -rf
-    tar c tzinfo-0.0.x | gzip -9 > tzinfo-0.0.x.tar.gz
-    zip -r9 tzinfo-0.0.x.zip tzinfo-0.0.x
+* Update version number in Rakefile
+* Regenerate rdoc (rake rdoc)
+* Build new gem, zip and tar.gz (rake package)
 * Upload gem, tar.gz, zip.
 * Upload documentation.
 * Write news item.
-    
