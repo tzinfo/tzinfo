@@ -1,3 +1,4 @@
+require 'date'
 require 'tzinfo/country'
 
 module TZInfo
