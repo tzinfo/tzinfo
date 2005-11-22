@@ -1,13 +1,17 @@
-Version ????? (tzdata v?????) - ???????????
+Version ????? (tzdata v2005n) - ???????????
 -------------------------------------------
 
 * period_for_local and local_to_utc now allow resolution of ambiguous
-  times (e.g. when switching from daylight savings to standard time). Thanks
-  to Cliff Matthews for the suggestion.
+  times (e.g. when switching from daylight savings to standard time). 
+  The behaviour of these methods when faced with dealing with an ambiguous
+  local time has now changed. If you are using these methods you should check
+  the documentation. Thanks to Cliff Matthews for suggesting this change.
 * Added require 'date' to timezone.rb (date isn't loaded by default in all
   environments).
 * Use rake to build packages and documentation.
 * License file is now included in gem distribution.
+* Dates in definitions stored as Astronomical Julian Day numbers rather than
+  as civil dates (improves performance creating DateTime instances).
 
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------
