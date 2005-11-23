@@ -11,6 +11,22 @@ module TZInfo
   #
   # This process is extremely slow (optimization is required).
   class TZDataParser
+    # Whether to generate zone definitions (set to false to stop zones being
+    # generated).    
+    attr_accessor :generate_zones
+    
+    # Whether to generate country definitions (set to false to stop countries
+    # being generated).
+    attr_accessor :generate_countries
+    
+    # Limit the set of zones to generate (set to an array containing zone
+    # identifiers).
+    attr_accessor :only_zones
+    
+    # Limit the set of countries to generate (set to an array containing
+    # country codes).
+    attr_accessor :only_countries
+  
     # Initializes a new TZDataParser. input_dir must contain the extracted
     # tzdata tarball. output_dir is the location to output the classes
     # (in countries and definitions directories).
@@ -22,6 +38,10 @@ module TZInfo
       @zones = {}
       @countries = {}
       @no_rules = TZDataNoRules.new
+      @generate_zones = true
+      @generate_countries = true
+      @only_zones = []
+      @only_countries = []
     end
     
     # Reads the tzdata source and generates the classes. Takes a long time
@@ -41,15 +61,27 @@ module TZInfo
       
       load_countries
       
-      @zones.each_value {|zone|
-        zone.write_class(@output_dir)
-      }
+      if @generate_zones
+        if @only_zones.nil? || @only_zones.empty?
+          @zones.each_value {|zone|
+            zone.write_class(@output_dir)
+          }
+        else
+          @only_zones.each {|id| @zones[id].write_class(@output_dir) }
+        end
+      end
       
-      @countries.each_value {|country|
-        country.write_class(@output_dir)
-      }
+      if @generate_countries
+        if @only_countries.nil? || @only_countries.empty?          
+          @countries.each_value {|country|
+            country.write_class(@output_dir)
+          }
+        else
+          @only_countries.each {|code| @countries[code].write_class(@output_dir) }
+        end
       
-      write_countries_index      
+        write_countries_index
+      end
     end
     
     # Parses a month specified in the tz data and converts it to a number

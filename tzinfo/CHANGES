@@ -12,6 +12,8 @@ Version ????? (tzdata v2005n) - ???????????
 * License file is now included in gem distribution.
 * Dates in definitions stored as Astronomical Julian Day numbers rather than
   as civil dates (improves performance creating DateTime instances).
+* Added options to TZDataParser to allow generation of specific zones and
+  countries.
 
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------
