@@ -272,7 +272,7 @@ module TZInfo
         if datetime.nil? 
           'nil'
         else
-          "DateTime.new0(Rational.new!(#{datetime.ajd.numerator}/#{datetime.ajd.denominator}),0,Date::ITALY)"          
+          "DateTime.new0(Rational.new!(#{datetime.ajd.numerator},#{datetime.ajd.denominator}),0,Date::ITALY)"          
         end
       end
       
