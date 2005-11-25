@@ -14,6 +14,7 @@ Version ????? (tzdata v2005n) - ???????????
   as civil dates (improves performance creating DateTime instances).
 * Added options to TZDataParser to allow generation of specific zones and
   countries.
+* Moved TimezonePeriod to timezone_period.rb.
 
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------
