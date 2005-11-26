@@ -27,6 +27,8 @@ Version ????? (tzdata v2005n) - ???????????
   unbounded rather than arbitrary end time.
 * Construct the Rational offset in TimezonePeriod once when the TimezonePeriod
   is constructed rather than each time it is needed.
+* Timezone and Country now keep a cache of loaded instances to avoid running
+  require which can be slow on some platforms.
 
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------

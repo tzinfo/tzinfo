@@ -5,6 +5,8 @@
 # rake rdoc - Builds API documentation id doc dir.
 # rake build_tz_classes - Builds Timezone and Country classes. Expects to find
 #   source data in ../data.
+# rake build_tz_class zone=Zone/Name - Builds single Timezone class. Expects to
+#   find source data in ../data.
 
 require 'rake'
 require 'rake/testtask'
@@ -61,5 +63,13 @@ end
 task :build_tz_classes do
   require 'lib/tzinfo/tzdataparser'
   p = TZInfo::TZDataParser.new('../data', 'lib/tzinfo')
+  p.execute
+end
+
+task :build_tz_class do
+  require 'lib/tzinfo/tzdataparser'
+  p = TZInfo::TZDataParser.new('../data', 'lib/tzinfo')
+  p.generate_countries = false
+  p.only_zones = [ENV['zone']]
   p.execute
 end

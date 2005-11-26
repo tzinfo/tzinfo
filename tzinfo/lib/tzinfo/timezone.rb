@@ -30,24 +30,34 @@ module TZInfo
   class Timezone
     include Comparable
     
+    # Cache of loaded zones by identifier to avoid using require if a zone
+    # has already been loaded.
+    @@loaded_zones = {}
+    
     # Returns a timezone by its identifier (e.g. "Europe/London", 
     # "America/Chicago" or "UTC").
     #
     # Raises an exception of the timezone couldn't be found.
     def self.get(identifier)
-      raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
-      identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
-      begin
-        require "tzinfo/definitions/#{identifier}"
-        
-        m = Definitions
-        identifier.split(/\//).each {|part|
-          m = m.const_get(part)
-        }
-        m.instance
-      rescue LoadError, NameError => e
-        raise InvalidTimezoneIdentifier, e
+      instance = @@loaded_zones[identifier]
+      if instance.nil?      
+        raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
+        identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
+        begin
+          require "tzinfo/definitions/#{identifier}"
+          
+          m = Definitions
+          identifier.split(/\//).each {|part|
+            m = m.const_get(part)
+          }
+          instance = m.instance
+          @@loaded_zones[instance.identifier] = instance         
+        rescue LoadError, NameError => e
+          raise InvalidTimezoneIdentifier, e
+        end
       end
+      
+      instance
     end
     
     # If identifier is nil calls super(), else calls get(identifier). An

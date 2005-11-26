@@ -14,16 +14,26 @@ module TZInfo
   class Country
     include Comparable
     
+    # Cache of loaded countries by code to avoid using require if a country
+    # has already been loaded.
+    @@loaded_countries = {}
+    
     # Gets a Country by its ISO 3166 code. Raising an exception if it couldn't
     # be found.
     def self.get(identifier)
-      raise InvalidCountryCode.new, 'Invalid identifier' if identifier !~ /^[A-Z]{2}$/
-      begin
-        require "tzinfo/countries/#{identifier}"
-        Countries.const_get(identifier).instance
-      rescue LoadError, NameError => e
-        raise InvalidCountryCode, e
+      instance = @@loaded_countries[identifier]
+      if instance.nil?     
+        raise InvalidCountryCode.new, 'Invalid identifier' if identifier !~ /^[A-Z]{2}$/
+        begin
+          require "tzinfo/countries/#{identifier}"
+          instance = Countries.const_get(identifier).instance
+          @@loaded_countries[instance.code] = instance
+        rescue LoadError, NameError => e
+          raise InvalidCountryCode, e
+        end
       end
+      
+      instance
     end
     
     # If identifier is nil calls super(), else calls get(identifier).
