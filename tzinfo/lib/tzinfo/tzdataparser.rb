@@ -27,6 +27,17 @@ module TZInfo
     # country codes).
     attr_accessor :only_countries
   
+    # Zones to exclude from generation when not using only_zones (set to an
+    # array containing zone identifiers). Defaults to:
+    #
+    #   ['Asia/Riyadh87', 'Asia/Riyadh88', 'Asia/Riyadh89',
+    #    'Mideast/Riyadh87', 'Mideast/Riyadh88', 'Mideast/Ruyadh89']
+    attr_accessor :exclude_zones
+    
+    # Countries to exclude from generation when not using only_countries (set
+    # to an array containing country codes).
+    attr_accessor :exclude_countries    
+    
     # Initializes a new TZDataParser. input_dir must contain the extracted
     # tzdata tarball. output_dir is the location to output the classes
     # (in countries and definitions directories).
@@ -42,6 +53,9 @@ module TZInfo
       @generate_countries = true
       @only_zones = []
       @only_countries = []
+      @exclude_zones = ['Asia/Riyadh87', 'Asia/Riyadh88', 'Asia/Riyadh89',
+        'Mideast/Riyadh87', 'Mideast/Riyadh88', 'Mideast/Ruyadh89']
+      @exclude_countries = []
     end
     
     # Reads the tzdata source and generates the classes. Takes a long time
@@ -64,7 +78,7 @@ module TZInfo
       if @generate_zones
         if @only_zones.nil? || @only_zones.empty?
           @zones.each_value {|zone|
-            zone.write_class(@output_dir)
+            zone.write_class(@output_dir) unless @exclude_zones.include?(zone.name)
           }
         else
           @only_zones.each {|id| @zones[id].write_class(@output_dir) }
@@ -74,7 +88,7 @@ module TZInfo
       if @generate_countries
         if @only_countries.nil? || @only_countries.empty?          
           @countries.each_value {|country|
-            country.write_class(@output_dir)
+            country.write_class(@output_dir) unless @exclude_countries.include?(country.code)
           }
         else
           @only_countries.each {|code| @countries[code].write_class(@output_dir) }
@@ -276,7 +290,7 @@ module TZInfo
   end
   
   # Base class for all rule sets.
-  class TZDataRules
+  class TZDataRules #:nodoc:
     # Name of the rule set, e.g. EU.
     attr_reader :name
     
@@ -318,7 +332,7 @@ module TZInfo
   end
   
   # Empty rule set with a fixed daylight savings (std) offset.
-  class TZDataFixedOffsetRules < TZDataRules
+  class TZDataFixedOffsetRules < TZDataRules #:nodoc:
     attr_reader :offset
     
     def initialize(offset)
@@ -339,7 +353,7 @@ module TZInfo
   end
   
   # An empty set of rules.
-  class TZDataNoRules < TZDataRules
+  class TZDataNoRules < TZDataRules #:nodoc:
     def initialize
       super('-')
     end
@@ -359,7 +373,7 @@ module TZInfo
   end
   
   # A rule set (as defined by Rule name in the tz data).
-  class TZDataRuleSet < TZDataRules        
+  class TZDataRuleSet < TZDataRules #:nodoc:       
     attr_reader :rules
     
     def initialize(name)
@@ -478,7 +492,7 @@ module TZInfo
   end
   
   # A rule in a RuleSet (a single Rule line in the tz data).
-  class TZDataRule
+  class TZDataRule #:nodoc:
     attr_reader :from
     attr_reader :to
     attr_reader :type
@@ -630,7 +644,7 @@ module TZInfo
   end
   
   # Base class for Zones and Links.
-  class TZDataDefinition
+  class TZDataDefinition #:nodoc:
     attr_reader :name
     attr_reader :name_for_class
     
@@ -683,7 +697,7 @@ module TZInfo
   end
   
   # A tz data Link.
-  class TZDataLink < TZDataDefinition
+  class TZDataLink < TZDataDefinition #:nodoc:
     attr_reader :link_to
     
     def initialize(name, link_to)
@@ -713,7 +727,7 @@ module TZInfo
   end
   
   # A tz data Zone. Each line from the tz data is loaded as a TZDataPeriod.
-  class TZDataZone < TZDataDefinition    
+  class TZDataZone < TZDataDefinition #:nodoc:    
     attr_reader :periods
     
     def initialize(name)
@@ -756,7 +770,7 @@ module TZInfo
   end
   
   # A period within a zone.
-  class TZDataPeriod
+  class TZDataPeriod #:nodoc:
     attr_reader :utc_offset
     attr_reader :rule_set
     attr_reader :format
@@ -778,7 +792,7 @@ module TZInfo
   
   # A tz data time definition - an hour, minute, second and reference. Reference
   # is either :utc, :standard or :wall_clock.
-  class TZDataTime
+  class TZDataTime #:nodoc:
     attr_reader :hour
     attr_reader :minute
     attr_reader :second
@@ -811,7 +825,7 @@ module TZInfo
   end
   
   # A tz data offset.
-  class TZDataOffset     
+  class TZDataOffset #:nodoc:     
     attr_reader :hour
     attr_reader :minute
     attr_reader :second    
@@ -854,7 +868,7 @@ module TZInfo
   
   # A tz data day of the month reference. Can either be an absolute day,
   # a last week day or a week day >= or <= than a specific day of month.
-  class TZDataDayOfMonth
+  class TZDataDayOfMonth #:nodoc:
     attr_reader :type
     attr_reader :day_of_month
     attr_reader :day_of_week
@@ -933,7 +947,7 @@ module TZInfo
   end   
   
   # A tz data Zone until reference.
-  class TZDataUntil
+  class TZDataUntil #:nodoc:
     def initialize(spec)      
       parts = spec.split(/\s+/)      
       raise "Invalid until: #{spec}" if parts.length < 1
@@ -952,7 +966,7 @@ module TZInfo
   
   # A tz data Zone format string. Either alternate standard/daylight-savings
   # or substitution (%s) format.
-  class TZDataFormat        
+  class TZDataFormat #:nodoc:        
     def initialize(spec)
       if spec =~ /([A-z]+)\/([A-z]+)/
         @type = :alternate
@@ -979,7 +993,7 @@ module TZInfo
   end
   
   # An ISO 3166 country.
-  class TZDataCountry
+  class TZDataCountry #:nodoc:
     attr_reader :code
     attr_reader :name
     attr_reader :zones

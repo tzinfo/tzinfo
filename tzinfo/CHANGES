@@ -19,6 +19,9 @@ Version ????? (tzdata v2005n) - ???????????
   perform searches for periods.
 * Timezones now defined using blocks. TimezonePeriods are only instantiated
   when they are needed.
+* Add options to TZDataParser to all exclusion of specific zones and countries.
+* Exclude the Riyadh Solar Time zones. The rules are only for 1987 to 1989 and
+  take a long time to generate and process.
 
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------
