@@ -442,7 +442,7 @@ module TZInfo
         
         if earliest.nil?
           #puts 'found no earliest rule'
-          write_period(file, utc_current, utc_end, period, std_offset, letter)
+          write_period(file, utc_current, unbounded_end ? nil : utc_end, period, std_offset, letter)
           
           [utc_end, std_offset]
           break

@@ -18,10 +18,13 @@ Version ????? (tzdata v2005n) - ???????????
 * New TimezonePeriodList class to store TimezonePeriods for a timezone and
   perform searches for periods.
 * Timezones now defined using blocks. TimezonePeriods are only instantiated
-  when they are needed.
+  when they are needed. Thanks to Jamis Buck for the suggestion.
 * Add options to TZDataParser to all exclusion of specific zones and countries.
-* Exclude the Riyadh Solar Time zones. The rules are only for 1987 to 1989 and
-  take a long time to generate and process.
+* Exclude the Riyadh Solar Time zones. The rules are only for 1987 to 1989.
+  take a long time to generate and process. Riyadh Solar Time is no longer
+  observed.
+* The last TimezonePeriod for each Timezone is now written out with an
+  unbounded rather than arbitrary end time.
 
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------
