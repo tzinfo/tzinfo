@@ -25,6 +25,8 @@ Version ????? (tzdata v2005n) - ???????????
   observed.
 * The last TimezonePeriod for each Timezone is now written out with an
   unbounded rather than arbitrary end time.
+* Construct the Rational offset in TimezonePeriod once when the TimezonePeriod
+  is constructed rather than each time it is needed.
 
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------
