@@ -172,38 +172,8 @@ module TZInfo
     #
     # If no TimezonePeriod could be found, PeriodNotFound is raised.
     def period_for_utc(utc)
-      utc = as_datetime(utc)
-      
-      # dumb search for now
-      result = nil            
-      periods.each {|period|
-        if period.valid_for_utc?(utc)
-          result = period
-          break          
-        end
-      }
-        
-      # if nothing found, assume the first and last periods are unbounded
-      if result.nil?
-        if periods.length > 0
-          
-          last = periods[periods.length - 1] 
-          if last.utc_after_start?(utc)
-            last
-          else
-            first = periods[0]
-            if first.utc_before_end?(utc)
-              first
-            else            
-              raise PeriodNotFound, "No time period found for #{utc}"
-            end
-          end
-        else
-          raise PeriodNotFound, "No time period found for #{utc}"
-        end
-      else
-        result
-      end
+      utc = as_datetime(utc)      
+      periods.period_for_utc(utc)      
     end
     
     # Returns the TimezonePeriod for the given local time. local can either be
@@ -240,40 +210,8 @@ module TZInfo
     # return a single period or return nil or an empty array
     # to cause an AmbiguousTime exception to be raised.
     def period_for_local(local, dst = nil)
-      local = as_datetime(local)
-      
-      # dumb search for now
-      results = []      
-      periods.each {|period|
-        if period.valid_for_local?(local)
-          results << period
-        elsif !results.empty?
-          # periods are ordered by UTC start time
-          # if we've found some results and then found an invalid period we've
-          # found all the relevant useful ones
-          break          
-        end
-      }
-        
-      # if nothing found, assume the first and last periods are unbounded
-      if results.empty?
-        if periods.length > 0
-          
-          last = periods[periods.length - 1] 
-          if last.local_after_start?(local)
-            results << last
-          else
-            first = periods[0]
-            if first.local_before_end?(local)
-              results << first
-            else
-              raise PeriodNotFound, "No time period found for #{local}."
-            end
-          end
-        else
-          raise PeriodNotFound, "No time period found for #{local}."
-        end
-      end
+      local = as_datetime(local)      
+      results = periods.periods_for_local(local)
       
       # by this point, results must contain at least one period
       if results.size < 2
@@ -391,7 +329,7 @@ module TZInfo
     protected
       def self.setup
         class_eval <<CODE
-            @@periods = []
+            @@periods = TimezonePeriodList.new
             @@instance = new
             
             def identifier
@@ -403,13 +341,17 @@ module TZInfo
             end
             
             def periods
-              @@periods.freeze
+              @@periods
             end
             
             protected
-              def self.add_period(period)              
-                @@periods << period
-              end            
+              def self.add_period(year, month)              
+                @@periods.add(year, month) { yield }
+              end
+              
+              def self.add_unbounded_start_period()
+                @@periods.add_unbounded_start { yield }
+              end
               
               def self.set_identifier(identifier)
                 @@identifier = identifier

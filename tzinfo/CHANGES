@@ -15,6 +15,10 @@ Version ????? (tzdata v2005n) - ???????????
 * Added options to TZDataParser to allow generation of specific zones and
   countries.
 * Moved TimezonePeriod to timezone_period.rb.
+* New TimezonePeriodList class to store TimezonePeriods for a timezone and
+  perform searches for periods.
+* Timezones now defined using blocks. TimezonePeriods are only instantiated
+  when they are needed.
 
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------

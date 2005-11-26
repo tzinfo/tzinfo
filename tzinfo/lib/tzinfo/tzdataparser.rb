@@ -295,7 +295,11 @@ module TZInfo
           zone_id = 'Unknown'
         end
         
-        file.puts "add_period(TimezonePeriod.new(#{datetime_constructor(utc_start)},#{datetime_constructor(utc_end)},#{period.utc_offset.to_seconds},#{std_offset.to_seconds},:#{quote_str(zone_id)}))"
+        if utc_start.nil?
+          file.puts "add_unbounded_start_period {TimezonePeriod.new(nil,#{datetime_constructor(utc_end)},#{period.utc_offset.to_seconds},#{std_offset.to_seconds},:#{quote_str(zone_id)})}"
+        else
+          file.puts "add_period(#{utc_start.year},#{utc_start.mon}) {TimezonePeriod.new(#{datetime_constructor(utc_start)},#{datetime_constructor(utc_end)},#{period.utc_offset.to_seconds},#{std_offset.to_seconds},:#{quote_str(zone_id)})}"
+        end
         #puts "Period from #{utc_start} to #{utc_end}, utc_offset=#{period.utc_offset.to_seconds}, std_offset=#{std_offset.to_seconds}, name=#{period.format.expand(std_offset, letter)}"
       end
       
