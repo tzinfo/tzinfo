@@ -71,7 +71,7 @@ class TCTimezone < Test::Unit::TestCase
   
   def test_get_case    
     assert_raise(InvalidTimezoneIdentifier) {
-      Timezone.get('Europe/london')
+      Timezone.get('Europe/prague')
     }
   end
   
