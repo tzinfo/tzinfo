@@ -5,8 +5,8 @@ module Africa #:nodoc:
 class Blantyre < Timezone #:nodoc:
 setup
 set_identifier('Africa/Blantyre')
-add_period(TimezonePeriod.new(nil,DateTime.new(1903,2,28,21,40,0),8400,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1903,2,28,21,40,0),nil,7200,0,:'CAT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(173964557,72),0,Date::ITALY),8400,0,:'LMT')}
+add_period(1903,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(173964557,72),0,Date::ITALY),nil,7200,0,:'CAT')}
 end
 end
 end

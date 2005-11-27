@@ -75,7 +75,7 @@ module TZInfo
           instance = m.instance
           @@loaded_zones[instance.identifier] = instance         
         rescue LoadError, NameError => e
-          raise InvalidTimezoneIdentifier, e
+          raise InvalidTimezoneIdentifier, e.message
         end
       end
       
@@ -359,7 +359,7 @@ module TZInfo
     end
     
     protected
-      def self.setup
+      def self.setup        
         class_eval <<CODE
             @@periods = TimezonePeriodList.new
             @@instance = new
@@ -381,7 +381,7 @@ module TZInfo
                 @@periods.add(year, month) { yield }
               end
               
-              def self.add_unbounded_start_period()
+              def self.add_unbounded_start_period
                 @@periods.add_unbounded_start { yield }
               end
               

@@ -5,8 +5,8 @@ module Africa #:nodoc:
 class Douala < Timezone #:nodoc:
 setup
 set_identifier('Africa/Douala')
-add_period(TimezonePeriod.new(nil,DateTime.new(1911,12,31,23,21,12),2328,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1911,12,31,23,21,12),nil,3600,0,:'WAT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(8709848903,3600),0,Date::ITALY),2328,0,:'LMT')}
+add_period(1911,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(8709848903,3600),0,Date::ITALY),nil,3600,0,:'WAT')}
 end
 end
 end

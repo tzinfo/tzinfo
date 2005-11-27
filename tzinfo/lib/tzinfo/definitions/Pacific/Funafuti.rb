@@ -5,8 +5,8 @@ module Pacific #:nodoc:
 class Funafuti < Timezone #:nodoc:
 setup
 set_identifier('Pacific/Funafuti')
-add_period(TimezonePeriod.new(nil,DateTime.new(1900,12,31,12,3,8),43012,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1900,12,31,12,3,8),nil,43200,0,:'TVT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52172316047,21600),0,Date::ITALY),43012,0,:'LMT')}
+add_period(1900,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52172316047,21600),0,Date::ITALY),nil,43200,0,:'TVT')}
 end
 end
 end

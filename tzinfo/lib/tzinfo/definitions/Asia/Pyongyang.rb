@@ -5,13 +5,13 @@ module Asia #:nodoc:
 class Pyongyang < Timezone #:nodoc:
 setup
 set_identifier('Asia/Pyongyang')
-add_period(TimezonePeriod.new(nil,DateTime.new(1889,12,31,15,37,0),30180,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1889,12,31,15,37,0),DateTime.new(1904,11,30,15,30,0),30600,0,:'KST'))
-add_period(TimezonePeriod.new(DateTime.new(1904,11,30,15,30,0),DateTime.new(1927,12,31,15,0,0),32400,0,:'KST'))
-add_period(TimezonePeriod.new(DateTime.new(1927,12,31,15,0,0),DateTime.new(1931,12,31,15,30,0),30600,0,:'KST'))
-add_period(TimezonePeriod.new(DateTime.new(1931,12,31,15,30,0),DateTime.new(1954,3,20,15,0,0),32400,0,:'KST'))
-add_period(TimezonePeriod.new(DateTime.new(1954,3,20,15,0,0),DateTime.new(1961,8,9,16,0,0),28800,0,:'KST'))
-add_period(TimezonePeriod.new(DateTime.new(1961,8,9,16,0,0),nil,32400,0,:'KST'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(3472370137,1440),0,Date::ITALY),30180,0,:'LMT')}
+add_period(1889,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(3472370137,1440),0,Date::ITALY),DateTime.new0(Rational.new!(116007127,48),0,Date::ITALY),30600,0,:'KST')}
+add_period(1904,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(116007127,48),0,Date::ITALY),DateTime.new0(Rational.new!(19401969,8),0,Date::ITALY),32400,0,:'KST')}
+add_period(1927,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(19401969,8),0,Date::ITALY),DateTime.new0(Rational.new!(116481943,48),0,Date::ITALY),30600,0,:'KST')}
+add_period(1931,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(116481943,48),0,Date::ITALY),DateTime.new0(Rational.new!(19478577,8),0,Date::ITALY),32400,0,:'KST')}
+add_period(1954,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19478577,8),0,Date::ITALY),DateTime.new0(Rational.new!(14625127,6),0,Date::ITALY),28800,0,:'KST')}
+add_period(1961,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(14625127,6),0,Date::ITALY),nil,32400,0,:'KST')}
 end
 end
 end

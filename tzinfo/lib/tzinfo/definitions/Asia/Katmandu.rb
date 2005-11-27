@@ -5,9 +5,9 @@ module Asia #:nodoc:
 class Katmandu < Timezone #:nodoc:
 setup
 set_identifier('Asia/Katmandu')
-add_period(TimezonePeriod.new(nil,DateTime.new(1919,12,31,18,18,44),20476,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1919,12,31,18,18,44),DateTime.new(1985,12,31,18,30,0),19800,0,:'IST'))
-add_period(TimezonePeriod.new(DateTime.new(1985,12,31,18,30,0),nil,20700,0,:'NPT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52322204081,21600),0,Date::ITALY),20476,0,:'LMT')}
+add_period(1919,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52322204081,21600),0,Date::ITALY),DateTime.new0(Rational.new!(117428701,48),0,Date::ITALY),19800,0,:'IST')}
+add_period(1985,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(117428701,48),0,Date::ITALY),nil,20700,0,:'NPT')}
 end
 end
 end

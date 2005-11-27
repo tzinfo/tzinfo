@@ -5,7 +5,7 @@ module Etc #:nodoc:
 class GMT__p__2 < Timezone #:nodoc:
 setup
 set_identifier('Etc/GMT+2')
-add_period(TimezonePeriod.new(nil,nil,-7200,0,:'GMT+2'))
+add_unbounded_start_period {TimezonePeriod.new(nil,nil,-7200,0,:'GMT+2')}
 end
 end
 end

@@ -5,11 +5,11 @@ module Pacific #:nodoc:
 class Nauru < Timezone #:nodoc:
 setup
 set_identifier('Pacific/Nauru')
-add_period(TimezonePeriod.new(nil,DateTime.new(1921,1,14,12,52,20),40060,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1921,1,14,12,52,20),DateTime.new(1942,3,14,12,30,0),41400,0,:'NRT'))
-add_period(TimezonePeriod.new(DateTime.new(1942,3,14,12,30,0),DateTime.new(1944,8,14,15,0,0),32400,0,:'JST'))
-add_period(TimezonePeriod.new(DateTime.new(1944,8,14,15,0,0),DateTime.new(1979,4,30,12,30,0),41400,0,:'NRT'))
-add_period(TimezonePeriod.new(DateTime.new(1979,4,30,12,30,0),nil,43200,0,:'NRT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10466081437,4320),0,Date::ITALY),40060,0,:'LMT')}
+add_period(1921,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10466081437,4320),0,Date::ITALY),DateTime.new0(Rational.new!(116660785,48),0,Date::ITALY),41400,0,:'NRT')}
+add_period(1942,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(116660785,48),0,Date::ITALY),DateTime.new0(Rational.new!(19450537,8),0,Date::ITALY),32400,0,:'JST')}
+add_period(1944,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(19450537,8),0,Date::ITALY),DateTime.new0(Rational.new!(117311713,48),0,Date::ITALY),41400,0,:'NRT')}
+add_period(1979,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(117311713,48),0,Date::ITALY),nil,43200,0,:'NRT')}
 end
 end
 end

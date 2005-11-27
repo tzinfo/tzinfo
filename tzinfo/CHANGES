@@ -1,10 +1,10 @@
-Version ????? (tzdata v2005n) - ???????????
+Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
 -------------------------------------------
 
 * period_for_local and local_to_utc now allow resolution of ambiguous
   times (e.g. when switching from daylight savings to standard time). 
-  The behaviour of these methods when faced with dealing with an ambiguous
-  local time has now changed. If you are using these methods you should check
+  The behaviour of these methods when faced with an ambiguous local time
+  has now changed. If you are using these methods you should check
   the documentation. Thanks to Cliff Matthews for suggesting this change.
 * Added require 'date' to timezone.rb (date isn't loaded by default in all
   environments).
@@ -14,13 +14,14 @@ Version ????? (tzdata v2005n) - ???????????
   as civil dates (improves performance creating DateTime instances).
 * Added options to TZDataParser to allow generation of specific zones and
   countries.
-* Moved TimezonePeriod to timezone_period.rb.
+* Moved TimezonePeriod class to timezone_period.rb.
 * New TimezonePeriodList class to store TimezonePeriods for a timezone and
   perform searches for periods.
 * Timezones now defined using blocks. TimezonePeriods are only instantiated
   when they are needed. Thanks to Jamis Buck for the suggestion.
-* Add options to TZDataParser to all exclusion of specific zones and countries.
-* Exclude the Riyadh Solar Time zones. The rules are only for 1987 to 1989.
+* Add options to TZDataParser to allow exclusion of specific zones and 
+  countries.
+* Exclude the Riyadh Solar Time zones. The rules are only for 1987 to 1989 and
   take a long time to generate and process. Riyadh Solar Time is no longer
   observed.
 * The last TimezonePeriod for each Timezone is now written out with an
@@ -29,6 +30,8 @@ Version ????? (tzdata v2005n) - ???????????
   is constructed rather than each time it is needed.
 * Timezone and Country now keep a cache of loaded instances to avoid running
   require which can be slow on some platforms.
+* Updated to tzdata version 2005n.
+
 
 Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 -------------------------------------------
@@ -41,6 +44,7 @@ Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 * Added testcases for Timezone, TimezoneProxy, TimezonePeriod, Country and
   some selected timezones.
 
+  
 Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
 -------------------------------------------
 

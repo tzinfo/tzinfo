@@ -5,11 +5,11 @@ module Africa #:nodoc:
 class Kampala < Timezone #:nodoc:
 setup
 set_identifier('Africa/Kampala')
-add_period(TimezonePeriod.new(nil,DateTime.new(1928,6,30,21,50,20),7780,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1928,6,30,21,50,20),DateTime.new(1929,12,31,21,0,0),10800,0,:'EAT'))
-add_period(TimezonePeriod.new(DateTime.new(1929,12,31,21,0,0),DateTime.new(1947,12,31,21,30,0),9000,0,:'BEAT'))
-add_period(TimezonePeriod.new(DateTime.new(1947,12,31,21,30,0),DateTime.new(1956,12,31,21,15,15),9885,0,:'BEAUT'))
-add_period(TimezonePeriod.new(DateTime.new(1956,12,31,21,15,15),nil,10800,0,:'EAT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10477850731,4320),0,Date::ITALY),7780,0,:'LMT')}
+add_period(1928,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(10477850731,4320),0,Date::ITALY),DateTime.new0(Rational.new!(19407819,8),0,Date::ITALY),10800,0,:'EAT')}
+add_period(1929,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(19407819,8),0,Date::ITALY),DateTime.new0(Rational.new!(116762467,48),0,Date::ITALY),9000,0,:'BEAT')}
+add_period(1947,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(116762467,48),0,Date::ITALY),DateTime.new0(Rational.new!(14030434861,5760),0,Date::ITALY),9885,0,:'BEAUT')}
+add_period(1956,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(14030434861,5760),0,Date::ITALY),nil,10800,0,:'EAT')}
 end
 end
 end

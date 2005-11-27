@@ -5,11 +5,11 @@ module America #:nodoc:
 class Guyana < Timezone #:nodoc:
 setup
 set_identifier('America/Guyana')
-add_period(TimezonePeriod.new(nil,DateTime.new(1915,3,1,3,52,40),-13960,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1915,3,1,3,52,40),DateTime.new(1966,5,26,3,45,0),-13500,0,:'GBGT'))
-add_period(TimezonePeriod.new(DateTime.new(1966,5,26,3,45,0),DateTime.new(1975,7,31,3,45,0),-13500,0,:'GYT'))
-add_period(TimezonePeriod.new(DateTime.new(1975,7,31,3,45,0),DateTime.new(1991,1,1,3,0,0),-10800,0,:'GYT'))
-add_period(TimezonePeriod.new(DateTime.new(1991,1,1,3,0,0),nil,-14400,0,:'GYT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(5228404549,2160),0,Date::ITALY),-13960,0,:'LMT')}
+add_period(1915,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(5228404549,2160),0,Date::ITALY),DateTime.new0(Rational.new!(78056693,32),0,Date::ITALY),-13500,0,:'GBGT')}
+add_period(1966,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(78056693,32),0,Date::ITALY),DateTime.new0(Rational.new!(78163989,32),0,Date::ITALY),-13500,0,:'GYT')}
+add_period(1975,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(78163989,32),0,Date::ITALY),DateTime.new0(Rational.new!(19586061,8),0,Date::ITALY),-10800,0,:'GYT')}
+add_period(1991,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(19586061,8),0,Date::ITALY),nil,-14400,0,:'GYT')}
 end
 end
 end

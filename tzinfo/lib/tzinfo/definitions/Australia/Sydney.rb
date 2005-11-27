@@ -5,165 +5,166 @@ module Australia #:nodoc:
 class Sydney < Timezone #:nodoc:
 setup
 set_identifier('Australia/Sydney')
-add_period(TimezonePeriod.new(nil,DateTime.new(1895,1,31,13,55,8),36292,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1895,1,31,13,55,8),DateTime.new(1916,12,31,14,1,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1916,12,31,14,1,0),DateTime.new(1917,3,24,15,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1917,3,24,15,0,0),DateTime.new(1941,12,31,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1941,12,31,16,0,0),DateTime.new(1942,3,28,15,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1942,3,28,15,0,0),DateTime.new(1942,9,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1942,9,26,16,0,0),DateTime.new(1943,3,27,15,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1943,3,27,15,0,0),DateTime.new(1943,10,2,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1943,10,2,16,0,0),DateTime.new(1944,3,25,15,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1944,3,25,15,0,0),DateTime.new(1970,12,31,14,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1970,12,31,14,0,0),DateTime.new(1971,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1971,10,30,16,0,0),DateTime.new(1972,2,26,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1972,2,26,16,0,0),DateTime.new(1972,10,28,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1972,10,28,16,0,0),DateTime.new(1973,3,3,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1973,3,3,16,0,0),DateTime.new(1973,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1973,10,27,16,0,0),DateTime.new(1974,3,2,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1974,3,2,16,0,0),DateTime.new(1974,10,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1974,10,26,16,0,0),DateTime.new(1975,3,1,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1975,3,1,16,0,0),DateTime.new(1975,10,25,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1975,10,25,16,0,0),DateTime.new(1976,3,6,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1976,3,6,16,0,0),DateTime.new(1976,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1976,10,30,16,0,0),DateTime.new(1977,3,5,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1977,3,5,16,0,0),DateTime.new(1977,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1977,10,29,16,0,0),DateTime.new(1978,3,4,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1978,3,4,16,0,0),DateTime.new(1978,10,28,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1978,10,28,16,0,0),DateTime.new(1979,3,3,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1979,3,3,16,0,0),DateTime.new(1979,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1979,10,27,16,0,0),DateTime.new(1980,3,1,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1980,3,1,16,0,0),DateTime.new(1980,10,25,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1980,10,25,16,0,0),DateTime.new(1981,2,28,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1981,2,28,16,0,0),DateTime.new(1981,10,24,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1981,10,24,16,0,0),DateTime.new(1982,4,3,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1982,4,3,16,0,0),DateTime.new(1982,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1982,10,30,16,0,0),DateTime.new(1983,3,5,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1983,3,5,16,0,0),DateTime.new(1983,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1983,10,29,16,0,0),DateTime.new(1984,3,3,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1984,3,3,16,0,0),DateTime.new(1984,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1984,10,27,16,0,0),DateTime.new(1985,3,2,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1985,3,2,16,0,0),DateTime.new(1985,10,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1985,10,26,16,0,0),DateTime.new(1986,3,15,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1986,3,15,16,0,0),DateTime.new(1986,10,18,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1986,10,18,16,0,0),DateTime.new(1987,3,14,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1987,3,14,16,0,0),DateTime.new(1987,10,24,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1987,10,24,16,0,0),DateTime.new(1988,3,19,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1988,3,19,16,0,0),DateTime.new(1988,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1988,10,29,16,0,0),DateTime.new(1989,3,18,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1989,3,18,16,0,0),DateTime.new(1989,10,28,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1989,10,28,16,0,0),DateTime.new(1990,3,3,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1990,3,3,16,0,0),DateTime.new(1990,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1990,10,27,16,0,0),DateTime.new(1991,3,2,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1991,3,2,16,0,0),DateTime.new(1991,10,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1991,10,26,16,0,0),DateTime.new(1992,2,29,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1992,2,29,16,0,0),DateTime.new(1992,10,24,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1992,10,24,16,0,0),DateTime.new(1993,3,6,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1993,3,6,16,0,0),DateTime.new(1993,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1993,10,30,16,0,0),DateTime.new(1994,3,5,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1994,3,5,16,0,0),DateTime.new(1994,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1994,10,29,16,0,0),DateTime.new(1995,3,4,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1995,3,4,16,0,0),DateTime.new(1995,10,28,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1995,10,28,16,0,0),DateTime.new(1996,3,30,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1996,3,30,16,0,0),DateTime.new(1996,10,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1996,10,26,16,0,0),DateTime.new(1997,3,29,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1997,3,29,16,0,0),DateTime.new(1997,10,25,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1997,10,25,16,0,0),DateTime.new(1998,3,28,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1998,3,28,16,0,0),DateTime.new(1998,10,24,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1998,10,24,16,0,0),DateTime.new(1999,3,27,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1999,3,27,16,0,0),DateTime.new(1999,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(1999,10,30,16,0,0),DateTime.new(2000,3,25,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2000,3,25,16,0,0),DateTime.new(2000,8,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2000,8,26,16,0,0),DateTime.new(2001,3,24,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2001,3,24,16,0,0),DateTime.new(2001,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2001,10,27,16,0,0),DateTime.new(2002,3,30,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2002,3,30,16,0,0),DateTime.new(2002,10,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2002,10,26,16,0,0),DateTime.new(2003,3,29,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2003,3,29,16,0,0),DateTime.new(2003,10,25,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2003,10,25,16,0,0),DateTime.new(2004,3,27,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2004,3,27,16,0,0),DateTime.new(2004,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2004,10,30,16,0,0),DateTime.new(2005,3,26,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2005,3,26,16,0,0),DateTime.new(2005,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2005,10,29,16,0,0),DateTime.new(2006,4,1,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2006,4,1,16,0,0),DateTime.new(2006,10,28,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2006,10,28,16,0,0),DateTime.new(2007,3,24,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2007,3,24,16,0,0),DateTime.new(2007,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2007,10,27,16,0,0),DateTime.new(2008,3,29,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2008,3,29,16,0,0),DateTime.new(2008,10,25,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2008,10,25,16,0,0),DateTime.new(2009,3,28,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2009,3,28,16,0,0),DateTime.new(2009,10,24,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2009,10,24,16,0,0),DateTime.new(2010,3,27,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2010,3,27,16,0,0),DateTime.new(2010,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2010,10,30,16,0,0),DateTime.new(2011,3,26,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2011,3,26,16,0,0),DateTime.new(2011,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2011,10,29,16,0,0),DateTime.new(2012,3,24,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2012,3,24,16,0,0),DateTime.new(2012,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2012,10,27,16,0,0),DateTime.new(2013,3,30,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2013,3,30,16,0,0),DateTime.new(2013,10,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2013,10,26,16,0,0),DateTime.new(2014,3,29,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2014,3,29,16,0,0),DateTime.new(2014,10,25,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2014,10,25,16,0,0),DateTime.new(2015,3,28,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2015,3,28,16,0,0),DateTime.new(2015,10,24,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2015,10,24,16,0,0),DateTime.new(2016,3,26,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2016,3,26,16,0,0),DateTime.new(2016,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2016,10,29,16,0,0),DateTime.new(2017,3,25,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2017,3,25,16,0,0),DateTime.new(2017,10,28,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2017,10,28,16,0,0),DateTime.new(2018,3,24,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2018,3,24,16,0,0),DateTime.new(2018,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2018,10,27,16,0,0),DateTime.new(2019,3,30,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2019,3,30,16,0,0),DateTime.new(2019,10,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2019,10,26,16,0,0),DateTime.new(2020,3,28,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2020,3,28,16,0,0),DateTime.new(2020,10,24,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2020,10,24,16,0,0),DateTime.new(2021,3,27,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2021,3,27,16,0,0),DateTime.new(2021,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2021,10,30,16,0,0),DateTime.new(2022,3,26,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2022,3,26,16,0,0),DateTime.new(2022,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2022,10,29,16,0,0),DateTime.new(2023,3,25,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2023,3,25,16,0,0),DateTime.new(2023,10,28,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2023,10,28,16,0,0),DateTime.new(2024,3,30,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2024,3,30,16,0,0),DateTime.new(2024,10,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2024,10,26,16,0,0),DateTime.new(2025,3,29,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2025,3,29,16,0,0),DateTime.new(2025,10,25,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2025,10,25,16,0,0),DateTime.new(2026,3,28,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2026,3,28,16,0,0),DateTime.new(2026,10,24,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2026,10,24,16,0,0),DateTime.new(2027,3,27,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2027,3,27,16,0,0),DateTime.new(2027,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2027,10,30,16,0,0),DateTime.new(2028,3,25,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2028,3,25,16,0,0),DateTime.new(2028,10,28,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2028,10,28,16,0,0),DateTime.new(2029,3,24,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2029,3,24,16,0,0),DateTime.new(2029,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2029,10,27,16,0,0),DateTime.new(2030,3,30,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2030,3,30,16,0,0),DateTime.new(2030,10,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2030,10,26,16,0,0),DateTime.new(2031,3,29,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2031,3,29,16,0,0),DateTime.new(2031,10,25,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2031,10,25,16,0,0),DateTime.new(2032,3,27,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2032,3,27,16,0,0),DateTime.new(2032,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2032,10,30,16,0,0),DateTime.new(2033,3,26,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2033,3,26,16,0,0),DateTime.new(2033,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2033,10,29,16,0,0),DateTime.new(2034,3,25,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2034,3,25,16,0,0),DateTime.new(2034,10,28,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2034,10,28,16,0,0),DateTime.new(2035,3,24,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2035,3,24,16,0,0),DateTime.new(2035,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2035,10,27,16,0,0),DateTime.new(2036,3,29,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2036,3,29,16,0,0),DateTime.new(2036,10,25,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2036,10,25,16,0,0),DateTime.new(2037,3,28,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2037,3,28,16,0,0),DateTime.new(2037,10,24,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2037,10,24,16,0,0),DateTime.new(2038,3,27,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2038,3,27,16,0,0),DateTime.new(2038,10,30,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2038,10,30,16,0,0),DateTime.new(2039,3,26,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2039,3,26,16,0,0),DateTime.new(2039,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2039,10,29,16,0,0),DateTime.new(2040,3,24,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2040,3,24,16,0,0),DateTime.new(2040,10,27,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2040,10,27,16,0,0),DateTime.new(2041,3,30,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2041,3,30,16,0,0),DateTime.new(2041,10,26,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2041,10,26,16,0,0),DateTime.new(2042,3,29,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2042,3,29,16,0,0),DateTime.new(2042,10,25,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2042,10,25,16,0,0),DateTime.new(2043,3,28,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2043,3,28,16,0,0),DateTime.new(2043,10,24,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2043,10,24,16,0,0),DateTime.new(2044,3,26,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2044,3,26,16,0,0),DateTime.new(2044,10,29,16,0,0),36000,0,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2044,10,29,16,0,0),DateTime.new(2045,3,25,16,0,0),36000,3600,:'EST'))
-add_period(TimezonePeriod.new(DateTime.new(2045,3,25,16,0,0),DateTime.new(2045,9,3,22,38,17),36000,0,:'EST'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52125661727,21600),0,Date::ITALY),36292,0,:'LMT')}
+add_period(1895,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52125661727,21600),0,Date::ITALY),DateTime.new0(Rational.new!(3486569881,1440),0,Date::ITALY),36000,0,:'EST')}
+add_period(1916,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(3486569881,1440),0,Date::ITALY),DateTime.new0(Rational.new!(19370497,8),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1917,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19370497,8),0,Date::ITALY),DateTime.new0(Rational.new!(14582161,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1941,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(14582161,6),0,Date::ITALY),DateTime.new0(Rational.new!(19443577,8),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1942,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19443577,8),0,Date::ITALY),DateTime.new0(Rational.new!(14583775,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1942,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(14583775,6),0,Date::ITALY),DateTime.new0(Rational.new!(19446489,8),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1943,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19446489,8),0,Date::ITALY),DateTime.new0(Rational.new!(14586001,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1943,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14586001,6),0,Date::ITALY),DateTime.new0(Rational.new!(19449401,8),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1944,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19449401,8),0,Date::ITALY),DateTime.new0(Rational.new!(29291425,12),0,Date::ITALY),36000,0,:'EST')}
+add_period(1970,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(29291425,12),0,Date::ITALY),DateTime.new0(Rational.new!(14647531,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1971,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14647531,6),0,Date::ITALY),DateTime.new0(Rational.new!(14648245,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1972,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(14648245,6),0,Date::ITALY),DateTime.new0(Rational.new!(14649715,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1972,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14649715,6),0,Date::ITALY),DateTime.new0(Rational.new!(14650471,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1973,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14650471,6),0,Date::ITALY),DateTime.new0(Rational.new!(14651899,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1973,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14651899,6),0,Date::ITALY),DateTime.new0(Rational.new!(14652655,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1974,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14652655,6),0,Date::ITALY),DateTime.new0(Rational.new!(14654083,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1974,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14654083,6),0,Date::ITALY),DateTime.new0(Rational.new!(14654839,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1975,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14654839,6),0,Date::ITALY),DateTime.new0(Rational.new!(14656267,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1975,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14656267,6),0,Date::ITALY),DateTime.new0(Rational.new!(14657065,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1976,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14657065,6),0,Date::ITALY),DateTime.new0(Rational.new!(14658493,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1976,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14658493,6),0,Date::ITALY),DateTime.new0(Rational.new!(14659249,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1977,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14659249,6),0,Date::ITALY),DateTime.new0(Rational.new!(14660677,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1977,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14660677,6),0,Date::ITALY),DateTime.new0(Rational.new!(14661433,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1978,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14661433,6),0,Date::ITALY),DateTime.new0(Rational.new!(14662861,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1978,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14662861,6),0,Date::ITALY),DateTime.new0(Rational.new!(14663617,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1979,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14663617,6),0,Date::ITALY),DateTime.new0(Rational.new!(14665045,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1979,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14665045,6),0,Date::ITALY),DateTime.new0(Rational.new!(14665801,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1980,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14665801,6),0,Date::ITALY),DateTime.new0(Rational.new!(14667229,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1980,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14667229,6),0,Date::ITALY),DateTime.new0(Rational.new!(14667985,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1981,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(14667985,6),0,Date::ITALY),DateTime.new0(Rational.new!(14669413,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1981,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14669413,6),0,Date::ITALY),DateTime.new0(Rational.new!(14670379,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1982,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14670379,6),0,Date::ITALY),DateTime.new0(Rational.new!(14671639,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1982,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14671639,6),0,Date::ITALY),DateTime.new0(Rational.new!(14672395,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1983,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14672395,6),0,Date::ITALY),DateTime.new0(Rational.new!(14673823,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1983,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14673823,6),0,Date::ITALY),DateTime.new0(Rational.new!(14674579,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1984,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14674579,6),0,Date::ITALY),DateTime.new0(Rational.new!(14676007,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1984,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14676007,6),0,Date::ITALY),DateTime.new0(Rational.new!(14676763,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1985,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14676763,6),0,Date::ITALY),DateTime.new0(Rational.new!(14678191,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1985,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14678191,6),0,Date::ITALY),DateTime.new0(Rational.new!(14679031,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1986,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14679031,6),0,Date::ITALY),DateTime.new0(Rational.new!(14680333,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1986,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14680333,6),0,Date::ITALY),DateTime.new0(Rational.new!(14681215,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1987,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14681215,6),0,Date::ITALY),DateTime.new0(Rational.new!(14682559,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1987,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14682559,6),0,Date::ITALY),DateTime.new0(Rational.new!(14683441,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1988,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14683441,6),0,Date::ITALY),DateTime.new0(Rational.new!(14684785,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1988,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14684785,6),0,Date::ITALY),DateTime.new0(Rational.new!(14685625,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1989,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14685625,6),0,Date::ITALY),DateTime.new0(Rational.new!(14686969,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1989,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14686969,6),0,Date::ITALY),DateTime.new0(Rational.new!(14687725,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1990,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14687725,6),0,Date::ITALY),DateTime.new0(Rational.new!(14689153,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1990,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14689153,6),0,Date::ITALY),DateTime.new0(Rational.new!(14689909,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1991,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14689909,6),0,Date::ITALY),DateTime.new0(Rational.new!(14691337,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1991,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14691337,6),0,Date::ITALY),DateTime.new0(Rational.new!(14692093,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1992,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(14692093,6),0,Date::ITALY),DateTime.new0(Rational.new!(14693521,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1992,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14693521,6),0,Date::ITALY),DateTime.new0(Rational.new!(14694319,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1993,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14694319,6),0,Date::ITALY),DateTime.new0(Rational.new!(14695747,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1993,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14695747,6),0,Date::ITALY),DateTime.new0(Rational.new!(14696503,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1994,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14696503,6),0,Date::ITALY),DateTime.new0(Rational.new!(14697931,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1994,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14697931,6),0,Date::ITALY),DateTime.new0(Rational.new!(14698687,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1995,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14698687,6),0,Date::ITALY),DateTime.new0(Rational.new!(14700115,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1995,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14700115,6),0,Date::ITALY),DateTime.new0(Rational.new!(14701039,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1996,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14701039,6),0,Date::ITALY),DateTime.new0(Rational.new!(14702299,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1996,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14702299,6),0,Date::ITALY),DateTime.new0(Rational.new!(14703223,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1997,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14703223,6),0,Date::ITALY),DateTime.new0(Rational.new!(14704483,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1997,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14704483,6),0,Date::ITALY),DateTime.new0(Rational.new!(14705407,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1998,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14705407,6),0,Date::ITALY),DateTime.new0(Rational.new!(14706667,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1998,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14706667,6),0,Date::ITALY),DateTime.new0(Rational.new!(14707591,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(1999,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14707591,6),0,Date::ITALY),DateTime.new0(Rational.new!(14708893,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1999,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14708893,6),0,Date::ITALY),DateTime.new0(Rational.new!(14709775,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2000,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14709775,6),0,Date::ITALY),DateTime.new0(Rational.new!(14710699,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2000,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(14710699,6),0,Date::ITALY),DateTime.new0(Rational.new!(14711959,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2001,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14711959,6),0,Date::ITALY),DateTime.new0(Rational.new!(14713261,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2001,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14713261,6),0,Date::ITALY),DateTime.new0(Rational.new!(14714185,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2002,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14714185,6),0,Date::ITALY),DateTime.new0(Rational.new!(14715445,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2002,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14715445,6),0,Date::ITALY),DateTime.new0(Rational.new!(14716369,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2003,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14716369,6),0,Date::ITALY),DateTime.new0(Rational.new!(14717629,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2003,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14717629,6),0,Date::ITALY),DateTime.new0(Rational.new!(14718553,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2004,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14718553,6),0,Date::ITALY),DateTime.new0(Rational.new!(14719855,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2004,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14719855,6),0,Date::ITALY),DateTime.new0(Rational.new!(14720737,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2005,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14720737,6),0,Date::ITALY),DateTime.new0(Rational.new!(14722039,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2005,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14722039,6),0,Date::ITALY),DateTime.new0(Rational.new!(14722963,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2006,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14722963,6),0,Date::ITALY),DateTime.new0(Rational.new!(14724223,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2006,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14724223,6),0,Date::ITALY),DateTime.new0(Rational.new!(14725105,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2007,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14725105,6),0,Date::ITALY),DateTime.new0(Rational.new!(14726407,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2007,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14726407,6),0,Date::ITALY),DateTime.new0(Rational.new!(14727331,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2008,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14727331,6),0,Date::ITALY),DateTime.new0(Rational.new!(14728591,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2008,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14728591,6),0,Date::ITALY),DateTime.new0(Rational.new!(14729515,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2009,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14729515,6),0,Date::ITALY),DateTime.new0(Rational.new!(14730775,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2009,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14730775,6),0,Date::ITALY),DateTime.new0(Rational.new!(14731699,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2010,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14731699,6),0,Date::ITALY),DateTime.new0(Rational.new!(14733001,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2010,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14733001,6),0,Date::ITALY),DateTime.new0(Rational.new!(14733883,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2011,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14733883,6),0,Date::ITALY),DateTime.new0(Rational.new!(14735185,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2011,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14735185,6),0,Date::ITALY),DateTime.new0(Rational.new!(14736067,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2012,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14736067,6),0,Date::ITALY),DateTime.new0(Rational.new!(14737369,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2012,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14737369,6),0,Date::ITALY),DateTime.new0(Rational.new!(14738293,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2013,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14738293,6),0,Date::ITALY),DateTime.new0(Rational.new!(14739553,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2013,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14739553,6),0,Date::ITALY),DateTime.new0(Rational.new!(14740477,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2014,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14740477,6),0,Date::ITALY),DateTime.new0(Rational.new!(14741737,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2014,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14741737,6),0,Date::ITALY),DateTime.new0(Rational.new!(14742661,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2015,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14742661,6),0,Date::ITALY),DateTime.new0(Rational.new!(14743921,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2015,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14743921,6),0,Date::ITALY),DateTime.new0(Rational.new!(14744845,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2016,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14744845,6),0,Date::ITALY),DateTime.new0(Rational.new!(14746147,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2016,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14746147,6),0,Date::ITALY),DateTime.new0(Rational.new!(14747029,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2017,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14747029,6),0,Date::ITALY),DateTime.new0(Rational.new!(14748331,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2017,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14748331,6),0,Date::ITALY),DateTime.new0(Rational.new!(14749213,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2018,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14749213,6),0,Date::ITALY),DateTime.new0(Rational.new!(14750515,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2018,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14750515,6),0,Date::ITALY),DateTime.new0(Rational.new!(14751439,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2019,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14751439,6),0,Date::ITALY),DateTime.new0(Rational.new!(14752699,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2019,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14752699,6),0,Date::ITALY),DateTime.new0(Rational.new!(14753623,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2020,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14753623,6),0,Date::ITALY),DateTime.new0(Rational.new!(14754883,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2020,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14754883,6),0,Date::ITALY),DateTime.new0(Rational.new!(14755807,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2021,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14755807,6),0,Date::ITALY),DateTime.new0(Rational.new!(14757109,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2021,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14757109,6),0,Date::ITALY),DateTime.new0(Rational.new!(14757991,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2022,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14757991,6),0,Date::ITALY),DateTime.new0(Rational.new!(14759293,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2022,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14759293,6),0,Date::ITALY),DateTime.new0(Rational.new!(14760175,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2023,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14760175,6),0,Date::ITALY),DateTime.new0(Rational.new!(14761477,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2023,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14761477,6),0,Date::ITALY),DateTime.new0(Rational.new!(14762401,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2024,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14762401,6),0,Date::ITALY),DateTime.new0(Rational.new!(14763661,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2024,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14763661,6),0,Date::ITALY),DateTime.new0(Rational.new!(14764585,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2025,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14764585,6),0,Date::ITALY),DateTime.new0(Rational.new!(14765845,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2025,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14765845,6),0,Date::ITALY),DateTime.new0(Rational.new!(14766769,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2026,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14766769,6),0,Date::ITALY),DateTime.new0(Rational.new!(14768029,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2026,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14768029,6),0,Date::ITALY),DateTime.new0(Rational.new!(14768953,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2027,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14768953,6),0,Date::ITALY),DateTime.new0(Rational.new!(14770255,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2027,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14770255,6),0,Date::ITALY),DateTime.new0(Rational.new!(14771137,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2028,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14771137,6),0,Date::ITALY),DateTime.new0(Rational.new!(14772439,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2028,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14772439,6),0,Date::ITALY),DateTime.new0(Rational.new!(14773321,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2029,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14773321,6),0,Date::ITALY),DateTime.new0(Rational.new!(14774623,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2029,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14774623,6),0,Date::ITALY),DateTime.new0(Rational.new!(14775547,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2030,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14775547,6),0,Date::ITALY),DateTime.new0(Rational.new!(14776807,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2030,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14776807,6),0,Date::ITALY),DateTime.new0(Rational.new!(14777731,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2031,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14777731,6),0,Date::ITALY),DateTime.new0(Rational.new!(14778991,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2031,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14778991,6),0,Date::ITALY),DateTime.new0(Rational.new!(14779915,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2032,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14779915,6),0,Date::ITALY),DateTime.new0(Rational.new!(14781217,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2032,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14781217,6),0,Date::ITALY),DateTime.new0(Rational.new!(14782099,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2033,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14782099,6),0,Date::ITALY),DateTime.new0(Rational.new!(14783401,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2033,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14783401,6),0,Date::ITALY),DateTime.new0(Rational.new!(14784283,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2034,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14784283,6),0,Date::ITALY),DateTime.new0(Rational.new!(14785585,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2034,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14785585,6),0,Date::ITALY),DateTime.new0(Rational.new!(14786467,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2035,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14786467,6),0,Date::ITALY),DateTime.new0(Rational.new!(14787769,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2035,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14787769,6),0,Date::ITALY),DateTime.new0(Rational.new!(14788693,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2036,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14788693,6),0,Date::ITALY),DateTime.new0(Rational.new!(14789953,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2036,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14789953,6),0,Date::ITALY),DateTime.new0(Rational.new!(14790877,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2037,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14790877,6),0,Date::ITALY),DateTime.new0(Rational.new!(14792137,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2037,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14792137,6),0,Date::ITALY),DateTime.new0(Rational.new!(14793061,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2038,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14793061,6),0,Date::ITALY),DateTime.new0(Rational.new!(14794363,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2038,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14794363,6),0,Date::ITALY),DateTime.new0(Rational.new!(14795245,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2039,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14795245,6),0,Date::ITALY),DateTime.new0(Rational.new!(14796547,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2039,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14796547,6),0,Date::ITALY),DateTime.new0(Rational.new!(14797429,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2040,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14797429,6),0,Date::ITALY),DateTime.new0(Rational.new!(14798731,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2040,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14798731,6),0,Date::ITALY),DateTime.new0(Rational.new!(14799655,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2041,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14799655,6),0,Date::ITALY),DateTime.new0(Rational.new!(14800915,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2041,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14800915,6),0,Date::ITALY),DateTime.new0(Rational.new!(14801839,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2042,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14801839,6),0,Date::ITALY),DateTime.new0(Rational.new!(14803099,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2042,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14803099,6),0,Date::ITALY),DateTime.new0(Rational.new!(14804023,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2043,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14804023,6),0,Date::ITALY),DateTime.new0(Rational.new!(14805283,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2043,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14805283,6),0,Date::ITALY),DateTime.new0(Rational.new!(14806207,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14806207,6),0,Date::ITALY),DateTime.new0(Rational.new!(14807509,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2044,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14807509,6),0,Date::ITALY),DateTime.new0(Rational.new!(14808391,6),0,Date::ITALY),36000,3600,:'EST')}
+add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14808391,6),0,Date::ITALY),DateTime.new0(Rational.new!(14809693,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(2045,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14809693,6),0,Date::ITALY),nil,36000,3600,:'EST')}
 end
 end
 end

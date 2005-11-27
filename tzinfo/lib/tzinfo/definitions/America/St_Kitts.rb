@@ -5,8 +5,8 @@ module America #:nodoc:
 class St_Kitts < Timezone #:nodoc:
 setup
 set_identifier('America/St_Kitts')
-add_period(TimezonePeriod.new(nil,DateTime.new(1912,3,2,4,10,52),-15052,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1912,3,2,4,10,52),nil,-14400,0,:'AST'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52260415363,21600),0,Date::ITALY),-15052,0,:'LMT')}
+add_period(1912,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(52260415363,21600),0,Date::ITALY),nil,-14400,0,:'AST')}
 end
 end
 end

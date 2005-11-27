@@ -5,24 +5,24 @@ module Asia #:nodoc:
 class Harbin < Timezone #:nodoc:
 setup
 set_identifier('Asia/Harbin')
-add_period(TimezonePeriod.new(nil,DateTime.new(1927,12,31,15,33,16),30404,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1927,12,31,15,33,16),DateTime.new(1932,2,29,15,30,0),30600,0,:'CHAT'))
-add_period(TimezonePeriod.new(DateTime.new(1932,2,29,15,30,0),DateTime.new(1939,12,31,16,0,0),28800,0,:'CST'))
-add_period(TimezonePeriod.new(DateTime.new(1939,12,31,16,0,0),DateTime.new(1966,4,30,15,0,0),32400,0,:'CHAT'))
-add_period(TimezonePeriod.new(DateTime.new(1966,4,30,15,0,0),DateTime.new(1980,4,30,15,30,0),30600,0,:'CHAT'))
-add_period(TimezonePeriod.new(DateTime.new(1980,4,30,15,30,0),DateTime.new(1986,5,3,16,0,0),28800,0,:'CT'))
-add_period(TimezonePeriod.new(DateTime.new(1986,5,3,16,0,0),DateTime.new(1986,9,13,15,0,0),28800,3600,:'CDT'))
-add_period(TimezonePeriod.new(DateTime.new(1986,9,13,15,0,0),DateTime.new(1987,4,11,16,0,0),28800,0,:'CST'))
-add_period(TimezonePeriod.new(DateTime.new(1987,4,11,16,0,0),DateTime.new(1987,9,12,15,0,0),28800,3600,:'CDT'))
-add_period(TimezonePeriod.new(DateTime.new(1987,9,12,15,0,0),DateTime.new(1988,4,9,16,0,0),28800,0,:'CST'))
-add_period(TimezonePeriod.new(DateTime.new(1988,4,9,16,0,0),DateTime.new(1988,9,10,15,0,0),28800,3600,:'CDT'))
-add_period(TimezonePeriod.new(DateTime.new(1988,9,10,15,0,0),DateTime.new(1989,4,15,16,0,0),28800,0,:'CST'))
-add_period(TimezonePeriod.new(DateTime.new(1989,4,15,16,0,0),DateTime.new(1989,9,16,15,0,0),28800,3600,:'CDT'))
-add_period(TimezonePeriod.new(DateTime.new(1989,9,16,15,0,0),DateTime.new(1990,4,14,16,0,0),28800,0,:'CST'))
-add_period(TimezonePeriod.new(DateTime.new(1990,4,14,16,0,0),DateTime.new(1990,9,15,15,0,0),28800,3600,:'CDT'))
-add_period(TimezonePeriod.new(DateTime.new(1990,9,15,15,0,0),DateTime.new(1991,4,13,16,0,0),28800,0,:'CST'))
-add_period(TimezonePeriod.new(DateTime.new(1991,4,13,16,0,0),DateTime.new(1991,9,14,15,0,0),28800,3600,:'CDT'))
-add_period(TimezonePeriod.new(DateTime.new(1991,9,14,15,0,0),DateTime.new(2045,9,3,22,37,54),28800,0,:'CST'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52385316799,21600),0,Date::ITALY),30404,0,:'LMT')}
+add_period(1927,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52385316799,21600),0,Date::ITALY),DateTime.new0(Rational.new!(116484823,48),0,Date::ITALY),30600,0,:'CHAT')}
+add_period(1932,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(116484823,48),0,Date::ITALY),DateTime.new0(Rational.new!(14577775,6),0,Date::ITALY),28800,0,:'CST')}
+add_period(1939,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(14577775,6),0,Date::ITALY),DateTime.new0(Rational.new!(19513969,8),0,Date::ITALY),32400,0,:'CHAT')}
+add_period(1966,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(19513969,8),0,Date::ITALY),DateTime.new0(Rational.new!(117329287,48),0,Date::ITALY),30600,0,:'CHAT')}
+add_period(1980,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(117329287,48),0,Date::ITALY),DateTime.new0(Rational.new!(14679325,6),0,Date::ITALY),28800,0,:'CT')}
+add_period(1986,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(14679325,6),0,Date::ITALY),DateTime.new0(Rational.new!(19573497,8),0,Date::ITALY),28800,3600,:'CDT')}
+add_period(1986,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19573497,8),0,Date::ITALY),DateTime.new0(Rational.new!(14681383,6),0,Date::ITALY),28800,0,:'CST')}
+add_period(1987,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14681383,6),0,Date::ITALY),DateTime.new0(Rational.new!(19576409,8),0,Date::ITALY),28800,3600,:'CDT')}
+add_period(1987,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19576409,8),0,Date::ITALY),DateTime.new0(Rational.new!(14683567,6),0,Date::ITALY),28800,0,:'CST')}
+add_period(1988,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14683567,6),0,Date::ITALY),DateTime.new0(Rational.new!(19579321,8),0,Date::ITALY),28800,3600,:'CDT')}
+add_period(1988,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19579321,8),0,Date::ITALY),DateTime.new0(Rational.new!(14685793,6),0,Date::ITALY),28800,0,:'CST')}
+add_period(1989,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14685793,6),0,Date::ITALY),DateTime.new0(Rational.new!(19582289,8),0,Date::ITALY),28800,3600,:'CDT')}
+add_period(1989,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19582289,8),0,Date::ITALY),DateTime.new0(Rational.new!(14687977,6),0,Date::ITALY),28800,0,:'CST')}
+add_period(1990,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14687977,6),0,Date::ITALY),DateTime.new0(Rational.new!(19585201,8),0,Date::ITALY),28800,3600,:'CDT')}
+add_period(1990,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19585201,8),0,Date::ITALY),DateTime.new0(Rational.new!(14690161,6),0,Date::ITALY),28800,0,:'CST')}
+add_period(1991,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14690161,6),0,Date::ITALY),DateTime.new0(Rational.new!(19588113,8),0,Date::ITALY),28800,3600,:'CDT')}
+add_period(1991,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19588113,8),0,Date::ITALY),nil,28800,0,:'CST')}
 end
 end
 end

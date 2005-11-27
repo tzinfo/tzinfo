@@ -5,12 +5,12 @@ module Pacific #:nodoc:
 class Midway < Timezone #:nodoc:
 setup
 set_identifier('Pacific/Midway')
-add_period(TimezonePeriod.new(nil,DateTime.new(1901,1,1,11,49,28),-42568,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1901,1,1,11,49,28),DateTime.new(1956,6,3,11,0,0),-39600,0,:'NST'))
-add_period(TimezonePeriod.new(DateTime.new(1956,6,3,11,0,0),DateTime.new(1956,9,2,10,0,0),-39600,3600,:'NDT'))
-add_period(TimezonePeriod.new(DateTime.new(1956,9,2,10,0,0),DateTime.new(1967,4,1,11,0,0),-39600,0,:'NST'))
-add_period(TimezonePeriod.new(DateTime.new(1967,4,1,11,0,0),DateTime.new(1983,11,30,11,0,0),-39600,0,:'BST'))
-add_period(TimezonePeriod.new(DateTime.new(1983,11,30,11,0,0),nil,-39600,0,:'SST'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(26086168721,10800),0,Date::ITALY),-42568,0,:'LMT')}
+add_period(1901,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(26086168721,10800),0,Date::ITALY),DateTime.new0(Rational.new!(58455071,24),0,Date::ITALY),-39600,0,:'NST')}
+add_period(1956,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(58455071,24),0,Date::ITALY),DateTime.new0(Rational.new!(29228627,12),0,Date::ITALY),-39600,3600,:'NDT')}
+add_period(1956,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(29228627,12),0,Date::ITALY),DateTime.new0(Rational.new!(58549967,24),0,Date::ITALY),-39600,0,:'NST')}
+add_period(1967,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58549967,24),0,Date::ITALY),DateTime.new0(Rational.new!(58696055,24),0,Date::ITALY),-39600,0,:'BST')}
+add_period(1983,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(58696055,24),0,Date::ITALY),nil,-39600,0,:'SST')}
 end
 end
 end

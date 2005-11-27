@@ -51,7 +51,7 @@ module TZInfo
           instance = Countries.const_get(identifier).instance
           @@loaded_countries[instance.code] = instance
         rescue LoadError, NameError => e
-          raise InvalidCountryCode, e
+          raise InvalidCountryCode, e.message
         end
       end
       

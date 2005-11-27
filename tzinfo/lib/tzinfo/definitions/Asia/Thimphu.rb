@@ -5,9 +5,9 @@ module Asia #:nodoc:
 class Thimphu < Timezone #:nodoc:
 setup
 set_identifier('Asia/Thimphu')
-add_period(TimezonePeriod.new(nil,DateTime.new(1947,8,14,18,1,24),21516,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1947,8,14,18,1,24),DateTime.new(1987,9,30,18,30,0),19800,0,:'IST'))
-add_period(TimezonePeriod.new(DateTime.new(1987,9,30,18,30,0),nil,21600,0,:'BTT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(17513368207,7200),0,Date::ITALY),21516,0,:'LMT')}
+add_period(1947,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(17513368207,7200),0,Date::ITALY),DateTime.new0(Rational.new!(117459325,48),0,Date::ITALY),19800,0,:'IST')}
+add_period(1987,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(117459325,48),0,Date::ITALY),nil,21600,0,:'BTT')}
 end
 end
 end

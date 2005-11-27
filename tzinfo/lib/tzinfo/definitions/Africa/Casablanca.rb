@@ -5,26 +5,26 @@ module Africa #:nodoc:
 class Casablanca < Timezone #:nodoc:
 setup
 set_identifier('Africa/Casablanca')
-add_period(TimezonePeriod.new(nil,DateTime.new(1913,10,26,0,30,20),-1820,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1913,10,26,0,30,20),DateTime.new(1939,9,12,0,0,0),0,0,:'WET'))
-add_period(TimezonePeriod.new(DateTime.new(1939,9,12,0,0,0),DateTime.new(1939,11,18,23,0,0),0,3600,:'WEST'))
-add_period(TimezonePeriod.new(DateTime.new(1939,11,18,23,0,0),DateTime.new(1940,2,25,0,0,0),0,0,:'WET'))
-add_period(TimezonePeriod.new(DateTime.new(1940,2,25,0,0,0),DateTime.new(1945,11,17,23,0,0),0,3600,:'WEST'))
-add_period(TimezonePeriod.new(DateTime.new(1945,11,17,23,0,0),DateTime.new(1950,6,11,0,0,0),0,0,:'WET'))
-add_period(TimezonePeriod.new(DateTime.new(1950,6,11,0,0,0),DateTime.new(1950,10,28,23,0,0),0,3600,:'WEST'))
-add_period(TimezonePeriod.new(DateTime.new(1950,10,28,23,0,0),DateTime.new(1967,6,3,12,0,0),0,0,:'WET'))
-add_period(TimezonePeriod.new(DateTime.new(1967,6,3,12,0,0),DateTime.new(1967,9,30,23,0,0),0,3600,:'WEST'))
-add_period(TimezonePeriod.new(DateTime.new(1967,9,30,23,0,0),DateTime.new(1974,6,24,0,0,0),0,0,:'WET'))
-add_period(TimezonePeriod.new(DateTime.new(1974,6,24,0,0,0),DateTime.new(1974,8,31,23,0,0),0,3600,:'WEST'))
-add_period(TimezonePeriod.new(DateTime.new(1974,8,31,23,0,0),DateTime.new(1976,5,1,0,0,0),0,0,:'WET'))
-add_period(TimezonePeriod.new(DateTime.new(1976,5,1,0,0,0),DateTime.new(1976,7,31,23,0,0),0,3600,:'WEST'))
-add_period(TimezonePeriod.new(DateTime.new(1976,7,31,23,0,0),DateTime.new(1977,5,1,0,0,0),0,0,:'WET'))
-add_period(TimezonePeriod.new(DateTime.new(1977,5,1,0,0,0),DateTime.new(1977,9,27,23,0,0),0,3600,:'WEST'))
-add_period(TimezonePeriod.new(DateTime.new(1977,9,27,23,0,0),DateTime.new(1978,6,1,0,0,0),0,0,:'WET'))
-add_period(TimezonePeriod.new(DateTime.new(1978,6,1,0,0,0),DateTime.new(1978,8,3,23,0,0),0,3600,:'WEST'))
-add_period(TimezonePeriod.new(DateTime.new(1978,8,3,23,0,0),DateTime.new(1984,3,16,0,0,0),0,0,:'WET'))
-add_period(TimezonePeriod.new(DateTime.new(1984,3,16,0,0,0),DateTime.new(1985,12,31,23,0,0),3600,0,:'CET'))
-add_period(TimezonePeriod.new(DateTime.new(1985,12,31,23,0,0),nil,0,0,:'WET'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10454687371,4320),0,Date::ITALY),-1820,0,:'LMT')}
+add_period(1913,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(10454687371,4320),0,Date::ITALY),DateTime.new0(Rational.new!(4859037,2),0,Date::ITALY),0,0,:'WET')}
+add_period(1939,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(4859037,2),0,Date::ITALY),DateTime.new0(Rational.new!(58310075,24),0,Date::ITALY),0,3600,:'WEST')}
+add_period(1939,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(58310075,24),0,Date::ITALY),DateTime.new0(Rational.new!(4859369,2),0,Date::ITALY),0,0,:'WET')}
+add_period(1940,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(4859369,2),0,Date::ITALY),DateTime.new0(Rational.new!(58362659,24),0,Date::ITALY),0,3600,:'WEST')}
+add_period(1945,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(58362659,24),0,Date::ITALY),DateTime.new0(Rational.new!(4866887,2),0,Date::ITALY),0,0,:'WET')}
+add_period(1950,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(4866887,2),0,Date::ITALY),DateTime.new0(Rational.new!(58406003,24),0,Date::ITALY),0,3600,:'WEST')}
+add_period(1950,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58406003,24),0,Date::ITALY),DateTime.new0(Rational.new!(2439645,1),0,Date::ITALY),0,0,:'WET')}
+add_period(1967,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(2439645,1),0,Date::ITALY),DateTime.new0(Rational.new!(58554347,24),0,Date::ITALY),0,3600,:'WEST')}
+add_period(1967,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58554347,24),0,Date::ITALY),DateTime.new0(Rational.new!(4884445,2),0,Date::ITALY),0,0,:'WET')}
+add_period(1974,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(4884445,2),0,Date::ITALY),DateTime.new0(Rational.new!(58614995,24),0,Date::ITALY),0,3600,:'WEST')}
+add_period(1974,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58614995,24),0,Date::ITALY),DateTime.new0(Rational.new!(4885799,2),0,Date::ITALY),0,0,:'WET')}
+add_period(1976,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(4885799,2),0,Date::ITALY),DateTime.new0(Rational.new!(58631795,24),0,Date::ITALY),0,3600,:'WEST')}
+add_period(1976,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(58631795,24),0,Date::ITALY),DateTime.new0(Rational.new!(4886529,2),0,Date::ITALY),0,0,:'WET')}
+add_period(1977,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(4886529,2),0,Date::ITALY),DateTime.new0(Rational.new!(58641947,24),0,Date::ITALY),0,3600,:'WEST')}
+add_period(1977,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58641947,24),0,Date::ITALY),DateTime.new0(Rational.new!(4887321,2),0,Date::ITALY),0,0,:'WET')}
+add_period(1978,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(4887321,2),0,Date::ITALY),DateTime.new0(Rational.new!(58649387,24),0,Date::ITALY),0,3600,:'WEST')}
+add_period(1978,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58649387,24),0,Date::ITALY),DateTime.new0(Rational.new!(4891551,2),0,Date::ITALY),0,0,:'WET')}
+add_period(1984,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(4891551,2),0,Date::ITALY),DateTime.new0(Rational.new!(58714355,24),0,Date::ITALY),3600,0,:'CET')}
+add_period(1985,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(58714355,24),0,Date::ITALY),nil,0,0,:'WET')}
 end
 end
 end

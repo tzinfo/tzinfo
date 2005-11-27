@@ -5,12 +5,12 @@ module Asia #:nodoc:
 class Dili < Timezone #:nodoc:
 setup
 set_identifier('Asia/Dili')
-add_period(TimezonePeriod.new(nil,DateTime.new(1911,12,31,15,37,40),30140,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1911,12,31,15,37,40),DateTime.new(1942,2,21,15,0,0),28800,0,:'TLT'))
-add_period(TimezonePeriod.new(DateTime.new(1942,2,21,15,0,0),DateTime.new(1945,7,31,15,0,0),32400,0,:'JST'))
-add_period(TimezonePeriod.new(DateTime.new(1945,7,31,15,0,0),DateTime.new(1976,5,2,15,0,0),32400,0,:'TLT'))
-add_period(TimezonePeriod.new(DateTime.new(1976,5,2,15,0,0),DateTime.new(2000,9,16,16,0,0),28800,0,:'CIT'))
-add_period(TimezonePeriod.new(DateTime.new(2000,9,16,16,0,0),nil,32400,0,:'TLT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10451817293,4320),0,Date::ITALY),30140,0,:'LMT')}
+add_period(1911,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(10451817293,4320),0,Date::ITALY),DateTime.new0(Rational.new!(19443297,8),0,Date::ITALY),28800,0,:'TLT')}
+add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(19443297,8),0,Date::ITALY),DateTime.new0(Rational.new!(19453345,8),0,Date::ITALY),32400,0,:'JST')}
+add_period(1945,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(19453345,8),0,Date::ITALY),DateTime.new0(Rational.new!(19543209,8),0,Date::ITALY),32400,0,:'TLT')}
+add_period(1976,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(19543209,8),0,Date::ITALY),DateTime.new0(Rational.new!(14710825,6),0,Date::ITALY),28800,0,:'CIT')}
+add_period(2000,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(14710825,6),0,Date::ITALY),nil,32400,0,:'TLT')}
 end
 end
 end

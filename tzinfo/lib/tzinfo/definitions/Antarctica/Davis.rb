@@ -5,10 +5,10 @@ module Antarctica #:nodoc:
 class Davis < Timezone #:nodoc:
 setup
 set_identifier('Antarctica/Davis')
-add_period(TimezonePeriod.new(nil,DateTime.new(1957,1,13,0,0,0),0,0,:'zzz'))
-add_period(TimezonePeriod.new(DateTime.new(1957,1,13,0,0,0),DateTime.new(1964,10,31,17,0,0),25200,0,:'DAVT'))
-add_period(TimezonePeriod.new(DateTime.new(1964,10,31,17,0,0),DateTime.new(1969,2,1,0,0,0),0,0,:'zzz'))
-add_period(TimezonePeriod.new(DateTime.new(1969,2,1,0,0,0),nil,25200,0,:'DAVT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(4871703,2),0,Date::ITALY),0,0,:'zzz')}
+add_period(1957,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(4871703,2),0,Date::ITALY),DateTime.new0(Rational.new!(58528805,24),0,Date::ITALY),25200,0,:'DAVT')}
+add_period(1964,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58528805,24),0,Date::ITALY),DateTime.new0(Rational.new!(4880507,2),0,Date::ITALY),0,0,:'zzz')}
+add_period(1969,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(4880507,2),0,Date::ITALY),nil,25200,0,:'DAVT')}
 end
 end
 end

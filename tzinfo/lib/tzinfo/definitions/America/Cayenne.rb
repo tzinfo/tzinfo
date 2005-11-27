@@ -5,9 +5,9 @@ module America #:nodoc:
 class Cayenne < Timezone #:nodoc:
 setup
 set_identifier('America/Cayenne')
-add_period(TimezonePeriod.new(nil,DateTime.new(1911,7,1,3,29,20),-12560,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1911,7,1,3,29,20),DateTime.new(1967,10,1,4,0,0),-14400,0,:'GFT'))
-add_period(TimezonePeriod.new(DateTime.new(1967,10,1,4,0,0),nil,-10800,0,:'GFT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(2612756137,1080),0,Date::ITALY),-12560,0,:'LMT')}
+add_period(1911,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(2612756137,1080),0,Date::ITALY),DateTime.new0(Rational.new!(7319294,3),0,Date::ITALY),-14400,0,:'GFT')}
+add_period(1967,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7319294,3),0,Date::ITALY),nil,-10800,0,:'GFT')}
 end
 end
 end

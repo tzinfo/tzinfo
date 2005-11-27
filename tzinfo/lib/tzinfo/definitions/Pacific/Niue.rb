@@ -5,10 +5,10 @@ module Pacific #:nodoc:
 class Niue < Timezone #:nodoc:
 setup
 set_identifier('Pacific/Niue')
-add_period(TimezonePeriod.new(nil,DateTime.new(1901,1,1,11,19,40),-40780,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1901,1,1,11,19,40),DateTime.new(1951,1,1,11,20,0),-40800,0,:'NUT'))
-add_period(TimezonePeriod.new(DateTime.new(1951,1,1,11,20,0),DateTime.new(1978,10,1,11,30,0),-41400,0,:'NUT'))
-add_period(TimezonePeriod.new(DateTime.new(1978,10,1,11,30,0),nil,-39600,0,:'NUT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10434467399,4320),0,Date::ITALY),-40780,0,:'LMT')}
+add_period(1901,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10434467399,4320),0,Date::ITALY),DateTime.new0(Rational.new!(87611327,36),0,Date::ITALY),-40800,0,:'NUT')}
+add_period(1951,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(87611327,36),0,Date::ITALY),DateTime.new0(Rational.new!(117301583,48),0,Date::ITALY),-41400,0,:'NUT')}
+add_period(1978,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(117301583,48),0,Date::ITALY),nil,-39600,0,:'NUT')}
 end
 end
 end

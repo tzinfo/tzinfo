@@ -5,8 +5,8 @@ module Pacific #:nodoc:
 class Tahiti < Timezone #:nodoc:
 setup
 set_identifier('Pacific/Tahiti')
-add_period(TimezonePeriod.new(nil,DateTime.new(1912,10,1,9,58,16),-35896,0,:'LMT'))
-add_period(TimezonePeriod.new(DateTime.new(1912,10,1,9,58,16),nil,-36000,0,:'TAHT'))
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(26132510687,10800),0,Date::ITALY),-35896,0,:'LMT')}
+add_period(1912,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(26132510687,10800),0,Date::ITALY),nil,-36000,0,:'TAHT')}
 end
 end
 end
