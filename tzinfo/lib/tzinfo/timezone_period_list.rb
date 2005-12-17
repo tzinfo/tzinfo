@@ -85,29 +85,32 @@ module TZInfo
     
     # Returns the period for the given utc time. 
     # If no period is found for the given time, PeriodNotFound is thrown.
-    def period_for_utc(utc)
-      raise PeriodNotFound, 'No periods defined' if @list.nil?
-      index = index_for_utc(utc.year, utc.mon)
-      index = 0 if index < 0
-      index = @list.length - 1 if index >= @list.length
-      
-      result = nil
-      index.downto(0) {|i|
-        contents = get_contents(i)
+    def period_for_utc(utc)      
+      if @list.nil?
+        result = nil
+      else
+        index = index_for_utc(utc.year, utc.mon)
+        index = 0 if index < 0
+        index = @list.length - 1 if index >= @list.length
         
-        if contents.is_a?(Array)
-          (contents.length - 1).downto(0) {|j|
-            if contents[j].valid_for_utc?(utc)
-              result = contents[j]
-              break
-            end
-          }
-          break unless result.nil?
-        elsif !contents.nil? && contents.valid_for_utc?(utc)
-          result = contents
-          break        
-        end
-      }
+        result = nil
+        index.downto(0) {|i|
+          contents = get_contents(i)
+          
+          if contents.is_a?(Array)
+            (contents.length - 1).downto(0) {|j|
+              if contents[j].valid_for_utc?(utc)
+                result = contents[j]
+                break
+              end
+            }
+            break unless result.nil?
+          elsif !contents.nil? && contents.valid_for_utc?(utc)
+            result = contents
+            break        
+          end
+        }
+      end
       
       if result.nil?
         unbounded_start = get_unbounded_start
@@ -125,42 +128,42 @@ module TZInfo
     # If no period is found for the given time, PeriodNotFound is thrown.
     # Results returned are ordered by increasing UTC start date.    
     def periods_for_local(local)
-      raise PeriodNotFound, 'No periods defined' if @list.nil?
-      
-      # add one to the index because the periods are indexed by UTC start
-      # and the period we are looking for could therefore be in the next
-      # half of the year
-      index = index_for_utc(local.year, local.mon) + 1
-      index = 0 if index < 0
-      index = @list.length - 1 if index >= @list.length
-      
-      result = []
-      
       # found_first is used to avoid searching back to far
       # the search will be limited at the next half year block after discovering
       # the first match
       found_first = nil
       
-      index.downto(0) {|i|
-        contents = get_contents(i)
+      result = []
+      
+      if !@list.nil?      
+        # add one to the index because the periods are indexed by UTC start
+        # and the period we are looking for could therefore be in the next
+        # half of the year
+        index = index_for_utc(local.year, local.mon) + 1
+        index = 0 if index < 0
+        index = @list.length - 1 if index >= @list.length
         
-        if contents.is_a?(Array)
-          (contents.length - 1).downto(0) {|j|
-            if contents[j].valid_for_local?(local)
-              result << contents[j]
-              found_first = i if found_first.nil?
-            end
-          }
+        index.downto(0) {|i|
+          contents = get_contents(i)
           
-          if !found_first.nil? && i < found_first
-            # searched far enough
-            break
+          if contents.is_a?(Array)
+            (contents.length - 1).downto(0) {|j|
+              if contents[j].valid_for_local?(local)
+                result << contents[j]
+                found_first = i if found_first.nil?
+              end
+            }
+            
+            if !found_first.nil? && i < found_first
+              # searched far enough
+              break
+            end
+          elsif !contents.nil? && contents.valid_for_local?(local)
+            result << contents                  
           end
-        elsif !contents.nil? && contents.valid_for_local?(local)
-          result << contents                  
-        end
-      }
-                 
+        }
+      end
+        
       if result.empty? || found_first == 0
         unbounded_start = get_unbounded_start
         result << unbounded_start if !unbounded_start.nil? && unbounded_start.valid_for_local?(local)

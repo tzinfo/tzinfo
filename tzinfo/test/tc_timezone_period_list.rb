@@ -268,6 +268,16 @@ class TCTimezonePeriod < Test::Unit::TestCase
       list.periods_for_local(DateTime.new(2000,7,1,0,0,0)))
   end
   
+  def test_unbounded_start_only
+    list = TimezonePeriodList.new
+    list.add_unbounded_start { TimezonePeriod.new(nil,nil,0,0,:'UTC') }
+    
+    assert_period_equal(TimezonePeriod.new(nil,nil,0,0,:'UTC'), 
+      list.period_for_utc(DateTime.new(2000,1,1,0,0,0)))
+    assert_periods_equal([TimezonePeriod.new(nil,nil,0,0,:'UTC')],
+      list.periods_for_local(DateTime.new(2000,1,1,0,0,0)))
+  end
+  
   private
     def assert_period_equal(expected, actual)
       assert_equal(expected.utc_start, actual.utc_start)
