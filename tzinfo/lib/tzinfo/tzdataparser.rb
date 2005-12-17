@@ -76,7 +76,7 @@ module TZInfo
       @only_zones = []
       @only_countries = []
       @exclude_zones = ['Asia/Riyadh87', 'Asia/Riyadh88', 'Asia/Riyadh89',
-        'Mideast/Riyadh87', 'Mideast/Riyadh88', 'Mideast/Ruyadh89']
+        'Mideast/Riyadh87', 'Mideast/Riyadh88', 'Mideast/Riyadh89']
       @exclude_countries = []
     end
     

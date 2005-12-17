@@ -98,9 +98,7 @@ add_period(2002,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58856921,24),
 add_period(2002,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58861793,24),0,Date::ITALY),DateTime.new0(Rational.new!(58865657,24),0,Date::ITALY),-18000,0,:'CST')}
 add_period(2003,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58865657,24),0,Date::ITALY),DateTime.new0(Rational.new!(58870529,24),0,Date::ITALY),-18000,3600,:'CDT')}
 add_period(2003,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58870529,24),0,Date::ITALY),DateTime.new0(Rational.new!(58874393,24),0,Date::ITALY),-18000,0,:'CST')}
-add_period(2004,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58874393,24),0,Date::ITALY),DateTime.new0(Rational.new!(58888169,24),0,Date::ITALY),-18000,3600,:'CDT')}
-add_period(2005,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58888169,24),0,Date::ITALY),DateTime.new0(Rational.new!(58891865,24),0,Date::ITALY),-18000,0,:'CST')}
-add_period(2006,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58891865,24),0,Date::ITALY),DateTime.new0(Rational.new!(58896905,24),0,Date::ITALY),-18000,3600,:'CDT')}
+add_period(2004,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58874393,24),0,Date::ITALY),DateTime.new0(Rational.new!(58896905,24),0,Date::ITALY),-18000,3600,:'CDT')}
 add_period(2006,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58896905,24),0,Date::ITALY),DateTime.new0(Rational.new!(58900601,24),0,Date::ITALY),-18000,0,:'CST')}
 add_period(2007,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58900601,24),0,Date::ITALY),DateTime.new0(Rational.new!(58905641,24),0,Date::ITALY),-18000,3600,:'CDT')}
 add_period(2007,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58905641,24),0,Date::ITALY),DateTime.new0(Rational.new!(58909505,24),0,Date::ITALY),-18000,0,:'CST')}

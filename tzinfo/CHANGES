@@ -1,8 +1,9 @@
-Version 0.1.x (tzdata v?????) - ???????????
+Version 0.1.x (tzdata v2005q) - ???????????
 -------------------------------------------
 
 * Timezones that are defined by a single unbounded period (e.g. UTC) now 
-  work again.  
+  work again.
+* Updated to tzdata version 2005q.
 
 Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
 -------------------------------------------

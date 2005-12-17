@@ -18,8 +18,8 @@ add_period(1992,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(29383475,12),
 add_period(1992,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58773353,24),0,Date::ITALY),DateTime.new0(Rational.new!(29387867,12),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1993,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(29387867,12),0,Date::ITALY),DateTime.new0(Rational.new!(58827569,24),0,Date::ITALY),-18000,0,:'EST')}
 add_period(1998,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(58827569,24),0,Date::ITALY),DateTime.new0(Rational.new!(9813883,4),0,Date::ITALY),-21600,0,:'CT')}
-add_period(2005,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(9813883,4),0,Date::ITALY),DateTime.new0(Rational.new!(58887161,24),0,Date::ITALY),-21600,3600,:'CDT')}
-add_period(2005,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58887161,24),0,Date::ITALY),nil,-21600,0,:'CST')}
+add_period(2005,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(9813883,4),0,Date::ITALY),DateTime.new0(Rational.new!(58887497,24),0,Date::ITALY),-21600,3600,:'CDT')}
+add_period(2005,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58887497,24),0,Date::ITALY),nil,-21600,0,:'CST')}
 end
 end
 end
