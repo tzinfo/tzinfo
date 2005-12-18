@@ -3,6 +3,7 @@
 * Update version number in Rakefile
 * Regenerate rdoc (rake rdoc)
 * Build new gem, zip and tar.gz (rake package)
+* Commit and tag release
 * Upload gem, tar.gz, zip.
 * Upload documentation.
 * Write news item.

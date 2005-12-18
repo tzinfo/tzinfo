@@ -339,7 +339,8 @@ module TZInfo
       period_for_utc(Time.now.utc)
     end
     
-    # Returns the current Time and TimezonePeriod as an array.
+    # Returns the current Time and TimezonePeriod as an array. The first element
+    # is the time, the second element is the period.
     def current_period_and_time
       utc = Time.now.utc
       [utc_to_local(utc), period_for_utc(utc)]
