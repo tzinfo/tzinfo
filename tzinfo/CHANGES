@@ -1,9 +1,17 @@
+Version 0.?.? (tzdata v200??) - ???????????
+-------------------------------------------
+
+* Add lib directory to the load path when tzinfo is required. Makes it easier
+  to use tzinfo gem when unpacked to vendor directory in rails. 
+
+
 Version 0.1.1 (tzdata v2005q) - 18-Dec-2005
 -------------------------------------------
 
 * Timezones that are defined by a single unbounded period (e.g. UTC) now 
   work again.
 * Updated to tzdata version 2005q.
+
 
 Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
 -------------------------------------------
