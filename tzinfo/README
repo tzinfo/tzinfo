@@ -1,6 +1,6 @@
 = TZInfo -- Daylight-savings aware timezone support for Ruby
 
-TZInfo[http://tzinfo.rubygforge.org] uses the tz database 
+TZInfo[http://tzinfo.rubyforge.org] uses the tz database 
 (http://www.twinsun.com/tz/tz-link.htm) to provide
 daylight-savings aware transformations between times in different timezones.
 This is the same database as used for zoneinfo on Unix machines.
