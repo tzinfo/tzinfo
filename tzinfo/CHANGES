@@ -1,8 +1,12 @@
-Version 0.?.? (tzdata v200??) - ???????????
+Version 0.?.? (tzdata v2006a) - ???????????
 -------------------------------------------
 
 * Add lib directory to the load path when tzinfo is required. Makes it easier
   to use tzinfo gem when unpacked to vendor directory in rails. 
+* Updated to tzdata version 2006a 
+  (http://article.gmane.org/gmane.comp.time.tz/738).
+* build_tz_classes rake task now handles running svn add and svn delete as new 
+  timezones and countries are added and old ones are removed.
 
 
 Version 0.1.1 (tzdata v2005q) - 18-Dec-2005
