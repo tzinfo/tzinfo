@@ -79,13 +79,27 @@ class TCTimezone < Test::Unit::TestCase
   def test_new_no_args
     tz = Timezone.new
     
-    assert_equal('Unknown', tz.identifier)    
+    assert_equal('Unknown', tz.identifier)
+    assert_equal('Unknown', tz.friendly_identifier)
+    assert_raise(UnknownTimezone) { tz.utc_to_local(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raise(UnknownTimezone) { tz.local_to_utc(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raise(UnknownTimezone) { tz.period_for_utc(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raise(UnknownTimezone) { tz.period_for_local(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raise(UnknownTimezone) { tz.now }
+    assert_raise(UnknownTimezone) { tz.current_period_and_time } 
   end
   
   def test_new_nil
     tz = Timezone.new(nil)
     
-    assert_equal('Unknown', tz.identifier)    
+    assert_equal('Unknown', tz.identifier)
+    assert_equal('Unknown', tz.friendly_identifier)
+    assert_raise(UnknownTimezone) { tz.utc_to_local(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raise(UnknownTimezone) { tz.local_to_utc(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raise(UnknownTimezone) { tz.period_for_utc(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raise(UnknownTimezone) { tz.period_for_local(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raise(UnknownTimezone) { tz.now }
+    assert_raise(UnknownTimezone) { tz.current_period_and_time }    
   end
   
   def test_new_arg

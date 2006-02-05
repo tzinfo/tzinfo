@@ -7,6 +7,11 @@ Version 0.?.? (tzdata v2006a) - ???????????
   (http://article.gmane.org/gmane.comp.time.tz/738).
 * build_tz_classes rake task now handles running svn add and svn delete as new 
   timezones and countries are added and old ones are removed.
+* Return a better error when attempting to use a Timezone instance that was
+  constructed with Timezone.new(nil). This will occur when using Rails'
+  composed_of. When the timezone identifier in the database is null, attempting
+  to use the Timezone will now result in a UnknownTimezone exception rather than
+  a NameError.
 
 
 Version 0.1.1 (tzdata v2005q) - 18-Dec-2005

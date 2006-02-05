@@ -38,6 +38,11 @@ module TZInfo
   class InvalidTimezoneIdentifier < StandardError
   end
   
+  # Thrown if an attempt is made to do a conversion on a timezone created
+  # with Timezone.new(nil).
+  class UnknownTimezone < StandardError
+  end
+  
   # Timezone is the base class of all timezones. It provides a factory method
   # get to access timezones by identifier. Once a specific Timezone has been
   # retrieved, DateTimes and Times can be converted between the UTC and the
@@ -357,6 +362,11 @@ module TZInfo
     # than self, 0 if tz is equal to self and +1 if tz is greater than self.
     def <=>(tz)
       identifier <=> tz.identifier
+    end
+    
+    def periods #:nodoc:
+      raise UnknownTimezone, 'An attempt was made to perform a conversion on ' + 
+        'an unknown timezone (i.e. one created with TZInfo::Timezone.new(nil))'
     end
     
     protected
