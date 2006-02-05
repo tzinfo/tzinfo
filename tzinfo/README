@@ -1,6 +1,7 @@
 = TZInfo -- Daylight-savings aware timezone support for Ruby
 
-TZInfo uses the tz database (http://www.twinsun.com/tz/tz-link.htm) to provide
+TZInfo[http://tzinfo.rubygforge.org] uses the tz database 
+(http://www.twinsun.com/tz/tz-link.htm) to provide
 daylight-savings aware transformations between times in different timezones.
 This is the same database as used for zoneinfo on Unix machines.
 
@@ -46,7 +47,7 @@ gets all the Timezone identifiers for the US:
   timezones = us.zone_identifiers
   
 The above covers the most common uses of Timezone and Country. For more detail,
-see their individual class documentation.
+see the API documentation for the individual classes.
 
 
 == Download
@@ -55,14 +56,14 @@ The latest version of TZInfo can be found at
 
 * http://rubyforge.org/frs/?group_id=894
 
-Documentation can be found at 
+API documentation can be found at 
 
 * http://tzinfo.rubyforge.org/doc/
 
 
 == Installation
 
-The preferred method of installing TZInfo is through its GEM file (RubyGems[http://docs.rubygems.org/] required):
+The preferred method of installing TZInfo is through the GEM file (RubyGems[http://docs.rubygems.org/] required):
 
   % gem install tzinfo-x.y.z.gem
   
@@ -78,5 +79,7 @@ TZInfo is released under the MIT[http://opensource.org/licenses/mit-license.html
 
 == Support
 
-Please contact Philip Ross (phil.ross@gmail.com) if you require assistance or have
-any suggestions.
+Please post to the TZInfo Users mailing list (http://rubyforge.org/mailman/listinfo/tzinfo-users)
+if you require assistance or have any suggestions.
+
+Alternatively, you can contact the author Philip Ross directly at phil.ross@gmail.com.
