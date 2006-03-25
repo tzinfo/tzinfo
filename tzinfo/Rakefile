@@ -52,6 +52,10 @@ end
 
 
 Rake::TestTask.new('test') do |t|
+  # Force a particular timezone to be local (helps find issues when local
+  # timezone isn't GMT). This won't work on Windows.
+  ENV['TZ'] = 'America/Los_Angeles'
+
   t.libs << 'test'
   t.pattern = 'test/tc_*.rb'
   t.verbose = true

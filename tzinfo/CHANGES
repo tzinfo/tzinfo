@@ -1,3 +1,14 @@
+Version 0.?.? (tzdata v?????) - ??????????
+------------------------------------------
+
+* Use timestamps rather than DateTime objects in zone files for times between
+  1970 and 2037 (the range of Time).
+* Don't convert passed in Time objects to DateTime in most cases (provides 
+  a substantial performance improvement).
+* Allow integer timestamps (time in seconds since 1970-1-1) to be used as well 
+  as Time and DateTime objects in all public methods taking times.
+  
+
 Version 0.1.2 (tzdata v2006a) - 5-Feb-2006
 ------------------------------------------
 

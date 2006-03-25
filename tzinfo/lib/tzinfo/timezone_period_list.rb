@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005 Philip Ross
+# Copyright (c) 2005-2006 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+require 'tzinfo/time_or_datetime'
 require 'tzinfo/timezone_period'
 
 module TZInfo
@@ -85,7 +86,9 @@ module TZInfo
     
     # Returns the period for the given utc time. 
     # If no period is found for the given time, PeriodNotFound is thrown.
-    def period_for_utc(utc)      
+    def period_for_utc(utc)
+      utc = TimeOrDateTime.wrap(utc)
+      
       if @list.nil?
         result = nil
       else
@@ -128,6 +131,8 @@ module TZInfo
     # If no period is found for the given time, PeriodNotFound is thrown.
     # Results returned are ordered by increasing UTC start date.    
     def periods_for_local(local)
+      local = TimeOrDateTime.wrap(local)
+      
       # found_first is used to avoid searching back to far
       # the search will be limited at the next half year block after discovering
       # the first match

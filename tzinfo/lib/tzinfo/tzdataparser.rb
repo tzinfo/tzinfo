@@ -343,6 +343,8 @@ module TZInfo
       def datetime_constructor(datetime)
         if datetime.nil? 
           'nil'
+        elsif (1970..2037).include?(datetime.year)
+          "#{Time.utc(datetime.year, datetime.mon, datetime.mday, datetime.hour, datetime.min, datetime.sec).to_i}"
         else
           "DateTime.new0(Rational.new!(#{datetime.ajd.numerator},#{datetime.ajd.denominator}),0,Date::ITALY)"          
         end

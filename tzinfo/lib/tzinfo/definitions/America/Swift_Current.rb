@@ -26,8 +26,8 @@ add_period(1959,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14621201,6),
 add_period(1960,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(19496391,8),0,Date::ITALY),DateTime.new0(Rational.new!(14623217,6),0,Date::ITALY),-25200,3600,:'MDT')}
 add_period(1960,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(14623217,6),0,Date::ITALY),DateTime.new0(Rational.new!(19499359,8),0,Date::ITALY),-25200,0,:'MST')}
 add_period(1961,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(19499359,8),0,Date::ITALY),DateTime.new0(Rational.new!(14625401,6),0,Date::ITALY),-25200,3600,:'MDT')}
-add_period(1961,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(14625401,6),0,Date::ITALY),DateTime.new0(Rational.new!(19531503,8),0,Date::ITALY),-25200,0,:'MST')}
-add_period(1972,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(19531503,8),0,Date::ITALY),nil,-21600,0,:'CST')}
+add_period(1961,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(14625401,6),0,Date::ITALY),73472400,-25200,0,:'MST')}
+add_period(1972,4) {TimezonePeriod.new(73472400,nil,-21600,0,:'CST')}
 end
 end
 end

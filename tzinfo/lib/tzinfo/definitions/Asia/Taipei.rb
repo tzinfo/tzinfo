@@ -40,13 +40,13 @@ add_period(1959,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19494737,8),0
 add_period(1960,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(14622517,6),0,Date::ITALY),DateTime.new0(Rational.new!(19497665,8),0,Date::ITALY),28800,3600,:'CDT')}
 add_period(1960,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19497665,8),0,Date::ITALY),DateTime.new0(Rational.new!(14624707,6),0,Date::ITALY),28800,0,:'CST')}
 add_period(1961,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(14624707,6),0,Date::ITALY),DateTime.new0(Rational.new!(19500585,8),0,Date::ITALY),28800,3600,:'CDT')}
-add_period(1961,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19500585,8),0,Date::ITALY),DateTime.new0(Rational.new!(14652829,6),0,Date::ITALY),28800,0,:'CST')}
-add_period(1974,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14652829,6),0,Date::ITALY),DateTime.new0(Rational.new!(19538569,8),0,Date::ITALY),28800,3600,:'CDT')}
-add_period(1974,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19538569,8),0,Date::ITALY),DateTime.new0(Rational.new!(14655019,6),0,Date::ITALY),28800,0,:'CST')}
-add_period(1975,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14655019,6),0,Date::ITALY),DateTime.new0(Rational.new!(19541489,8),0,Date::ITALY),28800,3600,:'CDT')}
-add_period(1975,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19541489,8),0,Date::ITALY),DateTime.new0(Rational.new!(14666521,6),0,Date::ITALY),28800,0,:'CST')}
-add_period(1980,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(14666521,6),0,Date::ITALY),DateTime.new0(Rational.new!(19556097,8),0,Date::ITALY),28800,3600,:'CDT')}
-add_period(1980,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19556097,8),0,Date::ITALY),nil,28800,0,:'CST')}
+add_period(1961,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19500585,8),0,Date::ITALY),133977600,28800,0,:'CST')}
+add_period(1974,3) {TimezonePeriod.new(133977600,149785200,28800,3600,:'CDT')}
+add_period(1974,9) {TimezonePeriod.new(149785200,165513600,28800,0,:'CST')}
+add_period(1975,3) {TimezonePeriod.new(165513600,181321200,28800,3600,:'CDT')}
+add_period(1975,9) {TimezonePeriod.new(181321200,331142400,28800,0,:'CST')}
+add_period(1980,6) {TimezonePeriod.new(331142400,339087600,28800,3600,:'CDT')}
+add_period(1980,9) {TimezonePeriod.new(339087600,nil,28800,0,:'CST')}
 end
 end
 end

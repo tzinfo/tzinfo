@@ -216,29 +216,49 @@ class TCTimezone < Test::Unit::TestCase
   def test_period_for_utc
     dt = DateTime.new(2005,2,18,16,24,23)
     t = Time.utc(2005,2,18,16,24,23)
+    t2 = Time.local(2005,2,18,16,24,23)
+    ts = t.to_i
         
     dt_period = Timezone.get('Europe/London').period_for_utc(dt)
     t_period = Timezone.get('Europe/London').period_for_utc(t)
+    t2_period = Timezone.get('Europe/London').period_for_utc(t2)
+    ts_period = Timezone.get('Europe/London').period_for_utc(ts)
     
     assert_equal(DateTime.new(2004,10,31,1,0,0), dt_period.utc_start)
-    assert_equal(DateTime.new(2005,3,27,1,0,0), dt_period.utc_end)
+    assert_equal(DateTime.new(2005,3,27,1,0,0), dt_period.utc_end)   
     
     assert_equal(DateTime.new(2004,10,31,1,0,0), t_period.utc_start)
     assert_equal(DateTime.new(2005,3,27,1,0,0), t_period.utc_end)
+    
+    assert_equal(DateTime.new(2004,10,31,1,0,0), t2_period.utc_start)
+    assert_equal(DateTime.new(2005,3,27,1,0,0), t2_period.utc_end)
+    
+    assert_equal(DateTime.new(2004,10,31,1,0,0), ts_period.utc_start)
+    assert_equal(DateTime.new(2005,3,27,1,0,0), ts_period.utc_end)
   end
   
   def test_period_for_local
     dt = DateTime.new(2005,2,18,16,24,23)
     t = Time.utc(2005,2,18,16,24,23)
+    t2 = Time.local(2005,2,18,16,24,23)
+    ts = t.to_i
     
     dt_period = Timezone.get('Europe/London').period_for_local(dt)
     t_period = Timezone.get('Europe/London').period_for_local(t)
+    t2_period = Timezone.get('Europe/London').period_for_local(t2)
+    ts_period = Timezone.get('Europe/London').period_for_local(ts)        
     
     assert_equal(DateTime.new(2004,10,31,1,0,0), dt_period.utc_start)
     assert_equal(DateTime.new(2005,3,27,1,0,0), dt_period.utc_end)
     
     assert_equal(DateTime.new(2004,10,31,1,0,0), t_period.utc_start)
     assert_equal(DateTime.new(2005,3,27,1,0,0), t_period.utc_end)
+    
+    assert_equal(DateTime.new(2004,10,31,1,0,0), t2_period.utc_start)
+    assert_equal(DateTime.new(2005,3,27,1,0,0), t2_period.utc_end)
+    
+    assert_equal(DateTime.new(2004,10,31,1,0,0), ts_period.utc_start)
+    assert_equal(DateTime.new(2005,3,27,1,0,0), ts_period.utc_end)
   end
   
   def test_period_for_local_invalid
@@ -339,32 +359,48 @@ class TCTimezone < Test::Unit::TestCase
   def test_utc_to_local
     dt = DateTime.new(2005,2,18,16,24,23)
     t = Time.utc(2005,2,18,16,24,23)
+    t2 = Time.local(2005,2,18,16,24,23)
+    ts = t.to_i
         
-    assert_equal(dt, Timezone.get('Europe/London').utc_to_local(dt))
-    assert_not_equal(t, Timezone.get('Europe/London').utc_to_local(dt))
+    assert_equal(dt, Timezone.get('Europe/London').utc_to_local(dt))    
     assert_equal(t, Timezone.get('Europe/London').utc_to_local(t))
-    assert_not_equal(dt, Timezone.get('Europe/London').utc_to_local(t))
+    assert_equal(t, Timezone.get('Europe/London').utc_to_local(t2))
+    assert_equal(ts, Timezone.get('Europe/London').utc_to_local(ts))
   end    
   
   def test_local_to_utc
     dt = DateTime.new(2005,2,18,16,24,23)
     t = Time.utc(2005,2,18,16,24,23)
+    t2 = Time.local(2005,2,18,16,24,23)
+    ts = t.to_i
         
-    assert_equal(dt, Timezone.get('Europe/London').local_to_utc(dt))
-    assert_not_equal(t, Timezone.get('Europe/London').local_to_utc(dt))
+    assert_equal(dt, Timezone.get('Europe/London').local_to_utc(dt))    
     assert_equal(t, Timezone.get('Europe/London').local_to_utc(t))
-    assert_not_equal(dt, Timezone.get('Europe/London').local_to_utc(t))
+    assert_equal(t, Timezone.get('Europe/London').local_to_utc(t2))
+    assert_equal(ts, Timezone.get('Europe/London').local_to_utc(ts))
   end
   
   def test_local_to_utc_invalid
     assert_raise(PeriodNotFound) {
       Timezone.get('America/New_York').local_to_utc(DateTime.new(2004,4,4,2,30,0))
     }
+    assert_raise(PeriodNotFound) {
+      Timezone.get('America/New_York').local_to_utc(Time.utc(2004,4,4,2,30,0))
+    }
+    assert_raise(PeriodNotFound) {
+      Timezone.get('America/New_York').local_to_utc(Time.utc(2004,4,4,2,30,0).to_i)
+    }
   end
   
   def test_local_to_utc_ambiguous
     assert_raise(AmbiguousTime) {
       Timezone.get('America/New_York').local_to_utc(DateTime.new(2004,10,31,1,30,0))
+    }
+    assert_raise(AmbiguousTime) {
+      Timezone.get('America/New_York').local_to_utc(Time.utc(2004,10,31,1,30,0))
+    }
+    assert_raise(AmbiguousTime) {
+      Timezone.get('America/New_York').local_to_utc(Time.utc(2004,10,31,1,30,0).to_i)
     }
   end
   

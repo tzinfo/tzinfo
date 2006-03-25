@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005 Philip Ross
+# Copyright (c) 2005-2006 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,7 @@
 
 require 'date'
 require 'tzinfo/country'
+require 'tzinfo/time_or_datetime'
 require 'tzinfo/timezone_period'
 require 'tzinfo/timezone_period_list'
 
@@ -45,12 +46,16 @@ module TZInfo
   
   # Timezone is the base class of all timezones. It provides a factory method
   # get to access timezones by identifier. Once a specific Timezone has been
-  # retrieved, DateTimes and Times can be converted between the UTC and the
-  # local time for the zone. For example:
+  # retrieved, DateTimes, Times and timestamps can be converted between the UTC 
+  # and the local time for the zone. For example:
   #
   #   tz = TZInfo::Timezone.get('America/New_York')
   #   puts tz.utc_to_local(DateTime.new(2005,8,29,15,35,0)).to_s
   #   puts tz.local_to_utc(Time.utc(2005,8,29,11,35,0)).to_s
+  #   puts tz.utc_to_local(1125315300).to_s
+  #
+  # Each time conversion method returns an object of the same type it was 
+  # passed.
   #
   # The timezone information all comes from the tz database
   # (see http://www.twinsun.com/tz/tz-link.htm)
@@ -204,18 +209,18 @@ module TZInfo
     end
     
     # Returns the TimezonePeriod for the given UTC time. utc can either be
-    # a DateTime or a Time. Any timezone information in utc is ignored (it is
-    # treated as a UTC time).    
+    # a DateTime, Time or integer timestamp (Time.to_i). Any timezone 
+    # information in utc is ignored (it is treated as a UTC time).        
     #
     # If no TimezonePeriod could be found, PeriodNotFound is raised.
-    def period_for_utc(utc)
-      utc = as_datetime(utc)      
+    def period_for_utc(utc)            
       periods.period_for_utc(utc)      
     end
     
     # Returns the TimezonePeriod for the given local time. local can either be
-    # a DateTime or a Time. Any timezone information in local is ignored (it is
-    # treated as a time in the current timezone).
+    # a DateTime, Time or integer timestamp (Time.to_i). Any timezone 
+    # information in local is ignored (it is treated as a time in the current 
+    # timezone).
     #
     # Warning: There are local times that have no equivalent UTC times (e.g.
     # in the transition from standard time to daylight savings time). There are
@@ -246,8 +251,7 @@ module TZInfo
     # array of the periods that need to be resolved. The block can select and
     # return a single period or return nil or an empty array
     # to cause an AmbiguousTime exception to be raised.
-    def period_for_local(local, dst = nil)
-      local = as_datetime(local)      
+    def period_for_local(local, dst = nil)            
       results = periods.periods_for_local(local)
       
       # by this point, results must contain at least one period
@@ -282,17 +286,19 @@ module TZInfo
     end
     
     # Converts a time in UTC to the local timezone. utc can either be
-    # a DateTime or a Time. The returned time has the same type as utc.
-    # Any timezone information in utc is ignored (it is treated as a UTC time).
+    # a DateTime, Time or timestamp (Time.to_i). The returned time has the same
+    # type as utc. Any timezone information in utc is ignored (it is treated as 
+    # a UTC time).
     def utc_to_local(utc)
-      run_on_datetime(utc) {|utc|
+      TimeOrDateTime.wrap(utc) {|utc|
         period_for_utc(utc).to_local(utc)
       }
     end
     
     # Converts a time in the local timezone to UTC. local can either be
-    # a DateTime or a Time. The returned time has the same type as local.
-    # Any timezone information in local is ignored (it is treated as a local time).
+    # a DateTime, Time or timestamp (Time.to_i). The returned time has the same
+    # type as local. Any timezone information in local is ignored (it is treated
+    # as a local time).
     #
     # Warning: There are local times that have no equivalent UTC times (e.g.
     # in the transition from standard time to daylight savings time). There are
@@ -323,7 +329,7 @@ module TZInfo
     # single period to use to convert the time or return nil or an empty array
     # to cause an AmbiguousTime exception to be raised.
     def local_to_utc(local, dst = nil)
-      run_on_datetime(local) {|local|
+      TimeOrDateTime.wrap(local) {|local|
         if block_given?
           period = period_for_local(local, dst) {|periods| yield periods }
         else
@@ -348,7 +354,8 @@ module TZInfo
     # is the time, the second element is the period.
     def current_period_and_time
       utc = Time.now.utc
-      [utc_to_local(utc), period_for_utc(utc)]
+      period = period_for_utc(utc)
+      [period.to_local(utc), period]
     end
     
     alias :current_time_and_period :current_period_and_time
@@ -401,32 +408,6 @@ module TZInfo
               end              
 CODE
       end
-    
-    private
-      # If called with a Time, returns an equivalent DateTime; otherwise returns
-      # the datetime paramter.
-      def as_datetime(datetime)
-        if datetime.instance_of?(Time)
-          DateTime.new(datetime.year, datetime.mon, datetime.mday, datetime.hour, datetime.min, datetime.sec)
-        else
-          datetime
-        end
-      end
-    
-      # Executes a block with a DateTime. If datetime is a Time it will be
-      # converted to a DateTime before yielding to the block and the result of
-      # the block will be converted back to a Time.
-      def run_on_datetime(datetime)
-        if datetime.instance_of?(Time)
-          datetime = DateTime.new(datetime.year, datetime.mon, datetime.mday, datetime.hour, datetime.min, datetime.sec)
-          result = yield datetime
-          
-          # not necessarily utc, but pretend it is
-          Time.utc(result.year, result.mon, result.mday, result.hour, result.min, result.sec)
-        else
-          yield datetime
-        end
-      end            
   end 
   
   # A proxy class representing a timezone with a given identifier. It can be

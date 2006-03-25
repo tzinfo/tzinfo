@@ -57,13 +57,13 @@ add_period(1967,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19518343,8),
 add_period(1968,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29279699,12),0,Date::ITALY),DateTime.new0(Rational.new!(19521255,8),0,Date::ITALY),-28800,3600,:'PDT')}
 add_period(1968,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19521255,8),0,Date::ITALY),DateTime.new0(Rational.new!(29284067,12),0,Date::ITALY),-28800,0,:'PST')}
 add_period(1969,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29284067,12),0,Date::ITALY),DateTime.new0(Rational.new!(19524167,8),0,Date::ITALY),-28800,3600,:'PDT')}
-add_period(1969,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19524167,8),0,Date::ITALY),DateTime.new0(Rational.new!(29288435,12),0,Date::ITALY),-28800,0,:'PST')}
-add_period(1970,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29288435,12),0,Date::ITALY),DateTime.new0(Rational.new!(19527079,8),0,Date::ITALY),-28800,3600,:'PDT')}
-add_period(1970,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19527079,8),0,Date::ITALY),DateTime.new0(Rational.new!(29292803,12),0,Date::ITALY),-28800,0,:'PST')}
-add_period(1971,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29292803,12),0,Date::ITALY),DateTime.new0(Rational.new!(19530047,8),0,Date::ITALY),-28800,3600,:'PDT')}
-add_period(1971,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19530047,8),0,Date::ITALY),DateTime.new0(Rational.new!(29297255,12),0,Date::ITALY),-28800,0,:'PST')}
-add_period(1972,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29297255,12),0,Date::ITALY),DateTime.new0(Rational.new!(19532479,8),0,Date::ITALY),-28800,3600,:'PDT')}
-add_period(1972,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(19532479,8),0,Date::ITALY),nil,-25200,0,:'MST')}
+add_period(1969,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19524167,8),0,Date::ITALY),9972000,-28800,0,:'PST')}
+add_period(1970,4) {TimezonePeriod.new(9972000,25693200,-28800,3600,:'PDT')}
+add_period(1970,10) {TimezonePeriod.new(25693200,41421600,-28800,0,:'PST')}
+add_period(1971,4) {TimezonePeriod.new(41421600,57747600,-28800,3600,:'PDT')}
+add_period(1971,10) {TimezonePeriod.new(57747600,73476000,-28800,0,:'PST')}
+add_period(1972,4) {TimezonePeriod.new(73476000,84013200,-28800,3600,:'PDT')}
+add_period(1972,8) {TimezonePeriod.new(84013200,nil,-25200,0,:'MST')}
 end
 end
 end
