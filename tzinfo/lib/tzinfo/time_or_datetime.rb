@@ -22,6 +22,7 @@
 
 require 'date'
 require 'time'
+require 'tzinfo/offset_rationals'
 
 module TZInfo
   # Used by TZInfo internally to represent either a Time, DateTime or integer

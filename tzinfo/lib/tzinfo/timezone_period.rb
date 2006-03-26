@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+require 'tzinfo/offset_rationals'
 require 'tzinfo/time_or_datetime'
 
 module TZInfo
