@@ -8,8 +8,7 @@ set_identifier('Australia/Currie')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(6516280171,2700),0,Date::ITALY),34528,0,:'LMT')}
 add_period(1895,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(6516280171,2700),0,Date::ITALY),DateTime.new0(Rational.new!(14526823,6),0,Date::ITALY),36000,0,:'EST')}
 add_period(1916,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(14526823,6),0,Date::ITALY),DateTime.new0(Rational.new!(58110241,24),0,Date::ITALY),36000,3600,:'EST')}
-add_period(1917,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(58110241,24),0,Date::ITALY),DateTime.new0(Rational.new!(19370497,8),0,Date::ITALY),36000,3600,:'EST')}
-add_period(1917,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19370497,8),0,Date::ITALY),DateTime.new0(Rational.new!(14582161,6),0,Date::ITALY),36000,0,:'EST')}
+add_period(1917,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(58110241,24),0,Date::ITALY),DateTime.new0(Rational.new!(14582161,6),0,Date::ITALY),36000,0,:'EST')}
 add_period(1941,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(14582161,6),0,Date::ITALY),DateTime.new0(Rational.new!(19443577,8),0,Date::ITALY),36000,3600,:'EST')}
 add_period(1942,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19443577,8),0,Date::ITALY),DateTime.new0(Rational.new!(14583775,6),0,Date::ITALY),36000,0,:'EST')}
 add_period(1942,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(14583775,6),0,Date::ITALY),DateTime.new0(Rational.new!(19446489,8),0,Date::ITALY),36000,3600,:'EST')}

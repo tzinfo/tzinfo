@@ -29,7 +29,8 @@ add_period(1989,9) {TimezonePeriod.new(622584000,638308800,21600,0,:'FRUT')}
 add_period(1990,3) {TimezonePeriod.new(638308800,654638400,21600,3600,:'FRUST')}
 add_period(1990,9) {TimezonePeriod.new(654638400,670363200,21600,0,:'FRUT')}
 add_period(1991,3) {TimezonePeriod.new(670363200,683582400,18000,3600,:'FRUST')}
-add_period(1991,8) {TimezonePeriod.new(683582400,717530400,18000,3600,:'KGT')}
+add_period(1991,8) {TimezonePeriod.new(683582400,703018800,18000,0,:'KGT')}
+add_period(1992,4) {TimezonePeriod.new(703018800,717530400,18000,3600,:'KGST')}
 add_period(1992,9) {TimezonePeriod.new(717530400,734468400,18000,0,:'KGT')}
 add_period(1993,4) {TimezonePeriod.new(734468400,748980000,18000,3600,:'KGST')}
 add_period(1993,9) {TimezonePeriod.new(748980000,765918000,18000,0,:'KGT')}

@@ -6,7 +6,7 @@ class London < Timezone #:nodoc:
 setup
 set_identifier('Europe/London')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(2760187969,1152),0,Date::ITALY),-75,0,:'LMT')}
-add_period(1847,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(2760187969,1152),0,Date::ITALY),DateTime.new0(Rational.new!(29052055,12),0,Date::ITALY),0,0,:'Unknown')}
+add_period(1847,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(2760187969,1152),0,Date::ITALY),DateTime.new0(Rational.new!(29052055,12),0,Date::ITALY),0,0,:'GMT')}
 add_period(1916,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(29052055,12),0,Date::ITALY),DateTime.new0(Rational.new!(29053651,12),0,Date::ITALY),0,3600,:'BST')}
 add_period(1916,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29053651,12),0,Date::ITALY),DateTime.new0(Rational.new!(29055919,12),0,Date::ITALY),0,0,:'GMT')}
 add_period(1917,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29055919,12),0,Date::ITALY),DateTime.new0(Rational.new!(29057863,12),0,Date::ITALY),0,3600,:'BST')}
@@ -115,7 +115,7 @@ add_period(1967,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29274823,12),
 add_period(1967,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29277511,12),0,Date::ITALY),DateTime.new0(Rational.new!(29278855,12),0,Date::ITALY),0,0,:'GMT')}
 add_period(1968,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(29278855,12),0,Date::ITALY),DateTime.new0(Rational.new!(58563755,24),0,Date::ITALY),0,3600,:'BST')}
 add_period(1968,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58563755,24),0,Date::ITALY),57722400,3600,0,:'BST')}
-add_period(1971,10) {TimezonePeriod.new(57722400,69818400,0,0,:'Unknown')}
+add_period(1971,10) {TimezonePeriod.new(57722400,69818400,0,0,:'GMT')}
 add_period(1972,3) {TimezonePeriod.new(69818400,89172000,0,3600,:'BST')}
 add_period(1972,10) {TimezonePeriod.new(89172000,101268000,0,0,:'GMT')}
 add_period(1973,3) {TimezonePeriod.new(101268000,120621600,0,3600,:'BST')}

@@ -6,7 +6,7 @@ class Taipei < Timezone #:nodoc:
 setup
 set_identifier('Asia/Taipei')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(193084733,80),0,Date::ITALY),29160,0,:'LMT')}
-add_period(1895,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(193084733,80),0,Date::ITALY),DateTime.new0(Rational.new!(14589457,6),0,Date::ITALY),28800,0,:'CT')}
+add_period(1895,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(193084733,80),0,Date::ITALY),DateTime.new0(Rational.new!(14589457,6),0,Date::ITALY),28800,0,:'CST')}
 add_period(1945,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14589457,6),0,Date::ITALY),DateTime.new0(Rational.new!(19453833,8),0,Date::ITALY),28800,3600,:'CDT')}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19453833,8),0,Date::ITALY),DateTime.new0(Rational.new!(14591647,6),0,Date::ITALY),28800,0,:'CST')}
 add_period(1946,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14591647,6),0,Date::ITALY),DateTime.new0(Rational.new!(19456753,8),0,Date::ITALY),28800,3600,:'CDT')}

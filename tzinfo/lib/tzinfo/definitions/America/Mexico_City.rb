@@ -11,7 +11,7 @@ add_period(1927,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(9700171,4),0,
 add_period(1930,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(9705183,4),0,Date::ITALY),DateTime.new0(Rational.new!(9705855,4),0,Date::ITALY),-25200,0,:'MST')}
 add_period(1931,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(9705855,4),0,Date::ITALY),DateTime.new0(Rational.new!(9706463,4),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1931,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9706463,4),0,Date::ITALY),DateTime.new0(Rational.new!(58243171,24),0,Date::ITALY),-25200,0,:'MST')}
-add_period(1932,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58243171,24),0,Date::ITALY),DateTime.new0(Rational.new!(9717199,4),0,Date::ITALY),-21600,0,:'CT')}
+add_period(1932,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58243171,24),0,Date::ITALY),DateTime.new0(Rational.new!(9717199,4),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1939,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(9717199,4),0,Date::ITALY),DateTime.new0(Rational.new!(58306553,24),0,Date::ITALY),-21600,3600,:'CDT')}
 add_period(1939,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(58306553,24),0,Date::ITALY),DateTime.new0(Rational.new!(9719891,4),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1940,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(9719891,4),0,Date::ITALY),DateTime.new0(Rational.new!(58322057,24),0,Date::ITALY),-21600,3600,:'CDT')}
@@ -32,7 +32,7 @@ add_period(2000,4) {TimezonePeriod.new(954662400,972802800,-21600,3600,:'CDT')}
 add_period(2000,10) {TimezonePeriod.new(972802800,989136000,-21600,0,:'CST')}
 add_period(2001,5) {TimezonePeriod.new(989136000,1001833200,-21600,3600,:'CDT')}
 add_period(2001,9) {TimezonePeriod.new(1001833200,1014184800,-21600,0,:'CST')}
-add_period(2002,2) {TimezonePeriod.new(1014184800,1018166400,-21600,0,:'CT')}
+add_period(2002,2) {TimezonePeriod.new(1014184800,1018166400,-21600,0,:'CST')}
 add_period(2002,4) {TimezonePeriod.new(1018166400,1035702000,-21600,3600,:'CDT')}
 add_period(2002,10) {TimezonePeriod.new(1035702000,1049616000,-21600,0,:'CST')}
 add_period(2003,4) {TimezonePeriod.new(1049616000,1067151600,-21600,3600,:'CDT')}

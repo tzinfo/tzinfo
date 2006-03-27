@@ -6,16 +6,17 @@ class Dawson < Timezone #:nodoc:
 setup
 set_identifier('America/Dawson')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10433888153,4320),0,Date::ITALY),-33460,0,:'LMT')}
-add_period(1900,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(10433888153,4320),0,Date::ITALY),DateTime.new0(Rational.new!(58120751,24),0,Date::ITALY),-32400,0,:'YT')}
+add_period(1900,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(10433888153,4320),0,Date::ITALY),DateTime.new0(Rational.new!(58120751,24),0,Date::ITALY),-32400,0,:'YST')}
 add_period(1918,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58120751,24),0,Date::ITALY),DateTime.new0(Rational.new!(29062727,12),0,Date::ITALY),-32400,3600,:'YDT')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29062727,12),0,Date::ITALY),DateTime.new0(Rational.new!(58130495,24),0,Date::ITALY),-32400,0,:'YST')}
 add_period(1919,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(58130495,24),0,Date::ITALY),DateTime.new0(Rational.new!(14533583,6),0,Date::ITALY),-32400,3600,:'YDT')}
 add_period(1919,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14533583,6),0,Date::ITALY),DateTime.new0(Rational.new!(58329599,24),0,Date::ITALY),-32400,0,:'YST')}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(58329599,24),0,Date::ITALY),DateTime.new0(Rational.new!(29180747,12),0,Date::ITALY),-32400,3600,:'YWT')}
+add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(58329599,24),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-32400,3600,:'YWT')}
+add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(29180747,12),0,Date::ITALY),-32400,3600,:'YPT')}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(29180747,12),0,Date::ITALY),DateTime.new0(Rational.new!(19511007,8),0,Date::ITALY),-32400,0,:'YST')}
 add_period(1965,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(19511007,8),0,Date::ITALY),DateTime.new0(Rational.new!(19512519,8),0,Date::ITALY),-32400,7200,:'YDDT')}
 add_period(1965,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19512519,8),0,Date::ITALY),120646800,-32400,0,:'YST')}
-add_period(1973,10) {TimezonePeriod.new(120646800,325677600,-28800,0,:'PT')}
+add_period(1973,10) {TimezonePeriod.new(120646800,325677600,-28800,0,:'PST')}
 add_period(1980,4) {TimezonePeriod.new(325677600,341398800,-28800,3600,:'PDT')}
 add_period(1980,10) {TimezonePeriod.new(341398800,357127200,-28800,0,:'PST')}
 add_period(1981,4) {TimezonePeriod.new(357127200,372848400,-28800,3600,:'PDT')}

@@ -136,7 +136,7 @@ add_period(1990,9) {TimezonePeriod.new(654660000,670384800,-3600,0,:'AZOT')}
 add_period(1991,3) {TimezonePeriod.new(670384800,686109600,-3600,3600,:'AZOST')}
 add_period(1991,9) {TimezonePeriod.new(686109600,701834400,-3600,0,:'AZOT')}
 add_period(1992,3) {TimezonePeriod.new(701834400,717559200,-3600,3600,:'AZOST')}
-add_period(1992,9) {TimezonePeriod.new(717555600,733280400,0,0,:'WET')}
+add_period(1992,9) {TimezonePeriod.new(717559200,733280400,0,0,:'WET')}
 add_period(1993,3) {TimezonePeriod.new(733280400,749005200,-3600,3600,:'AZOST')}
 add_period(1993,9) {TimezonePeriod.new(749005200,764730000,-3600,0,:'AZOT')}
 add_period(1994,3) {TimezonePeriod.new(764730000,780454800,-3600,3600,:'AZOST')}

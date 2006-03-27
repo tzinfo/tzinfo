@@ -7,7 +7,7 @@ setup
 set_identifier('Africa/Freetown')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(3468163013,1440),0,Date::ITALY),-3180,0,:'LMT')}
 add_period(1882,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(3468163013,1440),0,Date::ITALY),DateTime.new0(Rational.new!(3484684133,1440),0,Date::ITALY),-3180,0,:'FMT')}
-add_period(1913,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(3484684133,1440),0,Date::ITALY),DateTime.new0(Rational.new!(58270909,24),0,Date::ITALY),-3600,0,:'Unknown')}
+add_period(1913,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(3484684133,1440),0,Date::ITALY),DateTime.new0(Rational.new!(58270909,24),0,Date::ITALY),-3600,0,:'WAT')}
 add_period(1935,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(58270909,24),0,Date::ITALY),DateTime.new0(Rational.new!(174821509,72),0,Date::ITALY),-3600,2400,:'SLST')}
 add_period(1935,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(174821509,72),0,Date::ITALY),DateTime.new0(Rational.new!(58279693,24),0,Date::ITALY),-3600,0,:'WAT')}
 add_period(1936,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(58279693,24),0,Date::ITALY),DateTime.new0(Rational.new!(174847861,72),0,Date::ITALY),-3600,2400,:'SLST')}
@@ -24,7 +24,7 @@ add_period(1941,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(58323517,24),
 add_period(1941,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(174979333,72),0,Date::ITALY),DateTime.new0(Rational.new!(58332277,24),0,Date::ITALY),-3600,0,:'WAT')}
 add_period(1942,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(58332277,24),0,Date::ITALY),DateTime.new0(Rational.new!(175005613,72),0,Date::ITALY),-3600,2400,:'SLST')}
 add_period(1942,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(175005613,72),0,Date::ITALY),DateTime.new0(Rational.new!(58460149,24),0,Date::ITALY),-3600,0,:'WAT')}
-add_period(1957,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(58460149,24),0,Date::ITALY),DateTime.new0(Rational.new!(4871981,2),0,Date::ITALY),0,0,:'Unknown')}
+add_period(1957,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(58460149,24),0,Date::ITALY),DateTime.new0(Rational.new!(4871981,2),0,Date::ITALY),0,0,:'GMT')}
 add_period(1957,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(4871981,2),0,Date::ITALY),DateTime.new0(Rational.new!(58465979,24),0,Date::ITALY),0,3600,:'SLST')}
 add_period(1957,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58465979,24),0,Date::ITALY),DateTime.new0(Rational.new!(4872711,2),0,Date::ITALY),0,0,:'GMT')}
 add_period(1958,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(4872711,2),0,Date::ITALY),DateTime.new0(Rational.new!(58474739,24),0,Date::ITALY),0,3600,:'SLST')}

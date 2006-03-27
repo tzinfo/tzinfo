@@ -6,7 +6,7 @@ class Accra < Timezone #:nodoc:
 setup
 set_identifier('Africa/Accra')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52306441213,21600),0,Date::ITALY),-52,0,:'LMT')}
-add_period(1918,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52306441213,21600),0,Date::ITALY),DateTime.new0(Rational.new!(4856825,2),0,Date::ITALY),0,0,:'Unknown')}
+add_period(1918,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52306441213,21600),0,Date::ITALY),DateTime.new0(Rational.new!(4856825,2),0,Date::ITALY),0,0,:'GMT')}
 add_period(1936,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(4856825,2),0,Date::ITALY),DateTime.new0(Rational.new!(174854411,72),0,Date::ITALY),0,1200,:'GHST')}
 add_period(1936,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(174854411,72),0,Date::ITALY),DateTime.new0(Rational.new!(4857555,2),0,Date::ITALY),0,0,:'GMT')}
 add_period(1937,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(4857555,2),0,Date::ITALY),DateTime.new0(Rational.new!(174880691,72),0,Date::ITALY),0,1200,:'GHST')}

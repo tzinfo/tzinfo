@@ -6,7 +6,7 @@ class Thule < Timezone #:nodoc:
 setup
 set_identifier('America/Thule')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52295170127,21600),0,Date::ITALY),-16508,0,:'LMT')}
-add_period(1916,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(52295170127,21600),0,Date::ITALY),670399200,-14400,0,:'AT')}
+add_period(1916,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(52295170127,21600),0,Date::ITALY),670399200,-14400,0,:'AST')}
 add_period(1991,3) {TimezonePeriod.new(670399200,686120400,-14400,3600,:'ADT')}
 add_period(1991,9) {TimezonePeriod.new(686120400,701848800,-14400,0,:'AST')}
 add_period(1992,3) {TimezonePeriod.new(701848800,717570000,-14400,3600,:'ADT')}

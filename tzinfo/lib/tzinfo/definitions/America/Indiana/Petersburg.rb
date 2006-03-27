@@ -7,14 +7,15 @@ class Petersburg < Timezone #:nodoc:
 setup
 set_identifier('America/Indiana/Petersburg')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(9636533,4),0,Date::ITALY),-20947,0,:'LMT')}
-add_period(1883,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(9636533,4),0,Date::ITALY),DateTime.new0(Rational.new!(14530103,6),0,Date::ITALY),-21600,0,:'CT')}
+add_period(1883,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(9636533,4),0,Date::ITALY),DateTime.new0(Rational.new!(14530103,6),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1918,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14530103,6),0,Date::ITALY),DateTime.new0(Rational.new!(58125451,24),0,Date::ITALY),-21600,3600,:'CDT')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58125451,24),0,Date::ITALY),DateTime.new0(Rational.new!(14532287,6),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1919,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14532287,6),0,Date::ITALY),DateTime.new0(Rational.new!(58134187,24),0,Date::ITALY),-21600,3600,:'CDT')}
 add_period(1919,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58134187,24),0,Date::ITALY),DateTime.new0(Rational.new!(14582399,6),0,Date::ITALY),-21600,0,:'CST')}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(14582399,6),0,Date::ITALY),DateTime.new0(Rational.new!(58361491,24),0,Date::ITALY),-21600,3600,:'CWT')}
+add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(14582399,6),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-21600,3600,:'CWT')}
+add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(58361491,24),0,Date::ITALY),-21600,3600,:'CPT')}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58361491,24),0,Date::ITALY),DateTime.new0(Rational.new!(9740435,4),0,Date::ITALY),-21600,0,:'CST')}
-add_period(1955,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(9740435,4),0,Date::ITALY),DateTime.new0(Rational.new!(9740915,4),0,Date::ITALY),-21600,0,:'CT')}
+add_period(1955,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(9740435,4),0,Date::ITALY),DateTime.new0(Rational.new!(9740915,4),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1955,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(9740915,4),0,Date::ITALY),DateTime.new0(Rational.new!(58449019,24),0,Date::ITALY),-21600,3600,:'CDT')}
 add_period(1955,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58449019,24),0,Date::ITALY),DateTime.new0(Rational.new!(14613557,6),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1956,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14613557,6),0,Date::ITALY),DateTime.new0(Rational.new!(58457923,24),0,Date::ITALY),-21600,3600,:'CDT')}
@@ -36,7 +37,7 @@ add_period(1963,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58519915,24)
 add_period(1964,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14631071,6),0,Date::ITALY),DateTime.new0(Rational.new!(58528651,24),0,Date::ITALY),-21600,3600,:'CDT')}
 add_period(1964,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58528651,24),0,Date::ITALY),DateTime.new0(Rational.new!(14633255,6),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1965,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14633255,6),0,Date::ITALY),DateTime.new0(Rational.new!(58546291,24),0,Date::ITALY),-18000,0,:'EST')}
-add_period(1966,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58546291,24),0,Date::ITALY),DateTime.new0(Rational.new!(14637665,6),0,Date::ITALY),-21600,0,:'CT')}
+add_period(1966,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58546291,24),0,Date::ITALY),DateTime.new0(Rational.new!(14637665,6),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1967,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14637665,6),0,Date::ITALY),DateTime.new0(Rational.new!(58555027,24),0,Date::ITALY),-21600,3600,:'CDT')}
 add_period(1967,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58555027,24),0,Date::ITALY),DateTime.new0(Rational.new!(14639849,6),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1968,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14639849,6),0,Date::ITALY),DateTime.new0(Rational.new!(58563763,24),0,Date::ITALY),-21600,3600,:'CDT')}

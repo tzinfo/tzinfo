@@ -7,7 +7,7 @@ setup
 set_identifier('America/Port-au-Prince')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(2604278197,1080),0,Date::ITALY),-17360,0,:'LMT')}
 add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(2604278197,1080),0,Date::ITALY),DateTime.new0(Rational.new!(3486604609,1440),0,Date::ITALY),-17340,0,:'PPMT')}
-add_period(1917,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(3486604609,1440),0,Date::ITALY),421218000,-18000,0,:'ET')}
+add_period(1917,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(3486604609,1440),0,Date::ITALY),421218000,-18000,0,:'EST')}
 add_period(1983,5) {TimezonePeriod.new(421218000,436334400,-18000,3600,:'EDT')}
 add_period(1983,10) {TimezonePeriod.new(436334400,452062800,-18000,0,:'EST')}
 add_period(1984,4) {TimezonePeriod.new(452062800,467784000,-18000,3600,:'EDT')}

@@ -6,12 +6,13 @@ class Rankin_Inlet < Timezone #:nodoc:
 setup
 set_identifier('America/Rankin_Inlet')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(5203821793,2160),0,Date::ITALY),-22120,0,:'LMT')}
-add_period(1884,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(5203821793,2160),0,Date::ITALY),DateTime.new0(Rational.new!(14530187,6),0,Date::ITALY),-21600,0,:'CT')}
+add_period(1884,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(5203821793,2160),0,Date::ITALY),DateTime.new0(Rational.new!(14530187,6),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1918,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14530187,6),0,Date::ITALY),DateTime.new0(Rational.new!(58125451,24),0,Date::ITALY),-21600,3600,:'CDT')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58125451,24),0,Date::ITALY),DateTime.new0(Rational.new!(14532623,6),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1919,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(14532623,6),0,Date::ITALY),DateTime.new0(Rational.new!(58134329,24),0,Date::ITALY),-21600,3600,:'CDT')}
 add_period(1919,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(58134329,24),0,Date::ITALY),DateTime.new0(Rational.new!(14582399,6),0,Date::ITALY),-21600,0,:'CST')}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(14582399,6),0,Date::ITALY),DateTime.new0(Rational.new!(58361491,24),0,Date::ITALY),-21600,3600,:'CWT')}
+add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(14582399,6),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-21600,3600,:'CWT')}
+add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(58361491,24),0,Date::ITALY),-21600,3600,:'CPT')}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58361491,24),0,Date::ITALY),DateTime.new0(Rational.new!(9755503,4),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1965,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(9755503,4),0,Date::ITALY),DateTime.new0(Rational.new!(9756259,4),0,Date::ITALY),-21600,7200,:'CDDT')}
 add_period(1965,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9756259,4),0,Date::ITALY),325670400,-21600,0,:'CST')}

@@ -75,8 +75,7 @@ add_period(1998,3) {TimezonePeriod.new(891102600,909246600,34200,0,:'CST')}
 add_period(1998,10) {TimezonePeriod.new(909246600,922552200,34200,3600,:'CST')}
 add_period(1999,3) {TimezonePeriod.new(922552200,941301000,34200,0,:'CST')}
 add_period(1999,10) {TimezonePeriod.new(941301000,946647000,34200,3600,:'CST')}
-add_period(1999,12) {TimezonePeriod.new(946647000,954001800,34200,3600,:'CST')}
-add_period(2000,3) {TimezonePeriod.new(954001800,972750600,34200,0,:'CST')}
+add_period(1999,12) {TimezonePeriod.new(946647000,972750600,34200,0,:'CST')}
 add_period(2000,10) {TimezonePeriod.new(972750600,985451400,34200,3600,:'CST')}
 add_period(2001,3) {TimezonePeriod.new(985451400,1004200200,34200,0,:'CST')}
 add_period(2001,10) {TimezonePeriod.new(1004200200,1017505800,34200,3600,:'CST')}

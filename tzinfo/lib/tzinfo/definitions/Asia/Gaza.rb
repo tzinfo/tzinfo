@@ -39,7 +39,8 @@ add_period(1965,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(4878067,2),0,
 add_period(1966,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58541915,24),0,Date::ITALY),DateTime.new0(Rational.new!(4878799,2),0,Date::ITALY),7200,3600,:'EEST')}
 add_period(1966,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(4878799,2),0,Date::ITALY),DateTime.new0(Rational.new!(58550675,24),0,Date::ITALY),7200,0,:'EET')}
 add_period(1967,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58550675,24),0,Date::ITALY),DateTime.new0(Rational.new!(19517171,8),0,Date::ITALY),7200,3600,:'EEST')}
-add_period(1967,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(19517171,8),0,Date::ITALY),150843600,7200,3600,:'IT')}
+add_period(1967,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(19517171,8),0,Date::ITALY),142380000,7200,0,:'IST')}
+add_period(1974,7) {TimezonePeriod.new(142380000,150843600,7200,3600,:'IDT')}
 add_period(1974,10) {TimezonePeriod.new(150843600,167176800,7200,0,:'IST')}
 add_period(1975,4) {TimezonePeriod.new(167176800,178664400,7200,3600,:'IDT')}
 add_period(1975,8) {TimezonePeriod.new(178664400,482277600,7200,0,:'IST')}

@@ -7,14 +7,14 @@ setup
 set_identifier('America/Cancun')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(9692223,4),0,Date::ITALY),-20824,0,:'LMT')}
 add_period(1922,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(9692223,4),0,Date::ITALY),377935200,-21600,0,:'CST')}
-add_period(1981,12) {TimezonePeriod.new(377935200,828860400,-18000,0,:'ET')}
+add_period(1981,12) {TimezonePeriod.new(377935200,828860400,-18000,0,:'EST')}
 add_period(1996,4) {TimezonePeriod.new(828860400,846396000,-18000,3600,:'EDT')}
 add_period(1996,10) {TimezonePeriod.new(846396000,860310000,-18000,0,:'EST')}
 add_period(1997,4) {TimezonePeriod.new(860310000,877845600,-18000,3600,:'EDT')}
 add_period(1997,10) {TimezonePeriod.new(877845600,891759600,-18000,0,:'EST')}
 add_period(1998,4) {TimezonePeriod.new(891759600,902037600,-18000,3600,:'EDT')}
-add_period(1998,8) {TimezonePeriod.new(902037600,909298800,-21600,3600,:'CT')}
-add_period(1998,10) {TimezonePeriod.new(909298800,923212800,-21600,0,:'CST')}
+add_period(1998,8) {TimezonePeriod.new(902037600,909302400,-21600,0,:'CST')}
+add_period(1998,10) {TimezonePeriod.new(909302400,923212800,-21600,0,:'CST')}
 add_period(1999,4) {TimezonePeriod.new(923212800,941353200,-21600,3600,:'CDT')}
 add_period(1999,10) {TimezonePeriod.new(941353200,954662400,-21600,0,:'CST')}
 add_period(2000,4) {TimezonePeriod.new(954662400,972802800,-21600,3600,:'CDT')}

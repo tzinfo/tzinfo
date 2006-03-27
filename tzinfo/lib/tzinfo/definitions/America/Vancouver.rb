@@ -6,10 +6,11 @@ class Vancouver < Timezone #:nodoc:
 setup
 set_identifier('America/Vancouver')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52038219787,21600),0,Date::ITALY),-29548,0,:'LMT')}
-add_period(1884,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52038219787,21600),0,Date::ITALY),DateTime.new0(Rational.new!(29060375,12),0,Date::ITALY),-28800,0,:'PT')}
+add_period(1884,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52038219787,21600),0,Date::ITALY),DateTime.new0(Rational.new!(29060375,12),0,Date::ITALY),-28800,0,:'PST')}
 add_period(1918,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29060375,12),0,Date::ITALY),DateTime.new0(Rational.new!(19375183,8),0,Date::ITALY),-28800,3600,:'PDT')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19375183,8),0,Date::ITALY),DateTime.new0(Rational.new!(29164799,12),0,Date::ITALY),-28800,0,:'PST')}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(29164799,12),0,Date::ITALY),DateTime.new0(Rational.new!(19453831,8),0,Date::ITALY),-28800,3600,:'PWT')}
+add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(29164799,12),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-28800,3600,:'PWT')}
+add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(19453831,8),0,Date::ITALY),-28800,3600,:'PPT')}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19453831,8),0,Date::ITALY),DateTime.new0(Rational.new!(29183267,12),0,Date::ITALY),-28800,0,:'PST')}
 add_period(1946,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29183267,12),0,Date::ITALY),DateTime.new0(Rational.new!(19456855,8),0,Date::ITALY),-28800,3600,:'PDT')}
 add_period(1946,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19456855,8),0,Date::ITALY),DateTime.new0(Rational.new!(29187635,12),0,Date::ITALY),-28800,0,:'PST')}

@@ -6,12 +6,12 @@ class Shanghai < Timezone #:nodoc:
 setup
 set_identifier('Asia/Shanghai')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(6548164639,2700),0,Date::ITALY),29152,0,:'LMT')}
-add_period(1927,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(6548164639,2700),0,Date::ITALY),DateTime.new0(Rational.new!(14578699,6),0,Date::ITALY),28800,0,:'CT')}
+add_period(1927,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(6548164639,2700),0,Date::ITALY),DateTime.new0(Rational.new!(14578699,6),0,Date::ITALY),28800,0,:'CST')}
 add_period(1940,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(14578699,6),0,Date::ITALY),DateTime.new0(Rational.new!(19439225,8),0,Date::ITALY),28800,3600,:'CDT')}
 add_period(1940,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19439225,8),0,Date::ITALY),DateTime.new0(Rational.new!(14580415,6),0,Date::ITALY),28800,0,:'CST')}
 add_period(1941,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(14580415,6),0,Date::ITALY),DateTime.new0(Rational.new!(19442145,8),0,Date::ITALY),28800,3600,:'CDT')}
 add_period(1941,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19442145,8),0,Date::ITALY),DateTime.new0(Rational.new!(14597503,6),0,Date::ITALY),28800,0,:'CST')}
-add_period(1948,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(14597503,6),0,Date::ITALY),515520000,28800,0,:'CT')}
+add_period(1948,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(14597503,6),0,Date::ITALY),515520000,28800,0,:'CST')}
 add_period(1986,5) {TimezonePeriod.new(515520000,527007600,28800,3600,:'CDT')}
 add_period(1986,9) {TimezonePeriod.new(527007600,545155200,28800,0,:'CST')}
 add_period(1987,4) {TimezonePeriod.new(545155200,558457200,28800,3600,:'CDT')}

@@ -10,7 +10,7 @@ add_period(1927,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52385316799,
 add_period(1932,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(116484823,48),0,Date::ITALY),DateTime.new0(Rational.new!(14577775,6),0,Date::ITALY),28800,0,:'CST')}
 add_period(1939,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(14577775,6),0,Date::ITALY),DateTime.new0(Rational.new!(19513969,8),0,Date::ITALY),32400,0,:'CHAT')}
 add_period(1966,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(19513969,8),0,Date::ITALY),325956600,30600,0,:'CHAT')}
-add_period(1980,4) {TimezonePeriod.new(325956600,515520000,28800,0,:'CT')}
+add_period(1980,4) {TimezonePeriod.new(325956600,515520000,28800,0,:'CST')}
 add_period(1986,5) {TimezonePeriod.new(515520000,527007600,28800,3600,:'CDT')}
 add_period(1986,9) {TimezonePeriod.new(527007600,545155200,28800,0,:'CST')}
 add_period(1987,4) {TimezonePeriod.new(545155200,558457200,28800,3600,:'CDT')}

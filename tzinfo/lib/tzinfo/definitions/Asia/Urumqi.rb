@@ -7,7 +7,7 @@ setup
 set_identifier('Asia/Urumqi')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10477063829,4320),0,Date::ITALY),21020,0,:'LMT')}
 add_period(1927,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(10477063829,4320),0,Date::ITALY),325965600,21600,0,:'URUT')}
-add_period(1980,4) {TimezonePeriod.new(325965600,515520000,28800,0,:'CT')}
+add_period(1980,4) {TimezonePeriod.new(325965600,515520000,28800,0,:'CST')}
 add_period(1986,5) {TimezonePeriod.new(515520000,527007600,28800,3600,:'CDT')}
 add_period(1986,9) {TimezonePeriod.new(527007600,545155200,28800,0,:'CST')}
 add_period(1987,4) {TimezonePeriod.new(545155200,558457200,28800,3600,:'CDT')}

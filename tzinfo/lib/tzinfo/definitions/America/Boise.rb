@@ -6,13 +6,14 @@ class Boise < Timezone #:nodoc:
 setup
 set_identifier('America/Boise')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(7227400,3),0,Date::ITALY),-27889,0,:'LMT')}
-add_period(1883,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(7227400,3),0,Date::ITALY),DateTime.new0(Rational.new!(29060207,12),0,Date::ITALY),-28800,0,:'PT')}
+add_period(1883,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(7227400,3),0,Date::ITALY),DateTime.new0(Rational.new!(29060207,12),0,Date::ITALY),-28800,0,:'PST')}
 add_period(1918,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29060207,12),0,Date::ITALY),DateTime.new0(Rational.new!(19375151,8),0,Date::ITALY),-28800,3600,:'PDT')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19375151,8),0,Date::ITALY),DateTime.new0(Rational.new!(29064575,12),0,Date::ITALY),-28800,0,:'PST')}
 add_period(1919,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29064575,12),0,Date::ITALY),DateTime.new0(Rational.new!(19378063,8),0,Date::ITALY),-28800,3600,:'PDT')}
 add_period(1919,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19378063,8),0,Date::ITALY),DateTime.new0(Rational.new!(29082635,12),0,Date::ITALY),-28800,0,:'PST')}
-add_period(1923,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(29082635,12),0,Date::ITALY),DateTime.new0(Rational.new!(19443199,8),0,Date::ITALY),-25200,0,:'MT')}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(19443199,8),0,Date::ITALY),DateTime.new0(Rational.new!(14590373,6),0,Date::ITALY),-25200,3600,:'MWT')}
+add_period(1923,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(29082635,12),0,Date::ITALY),DateTime.new0(Rational.new!(19443199,8),0,Date::ITALY),-25200,0,:'MST')}
+add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(19443199,8),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-25200,3600,:'MWT')}
+add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(14590373,6),0,Date::ITALY),-25200,3600,:'MPT')}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(14590373,6),0,Date::ITALY),DateTime.new0(Rational.new!(19516887,8),0,Date::ITALY),-25200,0,:'MST')}
 add_period(1967,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(19516887,8),0,Date::ITALY),DateTime.new0(Rational.new!(14638757,6),0,Date::ITALY),-25200,3600,:'MDT')}
 add_period(1967,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14638757,6),0,Date::ITALY),DateTime.new0(Rational.new!(19519799,8),0,Date::ITALY),-25200,0,:'MST')}
@@ -29,7 +30,8 @@ add_period(1972,10) {TimezonePeriod.new(89193600,104922000,-25200,0,:'MST')}
 add_period(1973,4) {TimezonePeriod.new(104922000,120643200,-25200,3600,:'MDT')}
 add_period(1973,10) {TimezonePeriod.new(120643200,126255600,-25200,0,:'MST')}
 add_period(1974,1) {TimezonePeriod.new(126255600,129114000,-25200,0,:'MST')}
-add_period(1974,2) {TimezonePeriod.new(129114000,162378000,-25200,0,:'MT')}
+add_period(1974,2) {TimezonePeriod.new(129114000,152096400,-25200,0,:'MST')}
+add_period(1974,10) {TimezonePeriod.new(152096400,162378000,-25200,0,:'MST')}
 add_period(1975,2) {TimezonePeriod.new(162378000,183542400,-25200,3600,:'MDT')}
 add_period(1975,10) {TimezonePeriod.new(183542400,199270800,-25200,0,:'MST')}
 add_period(1976,4) {TimezonePeriod.new(199270800,215596800,-25200,3600,:'MDT')}

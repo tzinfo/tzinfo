@@ -7,7 +7,7 @@ setup
 set_identifier('America/Havana')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(26042782271,10800),0,Date::ITALY),-19768,0,:'LMT')}
 add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(26042782271,10800),0,Date::ITALY),DateTime.new0(Rational.new!(1090958053,450),0,Date::ITALY),-19776,0,:'HMT')}
-add_period(1925,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(1090958053,450),0,Date::ITALY),DateTime.new0(Rational.new!(58209785,24),0,Date::ITALY),-18000,0,:'CT')}
+add_period(1925,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(1090958053,450),0,Date::ITALY),DateTime.new0(Rational.new!(58209785,24),0,Date::ITALY),-18000,0,:'CST')}
 add_period(1928,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(58209785,24),0,Date::ITALY),DateTime.new0(Rational.new!(7276589,3),0,Date::ITALY),-18000,3600,:'CDT')}
 add_period(1928,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7276589,3),0,Date::ITALY),DateTime.new0(Rational.new!(58314785,24),0,Date::ITALY),-18000,0,:'CST')}
 add_period(1940,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(58314785,24),0,Date::ITALY),DateTime.new0(Rational.new!(7289621,3),0,Date::ITALY),-18000,3600,:'CDT')}

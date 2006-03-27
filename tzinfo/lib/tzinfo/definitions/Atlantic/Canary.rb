@@ -9,8 +9,7 @@ add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(4
 add_period(1922,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(4361606177,1800),0,Date::ITALY),DateTime.new0(Rational.new!(29185123,12),0,Date::ITALY),-3600,0,:'CANT')}
 add_period(1946,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(29185123,12),0,Date::ITALY),323827200,0,0,:'WET')}
 add_period(1980,4) {TimezonePeriod.new(323827200,338947200,0,3600,:'WEST')}
-add_period(1980,9) {TimezonePeriod.new(338947200,338950800,0,3600,:'WET')}
-add_period(1980,9) {TimezonePeriod.new(338950800,354675600,0,0,:'WET')}
+add_period(1980,9) {TimezonePeriod.new(338947200,354675600,0,0,:'WET')}
 add_period(1981,3) {TimezonePeriod.new(354675600,370400400,0,3600,:'WEST')}
 add_period(1981,9) {TimezonePeriod.new(370400400,386125200,0,0,:'WET')}
 add_period(1982,3) {TimezonePeriod.new(386125200,401850000,0,3600,:'WEST')}

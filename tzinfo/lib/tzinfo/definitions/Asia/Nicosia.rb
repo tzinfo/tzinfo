@@ -54,8 +54,7 @@ add_period(1996,9) {TimezonePeriod.new(843944400,859672800,7200,0,:'EET')}
 add_period(1997,3) {TimezonePeriod.new(859672800,875394000,7200,3600,:'EEST')}
 add_period(1997,9) {TimezonePeriod.new(875394000,891122400,7200,0,:'EET')}
 add_period(1998,3) {TimezonePeriod.new(891122400,904597200,7200,3600,:'EEST')}
-add_period(1998,8) {TimezonePeriod.new(904597200,909277200,7200,3600,:'EET')}
-add_period(1998,10) {TimezonePeriod.new(909277200,922582800,7200,0,:'EET')}
+add_period(1998,8) {TimezonePeriod.new(904597200,922582800,7200,0,:'EET')}
 add_period(1999,3) {TimezonePeriod.new(922582800,941331600,7200,3600,:'EEST')}
 add_period(1999,10) {TimezonePeriod.new(941331600,954032400,7200,0,:'EET')}
 add_period(2000,3) {TimezonePeriod.new(954032400,972781200,7200,3600,:'EEST')}

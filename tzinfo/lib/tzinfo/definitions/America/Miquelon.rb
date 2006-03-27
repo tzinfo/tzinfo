@@ -8,7 +8,7 @@ set_identifier('America/Miquelon')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(5225410777,2160),0,Date::ITALY),-13480,0,:'LMT')}
 add_period(1911,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(5225410777,2160),0,Date::ITALY),326001600,-14400,0,:'AST')}
 add_period(1980,5) {TimezonePeriod.new(326001600,536468400,-10800,0,:'PMST')}
-add_period(1987,1) {TimezonePeriod.new(536468400,544597200,-10800,0,:'PMT')}
+add_period(1987,1) {TimezonePeriod.new(536468400,544597200,-10800,0,:'PMST')}
 add_period(1987,4) {TimezonePeriod.new(544597200,562132800,-10800,3600,:'PMDT')}
 add_period(1987,10) {TimezonePeriod.new(562132800,576046800,-10800,0,:'PMST')}
 add_period(1988,4) {TimezonePeriod.new(576046800,594187200,-10800,3600,:'PMDT')}

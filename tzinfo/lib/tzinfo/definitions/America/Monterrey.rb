@@ -7,10 +7,10 @@ setup
 set_identifier('America/Monterrey')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(9692223,4),0,Date::ITALY),-24076,0,:'LMT')}
 add_period(1922,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(9692223,4),0,Date::ITALY),568015200,-21600,0,:'CST')}
-add_period(1988,1) {TimezonePeriod.new(568015200,576057600,-21600,0,:'CT')}
+add_period(1988,1) {TimezonePeriod.new(568015200,576057600,-21600,0,:'CST')}
 add_period(1988,4) {TimezonePeriod.new(576057600,594198000,-21600,3600,:'CDT')}
 add_period(1988,10) {TimezonePeriod.new(594198000,599637600,-21600,0,:'CST')}
-add_period(1989,1) {TimezonePeriod.new(599637600,828864000,-21600,0,:'CT')}
+add_period(1989,1) {TimezonePeriod.new(599637600,828864000,-21600,0,:'CST')}
 add_period(1996,4) {TimezonePeriod.new(828864000,846399600,-21600,3600,:'CDT')}
 add_period(1996,10) {TimezonePeriod.new(846399600,860313600,-21600,0,:'CST')}
 add_period(1997,4) {TimezonePeriod.new(860313600,877849200,-21600,3600,:'CDT')}

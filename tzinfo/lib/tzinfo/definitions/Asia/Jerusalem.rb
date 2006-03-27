@@ -7,7 +7,7 @@ setup
 set_identifier('Asia/Jerusalem')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(26003326343,10800),0,Date::ITALY),8456,0,:'LMT')}
 add_period(1879,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(26003326343,10800),0,Date::ITALY),DateTime.new0(Rational.new!(5230643909,2160),0,Date::ITALY),8440,0,:'JMT')}
-add_period(1917,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(5230643909,2160),0,Date::ITALY),DateTime.new0(Rational.new!(29157377,12),0,Date::ITALY),7200,0,:'IT')}
+add_period(1917,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(5230643909,2160),0,Date::ITALY),DateTime.new0(Rational.new!(29157377,12),0,Date::ITALY),7200,0,:'IST')}
 add_period(1940,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(29157377,12),0,Date::ITALY),DateTime.new0(Rational.new!(19445315,8),0,Date::ITALY),7200,3600,:'IDT')}
 add_period(1942,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19445315,8),0,Date::ITALY),DateTime.new0(Rational.new!(4861631,2),0,Date::ITALY),7200,0,:'IST')}
 add_period(1943,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(4861631,2),0,Date::ITALY),DateTime.new0(Rational.new!(19448235,8),0,Date::ITALY),7200,3600,:'IDT')}

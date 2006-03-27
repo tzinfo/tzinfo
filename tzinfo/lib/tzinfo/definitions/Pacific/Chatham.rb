@@ -6,7 +6,7 @@ class Chatham < Timezone #:nodoc:
 setup
 set_identifier('Pacific/Chatham')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(5846013577,2400),0,Date::ITALY),44028,0,:'LMT')}
-add_period(1956,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(5846013577,2400),0,Date::ITALY),152632800,45900,0,:'CHAT')}
+add_period(1956,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(5846013577,2400),0,Date::ITALY),152632800,45900,0,:'CHAST')}
 add_period(1974,11) {TimezonePeriod.new(152632800,162309600,45900,3600,:'CHADT')}
 add_period(1975,2) {TimezonePeriod.new(162309600,183477600,45900,0,:'CHAST')}
 add_period(1975,10) {TimezonePeriod.new(183477600,194968800,45900,3600,:'CHADT')}
@@ -149,7 +149,8 @@ add_period(2043,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29610313,12)
 add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29612329,12),0,Date::ITALY),DateTime.new0(Rational.new!(29614681,12),0,Date::ITALY),45900,0,:'CHAST')}
 add_period(2044,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29614681,12),0,Date::ITALY),DateTime.new0(Rational.new!(29616697,12),0,Date::ITALY),45900,3600,:'CHADT')}
 add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29616697,12),0,Date::ITALY),DateTime.new0(Rational.new!(29619049,12),0,Date::ITALY),45900,0,:'CHAST')}
-add_period(2045,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(29619049,12),0,Date::ITALY),nil,45900,3600,:'CHADT')}
+add_period(2045,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(29619049,12),0,Date::ITALY),DateTime.new0(Rational.new!(29621065,12),0,Date::ITALY),45900,3600,:'CHADT')}
+add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29621065,12),0,Date::ITALY),nil,45900,0,:'CHAST')}
 end
 end
 end

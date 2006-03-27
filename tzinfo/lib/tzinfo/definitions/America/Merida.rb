@@ -8,7 +8,7 @@ set_identifier('America/Merida')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(9692223,4),0,Date::ITALY),-21508,0,:'LMT')}
 add_period(1922,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(9692223,4),0,Date::ITALY),377935200,-21600,0,:'CST')}
 add_period(1981,12) {TimezonePeriod.new(377935200,407653200,-18000,0,:'EST')}
-add_period(1982,12) {TimezonePeriod.new(407653200,828864000,-21600,0,:'CT')}
+add_period(1982,12) {TimezonePeriod.new(407653200,828864000,-21600,0,:'CST')}
 add_period(1996,4) {TimezonePeriod.new(828864000,846399600,-21600,3600,:'CDT')}
 add_period(1996,10) {TimezonePeriod.new(846399600,860313600,-21600,0,:'CST')}
 add_period(1997,4) {TimezonePeriod.new(860313600,877849200,-21600,3600,:'CDT')}

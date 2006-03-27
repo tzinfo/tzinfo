@@ -7,7 +7,7 @@ setup
 set_identifier('America/Grand_Turk')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(13021390967,5400),0,Date::ITALY),-17072,0,:'LMT')}
 add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(13021390967,5400),0,Date::ITALY),DateTime.new0(Rational.new!(362915057,150),0,Date::ITALY),-18432,0,:'KMT')}
-add_period(1912,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(362915057,150),0,Date::ITALY),294210000,-18000,0,:'ET')}
+add_period(1912,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(362915057,150),0,Date::ITALY),294210000,-18000,0,:'EST')}
 add_period(1979,4) {TimezonePeriod.new(294210000,309931200,-18000,3600,:'EDT')}
 add_period(1979,10) {TimezonePeriod.new(309931200,325659600,-18000,0,:'EST')}
 add_period(1980,4) {TimezonePeriod.new(325659600,341380800,-18000,3600,:'EDT')}

@@ -6,12 +6,13 @@ class Cambridge_Bay < Timezone #:nodoc:
 setup
 set_identifier('America/Cambridge_Bay')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10407643741,4320),0,Date::ITALY),-25220,0,:'LMT')}
-add_period(1884,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10407643741,4320),0,Date::ITALY),DateTime.new0(Rational.new!(19373583,8),0,Date::ITALY),-25200,0,:'MT')}
+add_period(1884,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10407643741,4320),0,Date::ITALY),DateTime.new0(Rational.new!(19373583,8),0,Date::ITALY),-25200,0,:'MST')}
 add_period(1918,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(19373583,8),0,Date::ITALY),DateTime.new0(Rational.new!(14531363,6),0,Date::ITALY),-25200,3600,:'MDT')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14531363,6),0,Date::ITALY),DateTime.new0(Rational.new!(19376831,8),0,Date::ITALY),-25200,0,:'MST')}
 add_period(1919,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(19376831,8),0,Date::ITALY),DateTime.new0(Rational.new!(9689055,4),0,Date::ITALY),-25200,3600,:'MDT')}
 add_period(1919,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(9689055,4),0,Date::ITALY),DateTime.new0(Rational.new!(19443199,8),0,Date::ITALY),-25200,0,:'MST')}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(19443199,8),0,Date::ITALY),DateTime.new0(Rational.new!(14590373,6),0,Date::ITALY),-25200,3600,:'MWT')}
+add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(19443199,8),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-25200,3600,:'MWT')}
+add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(14590373,6),0,Date::ITALY),-25200,3600,:'MPT')}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(14590373,6),0,Date::ITALY),DateTime.new0(Rational.new!(58533019,24),0,Date::ITALY),-25200,0,:'MST')}
 add_period(1965,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58533019,24),0,Date::ITALY),DateTime.new0(Rational.new!(58537555,24),0,Date::ITALY),-25200,7200,:'MDDT')}
 add_period(1965,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58537555,24),0,Date::ITALY),325674000,-25200,0,:'MST')}

@@ -6,11 +6,12 @@ class Nipigon < Timezone #:nodoc:
 setup
 set_identifier('America/Nipigon')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(1628906453,675),0,Date::ITALY),-21184,0,:'LMT')}
-add_period(1895,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(1628906453,675),0,Date::ITALY),DateTime.new0(Rational.new!(58120747,24),0,Date::ITALY),-18000,0,:'ET')}
+add_period(1895,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(1628906453,675),0,Date::ITALY),DateTime.new0(Rational.new!(58120747,24),0,Date::ITALY),-18000,0,:'EST')}
 add_period(1918,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58120747,24),0,Date::ITALY),DateTime.new0(Rational.new!(9687591,4),0,Date::ITALY),-18000,3600,:'EDT')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9687591,4),0,Date::ITALY),DateTime.new0(Rational.new!(58317641,24),0,Date::ITALY),-18000,0,:'EST')}
 add_period(1940,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58317641,24),0,Date::ITALY),DateTime.new0(Rational.new!(58329595,24),0,Date::ITALY),-18000,3600,:'EDT')}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(58329595,24),0,Date::ITALY),DateTime.new0(Rational.new!(9726915,4),0,Date::ITALY),-18000,3600,:'ET')}
+add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(58329595,24),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-18000,3600,:'EWT')}
+add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(9726915,4),0,Date::ITALY),-18000,3600,:'EPT')}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9726915,4),0,Date::ITALY),136364400,-18000,0,:'EST')}
 add_period(1974,4) {TimezonePeriod.new(136364400,152085600,-18000,3600,:'EDT')}
 add_period(1974,10) {TimezonePeriod.new(152085600,167814000,-18000,0,:'EST')}

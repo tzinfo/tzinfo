@@ -6,7 +6,7 @@ class Gibraltar < Timezone #:nodoc:
 setup
 set_identifier('Europe/Gibraltar')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(17337092507,7200),0,Date::ITALY),-1284,0,:'LMT')}
-add_period(1880,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(17337092507,7200),0,Date::ITALY),DateTime.new0(Rational.new!(29052055,12),0,Date::ITALY),0,0,:'Unknown')}
+add_period(1880,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(17337092507,7200),0,Date::ITALY),DateTime.new0(Rational.new!(29052055,12),0,Date::ITALY),0,0,:'GMT')}
 add_period(1916,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(29052055,12),0,Date::ITALY),DateTime.new0(Rational.new!(29053651,12),0,Date::ITALY),0,3600,:'BST')}
 add_period(1916,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29053651,12),0,Date::ITALY),DateTime.new0(Rational.new!(29055919,12),0,Date::ITALY),0,0,:'GMT')}
 add_period(1917,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29055919,12),0,Date::ITALY),DateTime.new0(Rational.new!(29057863,12),0,Date::ITALY),0,3600,:'BST')}

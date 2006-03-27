@@ -6,7 +6,7 @@ class Auckland < Timezone #:nodoc:
 setup
 set_identifier('Pacific/Auckland')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(25959290557,10800),0,Date::ITALY),41944,0,:'LMT')}
-add_period(1868,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(25959290557,10800),0,Date::ITALY),DateTime.new0(Rational.new!(116409125,48),0,Date::ITALY),41400,0,:'NZT')}
+add_period(1868,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(25959290557,10800),0,Date::ITALY),DateTime.new0(Rational.new!(116409125,48),0,Date::ITALY),41400,0,:'NZMT')}
 add_period(1927,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(116409125,48),0,Date::ITALY),DateTime.new0(Rational.new!(38804945,16),0,Date::ITALY),41400,3600,:'NZST')}
 add_period(1928,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(38804945,16),0,Date::ITALY),DateTime.new0(Rational.new!(116425589,48),0,Date::ITALY),41400,0,:'NZMT')}
 add_period(1928,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(116425589,48),0,Date::ITALY),DateTime.new0(Rational.new!(29108245,12),0,Date::ITALY),41400,1800,:'NZST')}
@@ -177,7 +177,8 @@ add_period(2043,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29610313,12)
 add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29612329,12),0,Date::ITALY),DateTime.new0(Rational.new!(29614681,12),0,Date::ITALY),43200,0,:'NZST')}
 add_period(2044,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29614681,12),0,Date::ITALY),DateTime.new0(Rational.new!(29616697,12),0,Date::ITALY),43200,3600,:'NZDT')}
 add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29616697,12),0,Date::ITALY),DateTime.new0(Rational.new!(29619049,12),0,Date::ITALY),43200,0,:'NZST')}
-add_period(2045,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(29619049,12),0,Date::ITALY),nil,43200,3600,:'NZDT')}
+add_period(2045,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(29619049,12),0,Date::ITALY),DateTime.new0(Rational.new!(29621065,12),0,Date::ITALY),43200,3600,:'NZDT')}
+add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29621065,12),0,Date::ITALY),nil,43200,0,:'NZST')}
 end
 end
 end

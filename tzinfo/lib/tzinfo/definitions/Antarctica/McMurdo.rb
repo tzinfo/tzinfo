@@ -6,7 +6,7 @@ class McMurdo < Timezone #:nodoc:
 setup
 set_identifier('Antarctica/McMurdo')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(4870947,2),0,Date::ITALY),0,0,:'zzz')}
-add_period(1956,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(4870947,2),0,Date::ITALY),152632800,43200,0,:'NZT')}
+add_period(1956,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(4870947,2),0,Date::ITALY),152632800,43200,0,:'NZST')}
 add_period(1974,11) {TimezonePeriod.new(152632800,162309600,43200,3600,:'NZDT')}
 add_period(1975,2) {TimezonePeriod.new(162309600,183477600,43200,0,:'NZST')}
 add_period(1975,10) {TimezonePeriod.new(183477600,194968800,43200,3600,:'NZDT')}
@@ -149,7 +149,8 @@ add_period(2043,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29610313,12)
 add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29612329,12),0,Date::ITALY),DateTime.new0(Rational.new!(29614681,12),0,Date::ITALY),43200,0,:'NZST')}
 add_period(2044,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29614681,12),0,Date::ITALY),DateTime.new0(Rational.new!(29616697,12),0,Date::ITALY),43200,3600,:'NZDT')}
 add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29616697,12),0,Date::ITALY),DateTime.new0(Rational.new!(29619049,12),0,Date::ITALY),43200,0,:'NZST')}
-add_period(2045,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(29619049,12),0,Date::ITALY),nil,43200,3600,:'NZDT')}
+add_period(2045,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(29619049,12),0,Date::ITALY),DateTime.new0(Rational.new!(29621065,12),0,Date::ITALY),43200,3600,:'NZDT')}
+add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29621065,12),0,Date::ITALY),nil,43200,0,:'NZST')}
 end
 end
 end

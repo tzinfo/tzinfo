@@ -13,7 +13,8 @@ add_period(1941,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19442395,8),
 add_period(1943,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(58339501,24),0,Date::ITALY),DateTime.new0(Rational.new!(58344037,24),0,Date::ITALY),3600,3600,:'CEST')}
 add_period(1943,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58344037,24),0,Date::ITALY),DateTime.new0(Rational.new!(58348405,24),0,Date::ITALY),3600,0,:'CET')}
 add_period(1944,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58348405,24),0,Date::ITALY),DateTime.new0(Rational.new!(29174321,12),0,Date::ITALY),3600,3600,:'CEST')}
-add_period(1944,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29174321,12),0,Date::ITALY),370728000,10800,3600,:'MSD')}
+add_period(1944,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29174321,12),0,Date::ITALY),354920400,10800,0,:'MSK')}
+add_period(1981,3) {TimezonePeriod.new(354920400,370728000,10800,3600,:'MSD')}
 add_period(1981,9) {TimezonePeriod.new(370728000,386456400,10800,0,:'MSK')}
 add_period(1982,3) {TimezonePeriod.new(386456400,402264000,10800,3600,:'MSD')}
 add_period(1982,9) {TimezonePeriod.new(402264000,417992400,10800,0,:'MSK')}
@@ -39,13 +40,12 @@ add_period(1992,9) {TimezonePeriod.new(717541200,733269600,7200,0,:'EET')}
 add_period(1993,3) {TimezonePeriod.new(733269600,748990800,7200,3600,:'EEST')}
 add_period(1993,9) {TimezonePeriod.new(748990800,764719200,7200,0,:'EET')}
 add_period(1994,3) {TimezonePeriod.new(764719200,767739600,7200,3600,:'EEST')}
-add_period(1994,4) {TimezonePeriod.new(767739600,780436800,10800,3600,:'MSD')}
-add_period(1994,9) {TimezonePeriod.new(780436800,796165200,10800,0,:'MSK')}
+add_period(1994,4) {TimezonePeriod.new(767739600,796165200,10800,0,:'MSK')}
 add_period(1995,3) {TimezonePeriod.new(796165200,811886400,10800,3600,:'MSD')}
 add_period(1995,9) {TimezonePeriod.new(811886400,828219600,10800,0,:'MSK')}
 add_period(1996,3) {TimezonePeriod.new(828219600,828230400,10800,3600,:'MSD')}
 add_period(1996,3) {TimezonePeriod.new(828230400,846374400,10800,3600,:'MSD')}
-add_period(1996,10) {TimezonePeriod.new(846370800,852066000,10800,0,:'MSK')}
+add_period(1996,10) {TimezonePeriod.new(846374400,852066000,10800,0,:'MSK')}
 add_period(1996,12) {TimezonePeriod.new(852066000,859683600,10800,0,:'MSK')}
 add_period(1997,3) {TimezonePeriod.new(859683600,877827600,7200,3600,:'EEST')}
 add_period(1997,10) {TimezonePeriod.new(877827600,891133200,7200,0,:'EET')}

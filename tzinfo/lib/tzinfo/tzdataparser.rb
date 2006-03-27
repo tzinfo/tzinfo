@@ -323,13 +323,8 @@ module TZInfo
     protected
       # Writes a period of time with the same utc and std offsets to the file.
       def write_period(file, utc_start, utc_end, period, std_offset, letter)
-        # The tzdata neglects to define the identifier for certain periods
-        # These have %s as the Zone format, but don't start with at the same
-        # time as a rule is defined to fill in %s.
-        zone_id = period.format.expand(std_offset, letter)
-        if zone_id.empty?
-          zone_id = 'Unknown'
-        end
+        zone_id = period.format.expand(std_offset, letter)        
+        raise 'Empty zone id found' if zone_id.empty?
         
         if utc_start.nil?
           file.puts "add_unbounded_start_period {TimezonePeriod.new(nil,#{datetime_constructor(utc_end)},#{period.utc_offset.to_seconds},#{std_offset.to_seconds},:#{quote_str(zone_id)})}"
@@ -365,14 +360,14 @@ module TZInfo
     end
     
     # Writes a single period to the file with the fixed offset. Returns the
-    # end of the period in UTC and the offset.
-    def write_class_periods(file, utc_start, period, last_utc_offset, std_offset)
+    # end of the period in UTC.
+    def write_class_periods(file, utc_start, period, last_utc_offset)
       result = period.valid_until.nil? ? nil : 
         period.valid_until.to_utc(period.utc_offset, @offset)
       
       write_period(file, utc_start, result, period, @offset, nil)
       
-      [result, @offset]
+      result
     end
   end
   
@@ -383,7 +378,7 @@ module TZInfo
     end
     
     # Writes a single period to the file with a zero daylight savings offset.
-    def write_class_periods(file, utc_start, period, last_utc_offset, std_offset)
+    def write_class_periods(file, utc_start, period, last_utc_offset)
       # no rules to apply, just take the end of the period and convert to
       # utc according to the zone offset
       
@@ -392,7 +387,7 @@ module TZInfo
       
       write_period(file, utc_start, result, period, TZDataOffset.zero, nil)
       
-      [result, TZDataOffset.zero]
+      result
     end
   end
   
@@ -411,10 +406,10 @@ module TZInfo
     end     
     
     # Finds all the periods between utc_start and period.valid_until and writes
-    # them to file. Returns the end of the period and the final std_offset.
+    # them to file. Returns the end of the period.
     #
     # This is where almost all the time is currently spent running the import.
-    def write_class_periods(file, utc_start, period, last_utc_offset, std_offset)
+    def write_class_periods(file, utc_start, period, last_utc_offset)
       # search the rule space between utc_start and period.valid_until 
       # (both can be nil = unbounded)
       # For simplicity treat unbounded ends as fixed dates. This is not too bad
@@ -426,6 +421,7 @@ module TZInfo
       #puts name
       
       utc_current = utc_start.nil? ? DateTime.new(1850, 1, 1, 0, 0, 0) : utc_start
+      std_offset = TZDataOffset.zero
       
       unbounded_end = period.valid_until.nil?
       if unbounded_end
@@ -436,8 +432,8 @@ module TZInfo
       
       #puts "utc_end: #{utc_end}"
       
-      first = true
-      letter = nil
+      first = true                       
+      letter = nil      
       
       if last_utc_offset != period.utc_offset
         # change of offset
@@ -446,7 +442,7 @@ module TZInfo
         
         #puts "checking last_utc_offset #{last_utc_offset.inspect}"
         
-        earliest = earliest_in_bounds(utc_current, utc_end, last_utc_offset, std_offset)
+        earliest = earliest_in_bounds_with_change(utc_current, utc_end, last_utc_offset, std_offset, letter)
         
         if !earliest.nil? && earliest[1] == utc_current
           # found the transition
@@ -454,7 +450,7 @@ module TZInfo
           rule = earliest[0]
           std_offset = rule.save
           letter = rule.letter
-          first = false
+          first = false          
         end
       end
       
@@ -462,16 +458,30 @@ module TZInfo
       while utc_current < utc_end
         #puts "utc_current: #{utc_current}"
         
-        earliest = earliest_in_bounds(utc_current, utc_end, period.utc_offset, std_offset)
+        earliest = earliest_in_bounds_with_change(utc_current, utc_end, period.utc_offset, std_offset, letter)
         
         if earliest.nil?
           #puts 'found no earliest rule'
+          
+          if letter.nil? && period.format.requires_rule_string?
+            earliest_same_std = earliest_in_bounds_with_std_offset(utc_current, utc_end, period.utc_offset, std_offset)
+            letter = earliest_same_std.first.letter unless earliest_same_std.nil?            
+          end            
+          
           write_period(file, utc_current, unbounded_end ? nil : utc_end, period, std_offset, letter)
           
           [utc_end, std_offset]
           break
         else
-          write_period(file, utc_current, earliest[1], period, std_offset, letter) if !first || earliest[1] > utc_current          
+          
+          if !first || earliest[1] > utc_current
+            if letter.nil? && period.format.requires_rule_string?
+              earliest_same_std = earliest_in_bounds_with_std_offset(utc_current, utc_end, period.utc_offset, std_offset)
+              letter = earliest_same_std.first.letter unless earliest_same_std.nil?
+            end
+          
+            write_period(file, utc_current, earliest[1], period, std_offset, letter)
+          end
           
           raise 'Not moved forwards' if !first and earliest[1] <= utc_current
           first = false if first
@@ -487,17 +497,17 @@ module TZInfo
         end
       end
       
-      [utc_end, std_offset]
+      utc_end
     end
     
     # Finds the earliest rule that applies at of after utc_start and before
-    # utc_end that has a different std_offset to the current std_offset.
+    # utc_end where the block given returns true.
     def earliest_in_bounds(utc_start, utc_end, utc_offset, std_offset)
       earliest_utc = nil
       earliest_rule = nil
       @rules.each {|rule|
         # only consider rules that change the offset
-        if rule.save.to_seconds != std_offset.to_seconds      
+        if yield rule      
           test = rule.earliest_in_bounds(utc_start, utc_end, utc_offset, std_offset)
           
           if !test.nil? && (earliest_utc.nil? || test < earliest_utc)
@@ -513,7 +523,23 @@ module TZInfo
         [earliest_rule, earliest_utc]
       end
     end
-  end
+    
+    # Finds the earliest rule that applies at of after utc_start and before
+    # utc_end that has a different std_offset to the current std_offset.
+    def earliest_in_bounds_with_change(utc_start, utc_end, utc_offset, std_offset, letter)
+      earliest_in_bounds(utc_start, utc_end, utc_offset, std_offset) {|rule|
+        rule.save.to_seconds != std_offset.to_seconds || rule.letter != letter
+      }
+    end
+    
+    # Finds the earliest rule that applies at of after utc_start and before
+    # utc_end that has the same std_offset as the current std_offset.
+    def earliest_in_bounds_with_std_offset(utc_start, utc_end, utc_offset, std_offset)
+      earliest_in_bounds(utc_start, utc_end, utc_offset, std_offset) {|rule|
+        rule.save.to_seconds == std_offset.to_seconds
+      }
+    end
+  end    
   
   # A rule in a RuleSet (a single Rule line in the tz data).
   class TZDataRule #:nodoc:
@@ -778,15 +804,12 @@ module TZInfo
         file.puts('setup')
         file.puts("set_identifier('#{@name.gsub(/'/, '\\\'')}')")
         
-        utc_start = nil
-        std_offset = TZDataOffset.zero
+        utc_start = nil        
         last_utc_offset = nil
         
         @periods.each {|period|
           last_utc_offset = period.utc_offset if last_utc_offset.nil?
-          result = period.write_class_periods(file, utc_start, last_utc_offset, std_offset)
-          utc_start = result[0]
-          std_offset = result[1]
+          utc_start = period.write_class_periods(file, utc_start, last_utc_offset)          
           last_utc_offset = period.utc_offset
         }                                
       }      
@@ -809,8 +832,8 @@ module TZInfo
     
     # Writes the definition of this period to the file. Calls the rule_set to
     # do this.
-    def write_class_periods(file, utc_start, last_utc_offset, std_offset)
-      @rule_set.write_class_periods(file, utc_start, self, last_utc_offset, std_offset)
+    def write_class_periods(file, utc_start, last_utc_offset)
+      @rule_set.write_class_periods(file, utc_start, self, last_utc_offset)
     end
   end
   
@@ -988,16 +1011,19 @@ module TZInfo
     end
   end
   
-  # A tz data Zone format string. Either alternate standard/daylight-savings
-  # or substitution (%s) format.
+  # A tz data Zone format string. Either alternate standard/daylight-savings,
+  # substitution (%s) format or a fixed string.
   class TZDataFormat #:nodoc:        
     def initialize(spec)
       if spec =~ /([A-z]+)\/([A-z]+)/
         @type = :alternate
         @standard_abbrev = $1
         @daylight_abbrev = $2
-      else
+      elsif spec =~ /%s/
         @type = :subst
+        @abbrev = spec
+      else
+        @type = :fixed
         @abbrev = spec
       end
     end
@@ -1010,9 +1036,16 @@ module TZInfo
         else
           @daylight_abbrev
         end
-      else
+      elsif @type == :subst
         sprintf(@abbrev, rule_string)
+      else
+        @abbrev
       end        
+    end
+    
+    # True if a string from the rule is required to expand this format.
+    def requires_rule_string?
+      @type == :subst
     end
   end
   

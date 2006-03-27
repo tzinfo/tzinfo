@@ -57,12 +57,12 @@ add_period(1938,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58300163,24)
 add_period(1939,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58304867,24),0,Date::ITALY),DateTime.new0(Rational.new!(58310075,24),0,Date::ITALY),0,3600,:'WEST')}
 add_period(1939,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(58310075,24),0,Date::ITALY),DateTime.new0(Rational.new!(29156215,12),0,Date::ITALY),0,0,:'WET')}
 add_period(1940,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(29156215,12),0,Date::ITALY),DateTime.new0(Rational.new!(29157545,12),0,Date::ITALY),0,3600,:'WEST')}
-add_period(1940,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(29157545,12),0,Date::ITALY),DateTime.new0(Rational.new!(58335973,24),0,Date::ITALY),3600,3600,:'CET')}
-add_period(1942,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(58335973,24),0,Date::ITALY),DateTime.new0(Rational.new!(58339501,24),0,Date::ITALY),3600,0,:'CET')}
+add_period(1940,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(29157545,12),0,Date::ITALY),DateTime.new0(Rational.new!(58339501,24),0,Date::ITALY),3600,0,:'CET')}
 add_period(1943,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(58339501,24),0,Date::ITALY),DateTime.new0(Rational.new!(58344037,24),0,Date::ITALY),3600,3600,:'CEST')}
 add_period(1943,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58344037,24),0,Date::ITALY),DateTime.new0(Rational.new!(58348405,24),0,Date::ITALY),3600,0,:'CET')}
 add_period(1944,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58348405,24),0,Date::ITALY),DateTime.new0(Rational.new!(29175929,12),0,Date::ITALY),3600,3600,:'CEST')}
-add_period(1944,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(29175929,12),0,Date::ITALY),DateTime.new0(Rational.new!(58357141,24),0,Date::ITALY),0,3600,:'WET')}
+add_period(1944,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(29175929,12),0,Date::ITALY),DateTime.new0(Rational.new!(58352917,24),0,Date::ITALY),0,0,:'WET')}
+add_period(1944,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58352917,24),0,Date::ITALY),DateTime.new0(Rational.new!(58357141,24),0,Date::ITALY),0,3600,:'WEST')}
 add_period(1945,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58357141,24),0,Date::ITALY),DateTime.new0(Rational.new!(58361149,24),0,Date::ITALY),0,7200,:'WEMT')}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58361149,24),0,Date::ITALY),196819200,3600,0,:'CET')}
 add_period(1976,3) {TimezonePeriod.new(196819200,212540400,3600,3600,:'CEST')}

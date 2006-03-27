@@ -8,10 +8,10 @@ set_identifier('Asia/Tehran')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(26145324257,10800),0,Date::ITALY),12344,0,:'LMT')}
 add_period(1915,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(26145324257,10800),0,Date::ITALY),DateTime.new0(Rational.new!(26263670657,10800),0,Date::ITALY),12344,0,:'TMT')}
 add_period(1945,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(26263670657,10800),0,Date::ITALY),247177800,12600,0,:'IRST')}
-add_period(1977,10) {TimezonePeriod.new(247177800,259272000,14400,0,:'IRT')}
+add_period(1977,10) {TimezonePeriod.new(247177800,259272000,14400,0,:'IRST')}
 add_period(1978,3) {TimezonePeriod.new(259272000,277758000,14400,3600,:'IRDT')}
 add_period(1978,10) {TimezonePeriod.new(277758000,283982400,14400,0,:'IRST')}
-add_period(1978,12) {TimezonePeriod.new(283982400,290809800,12600,0,:'IRT')}
+add_period(1978,12) {TimezonePeriod.new(283982400,290809800,12600,0,:'IRST')}
 add_period(1979,3) {TimezonePeriod.new(290809800,306531000,12600,3600,:'IRDT')}
 add_period(1979,9) {TimezonePeriod.new(306531000,322432200,12600,0,:'IRST')}
 add_period(1980,3) {TimezonePeriod.new(322432200,338499000,12600,3600,:'IRDT')}

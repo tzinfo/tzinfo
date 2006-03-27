@@ -6,11 +6,12 @@ class Rainy_River < Timezone #:nodoc:
 setup
 set_identifier('America/Rainy_River')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52125006869,21600),0,Date::ITALY),-22676,0,:'LMT')}
-add_period(1895,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52125006869,21600),0,Date::ITALY),DateTime.new0(Rational.new!(14530187,6),0,Date::ITALY),-21600,0,:'CT')}
+add_period(1895,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52125006869,21600),0,Date::ITALY),DateTime.new0(Rational.new!(14530187,6),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1918,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14530187,6),0,Date::ITALY),DateTime.new0(Rational.new!(58125547,24),0,Date::ITALY),-21600,3600,:'CDT')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58125547,24),0,Date::ITALY),DateTime.new0(Rational.new!(9719607,4),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1940,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9719607,4),0,Date::ITALY),DateTime.new0(Rational.new!(14582399,6),0,Date::ITALY),-21600,3600,:'CDT')}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(14582399,6),0,Date::ITALY),DateTime.new0(Rational.new!(58361491,24),0,Date::ITALY),-21600,3600,:'CT')}
+add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(14582399,6),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-21600,3600,:'CWT')}
+add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(58361491,24),0,Date::ITALY),-21600,3600,:'CPT')}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58361491,24),0,Date::ITALY),136368000,-21600,0,:'CST')}
 add_period(1974,4) {TimezonePeriod.new(136368000,152089200,-21600,3600,:'CDT')}
 add_period(1974,10) {TimezonePeriod.new(152089200,167817600,-21600,0,:'CST')}

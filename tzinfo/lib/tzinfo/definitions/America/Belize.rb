@@ -6,7 +6,7 @@ class Belize < Timezone #:nodoc:
 setup
 set_identifier('America/Belize')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(483898749,200),0,Date::ITALY),-21168,0,:'LMT')}
-add_period(1912,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(483898749,200),0,Date::ITALY),DateTime.new0(Rational.new!(9687491,4),0,Date::ITALY),-21600,0,:'CT')}
+add_period(1912,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(483898749,200),0,Date::ITALY),DateTime.new0(Rational.new!(9687491,4),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9687491,4),0,Date::ITALY),DateTime.new0(Rational.new!(116255939,48),0,Date::ITALY),-21600,1800,:'CHDT')}
 add_period(1919,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(116255939,48),0,Date::ITALY),DateTime.new0(Rational.new!(9688947,4),0,Date::ITALY),-21600,0,:'CST')}
 add_period(1919,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9688947,4),0,Date::ITALY),DateTime.new0(Rational.new!(116273747,48),0,Date::ITALY),-21600,1800,:'CHDT')}

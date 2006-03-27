@@ -6,7 +6,7 @@ class Nassau < Timezone #:nodoc:
 setup
 set_identifier('America/Nassau')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(17420138747,7200),0,Date::ITALY),-18564,0,:'LMT')}
-add_period(1912,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(17420138747,7200),0,Date::ITALY),DateTime.new0(Rational.new!(58524283,24),0,Date::ITALY),-18000,0,:'ET')}
+add_period(1912,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(17420138747,7200),0,Date::ITALY),DateTime.new0(Rational.new!(58524283,24),0,Date::ITALY),-18000,0,:'EST')}
 add_period(1964,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58524283,24),0,Date::ITALY),DateTime.new0(Rational.new!(9754775,4),0,Date::ITALY),-18000,3600,:'EDT')}
 add_period(1964,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9754775,4),0,Date::ITALY),DateTime.new0(Rational.new!(58533019,24),0,Date::ITALY),-18000,0,:'EST')}
 add_period(1965,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58533019,24),0,Date::ITALY),DateTime.new0(Rational.new!(9756259,4),0,Date::ITALY),-18000,3600,:'EDT')}
