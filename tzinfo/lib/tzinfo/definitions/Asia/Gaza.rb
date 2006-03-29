@@ -17,7 +17,7 @@ add_period(1945,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29178737,12),
 add_period(1945,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(58362251,24),0,Date::ITALY),DateTime.new0(Rational.new!(4863853,2),0,Date::ITALY),7200,0,:'EET')}
 add_period(1946,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(4863853,2),0,Date::ITALY),DateTime.new0(Rational.new!(19457003,8),0,Date::ITALY),7200,3600,:'EET')}
 add_period(1946,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19457003,8),0,Date::ITALY),DateTime.new0(Rational.new!(29192237,12),0,Date::ITALY),7200,0,:'EET')}
-add_period(1948,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(29192237,12),0,Date::ITALY),DateTime.new0(Rational.new!(29231621,12),0,Date::ITALY),7200,0,:'EET')}
+add_period(1948,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(29192237,12),0,Date::ITALY),DateTime.new0(Rational.new!(29231621,12),0,Date::ITALY),7200,0,:'EEST')}
 add_period(1957,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(29231621,12),0,Date::ITALY),DateTime.new0(Rational.new!(19488899,8),0,Date::ITALY),7200,3600,:'EEST')}
 add_period(1957,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19488899,8),0,Date::ITALY),DateTime.new0(Rational.new!(29235893,12),0,Date::ITALY),7200,0,:'EET')}
 add_period(1958,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29235893,12),0,Date::ITALY),DateTime.new0(Rational.new!(19491819,8),0,Date::ITALY),7200,3600,:'EEST')}
@@ -66,7 +66,7 @@ add_period(1994,3) {TimezonePeriod.new(765151200,778021200,7200,3600,:'IDT')}
 add_period(1994,8) {TimezonePeriod.new(778021200,796600800,7200,0,:'IST')}
 add_period(1995,3) {TimezonePeriod.new(796600800,810075600,7200,3600,:'IDT')}
 add_period(1995,9) {TimezonePeriod.new(810075600,820447200,7200,0,:'IST')}
-add_period(1995,12) {TimezonePeriod.new(820447200,828655200,7200,0,:'EET')}
+add_period(1995,12) {TimezonePeriod.new(820447200,828655200,7200,0,:'EEST')}
 add_period(1996,4) {TimezonePeriod.new(828655200,843170400,7200,3600,:'EEST')}
 add_period(1996,9) {TimezonePeriod.new(843170400,860104800,7200,0,:'EET')}
 add_period(1997,4) {TimezonePeriod.new(860104800,874620000,7200,3600,:'EEST')}

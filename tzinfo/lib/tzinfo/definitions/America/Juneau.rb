@@ -43,8 +43,7 @@ add_period(1981,10) {TimezonePeriod.new(372848400,388576800,-28800,0,:'PST')}
 add_period(1982,4) {TimezonePeriod.new(388576800,404902800,-28800,3600,:'PDT')}
 add_period(1982,10) {TimezonePeriod.new(404902800,420026400,-28800,0,:'PST')}
 add_period(1983,4) {TimezonePeriod.new(420026400,436352400,-28800,3600,:'PDT')}
-add_period(1983,10) {TimezonePeriod.new(436352400,436359600,-32400,0,:'YST')}
-add_period(1983,10) {TimezonePeriod.new(436359600,439030800,-32400,0,:'YST')}
+add_period(1983,10) {TimezonePeriod.new(436352400,439030800,-32400,0,:'YST')}
 add_period(1983,11) {TimezonePeriod.new(439030800,452084400,-32400,0,:'AKST')}
 add_period(1984,4) {TimezonePeriod.new(452084400,467805600,-32400,3600,:'AKDT')}
 add_period(1984,10) {TimezonePeriod.new(467805600,483534000,-32400,0,:'AKST')}

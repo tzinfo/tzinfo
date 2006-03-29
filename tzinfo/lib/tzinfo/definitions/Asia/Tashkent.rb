@@ -28,8 +28,8 @@ add_period(1989,3) {TimezonePeriod.new(606859200,622584000,21600,3600,:'TASST')}
 add_period(1989,9) {TimezonePeriod.new(622584000,638308800,21600,0,:'TAST')}
 add_period(1990,3) {TimezonePeriod.new(638308800,654638400,21600,3600,:'TASST')}
 add_period(1990,9) {TimezonePeriod.new(654638400,670363200,21600,0,:'TAST')}
-add_period(1991,3) {TimezonePeriod.new(670363200,683665200,18000,3600,:'TASST')}
-add_period(1991,8) {TimezonePeriod.new(683665200,694206000,18000,0,:'UZT')}
+add_period(1991,3) {TimezonePeriod.new(670363200,683661600,18000,3600,:'TASST')}
+add_period(1991,8) {TimezonePeriod.new(683661600,694206000,18000,0,:'UZT')}
 add_period(1991,12) {TimezonePeriod.new(694206000,701805600,18000,0,:'UZT')}
 add_period(1992,3) {TimezonePeriod.new(701805600,717526800,18000,3600,:'UZST')}
 add_period(1992,9) {TimezonePeriod.new(717526800,725828400,18000,0,:'UZT')}

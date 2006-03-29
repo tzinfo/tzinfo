@@ -92,7 +92,7 @@ add_period(1955,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29224591,12)
 add_period(1956,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29227027,12),0,Date::ITALY),DateTime.new0(Rational.new!(29229043,12),0,Date::ITALY),0,3600,:'BST')}
 add_period(1956,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29229043,12),0,Date::ITALY),DateTime.new0(Rational.new!(29231311,12),0,Date::ITALY),0,0,:'GMT')}
 add_period(1957,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29231311,12),0,Date::ITALY),378687600,3600,0,:'CET')}
-add_period(1981,12) {TimezonePeriod.new(378687600,386125200,3600,0,:'CET')}
+add_period(1981,12) {TimezonePeriod.new(378687600,386125200,3600,0,:'CEGMTT')}
 add_period(1982,3) {TimezonePeriod.new(386125200,401850000,3600,3600,:'CEST')}
 add_period(1982,9) {TimezonePeriod.new(401850000,417574800,3600,0,:'CET')}
 add_period(1983,3) {TimezonePeriod.new(417574800,433299600,3600,3600,:'CEST')}

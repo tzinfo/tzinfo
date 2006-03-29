@@ -23,8 +23,7 @@ add_period(1973,10) {TimezonePeriod.new(120636000,126687600,-18000,0,:'EST')}
 add_period(1974,1) {TimezonePeriod.new(126687600,152085600,-18000,3600,:'EDT')}
 add_period(1974,10) {TimezonePeriod.new(152085600,157784400,-18000,0,:'EST')}
 add_period(1975,1) {TimezonePeriod.new(157784400,167814000,-18000,0,:'EST')}
-add_period(1975,4) {TimezonePeriod.new(167814000,183538800,-18000,0,:'EST')}
-add_period(1975,10) {TimezonePeriod.new(183538800,199263600,-18000,0,:'EST')}
+add_period(1975,4) {TimezonePeriod.new(167814000,199263600,-18000,0,:'EST')}
 add_period(1976,4) {TimezonePeriod.new(199263600,215589600,-18000,3600,:'EDT')}
 add_period(1976,10) {TimezonePeriod.new(215589600,230713200,-18000,0,:'EST')}
 add_period(1977,4) {TimezonePeriod.new(230713200,247039200,-18000,3600,:'EDT')}
