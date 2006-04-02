@@ -30,8 +30,8 @@ add_period(1989,9) {TimezonePeriod.new(622591200,638316000,14400,0,:'TBIT')}
 add_period(1990,3) {TimezonePeriod.new(638316000,654645600,14400,3600,:'TBIST')}
 add_period(1990,9) {TimezonePeriod.new(654645600,670370400,14400,0,:'TBIT')}
 add_period(1991,3) {TimezonePeriod.new(670370400,671140800,10800,3600,:'TBIST')}
-add_period(1991,4) {TimezonePeriod.new(671140800,694213200,10800,0,:'GET')}
-add_period(1991,12) {TimezonePeriod.new(694213200,701816400,10800,0,:'GET')}
+add_period(1991,4) {TimezonePeriod.new(671140800,686098800,10800,3600,:'GEST')}
+add_period(1991,9) {TimezonePeriod.new(686098800,701816400,10800,0,:'GET')}
 add_period(1992,3) {TimezonePeriod.new(701816400,717537600,10800,3600,:'GEST')}
 add_period(1992,9) {TimezonePeriod.new(717537600,733266000,10800,0,:'GET')}
 add_period(1993,3) {TimezonePeriod.new(733266000,748987200,10800,3600,:'GEST')}
@@ -40,10 +40,8 @@ add_period(1994,3) {TimezonePeriod.new(764715600,780436800,10800,3600,:'GEST')}
 add_period(1994,9) {TimezonePeriod.new(780436800,796161600,14400,0,:'GET')}
 add_period(1995,3) {TimezonePeriod.new(796161600,811882800,14400,3600,:'GEST')}
 add_period(1995,9) {TimezonePeriod.new(811882800,828216000,14400,0,:'GET')}
-add_period(1996,3) {TimezonePeriod.new(828216000,846356400,14400,3600,:'GEST')}
-add_period(1996,10) {TimezonePeriod.new(846356400,859662000,14400,3600,:'GEST')}
-add_period(1997,3) {TimezonePeriod.new(859662000,859665600,14400,0,:'GET')}
-add_period(1997,3) {TimezonePeriod.new(859665600,877806000,14400,3600,:'GEST')}
+add_period(1996,3) {TimezonePeriod.new(828216000,859662000,14400,3600,:'GEST')}
+add_period(1997,3) {TimezonePeriod.new(859662000,877806000,14400,3600,:'GEST')}
 add_period(1997,10) {TimezonePeriod.new(877806000,891115200,14400,0,:'GET')}
 add_period(1998,3) {TimezonePeriod.new(891115200,909255600,14400,3600,:'GEST')}
 add_period(1998,10) {TimezonePeriod.new(909255600,922564800,14400,0,:'GET')}
@@ -58,7 +56,8 @@ add_period(2002,10) {TimezonePeriod.new(1035658800,1048968000,14400,0,:'GET')}
 add_period(2003,3) {TimezonePeriod.new(1048968000,1067108400,14400,3600,:'GEST')}
 add_period(2003,10) {TimezonePeriod.new(1067108400,1080417600,14400,0,:'GET')}
 add_period(2004,3) {TimezonePeriod.new(1080417600,1088276400,14400,3600,:'GEST')}
-add_period(2004,6) {TimezonePeriod.new(1088276400,1111878000,10800,0,:'GET')}
+add_period(2004,6) {TimezonePeriod.new(1088276400,1099177200,10800,3600,:'GEST')}
+add_period(2004,10) {TimezonePeriod.new(1099177200,1111878000,10800,0,:'GET')}
 add_period(2005,3) {TimezonePeriod.new(1111878000,nil,14400,0,:'GET')}
 end
 end

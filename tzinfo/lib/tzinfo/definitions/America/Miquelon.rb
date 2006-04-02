@@ -7,8 +7,7 @@ setup
 set_identifier('America/Miquelon')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(5225410777,2160),0,Date::ITALY),-13480,0,:'LMT')}
 add_period(1911,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(5225410777,2160),0,Date::ITALY),326001600,-14400,0,:'AST')}
-add_period(1980,5) {TimezonePeriod.new(326001600,536468400,-10800,0,:'PMST')}
-add_period(1987,1) {TimezonePeriod.new(536468400,544597200,-10800,0,:'PMST')}
+add_period(1980,5) {TimezonePeriod.new(326001600,544597200,-10800,0,:'PMST')}
 add_period(1987,4) {TimezonePeriod.new(544597200,562132800,-10800,3600,:'PMDT')}
 add_period(1987,10) {TimezonePeriod.new(562132800,576046800,-10800,0,:'PMST')}
 add_period(1988,4) {TimezonePeriod.new(576046800,594187200,-10800,3600,:'PMDT')}
@@ -127,7 +126,16 @@ add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(59224505,24),
 add_period(2044,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(7403777,3),0,Date::ITALY),DateTime.new0(Rational.new!(59233241,24),0,Date::ITALY),-10800,0,:'PMST')}
 add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(59233241,24),0,Date::ITALY),DateTime.new0(Rational.new!(7404869,3),0,Date::ITALY),-10800,3600,:'PMDT')}
 add_period(2045,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(7404869,3),0,Date::ITALY),DateTime.new0(Rational.new!(59241977,24),0,Date::ITALY),-10800,0,:'PMST')}
-add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(59241977,24),0,Date::ITALY),nil,-10800,3600,:'PMDT')}
+add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(59241977,24),0,Date::ITALY),DateTime.new0(Rational.new!(7405961,3),0,Date::ITALY),-10800,3600,:'PMDT')}
+add_period(2046,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(7405961,3),0,Date::ITALY),DateTime.new0(Rational.new!(59250713,24),0,Date::ITALY),-10800,0,:'PMST')}
+add_period(2047,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(59250713,24),0,Date::ITALY),DateTime.new0(Rational.new!(7407053,3),0,Date::ITALY),-10800,3600,:'PMDT')}
+add_period(2047,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(7407053,3),0,Date::ITALY),DateTime.new0(Rational.new!(59259449,24),0,Date::ITALY),-10800,0,:'PMST')}
+add_period(2048,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(59259449,24),0,Date::ITALY),DateTime.new0(Rational.new!(7408145,3),0,Date::ITALY),-10800,3600,:'PMDT')}
+add_period(2048,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(7408145,3),0,Date::ITALY),DateTime.new0(Rational.new!(59268353,24),0,Date::ITALY),-10800,0,:'PMST')}
+add_period(2049,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(59268353,24),0,Date::ITALY),DateTime.new0(Rational.new!(7409258,3),0,Date::ITALY),-10800,3600,:'PMDT')}
+add_period(2049,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(7409258,3),0,Date::ITALY),DateTime.new0(Rational.new!(59277089,24),0,Date::ITALY),-10800,0,:'PMST')}
+add_period(2050,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(59277089,24),0,Date::ITALY),DateTime.new0(Rational.new!(7410350,3),0,Date::ITALY),-10800,3600,:'PMDT')}
+add_period(2050,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(7410350,3),0,Date::ITALY),nil,-10800,0,:'PMST')}
 end
 end
 end

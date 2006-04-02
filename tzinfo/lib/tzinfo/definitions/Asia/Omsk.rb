@@ -138,7 +138,17 @@ add_period(2043,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7402642,3),0
 add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(7403104,3),0,Date::ITALY),DateTime.new0(Rational.new!(7403755,3),0,Date::ITALY),21600,3600,:'OMSST')}
 add_period(2044,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7403755,3),0,Date::ITALY),DateTime.new0(Rational.new!(7404196,3),0,Date::ITALY),21600,0,:'OMST')}
 add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(7404196,3),0,Date::ITALY),DateTime.new0(Rational.new!(7404847,3),0,Date::ITALY),21600,3600,:'OMSST')}
-add_period(2045,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7404847,3),0,Date::ITALY),nil,21600,0,:'OMST')}
+add_period(2045,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7404847,3),0,Date::ITALY),DateTime.new0(Rational.new!(7405288,3),0,Date::ITALY),21600,0,:'OMST')}
+add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(7405288,3),0,Date::ITALY),DateTime.new0(Rational.new!(7405939,3),0,Date::ITALY),21600,3600,:'OMSST')}
+add_period(2046,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7405939,3),0,Date::ITALY),DateTime.new0(Rational.new!(7406401,3),0,Date::ITALY),21600,0,:'OMST')}
+add_period(2047,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(7406401,3),0,Date::ITALY),DateTime.new0(Rational.new!(7407031,3),0,Date::ITALY),21600,3600,:'OMSST')}
+add_period(2047,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7407031,3),0,Date::ITALY),DateTime.new0(Rational.new!(7407493,3),0,Date::ITALY),21600,0,:'OMST')}
+add_period(2048,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(7407493,3),0,Date::ITALY),DateTime.new0(Rational.new!(7408123,3),0,Date::ITALY),21600,3600,:'OMSST')}
+add_period(2048,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7408123,3),0,Date::ITALY),DateTime.new0(Rational.new!(7408585,3),0,Date::ITALY),21600,0,:'OMST')}
+add_period(2049,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(7408585,3),0,Date::ITALY),DateTime.new0(Rational.new!(7409236,3),0,Date::ITALY),21600,3600,:'OMSST')}
+add_period(2049,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7409236,3),0,Date::ITALY),DateTime.new0(Rational.new!(7409677,3),0,Date::ITALY),21600,0,:'OMST')}
+add_period(2050,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(7409677,3),0,Date::ITALY),DateTime.new0(Rational.new!(7410328,3),0,Date::ITALY),21600,3600,:'OMSST')}
+add_period(2050,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7410328,3),0,Date::ITALY),nil,21600,0,:'OMST')}
 end
 end
 end

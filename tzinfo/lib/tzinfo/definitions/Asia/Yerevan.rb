@@ -29,7 +29,8 @@ add_period(1989,9) {TimezonePeriod.new(622591200,638316000,14400,0,:'YERT')}
 add_period(1990,3) {TimezonePeriod.new(638316000,654645600,14400,3600,:'YERST')}
 add_period(1990,9) {TimezonePeriod.new(654645600,670370400,14400,0,:'YERT')}
 add_period(1991,3) {TimezonePeriod.new(670370400,685569600,10800,3600,:'YERST')}
-add_period(1991,9) {TimezonePeriod.new(685569600,701812800,10800,0,:'AMT')}
+add_period(1991,9) {TimezonePeriod.new(685569600,686098800,10800,3600,:'AMST')}
+add_period(1991,9) {TimezonePeriod.new(686098800,701812800,10800,0,:'AMT')}
 add_period(1992,3) {TimezonePeriod.new(701812800,717534000,10800,3600,:'AMST')}
 add_period(1992,9) {TimezonePeriod.new(717534000,733273200,10800,0,:'AMT')}
 add_period(1993,3) {TimezonePeriod.new(733273200,748998000,10800,3600,:'AMST')}
@@ -37,8 +38,7 @@ add_period(1993,9) {TimezonePeriod.new(748998000,764722800,10800,0,:'AMT')}
 add_period(1994,3) {TimezonePeriod.new(764722800,780447600,10800,3600,:'AMST')}
 add_period(1994,9) {TimezonePeriod.new(780447600,796172400,10800,0,:'AMT')}
 add_period(1995,3) {TimezonePeriod.new(796172400,811897200,10800,3600,:'AMST')}
-add_period(1995,9) {TimezonePeriod.new(811897200,852062400,14400,0,:'AMT')}
-add_period(1996,12) {TimezonePeriod.new(852062400,859672800,14400,0,:'AMT')}
+add_period(1995,9) {TimezonePeriod.new(811897200,859672800,14400,0,:'AMT')}
 add_period(1997,3) {TimezonePeriod.new(859672800,877816800,14400,3600,:'AMST')}
 add_period(1997,10) {TimezonePeriod.new(877816800,891122400,14400,0,:'AMT')}
 add_period(1998,3) {TimezonePeriod.new(891122400,909266400,14400,3600,:'AMST')}
@@ -136,7 +136,17 @@ add_period(2043,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29610569,12)
 add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29612417,12),0,Date::ITALY),DateTime.new0(Rational.new!(29615021,12),0,Date::ITALY),14400,3600,:'AMST')}
 add_period(2044,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29615021,12),0,Date::ITALY),DateTime.new0(Rational.new!(29616785,12),0,Date::ITALY),14400,0,:'AMT')}
 add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29616785,12),0,Date::ITALY),DateTime.new0(Rational.new!(29619389,12),0,Date::ITALY),14400,3600,:'AMST')}
-add_period(2045,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29619389,12),0,Date::ITALY),nil,14400,0,:'AMT')}
+add_period(2045,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29619389,12),0,Date::ITALY),DateTime.new0(Rational.new!(29621153,12),0,Date::ITALY),14400,0,:'AMT')}
+add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29621153,12),0,Date::ITALY),DateTime.new0(Rational.new!(29623757,12),0,Date::ITALY),14400,3600,:'AMST')}
+add_period(2046,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29623757,12),0,Date::ITALY),DateTime.new0(Rational.new!(29625605,12),0,Date::ITALY),14400,0,:'AMT')}
+add_period(2047,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29625605,12),0,Date::ITALY),DateTime.new0(Rational.new!(29628125,12),0,Date::ITALY),14400,3600,:'AMST')}
+add_period(2047,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29628125,12),0,Date::ITALY),DateTime.new0(Rational.new!(29629973,12),0,Date::ITALY),14400,0,:'AMT')}
+add_period(2048,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29629973,12),0,Date::ITALY),DateTime.new0(Rational.new!(29632493,12),0,Date::ITALY),14400,3600,:'AMST')}
+add_period(2048,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29632493,12),0,Date::ITALY),DateTime.new0(Rational.new!(29634341,12),0,Date::ITALY),14400,0,:'AMT')}
+add_period(2049,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29634341,12),0,Date::ITALY),DateTime.new0(Rational.new!(29636945,12),0,Date::ITALY),14400,3600,:'AMST')}
+add_period(2049,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29636945,12),0,Date::ITALY),DateTime.new0(Rational.new!(29638709,12),0,Date::ITALY),14400,0,:'AMT')}
+add_period(2050,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29638709,12),0,Date::ITALY),DateTime.new0(Rational.new!(29641313,12),0,Date::ITALY),14400,3600,:'AMST')}
+add_period(2050,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(29641313,12),0,Date::ITALY),nil,14400,0,:'AMT')}
 end
 end
 end

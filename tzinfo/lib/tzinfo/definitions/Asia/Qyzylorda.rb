@@ -27,8 +27,7 @@ add_period(1988,9) {TimezonePeriod.new(591138000,606862800,18000,0,:'KIZT')}
 add_period(1989,3) {TimezonePeriod.new(606862800,622587600,18000,3600,:'KIZST')}
 add_period(1989,9) {TimezonePeriod.new(622587600,638312400,18000,0,:'KIZT')}
 add_period(1990,3) {TimezonePeriod.new(638312400,654642000,18000,3600,:'KIZST')}
-add_period(1990,9) {TimezonePeriod.new(654642000,662670000,18000,0,:'KIZT')}
-add_period(1990,12) {TimezonePeriod.new(662670000,692823600,18000,0,:'KIZT')}
+add_period(1990,9) {TimezonePeriod.new(654642000,692823600,18000,0,:'KIZT')}
 add_period(1991,12) {TimezonePeriod.new(692823600,695768400,18000,0,:'QYZT')}
 add_period(1992,1) {TimezonePeriod.new(695768400,701802000,21600,0,:'QYZT')}
 add_period(1992,3) {TimezonePeriod.new(701802000,717523200,21600,3600,:'QYZST')}
@@ -56,8 +55,7 @@ add_period(2002,10) {TimezonePeriod.new(1035662400,1048968000,21600,0,:'QYZT')}
 add_period(2003,3) {TimezonePeriod.new(1048968000,1067112000,21600,3600,:'QYZST')}
 add_period(2003,10) {TimezonePeriod.new(1067112000,1080417600,21600,0,:'QYZT')}
 add_period(2004,3) {TimezonePeriod.new(1080417600,1099166400,21600,3600,:'QYZST')}
-add_period(2004,10) {TimezonePeriod.new(1099166400,1110823200,21600,0,:'QYZT')}
-add_period(2005,3) {TimezonePeriod.new(1110823200,nil,21600,0,:'QYZT')}
+add_period(2004,10) {TimezonePeriod.new(1099166400,nil,21600,0,:'QYZT')}
 end
 end
 end

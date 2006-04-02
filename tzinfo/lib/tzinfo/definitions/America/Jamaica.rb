@@ -8,7 +8,8 @@ set_identifier('America/Jamaica')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(361705307,150),0,Date::ITALY),-18432,0,:'LMT')}
 add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(361705307,150),0,Date::ITALY),DateTime.new0(Rational.new!(362915057,150),0,Date::ITALY),-18432,0,:'KMT')}
 add_period(1912,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(362915057,150),0,Date::ITALY),136364400,-18000,0,:'EST')}
-add_period(1974,4) {TimezonePeriod.new(136364400,162370800,-18000,0,:'EST')}
+add_period(1974,4) {TimezonePeriod.new(136364400,152085600,-18000,3600,:'EDT')}
+add_period(1974,10) {TimezonePeriod.new(152085600,162370800,-18000,0,:'EST')}
 add_period(1975,2) {TimezonePeriod.new(162370800,183535200,-18000,3600,:'EDT')}
 add_period(1975,10) {TimezonePeriod.new(183535200,199263600,-18000,0,:'EST')}
 add_period(1976,4) {TimezonePeriod.new(199263600,215589600,-18000,3600,:'EDT')}
@@ -26,8 +27,7 @@ add_period(1981,10) {TimezonePeriod.new(372837600,388566000,-18000,0,:'EST')}
 add_period(1982,4) {TimezonePeriod.new(388566000,404892000,-18000,3600,:'EDT')}
 add_period(1982,10) {TimezonePeriod.new(404892000,420015600,-18000,0,:'EST')}
 add_period(1983,4) {TimezonePeriod.new(420015600,436341600,-18000,3600,:'EDT')}
-add_period(1983,10) {TimezonePeriod.new(436341600,441781200,-18000,0,:'EST')}
-add_period(1984,1) {TimezonePeriod.new(441781200,nil,-18000,0,:'EST')}
+add_period(1983,10) {TimezonePeriod.new(436341600,nil,-18000,0,:'EST')}
 end
 end
 end

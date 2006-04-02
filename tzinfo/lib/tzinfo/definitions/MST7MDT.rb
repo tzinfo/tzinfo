@@ -4,7 +4,7 @@ module Definitions #:nodoc:
 class MST7MDT < Timezone #:nodoc:
 setup
 set_identifier('MST7MDT')
-add_period(1850,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(4793517,2),0,Date::ITALY),DateTime.new0(Rational.new!(19373471,8),0,Date::ITALY),-25200,0,:'MST')}
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(19373471,8),0,Date::ITALY),-25200,0,:'MST')}
 add_period(1918,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19373471,8),0,Date::ITALY),DateTime.new0(Rational.new!(14531363,6),0,Date::ITALY),-25200,3600,:'MDT')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14531363,6),0,Date::ITALY),DateTime.new0(Rational.new!(19376383,8),0,Date::ITALY),-25200,0,:'MST')}
 add_period(1919,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19376383,8),0,Date::ITALY),DateTime.new0(Rational.new!(14533547,6),0,Date::ITALY),-25200,3600,:'MDT')}
@@ -170,7 +170,16 @@ add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19741503,8),0
 add_period(2044,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14807555,6),0,Date::ITALY),DateTime.new0(Rational.new!(19744415,8),0,Date::ITALY),-25200,0,:'MST')}
 add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19744415,8),0,Date::ITALY),DateTime.new0(Rational.new!(14809739,6),0,Date::ITALY),-25200,3600,:'MDT')}
 add_period(2045,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14809739,6),0,Date::ITALY),DateTime.new0(Rational.new!(19747327,8),0,Date::ITALY),-25200,0,:'MST')}
-add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19747327,8),0,Date::ITALY),nil,-25200,3600,:'MDT')}
+add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19747327,8),0,Date::ITALY),DateTime.new0(Rational.new!(14811923,6),0,Date::ITALY),-25200,3600,:'MDT')}
+add_period(2046,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14811923,6),0,Date::ITALY),DateTime.new0(Rational.new!(19750239,8),0,Date::ITALY),-25200,0,:'MST')}
+add_period(2047,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19750239,8),0,Date::ITALY),DateTime.new0(Rational.new!(14814107,6),0,Date::ITALY),-25200,3600,:'MDT')}
+add_period(2047,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14814107,6),0,Date::ITALY),DateTime.new0(Rational.new!(19753151,8),0,Date::ITALY),-25200,0,:'MST')}
+add_period(2048,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19753151,8),0,Date::ITALY),DateTime.new0(Rational.new!(14816291,6),0,Date::ITALY),-25200,3600,:'MDT')}
+add_period(2048,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14816291,6),0,Date::ITALY),DateTime.new0(Rational.new!(19756119,8),0,Date::ITALY),-25200,0,:'MST')}
+add_period(2049,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19756119,8),0,Date::ITALY),DateTime.new0(Rational.new!(14818517,6),0,Date::ITALY),-25200,3600,:'MDT')}
+add_period(2049,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14818517,6),0,Date::ITALY),DateTime.new0(Rational.new!(19759031,8),0,Date::ITALY),-25200,0,:'MST')}
+add_period(2050,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19759031,8),0,Date::ITALY),DateTime.new0(Rational.new!(14820701,6),0,Date::ITALY),-25200,3600,:'MDT')}
+add_period(2050,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14820701,6),0,Date::ITALY),nil,-25200,0,:'MST')}
 end
 end
 end

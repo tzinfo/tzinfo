@@ -9,7 +9,7 @@ zoneinfo=$1
 zdump=$2
 
 pushd $zoneinfo > /dev/null
-find . ! -name localtime ! -name posixrules ! -name '*.tab' -type f -print | sed -e 's/^\.\///' | sort |
+find . ! -name localtime ! -name posixrules ! -name '*.tab' ! -name 'Factory' -type f -print | sed -e 's/^\.\///' | sort |
 {
   popd > /dev/null
 

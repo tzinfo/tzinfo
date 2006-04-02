@@ -32,7 +32,13 @@ module TZInfo
   # tzinfo version for a new version of the tzdata data.
   #
   # This process is extremely slow (optimization is required).
-  class TZDataParser
+  class TZDataParser    
+    # Minimum year that will be considered.
+    MIN_YEAR = 1800
+    
+    # Maximum year that will be considered.
+    MAX_YEAR = 2050
+    
     # Whether to generate zone definitions (set to false to stop zones being
     # generated).    
     attr_accessor :generate_zones
@@ -75,8 +81,7 @@ module TZInfo
       @generate_countries = true
       @only_zones = []
       @only_countries = []
-      @exclude_zones = ['Asia/Riyadh87', 'Asia/Riyadh88', 'Asia/Riyadh89',
-        'Mideast/Riyadh87', 'Mideast/Riyadh88', 'Mideast/Riyadh89']
+      @exclude_zones = []
       @exclude_countries = []
     end
     
@@ -153,6 +158,25 @@ module TZInfo
       end
     end
     
+    # Parses an offset string [-]h:m:s (minutes and seconds are optional). Returns
+    # the offset in seconds.
+    def self.parse_offset(offset)
+      raise "Invalid time: #{offset}" if offset !~ /^(-)?([0-9]+)(:([0-9]+)(:([0-9]+))?)?$/
+      
+      negative = !$1.nil?      
+      hour = $2.to_i
+      minute = $4.nil? ? 0 : $4.to_i
+      second = $6.nil? ? 0 : $6.to_i
+      
+      seconds = hour
+      seconds = seconds * 60
+      seconds = seconds + minute
+      seconds = seconds * 60
+      seconds = seconds + second
+      seconds = -seconds if negative
+      seconds
+    end
+    
     private
       # Loads all the Rule definitions from the tz data and stores them in
       # @rule_sets.
@@ -182,7 +206,7 @@ module TZInfo
         if ref == '-'
           @no_rules
         elsif ref =~ /^[0-9]+:[0-9]+$/
-          TZDataFixedOffsetRules.new(TZDataOffset.new(ref))
+          TZDataFixedOffsetRules.new(TZDataParser.parse_offset(ref))
         else
           rule_set = @rule_sets[ref]
           raise "Ruleset not found: #{ref}" if rule_set.nil?    
@@ -203,7 +227,7 @@ module TZInfo
           if in_zone
             if line =~ /^\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)(\s+([0-9]+(\s+.*)?))?$/              
               
-              in_zone.add_period(TZDataPeriod.new($1, get_rules($2), $3, $5))
+              in_zone.add_observance(TZDataObservance.new($1, get_rules($2), $3, $5))
               
               in_zone = nil if $4.nil? 
             end
@@ -215,7 +239,7 @@ module TZInfo
                 @zones[name] = TZDataZone.new(name)
               end                            
               
-              @zones[name].add_period(TZDataPeriod.new($2, get_rules($3), $4, $6))
+              @zones[name].add_observance(TZDataObservance.new($2, get_rules($3), $4, $6))
               
               in_zone = @zones[name] if !$5.nil?
             end
@@ -320,34 +344,9 @@ module TZInfo
       @name = name
     end
     
-    protected
-      # Writes a period of time with the same utc and std offsets to the file.
-      def write_period(file, utc_start, utc_end, period, std_offset, letter)
-        zone_id = period.format.expand(std_offset, letter)        
-        raise 'Empty zone id found' if zone_id.empty?
-        
-        if utc_start.nil?
-          file.puts "add_unbounded_start_period {TimezonePeriod.new(nil,#{datetime_constructor(utc_end)},#{period.utc_offset.to_seconds},#{std_offset.to_seconds},:#{quote_str(zone_id)})}"
-        else
-          file.puts "add_period(#{utc_start.year},#{utc_start.mon}) {TimezonePeriod.new(#{datetime_constructor(utc_start)},#{datetime_constructor(utc_end)},#{period.utc_offset.to_seconds},#{std_offset.to_seconds},:#{quote_str(zone_id)})}"
-        end
-        #puts "Period from #{utc_start} to #{utc_end}, utc_offset=#{period.utc_offset.to_seconds}, std_offset=#{std_offset.to_seconds}, name=#{period.format.expand(std_offset, letter)}"
-      end
-      
-    private
-      def datetime_constructor(datetime)
-        if datetime.nil? 
-          'nil'
-        elsif (1970..2037).include?(datetime.year)
-          "#{Time.utc(datetime.year, datetime.mon, datetime.mday, datetime.hour, datetime.min, datetime.sec).to_i}"
-        else
-          "DateTime.new0(Rational.new!(#{datetime.ajd.numerator},#{datetime.ajd.denominator}),0,Date::ITALY)"          
-        end
-      end
-      
-      def quote_str(str)        
-        "'#{str.gsub(/'/, '\\\'')}'" 
-      end
+    def count
+      0
+    end
   end
   
   # Empty rule set with a fixed daylight savings (std) offset.
@@ -357,37 +356,13 @@ module TZInfo
     def initialize(offset)
       super(offset.to_s)
       @offset = offset
-    end
-    
-    # Writes a single period to the file with the fixed offset. Returns the
-    # end of the period in UTC.
-    def write_class_periods(file, utc_start, period, last_utc_offset, last_std_offset_letters)
-      result = period.valid_until.nil? ? nil : 
-        period.valid_until.to_utc(period.utc_offset, @offset)
-      
-      write_period(file, utc_start, result, period, @offset, nil)
-      
-      result
-    end
+    end        
   end
   
   # An empty set of rules.
   class TZDataNoRules < TZDataRules #:nodoc:
     def initialize
       super('-')
-    end
-    
-    # Writes a single period to the file with a zero daylight savings offset.
-    def write_class_periods(file, utc_start, period, last_utc_offset, last_std_offset_letters)
-      # no rules to apply, just take the end of the period and convert to
-      # utc according to the zone offset
-      
-      result = period.valid_until.nil? ? nil : 
-        period.valid_until.to_utc(period.utc_offset, TZDataOffset.zero)
-      
-      write_period(file, utc_start, result, period, TZDataOffset.zero, nil)
-      
-      result
     end
   end
   
@@ -403,158 +378,15 @@ module TZInfo
     # Adds a new rule to the set.
     def add_rule(rule)
       @rules << rule
-    end     
-    
-    # Finds all the periods between utc_start and period.valid_until and writes
-    # them to file. Returns the end of the period.
-    #
-    # This is where almost all the time is currently spent running the import.
-    def write_class_periods(file, utc_start, period, last_utc_offset, last_std_offset_letters)
-      # search the rule space between utc_start and period.valid_until 
-      # (both can be nil = unbounded)
-      # For simplicity treat unbounded ends as fixed dates. This is not too bad
-      # as there wasn't daylight savings before 1900 and the rules will change
-      # in the future.
-      
-      # divide the time up into periods with the same std_offset
-      # need to keep finding the earliest rule after utc_start and before period.valid_until      
-      #puts name
-      
-      utc_current = utc_start.nil? ? DateTime.new(1850, 1, 1, 0, 0, 0) : utc_start
-      std_offset = TZDataOffset.zero
-      
-      unbounded_end = period.valid_until.nil?
-      if unbounded_end
-        utc_end = DateTime.now + 14600
-      else        
-        utc_end = period.valid_until.to_utc(period.utc_offset, std_offset)        
-      end        
-      
-      #puts "utc_end: #{utc_end}"
-      
-      first = true                       
-      letter = nil      
-      
-      if last_utc_offset != period.utc_offset
-        # change of offset
-        # need to check if there is a wallclock time transition right at the start
-        # of the period using the _last_ utc offset (see Asia/Qyzylorda Apr 1 1982)
-        
-        #puts "checking last_utc_offset #{last_utc_offset.inspect}"
-        
-        earliest = earliest_in_bounds_with_change(utc_current, utc_end, last_utc_offset, std_offset, letter)
-        
-        if !earliest.nil? && earliest[1] == utc_current
-          # found the transition
-          # no period to write here, just update the std_offset          
-          rule = earliest[0]
-          std_offset = rule.save
-          utc_end = period.valid_until.to_utc(period.utc_offset, std_offset) unless unbounded_end
-          letter = rule.letter       
-          letter_assigned = true
-          first = false            
-        end
-      end           
-      
-      letter = find_letter_for_initial(utc_current, utc_end, period, std_offset, letter, last_std_offset_letters) unless letter_assigned
-      
-      # Main loop. Repeatedly find earliest rule to apply.      
-      while utc_current < utc_end
-        #puts "utc_current: #{utc_current}"
-        
-        earliest = earliest_in_bounds_with_change(utc_current, utc_end, period.utc_offset, std_offset, letter)
-        
-        if earliest.nil?
-          #puts 'found no earliest rule'
-                    
-          write_period(file, utc_current, unbounded_end ? nil : utc_end, period, std_offset, letter)          
-          last_std_offset_letters[std_offset.to_seconds] = letter
-          
-          [utc_end, std_offset]
-          break
-        else
-          
-          if !first || earliest[1] > utc_current
-            write_period(file, utc_current, earliest[1], period, std_offset, letter)
-            last_std_offset_letters[std_offset.to_seconds] = letter            
-          end
-          
-          raise 'Not moved forwards' if !first and earliest[1] <= utc_current
-          first = false if first
-          
-          rule = earliest[0]
-          utc_current = earliest[1]
-          std_offset = rule.save          
-          letter = rule.letter
-          
-          if !unbounded_end
-            utc_end = period.valid_until.to_utc(period.utc_offset, std_offset)            
-          end
-        end
-      end
-      
-      utc_end
     end
     
-    # Finds the earliest rule that applies at of after utc_start and before
-    # utc_end where the block given returns true.
-    def earliest_in_bounds(utc_start, utc_end, utc_offset, std_offset)
-      earliest_utc = nil
-      earliest_rule = nil
-      @rules.each {|rule|
-        # only consider rules that change the offset
-        if yield rule      
-          test = rule.earliest_in_bounds(utc_start, utc_end, utc_offset, std_offset)
-          
-          if !test.nil? && (earliest_utc.nil? || test < earliest_utc)
-            earliest_utc = test
-            earliest_rule = rule
-          end
-        end
-      }
-      
-      if earliest_rule.nil?
-        nil
-      else
-        [earliest_rule, earliest_utc]
-      end
+    def count
+      @rules.length
     end
     
-    # Finds the earliest rule that applies at of after utc_start and before
-    # utc_end that has a different std_offset to the current std_offset.
-    def earliest_in_bounds_with_change(utc_start, utc_end, utc_offset, std_offset, letter)
-      earliest_in_bounds(utc_start, utc_end, utc_offset, std_offset) {|rule|
-        rule.save.to_seconds != std_offset.to_seconds || rule.letter != letter
-      }
+    def each
+      @rules.each {|rule| yield rule}
     end
-    
-    # Finds the earliest rule that applies at of after utc_start and before
-    # utc_end that has the same std_offset as the current std_offset.
-    def earliest_in_bounds_with_std_offset(utc_start, utc_end, utc_offset, std_offset)
-      earliest_in_bounds(utc_start, utc_end, utc_offset, std_offset) {|rule|
-        rule.save.to_seconds == std_offset.to_seconds
-      }
-    end
-    
-    private
-      # Finds a letter to use for the initial period if there is no initial 
-      # transition.
-      def find_letter_for_initial(utc_start, utc_end, period, std_offset, letter, last_std_offset_letters)        
-        if letter.nil? && period.format.requires_rule_string?
-puts utc_start          
-          if last_std_offset_letters.has_key?(std_offset.to_seconds)
-            letter = last_std_offset_letters[std_offset.to_seconds]
-          puts letter
-          end
-          
-          if letter.nil?
-            earliest_same_std = earliest_in_bounds_with_std_offset(utc_start, utc_end, period.utc_offset, std_offset)
-            letter = earliest_same_std.first.letter unless earliest_same_std.nil?
-          end            
-        end
-        
-        letter
-      end
   end    
   
   # A rule in a RuleSet (a single Rule line in the tz data).
@@ -572,102 +404,31 @@ puts utc_start
       @from = parse_from(from)
       @to = parse_to(to)
       
-      # get rid of to only
+      # replace a to of :only with the from year
       raise 'to cannot be only if from is minimum' if @to == :only && @from == :min
-      @to = @from if @to == :only
+      @to = @from if @to == :only      
       
       @type = parse_type(type)
       @in_month = TZDataParser.parse_month(in_month)
       @on_day = TZDataDayOfMonth.new(on_day)
       @at_time = TZDataTime.new(at_time)
-      @save = TZDataOffset.new(save)
+      @save = TZDataParser.parse_offset(save)
       @letter = parse_letter(letter)
     end
     
-    # Gets the earliest UTC time this rule can be applied that is greater than
-    # or equal to utc_start and before utc_end.
-    def earliest_in_bounds(utc_start, utc_end, utc_offset, std_offset) 
-      earliest = earliest_start_date(utc_start, utc_offset, std_offset)
-      if !earliest.nil? && earliest < utc_end
-        earliest
+    def activate(year)
+      # The following test ignores yearistype at present (currently unused in
+      # the data. parse_type currently excepts on encountering a year type.
+      if (@from == :min || @from <= year) && (@to == :max || @to >= year)                        
+        TZDataActivatedRule.new(self, year)
       else
         nil
       end
     end
     
-    # Gets the earliest UTC time this rule can be applied that is greater than
-    # or equal to utc_start.
-    def earliest_start_date(utc_now, utc_offset, std_offset)
-      #puts "testing rule #{@from}-#{@to}"      
-      
-      # convert the utc definition to whatever reference this rule is in terms of
-      
-      if @at_time.ref == :standard        
-        rule_now = utc_now + Rational(utc_offset.to_seconds, 86400)        
-        #puts "converted utc to standard: #{rule_now}"
-      elsif @at_time.ref == :wall_clock
-        rule_now = utc_now + Rational(utc_offset.to_seconds + std_offset.to_seconds, 86400)
-        #puts "converted utc to wall clock: #{rule_now}"
-      else
-        rule_now = utc_now
-      end
-                  
-      if @to == :max || @to >= rule_now.year
-      
-        next_year = false
-        
-        if @in_month > rule_now.mon
-          #puts 'month greater'                            
-        elsif @in_month < rule_now.mon
-          #puts 'month less'
-          next_year = true          
-        else          
-          # work out the complete time as this may move the day back/forward
-          abs_day = @on_day.to_absolute(rule_now.year, @in_month)          
-          #puts "months equal #{abs_day}"
-          
-          if abs_day > rule_now.mday                        
-          elsif abs_day < rule_now.mday            
-            next_year = true
-          else
-            if @at_time.hour > rule_now.hour              
-            elsif @at_time.hour < rule_now.hour              
-            else
-              if @at_time.minute > rule_now.min                
-              elsif @at_time.minute < rule_now.min                
-                next_year = true
-              else
-                if @at_time.second >= rule_now.sec                                  
-                else                  
-                  next_year = true
-                end
-              end
-            end                        
-          end
-        end        
-        
-        if @from == :min
-          year = rule_now.year
-        else
-          if @from > rule_now.year
-            year = @from
-          else
-            year = rule_now.year
-          end
-        end
-        
-        if next_year && year == rule_now.year
-          year = year + 1
-        end
-        
-        if @to == :max || @to >= year
-          @at_time.to_utc(utc_offset, std_offset, year, @in_month, @on_day.to_absolute(year, @in_month))
-        else
-          nil
-        end
-      else
-        nil
-      end
+    def at_utc_time(year, utc_offset, std_offset)
+      @at_time.to_utc(utc_offset, std_offset,
+        year, @in_month, @on_day.to_absolute(year, @in_month))
     end
     
     private
@@ -740,12 +501,7 @@ puts utc_start
         file.puts("class #{class_name} < #{superclass} #:nodoc:")
       
         yield file
-        
-        #file.puts('@@instance = new')
-        #file.puts('def self.instance')
-        #file.puts('   @@instance')
-        #file.puts('end')        
-        
+                
         file.puts('end') # end class
         
         modules.each do
@@ -792,17 +548,17 @@ puts utc_start
     end
   end
   
-  # A tz data Zone. Each line from the tz data is loaded as a TZDataPeriod.
+  # A tz data Zone. Each line from the tz data is loaded as a TZDataObservance.
   class TZDataZone < TZDataDefinition #:nodoc:    
-    attr_reader :periods
+    attr_reader :observances
     
     def initialize(name)
       super
-      @periods = []
+      @observances = []
     end
     
-    def add_period(period)      
-      @periods << period
+    def add_observance(observance)      
+      @observances << observance
     end        
     
     # Superclass is a Timezone. Called by create_file.
@@ -820,37 +576,292 @@ puts utc_start
         file.puts('setup')
         file.puts("set_identifier('#{@name.gsub(/'/, '\\\'')}')")
         
-        utc_start = nil        
-        last_utc_offset = nil
-        last_std_offset_letters = {}
-        
-        @periods.each {|period|
-          last_utc_offset = period.utc_offset if last_utc_offset.nil?
-          utc_start = period.write_class_periods(file, utc_start, last_utc_offset, last_std_offset_letters)          
-          last_utc_offset = period.utc_offset
-        }                                
+        transitions = find_transitions
+        transitions.output_class(file)                
       }      
     end
+    
+    private
+      def find_transitions
+        transitions = TZDataTransitions.new
+        
+        # algorithm from zic.c outzone
+        
+        start_time = nil
+        until_time = nil
+        
+        
+        @observances.each_with_index {|observance, i|
+          std_offset = 0
+          use_start = i > 0
+          use_until = i < @observances.length - 1
+          utc_offset = observance.utc_offset
+          start_zone_id = nil
+          start_utc_offset = observance.utc_offset
+          start_std_offset = 0
+          
+          if observance.rule_set.count == 0
+            std_offset = observance.std_offset
+            start_zone_id = observance.format.expand(std_offset, nil)
+            
+            if use_start
+              transitions << TZDataTransition.new(start_time, utc_offset, std_offset, start_zone_id)
+              use_start = false
+            else
+              # zic algorithm only outputs this if std_offset is non-zero
+              # to get the initial LMT range, we output this regardless
+              transitions << TZDataTransition.new(nil, utc_offset, std_offset, start_zone_id)
+            end  
+          else
+            (TZDataParser::MIN_YEAR..TZDataParser::MAX_YEAR).each {|year|
+              if use_until && year > observance.valid_until.year
+                break
+              end
+              
+              activated_rules = []
+              
+              observance.rule_set.each {|rule|
+                activated_rule = rule.activate(year)
+                activated_rules << activated_rule unless activated_rule.nil?
+              }
+              
+              while true 
+                # turn until_time into UTC using the current utc_offset and std_offset
+                until_time = observance.valid_until.to_utc(utc_offset, std_offset) if use_until
+                
+                earliest = nil
+
+                activated_rules.each {|activated_rule| 
+                  # recalculate the time using the current std_offset
+                  activated_rule.calculate_time(utc_offset, std_offset) 
+                  earliest = activated_rule if earliest.nil? || activated_rule.at < earliest.at                   
+                }
+                
+                break if earliest.nil?                
+                activated_rules.delete(earliest)                               
+                break if use_until && earliest.at >= until_time                
+                std_offset = earliest.rule.save                   
+                use_start = false if use_start && earliest.at == start_time
+                
+                if use_start
+                  if earliest.at < start_time
+                    start_utc_offset = observance.utc_offset
+                    start_std_offset = std_offset
+                    start_zone_id = observance.format.expand(earliest.rule.save, earliest.rule.letter)                    
+                    next
+                  end
+                  
+                  if start_zone_id.nil? && start_utc_offset + start_std_offset == observance.utc_offset + std_offset
+                    start_zone_id = observance.format.expand(earliest.rule.save, earliest.rule.letter)
+                  end
+                end
+                
+                zone_id = observance.format.expand(earliest.rule.save, earliest.rule.letter)
+                transitions << TZDataTransition.new(earliest.at, observance.utc_offset, earliest.rule.save, zone_id)
+              end              
+            }
+          end
+        
+          if use_start
+            start_zone_id = observance.format.expand(nil, nil) if start_zone_id.nil? && observance.format.fixed?            
+            raise 'Could not determine time zone abbreviation to use just after until time' if start_zone_id.nil?            
+            transitions << TZDataTransition.new(start_time, start_utc_offset, start_std_offset, start_zone_id)
+          end
+                    
+          start_time = observance.valid_until.to_utc(utc_offset, std_offset) if use_until 
+        }
+        
+        transitions
+      end
   end
   
-  # A period within a zone.
-  class TZDataPeriod #:nodoc:
+  # A observance within a zone (a line within the zone definition).
+  class TZDataObservance #:nodoc:
     attr_reader :utc_offset
     attr_reader :rule_set
     attr_reader :format
     attr_reader :valid_until
     
     def initialize(utc_offset, rule_set, format, valid_until)
-      @utc_offset = TZDataOffset.new(utc_offset)
+      @utc_offset = TZDataParser.parse_offset(utc_offset)
       @rule_set = rule_set      
       @format = TZDataFormat.new(format)
       @valid_until = valid_until.nil? ? nil : TZDataUntil.new(valid_until)      
+    end 
+    
+    def std_offset
+      if @rule_set.kind_of?(TZDataFixedOffsetRules)
+        @rule_set.offset
+      else
+        0
+      end
+    end
+  end
+  
+  # Collection of TZDataTransition instances used when building a zone class.
+  class TZDataTransitions #:nodoc:
+    
+    def initialize
+      @transitions = []
     end
     
-    # Writes the definition of this period to the file. Calls the rule_set to
-    # do this.
-    def write_class_periods(file, utc_start, last_utc_offset, last_std_offset_letters)
-      @rule_set.write_class_periods(file, utc_start, self, last_utc_offset, last_std_offset_letters)
+    def << (transition)
+      @transitions << transition
+    end 
+    
+    def output_class(file)
+      optimize
+      
+      previous = nil
+      @transitions.each {|transition|
+        if previous.nil?
+          # first transition
+          # if it has a time, need to work out what the unbounded start before
+          # it should have been
+          
+          if transition.std_offset == 0
+            # treat the start time as nil
+            previous = transition.clone_with_at(nil)             
+          else
+            first_std = @transitions.find {|t| t.std_offset == 0}
+            
+            if first_std.nil?
+              previous = transition.clone_with_at(nil)
+            else              
+              first_std.clone_with_at(nil).write_period(file, transition.at_utc)
+              previous = transition
+            end            
+          end
+        else
+          raise 'Only the first transition can have a nil start time' if transition.at_utc.nil?        
+          previous.write_period(file, transition.at_utc)
+          previous = transition
+        end                
+      }
+      
+      previous.write_period(file, nil) unless previous.nil?        
+    end
+    
+    private
+      def optimize
+        @transitions.sort!
+        
+        # Optimization logic from zic.c writezone.
+        
+        from_i = 0
+        to_i = 0
+        
+        while from_i < @transitions.length
+          if to_i > 1 && 
+              !@transitions[from_i].at_utc.nil?  &&
+              !@transitions[to_i - 1].at_utc.nil? &&
+              @transitions[from_i].at_utc + Rational(@transitions[to_i - 1].total_offset, 86400) <=
+              @transitions[to_i - 1].at_utc + Rational(@transitions[to_i - 2].total_offset, 86400)
+                      
+            @transitions[to_i - 1] = @transitions[from_i].clone_with_at(@transitions[to_i - 1].at_utc)             
+            from_i += 1
+            next
+          end
+          
+          # Shuffle transitions up, eliminating any redundant transitions 
+          # along the way.
+          if to_i == 0 ||
+              @transitions[to_i - 1].total_offset != @transitions[from_i].total_offset ||
+              @transitions[to_i - 1].zone_id != @transitions[from_i].zone_id
+                      
+            @transitions[to_i] = @transitions[from_i]
+            to_i += 1            
+          end
+          
+          from_i += 1
+        end                
+        
+        if to_i > 0
+          @transitions = @transitions[0..to_i - 1]
+        else
+          @transitions = []
+        end                
+      end            
+  end
+  
+  # A transition that will be used to write the periods in a zone class.
+  class TZDataTransition #:nodoc:
+    include Comparable
+    
+    attr_reader :at_utc
+    attr_reader :utc_offset
+    attr_reader :std_offset
+    attr_reader :zone_id
+    
+    def initialize(at_utc, utc_offset, std_offset, zone_id)
+      @at_utc = at_utc
+      @utc_offset = utc_offset
+      @std_offset = std_offset
+      @zone_id = zone_id
+    end
+    
+    def to_s
+      "At #{at_utc} UTC switch to UTC offset #{@utc_offset} with std offset #{@std_offset}, zone id #{@zone_id}"
+    end
+    
+    def <=>(transition)
+      if @at_utc == transition.at_utc
+        0
+      elsif @at_utc.nil?
+        -1
+      elsif transition.nil?
+        1
+      else       
+        @at_utc - transition.at_utc
+      end
+    end
+    
+    def total_offset
+      @utc_offset + @std_offset
+    end
+    
+    def clone_with_at(at_utc)
+      TZDataTransition.new(at_utc, @utc_offset, @std_offset, @zone_id)
+    end
+        
+    def write_period(file, utc_end)        
+      if @at_utc.nil?
+        file.puts "add_unbounded_start_period {TimezonePeriod.new(nil,#{datetime_constructor(utc_end)},#{@utc_offset},#{@std_offset},:#{quote_str(@zone_id)})}"
+      else
+        file.puts "add_period(#{@at_utc.year},#{@at_utc.mon}) {TimezonePeriod.new(#{datetime_constructor(@at_utc)},#{datetime_constructor(utc_end)},#{@utc_offset},#{@std_offset},:#{quote_str(@zone_id)})}"
+      end        
+    end
+     
+    private
+      def datetime_constructor(datetime)
+        if datetime.nil? 
+          'nil'
+        elsif (1970..2037).include?(datetime.year)
+          "#{Time.utc(datetime.year, datetime.mon, datetime.mday, datetime.hour, datetime.min, datetime.sec).to_i}"
+        else
+          "DateTime.new0(Rational.new!(#{datetime.ajd.numerator},#{datetime.ajd.denominator}),0,Date::ITALY)"          
+        end
+      end
+      
+      def quote_str(str)        
+        "'#{str.gsub(/'/, '\\\'')}'" 
+      end      
+  end
+   
+  # An instance of a rule for a year.
+  class TZDataActivatedRule
+    attr_reader :rule
+    attr_reader :year
+    attr_reader :at
+    
+    def initialize(rule, year)
+      @rule = rule
+      @year = year
+      @at = nil
+    end
+    
+    def calculate_time(utc_offset, std_offset)
+      @at = @rule.at_utc_time(@year, utc_offset, std_offset)
     end
   end
   
@@ -882,54 +893,12 @@ puts utc_start
     def to_utc(utc_offset, std_offset, year, month, day)      
       result = DateTime.new(year, month, day, @hour, @minute, @second)
       offset = 0
-      offset = offset + utc_offset.to_seconds if @ref == :standard || @ref == :wall_clock            
-      offset = offset + std_offset.to_seconds if @ref == :wall_clock       
+      offset = offset + utc_offset if @ref == :standard || @ref == :wall_clock            
+      offset = offset + std_offset if @ref == :wall_clock       
       result - Rational(offset, 86400)            
     end
   end
-  
-  # A tz data offset.
-  class TZDataOffset #:nodoc:     
-    attr_reader :hour
-    attr_reader :minute
-    attr_reader :second    
-        
-    def initialize(spec)
-      raise "Invalid time: #{spec}" if spec !~ /^(-)?([0-9]+)(:([0-9]+)(:([0-9]+))?)?$/
-
-      @negative = !$1.nil?      
-      @hour = $2.to_i
-      @minute = $4.nil? ? 0 : $4.to_i
-      @second = $6.nil? ? 0 : $6.to_i            
-    end
     
-    @@zero = TZDataOffset.new('0')
-    
-    # A TZDataOffset representing 0.
-    def self.zero
-      @@zero
-    end
-        
-    def negative?
-      @negative
-    end
-    
-    def to_s
-      "#{@negative ? '-' : ''}#{@hour}:#{@minute}:#{@second}"
-    end
-    
-    # Converts the offset to seconds.
-    def to_seconds
-      result = @hour
-      result = result * 60
-      result = result + @minute
-      result = result * 60
-      result = result + @second
-      result = -result if @negative
-      result
-    end
-  end
-  
   # A tz data day of the month reference. Can either be an absolute day,
   # a last week day or a week day >= or <= than a specific day of month.
   class TZDataDayOfMonth #:nodoc:
@@ -970,6 +939,11 @@ puts utc_start
           offset = offset + 7 if offset < 0
           offset = -offset if @operator == :less_equal          
           result = pivot + offset
+          if result.month != pivot.month
+            puts self.inspect
+            puts year
+            puts month
+          end
           raise 'No suitable date found' if result.month != pivot.month
           result.day          
         else #absolute
@@ -1012,6 +986,11 @@ puts utc_start
   
   # A tz data Zone until reference.
   class TZDataUntil #:nodoc:
+    attr_reader :year
+    attr_reader :month
+    attr_reader :day
+    attr_reader :time
+    
     def initialize(spec)      
       parts = spec.split(/\s+/)      
       raise "Invalid until: #{spec}" if parts.length < 1
@@ -1048,7 +1027,7 @@ puts utc_start
     # Expands given the current daylight savings offset and Rule string.
     def expand(std_offset, rule_string)
       if @type == :alternate
-        if std_offset.to_seconds == 0
+        if std_offset == 0
           @standard_abbrev
         else
           @daylight_abbrev
@@ -1063,6 +1042,11 @@ puts utc_start
     # True if a string from the rule is required to expand this format.
     def requires_rule_string?
       @type == :subst
+    end
+    
+    # Is a fixed format string.
+    def fixed?
+      @type == :fixed
     end
   end
   

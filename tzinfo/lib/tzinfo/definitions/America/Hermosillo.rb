@@ -20,8 +20,7 @@ add_period(1996,10) {TimezonePeriod.new(846403200,860317200,-25200,0,:'MST')}
 add_period(1997,4) {TimezonePeriod.new(860317200,877852800,-25200,3600,:'MDT')}
 add_period(1997,10) {TimezonePeriod.new(877852800,891766800,-25200,0,:'MST')}
 add_period(1998,4) {TimezonePeriod.new(891766800,909302400,-25200,3600,:'MDT')}
-add_period(1998,10) {TimezonePeriod.new(909302400,915174000,-25200,0,:'MST')}
-add_period(1999,1) {TimezonePeriod.new(915174000,nil,-25200,0,:'MST')}
+add_period(1998,10) {TimezonePeriod.new(909302400,nil,-25200,0,:'MST')}
 end
 end
 end

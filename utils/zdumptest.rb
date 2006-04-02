@@ -9,7 +9,7 @@ require '../tzinfo/lib/tzinfo'
 include TZInfo
 
 STDIN.each {|line|
- if line =~ /^([^\s]+)\s+([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]+)\s[A-Z]+\s=\s([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]+)\s([A-Z]+)/ then
+ if line =~ /^([^\s]+)\s+([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]+)\s[A-Z]+\s=\s([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]+)\s([A-Za-z0-9+\-]+)/ then
    begin
      zone = Timezone.get($1)
      utc = DateTime.parse($2)
@@ -25,6 +25,10 @@ STDIN.each {|line|
      end
    rescue InvalidTimezoneIdentifier
      puts "Unrecognized timezone: #$1"
+   rescue PeriodNotFound
+     puts "Period not found for utc: #{utc}"
+   rescue StandardError => e
+     puts "Error: #{e}"     
    end
  end
 }

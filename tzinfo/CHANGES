@@ -8,12 +8,10 @@ Version 0.?.? (tzdata v?????) - ??????????
 * Allow integer timestamps (time in seconds since 1970-1-1) to be used as well 
   as Time and DateTime objects in all public methods taking times.
 * Tool to compare TZInfo conversions with output from zdump.
-* Make TZDataParser look ahead in the rules for a letter if the first rule does 
-  not coincide with the start of a period.
-* TZDataParser no longer carries the std offset through from one period to the
-  next.
-* TZDataParser now detects when the zone identifier changes but the std offset
-  does not.
+* TZDataParser zone generation algorithm rewritten. Now based on the zic code.
+  TZInfo now 100% compatible with zic/zdump output.
+* Riyadh Solar Time zones now included again (generation time has been reduced
+  with TZDataParser changes).
   
 
 Version 0.1.2 (tzdata v2006a) - 5-Feb-2006

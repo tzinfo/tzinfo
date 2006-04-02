@@ -13,8 +13,7 @@ add_period(1919,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(58130491,24),
 add_period(1919,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(7266791,3),0,Date::ITALY),DateTime.new0(Rational.new!(58329595,24),0,Date::ITALY),-18000,0,:'EST')}
 add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(58329595,24),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-18000,3600,:'EWT')}
 add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(9726915,4),0,Date::ITALY),-18000,3600,:'EPT')}
-add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9726915,4),0,Date::ITALY),DateTime.new0(Rational.new!(58363721,24),0,Date::ITALY),-18000,0,:'EST')}
-add_period(1946,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(58363721,24),0,Date::ITALY),nil,-18000,0,:'EST')}
+add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9726915,4),0,Date::ITALY),nil,-18000,0,:'EST')}
 end
 end
 end

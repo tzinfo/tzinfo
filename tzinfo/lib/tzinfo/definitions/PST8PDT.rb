@@ -4,7 +4,7 @@ module Definitions #:nodoc:
 class PST8PDT < Timezone #:nodoc:
 setup
 set_identifier('PST8PDT')
-add_period(1850,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(4793517,2),0,Date::ITALY),DateTime.new0(Rational.new!(29060207,12),0,Date::ITALY),-28800,0,:'PST')}
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(29060207,12),0,Date::ITALY),-28800,0,:'PST')}
 add_period(1918,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29060207,12),0,Date::ITALY),DateTime.new0(Rational.new!(19375151,8),0,Date::ITALY),-28800,3600,:'PDT')}
 add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19375151,8),0,Date::ITALY),DateTime.new0(Rational.new!(29064575,12),0,Date::ITALY),-28800,0,:'PST')}
 add_period(1919,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29064575,12),0,Date::ITALY),DateTime.new0(Rational.new!(19378063,8),0,Date::ITALY),-28800,3600,:'PDT')}
@@ -170,7 +170,16 @@ add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29612255,12),
 add_period(2044,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(19743407,8),0,Date::ITALY),DateTime.new0(Rational.new!(29616623,12),0,Date::ITALY),-28800,0,:'PST')}
 add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29616623,12),0,Date::ITALY),DateTime.new0(Rational.new!(19746319,8),0,Date::ITALY),-28800,3600,:'PDT')}
 add_period(2045,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(19746319,8),0,Date::ITALY),DateTime.new0(Rational.new!(29620991,12),0,Date::ITALY),-28800,0,:'PST')}
-add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29620991,12),0,Date::ITALY),nil,-28800,3600,:'PDT')}
+add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29620991,12),0,Date::ITALY),DateTime.new0(Rational.new!(19749231,8),0,Date::ITALY),-28800,3600,:'PDT')}
+add_period(2046,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(19749231,8),0,Date::ITALY),DateTime.new0(Rational.new!(29625359,12),0,Date::ITALY),-28800,0,:'PST')}
+add_period(2047,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29625359,12),0,Date::ITALY),DateTime.new0(Rational.new!(19752143,8),0,Date::ITALY),-28800,3600,:'PDT')}
+add_period(2047,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(19752143,8),0,Date::ITALY),DateTime.new0(Rational.new!(29629727,12),0,Date::ITALY),-28800,0,:'PST')}
+add_period(2048,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29629727,12),0,Date::ITALY),DateTime.new0(Rational.new!(19755055,8),0,Date::ITALY),-28800,3600,:'PDT')}
+add_period(2048,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(19755055,8),0,Date::ITALY),DateTime.new0(Rational.new!(29634179,12),0,Date::ITALY),-28800,0,:'PST')}
+add_period(2049,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29634179,12),0,Date::ITALY),DateTime.new0(Rational.new!(19758023,8),0,Date::ITALY),-28800,3600,:'PDT')}
+add_period(2049,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(19758023,8),0,Date::ITALY),DateTime.new0(Rational.new!(29638547,12),0,Date::ITALY),-28800,0,:'PST')}
+add_period(2050,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(29638547,12),0,Date::ITALY),DateTime.new0(Rational.new!(19760935,8),0,Date::ITALY),-28800,3600,:'PDT')}
+add_period(2050,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(19760935,8),0,Date::ITALY),nil,-28800,0,:'PST')}
 end
 end
 end

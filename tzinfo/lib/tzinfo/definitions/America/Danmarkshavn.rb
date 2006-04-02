@@ -7,7 +7,7 @@ setup
 set_identifier('America/Danmarkshavn')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(653689589,270),0,Date::ITALY),-4480,0,:'LMT')}
 add_period(1916,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(653689589,270),0,Date::ITALY),323845200,-10800,0,:'WGT')}
-add_period(1980,4) {TimezonePeriod.new(323830800,338950800,-10800,3600,:'WGST')}
+add_period(1980,4) {TimezonePeriod.new(323845200,338950800,-10800,3600,:'WGST')}
 add_period(1980,9) {TimezonePeriod.new(338950800,354675600,-10800,0,:'WGT')}
 add_period(1981,3) {TimezonePeriod.new(354675600,370400400,-10800,3600,:'WGST')}
 add_period(1981,9) {TimezonePeriod.new(370400400,386125200,-10800,0,:'WGT')}

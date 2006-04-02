@@ -34,8 +34,7 @@ add_period(1986,3) {TimezonePeriod.new(511239600,530596800,-14400,0,:'AMT')}
 add_period(1986,10) {TimezonePeriod.new(530596800,540270000,-14400,3600,:'AMST')}
 add_period(1987,2) {TimezonePeriod.new(540270000,562132800,-14400,0,:'AMT')}
 add_period(1987,10) {TimezonePeriod.new(562132800,571201200,-14400,3600,:'AMST')}
-add_period(1988,2) {TimezonePeriod.new(571201200,590040000,-14400,0,:'AMT')}
-add_period(1988,9) {TimezonePeriod.new(590040000,nil,-14400,0,:'AMT')}
+add_period(1988,2) {TimezonePeriod.new(571201200,nil,-14400,0,:'AMT')}
 end
 end
 end

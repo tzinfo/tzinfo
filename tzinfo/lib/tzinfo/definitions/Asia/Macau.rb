@@ -47,7 +47,7 @@ add_period(1979,4) {TimezonePeriod.new(292953600,309279600,28800,3600,:'MOST')}
 add_period(1979,10) {TimezonePeriod.new(309279600,325008000,28800,0,:'MOT')}
 add_period(1980,4) {TimezonePeriod.new(325008000,340729200,28800,3600,:'MOST')}
 add_period(1980,10) {TimezonePeriod.new(340729200,945619200,28800,0,:'MOT')}
-add_period(1999,12) {TimezonePeriod.new(945619200,nil,28800,0,:'CT')}
+add_period(1999,12) {TimezonePeriod.new(945619200,nil,28800,0,:'CST')}
 end
 end
 end

@@ -145,7 +145,17 @@ add_period(2043,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9869995,4),0,
 add_period(2044,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(59225345,24),0,Date::ITALY),DateTime.new0(Rational.new!(9871451,4),0,Date::ITALY),-14400,0,:'FKT')}
 add_period(2044,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9871451,4),0,Date::ITALY),DateTime.new0(Rational.new!(59234081,24),0,Date::ITALY),-14400,3600,:'FKST')}
 add_period(2045,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(59234081,24),0,Date::ITALY),DateTime.new0(Rational.new!(9872907,4),0,Date::ITALY),-14400,0,:'FKT')}
-add_period(2045,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9872907,4),0,Date::ITALY),nil,-14400,3600,:'FKST')}
+add_period(2045,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9872907,4),0,Date::ITALY),DateTime.new0(Rational.new!(59242817,24),0,Date::ITALY),-14400,3600,:'FKST')}
+add_period(2046,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(59242817,24),0,Date::ITALY),DateTime.new0(Rational.new!(9874363,4),0,Date::ITALY),-14400,0,:'FKT')}
+add_period(2046,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9874363,4),0,Date::ITALY),DateTime.new0(Rational.new!(59251721,24),0,Date::ITALY),-14400,3600,:'FKST')}
+add_period(2047,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(59251721,24),0,Date::ITALY),DateTime.new0(Rational.new!(9875819,4),0,Date::ITALY),-14400,0,:'FKT')}
+add_period(2047,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9875819,4),0,Date::ITALY),DateTime.new0(Rational.new!(59260457,24),0,Date::ITALY),-14400,3600,:'FKST')}
+add_period(2048,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(59260457,24),0,Date::ITALY),DateTime.new0(Rational.new!(9877303,4),0,Date::ITALY),-14400,0,:'FKT')}
+add_period(2048,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9877303,4),0,Date::ITALY),DateTime.new0(Rational.new!(59269193,24),0,Date::ITALY),-14400,3600,:'FKST')}
+add_period(2049,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(59269193,24),0,Date::ITALY),DateTime.new0(Rational.new!(9878759,4),0,Date::ITALY),-14400,0,:'FKT')}
+add_period(2049,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9878759,4),0,Date::ITALY),DateTime.new0(Rational.new!(59277929,24),0,Date::ITALY),-14400,3600,:'FKST')}
+add_period(2050,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(59277929,24),0,Date::ITALY),DateTime.new0(Rational.new!(9880215,4),0,Date::ITALY),-14400,0,:'FKT')}
+add_period(2050,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(9880215,4),0,Date::ITALY),nil,-14400,3600,:'FKST')}
 end
 end
 end

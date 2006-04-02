@@ -139,7 +139,17 @@ add_period(2043,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9870189,4),0
 add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(9870805,4),0,Date::ITALY),DateTime.new0(Rational.new!(9871673,4),0,Date::ITALY),28800,3600,:'IRKST')}
 add_period(2044,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9871673,4),0,Date::ITALY),DateTime.new0(Rational.new!(9872261,4),0,Date::ITALY),28800,0,:'IRKT')}
 add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(9872261,4),0,Date::ITALY),DateTime.new0(Rational.new!(9873129,4),0,Date::ITALY),28800,3600,:'IRKST')}
-add_period(2045,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9873129,4),0,Date::ITALY),nil,28800,0,:'IRKT')}
+add_period(2045,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9873129,4),0,Date::ITALY),DateTime.new0(Rational.new!(9873717,4),0,Date::ITALY),28800,0,:'IRKT')}
+add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(9873717,4),0,Date::ITALY),DateTime.new0(Rational.new!(9874585,4),0,Date::ITALY),28800,3600,:'IRKST')}
+add_period(2046,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9874585,4),0,Date::ITALY),DateTime.new0(Rational.new!(9875201,4),0,Date::ITALY),28800,0,:'IRKT')}
+add_period(2047,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(9875201,4),0,Date::ITALY),DateTime.new0(Rational.new!(9876041,4),0,Date::ITALY),28800,3600,:'IRKST')}
+add_period(2047,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9876041,4),0,Date::ITALY),DateTime.new0(Rational.new!(9876657,4),0,Date::ITALY),28800,0,:'IRKT')}
+add_period(2048,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(9876657,4),0,Date::ITALY),DateTime.new0(Rational.new!(9877497,4),0,Date::ITALY),28800,3600,:'IRKST')}
+add_period(2048,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9877497,4),0,Date::ITALY),DateTime.new0(Rational.new!(9878113,4),0,Date::ITALY),28800,0,:'IRKT')}
+add_period(2049,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(9878113,4),0,Date::ITALY),DateTime.new0(Rational.new!(9878981,4),0,Date::ITALY),28800,3600,:'IRKST')}
+add_period(2049,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9878981,4),0,Date::ITALY),DateTime.new0(Rational.new!(9879569,4),0,Date::ITALY),28800,0,:'IRKT')}
+add_period(2050,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(9879569,4),0,Date::ITALY),DateTime.new0(Rational.new!(9880437,4),0,Date::ITALY),28800,3600,:'IRKST')}
+add_period(2050,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(9880437,4),0,Date::ITALY),nil,28800,0,:'IRKT')}
 end
 end
 end

@@ -150,7 +150,17 @@ add_period(2043,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(59221145,24)
 add_period(2044,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(9870835,4),0,Date::ITALY),DateTime.new0(Rational.new!(59230049,24),0,Date::ITALY),-14400,3600,:'ADT')}
 add_period(2044,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(59230049,24),0,Date::ITALY),DateTime.new0(Rational.new!(9872291,4),0,Date::ITALY),-14400,0,:'AST')}
 add_period(2045,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(9872291,4),0,Date::ITALY),DateTime.new0(Rational.new!(59238785,24),0,Date::ITALY),-14400,3600,:'ADT')}
-add_period(2045,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(59238785,24),0,Date::ITALY),nil,-14400,0,:'AST')}
+add_period(2045,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(59238785,24),0,Date::ITALY),DateTime.new0(Rational.new!(9873747,4),0,Date::ITALY),-14400,0,:'AST')}
+add_period(2046,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(9873747,4),0,Date::ITALY),DateTime.new0(Rational.new!(59247521,24),0,Date::ITALY),-14400,3600,:'ADT')}
+add_period(2046,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(59247521,24),0,Date::ITALY),DateTime.new0(Rational.new!(9875231,4),0,Date::ITALY),-14400,0,:'AST')}
+add_period(2047,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(9875231,4),0,Date::ITALY),DateTime.new0(Rational.new!(59256257,24),0,Date::ITALY),-14400,3600,:'ADT')}
+add_period(2047,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(59256257,24),0,Date::ITALY),DateTime.new0(Rational.new!(9876687,4),0,Date::ITALY),-14400,0,:'AST')}
+add_period(2048,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(9876687,4),0,Date::ITALY),DateTime.new0(Rational.new!(59264993,24),0,Date::ITALY),-14400,3600,:'ADT')}
+add_period(2048,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(59264993,24),0,Date::ITALY),DateTime.new0(Rational.new!(9878143,4),0,Date::ITALY),-14400,0,:'AST')}
+add_period(2049,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(9878143,4),0,Date::ITALY),DateTime.new0(Rational.new!(59273897,24),0,Date::ITALY),-14400,3600,:'ADT')}
+add_period(2049,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(59273897,24),0,Date::ITALY),DateTime.new0(Rational.new!(9879599,4),0,Date::ITALY),-14400,0,:'AST')}
+add_period(2050,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(9879599,4),0,Date::ITALY),DateTime.new0(Rational.new!(59282633,24),0,Date::ITALY),-14400,3600,:'ADT')}
+add_period(2050,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(59282633,24),0,Date::ITALY),nil,-14400,0,:'AST')}
 end
 end
 end
