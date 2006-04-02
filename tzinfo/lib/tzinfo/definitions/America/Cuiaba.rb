@@ -156,8 +156,7 @@ add_period(2048,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(19752981,8),0
 add_period(2048,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7408103,3),0,Date::ITALY),DateTime.new0(Rational.new!(19755949,8),0,Date::ITALY),-14400,3600,:AMST)}
 add_period(2049,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(19755949,8),0,Date::ITALY),DateTime.new0(Rational.new!(7409195,3),0,Date::ITALY),-14400,0,:AMT)}
 add_period(2049,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7409195,3),0,Date::ITALY),DateTime.new0(Rational.new!(19758861,8),0,Date::ITALY),-14400,3600,:AMST)}
-add_period(2050,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(19758861,8),0,Date::ITALY),DateTime.new0(Rational.new!(7410287,3),0,Date::ITALY),-14400,0,:AMT)}
-add_period(2050,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7410287,3),0,Date::ITALY),nil,-14400,3600,:AMST)}
+add_period(2050,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(19758861,8),0,Date::ITALY),nil,-14400,0,:AMT)}
 end
 end
 end

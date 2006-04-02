@@ -123,8 +123,7 @@ add_period(2048,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(4938343,2),0,
 add_period(2048,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(59263813,24),0,Date::ITALY),DateTime.new0(Rational.new!(4939071,2),0,Date::ITALY),3600,3600,:WAST)}
 add_period(2049,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(4939071,2),0,Date::ITALY),DateTime.new0(Rational.new!(59272549,24),0,Date::ITALY),3600,0,:WAT)}
 add_period(2049,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(59272549,24),0,Date::ITALY),DateTime.new0(Rational.new!(4939799,2),0,Date::ITALY),3600,3600,:WAST)}
-add_period(2050,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(4939799,2),0,Date::ITALY),DateTime.new0(Rational.new!(59281285,24),0,Date::ITALY),3600,0,:WAT)}
-add_period(2050,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(59281285,24),0,Date::ITALY),nil,3600,3600,:WAST)}
+add_period(2050,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(4939799,2),0,Date::ITALY),nil,3600,0,:WAT)}
 end
 end
 end

@@ -15,7 +15,8 @@ Version 0.?.? (tzdata v?????) - ??????????
 * Use binary mode when writing zone and country files to get Unix (\n) new
   lines.
 * Omit unnecessary quotes in zone identifier symbols.
-  
+* Omit the final transition to DST if there is a prior transition in the last
+  year processed to standard time.
 
 Version 0.1.2 (tzdata v2006a) - 5-Feb-2006
 ------------------------------------------

@@ -713,8 +713,19 @@ module TZInfo
     def output_class(file)
       optimize
       
+      # Try and end on a transition to std if one happens in the last year.
+      if @transitions.length > 1 && 
+          @transitions.last.std_offset != 0 &&
+          @transitions[@transitions.length - 2].std_offset == 0 &&
+          @transitions[@transitions.length - 2].at_utc.year == TZDataParser::MAX_YEAR
+        
+        transitions = @transitions[0..@transitions.length - 2]
+      else
+        transitions = @transitions
+      end
+      
       previous = nil
-      @transitions.each {|transition|
+      transitions.each {|transition|
         if previous.nil?
           # first transition
           # if it has a time, need to work out what the unbounded start before
