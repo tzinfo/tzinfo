@@ -491,6 +491,7 @@ module TZInfo
       FileUtils.mkdir_p(dir)
       
       File.open(output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + @name_for_class.gsub(/\//, File::SEPARATOR) + '.rb', 'w') {|file|
+        file.binmode
         write_requires(file)        
         file.puts('module TZInfo')
         file.puts('module Definitions #:nodoc:')
@@ -843,8 +844,12 @@ module TZInfo
         end
       end
       
-      def quote_str(str)        
-        "'#{str.gsub(/'/, '\\\'')}'" 
+      def quote_str(str)     
+        if str =~ %r{[\-+']}
+          "'#{str.gsub(/'/, '\\\'')}'"        
+        else
+          str
+        end
       end      
   end
    
@@ -1070,7 +1075,8 @@ module TZInfo
       dir = output_dir + File::SEPARATOR + 'countries'      
       FileUtils.mkdir_p(dir)
       
-      File.open(dir + File::SEPARATOR + @code + '.rb', 'w') {|file|        
+      File.open(dir + File::SEPARATOR + @code + '.rb', 'w') {|file|
+        file.binmode
         file.puts('require \'tzinfo/country\'')        
         file.puts('module TZInfo #:nodoc:')
         file.puts('module Countries #:nodoc:')

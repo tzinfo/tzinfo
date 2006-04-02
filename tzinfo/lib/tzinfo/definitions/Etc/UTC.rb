@@ -5,7 +5,7 @@ module Etc #:nodoc:
 class UTC < Timezone #:nodoc:
 setup
 set_identifier('Etc/UTC')
-add_unbounded_start_period {TimezonePeriod.new(nil,nil,0,0,:'UTC')}
+add_unbounded_start_period {TimezonePeriod.new(nil,nil,0,0,:UTC)}
 end
 end
 end

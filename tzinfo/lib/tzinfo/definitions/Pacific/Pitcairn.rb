@@ -5,9 +5,9 @@ module Pacific #:nodoc:
 class Pitcairn < Timezone #:nodoc:
 setup
 set_identifier('Pacific/Pitcairn')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10434466921,4320),0,Date::ITALY),-31220,0,:'LMT')}
-add_period(1901,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10434466921,4320),0,Date::ITALY),893665800,-30600,0,:'PNT')}
-add_period(1998,4) {TimezonePeriod.new(893665800,nil,-28800,0,:'PST')}
+add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10434466921,4320),0,Date::ITALY),-31220,0,:LMT)}
+add_period(1901,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10434466921,4320),0,Date::ITALY),893665800,-30600,0,:PNT)}
+add_period(1998,4) {TimezonePeriod.new(893665800,nil,-28800,0,:PST)}
 end
 end
 end
