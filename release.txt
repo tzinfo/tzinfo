@@ -6,4 +6,4 @@
 * Commit and tag release
 * Upload gem, tar.gz, zip.
 * Upload documentation.
-* Write news item.
+* Write news item / announcement mailing list post.

@@ -13,7 +13,7 @@
     <h1>TZInfo - Ruby Timezone Library</h1>
     <p>
       TZInfo is a Ruby library that uses the standard <a href="http://www.twinsun.com/tz/tz-link.htm">tz (Olson) database</a> to provide
-      daylight savings aware transformations between times in different timezones.
+      daylight savings aware transformations between times in different time zones.
       The tz database is compiled into Ruby classes which are packaged in the release.
       No external zoneinfo files are required at runtime.
     </p>
@@ -27,24 +27,24 @@
     </p>
     <h2>Mailing Lists</h2>
     <p>
-      There are two TZInfo <a href="http://rubyforge.org/mail/?group_id=894">mailing lists</a>:      
-    </p>   
+      There are two TZInfo <a href="http://rubyforge.org/mail/?group_id=894">mailing lists</a>:
+    </p>
     <ul>
-      <li><a href="http://rubyforge.org/pipermail/tzinfo-announce/">annouce</a> - Announcements of new versions, etc.</li>
+      <li><a href="http://rubyforge.org/pipermail/tzinfo-announce/">announce</a> - Announcements of new versions, etc.</li>
       <li><a href="http://rubyforge.org/mailman/listinfo/tzinfo-users">users</a> - General discussion about TZInfo. Please post any questions you have to this list.</li>
     </ul>
     <h2>RubyForge</h2>
     <p>
       The RubyForge project page for TZInfo can be found at <a href="http://rubyforge.org/projects/tzinfo/">http://rubyforge.org/projects/tzinfo/</a>.
-    </p>    
+    </p>
     <h2>References</h2>
     <p>
       <a href="http://scott.elitists.net/">Scott Barron</a> of <a href="http://lunchboxsoftware.com/">Lunchbox Software</a>
       has written an article on <a href="http://lunchroom.lunchboxsoftware.com/pages/tzinfo_rails">using TZInfo with Ruby on Rails</a>.
     </p>
     <p>
-      Note that the article was based on version 0.0.1 of TZInfo. There is now an easier way to display a drop-down select list of 
-      Timezones than is described. With TZInfo v0.0.3 and later you can use</p>
+      Note that the article was based on version 0.0.1 of TZInfo. There is now an easier way to display a drop-down select list of
+      time zones than is described. With TZInfo v0.0.3 and later you can use</p>
       <pre>&lt;%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %&gt;</pre>
       <p>instead of having to use the placeholder TzForSelect class.
     </p>
@@ -56,7 +56,7 @@
     </p>
     <h3>Ruby on Rails TimeZone Class</h3>
     <p>
-      <a href="http://www.rubyonrails.com">Ruby on Rails</a> provides a simple 
+      <a href="http://www.rubyonrails.com">Ruby on Rails</a> provides a simple
       <a href="http://api.rubyonrails.com/classes/TimeZone.html">TimeZone</a> class. This does not have
       any support for daylight savings.
     </p>
@@ -64,7 +64,7 @@
       <small>
         <a href="http://phil.ross.org.uk/">Phil Ross</a>
         <br />
-        5th February 2006
+        3rd April 2006
       </small>
     </p>
   </body>
