@@ -39,8 +39,7 @@ add_period(1980,3) {TimezonePeriod.new(321418800,340171200,-25200,0,:EAST)}
 add_period(1980,10) {TimezonePeriod.new(340171200,353473200,-25200,3600,:EASST)}
 add_period(1981,3) {TimezonePeriod.new(353473200,371620800,-25200,0,:EAST)}
 add_period(1981,10) {TimezonePeriod.new(371620800,384922800,-25200,3600,:EASST)}
-add_period(1982,3) {TimezonePeriod.new(384922800,384937200,-25200,0,:EAST)}
-add_period(1982,3) {TimezonePeriod.new(384937200,403070400,-21600,0,:EAST)}
+add_period(1982,3) {TimezonePeriod.new(384922800,403070400,-21600,0,:EAST)}
 add_period(1982,10) {TimezonePeriod.new(403070400,416372400,-21600,3600,:EASST)}
 add_period(1983,3) {TimezonePeriod.new(416372400,434520000,-21600,0,:EAST)}
 add_period(1983,10) {TimezonePeriod.new(434520000,447822000,-21600,3600,:EASST)}

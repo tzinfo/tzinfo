@@ -8,7 +8,8 @@ set_identifier('America/Anchorage')
 add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(8651724899,3600),0,Date::ITALY),50424,0,:LMT)}
 add_period(1867,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(8651724899,3600),0,Date::ITALY),DateTime.new0(Rational.new!(8694908699,3600),0,Date::ITALY),-35976,0,:LMT)}
 add_period(1900,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(8694908699,3600),0,Date::ITALY),DateTime.new0(Rational.new!(2430400,1),0,Date::ITALY),-36000,0,:CAT)}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(2430400,1),0,Date::ITALY),DateTime.new0(Rational.new!(58361495,24),0,Date::ITALY),-36000,3600,:CAWT)}
+add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(2430400,1),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-36000,3600,:CAWT)}
+add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(58361495,24),0,Date::ITALY),-36000,3600,:CAPT)}
 add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58361495,24),0,Date::ITALY),DateTime.new0(Rational.new!(29274983,12),0,Date::ITALY),-36000,0,:CAT)}
 add_period(1967,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29274983,12),0,Date::ITALY),DateTime.new0(Rational.new!(2440339,1),0,Date::ITALY),-36000,0,:AHST)}
 add_period(1969,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(2440339,1),0,Date::ITALY),DateTime.new0(Rational.new!(58572503,24),0,Date::ITALY),-36000,3600,:AHDT)}
