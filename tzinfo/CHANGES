@@ -1,4 +1,4 @@
-Version 0.?.? (tzdata v?????) - ??????????
+Version 0.2.0 (tzdata v2006c) - 3-Apr-2006
 ------------------------------------------
 
 * Use timestamps rather than DateTime objects in zone files for times between
@@ -6,10 +6,11 @@ Version 0.?.? (tzdata v?????) - ??????????
 * Don't convert passed in Time objects to DateTime in most cases (provides 
   a substantial performance improvement).
 * Allow integer timestamps (time in seconds since 1970-1-1) to be used as well 
-  as Time and DateTime objects in all public methods taking times.
+  as Time and DateTime objects in all public methods that take times as 
+  parameters.
 * Tool to compare TZInfo conversions with output from zdump.
 * TZDataParser zone generation algorithm rewritten. Now based on the zic code.
-  TZInfo now 100% compatible with zic/zdump output.
+  TZInfo is now 100% compatible with zic/zdump output.
 * Riyadh Solar Time zones now included again (generation time has been reduced
   with TZDataParser changes).
 * Use binary mode when writing zone and country files to get Unix (\n) new
