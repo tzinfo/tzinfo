@@ -865,7 +865,7 @@ module TZInfo
   end
    
   # An instance of a rule for a year.
-  class TZDataActivatedRule
+  class TZDataActivatedRule #:nodoc:
     attr_reader :rule
     attr_reader :year
     attr_reader :at
