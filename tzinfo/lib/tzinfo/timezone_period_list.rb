@@ -191,7 +191,7 @@ module TZInfo
         index
       end
       
-      # Returns the contents of any 6 month period, exapanding any blocks to
+      # Returns the contents of any 6 month period, expanding any blocks to
       # TimezonePeriods first.
       def get_contents(index)
         contents = @list[index]
