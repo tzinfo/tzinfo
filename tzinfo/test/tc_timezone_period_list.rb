@@ -212,6 +212,18 @@ class TCTimezonePeriod < Test::Unit::TestCase
     }
   end
   
+  def test_periods_for_local_warsaw
+    list = TimezonePeriodList.new
+    list.add_unbounded_start {TimezonePeriod.new(nil,DateTime.new(1879,12,31,22,36,0),5040,0,:LMT)}
+    list.add(1879,12) {TimezonePeriod.new(DateTime.new(1879,12,31,22,36,0),DateTime.new(1915,8,4,22,36,0),5040,0,:WMT)}
+    list.add(1915,8) {TimezonePeriod.new(DateTime.new(1915,8,4,22,36,0),DateTime.new(1916,4,30,22,0,0),3600,0,:CET)}
+
+    assert_periods_equal([
+      TimezonePeriod.new(DateTime.new(1879,12,31,22,36,0),DateTime.new(1915,8,4,22,36,0),5040,0,:WMT),
+      TimezonePeriod.new(DateTime.new(1915,8,4,22,36,0),DateTime.new(1916,4,30,22,0,0),3600,0,:CET)],
+      list.periods_for_local(DateTime.new(1915,8,4,23,40,0)))
+  end
+  
   def test_period_for_local_unbounded
     list = TimezonePeriodList.new
     list.add_unbounded_start  { TimezonePeriod.new(nil,DateTime.new(2000,10,2,1,0,0),-18000,3600,:'TESTD') }

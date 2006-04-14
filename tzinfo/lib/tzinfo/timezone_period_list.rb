@@ -157,14 +157,15 @@ module TZInfo
                 result << contents[j]
                 found_first = i if found_first.nil?
               end
-            }
-            
-            if !found_first.nil? && i < found_first
-              # searched far enough
-              break
-            end
+            }                        
           elsif !contents.nil? && contents.valid_for_local?(local)
-            result << contents                  
+            result << contents
+            found_first = i if found_first.nil?
+          end
+          
+          if !contents.nil? && !found_first.nil? && i < found_first
+            # searched far enough
+            break
           end
         }
       end
