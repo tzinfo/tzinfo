@@ -171,8 +171,18 @@ module TZInfo
     #
     # Milliseconds and smaller units are ignored in the comparison.
     def <=>(timeOrDateTime)
-      if timeOrDateTime.is_a?(TimeOrDateTime)        
-        self <=> timeOrDateTime.orig      
+      if timeOrDateTime.is_a?(TimeOrDateTime)            
+        orig = timeOrDateTime.to_orig
+        
+        if @orig.is_a?(DateTime) || orig.is_a?(DateTime)
+          # If either is a DateTime, assume it is there for a reason 
+          # (i.e. for range).
+          to_datetime <=> timeOrDateTime.to_datetime
+        elsif orig.is_a?(Time)
+          to_time <=> timeOrDateTime.to_time
+        else
+          to_i <=> timeOrDateTime.to_i
+        end        
       elsif @orig.is_a?(DateTime) || timeOrDateTime.is_a?(DateTime)
         # If either is a DateTime, assume it is there for a reason 
         # (i.e. for range).        
