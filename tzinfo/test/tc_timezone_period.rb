@@ -12,7 +12,8 @@ class TCTimezonePeriod < Test::Unit::TestCase
     assert_equal(DateTime.new(2005,1,2,0,0,0), p.utc_end)
     assert_equal(-7200, p.utc_offset)
     assert_equal(3600, p.std_offset)
-    assert_equal(:TEST, p.zone_identifier)    
+    assert_equal(:TEST, p.zone_identifier)
+    assert_equal(:TEST, p.abbreviation)    
     assert_equal(DateTime.new(2004,12,31,23,0,0), p.local_start)    
     assert_equal(DateTime.new(2005,1,1,23,0,0), p.local_end)        
   end
@@ -24,7 +25,8 @@ class TCTimezonePeriod < Test::Unit::TestCase
     assert_equal(DateTime.new(2005,1,2,0,0,0), p.utc_end)
     assert_equal(-7200, p.utc_offset)
     assert_equal(3600, p.std_offset)
-    assert_equal(:TEST, p.zone_identifier)    
+    assert_equal(:TEST, p.zone_identifier)
+    assert_equal(:TEST, p.abbreviation)    
     assert_equal(DateTime.new(2004,12,31,23,0,0), p.local_start)    
     assert_equal(DateTime.new(2005,1,1,23,0,0), p.local_end)
   end
@@ -36,7 +38,8 @@ class TCTimezonePeriod < Test::Unit::TestCase
     assert_equal(DateTime.new(2005,1,2,0,0,0), p.utc_end)
     assert_equal(-7200, p.utc_offset)
     assert_equal(3600, p.std_offset)
-    assert_equal(:TEST, p.zone_identifier)    
+    assert_equal(:TEST, p.zone_identifier)
+    assert_equal(:TEST, p.abbreviation)    
     assert_equal(DateTime.new(2004,12,31,23,0,0), p.local_start)    
     assert_equal(DateTime.new(2005,1,1,23,0,0), p.local_end)
   end
@@ -49,6 +52,7 @@ class TCTimezonePeriod < Test::Unit::TestCase
     assert_equal(-7200, p.utc_offset)
     assert_equal(3600, p.std_offset)
     assert_equal(:TEST, p.zone_identifier)    
+    assert_equal(:TEST, p.abbreviation)
     assert_nil(p.local_start)    
     assert_nil(p.local_end)
   end

@@ -26,6 +26,7 @@ Version ?.?.? (tzdata v?????) - ??????????
   tz.utc_to_local(DateTime.new(2006, 4, 17, 15, 40, 0).new_offset(Rational(5, 24)))
   tz.utc_to_local(Time.utc(2006, 4, 17, 15, 40, 0))
   tz.utc_to_local(Time.local(2006, 4, 17, 15, 40, 0))
+* Added abbreviation as an alias for TimezonePeriod.zone_identifier.
   
 
 Version 0.2.0 (tzdata v2006c) - 3-Apr-2006
