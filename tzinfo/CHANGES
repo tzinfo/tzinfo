@@ -1,28 +1,20 @@
-Version ?.?.? (tzdata v?????) - ??????????
-------------------------------------------
+Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
+-------------------------------------------
 
-* When comparing a TimeOrDateTime with another TimeOrDateTime with <=>, make 
-  sure any conversions performed on the passed in TimeOrDateTime are cached. 
-  Previously the TimeOrDateTime passed in would be converted to its original
-  form and then <=> would be called recursively. This could create a 
-  temporary TimeOrDateTime to be converted that would subsequently be 
-  discarded. This change brings the performance of Timezone.local_to_utc
-  and Timezone.period_for_local back to the level it was at in 0.1.2. Thanks to
-  Michael Smedberg and Jamis Buck for reporting these performance issues.
-* Fix the condition that is tested by TimezonePeriodList.periods_for_local to
-  avoid iterating back through the Timezone periods once all the possible 
-  periods have been found. The condition was only being evaluated for cases 
-  where multiple periods were defined in one half of the year. This change 
-  improves the performance of Timezone.local_to_utc and 
-  Timezone.period_for_local to the same level as Timezone.utc_to_local and
-  Timezone.period_for_utc. Thanks to Michael Smedberg and Jamis Buck for 
-  reporting these performance issues.
+* Fix a performance issue caused in 0.2.0 with Timezone.local_to_utc. 
+  Conversions performed on TimeOrDateTime instances passed to <=> are now
+  cached as originally intended. Thanks to Michael Smedberg for spotting this.
+* Fix a performance issue with the local_to_utc period search algorithm 
+  originally implemented in 0.1.0. The condition that was supposed to cause
+  the search to terminate when enough periods had been found was only being
+  evaluated in a small subset of cases. Thanks to Michael Smedberg and 
+  Jamis Buck for reporting this.
 * Added abbreviation as an alias for TimezonePeriod.zone_identifier.
 * Updated to tzdata version 2006d
   (http://article.gmane.org/gmane.comp.time.tz/936).
-* Ignore any offset in DateTimes passed in. The zone of Times is already 
-  ignored. All of the following now refer to the same UTC time (15:40 on 
-  17 April 2006). Previously, the second line would have been interpreted 
+* Ignore any offset in DateTimes passed in (as is already done for Times).
+  All of the following now refer to the same UTC time (15:40 on 17 April 2006). 
+  Previously, the DateTime in the second line would have been interpreted 
   as 20:40.
   
     tz.utc_to_local(DateTime.new(2006, 4, 17, 15, 40, 0))
