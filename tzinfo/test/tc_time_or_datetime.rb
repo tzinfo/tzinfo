@@ -9,10 +9,16 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))    
   end
   
-  def test_initialize_time_local    
-    tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3))
+  def test_initialize_time_local 
+    tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3))    
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), tdt.to_time)    
     assert_equal('UTC', tdt.to_time.zone)
+  end
+  
+  def test_initialize_datetime_offset
+    tdt = TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3).new_offset(Rational(5, 24)))
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), tdt.to_datetime)
+    assert_equal(0, tdt.to_datetime.offset)
   end
   
   def test_initialize_datetime

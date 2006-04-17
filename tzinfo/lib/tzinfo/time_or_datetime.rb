@@ -31,7 +31,8 @@ module TZInfo
     include Comparable
     
     # Constructs a new TimeOrDateTime. timeOrDateTime can be a Time, DateTime
-    # or an integer. If using a Time, any time zone information is ignored.
+    # or an integer. If using a Time or DateTime, any time zone information is 
+    # ignored.
     def initialize(timeOrDateTime)
       @time = nil
       @datetime = nil
@@ -43,6 +44,7 @@ module TZInfo
         @orig = @time
       elsif timeOrDateTime.is_a?(DateTime)
         @datetime = timeOrDateTime
+        @datetime = @datetime.new_offset(0) unless @datetime.offset == 0
         @orig = @datetime
       else
         @timestamp = timeOrDateTime.to_i
