@@ -316,7 +316,8 @@ module TZInfo
         dir = @output_dir + File::SEPARATOR + 'countries'      
         FileUtils.mkdir_p(dir)
         
-        File.open(dir + File::SEPARATOR + 'Index.rb', 'w') {|file|        
+        File.open(dir + File::SEPARATOR + 'Index.rb', 'w') {|file|
+          file.binmode        
           file.puts('require \'tzinfo/country\'')        
           file.puts('module TZInfo')
           file.puts('module Countries')
@@ -350,6 +351,7 @@ module TZInfo
         puts "writing module #{path_elements.join('::')}"
         
         File.open(@output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + path_elements.join(File::SEPARATOR) + '.rb', 'w') {|file|
+          file.binmode
           file.puts('require \'tzinfo/directory_loader\'')
         
           file.puts('module TZInfo')
