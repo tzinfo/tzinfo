@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2006 Philip Ross
+# Copyright (c) 2006 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,13 +20,24 @@
 # THE SOFTWARE.
 #++
 
-# Add the directory containing this file to the start of the load path if it
-# isn't there already.
-$:.unshift(File.dirname(__FILE__)) unless
-  $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
-
-require 'tzinfo/timezone'
-require 'tzinfo/country'
-require 'tzinfo/tzdataparser'
-require 'tzinfo/definitions'
-require 'tzinfo/countries'
+module TZInfo
+  module DirectoryLoader #:nodoc:
+    def self.append_features(base)
+      super
+      base.extend(ClassMethods)
+    end
+  
+    module ClassMethods
+      def const_missing(sym)
+        require "tzinfo/#{@dir}/#{sym}"
+        c = const_get(sym)
+        raise NameError, "Symbol not found #{name}::#{sym}" unless c
+        c
+      end
+      
+      def directory(dir)
+        @dir = dir
+      end
+    end
+  end
+end

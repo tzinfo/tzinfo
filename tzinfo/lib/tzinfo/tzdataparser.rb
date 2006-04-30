@@ -103,13 +103,24 @@ module TZInfo
       load_countries
       
       if @generate_zones
+        modules = []
+        
         if @only_zones.nil? || @only_zones.empty?
           @zones.each_value {|zone|
             zone.write_class(@output_dir) unless @exclude_zones.include?(zone.name)
+            modules << zone.path_elements
           }
         else
-          @only_zones.each {|id| @zones[id].write_class(@output_dir) }
+          @only_zones.each {|id|
+            zone = @zones[id]
+            zone.write_class(@output_dir)
+            modules << zone.path_elements
+          }          
         end
+        
+        modules.uniq!
+        
+        modules.each {|path_elements| write_module(path_elements) unless path_elements.empty?}
       end
       
       if @generate_countries
@@ -332,6 +343,26 @@ module TZInfo
           file.puts('end') # end module TZInfo
         }                      
       end
+      
+      # Writes a module definition with a const_missing method to load child
+      # classes and modules.
+      def write_module(path_elements)
+        puts "writing module #{path_elements.join('::')}"
+        
+        File.open(@output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + path_elements.join(File::SEPARATOR) + '.rb', 'w') {|file|
+          file.puts('require \'tzinfo/directory_loader\'')
+        
+          file.puts('module TZInfo')
+          file.puts('module Definitions #:nodoc:')
+          
+          path_elements.each{|mod| file.puts("module #{mod} #:nodoc:")}
+          
+          file.puts('include DirectoryLoader')
+          file.puts("directory 'definitions/#{path_elements.join('/')}'")
+          
+          (path_elements.length + 2).times {file.puts('end')}                              
+        }
+      end
     
   end
   
@@ -473,39 +504,40 @@ module TZInfo
   # Base class for Zones and Links.
   class TZDataDefinition #:nodoc:
     attr_reader :name
-    attr_reader :name_for_class
+    attr_reader :name_elements
+    attr_reader :path_elements
     
     def initialize(name)
       @name = name
       
       # + and - aren't allowed in class names
-      @name_for_class = name.gsub(/-/, '__m__').gsub(/\+/, '__p__')
+      @name_elements = name.gsub(/-/, '__m__').gsub(/\+/, '__p__').split(/\//)
+      @path_elements = @name_elements.clone
+      @path_elements.pop
     end        
     
     # Creates necessary directories, the file, writes the class header and footer
     # and yields to a block to write the content.    
-    def create_file(output_dir)      
-      modules = @name_for_class.split(/\//)
-      class_name = modules.pop            
-      dir = output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + modules.join(File::SEPARATOR)      
+    def create_file(output_dir)        
+      dir = output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + @path_elements.join(File::SEPARATOR)      
       FileUtils.mkdir_p(dir)
       
-      File.open(output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + @name_for_class.gsub(/\//, File::SEPARATOR) + '.rb', 'w') {|file|
+      File.open(output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + @name_elements.join(File::SEPARATOR) + '.rb', 'w') {|file|
         file.binmode
         write_requires(file)        
         file.puts('module TZInfo')
         file.puts('module Definitions #:nodoc:')
-        modules.each do |part| 
+        @path_elements.each do |part| 
           file.puts("module #{part} #:nodoc:")
         end
         
-        file.puts("class #{class_name} < #{superclass} #:nodoc:")
+        file.puts("class #{@name_elements.last} < #{superclass} #:nodoc:")
       
         yield file
                 
         file.puts('end') # end class
         
-        modules.each do
+        @path_elements.each do
           file.puts('end')
         end
         file.puts('end') # end module Definitions
@@ -531,12 +563,12 @@ module TZInfo
     # Called to write any requires into the file. Called by create_file.
     def write_requires(file)
       super
-      file.puts("require 'tzinfo/definitions/#{link_to.name_for_class}'")
+      file.puts("require 'tzinfo/definitions/#{link_to.name_elements.join('/')}'")
     end
     
     # Superclass of this class (the class we are linking to).
     def superclass
-      'Definitions::' + link_to.name_for_class.gsub(/\//, '::')
+      'Definitions::' + link_to.name_elements.join('::')
     end
     
     # Writes a class for this link.

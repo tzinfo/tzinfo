@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2006 Philip Ross
+# Copyright (c) 2006 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,13 +20,11 @@
 # THE SOFTWARE.
 #++
 
-# Add the directory containing this file to the start of the load path if it
-# isn't there already.
-$:.unshift(File.dirname(__FILE__)) unless
-  $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
+require 'tzinfo/directory_loader'
 
-require 'tzinfo/timezone'
-require 'tzinfo/country'
-require 'tzinfo/tzdataparser'
-require 'tzinfo/definitions'
-require 'tzinfo/countries'
+module TZInfo
+  module Definitions #:nodoc:
+    include DirectoryLoader
+    directory 'definitions'    
+  end
+end

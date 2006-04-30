@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+require 'tzinfo/countries'
 require 'tzinfo/timezone'
 
 module TZInfo

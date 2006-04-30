@@ -575,6 +575,24 @@ class TCTimezone < Test::Unit::TestCase
     assert((Timezone.get('Europe/Paris') <=> Timezone.get('America/New_York')) > 0)
   end
   
+  def test_direct_load
+    # This test uses the Zone America/Kentucky/Louisville.
+    # It is assumed (and tested for) that none of the Kentucky zones will have
+    # been loaded before this test is run.
+    
+    # First load America/New_York to ensure the correct thing happens when
+    # defining America for the first time (i.e. the module file gets loaded).
+    
+    Timezone.get('America/New_York')
+    
+    assert_equal(false, Definitions::America.const_defined?('Kentucky'))
+    assert_equal('TZInfo::Definitions::America::Kentucky', 
+      Definitions::America::Kentucky.name)
+    assert_equal(false, Definitions::America.const_defined?('Louisville'))
+    assert_equal('TZInfo::Definitions::America::Kentucky::Louisville', 
+      Definitions::America::Kentucky::Louisville.name)
+  end
+  
   private
     def assert_period_for(utc_start, utc_end, dst, period)
       assert_equal(utc_start, period.utc_start)

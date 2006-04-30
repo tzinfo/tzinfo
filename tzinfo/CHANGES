@@ -1,3 +1,12 @@
+== Version ?.?.? (tzdata v?????) - ???????????
+
+* Define const_missing methods in TZInfo::Countries, TZInfo::Definitions and
+  all sub-modules of TZInfo::Definitions that load files for classes and
+  modules contained within them. This allows Timezone and Country instances to 
+  be used with Marshal.dump and Marshal.load and hence allows them to be stored 
+  in Rails sessions. Closes #4240.
+
+
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
 
 * Fix a performance issue caused in 0.2.0 with Timezone.local_to_utc. 

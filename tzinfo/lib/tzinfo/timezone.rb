@@ -22,6 +22,7 @@
 
 require 'date'
 require 'tzinfo/country'
+require 'tzinfo/definitions'
 require 'tzinfo/time_or_datetime'
 require 'tzinfo/timezone_period'
 require 'tzinfo/timezone_period_list'
@@ -76,7 +77,14 @@ module TZInfo
         raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
         identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
         begin
-          require "tzinfo/definitions/#{identifier}"
+          path = 'tzinfo/definitions'
+          
+          # Require each of the modules along the way as well as the class.
+          # This brings in the const_missing method at each level.
+          identifier.split(/\//).each {|part|
+            path << '/' + part            
+            require path
+          }
           
           m = Definitions
           identifier.split(/\//).each {|part|

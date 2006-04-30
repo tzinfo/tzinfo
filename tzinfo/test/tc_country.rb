@@ -124,4 +124,17 @@ class TCCountry < Test::Unit::TestCase
     assert((Country.get('FR') <=> Country.get('US')) < 0)
     assert((Country.get('US') <=> Country.get('FR')) > 0)
   end
+  
+  def test_aa_direct_load
+    # This test uses the country KN (St Kitts & Nevis)
+    # It is assumed (and tested for) that this country has not already been 
+    # used in other tests.
+    
+    # Other tests load all the zones, so the name of this is arranged such that
+    # it will run first (test methods are sorted before being run).
+        
+    assert_equal(false, Countries.const_defined?('KN'))
+    assert_equal('TZInfo::Countries::KN', 
+      Countries::KN.name)    
+  end
 end
