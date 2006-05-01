@@ -5,6 +5,8 @@
   modules contained within them. This allows Timezone and Country instances to 
   be used with Marshal.dump and Marshal.load and hence allows them to be stored 
   in Rails sessions. Closes #4240.
+* Updated to tzdata version 2006f
+  (http://article.gmane.org/gmane.comp.time.tz/1001).
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006

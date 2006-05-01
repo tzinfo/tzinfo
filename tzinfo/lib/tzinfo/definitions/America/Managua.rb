@@ -14,12 +14,14 @@ add_period(1979,3) {TimezonePeriod.new(290584800,299134800,-21600,3600,:CDT)}
 add_period(1979,6) {TimezonePeriod.new(299134800,322034400,-21600,0,:CST)}
 add_period(1980,3) {TimezonePeriod.new(322034400,330584400,-21600,3600,:CDT)}
 add_period(1980,6) {TimezonePeriod.new(330584400,694260000,-21600,0,:CST)}
-add_period(1992,1) {TimezonePeriod.new(694260000,717310800,-21600,3600,:CDT)}
-add_period(1992,9) {TimezonePeriod.new(717310800,725882400,-21600,0,:CST)}
-add_period(1993,1) {TimezonePeriod.new(725882400,912488400,-18000,0,:EST)}
-add_period(1998,12) {TimezonePeriod.new(912488400,1113112800,-21600,0,:CST)}
+add_period(1992,1) {TimezonePeriod.new(694260000,717310800,-18000,0,:EST)}
+add_period(1992,9) {TimezonePeriod.new(717310800,725868000,-21600,0,:CST)}
+add_period(1993,1) {TimezonePeriod.new(725868000,852094800,-18000,0,:EST)}
+add_period(1997,1) {TimezonePeriod.new(852094800,1113112800,-21600,0,:CST)}
 add_period(2005,4) {TimezonePeriod.new(1113112800,1128229200,-21600,3600,:CDT)}
-add_period(2005,10) {TimezonePeriod.new(1128229200,nil,-21600,0,:CST)}
+add_period(2005,10) {TimezonePeriod.new(1128229200,1146384000,-21600,0,:CST)}
+add_period(2006,4) {TimezonePeriod.new(1146384000,1157266800,-21600,3600,:CDT)}
+add_period(2006,9) {TimezonePeriod.new(1157266800,nil,-21600,0,:CST)}
 end
 end
 end
