@@ -20,7 +20,6 @@
 # THE SOFTWARE.
 #++
 
-require 'tzinfo/countries'
 require 'tzinfo/timezone'
 
 module TZInfo
@@ -37,134 +36,165 @@ module TZInfo
   class Country
     include Comparable
     
-    # Cache of loaded countries by code to avoid using require if a country
-    # has already been loaded.
-    @@loaded_countries = {}
+    # Defined countries.
+    @@countries = nil        
     
     # Gets a Country by its ISO 3166 code. Raising an exception if it couldn't
     # be found.
     def self.get(identifier)
-      instance = @@loaded_countries[identifier]
-      if instance.nil?     
-        raise InvalidCountryCode.new, 'Invalid identifier' if identifier !~ /^[A-Z]{2}$/
-        begin
-          require "tzinfo/countries/#{identifier}"
-          instance = Countries.const_get(identifier).instance
-          @@loaded_countries[instance.code] = instance
-        rescue LoadError, NameError => e
-          raise InvalidCountryCode, e.message
-        end
-      end
-      
-      instance
+      load_index
+      instance = @@countries[identifier]                   
+      raise InvalidCountryCode.new, 'Invalid identifier' if instance.nil?
+      instance        
     end
     
-    # If identifier is nil calls super(), else calls get(identifier).
-    def self.new(identifier = nil)
-      if identifier
-        get(identifier)
+    # If identifier is a CountryInfo object, initializes the Country instance, 
+    # otherwise calls get(identifier).
+    def self.new(identifier)      
+      if identifier.kind_of?(CountryInfo)
+        instance = super()
+        instance.send :setup, identifier
+        instance
       else
-        super()
+        get(identifier)
       end
     end
     
     # Returns an Array of all the valid country codes.
     def self.all_codes
-      require 'tzinfo/countries/Index'
-      Countries::Index.all_codes
+      load_index
+      @@countries.keys      
     end
     
     # Returns an Array of all the defined Countries.
     def self.all
-      all_codes.collect {|code|
-        get(code)
-      }
+      load_index
+      @@countries.values
     end       
     
     # The ISO 3166 country code.
     def code
-      'Unknown'
+      @info.code
     end
     
     # The name of the country.
     def name
-      'Unknown'
+      @info.name
     end
     
     # Alias for name.
     def to_s
       name
-    end
+    end    
     
-    # Array of Timezone identifiers for the country.
-    def zone_names
-      []
-    end
-    
-    # Array of Timezone identifiers for the country.
+    # Returns a frozen array of all the zone identifiers for the country. These
+    # are in an order that
+    #   (1) makes some geographical sense, and
+    #   (2) puts the most populous zones first, where that does not contradict (1).
     def zone_identifiers
-      zone_names
+      @info.zone_identifiers
     end
+    alias zone_names zone_identifiers
     
     # An array of all the Timezones for this country. Returns TimezoneProxy
     # objects to avoid the overhead of loading Timezone definitions until
     # a conversion is actually required.
     def zones
-      zone_names.collect {|zone_name|
-        TimezoneProxy.new(zone_name)
+      zone_identifiers.collect {|id|
+        TimezoneProxy.new(id)
       }
     end        
-    
-    # Two Countries are considered to be equal if their codes are equal.
-    def ==(c)
-      code == c.code
+        
+    # Compare two Countries based on their code. Returns -1 if c is less
+    # than self, 0 if c is equal to self and +1 if c is greater than self.
+    def <=>(c)
+      code <=> c.code
     end
     
-    # Compare two Countries based on their code. Returns -1 if tz is less
-    # than self, 0 if tz is equal to self and +1 if tz is greater than self.
-    def <=>(tz)
-      code <=> tz.code
+    def _dump(limit)
+      code
     end
-            
-    protected
-      def self.setup
-        class_eval <<CODE
-            @@zone_names = []
-            @@instance = new
-            
-            def zone_names
-              @@zone_names
-            end            
-            
-            def code
-              @@code
-            end
-            
-            def name
-              @@name
-            end
-                        
-            def self.instance
-              @@instance
-            end 
-            
-            protected
-              def self.add_zone(zone_name)              
-                @@zone_names << zone_name
-              end
-              
-              def self.zones_added
-                @@zone_names.freeze
-              end
-              
-              def self.set_code(code)
-                @@code = code
-              end
-              
-              def self.set_name(name)
-                @@name = name
-              end                     
-CODE
-      end           
-  end    
+    
+    def self._load(data)
+      Country.get(data)
+    end
+    
+    private
+      # Loads in the index of countries if it hasn't already been loaded.
+      def self.load_index
+        unless @@countries
+          @@countries = {}
+          require 'tzinfo/indexes/countries'          
+        end
+      end
+      
+      # Callback raised through CountryIndexDefinition as countries are
+      # defined. Creates new Country instances.
+      def self.country_defined(country_info)
+        @@countries[country_info.code] = Country.new(country_info)
+      end
+      
+      # Called by Country.new to initialize a new Country instance. The info
+      # parameter is a CountryInfo that defines the country.
+      def setup(info)
+        @info = info        
+      end
+  end
+  
+  # The country index file includes CountryIndexDefinition which provides
+  # a country method used to define each country in the index.
+  module CountryIndexDefinition    
+    def self.append_features(base)
+      super
+      base.extend(ClassMethods)
+    end
+    
+    module ClassMethods
+      # Defines a country with an ISO 3166 country code, name and block. The
+      # block will be evaluated to obtain all the timezones for the country.
+      # Calls Country.country_defined with the definition of each country.
+      def country(code, name, &block)
+        country = CountryInfo.new(code, name, block)
+        Country.send :country_defined, country
+      end
+    end
+  end
+  
+  # Class to store the data loaded from the country index. Instances of this
+  # class are passed to the blocks in the index that define timezones.
+  class CountryInfo #:nodoc:
+    attr_reader :code
+    attr_reader :name
+    
+    # Constructs a new CountryInfo with an ISO 3166 country code, name and 
+    # block. The block will be evaluated to obtain the timezones for the country
+    # (when they are first needed).
+    def initialize(code, name, block)
+      @code = code
+      @name = name
+      @block = block
+      @zone_identifiers = nil
+    end
+    
+    # Called by the index data to define a timezone for the country.
+    def timezone(identifier, latitude, longitude, description = nil)
+      # Currently only store the identifiers.
+      @zone_identifiers << identifier
+    end
+    
+    # Returns a frozen array of all the zone identifiers for the country. These
+    # are in an order that
+    #   (1) makes some geographical sense, and
+    #   (2) puts the most populous zones first, where that does not contradict (1).
+    def zone_identifiers
+      if @zone_identifiers.nil?
+        @zone_identifiers = []
+        @block.call(self)
+        @block = nil
+        @zone_identifiers.freeze
+      end
+      
+      @zone_identifiers
+    end
+  end 
 end

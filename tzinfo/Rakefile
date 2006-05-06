@@ -78,7 +78,7 @@ task :build_tz_classes do
     p = TZInfo::TZDataParser.new('../data', BUILD_TZ_CLASSES_DIR)
     p.execute
     
-    ['countries', 'definitions'].each {|dir|
+    ['indexes', 'definitions'].each {|dir|
       sync_svn("#{BUILD_TZ_CLASSES_DIR}/#{dir}", "lib/tzinfo/#{dir}")
     }        
   ensure
@@ -159,5 +159,13 @@ task :build_tz_class do
   p = TZInfo::TZDataParser.new('../data', 'lib/tzinfo')
   p.generate_countries = false
   p.only_zones = [ENV['zone']]
+  p.execute
+end
+
+task :build_countries do
+  require 'lib/tzinfo/tzdataparser'
+  p = TZInfo::TZDataParser.new('../data', 'lib/tzinfo')
+  p.generate_countries = true
+  p.generate_zones = false
   p.execute
 end

@@ -1,12 +1,15 @@
 == Version ?.?.? (tzdata v?????) - ???????????
 
-* Define const_missing methods in TZInfo::Countries, TZInfo::Definitions and
-  all sub-modules of TZInfo::Definitions that load files for classes and
-  modules contained within them. This allows Timezone and Country instances to 
-  be used with Marshal.dump and Marshal.load and hence allows them to be stored 
-  in Rails sessions. Closes #4240.
+* Define const_missing methods in TZInfo::Definitions and all sub-modules of 
+  TZInfo::Definitions that load files for classes and modules contained within 
+  them. This allows Timezone instances to be used with Marshal.dump and 
+  Marshal.load and hence allows them to be stored in Rails sessions. 
+  Closes #4240.
 * Updated to tzdata version 2006f
   (http://article.gmane.org/gmane.comp.time.tz/1001).
+* Country index data is now defined in a single module that is independent
+  of the Country class implementation.
+* Country instances can now be used with Marshal.dump and Marshal.load (#4240).
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006

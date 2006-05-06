@@ -50,21 +50,10 @@ module TZInfo
     # Limit the set of zones to generate (set to an array containing zone
     # identifiers).
     attr_accessor :only_zones
-    
-    # Limit the set of countries to generate (set to an array containing
-    # country codes).
-    attr_accessor :only_countries
-  
+        
     # Zones to exclude from generation when not using only_zones (set to an
-    # array containing zone identifiers). Defaults to:
-    #
-    #   ['Asia/Riyadh87', 'Asia/Riyadh88', 'Asia/Riyadh89',
-    #    'Mideast/Riyadh87', 'Mideast/Riyadh88', 'Mideast/Ruyadh89']
-    attr_accessor :exclude_zones
-    
-    # Countries to exclude from generation when not using only_countries (set
-    # to an array containing country codes).
-    attr_accessor :exclude_countries    
+    # array containing zone identifiers).
+    attr_accessor :exclude_zones            
     
     # Initializes a new TZDataParser. input_dir must contain the extracted
     # tzdata tarball. output_dir is the location to output the classes
@@ -79,10 +68,8 @@ module TZInfo
       @no_rules = TZDataNoRules.new
       @generate_zones = true
       @generate_countries = true
-      @only_zones = []
-      @only_countries = []
-      @exclude_zones = []
-      @exclude_countries = []
+      @only_zones = []      
+      @exclude_zones = []      
     end
     
     # Reads the tzdata source and generates the classes. Takes a long time
@@ -123,15 +110,7 @@ module TZInfo
         modules.each {|path_elements| write_module(path_elements) unless path_elements.empty?}
       end
       
-      if @generate_countries
-        if @only_countries.nil? || @only_countries.empty?          
-          @countries.each_value {|country|
-            country.write_class(@output_dir) unless @exclude_countries.include?(country.code)
-          }
-        else
-          @only_countries.each {|code| @countries[code].write_class(@output_dir) }
-        end
-      
+      if @generate_countries        
         write_countries_index
       end
     end
@@ -186,6 +165,17 @@ module TZInfo
       seconds = seconds + second
       seconds = -seconds if negative
       seconds
+    end
+    
+    # Encloses the string in single quotes and escapes any single quotes in
+    # the content.
+    def self.quote_str(str)
+      "'#{str.gsub(/'/, '\\\'')}'"
+    end
+    
+    # Returns the string to construct a rational using the new! method.
+    def self.new_rational(rational)
+      "Rational.new!(#{rational.numerator},#{rational.denominator})"
     end
     
     private
@@ -281,66 +271,56 @@ module TZInfo
       def load_countries
         puts 'load_countries'
         
-        IO.foreach(@input_dir + File::SEPARATOR + 'iso3166.tab') {|line|
-          line = line.gsub(/#.*$/, '')
-          line = line.gsub(/\s+$/, '')
-          
-          if line =~ /^([A-Z]{2})\s+(.*)$/
+        IO.foreach(@input_dir + File::SEPARATOR + 'iso3166.tab') {|line|          
+          if line =~ /^([A-Z]{2})\t(.*)$/
             code = $1
-            name = $2            
+            name = $2
             @countries[code] = TZDataCountry.new(code, name)
           end
         }
         
-        IO.foreach(@input_dir + File::SEPARATOR + 'zone.tab') {|line|
-          line = line.gsub(/#.*$/, '')
-          line = line.gsub(/\s+$/, '')
-          
-          if line =~ /^([A-Z]{2})\s+([^\s]+)\s+([^\s]+)(\s+(.*))?$/
+        IO.foreach(@input_dir + File::SEPARATOR + 'zone.tab') {|line|          
+          line.chomp!          
+
+          if line =~ /^([A-Z]{2})\t([^\t]+)\t([^\t]+)(\t(.*))?$/
             code = $1
-            zone_name = $3            
-            
+            location_str = $2
+            zone_name = $3
+            description = $5
+
             country = @countries[code]
             raise "Country not found: #{code}" if country.nil?
+            
+            location = TZDataLocation.new(location_str)
             
             zone = @zones[zone_name]
             raise "Zone not found: #{zone_name}" if zone.nil?                        
             
-            country.add_zone(zone)
+            description = nil if description == ''
+            
+            country.add_zone(TZDataCountryTimezone.new(zone, description, location))
           end
         }
       end
       
       # Writes a country index file.
       def write_countries_index
-        dir = @output_dir + File::SEPARATOR + 'countries'      
+        dir = @output_dir + File::SEPARATOR + 'indexes'      
         FileUtils.mkdir_p(dir)
         
-        File.open(dir + File::SEPARATOR + 'Index.rb', 'w') {|file|
+        File.open(dir + File::SEPARATOR + 'countries.rb', 'w') {|file|
           file.binmode        
-          file.puts('require \'tzinfo/country\'')        
+                  
           file.puts('module TZInfo')
+          file.puts('module Indexes')
           file.puts('module Countries')
-                             
-          file.puts('class Index #:nodoc:')
-        
-          file.puts('@@all_codes = [')
-          
-          @countries.each_value {|country|
-            file.puts("'#{country.code.gsub(/'/, '\\\'')}',")
-          }
-          
-          file.puts(']')
-          file.puts('@@all_codes.freeze')
-          
-          file.puts('def self.all_codes')
-          file.puts('  @@all_codes')
-          file.puts('end')           
-          
-          file.puts('end') # end class
-          
-          
-          file.puts('end') # end module Countries
+          file.puts('include CountryIndexDefinition')
+                                       
+          countries = @countries.values.sort {|c1,c2| c1.code <=> c2.code}  
+          countries.each {|country| country.write_index_record(file)}
+                    
+          file.puts('end') # end module Countries                    
+          file.puts('end') # end module Indexes
           file.puts('end') # end module TZInfo
         }                      
       end
@@ -885,13 +865,13 @@ module TZInfo
         elsif (1970..2037).include?(datetime.year)
           "#{Time.utc(datetime.year, datetime.mon, datetime.mday, datetime.hour, datetime.min, datetime.sec).to_i}"
         else
-          "DateTime.new0(Rational.new!(#{datetime.ajd.numerator},#{datetime.ajd.denominator}),0,Date::ITALY)"          
+          "DateTime.new0(#{TZDataParser.new_rational(datetime.ajd)},0,Date::ITALY)"          
         end
       end
       
       def quote_str(str)     
         if str =~ %r{[\-+']}
-          "'#{str.gsub(/'/, '\\\'')}'"        
+          TZDataParser.quote_str(str)          
         else
           str
         end
@@ -1100,6 +1080,32 @@ module TZInfo
     end
   end
   
+  # A location (latitude + longitude)
+  class TZDataLocation #:nodoc:
+    attr_reader :latitude
+    attr_reader :longitude
+    
+    # Constructs a new TZDataLocation from a string in ISO 6709 
+    # sign-degrees-minutes-seconds format, either +-DDMM+-DDDMM 
+    # or +-DDMMSS+-DDDMMSS, first latitude (+ is north), 
+    # then longitude (+ is east).
+    def initialize(coordinates)
+      if coordinates !~ /^([+\-])([0-9]{2})([0-9]{2})([0-9]{2})?([+\-])([0-9]{3})([0-9]{2})([0-9]{2})?$/
+        raise "Invalid coordinates: #{coordinates}"
+      end
+      
+      @latitude = Rational($2.to_i) + Rational($3.to_i, 60)
+      @latitude += Rational($4.to_i, 3600) unless $4.nil?
+      @latitude = -@latitude if $1 == '-'
+      
+      @longitude = Rational($6.to_i) + Rational($7.to_i, 60)
+      @longitude += Rational($8.to_i, 3600) unless $8.nil?
+      @longitude = -@longitude if $5 == '-'
+    end
+  end  
+  
+  TZDataCountryTimezone = Struct.new(:timezone, :description, :location)  
+  
   # An ISO 3166 country.
   class TZDataCountry #:nodoc:
     attr_reader :code
@@ -1109,42 +1115,22 @@ module TZInfo
     def initialize(code, name)
       @code = code
       @name = name
-      @zones = {}
+      @zones = []
     end
     
+    # Adds a TZDataCountryTimezone
     def add_zone(zone)      
-      @zones[zone.name] = zone      
-    end
+      @zones << zone      
+    end  
     
-    def write_class(output_dir)      
-      dir = output_dir + File::SEPARATOR + 'countries'      
-      FileUtils.mkdir_p(dir)
+    def write_index_record(file)
+      file.puts "country #{TZDataParser.quote_str(@code)}, #{TZDataParser.quote_str(@name)} do |c|"
       
-      File.open(dir + File::SEPARATOR + @code + '.rb', 'w') {|file|
-        file.binmode
-        file.puts('require \'tzinfo/country\'')        
-        file.puts('module TZInfo #:nodoc:')
-        file.puts('module Countries #:nodoc:')
-        
-        file.puts("class #{@code} < Country #:nodoc:")
+      @zones.each do |zone|
+        file.puts "  c.timezone #{TZDataParser.quote_str(zone.timezone.name)}, #{TZDataParser.new_rational(zone.location.latitude)}, #{TZDataParser.new_rational(zone.location.longitude)}#{zone.description.nil? ? '' : ', ' + TZDataParser.quote_str(zone.description)}" 
+      end
       
-        file.puts('setup')
-        file.puts("set_code('#{code.gsub(/'/, '\\\'')}')")
-        file.puts("set_name('#{name.gsub(/'/, '\\\'')}')")
-        
-        @zones.each_value {|zone|          
-          file.puts("add_zone('#{zone.name.gsub(/'/, '\\\'')}')")
-        }
-        
-        file.puts('zones_added')
-                
-        
-        file.puts('end') # end class
-        
-        
-        file.puts('end') # end module Countries
-        file.puts('end') # end module TZInfo
-      }
+      file.puts 'end'
     end
   end
 end

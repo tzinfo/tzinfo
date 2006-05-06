@@ -9,8 +9,6 @@ class TCCountry < Test::Unit::TestCase
     c = Country.get('GB')
     
     assert_not_nil(c)
-    require 'tzinfo/countries/GB'
-    assert_same(Countries::GB.instance, c)
     assert_equal('GB', c.code)
   end
     
@@ -37,17 +35,11 @@ class TCCountry < Test::Unit::TestCase
       Country.get('gb')
     }
   end
-  
-  def test_new_no_args
-    c = Country.new
     
-    assert_equal('Unknown', c.code)    
-  end
-  
   def test_new_nil
-    c = Country.new(nil)
-    
-    assert_equal('Unknown', c.code)    
+    assert_raise(InvalidCountryCode) {
+      c = Country.new(nil)
+    }        
   end
   
   def test_new_arg
@@ -71,8 +63,7 @@ class TCCountry < Test::Unit::TestCase
     assert_equal(Country.all_codes, all.collect {|c| c.code})
   end
   
-  def test_code
-    assert_equal('Unknown', Country.new.code)
+  def test_code    
     assert_equal('US', Country.get('US').code)
   end
   
@@ -88,7 +79,7 @@ class TCCountry < Test::Unit::TestCase
   def test_zone_names
     zone_names = Country.get('US').zone_names
     assert_kind_of(Array, zone_names)
-    assert(zone_names.frozen?)
+    assert_equal(true, zone_names.frozen?)    
   end
   
   def test_zone_identifiers
@@ -103,38 +94,19 @@ class TCCountry < Test::Unit::TestCase
       assert_kind_of(TimezoneProxy, z)
     }
   end
-  
-  def test_equals
-    require 'tzinfo/countries/GB'
-    assert(Countries::GB.new == Countries::GB.new)
-    assert(Countries::GB.new == Country.get('GB'))
-    assert(Country.get('GB') == Countries::GB.new)    
-  end
-  
+      
   def test_compare
-    require 'tzinfo/countries/GB'
-    require 'tzinfo/countries/FR'
-    require 'tzinfo/countries/US'    
-    assert_equal(0, Countries::GB.new <=> Countries::GB.new)
-    assert_equal(0, Country.get('GB') <=> Countries::GB.new)
-    assert_equal(0, Countries::GB.new <=> Country.get('GB'))
     assert_equal(0, Country.get('GB') <=> Country.get('GB'))
-    assert((Country.get('GB') <=> Country.get('US')) < 0)
-    assert((Country.get('US') <=> Country.get('GB')) > 0)
-    assert((Country.get('FR') <=> Country.get('US')) < 0)
-    assert((Country.get('US') <=> Country.get('FR')) > 0)
+    assert_equal(-1, Country.get('GB') <=> Country.get('US'))
+    assert_equal(1, Country.get('US') <=> Country.get('GB'))
+    assert_equal(-1, Country.get('FR') <=> Country.get('US'))
+    assert_equal(1, Country.get('US') <=> Country.get('FR'))
   end
   
-  def test_aa_direct_load
-    # This test uses the country KN (St Kitts & Nevis)
-    # It is assumed (and tested for) that this country has not already been 
-    # used in other tests.
+  def test_marshal
+    c = Country.get('US')
     
-    # Other tests load all the zones, so the name of this is arranged such that
-    # it will run first (test methods are sorted before being run).
-        
-    assert_equal(false, Countries.const_defined?('KN'))
-    assert_equal('TZInfo::Countries::KN', 
-      Countries::KN.name)    
+    # Should get back the same instance because load calls Country.get.
+    assert_same(c, Marshal.load(Marshal.dump(c)))
   end
 end
