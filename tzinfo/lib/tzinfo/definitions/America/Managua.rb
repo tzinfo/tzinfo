@@ -20,8 +20,8 @@ add_period(1993,1) {TimezonePeriod.new(725868000,852094800,-18000,0,:EST)}
 add_period(1997,1) {TimezonePeriod.new(852094800,1113112800,-21600,0,:CST)}
 add_period(2005,4) {TimezonePeriod.new(1113112800,1128229200,-21600,3600,:CDT)}
 add_period(2005,10) {TimezonePeriod.new(1128229200,1146384000,-21600,0,:CST)}
-add_period(2006,4) {TimezonePeriod.new(1146384000,1157266800,-21600,3600,:CDT)}
-add_period(2006,9) {TimezonePeriod.new(1157266800,nil,-21600,0,:CST)}
+add_period(2006,4) {TimezonePeriod.new(1146384000,1159678800,-21600,3600,:CDT)}
+add_period(2006,10) {TimezonePeriod.new(1159678800,nil,-21600,0,:CST)}
 end
 end
 end

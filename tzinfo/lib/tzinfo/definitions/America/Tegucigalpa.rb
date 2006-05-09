@@ -10,7 +10,9 @@ add_period(1921,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(52332064033,2
 add_period(1987,5) {TimezonePeriod.new(547020000,559717200,-21600,3600,:CDT)}
 add_period(1987,9) {TimezonePeriod.new(559717200,578469600,-21600,0,:CST)}
 add_period(1988,5) {TimezonePeriod.new(578469600,591166800,-21600,3600,:CDT)}
-add_period(1988,9) {TimezonePeriod.new(591166800,nil,-21600,0,:CST)}
+add_period(1988,9) {TimezonePeriod.new(591166800,1146981600,-21600,0,:CST)}
+add_period(2006,5) {TimezonePeriod.new(1146981600,1159074000,-21600,3600,:CDT)}
+add_period(2006,9) {TimezonePeriod.new(1159074000,nil,-21600,0,:CST)}
 end
 end
 end
