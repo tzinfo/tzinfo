@@ -76,24 +76,34 @@ class TCCountry < Test::Unit::TestCase
     assert_equal(Country.get('GB').name, Country.get('GB').to_s)
   end
   
-  def test_zone_names
+  def test_zone_identifiers
     zone_names = Country.get('US').zone_names
     assert_kind_of(Array, zone_names)
     assert_equal(true, zone_names.frozen?)    
   end
   
-  def test_zone_identifiers
-    assert_equal(Country.get('US').zone_names, Country.get('US').zone_identifiers)
+  def test_zone_names
+    assert_equal(Country.get('US').zone_identifiers, Country.get('US').zone_names)
   end
   
   def test_zones
     zones = Country.get('US').zones
-    assert_equal(Country.get('US').zone_names, zones.collect {|z| z.identifier})
+    assert_kind_of(Array, zones)    
+    assert_equal(Country.get('US').zone_identifiers, zones.collect {|z| z.identifier})
     
-    zones.each {|z|
-      assert_kind_of(TimezoneProxy, z)
-    }
+    zones.each {|z| assert_kind_of(TimezoneProxy, z)}
   end
+  
+  def test_zone_info
+    zones = Country.get('US').zone_info
+    assert_kind_of(Array, zones)
+    assert_equal(true, zones.frozen?)
+    
+    assert_equal(Country.get('US').zone_identifiers, zones.collect {|z| z.identifier})
+    assert_equal(Country.get('US').zone_identifiers, zones.collect {|z| z.timezone.identifier})
+    
+    zones.each {|z| assert_kind_of(CountryTimezone, z)}
+  end  
       
   def test_compare
     assert_equal(0, Country.get('GB') <=> Country.get('GB'))

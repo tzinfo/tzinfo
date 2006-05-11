@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005 Philip Ross
+# Copyright (c) 2005-2006 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+require 'tzinfo/country_timezone'
 require 'tzinfo/timezone'
 
 module TZInfo
@@ -98,12 +99,24 @@ module TZInfo
     
     # An array of all the Timezones for this country. Returns TimezoneProxy
     # objects to avoid the overhead of loading Timezone definitions until
-    # a conversion is actually required.
+    # a conversion is actually required. The Timezones are returned in an order
+    # that
+    #   (1) makes some geographical sense, and
+    #   (2) puts the most populous zones first, where that does not contradict (1).
     def zones
       zone_identifiers.collect {|id|
         TimezoneProxy.new(id)
       }
-    end        
+    end
+    
+    # Returns a frozen array of all the timezones for the for the country as
+    # CountryTimezone instances (containing extra information about each zone). 
+    # These are in an order that
+    #   (1) makes some geographical sense, and
+    #   (2) puts the most populous zones first, where that does not contradict (1).
+    def zone_info
+      @info.zones
+    end
         
     # Compare two Countries based on their code. Returns -1 if c is less
     # than self, 0 if c is equal to self and +1 if c is greater than self.
@@ -173,13 +186,14 @@ module TZInfo
       @code = code
       @name = name
       @block = block
+      @zones = nil
       @zone_identifiers = nil
     end
     
     # Called by the index data to define a timezone for the country.
     def timezone(identifier, latitude, longitude, description = nil)
       # Currently only store the identifiers.
-      @zone_identifiers << identifier
+      @zones << CountryTimezone.new(identifier, latitude, longitude, description)     
     end
     
     # Returns a frozen array of all the zone identifiers for the country. These
@@ -187,14 +201,27 @@ module TZInfo
     #   (1) makes some geographical sense, and
     #   (2) puts the most populous zones first, where that does not contradict (1).
     def zone_identifiers
-      if @zone_identifiers.nil?
-        @zone_identifiers = []
-        @block.call(self)
-        @block = nil
+      unless @zone_identifiers
+        @zone_identifiers = zones.collect {|zone| zone.identifier}
         @zone_identifiers.freeze
       end
       
       @zone_identifiers
     end
-  end 
+    
+    # Returns a frozen array of all the timezones for the for the country as
+    # CountryTimezone instances. These are in an order that
+    #   (1) makes some geographical sense, and
+    #   (2) puts the most populous zones first, where that does not contradict (1).
+    def zones
+      unless @zones
+        @zones = []
+        @block.call(self)
+        @block = nil
+        @zones.freeze
+      end
+      
+      @zones
+    end
+  end
 end
