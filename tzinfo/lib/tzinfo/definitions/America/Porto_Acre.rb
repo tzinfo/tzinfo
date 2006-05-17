@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Porto_Acre < Definitions::America::Rio_Branco #:nodoc:
+setup_linked
 set_identifier('America/Porto_Acre')
 end
 end

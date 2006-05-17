@@ -11,7 +11,8 @@ include TZInfo
 STDIN.each {|line|
  if line =~ /^([^\s]+)\s+([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]+)\s[A-Z]+\s=\s([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]+)\s([A-Za-z0-9+\-]+)/ then
    begin
-     zone = Timezone.get($1)
+     zone_id = $1
+     zone = Timezone.get(zone_id)
      utc = DateTime.parse($2)
      local = DateTime.parse($3)
      identifier = $4
@@ -19,8 +20,8 @@ STDIN.each {|line|
      tzi_local = zone.utc_to_local(utc)
      tzi_identifier = zone.period_for_utc(utc).zone_identifier
    
-     if tzi_local != local || tzi_identifier.to_s != identifier
-       puts "zdump:  #{zone.identifier} #{utc} UTC #{local} #{identifier}"
+     if zone.identifier != zone_id || tzi_local != local || tzi_identifier.to_s != identifier
+       puts "zdump:  #{zone_id} #{utc} UTC #{local} #{identifier}"
        puts "tzinfo: #{zone.identifier} #{utc} UTC #{tzi_local} #{tzi_identifier}"
      end
    rescue InvalidTimezoneIdentifier

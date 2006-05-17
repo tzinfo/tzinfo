@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Mideast #:nodoc:
 class Riyadh88 < Definitions::Asia::Riyadh88 #:nodoc:
+setup_linked
 set_identifier('Mideast/Riyadh88')
 end
 end

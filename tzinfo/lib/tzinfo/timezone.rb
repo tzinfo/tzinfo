@@ -380,14 +380,14 @@ module TZInfo
       def self.setup        
         class_eval <<CODE
             @@periods = TimezonePeriodList.new
-            @@instance = new
+            @instance = new
             
             def identifier
-              @@identifier
+              self.class.get_identifier
             end            
             
             def self.instance
-              @@instance
+              @instance
             end
             
             def periods
@@ -404,8 +404,18 @@ module TZInfo
               end
               
               def self.set_identifier(identifier)
-                @@identifier = identifier
-              end              
+                @identifier = identifier
+              end
+
+              def self.get_identifier
+                @identifier
+              end             
+CODE
+      end
+      
+      def self.setup_linked
+        class_eval <<CODE
+          @instance = new
 CODE
       end
   end 

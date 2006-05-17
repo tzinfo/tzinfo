@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Mexico #:nodoc:
 class BajaSur < Definitions::America::Mazatlan #:nodoc:
+setup_linked
 set_identifier('Mexico/BajaSur')
 end
 end

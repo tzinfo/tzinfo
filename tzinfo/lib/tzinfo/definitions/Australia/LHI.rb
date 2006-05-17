@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Australia #:nodoc:
 class LHI < Definitions::Australia::Lord_Howe #:nodoc:
+setup_linked
 set_identifier('Australia/LHI')
 end
 end

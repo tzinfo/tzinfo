@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Australia #:nodoc:
 class North < Definitions::Australia::Darwin #:nodoc:
+setup_linked
 set_identifier('Australia/North')
 end
 end

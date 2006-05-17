@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Asia #:nodoc:
 class Ulan_Bator < Definitions::Asia::Ulaanbaatar #:nodoc:
+setup_linked
 set_identifier('Asia/Ulan_Bator')
 end
 end

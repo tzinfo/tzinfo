@@ -3,6 +3,7 @@ require 'tzinfo/definitions/Asia/Singapore'
 module TZInfo
 module Definitions #:nodoc:
 class Singapore < Definitions::Asia::Singapore #:nodoc:
+setup_linked
 set_identifier('Singapore')
 end
 end

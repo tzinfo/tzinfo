@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Australia #:nodoc:
 class Yancowinna < Definitions::Australia::Broken_Hill #:nodoc:
+setup_linked
 set_identifier('Australia/Yancowinna')
 end
 end

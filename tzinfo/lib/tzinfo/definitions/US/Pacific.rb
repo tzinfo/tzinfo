@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module US #:nodoc:
 class Pacific < Definitions::America::Los_Angeles #:nodoc:
+setup_linked
 set_identifier('US/Pacific')
 end
 end

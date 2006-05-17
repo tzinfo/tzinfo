@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Chile #:nodoc:
 class EasterIsland < Definitions::Pacific::Easter #:nodoc:
+setup_linked
 set_identifier('Chile/EasterIsland')
 end
 end

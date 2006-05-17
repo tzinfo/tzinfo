@@ -575,6 +575,39 @@ class TCTimezone < Test::Unit::TestCase
     assert((Timezone.get('Europe/Paris') <=> Timezone.get('America/New_York')) > 0)
   end
   
+  # Identifier for the parent zone was getting set to the identifier of the
+  # last linked zone to be loaded. See bug #4502.
+  def test_linked_identifier
+    zones = ['Europe/Belgrade', 'Europe/Ljubljana', 'Europe/Sarajevo',
+      'Europe/Skopje', 'Europe/Zagreb']
+    zones = zones + zones.reverse
+      
+    zones.each {|z| assert_equal(z, Timezone.get(z).identifier)}
+  end
+  
+  # When requesting a linked zone, an instance of the parent zone was being
+  # returned. See the first comment in bug #4502.
+  def test_linked_class
+    zones = ['Europe/Belgrade', 'Europe/Ljubljana', 'Europe/Sarajevo',
+      'Europe/Skopje', 'Europe/Zagreb']
+    zones = zones + zones.reverse
+    
+    zones.each {|z| 
+      assert_equal("TZInfo::Definitions::#{z.sub(/\//, '::')}",
+        Timezone.get(z).class.name)
+    }
+  end
+    
+  def test_linked_instance
+    zones = ['Europe/Belgrade', 'Europe/Ljubljana', 'Europe/Sarajevo',
+      'Europe/Skopje', 'Europe/Zagreb']
+    zones = zones + zones.reverse
+    
+    zones.each {|z| 
+      assert_equal(Timezone.get(z).class, Timezone.get(z).class.instance.class)
+    }
+  end
+  
   private
     def assert_period_for(utc_start, utc_end, dst, period)
       assert_equal(utc_start, period.utc_start)

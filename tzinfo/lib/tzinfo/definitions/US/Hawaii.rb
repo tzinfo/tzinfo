@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module US #:nodoc:
 class Hawaii < Definitions::Pacific::Honolulu #:nodoc:
+setup_linked
 set_identifier('US/Hawaii')
 end
 end

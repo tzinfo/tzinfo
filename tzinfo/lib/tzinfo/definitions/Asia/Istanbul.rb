@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Asia #:nodoc:
 class Istanbul < Definitions::Europe::Istanbul #:nodoc:
+setup_linked
 set_identifier('Asia/Istanbul')
 end
 end

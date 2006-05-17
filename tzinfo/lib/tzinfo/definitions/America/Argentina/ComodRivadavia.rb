@@ -5,6 +5,7 @@ module Definitions #:nodoc:
 module America #:nodoc:
 module Argentina #:nodoc:
 class ComodRivadavia < Definitions::America::Argentina::Catamarca #:nodoc:
+setup_linked
 set_identifier('America/Argentina/ComodRivadavia')
 end
 end

@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Antarctica #:nodoc:
 class South_Pole < Definitions::Antarctica::McMurdo #:nodoc:
+setup_linked
 set_identifier('Antarctica/South_Pole')
 end
 end

@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Canada #:nodoc:
 class Mountain < Definitions::America::Edmonton #:nodoc:
+setup_linked
 set_identifier('Canada/Mountain')
 end
 end

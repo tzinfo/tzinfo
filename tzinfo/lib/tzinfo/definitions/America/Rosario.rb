@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Rosario < Definitions::America::Argentina::Cordoba #:nodoc:
+setup_linked
 set_identifier('America/Rosario')
 end
 end
