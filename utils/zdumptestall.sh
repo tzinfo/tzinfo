@@ -3,6 +3,7 @@
 if [ $# -ne 2 ]
 then
   echo "Usage: $0 <zoneinfoDir> <zdumpCommand>"
+  exit 1
 fi
 
 zoneinfo=$1

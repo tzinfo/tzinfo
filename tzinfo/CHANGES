@@ -21,6 +21,9 @@
   zone's identifier to be changed. The instance method of a linked zone class
   also now returns an instance of the linked zone class rather than the parent
   class. Closes #4502.
+* zdumptest utility now compares the TZInfo zone identifier with the zdump
+  zone identifier.
+* zdumptestall utility now exits if not supplied with enough parameters.
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
