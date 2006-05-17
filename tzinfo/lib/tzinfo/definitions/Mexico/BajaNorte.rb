@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Mexico #:nodoc:
 class BajaNorte < Definitions::America::Tijuana #:nodoc:
+setup_linked
 set_identifier('Mexico/BajaNorte')
 end
 end

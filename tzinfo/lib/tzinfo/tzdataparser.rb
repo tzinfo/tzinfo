@@ -558,6 +558,7 @@ module TZInfo
       puts "writing link #{name}"
       
       create_file(output_dir) {|file|
+        file.puts('setup_linked')
         file.puts("set_identifier('#{@name.gsub(/'/, '\\\'')}')")
       }
     end

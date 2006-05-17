@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Asia #:nodoc:
 class Dacca < Definitions::Asia::Dhaka #:nodoc:
+setup_linked
 set_identifier('Asia/Dacca')
 end
 end

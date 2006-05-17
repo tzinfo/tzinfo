@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Brazil #:nodoc:
 class DeNoronha < Definitions::America::Noronha #:nodoc:
+setup_linked
 set_identifier('Brazil/DeNoronha')
 end
 end

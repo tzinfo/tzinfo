@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Fort_Wayne < Definitions::America::Indiana::Indianapolis #:nodoc:
+setup_linked
 set_identifier('America/Fort_Wayne')
 end
 end

@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module US #:nodoc:
 class Arizona < Definitions::America::Phoenix #:nodoc:
+setup_linked
 set_identifier('US/Arizona')
 end
 end

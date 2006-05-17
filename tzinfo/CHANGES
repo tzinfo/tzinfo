@@ -9,12 +9,18 @@
   (http://article.gmane.org/gmane.comp.time.tz/1008).
 * Country index data is now defined in a single module that is independent
   of the Country class implementation.
-* Country instances can now be used with Marshal.dump and Marshal.load (#4240).
+* Country instances can now be used with Marshal.dump and Marshal.load 
+  Closes #4240.
 * Country has a new zone_info method that returns CountryTimezone objects
   containing additional information about each Timezone (latitude, longitude
   and description).
 * Timezones within a Country are now returned in an order that makes 
-  geographic sense. 
+  geographic sense.
+* Use class-scoped instance variables to store the Timezone identifier and 
+  singleton instance. Loading a linked zone no longer causes the parent
+  zone's identifier to be changed. The instance method of a linked zone class
+  also now returns an instance of the linked zone class rather than the parent
+  class. Closes #4502.
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006

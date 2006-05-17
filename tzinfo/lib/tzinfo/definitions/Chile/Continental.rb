@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Chile #:nodoc:
 class Continental < Definitions::America::Santiago #:nodoc:
+setup_linked
 set_identifier('Chile/Continental')
 end
 end

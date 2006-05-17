@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module US #:nodoc:
 class Mountain < Definitions::America::Denver #:nodoc:
+setup_linked
 set_identifier('US/Mountain')
 end
 end

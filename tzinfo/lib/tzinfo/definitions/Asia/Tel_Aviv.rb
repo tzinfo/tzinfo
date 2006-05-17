@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Asia #:nodoc:
 class Tel_Aviv < Definitions::Asia::Jerusalem #:nodoc:
+setup_linked
 set_identifier('Asia/Tel_Aviv')
 end
 end

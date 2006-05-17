@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module US #:nodoc:
 class Eastern < Definitions::America::New_York #:nodoc:
+setup_linked
 set_identifier('US/Eastern')
 end
 end

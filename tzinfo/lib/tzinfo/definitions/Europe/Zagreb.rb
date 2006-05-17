@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Europe #:nodoc:
 class Zagreb < Definitions::Europe::Belgrade #:nodoc:
+setup_linked
 set_identifier('Europe/Zagreb')
 end
 end

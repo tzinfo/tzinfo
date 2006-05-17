@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Buenos_Aires < Definitions::America::Argentina::Buenos_Aires #:nodoc:
+setup_linked
 set_identifier('America/Buenos_Aires')
 end
 end

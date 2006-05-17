@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Australia #:nodoc:
 class Tasmania < Definitions::Australia::Hobart #:nodoc:
+setup_linked
 set_identifier('Australia/Tasmania')
 end
 end

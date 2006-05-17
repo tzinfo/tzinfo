@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Australia #:nodoc:
 class Queensland < Definitions::Australia::Brisbane #:nodoc:
+setup_linked
 set_identifier('Australia/Queensland')
 end
 end

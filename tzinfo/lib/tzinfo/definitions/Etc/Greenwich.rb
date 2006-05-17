@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Etc #:nodoc:
 class Greenwich < Definitions::Etc::GMT #:nodoc:
+setup_linked
 set_identifier('Etc/Greenwich')
 end
 end

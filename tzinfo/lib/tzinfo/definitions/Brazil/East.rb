@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module Brazil #:nodoc:
 class East < Definitions::America::Sao_Paulo #:nodoc:
+setup_linked
 set_identifier('Brazil/East')
 end
 end

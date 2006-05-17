@@ -4,6 +4,7 @@ module TZInfo
 module Definitions #:nodoc:
 module America #:nodoc:
 class Knox_IN < Definitions::America::Indiana::Knox #:nodoc:
+setup_linked
 set_identifier('America/Knox_IN')
 end
 end
