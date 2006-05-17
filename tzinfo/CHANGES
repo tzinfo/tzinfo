@@ -1,13 +1,13 @@
-== Version 0.2.? (tzdata v?????) - ???????????
+== Version 0.2.2 (tzdata v2006g) - 17-May-2006
 
 * Use class-scoped instance variables to store the Timezone identifier and 
   singleton instance. Loading a linked zone no longer causes the parent
   zone's identifier to be changed. The instance method of a linked zone class
   also now returns an instance of the linked zone class rather than the parent
   class. Closes #4502.
-* zdumptest utility now compares the TZInfo zone identifier with the zdump
+* The zdumptest utility now compares the TZInfo zone identifier with the zdump
   zone identifier.
-* zdumptestall utility now exits if not supplied with enough parameters.
+* The zdumptestall utility now exits if not supplied with enough parameters.
 * Updated to tzdata version 2006g
   (http://article.gmane.org/gmane.comp.time.tz/1008).
 
