@@ -7,3 +7,4 @@
 * Upload gem, tar.gz, zip.
 * Upload documentation.
 * Write news item / announcement mailing list post.
+* Update RAA page (http://raa.ruby-lang.org/project/tzinfo).

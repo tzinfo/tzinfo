@@ -1,5 +1,4 @@
-Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
--------------------------------------------
+== Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
 
 * Fix a performance issue caused in 0.2.0 with Timezone.local_to_utc. 
   Conversions performed on TimeOrDateTime instances passed to <=> are now
@@ -23,8 +22,7 @@ Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
     tz.utc_to_local(Time.local(2006, 4, 17, 15, 40, 0))
 
 
-Version 0.2.0 (tzdata v2006c) - 3-Apr-2006
-------------------------------------------
+== Version 0.2.0 (tzdata v2006c) - 3-Apr-2006
 
 * Use timestamps rather than DateTime objects in zone files for times between
   1970 and 2037 (the range of Time).
@@ -47,8 +45,7 @@ Version 0.2.0 (tzdata v2006c) - 3-Apr-2006
   (http://article.gmane.org/gmane.comp.time.tz/920).
 
 
-Version 0.1.2 (tzdata v2006a) - 5-Feb-2006
-------------------------------------------
+== Version 0.1.2 (tzdata v2006a) - 5-Feb-2006
 
 * Add lib directory to the load path when tzinfo is required. Makes it easier
   to use tzinfo gem when unpacked to vendor directory in rails. 
@@ -63,16 +60,14 @@ Version 0.1.2 (tzdata v2006a) - 5-Feb-2006
   than a NameError.
 
 
-Version 0.1.1 (tzdata v2005q) - 18-Dec-2005
--------------------------------------------
+== Version 0.1.1 (tzdata v2005q) - 18-Dec-2005
 
 * Timezones that are defined by a single unbounded period (e.g. UTC) now 
   work again.
 * Updated to tzdata version 2005q.
 
 
-Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
--------------------------------------------
+== Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
 
 * period_for_local and local_to_utc now allow resolution of ambiguous
   times (e.g. when switching from daylight savings to standard time). 
@@ -106,8 +101,7 @@ Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
 * Updated to tzdata version 2005n.
 
 
-Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
--------------------------------------------
+== Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 
 * Removed debug output accidentally included in the previous release.
 * Fixed a bug in the generation of friendly zone identifiers (was inserting
@@ -118,8 +112,7 @@ Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
   some selected timezones.
 
   
-Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
--------------------------------------------
+== Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
 
 * Reduced visibility of some methods added in Timezone#setup and Country#setup.
 * Added name method to Timezone (returns the identifier).
@@ -142,8 +135,7 @@ Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
   <%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %>
 
 
-Version 0.0.2 (tzdata v2005m) - 13-Sep-2005 
--------------------------------------------
+== Version 0.0.2 (tzdata v2005m) - 13-Sep-2005 
 
 * Country and Timezone data is now loaded into class rather than instance 
   variables. This makes Timezone links more efficient and saves memory if
@@ -161,7 +153,6 @@ article about using TZInfo with Rails
 (http://lunchroom.lunchboxsoftware.com/pages/tzinfo_rails)
 
 
-Version 0.0.1 (tzdata v2005m) - 29-Aug-2005 
--------------------------------------------
+== Version 0.0.1 (tzdata v2005m) - 29-Aug-2005 
 
 * First release.
