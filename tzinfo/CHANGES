@@ -8,6 +8,8 @@
 * zdumptest utility now compares the TZInfo zone identifier with the zdump
   zone identifier.
 * zdumptestall utility now exits if not supplied with enough parameters.
+* Updated to tzdata version 2006g
+  (http://article.gmane.org/gmane.comp.time.tz/1008).
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
