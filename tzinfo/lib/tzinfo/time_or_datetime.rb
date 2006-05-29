@@ -243,6 +243,18 @@ module TZInfo
       end
     end
     
+    # Returns true if todt represents the same time and was originally 
+    # constructed with the same type (DateTime, Time or timestamp) as this 
+    # TimeOrDateTime.
+    def eql?(todt)
+      todt.respond_to?(:to_orig) && to_orig.eql?(todt.to_orig)      
+    end
+    
+    # Returns a hash of this TimeOrDateTime.
+    def hash
+      @orig.hash
+    end
+    
     # If no block is given, returns a TimeOrDateTime wrapping the given 
     # timeOrDateTime. If a block is specified, a TimeOrDateTime is constructed
     # and passed to the block. The result of the block must be a TimeOrDateTime.
@@ -271,11 +283,5 @@ module TZInfo
         t
       end
     end
-
-    protected
-      # The time in the format it was originally constructed.
-      def orig
-        @orig
-      end
   end
 end

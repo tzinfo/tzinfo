@@ -110,4 +110,12 @@ class TCCountryTimezone < Test::Unit::TestCase
     
     assert_not_equal(true, ct.eql?(Object.new))
   end
+  
+  def test_hash
+    ct1 = CountryTimezone.new('Europe/London', Rational(2059, 40), Rational(-5, 16))
+    ct2 = CountryTimezone.new('America/New_York', Rational(48857,1200), Rational(-266423,3600), 'Eastern Time')
+    
+    assert_equal('Europe/London'.hash ^ Rational(2059, 40).hash ^ Rational(-5, 16).hash ^ nil.hash, ct1.hash)
+    assert_equal('America/New_York'.hash ^ Rational(48857,1200).hash ^ Rational(-266423,3600).hash ^ 'Eastern Time'.hash, ct2.hash)
+  end
 end

@@ -79,5 +79,10 @@ module TZInfo
     def eql?(ct)
       self == ct
     end
+    
+    # Returns a hash of this CountryTimezone. 
+    def hash
+      @identifier.hash ^ @latitude.hash ^ @longitude.hash ^ @description.hash
+    end
   end
 end
