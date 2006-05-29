@@ -20,7 +20,7 @@
 # THE SOFTWARE.
 #++
 
-require 'tzinfo/country_timezone'
+require 'tzinfo/country_info'
 require 'tzinfo/timezone'
 
 module TZInfo
@@ -32,16 +32,17 @@ module TZInfo
   # For example:
   #
   #  us = Country.get('US')
-  #  puts us.zone_identifiers
-  #  puts us.zones    
+  #  us.zone_identifiers
+  #  us.zones
+  #  us.zone_info
   class Country
     include Comparable
     
     # Defined countries.
     @@countries = nil        
     
-    # Gets a Country by its ISO 3166 code. Raising an exception if it couldn't
-    # be found.
+    # Gets a Country by its ISO 3166 code. Raises an InvalidCountryCode 
+    # exception if it couldn't be found.
     def self.get(identifier)
       load_index
       instance = @@countries[identifier]                   
@@ -124,10 +125,12 @@ module TZInfo
       code <=> c.code
     end
     
+    # Dump this Country for marshalling.
     def _dump(limit)
       code
     end
     
+    # Load a marshalled Country.
     def self._load(data)
       Country.get(data)
     end
@@ -167,61 +170,9 @@ module TZInfo
       # block will be evaluated to obtain all the timezones for the country.
       # Calls Country.country_defined with the definition of each country.
       def country(code, name, &block)
-        country = CountryInfo.new(code, name, block)
+        country = CountryInfo.new(code, name, &block)
         Country.send :country_defined, country
       end
     end
-  end
-  
-  # Class to store the data loaded from the country index. Instances of this
-  # class are passed to the blocks in the index that define timezones.
-  class CountryInfo #:nodoc:
-    attr_reader :code
-    attr_reader :name
-    
-    # Constructs a new CountryInfo with an ISO 3166 country code, name and 
-    # block. The block will be evaluated to obtain the timezones for the country
-    # (when they are first needed).
-    def initialize(code, name, block)
-      @code = code
-      @name = name
-      @block = block
-      @zones = nil
-      @zone_identifiers = nil
-    end
-    
-    # Called by the index data to define a timezone for the country.
-    def timezone(identifier, latitude, longitude, description = nil)
-      # Currently only store the identifiers.
-      @zones << CountryTimezone.new(identifier, latitude, longitude, description)     
-    end
-    
-    # Returns a frozen array of all the zone identifiers for the country. These
-    # are in an order that
-    #   (1) makes some geographical sense, and
-    #   (2) puts the most populous zones first, where that does not contradict (1).
-    def zone_identifiers
-      unless @zone_identifiers
-        @zone_identifiers = zones.collect {|zone| zone.identifier}
-        @zone_identifiers.freeze
-      end
-      
-      @zone_identifiers
-    end
-    
-    # Returns a frozen array of all the timezones for the for the country as
-    # CountryTimezone instances. These are in an order that
-    #   (1) makes some geographical sense, and
-    #   (2) puts the most populous zones first, where that does not contradict (1).
-    def zones
-      unless @zones
-        @zones = []
-        @block.call(self)
-        @block = nil
-        @zones.freeze
-      end
-      
-      @zones
-    end
-  end
+  end    
 end

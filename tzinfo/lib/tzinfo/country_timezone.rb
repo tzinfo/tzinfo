@@ -62,5 +62,22 @@ module TZInfo
     def description_or_friendly_identifier
       description || timezone.friendly_identifier(true)
     end
+    
+    # Returns true if and only if the given CountryTimezone is equal to the
+    # current CountryTimezone (has the same identifer, latitude, longitude
+    # and description).
+    def ==(ct)
+      ct.respond_to?(:identifier) && ct.respond_to?(:latitude) &&
+      ct.respond_to?(:longitude)  && ct.respond_to?(:description) &&
+      identifier == ct.identifier  && latitude == ct.latitude &&
+      longitude == ct.longitude   && description == ct.description         
+    end
+            
+    # Returns true if and only if the given CountryTimezone is equal to the
+    # current CountryTimezone (has the same identifer, latitude, longitude
+    # and description).
+    def eql?(ct)
+      self == ct
+    end
   end
 end
