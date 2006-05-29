@@ -366,17 +366,23 @@ module TZInfo
       [period.to_local(utc), period]
     end
     
-    alias :current_time_and_period :current_period_and_time
-    
-    # Two Timezones are considered to be equal if their identifiers are the same.
-    def ==(tz)
-      identifier == tz.identifier
-    end
+    alias :current_time_and_period :current_period_and_time        
     
     # Compare two Timezones based on their identifier. Returns -1 if tz is less
     # than self, 0 if tz is equal to self and +1 if tz is greater than self.
     def <=>(tz)
       identifier <=> tz.identifier
+    end
+    
+    # Returns true if and only if the identifier of tz is equal to the 
+    # identifier of this Timezone.
+    def eql?(tz)
+      self == tz
+    end
+    
+    # Returns a hash of this Timezone.
+    def hash
+      identifier.hash
     end
     
     def periods #:nodoc:

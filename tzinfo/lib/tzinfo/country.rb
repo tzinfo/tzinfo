@@ -125,6 +125,17 @@ module TZInfo
       code <=> c.code
     end
     
+    # Returns true if and only if the code of c is equal to the code of this
+    # Country.
+    def eql?(c)
+      self == c
+    end
+    
+    # Returns a hash value for this Country.
+    def hash
+      code.hash
+    end
+    
     # Dump this Country for marshalling.
     def _dump(limit)
       code

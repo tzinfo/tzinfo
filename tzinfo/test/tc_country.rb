@@ -113,6 +113,23 @@ class TCCountry < Test::Unit::TestCase
     assert_equal(1, Country.get('US') <=> Country.get('FR'))
   end
   
+  def test_equality
+    assert_equal(true, Country.get('GB') == Country.get('GB'))
+    assert_not_equal(true, Country.get('GB') == Country.get('US'))
+    assert_not_equal(true, Country.get('GB') == Object.new)
+  end
+  
+  def test_eql
+    assert_equal(true, Country.get('GB').eql?(Country.get('GB')))
+    assert_not_equal(true, Country.get('GB').eql?(Country.get('US')))
+    assert_not_equal(true, Country.get('GB').eql?(Object.new))
+  end
+  
+  def test_hash
+    assert_equal('GB'.hash, Country.get('GB').hash)
+    assert_equal('US'.hash, Country.get('US').hash)
+  end
+  
   def test_marshal
     c = Country.get('US')
     

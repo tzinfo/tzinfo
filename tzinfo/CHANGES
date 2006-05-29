@@ -24,6 +24,11 @@
 * zdumptest utility now compares the TZInfo zone identifier with the zdump
   zone identifier.
 * zdumptestall utility now exits if not supplied with enough parameters.
+* eql? method defined on Country and Timezone that is equivalent to ==.
+* == method of Timezone no longer raises an exception when passed an object
+  with no identifier method.
+* hash method defined on Country that returns the hash of the code.
+* hash method defined on Timezone that returns the hash of the identifier.
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006

@@ -575,6 +575,23 @@ class TCTimezone < Test::Unit::TestCase
     assert((Timezone.get('Europe/Paris') <=> Timezone.get('America/New_York')) > 0)
   end
   
+  def test_equality
+    assert_equal(true, Timezone.get('Europe/London') == Timezone.get('Europe/London'))
+    assert_not_equal(true, Timezone.get('Europe/London') == Timezone.get('America/New_York'))
+    assert_not_equal(true, Timezone.get('Europe/London') == Object.new)
+  end
+  
+  def test_eql
+    assert_equal(true, Timezone.get('Europe/London').eql?(Timezone.get('Europe/London')))
+    assert_not_equal(true, Timezone.get('Europe/London').eql?(Timezone.get('America/New_York')))
+    assert_not_equal(true, Timezone.get('Europe/London').eql?(Object.new))
+  end
+  
+  def test_hash
+    assert_equal('Europe/London'.hash, Timezone.get('Europe/London').hash)
+    assert_equal('America/New_York'.hash, Timezone.get('America/New_York').hash)
+  end
+  
   def test_direct_load
     # This test uses the Zone America/Kentucky/Louisville.
     # It is assumed (and tested for) that none of the Kentucky zones will have
