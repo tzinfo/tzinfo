@@ -70,7 +70,7 @@ module TZInfo
     # Returns a timezone by its identifier (e.g. "Europe/London", 
     # "America/Chicago" or "UTC").
     #
-    # Raises an exception of the timezone couldn't be found.
+    # Raises InvalidTimezoneIdentifier if the timezone couldn't be found.
     def self.get(identifier)
       instance = @@loaded_zones[identifier]
       if instance.nil?      
