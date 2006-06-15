@@ -1,3 +1,10 @@
+== Version 0.2.x (tzdata v?????) - ???????????
+
+* Timezone API documentation correction.
+* Fix duplicate test name in TimezonePeriodList tests.
+* Fix error in TimezonePeriodList period_for_local_unbounded testcase.
+
+
 == Version 0.2.2 (tzdata v2006g) - 17-May-2006
 
 * Use class-scoped instance variables to store the Timezone identifier and 

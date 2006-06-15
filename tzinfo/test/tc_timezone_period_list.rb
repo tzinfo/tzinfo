@@ -232,7 +232,8 @@ class TCTimezonePeriod < Test::Unit::TestCase
         
     assert_periods_equal([TimezonePeriod.new(nil,DateTime.new(2000,10,2,1,0,0),-18000,3600,:'TESTD')],
       list.periods_for_local(DateTime.new(1999,12,1,1,0,0)))
-    assert_periods_equal([TimezonePeriod.new(nil,DateTime.new(2000,10,2,1,0,0),-18000,3600,:'TESTD')],
+    assert_periods_equal([TimezonePeriod.new(nil,DateTime.new(2000,10,2,1,0,0),-18000,3600,:'TESTD'),
+      TimezonePeriod.new(DateTime.new(2000,10,2,1,0,0),DateTime.new(2001,3,2,1,0,0),-18000,0,:'TESTS')],
       list.periods_for_local(DateTime.new(2000,10,1,20,59,59)))
     assert_periods_equal([TimezonePeriod.new(nil,DateTime.new(2000,10,2,1,0,0),-18000,3600,:'TESTD')],
       list.periods_for_local(DateTime.new(2000,10,1,19,59,59)))
@@ -262,7 +263,7 @@ class TCTimezonePeriod < Test::Unit::TestCase
       list.periods_for_local(DateTime.new(2002,1,1,21,0,0)))
   end
   
-  def test_period_for_local_unbounded
+  def test_period_for_local_unbounded_boundary
     list = TimezonePeriodList.new
     list.add_unbounded_start  { TimezonePeriod.new(nil,DateTime.new(2000,7,1,0,0,0),-3600,0,:'TESTD') }
     list.add(2000, 7) { TimezonePeriod.new(DateTime.new(2000,7,1,0,0,0),nil,-3600,0,:'TESTS') }    
