@@ -209,21 +209,21 @@ module TZInfo
           nil
         else
           index = 0 if index < 0
-          @transitions_index[index]
+          0
         end
       end
       
       # Returns the index into @transitions of the first transition that occurs
-      # before the end of the period given index into @transitions_index.
+      # before the end of the given index into @transitions_index.
       # Returns nil if there are no such transitions.
       def transition_before_end(index)
         index = index + 1
         
         if index <= 0
           nil
-        elsif index >= @transitions_index.length
-          @transitions_index.last
-        else          
+        elsif index >= @transitions_index.length          
+          @transitions.length - 1
+        else      
           @transitions_index[index] - 1          
         end
       end            

@@ -89,6 +89,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
     dti.transition 2001, 10, :o3, Time.utc(2001,10,1,1,0,0).to_i
     dti.transition 2002, 10, :o3, Time.utc(2002,10,1,1,0,0).to_i
     dti.transition 2003,  2, :o2, Time.utc(2003, 2,1,1,0,0).to_i
+    dti.transition 2003,  3, :o3, Time.utc(2003, 3,1,1,0,0).to_i
     
     o1 = TimezoneOffsetInfo.new(-17900, 0,    :TESTLMT)
     o2 = TimezoneOffsetInfo.new(-18000, 3600, :TESTD)
@@ -101,7 +102,8 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
     t4 = TimezoneTransitionInfo.new(o4, o2, Time.utc(2001, 4,1,1,0,0).to_i)
     t5 = TimezoneTransitionInfo.new(o3, o4, Time.utc(2001,10,1,1,0,0).to_i)
     t6 = TimezoneTransitionInfo.new(o3, o3, Time.utc(2002,10,1,1,0,0).to_i)
-    t7 = TimezoneTransitionInfo.new(o2, o3, Time.utc(2003, 2,1,1,0,0).to_i)    
+    t7 = TimezoneTransitionInfo.new(o2, o3, Time.utc(2003, 2,1,1,0,0).to_i)
+    t8 = TimezoneTransitionInfo.new(o3, o2, Time.utc(2003, 3,1,1,0,0).to_i)     
     
     assert_equal(TimezonePeriod.new(nil, t1), dti.period_for_utc(DateTime.new(1960, 1,1,1, 0, 0)))
     assert_equal(TimezonePeriod.new(nil, t1), dti.period_for_utc(DateTime.new(1999,12,1,0, 0, 0)))
@@ -119,9 +121,11 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
     assert_equal(TimezonePeriod.new(t5, t6),  dti.period_for_utc(Time.utc(    2002,10,1,0,59,59)))
     assert_equal(TimezonePeriod.new(t6, t7),  dti.period_for_utc(Time.utc(    2002,10,1,1, 0, 0)))
     assert_equal(TimezonePeriod.new(t6, t7),  dti.period_for_utc(Time.utc(    2003, 2,1,0,59,59)))
-    assert_equal(TimezonePeriod.new(t7, nil), dti.period_for_utc(Time.utc(    2003, 2,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t7, nil), dti.period_for_utc(Time.utc(    2004, 1,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t7, nil), dti.period_for_utc(DateTime.new(2050, 1,1,1, 0, 0)))        
+    assert_equal(TimezonePeriod.new(t7, t8),  dti.period_for_utc(Time.utc(    2003, 2,1,1, 0, 0)))
+    assert_equal(TimezonePeriod.new(t7, t8),  dti.period_for_utc(Time.utc(    2003, 3,1,0,59,59)))
+    assert_equal(TimezonePeriod.new(t8, nil), dti.period_for_utc(Time.utc(    2003, 3,1,1, 0, 0)))
+    assert_equal(TimezonePeriod.new(t8, nil), dti.period_for_utc(Time.utc(    2004, 1,1,1, 0, 0)))
+    assert_equal(TimezonePeriod.new(t8, nil), dti.period_for_utc(DateTime.new(2050, 1,1,1, 0, 0)))        
   end
     
   def test_period_for_utc_no_transitions
