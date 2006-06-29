@@ -782,6 +782,19 @@ module TZInfo
         
         offsets = []
         
+        # Find the first std offset. Timezones always start in std.
+        @transitions.each do |t|
+          if t.std_offset == 0
+            offset = {:utc_offset => t.utc_offset, 
+              :std_offset => t.std_offset,
+              :zone_id => t.zone_id,
+              :name => 'o0'}
+              
+            offsets << offset
+            break
+          end
+        end
+        
         @transitions.each do |t|
           offset = offsets.find do |o| 
             o[:utc_offset] == t.utc_offset &&
@@ -794,14 +807,16 @@ module TZInfo
               :std_offset => t.std_offset,
               :zone_id => t.zone_id,
               :name => "o#{offsets.length}"}
-              
-            file.puts("tz.offset :#{offset[:name]}, #{offset[:utc_offset]}, #{offset[:std_offset]}, #{quote_zone_id(offset[:zone_id])}")             
+                                       
             offsets << offset
           end
           
           t.offset_name = offset[:name]
         end
         
+        offsets.each do |offset|
+          file.puts("tz.offset :#{offset[:name]}, #{offset[:utc_offset]}, #{offset[:std_offset]}, #{quote_zone_id(offset[:zone_id])}")
+        end
         
       end
   end
