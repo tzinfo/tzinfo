@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Pacific/Truk'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Yap < Definitions::Pacific::Truk #:nodoc:
-setup_linked
-set_identifier('Pacific/Yap')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Yap #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Pacific/Yap', 'Pacific/Truk'
+      end
+    end
+  end
 end

@@ -1,12 +1,16 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Etc #:nodoc:
-class GMT__p__3 < Timezone #:nodoc:
-setup
-set_identifier('Etc/GMT+3')
-add_unbounded_start_period {TimezonePeriod.new(nil,nil,-10800,0,:'GMT+3')}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Etc #:nodoc:
+      module GMT__p__3 #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Etc/GMT+3' do |tz|
+          tz.offset :o0, -10800, 0, :'GMT+3'
+          
+        end
+      end
+    end
+  end
 end

@@ -94,20 +94,14 @@ module TZInfo
         
         if @only_zones.nil? || @only_zones.empty?
           @zones.each_value {|zone|
-            zone.write_class(@output_dir) unless @exclude_zones.include?(zone.name)
-            modules << zone.path_elements
+            zone.write_module(@output_dir) unless @exclude_zones.include?(zone.name)
           }
         else
           @only_zones.each {|id|
             zone = @zones[id]
-            zone.write_class(@output_dir)
-            modules << zone.path_elements
+            zone.write_module(@output_dir)            
           }          
-        end
-        
-        modules.uniq!
-        
-        modules.each {|path_elements| write_module(path_elements) unless path_elements.empty?}
+        end        
       end
       
       if @generate_countries        
@@ -324,28 +318,6 @@ module TZInfo
           file.puts('end') # end module TZInfo
         }                      
       end
-      
-      # Writes a module definition with a const_missing method to load child
-      # classes and modules.
-      def write_module(path_elements)
-        puts "writing module #{path_elements.join('::')}"
-        
-        File.open(@output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + path_elements.join(File::SEPARATOR) + '.rb', 'w') {|file|
-          file.binmode
-          file.puts('require \'tzinfo/directory_loader\'')
-        
-          file.puts('module TZInfo')
-          file.puts('module Definitions #:nodoc:')
-          
-          path_elements.each{|mod| file.puts("module #{mod} #:nodoc:")}
-          
-          file.puts('include DirectoryLoader')
-          file.puts("directory 'definitions/#{path_elements.join('/')}'")
-          
-          (path_elements.length + 2).times {file.puts('end')}                              
-        }
-      end
-    
   end
   
   # Base class for all rule sets.
@@ -506,31 +478,47 @@ module TZInfo
       
       File.open(output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + @name_elements.join(File::SEPARATOR) + '.rb', 'w') {|file|
         file.binmode
-        write_requires(file)        
+        
+        def file.indent(by)
+          if @tz_indent
+            @tz_indent += by
+          else
+            @tz_indent = by
+          end
+        end
+        
+        def file.puts(s)
+          super("#{' ' * (@tz_indent || 0)}#{s}")
+        end
+        
+        file.puts('require \'tzinfo/timezone_definition\'')
+        file.puts('')        
+        
         file.puts('module TZInfo')
+        file.indent(2)
         file.puts('module Definitions #:nodoc:')
-        @path_elements.each do |part| 
+        file.indent(2)                
+        
+        @name_elements.each do |part| 
           file.puts("module #{part} #:nodoc:")
+          file.indent(2)
         end
         
-        file.puts("class #{@name_elements.last} < #{superclass} #:nodoc:")
-      
+        file.puts('include TimezoneDefinition')
+        file.puts('')
+        
         yield file
-                
-        file.puts('end') # end class
-        
-        @path_elements.each do
-          file.puts('end')
+                        
+        @name_elements.each do
+          file.indent(-2)  
+          file.puts('end')          
         end
+        file.indent(-2)
         file.puts('end') # end module Definitions
+        file.indent(-2)        
         file.puts('end') # end module TZInfo
       }
-    end
-    
-    # Called to write any requires into the file. Called by create_file.
-    def write_requires(file)
-      file.puts('require \'tzinfo/timezone\'')
-    end
+    end    
   end
   
   # A tz data Link.
@@ -541,25 +529,13 @@ module TZInfo
       super(name)
       @link_to = link_to
     end
-    
-    # Called to write any requires into the file. Called by create_file.
-    def write_requires(file)
-      super
-      file.puts("require 'tzinfo/definitions/#{link_to.name_elements.join('/')}'")
-    end
-    
-    # Superclass of this class (the class we are linking to).
-    def superclass
-      'Definitions::' + link_to.name_elements.join('::')
-    end
-    
-    # Writes a class for this link.
-    def write_class(output_dir)
+                
+    # Writes a module for this link.
+    def write_module(output_dir)
       puts "writing link #{name}"
-      
+            
       create_file(output_dir) {|file|
-        file.puts('setup_linked')
-        file.puts("set_identifier('#{@name.gsub(/'/, '\\\'')}')")
+        file.puts("linked_timezone #{TZDataParser.quote_str(@name)}, #{TZDataParser.quote_str(@link_to.name)}")        
       }
     end
   end
@@ -575,25 +551,23 @@ module TZInfo
     
     def add_observance(observance)      
       @observances << observance
-    end        
+    end                
     
-    # Superclass is a Timezone. Called by create_file.
-    def superclass
-      'Timezone'
-    end
-    
-    # Writes the class for the zone. Iterates all the periods and asks them
+    # Writes the module for the zone. Iterates all the periods and asks them
     # to write all periods in the timezone.
-    def write_class(output_dir) 
+    def write_module(output_dir) 
       puts "writing zone #{name}"
       
       create_file(output_dir) {|file|        
-               
-        file.puts('setup')
-        file.puts("set_identifier('#{@name.gsub(/'/, '\\\'')}')")
         
+        file.puts("timezone #{TZDataParser.quote_str(@name)} do |tz|")
+        file.indent(2)
+              
         transitions = find_transitions
-        transitions.output_class(file)                
+        transitions.output_module(file)
+        
+        file.indent(-2)
+        file.puts('end')
       }      
     end
     
@@ -725,7 +699,7 @@ module TZInfo
       @transitions << transition
     end 
     
-    def output_class(file)
+    def output_module(file)
       optimize
       
       # Try and end on a transition to std if one happens in the last year.
@@ -739,34 +713,12 @@ module TZInfo
         transitions = @transitions
       end
       
-      previous = nil
-      transitions.each {|transition|
-        if previous.nil?
-          # first transition
-          # if it has a time, need to work out what the unbounded start before
-          # it should have been
-          
-          if transition.std_offset == 0
-            # treat the start time as nil
-            previous = transition.clone_with_at(nil)             
-          else
-            first_std = @transitions.find {|t| t.std_offset == 0}
-            
-            if first_std.nil?
-              previous = transition.clone_with_at(nil)
-            else              
-              first_std.clone_with_at(nil).write_period(file, transition.at_utc)
-              previous = transition
-            end            
-          end
-        else
-          raise 'Only the first transition can have a nil start time' if transition.at_utc.nil?        
-          previous.write_period(file, transition.at_utc)
-          previous = transition
-        end                
-      }
+      process_offsets(file)
+      file.puts('')
       
-      previous.write_period(file, nil) unless previous.nil?        
+      transitions.each do |t|        
+        t.write(file)
+      end            
     end
     
     private
@@ -808,7 +760,50 @@ module TZInfo
         else
           @transitions = []
         end                
-      end            
+      end
+      
+      def quote_zone_id(zone_id)     
+        if zone_id =~ %r{[\-+']}
+          ":#{TZDataParser.quote_str(zone_id)}"          
+        else
+          ":#{zone_id}"
+        end
+      end  
+      
+      def process_offsets(file)
+        # A bit of a hack at the moment. The offset used to be output with
+        # each period (pair of transitions). They are now separated from the
+        # transition data. The code should probably be changed at some point to
+        # setup the offsets at an earlier stage.   
+        
+        # Assume that when this is called, the first transition is the Local
+        # Mean Time initial rule or a transition with no time that defines the
+        # offset for the entire zone.
+        
+        offsets = []
+        
+        @transitions.each do |t|
+          offset = offsets.find do |o| 
+            o[:utc_offset] == t.utc_offset &&
+              o[:std_offset] == t.std_offset &&
+              o[:zone_id] == t.zone_id
+          end
+        
+          unless offset
+            offset = {:utc_offset => t.utc_offset, 
+              :std_offset => t.std_offset,
+              :zone_id => t.zone_id,
+              :name => "o#{offsets.length}"}
+              
+            file.puts("tz.offset :#{offset[:name]}, #{offset[:utc_offset]}, #{offset[:std_offset]}, #{quote_zone_id(offset[:zone_id])}")             
+            offsets << offset
+          end
+          
+          t.offset_name = offset[:name]
+        end
+        
+        
+      end
   end
   
   # A transition that will be used to write the periods in a zone class.
@@ -819,12 +814,14 @@ module TZInfo
     attr_reader :utc_offset
     attr_reader :std_offset
     attr_reader :zone_id
+    attr_accessor :offset_name
     
     def initialize(at_utc, utc_offset, std_offset, zone_id)
       @at_utc = at_utc
       @utc_offset = utc_offset
       @std_offset = std_offset
       @zone_id = zone_id
+      @offset_name = nil
     end
     
     def to_s
@@ -851,32 +848,20 @@ module TZInfo
       TZDataTransition.new(at_utc, @utc_offset, @std_offset, @zone_id)
     end
         
-    def write_period(file, utc_end)        
-      if @at_utc.nil?
-        file.puts "add_unbounded_start_period {TimezonePeriod.new(nil,#{datetime_constructor(utc_end)},#{@utc_offset},#{@std_offset},:#{quote_str(@zone_id)})}"
-      else
-        file.puts "add_period(#{@at_utc.year},#{@at_utc.mon}) {TimezonePeriod.new(#{datetime_constructor(@at_utc)},#{datetime_constructor(utc_end)},#{@utc_offset},#{@std_offset},:#{quote_str(@zone_id)})}"
+    def write(file)        
+      if @at_utc
+        file.puts "tz.transition #{@at_utc.year}, #{@at_utc.mon}, :#{@offset_name}, #{datetime_constructor(@at_utc)}" 
       end        
     end
      
     private
-      def datetime_constructor(datetime)
-        if datetime.nil? 
-          'nil'
-        elsif (1970..2037).include?(datetime.year)
+      def datetime_constructor(datetime)      
+        if (1970..2037).include?(datetime.year)
           "#{Time.utc(datetime.year, datetime.mon, datetime.mday, datetime.hour, datetime.min, datetime.sec).to_i}"
         else
-          "DateTime.new0(#{TZDataParser.new_rational(datetime.ajd)},0,Date::ITALY)"          
+          "#{datetime.ajd.numerator}, #{datetime.ajd.denominator}"                    
         end
       end
-      
-      def quote_str(str)     
-        if str =~ %r{[\-+']}
-          TZDataParser.quote_str(str)          
-        else
-          str
-        end
-      end      
   end
    
   # An instance of a rule for a year.

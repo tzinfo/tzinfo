@@ -1,16 +1,23 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Martinique < Timezone #:nodoc:
-setup
-set_identifier('America/Martinique')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10417112653,4320),0,Date::ITALY),-14660,0,:LMT)}
-add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10417112653,4320),0,Date::ITALY),DateTime.new0(Rational.new!(10450761133,4320),0,Date::ITALY),-14660,0,:FFMT)}
-add_period(1911,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(10450761133,4320),0,Date::ITALY),323841600,-14400,0,:AST)}
-add_period(1980,4) {TimezonePeriod.new(323841600,338958000,-14400,3600,:ADT)}
-add_period(1980,9) {TimezonePeriod.new(338958000,nil,-14400,0,:AST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Martinique #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/Martinique' do |tz|
+          tz.offset :o0, -14660, 0, :LMT
+          tz.offset :o1, -14660, 0, :FFMT
+          tz.offset :o2, -14400, 0, :AST
+          tz.offset :o3, -14400, 3600, :ADT
+          
+          tz.transition 1890, 1, :o1, 10417112653, 4320
+          tz.transition 1911, 5, :o2, 10450761133, 4320
+          tz.transition 1980, 4, :o3, 323841600
+          tz.transition 1980, 9, :o2, 338958000
+        end
+      end
+    end
+  end
 end

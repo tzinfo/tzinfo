@@ -1,28 +1,36 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Managua < Timezone #:nodoc:
-setup
-set_identifier('America/Managua')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52085564777,21600),0,Date::ITALY),-20708,0,:LMT)}
-add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52085564777,21600),0,Date::ITALY),DateTime.new0(Rational.new!(8739402263,3600),0,Date::ITALY),-20712,0,:MMT)}
-add_period(1934,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(8739402263,3600),0,Date::ITALY),105084000,-21600,0,:CST)}
-add_period(1973,5) {TimezonePeriod.new(105084000,161758800,-18000,0,:EST)}
-add_period(1975,2) {TimezonePeriod.new(161758800,290584800,-21600,0,:CST)}
-add_period(1979,3) {TimezonePeriod.new(290584800,299134800,-21600,3600,:CDT)}
-add_period(1979,6) {TimezonePeriod.new(299134800,322034400,-21600,0,:CST)}
-add_period(1980,3) {TimezonePeriod.new(322034400,330584400,-21600,3600,:CDT)}
-add_period(1980,6) {TimezonePeriod.new(330584400,694260000,-21600,0,:CST)}
-add_period(1992,1) {TimezonePeriod.new(694260000,717310800,-18000,0,:EST)}
-add_period(1992,9) {TimezonePeriod.new(717310800,725868000,-21600,0,:CST)}
-add_period(1993,1) {TimezonePeriod.new(725868000,852094800,-18000,0,:EST)}
-add_period(1997,1) {TimezonePeriod.new(852094800,1113112800,-21600,0,:CST)}
-add_period(2005,4) {TimezonePeriod.new(1113112800,1128229200,-21600,3600,:CDT)}
-add_period(2005,10) {TimezonePeriod.new(1128229200,1146384000,-21600,0,:CST)}
-add_period(2006,4) {TimezonePeriod.new(1146384000,1159678800,-21600,3600,:CDT)}
-add_period(2006,10) {TimezonePeriod.new(1159678800,nil,-21600,0,:CST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Managua #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/Managua' do |tz|
+          tz.offset :o0, -20708, 0, :LMT
+          tz.offset :o1, -20712, 0, :MMT
+          tz.offset :o2, -21600, 0, :CST
+          tz.offset :o3, -18000, 0, :EST
+          tz.offset :o4, -21600, 3600, :CDT
+          
+          tz.transition 1890, 1, :o1, 52085564777, 21600
+          tz.transition 1934, 6, :o2, 8739402263, 3600
+          tz.transition 1973, 5, :o3, 105084000
+          tz.transition 1975, 2, :o2, 161758800
+          tz.transition 1979, 3, :o4, 290584800
+          tz.transition 1979, 6, :o2, 299134800
+          tz.transition 1980, 3, :o4, 322034400
+          tz.transition 1980, 6, :o2, 330584400
+          tz.transition 1992, 1, :o3, 694260000
+          tz.transition 1992, 9, :o2, 717310800
+          tz.transition 1993, 1, :o3, 725868000
+          tz.transition 1997, 1, :o2, 852094800
+          tz.transition 2005, 4, :o4, 1113112800
+          tz.transition 2005, 10, :o2, 1128229200
+          tz.transition 2006, 4, :o4, 1146384000
+          tz.transition 2006, 10, :o2, 1159678800
+        end
+      end
+    end
+  end
 end

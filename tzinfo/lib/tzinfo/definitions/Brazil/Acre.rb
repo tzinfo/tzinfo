@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Rio_Branco'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Brazil #:nodoc:
-class Acre < Definitions::America::Rio_Branco #:nodoc:
-setup_linked
-set_identifier('Brazil/Acre')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Brazil #:nodoc:
+      module Acre #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Brazil/Acre', 'America/Rio_Branco'
+      end
+    end
+  end
 end

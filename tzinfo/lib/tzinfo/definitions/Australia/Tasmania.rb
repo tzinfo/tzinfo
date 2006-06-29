@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Australia/Hobart'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Australia #:nodoc:
-class Tasmania < Definitions::Australia::Hobart #:nodoc:
-setup_linked
-set_identifier('Australia/Tasmania')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Australia #:nodoc:
+      module Tasmania #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Australia/Tasmania', 'Australia/Hobart'
+      end
+    end
+  end
 end

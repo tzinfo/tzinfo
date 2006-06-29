@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Los_Angeles'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module US #:nodoc:
-class Pacific__m__New < Definitions::America::Los_Angeles #:nodoc:
-setup_linked
-set_identifier('US/Pacific-New')
-end
-end
-end
+  module Definitions #:nodoc:
+    module US #:nodoc:
+      module Pacific__m__New #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'US/Pacific-New', 'America/Los_Angeles'
+      end
+    end
+  end
 end

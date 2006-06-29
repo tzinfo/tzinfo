@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Kinshasa < Timezone #:nodoc:
-setup
-set_identifier('Africa/Kinshasa')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(965694983,400),0,Date::ITALY),3672,0,:LMT)}
-add_period(1897,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(965694983,400),0,Date::ITALY),nil,3600,0,:WAT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Kinshasa #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Kinshasa' do |tz|
+          tz.offset :o0, 3672, 0, :LMT
+          tz.offset :o1, 3600, 0, :WAT
+          
+          tz.transition 1897, 11, :o1, 965694983, 400
+        end
+      end
+    end
+  end
 end

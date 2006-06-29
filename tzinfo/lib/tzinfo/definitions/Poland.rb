@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Warsaw'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Poland < Definitions::Europe::Warsaw #:nodoc:
-setup_linked
-set_identifier('Poland')
-end
-end
+  module Definitions #:nodoc:
+    module Poland #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Poland', 'Europe/Warsaw'
+    end
+  end
 end

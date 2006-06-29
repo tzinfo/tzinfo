@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Seoul'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class ROK < Definitions::Asia::Seoul #:nodoc:
-setup_linked
-set_identifier('ROK')
-end
-end
+  module Definitions #:nodoc:
+    module ROK #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'ROK', 'Asia/Seoul'
+    end
+  end
 end

@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Africa/Bamako'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Timbuktu < Definitions::Africa::Bamako #:nodoc:
-setup_linked
-set_identifier('Africa/Timbuktu')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Timbuktu #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Africa/Timbuktu', 'Africa/Bamako'
+      end
+    end
+  end
 end

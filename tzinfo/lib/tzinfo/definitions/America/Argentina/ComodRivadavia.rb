@@ -1,14 +1,15 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Argentina/Catamarca'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-module Argentina #:nodoc:
-class ComodRivadavia < Definitions::America::Argentina::Catamarca #:nodoc:
-setup_linked
-set_identifier('America/Argentina/ComodRivadavia')
-end
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Argentina #:nodoc:
+        module ComodRivadavia #:nodoc:
+          include TimezoneDefinition
+          
+          linked_timezone 'America/Argentina/ComodRivadavia', 'America/Argentina/Catamarca'
+        end
+      end
+    end
+  end
 end

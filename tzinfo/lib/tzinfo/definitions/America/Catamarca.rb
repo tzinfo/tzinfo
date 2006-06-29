@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Argentina/Catamarca'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Catamarca < Definitions::America::Argentina::Catamarca #:nodoc:
-setup_linked
-set_identifier('America/Catamarca')
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Catamarca #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'America/Catamarca', 'America/Argentina/Catamarca'
+      end
+    end
+  end
 end

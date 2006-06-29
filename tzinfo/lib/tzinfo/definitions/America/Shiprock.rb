@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Denver'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Shiprock < Definitions::America::Denver #:nodoc:
-setup_linked
-set_identifier('America/Shiprock')
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Shiprock #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'America/Shiprock', 'America/Denver'
+      end
+    end
+  end
 end

@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Nicosia'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Europe #:nodoc:
-class Nicosia < Definitions::Asia::Nicosia #:nodoc:
-setup_linked
-set_identifier('Europe/Nicosia')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Europe #:nodoc:
+      module Nicosia #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Europe/Nicosia', 'Asia/Nicosia'
+      end
+    end
+  end
 end

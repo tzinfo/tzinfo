@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Australia/Sydney'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Australia #:nodoc:
-class ACT < Definitions::Australia::Sydney #:nodoc:
-setup_linked
-set_identifier('Australia/ACT')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Australia #:nodoc:
+      module ACT #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Australia/ACT', 'Australia/Sydney'
+      end
+    end
+  end
 end

@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Jerusalem'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Israel < Definitions::Asia::Jerusalem #:nodoc:
-setup_linked
-set_identifier('Israel')
-end
-end
+  module Definitions #:nodoc:
+    module Israel #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Israel', 'Asia/Jerusalem'
+    end
+  end
 end

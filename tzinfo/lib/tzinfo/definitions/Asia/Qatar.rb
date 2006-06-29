@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Qatar < Timezone #:nodoc:
-setup
-set_identifier('Asia/Qatar')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(13080551527,5400),0,Date::ITALY),12368,0,:LMT)}
-add_period(1919,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(13080551527,5400),0,Date::ITALY),76190400,14400,0,:GST)}
-add_period(1972,5) {TimezonePeriod.new(76190400,nil,10800,0,:AST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Qatar #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Asia/Qatar' do |tz|
+          tz.offset :o0, 12368, 0, :LMT
+          tz.offset :o1, 14400, 0, :GST
+          tz.offset :o2, 10800, 0, :AST
+          
+          tz.transition 1919, 12, :o1, 13080551527, 5400
+          tz.transition 1972, 5, :o2, 76190400
+        end
+      end
+    end
+  end
 end

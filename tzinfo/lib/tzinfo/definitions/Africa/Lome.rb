@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Lome < Timezone #:nodoc:
-setup
-set_identifier('Africa/Lome')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52109233127,21600),0,Date::ITALY),292,0,:LMT)}
-add_period(1892,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52109233127,21600),0,Date::ITALY),nil,0,0,:GMT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Lome #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Lome' do |tz|
+          tz.offset :o0, 292, 0, :LMT
+          tz.offset :o1, 0, 0, :GMT
+          
+          tz.transition 1892, 12, :o1, 52109233127, 21600
+        end
+      end
+    end
+  end
 end

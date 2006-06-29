@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Indiana/Knox'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module US #:nodoc:
-class Indiana__m__Starke < Definitions::America::Indiana::Knox #:nodoc:
-setup_linked
-set_identifier('US/Indiana-Starke')
-end
-end
-end
+  module Definitions #:nodoc:
+    module US #:nodoc:
+      module Indiana__m__Starke #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'US/Indiana-Starke', 'America/Indiana/Knox'
+      end
+    end
+  end
 end

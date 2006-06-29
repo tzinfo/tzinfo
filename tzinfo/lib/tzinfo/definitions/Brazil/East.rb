@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Sao_Paulo'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Brazil #:nodoc:
-class East < Definitions::America::Sao_Paulo #:nodoc:
-setup_linked
-set_identifier('Brazil/East')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Brazil #:nodoc:
+      module East #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Brazil/East', 'America/Sao_Paulo'
+      end
+    end
+  end
 end

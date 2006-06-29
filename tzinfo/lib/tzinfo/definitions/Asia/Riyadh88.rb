@@ -1,349 +1,582 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Riyadh88 < Timezone #:nodoc:
-setup
-set_identifier('Asia/Riyadh88')
-add_unbounded_start_period {TimezonePeriod.new(nil,568025771,11224,0,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568025771,568112196,11224,-195,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568112196,568198626,11224,-220,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568198626,568285056,11224,-250,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568285056,568371481,11224,-280,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568371481,568457906,11224,-305,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568457906,568544336,11224,-330,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568544336,568630761,11224,-360,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568630761,568717186,11224,-385,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568717186,568803611,11224,-410,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568803611,568890036,11224,-435,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568890036,568976461,11224,-460,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(568976461,569062881,11224,-485,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569062881,569149306,11224,-505,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569149306,569235726,11224,-530,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569235726,569322146,11224,-550,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569322146,569408566,11224,-570,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569408566,569494986,11224,-590,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569494986,569581406,11224,-610,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569581406,569667826,11224,-630,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569667826,569754241,11224,-650,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569754241,569840661,11224,-665,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569840661,569927076,11224,-685,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(569927076,570013491,11224,-700,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(570013491,570099906,11224,-715,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(570099906,570186321,11224,-730,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(570186321,570272736,11224,-745,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(570272736,570359146,11224,-760,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(570359146,570445556,11224,-770,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(570445556,570531966,11224,-780,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(570531966,570618376,11224,-790,:zzz)}
-add_period(1988,1) {TimezonePeriod.new(570618376,570704786,11224,-800,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(570704786,570791196,11224,-810,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(570791196,570877601,11224,-820,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(570877601,570964011,11224,-825,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(570964011,571050416,11224,-835,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(571050416,571136821,11224,-840,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(571136821,571223226,11224,-845,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(571223226,571396031,11224,-850,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(571396031,571914426,11224,-855,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(571914426,572087221,11224,-850,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572087221,572173616,11224,-845,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572173616,572260011,11224,-840,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572260011,572346406,11224,-835,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572346406,572432801,11224,-830,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572432801,572519196,11224,-825,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572519196,572605586,11224,-820,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572605586,572691976,11224,-810,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572691976,572778371,11224,-800,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572778371,572864761,11224,-795,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572864761,572951151,11224,-785,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(572951151,573037541,11224,-775,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(573037541,573123926,11224,-765,:zzz)}
-add_period(1988,2) {TimezonePeriod.new(573123926,573210316,11224,-750,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(573210316,573296706,11224,-740,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(573296706,573383091,11224,-730,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(573383091,573469481,11224,-715,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(573469481,573555866,11224,-705,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(573555866,573642251,11224,-690,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(573642251,573728636,11224,-675,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(573728636,573815021,11224,-660,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(573815021,573901406,11224,-645,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(573901406,573987791,11224,-630,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(573987791,574074176,11224,-615,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574074176,574160561,11224,-600,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574160561,574246946,11224,-585,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574246946,574333326,11224,-570,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574333326,574419711,11224,-550,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574419711,574506096,11224,-535,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574506096,574592476,11224,-520,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574592476,574678861,11224,-500,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574678861,574765241,11224,-485,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574765241,574851626,11224,-465,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574851626,574938006,11224,-450,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(574938006,575024386,11224,-430,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(575024386,575110771,11224,-410,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(575110771,575197151,11224,-395,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(575197151,575283536,11224,-375,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(575283536,575369916,11224,-360,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(575369916,575456296,11224,-340,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(575456296,575542681,11224,-320,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(575542681,575629061,11224,-305,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(575629061,575715441,11224,-285,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(575715441,575801826,11224,-265,:zzz)}
-add_period(1988,3) {TimezonePeriod.new(575801826,575888206,11224,-250,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(575888206,575974591,11224,-230,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(575974591,576060971,11224,-215,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576060971,576147356,11224,-195,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576147356,576233736,11224,-180,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576233736,576320121,11224,-160,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576320121,576406501,11224,-145,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576406501,576492886,11224,-125,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576492886,576579271,11224,-110,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576579271,576665651,11224,-95,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576665651,576752036,11224,-75,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576752036,576838421,11224,-60,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576838421,576924806,11224,-45,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(576924806,577011191,11224,-30,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577011191,577097576,11224,-15,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577097576,577183961,11224,0,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577183961,577270346,11224,15,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577270346,577356736,11224,30,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577356736,577443121,11224,40,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577443121,577529511,11224,55,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577529511,577615896,11224,65,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577615896,577702286,11224,80,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577702286,577788671,11224,90,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577788671,577875061,11224,105,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577875061,577961451,11224,115,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(577961451,578047841,11224,125,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(578047841,578134231,11224,135,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(578134231,578220626,11224,145,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(578220626,578307016,11224,150,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(578307016,578393406,11224,160,:zzz)}
-add_period(1988,4) {TimezonePeriod.new(578393406,578479801,11224,170,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(578479801,578566191,11224,175,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(578566191,578652586,11224,185,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(578652586,578738981,11224,190,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(578738981,578825376,11224,195,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(578825376,578911771,11224,200,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(578911771,578998166,11224,205,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(578998166,579084561,11224,210,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(579084561,579257356,11224,215,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(579257356,579948561,11224,220,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(579948561,580121366,11224,215,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580121366,580207771,11224,210,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580207771,580294176,11224,205,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580294176,580380581,11224,200,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580380581,580466986,11224,195,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580466986,580553391,11224,190,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580553391,580639796,11224,185,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580639796,580726201,11224,180,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580726201,580812611,11224,175,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580812611,580899016,11224,165,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580899016,580985426,11224,160,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(580985426,581071836,11224,150,:zzz)}
-add_period(1988,5) {TimezonePeriod.new(581071836,581158246,11224,140,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(581158246,581244651,11224,130,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(581244651,581331061,11224,125,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(581331061,581417471,11224,115,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(581417471,581503886,11224,105,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(581503886,581590296,11224,90,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(581590296,581676706,11224,80,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(581676706,581763116,11224,70,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(581763116,581849531,11224,60,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(581849531,581935941,11224,45,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(581935941,582022351,11224,35,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582022351,582108766,11224,25,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582108766,582195176,11224,10,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582195176,582281591,11224,0,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582281591,582368001,11224,-15,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582368001,582454416,11224,-25,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582454416,582540831,11224,-40,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582540831,582627241,11224,-55,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582627241,582713656,11224,-65,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582713656,582800066,11224,-80,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582800066,582886481,11224,-90,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582886481,582972896,11224,-105,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(582972896,583059306,11224,-120,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(583059306,583145721,11224,-130,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(583145721,583232131,11224,-145,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(583232131,583318546,11224,-155,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(583318546,583404956,11224,-170,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(583404956,583491371,11224,-180,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(583491371,583577781,11224,-195,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(583577781,583664196,11224,-205,:zzz)}
-add_period(1988,6) {TimezonePeriod.new(583664196,583750606,11224,-220,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(583750606,583837016,11224,-230,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(583837016,583923426,11224,-240,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(583923426,584009841,11224,-250,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584009841,584096251,11224,-265,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584096251,584182661,11224,-275,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584182661,584269071,11224,-285,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584269071,584355481,11224,-295,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584355481,584441886,11224,-305,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584441886,584528296,11224,-310,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584528296,584614706,11224,-320,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584614706,584701111,11224,-330,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584701111,584787521,11224,-335,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584787521,584873926,11224,-345,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584873926,584960331,11224,-350,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(584960331,585046736,11224,-355,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(585046736,585133141,11224,-360,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(585133141,585219546,11224,-365,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(585219546,585305951,11224,-370,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(585305951,585392356,11224,-375,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(585392356,585478761,11224,-380,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(585478761,585737966,11224,-385,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(585737966,586169961,11224,-390,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(586169961,586342756,11224,-385,:zzz)}
-add_period(1988,7) {TimezonePeriod.new(586342756,586429151,11224,-380,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(586429151,586601946,11224,-375,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(586601946,586688341,11224,-370,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(586688341,586774731,11224,-365,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(586774731,586861126,11224,-355,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(586861126,586947521,11224,-350,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(586947521,587033911,11224,-345,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587033911,587120301,11224,-335,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587120301,587206696,11224,-325,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587206696,587293086,11224,-320,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587293086,587379476,11224,-310,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587379476,587465866,11224,-300,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587465866,587552251,11224,-290,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587552251,587638641,11224,-275,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587638641,587725031,11224,-265,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587725031,587811416,11224,-255,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587811416,587897806,11224,-240,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587897806,587984191,11224,-230,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(587984191,588070576,11224,-215,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588070576,588156961,11224,-200,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588156961,588243346,11224,-185,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588243346,588329731,11224,-170,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588329731,588416116,11224,-155,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588416116,588502496,11224,-140,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588502496,588588881,11224,-120,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588588881,588675266,11224,-105,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588675266,588761646,11224,-90,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588761646,588848026,11224,-70,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588848026,588934411,11224,-50,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(588934411,589020791,11224,-35,:zzz)}
-add_period(1988,8) {TimezonePeriod.new(589020791,589107171,11224,-15,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589107171,589193551,11224,5,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589193551,589279936,11224,25,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589279936,589366316,11224,40,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589366316,589452696,11224,60,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589452696,589539076,11224,80,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589539076,589625456,11224,100,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589625456,589711831,11224,120,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589711831,589798211,11224,145,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589798211,589884591,11224,165,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589884591,589970971,11224,185,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(589970971,590057351,11224,205,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590057351,590143726,11224,225,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590143726,590230106,11224,250,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590230106,590316486,11224,270,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590316486,590402866,11224,290,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590402866,590489241,11224,310,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590489241,590575621,11224,335,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590575621,590662001,11224,355,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590662001,590748381,11224,375,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590748381,590834756,11224,395,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590834756,590921136,11224,420,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(590921136,591007516,11224,440,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(591007516,591093896,11224,460,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(591093896,591180276,11224,480,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(591180276,591266651,11224,500,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(591266651,591353031,11224,525,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(591353031,591439411,11224,545,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(591439411,591525791,11224,565,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(591525791,591612171,11224,585,:zzz)}
-add_period(1988,9) {TimezonePeriod.new(591612171,591698551,11224,605,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(591698551,591784936,11224,625,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(591784936,591871316,11224,640,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(591871316,591957696,11224,660,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(591957696,592044081,11224,680,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592044081,592130461,11224,695,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592130461,592216846,11224,715,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592216846,592303226,11224,730,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592303226,592389611,11224,750,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592389611,592475996,11224,765,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592475996,592562381,11224,780,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592562381,592648766,11224,795,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592648766,592735151,11224,810,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592735151,592821536,11224,825,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592821536,592907921,11224,840,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592907921,592994311,11224,855,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(592994311,593080696,11224,865,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593080696,593167086,11224,880,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593167086,593253476,11224,890,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593253476,593339861,11224,900,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593339861,593426256,11224,915,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593426256,593512646,11224,920,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593512646,593599036,11224,930,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593599036,593685426,11224,940,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593685426,593771821,11224,950,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593771821,593858216,11224,955,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593858216,593944611,11224,960,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(593944611,594031006,11224,965,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(594031006,594117401,11224,970,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(594117401,594203796,11224,975,:zzz)}
-add_period(1988,10) {TimezonePeriod.new(594203796,594376591,11224,980,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(594376591,594722196,11224,985,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(594722196,594895001,11224,980,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(594895001,595067806,11224,975,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595067806,595154216,11224,970,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595154216,595240621,11224,960,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595240621,595327026,11224,955,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595327026,595413436,11224,950,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595413436,595499846,11224,940,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595499846,595586256,11224,930,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595586256,595672666,11224,920,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595672666,595759076,11224,910,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595759076,595845491,11224,900,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595845491,595931901,11224,885,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(595931901,596018316,11224,875,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596018316,596104731,11224,860,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596104731,596191146,11224,845,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596191146,596277566,11224,830,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596277566,596363981,11224,810,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596363981,596450401,11224,795,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596450401,596536816,11224,775,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596536816,596623236,11224,760,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596623236,596709656,11224,740,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596709656,596796081,11224,720,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596796081,596882501,11224,695,:zzz)}
-add_period(1988,11) {TimezonePeriod.new(596882501,596968921,11224,675,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(596968921,597055346,11224,655,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597055346,597141771,11224,630,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597141771,597228191,11224,605,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597228191,597314616,11224,585,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597314616,597401041,11224,560,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597401041,597487471,11224,535,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597487471,597573896,11224,505,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597573896,597660321,11224,480,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597660321,597746751,11224,455,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597746751,597833176,11224,425,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597833176,597919606,11224,400,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(597919606,598006031,11224,370,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598006031,598092461,11224,345,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598092461,598178891,11224,315,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598178891,598265321,11224,285,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598265321,598351751,11224,255,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598351751,598438176,11224,225,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598438176,598524606,11224,200,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598524606,598611036,11224,170,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598611036,598697466,11224,140,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598697466,598783896,11224,110,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598783896,598870326,11224,80,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598870326,598956756,11224,50,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(598956756,599043186,11224,20,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(599043186,599129616,11224,-10,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(599129616,599216046,11224,-40,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(599216046,599302476,11224,-70,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(599302476,599388906,11224,-100,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(599388906,599475331,11224,-130,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(599475331,599561761,11224,-155,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(599561761,599604961,11224,-185,:zzz)}
-add_period(1988,12) {TimezonePeriod.new(599604961,nil,11224,0,:zzz)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Riyadh88 #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Asia/Riyadh88' do |tz|
+          tz.offset :o0, 11224, 0, :zzz
+          tz.offset :o1, 11224, -195, :zzz
+          tz.offset :o2, 11224, -220, :zzz
+          tz.offset :o3, 11224, -250, :zzz
+          tz.offset :o4, 11224, -280, :zzz
+          tz.offset :o5, 11224, -305, :zzz
+          tz.offset :o6, 11224, -330, :zzz
+          tz.offset :o7, 11224, -360, :zzz
+          tz.offset :o8, 11224, -385, :zzz
+          tz.offset :o9, 11224, -410, :zzz
+          tz.offset :o10, 11224, -435, :zzz
+          tz.offset :o11, 11224, -460, :zzz
+          tz.offset :o12, 11224, -485, :zzz
+          tz.offset :o13, 11224, -505, :zzz
+          tz.offset :o14, 11224, -530, :zzz
+          tz.offset :o15, 11224, -550, :zzz
+          tz.offset :o16, 11224, -570, :zzz
+          tz.offset :o17, 11224, -590, :zzz
+          tz.offset :o18, 11224, -610, :zzz
+          tz.offset :o19, 11224, -630, :zzz
+          tz.offset :o20, 11224, -650, :zzz
+          tz.offset :o21, 11224, -665, :zzz
+          tz.offset :o22, 11224, -685, :zzz
+          tz.offset :o23, 11224, -700, :zzz
+          tz.offset :o24, 11224, -715, :zzz
+          tz.offset :o25, 11224, -730, :zzz
+          tz.offset :o26, 11224, -745, :zzz
+          tz.offset :o27, 11224, -760, :zzz
+          tz.offset :o28, 11224, -770, :zzz
+          tz.offset :o29, 11224, -780, :zzz
+          tz.offset :o30, 11224, -790, :zzz
+          tz.offset :o31, 11224, -800, :zzz
+          tz.offset :o32, 11224, -810, :zzz
+          tz.offset :o33, 11224, -820, :zzz
+          tz.offset :o34, 11224, -825, :zzz
+          tz.offset :o35, 11224, -835, :zzz
+          tz.offset :o36, 11224, -840, :zzz
+          tz.offset :o37, 11224, -845, :zzz
+          tz.offset :o38, 11224, -850, :zzz
+          tz.offset :o39, 11224, -855, :zzz
+          tz.offset :o40, 11224, -830, :zzz
+          tz.offset :o41, 11224, -795, :zzz
+          tz.offset :o42, 11224, -785, :zzz
+          tz.offset :o43, 11224, -775, :zzz
+          tz.offset :o44, 11224, -765, :zzz
+          tz.offset :o45, 11224, -750, :zzz
+          tz.offset :o46, 11224, -740, :zzz
+          tz.offset :o47, 11224, -705, :zzz
+          tz.offset :o48, 11224, -690, :zzz
+          tz.offset :o49, 11224, -675, :zzz
+          tz.offset :o50, 11224, -660, :zzz
+          tz.offset :o51, 11224, -645, :zzz
+          tz.offset :o52, 11224, -615, :zzz
+          tz.offset :o53, 11224, -600, :zzz
+          tz.offset :o54, 11224, -585, :zzz
+          tz.offset :o55, 11224, -535, :zzz
+          tz.offset :o56, 11224, -520, :zzz
+          tz.offset :o57, 11224, -500, :zzz
+          tz.offset :o58, 11224, -465, :zzz
+          tz.offset :o59, 11224, -450, :zzz
+          tz.offset :o60, 11224, -430, :zzz
+          tz.offset :o61, 11224, -395, :zzz
+          tz.offset :o62, 11224, -375, :zzz
+          tz.offset :o63, 11224, -340, :zzz
+          tz.offset :o64, 11224, -320, :zzz
+          tz.offset :o65, 11224, -285, :zzz
+          tz.offset :o66, 11224, -265, :zzz
+          tz.offset :o67, 11224, -230, :zzz
+          tz.offset :o68, 11224, -215, :zzz
+          tz.offset :o69, 11224, -180, :zzz
+          tz.offset :o70, 11224, -160, :zzz
+          tz.offset :o71, 11224, -145, :zzz
+          tz.offset :o72, 11224, -125, :zzz
+          tz.offset :o73, 11224, -110, :zzz
+          tz.offset :o74, 11224, -95, :zzz
+          tz.offset :o75, 11224, -75, :zzz
+          tz.offset :o76, 11224, -60, :zzz
+          tz.offset :o77, 11224, -45, :zzz
+          tz.offset :o78, 11224, -30, :zzz
+          tz.offset :o79, 11224, -15, :zzz
+          tz.offset :o80, 11224, 15, :zzz
+          tz.offset :o81, 11224, 30, :zzz
+          tz.offset :o82, 11224, 40, :zzz
+          tz.offset :o83, 11224, 55, :zzz
+          tz.offset :o84, 11224, 65, :zzz
+          tz.offset :o85, 11224, 80, :zzz
+          tz.offset :o86, 11224, 90, :zzz
+          tz.offset :o87, 11224, 105, :zzz
+          tz.offset :o88, 11224, 115, :zzz
+          tz.offset :o89, 11224, 125, :zzz
+          tz.offset :o90, 11224, 135, :zzz
+          tz.offset :o91, 11224, 145, :zzz
+          tz.offset :o92, 11224, 150, :zzz
+          tz.offset :o93, 11224, 160, :zzz
+          tz.offset :o94, 11224, 170, :zzz
+          tz.offset :o95, 11224, 175, :zzz
+          tz.offset :o96, 11224, 185, :zzz
+          tz.offset :o97, 11224, 190, :zzz
+          tz.offset :o98, 11224, 195, :zzz
+          tz.offset :o99, 11224, 200, :zzz
+          tz.offset :o100, 11224, 205, :zzz
+          tz.offset :o101, 11224, 210, :zzz
+          tz.offset :o102, 11224, 215, :zzz
+          tz.offset :o103, 11224, 220, :zzz
+          tz.offset :o104, 11224, 180, :zzz
+          tz.offset :o105, 11224, 165, :zzz
+          tz.offset :o106, 11224, 140, :zzz
+          tz.offset :o107, 11224, 130, :zzz
+          tz.offset :o108, 11224, 70, :zzz
+          tz.offset :o109, 11224, 60, :zzz
+          tz.offset :o110, 11224, 45, :zzz
+          tz.offset :o111, 11224, 35, :zzz
+          tz.offset :o112, 11224, 25, :zzz
+          tz.offset :o113, 11224, 10, :zzz
+          tz.offset :o114, 11224, -25, :zzz
+          tz.offset :o115, 11224, -40, :zzz
+          tz.offset :o116, 11224, -55, :zzz
+          tz.offset :o117, 11224, -65, :zzz
+          tz.offset :o118, 11224, -80, :zzz
+          tz.offset :o119, 11224, -90, :zzz
+          tz.offset :o120, 11224, -105, :zzz
+          tz.offset :o121, 11224, -120, :zzz
+          tz.offset :o122, 11224, -130, :zzz
+          tz.offset :o123, 11224, -155, :zzz
+          tz.offset :o124, 11224, -170, :zzz
+          tz.offset :o125, 11224, -205, :zzz
+          tz.offset :o126, 11224, -240, :zzz
+          tz.offset :o127, 11224, -275, :zzz
+          tz.offset :o128, 11224, -295, :zzz
+          tz.offset :o129, 11224, -310, :zzz
+          tz.offset :o130, 11224, -335, :zzz
+          tz.offset :o131, 11224, -345, :zzz
+          tz.offset :o132, 11224, -350, :zzz
+          tz.offset :o133, 11224, -355, :zzz
+          tz.offset :o134, 11224, -365, :zzz
+          tz.offset :o135, 11224, -370, :zzz
+          tz.offset :o136, 11224, -380, :zzz
+          tz.offset :o137, 11224, -390, :zzz
+          tz.offset :o138, 11224, -325, :zzz
+          tz.offset :o139, 11224, -300, :zzz
+          tz.offset :o140, 11224, -290, :zzz
+          tz.offset :o141, 11224, -255, :zzz
+          tz.offset :o142, 11224, -200, :zzz
+          tz.offset :o143, 11224, -185, :zzz
+          tz.offset :o144, 11224, -140, :zzz
+          tz.offset :o145, 11224, -70, :zzz
+          tz.offset :o146, 11224, -50, :zzz
+          tz.offset :o147, 11224, -35, :zzz
+          tz.offset :o148, 11224, 5, :zzz
+          tz.offset :o149, 11224, 100, :zzz
+          tz.offset :o150, 11224, 120, :zzz
+          tz.offset :o151, 11224, 225, :zzz
+          tz.offset :o152, 11224, 250, :zzz
+          tz.offset :o153, 11224, 270, :zzz
+          tz.offset :o154, 11224, 290, :zzz
+          tz.offset :o155, 11224, 310, :zzz
+          tz.offset :o156, 11224, 335, :zzz
+          tz.offset :o157, 11224, 355, :zzz
+          tz.offset :o158, 11224, 375, :zzz
+          tz.offset :o159, 11224, 395, :zzz
+          tz.offset :o160, 11224, 420, :zzz
+          tz.offset :o161, 11224, 440, :zzz
+          tz.offset :o162, 11224, 460, :zzz
+          tz.offset :o163, 11224, 480, :zzz
+          tz.offset :o164, 11224, 500, :zzz
+          tz.offset :o165, 11224, 525, :zzz
+          tz.offset :o166, 11224, 545, :zzz
+          tz.offset :o167, 11224, 565, :zzz
+          tz.offset :o168, 11224, 585, :zzz
+          tz.offset :o169, 11224, 605, :zzz
+          tz.offset :o170, 11224, 625, :zzz
+          tz.offset :o171, 11224, 640, :zzz
+          tz.offset :o172, 11224, 660, :zzz
+          tz.offset :o173, 11224, 680, :zzz
+          tz.offset :o174, 11224, 695, :zzz
+          tz.offset :o175, 11224, 715, :zzz
+          tz.offset :o176, 11224, 730, :zzz
+          tz.offset :o177, 11224, 750, :zzz
+          tz.offset :o178, 11224, 765, :zzz
+          tz.offset :o179, 11224, 780, :zzz
+          tz.offset :o180, 11224, 795, :zzz
+          tz.offset :o181, 11224, 810, :zzz
+          tz.offset :o182, 11224, 825, :zzz
+          tz.offset :o183, 11224, 840, :zzz
+          tz.offset :o184, 11224, 855, :zzz
+          tz.offset :o185, 11224, 865, :zzz
+          tz.offset :o186, 11224, 880, :zzz
+          tz.offset :o187, 11224, 890, :zzz
+          tz.offset :o188, 11224, 900, :zzz
+          tz.offset :o189, 11224, 915, :zzz
+          tz.offset :o190, 11224, 920, :zzz
+          tz.offset :o191, 11224, 930, :zzz
+          tz.offset :o192, 11224, 940, :zzz
+          tz.offset :o193, 11224, 950, :zzz
+          tz.offset :o194, 11224, 955, :zzz
+          tz.offset :o195, 11224, 960, :zzz
+          tz.offset :o196, 11224, 965, :zzz
+          tz.offset :o197, 11224, 970, :zzz
+          tz.offset :o198, 11224, 975, :zzz
+          tz.offset :o199, 11224, 980, :zzz
+          tz.offset :o200, 11224, 985, :zzz
+          tz.offset :o201, 11224, 910, :zzz
+          tz.offset :o202, 11224, 885, :zzz
+          tz.offset :o203, 11224, 875, :zzz
+          tz.offset :o204, 11224, 860, :zzz
+          tz.offset :o205, 11224, 845, :zzz
+          tz.offset :o206, 11224, 830, :zzz
+          tz.offset :o207, 11224, 775, :zzz
+          tz.offset :o208, 11224, 760, :zzz
+          tz.offset :o209, 11224, 740, :zzz
+          tz.offset :o210, 11224, 720, :zzz
+          tz.offset :o211, 11224, 675, :zzz
+          tz.offset :o212, 11224, 655, :zzz
+          tz.offset :o213, 11224, 630, :zzz
+          tz.offset :o214, 11224, 560, :zzz
+          tz.offset :o215, 11224, 535, :zzz
+          tz.offset :o216, 11224, 505, :zzz
+          tz.offset :o217, 11224, 455, :zzz
+          tz.offset :o218, 11224, 425, :zzz
+          tz.offset :o219, 11224, 400, :zzz
+          tz.offset :o220, 11224, 370, :zzz
+          tz.offset :o221, 11224, 345, :zzz
+          tz.offset :o222, 11224, 315, :zzz
+          tz.offset :o223, 11224, 285, :zzz
+          tz.offset :o224, 11224, 255, :zzz
+          tz.offset :o225, 11224, 110, :zzz
+          tz.offset :o226, 11224, 50, :zzz
+          tz.offset :o227, 11224, 20, :zzz
+          tz.offset :o228, 11224, -10, :zzz
+          tz.offset :o229, 11224, -100, :zzz
+          
+          tz.transition 1988, 1, :o1, 568025771
+          tz.transition 1988, 1, :o2, 568112196
+          tz.transition 1988, 1, :o3, 568198626
+          tz.transition 1988, 1, :o4, 568285056
+          tz.transition 1988, 1, :o5, 568371481
+          tz.transition 1988, 1, :o6, 568457906
+          tz.transition 1988, 1, :o7, 568544336
+          tz.transition 1988, 1, :o8, 568630761
+          tz.transition 1988, 1, :o9, 568717186
+          tz.transition 1988, 1, :o10, 568803611
+          tz.transition 1988, 1, :o11, 568890036
+          tz.transition 1988, 1, :o12, 568976461
+          tz.transition 1988, 1, :o13, 569062881
+          tz.transition 1988, 1, :o14, 569149306
+          tz.transition 1988, 1, :o15, 569235726
+          tz.transition 1988, 1, :o16, 569322146
+          tz.transition 1988, 1, :o17, 569408566
+          tz.transition 1988, 1, :o18, 569494986
+          tz.transition 1988, 1, :o19, 569581406
+          tz.transition 1988, 1, :o20, 569667826
+          tz.transition 1988, 1, :o21, 569754241
+          tz.transition 1988, 1, :o22, 569840661
+          tz.transition 1988, 1, :o23, 569927076
+          tz.transition 1988, 1, :o24, 570013491
+          tz.transition 1988, 1, :o25, 570099906
+          tz.transition 1988, 1, :o26, 570186321
+          tz.transition 1988, 1, :o27, 570272736
+          tz.transition 1988, 1, :o28, 570359146
+          tz.transition 1988, 1, :o29, 570445556
+          tz.transition 1988, 1, :o30, 570531966
+          tz.transition 1988, 1, :o31, 570618376
+          tz.transition 1988, 2, :o32, 570704786
+          tz.transition 1988, 2, :o33, 570791196
+          tz.transition 1988, 2, :o34, 570877601
+          tz.transition 1988, 2, :o35, 570964011
+          tz.transition 1988, 2, :o36, 571050416
+          tz.transition 1988, 2, :o37, 571136821
+          tz.transition 1988, 2, :o38, 571223226
+          tz.transition 1988, 2, :o39, 571396031
+          tz.transition 1988, 2, :o38, 571914426
+          tz.transition 1988, 2, :o37, 572087221
+          tz.transition 1988, 2, :o36, 572173616
+          tz.transition 1988, 2, :o35, 572260011
+          tz.transition 1988, 2, :o40, 572346406
+          tz.transition 1988, 2, :o34, 572432801
+          tz.transition 1988, 2, :o33, 572519196
+          tz.transition 1988, 2, :o32, 572605586
+          tz.transition 1988, 2, :o31, 572691976
+          tz.transition 1988, 2, :o41, 572778371
+          tz.transition 1988, 2, :o42, 572864761
+          tz.transition 1988, 2, :o43, 572951151
+          tz.transition 1988, 2, :o44, 573037541
+          tz.transition 1988, 2, :o45, 573123926
+          tz.transition 1988, 3, :o46, 573210316
+          tz.transition 1988, 3, :o25, 573296706
+          tz.transition 1988, 3, :o24, 573383091
+          tz.transition 1988, 3, :o47, 573469481
+          tz.transition 1988, 3, :o48, 573555866
+          tz.transition 1988, 3, :o49, 573642251
+          tz.transition 1988, 3, :o50, 573728636
+          tz.transition 1988, 3, :o51, 573815021
+          tz.transition 1988, 3, :o19, 573901406
+          tz.transition 1988, 3, :o52, 573987791
+          tz.transition 1988, 3, :o53, 574074176
+          tz.transition 1988, 3, :o54, 574160561
+          tz.transition 1988, 3, :o16, 574246946
+          tz.transition 1988, 3, :o15, 574333326
+          tz.transition 1988, 3, :o55, 574419711
+          tz.transition 1988, 3, :o56, 574506096
+          tz.transition 1988, 3, :o57, 574592476
+          tz.transition 1988, 3, :o12, 574678861
+          tz.transition 1988, 3, :o58, 574765241
+          tz.transition 1988, 3, :o59, 574851626
+          tz.transition 1988, 3, :o60, 574938006
+          tz.transition 1988, 3, :o9, 575024386
+          tz.transition 1988, 3, :o61, 575110771
+          tz.transition 1988, 3, :o62, 575197151
+          tz.transition 1988, 3, :o7, 575283536
+          tz.transition 1988, 3, :o63, 575369916
+          tz.transition 1988, 3, :o64, 575456296
+          tz.transition 1988, 3, :o5, 575542681
+          tz.transition 1988, 3, :o65, 575629061
+          tz.transition 1988, 3, :o66, 575715441
+          tz.transition 1988, 3, :o3, 575801826
+          tz.transition 1988, 4, :o67, 575888206
+          tz.transition 1988, 4, :o68, 575974591
+          tz.transition 1988, 4, :o1, 576060971
+          tz.transition 1988, 4, :o69, 576147356
+          tz.transition 1988, 4, :o70, 576233736
+          tz.transition 1988, 4, :o71, 576320121
+          tz.transition 1988, 4, :o72, 576406501
+          tz.transition 1988, 4, :o73, 576492886
+          tz.transition 1988, 4, :o74, 576579271
+          tz.transition 1988, 4, :o75, 576665651
+          tz.transition 1988, 4, :o76, 576752036
+          tz.transition 1988, 4, :o77, 576838421
+          tz.transition 1988, 4, :o78, 576924806
+          tz.transition 1988, 4, :o79, 577011191
+          tz.transition 1988, 4, :o0, 577097576
+          tz.transition 1988, 4, :o80, 577183961
+          tz.transition 1988, 4, :o81, 577270346
+          tz.transition 1988, 4, :o82, 577356736
+          tz.transition 1988, 4, :o83, 577443121
+          tz.transition 1988, 4, :o84, 577529511
+          tz.transition 1988, 4, :o85, 577615896
+          tz.transition 1988, 4, :o86, 577702286
+          tz.transition 1988, 4, :o87, 577788671
+          tz.transition 1988, 4, :o88, 577875061
+          tz.transition 1988, 4, :o89, 577961451
+          tz.transition 1988, 4, :o90, 578047841
+          tz.transition 1988, 4, :o91, 578134231
+          tz.transition 1988, 4, :o92, 578220626
+          tz.transition 1988, 4, :o93, 578307016
+          tz.transition 1988, 4, :o94, 578393406
+          tz.transition 1988, 5, :o95, 578479801
+          tz.transition 1988, 5, :o96, 578566191
+          tz.transition 1988, 5, :o97, 578652586
+          tz.transition 1988, 5, :o98, 578738981
+          tz.transition 1988, 5, :o99, 578825376
+          tz.transition 1988, 5, :o100, 578911771
+          tz.transition 1988, 5, :o101, 578998166
+          tz.transition 1988, 5, :o102, 579084561
+          tz.transition 1988, 5, :o103, 579257356
+          tz.transition 1988, 5, :o102, 579948561
+          tz.transition 1988, 5, :o101, 580121366
+          tz.transition 1988, 5, :o100, 580207771
+          tz.transition 1988, 5, :o99, 580294176
+          tz.transition 1988, 5, :o98, 580380581
+          tz.transition 1988, 5, :o97, 580466986
+          tz.transition 1988, 5, :o96, 580553391
+          tz.transition 1988, 5, :o104, 580639796
+          tz.transition 1988, 5, :o95, 580726201
+          tz.transition 1988, 5, :o105, 580812611
+          tz.transition 1988, 5, :o93, 580899016
+          tz.transition 1988, 5, :o92, 580985426
+          tz.transition 1988, 5, :o106, 581071836
+          tz.transition 1988, 6, :o107, 581158246
+          tz.transition 1988, 6, :o89, 581244651
+          tz.transition 1988, 6, :o88, 581331061
+          tz.transition 1988, 6, :o87, 581417471
+          tz.transition 1988, 6, :o86, 581503886
+          tz.transition 1988, 6, :o85, 581590296
+          tz.transition 1988, 6, :o108, 581676706
+          tz.transition 1988, 6, :o109, 581763116
+          tz.transition 1988, 6, :o110, 581849531
+          tz.transition 1988, 6, :o111, 581935941
+          tz.transition 1988, 6, :o112, 582022351
+          tz.transition 1988, 6, :o113, 582108766
+          tz.transition 1988, 6, :o0, 582195176
+          tz.transition 1988, 6, :o79, 582281591
+          tz.transition 1988, 6, :o114, 582368001
+          tz.transition 1988, 6, :o115, 582454416
+          tz.transition 1988, 6, :o116, 582540831
+          tz.transition 1988, 6, :o117, 582627241
+          tz.transition 1988, 6, :o118, 582713656
+          tz.transition 1988, 6, :o119, 582800066
+          tz.transition 1988, 6, :o120, 582886481
+          tz.transition 1988, 6, :o121, 582972896
+          tz.transition 1988, 6, :o122, 583059306
+          tz.transition 1988, 6, :o71, 583145721
+          tz.transition 1988, 6, :o123, 583232131
+          tz.transition 1988, 6, :o124, 583318546
+          tz.transition 1988, 6, :o69, 583404956
+          tz.transition 1988, 6, :o1, 583491371
+          tz.transition 1988, 6, :o125, 583577781
+          tz.transition 1988, 6, :o2, 583664196
+          tz.transition 1988, 7, :o67, 583750606
+          tz.transition 1988, 7, :o126, 583837016
+          tz.transition 1988, 7, :o3, 583923426
+          tz.transition 1988, 7, :o66, 584009841
+          tz.transition 1988, 7, :o127, 584096251
+          tz.transition 1988, 7, :o65, 584182661
+          tz.transition 1988, 7, :o128, 584269071
+          tz.transition 1988, 7, :o5, 584355481
+          tz.transition 1988, 7, :o129, 584441886
+          tz.transition 1988, 7, :o64, 584528296
+          tz.transition 1988, 7, :o6, 584614706
+          tz.transition 1988, 7, :o130, 584701111
+          tz.transition 1988, 7, :o131, 584787521
+          tz.transition 1988, 7, :o132, 584873926
+          tz.transition 1988, 7, :o133, 584960331
+          tz.transition 1988, 7, :o7, 585046736
+          tz.transition 1988, 7, :o134, 585133141
+          tz.transition 1988, 7, :o135, 585219546
+          tz.transition 1988, 7, :o62, 585305951
+          tz.transition 1988, 7, :o136, 585392356
+          tz.transition 1988, 7, :o8, 585478761
+          tz.transition 1988, 7, :o137, 585737966
+          tz.transition 1988, 7, :o8, 586169961
+          tz.transition 1988, 7, :o136, 586342756
+          tz.transition 1988, 8, :o62, 586429151
+          tz.transition 1988, 8, :o135, 586601946
+          tz.transition 1988, 8, :o134, 586688341
+          tz.transition 1988, 8, :o133, 586774731
+          tz.transition 1988, 8, :o132, 586861126
+          tz.transition 1988, 8, :o131, 586947521
+          tz.transition 1988, 8, :o130, 587033911
+          tz.transition 1988, 8, :o138, 587120301
+          tz.transition 1988, 8, :o64, 587206696
+          tz.transition 1988, 8, :o129, 587293086
+          tz.transition 1988, 8, :o139, 587379476
+          tz.transition 1988, 8, :o140, 587465866
+          tz.transition 1988, 8, :o127, 587552251
+          tz.transition 1988, 8, :o66, 587638641
+          tz.transition 1988, 8, :o141, 587725031
+          tz.transition 1988, 8, :o126, 587811416
+          tz.transition 1988, 8, :o67, 587897806
+          tz.transition 1988, 8, :o68, 587984191
+          tz.transition 1988, 8, :o142, 588070576
+          tz.transition 1988, 8, :o143, 588156961
+          tz.transition 1988, 8, :o124, 588243346
+          tz.transition 1988, 8, :o123, 588329731
+          tz.transition 1988, 8, :o144, 588416116
+          tz.transition 1988, 8, :o121, 588502496
+          tz.transition 1988, 8, :o120, 588588881
+          tz.transition 1988, 8, :o119, 588675266
+          tz.transition 1988, 8, :o145, 588761646
+          tz.transition 1988, 8, :o146, 588848026
+          tz.transition 1988, 8, :o147, 588934411
+          tz.transition 1988, 8, :o79, 589020791
+          tz.transition 1988, 9, :o148, 589107171
+          tz.transition 1988, 9, :o112, 589193551
+          tz.transition 1988, 9, :o82, 589279936
+          tz.transition 1988, 9, :o109, 589366316
+          tz.transition 1988, 9, :o85, 589452696
+          tz.transition 1988, 9, :o149, 589539076
+          tz.transition 1988, 9, :o150, 589625456
+          tz.transition 1988, 9, :o91, 589711831
+          tz.transition 1988, 9, :o105, 589798211
+          tz.transition 1988, 9, :o96, 589884591
+          tz.transition 1988, 9, :o100, 589970971
+          tz.transition 1988, 9, :o151, 590057351
+          tz.transition 1988, 9, :o152, 590143726
+          tz.transition 1988, 9, :o153, 590230106
+          tz.transition 1988, 9, :o154, 590316486
+          tz.transition 1988, 9, :o155, 590402866
+          tz.transition 1988, 9, :o156, 590489241
+          tz.transition 1988, 9, :o157, 590575621
+          tz.transition 1988, 9, :o158, 590662001
+          tz.transition 1988, 9, :o159, 590748381
+          tz.transition 1988, 9, :o160, 590834756
+          tz.transition 1988, 9, :o161, 590921136
+          tz.transition 1988, 9, :o162, 591007516
+          tz.transition 1988, 9, :o163, 591093896
+          tz.transition 1988, 9, :o164, 591180276
+          tz.transition 1988, 9, :o165, 591266651
+          tz.transition 1988, 9, :o166, 591353031
+          tz.transition 1988, 9, :o167, 591439411
+          tz.transition 1988, 9, :o168, 591525791
+          tz.transition 1988, 9, :o169, 591612171
+          tz.transition 1988, 10, :o170, 591698551
+          tz.transition 1988, 10, :o171, 591784936
+          tz.transition 1988, 10, :o172, 591871316
+          tz.transition 1988, 10, :o173, 591957696
+          tz.transition 1988, 10, :o174, 592044081
+          tz.transition 1988, 10, :o175, 592130461
+          tz.transition 1988, 10, :o176, 592216846
+          tz.transition 1988, 10, :o177, 592303226
+          tz.transition 1988, 10, :o178, 592389611
+          tz.transition 1988, 10, :o179, 592475996
+          tz.transition 1988, 10, :o180, 592562381
+          tz.transition 1988, 10, :o181, 592648766
+          tz.transition 1988, 10, :o182, 592735151
+          tz.transition 1988, 10, :o183, 592821536
+          tz.transition 1988, 10, :o184, 592907921
+          tz.transition 1988, 10, :o185, 592994311
+          tz.transition 1988, 10, :o186, 593080696
+          tz.transition 1988, 10, :o187, 593167086
+          tz.transition 1988, 10, :o188, 593253476
+          tz.transition 1988, 10, :o189, 593339861
+          tz.transition 1988, 10, :o190, 593426256
+          tz.transition 1988, 10, :o191, 593512646
+          tz.transition 1988, 10, :o192, 593599036
+          tz.transition 1988, 10, :o193, 593685426
+          tz.transition 1988, 10, :o194, 593771821
+          tz.transition 1988, 10, :o195, 593858216
+          tz.transition 1988, 10, :o196, 593944611
+          tz.transition 1988, 10, :o197, 594031006
+          tz.transition 1988, 10, :o198, 594117401
+          tz.transition 1988, 10, :o199, 594203796
+          tz.transition 1988, 11, :o200, 594376591
+          tz.transition 1988, 11, :o199, 594722196
+          tz.transition 1988, 11, :o198, 594895001
+          tz.transition 1988, 11, :o197, 595067806
+          tz.transition 1988, 11, :o195, 595154216
+          tz.transition 1988, 11, :o194, 595240621
+          tz.transition 1988, 11, :o193, 595327026
+          tz.transition 1988, 11, :o192, 595413436
+          tz.transition 1988, 11, :o191, 595499846
+          tz.transition 1988, 11, :o190, 595586256
+          tz.transition 1988, 11, :o201, 595672666
+          tz.transition 1988, 11, :o188, 595759076
+          tz.transition 1988, 11, :o202, 595845491
+          tz.transition 1988, 11, :o203, 595931901
+          tz.transition 1988, 11, :o204, 596018316
+          tz.transition 1988, 11, :o205, 596104731
+          tz.transition 1988, 11, :o206, 596191146
+          tz.transition 1988, 11, :o181, 596277566
+          tz.transition 1988, 11, :o180, 596363981
+          tz.transition 1988, 11, :o207, 596450401
+          tz.transition 1988, 11, :o208, 596536816
+          tz.transition 1988, 11, :o209, 596623236
+          tz.transition 1988, 11, :o210, 596709656
+          tz.transition 1988, 11, :o174, 596796081
+          tz.transition 1988, 11, :o211, 596882501
+          tz.transition 1988, 12, :o212, 596968921
+          tz.transition 1988, 12, :o213, 597055346
+          tz.transition 1988, 12, :o169, 597141771
+          tz.transition 1988, 12, :o168, 597228191
+          tz.transition 1988, 12, :o214, 597314616
+          tz.transition 1988, 12, :o215, 597401041
+          tz.transition 1988, 12, :o216, 597487471
+          tz.transition 1988, 12, :o163, 597573896
+          tz.transition 1988, 12, :o217, 597660321
+          tz.transition 1988, 12, :o218, 597746751
+          tz.transition 1988, 12, :o219, 597833176
+          tz.transition 1988, 12, :o220, 597919606
+          tz.transition 1988, 12, :o221, 598006031
+          tz.transition 1988, 12, :o222, 598092461
+          tz.transition 1988, 12, :o223, 598178891
+          tz.transition 1988, 12, :o224, 598265321
+          tz.transition 1988, 12, :o151, 598351751
+          tz.transition 1988, 12, :o99, 598438176
+          tz.transition 1988, 12, :o94, 598524606
+          tz.transition 1988, 12, :o106, 598611036
+          tz.transition 1988, 12, :o225, 598697466
+          tz.transition 1988, 12, :o85, 598783896
+          tz.transition 1988, 12, :o226, 598870326
+          tz.transition 1988, 12, :o227, 598956756
+          tz.transition 1988, 12, :o228, 599043186
+          tz.transition 1988, 12, :o115, 599129616
+          tz.transition 1988, 12, :o145, 599216046
+          tz.transition 1988, 12, :o229, 599302476
+          tz.transition 1988, 12, :o122, 599388906
+          tz.transition 1988, 12, :o123, 599475331
+          tz.transition 1988, 12, :o143, 599561761
+          tz.transition 1988, 12, :o0, 599604961
+        end
+      end
+    end
+  end
 end

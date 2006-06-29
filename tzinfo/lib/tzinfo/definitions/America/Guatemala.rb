@@ -1,21 +1,27 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Guatemala < Timezone #:nodoc:
-setup
-set_identifier('America/Guatemala')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52312429831,21600),0,Date::ITALY),-21724,0,:LMT)}
-add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(52312429831,21600),0,Date::ITALY),123055200,-21600,0,:CST)}
-add_period(1973,11) {TimezonePeriod.new(123055200,130914000,-21600,3600,:CDT)}
-add_period(1974,2) {TimezonePeriod.new(130914000,422344800,-21600,0,:CST)}
-add_period(1983,5) {TimezonePeriod.new(422344800,433054800,-21600,3600,:CDT)}
-add_period(1983,9) {TimezonePeriod.new(433054800,669708000,-21600,0,:CST)}
-add_period(1991,3) {TimezonePeriod.new(669708000,684219600,-21600,3600,:CDT)}
-add_period(1991,9) {TimezonePeriod.new(684219600,1146376800,-21600,0,:CST)}
-add_period(2006,4) {TimezonePeriod.new(1146376800,1159678800,-21600,3600,:CDT)}
-add_period(2006,10) {TimezonePeriod.new(1159678800,nil,-21600,0,:CST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Guatemala #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/Guatemala' do |tz|
+          tz.offset :o0, -21724, 0, :LMT
+          tz.offset :o1, -21600, 0, :CST
+          tz.offset :o2, -21600, 3600, :CDT
+          
+          tz.transition 1918, 10, :o1, 52312429831, 21600
+          tz.transition 1973, 11, :o2, 123055200
+          tz.transition 1974, 2, :o1, 130914000
+          tz.transition 1983, 5, :o2, 422344800
+          tz.transition 1983, 9, :o1, 433054800
+          tz.transition 1991, 3, :o2, 669708000
+          tz.transition 1991, 9, :o1, 684219600
+          tz.transition 2006, 4, :o2, 1146376800
+          tz.transition 2006, 10, :o1, 1159678800
+        end
+      end
+    end
+  end
 end

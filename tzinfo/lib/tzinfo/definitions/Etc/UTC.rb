@@ -1,12 +1,16 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Etc #:nodoc:
-class UTC < Timezone #:nodoc:
-setup
-set_identifier('Etc/UTC')
-add_unbounded_start_period {TimezonePeriod.new(nil,nil,0,0,:UTC)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Etc #:nodoc:
+      module UTC #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Etc/UTC' do |tz|
+          tz.offset :o0, 0, 0, :UTC
+          
+        end
+      end
+    end
+  end
 end

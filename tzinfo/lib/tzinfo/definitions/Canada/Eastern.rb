@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Toronto'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Canada #:nodoc:
-class Eastern < Definitions::America::Toronto #:nodoc:
-setup_linked
-set_identifier('Canada/Eastern')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Canada #:nodoc:
+      module Eastern #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Canada/Eastern', 'America/Toronto'
+      end
+    end
+  end
 end

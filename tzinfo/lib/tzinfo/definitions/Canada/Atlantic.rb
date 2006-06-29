@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Halifax'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Canada #:nodoc:
-class Atlantic < Definitions::America::Halifax #:nodoc:
-setup_linked
-set_identifier('Canada/Atlantic')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Canada #:nodoc:
+      module Atlantic #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Canada/Atlantic', 'America/Halifax'
+      end
+    end
+  end
 end

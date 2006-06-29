@@ -22,10 +22,9 @@
 
 require 'date'
 require 'tzinfo/country'
-require 'tzinfo/definitions'
 require 'tzinfo/time_or_datetime'
+require 'tzinfo/timezone_definition'
 require 'tzinfo/timezone_period'
-require 'tzinfo/timezone_period_list'
 
 module TZInfo
   # Indicate a specified time in a local timezone has more than one
@@ -40,8 +39,7 @@ module TZInfo
   class InvalidTimezoneIdentifier < StandardError
   end
   
-  # Thrown if an attempt is made to do a conversion on a timezone created
-  # with Timezone.new(nil).
+  # Thrown if an attempt is made to use a timezone created with Timezone.new(nil).
   class UnknownTimezone < StandardError
   end
   
@@ -73,24 +71,30 @@ module TZInfo
     # Raises InvalidTimezoneIdentifier if the timezone couldn't be found.
     def self.get(identifier)
       instance = @@loaded_zones[identifier]
-      if instance.nil?      
+      unless instance  
         raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
         identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
         begin
-          path = 'tzinfo/definitions'
-          
-          # Require each of the modules along the way as well as the class.
-          # This brings in the const_missing method at each level.
-          identifier.split(/\//).each {|part|
-            path << '/' + part            
-            require path
-          }
+          require "tzinfo/definitions/#{identifier}"
           
           m = Definitions
           identifier.split(/\//).each {|part|
             m = m.const_get(part)
           }
-          instance = m.instance
+          
+          info = m.get
+          
+          # Could make Timezone subclasses register an interest in an info
+          # type. Since there are currently only two however, there isn't
+          # much point.
+          if info.kind_of?(DataTimezoneInfo)
+            instance = DataTimezone.new(info)
+          elsif info.kind_of?(LinkedTimezoneInfo)
+            instance = LinkedTimezone.new(info)
+          else
+            raise InvalidTimezoneIdentifier, "No handler for info type #{info.class}"
+          end
+          
           @@loaded_zones[instance.identifier] = instance         
         rescue LoadError, NameError => e
           raise InvalidTimezoneIdentifier, e.message
@@ -98,6 +102,15 @@ module TZInfo
       end
       
       instance
+    end
+    
+    # Returns a proxy for the Timezone with the given identifier. The proxy
+    # will cause the real timezone to be loaded when an attempt is made to 
+    # find a period or convert a time. get_proxy will not validate the 
+    # identifier. If an invalid identifier is specified, no exception will be 
+    # raised until the proxy is used. 
+    def self.get_proxy(identifier)
+      TimezoneProxy.new(identifier)
     end
     
     # If identifier is nil calls super(), else calls get(identifier). An
@@ -163,7 +176,7 @@ module TZInfo
     
     # The identifier of the timezone, e.g. "Europe/Paris".
     def identifier
-      'Unknown'
+      raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
     end
     
     # An alias for identifier.
@@ -219,10 +232,16 @@ module TZInfo
     # Returns the TimezonePeriod for the given UTC time. utc can either be
     # a DateTime, Time or integer timestamp (Time.to_i). Any timezone 
     # information in utc is ignored (it is treated as a UTC time).        
-    #
-    # If no TimezonePeriod could be found, PeriodNotFound is raised.
     def period_for_utc(utc)            
-      periods.period_for_utc(utc)      
+      raise UnknownTimezone, 'TZInfo::Timezone constructed directly'      
+    end
+    
+    # Returns the set of TimezonePeriod instances that are valid for the given
+    # local time as an array. If you just want a single period, use 
+    # period_for_local instead and specify how abiguities should be resolved.
+    # Raises PeriodNotFound if no periods are found for the given time.
+    def periods_for_local(local)
+      raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
     end
     
     # Returns the TimezonePeriod for the given local time. local can either be
@@ -260,7 +279,7 @@ module TZInfo
     # return a single period or return nil or an empty array
     # to cause an AmbiguousTime exception to be raised.
     def period_for_local(local, dst = nil)            
-      results = periods.periods_for_local(local)
+      results = periods_for_local(local)
       
       # by this point, results must contain at least one period
       if results.size < 2
@@ -385,86 +404,14 @@ module TZInfo
       identifier.hash
     end
     
-    def periods #:nodoc:
-      raise UnknownTimezone, 'An attempt was made to perform a conversion on ' + 
-        'an unknown timezone (i.e. one created with TZInfo::Timezone.new(nil))'
+    # Dump this Timezone for marshalling.
+    def _dump(limit)
+      identifier
     end
     
-    protected
-      def self.setup        
-        class_eval <<CODE
-            @@periods = TimezonePeriodList.new
-            @instance = new
-            
-            def identifier
-              self.class.get_identifier
-            end            
-            
-            def self.instance
-              @instance
-            end
-            
-            def periods
-              @@periods
-            end
-            
-            protected
-              def self.add_period(year, month)              
-                @@periods.add(year, month) { yield }
-              end
-              
-              def self.add_unbounded_start_period
-                @@periods.add_unbounded_start { yield }
-              end
-              
-              def self.set_identifier(identifier)
-                @identifier = identifier
-              end
-
-              def self.get_identifier
-                @identifier
-              end             
-CODE
-      end
-      
-      def self.setup_linked
-        class_eval <<CODE
-          @instance = new
-CODE
-      end
-  end 
-  
-  # A proxy class representing a timezone with a given identifier. It can be
-  # constructed with an identifier and behaves almost identically to a Timezone 
-  # loaded through Timezone.get. The first time an attempt is made to perform
-  # a conversion on the proxy, the real Timezone class is loaded. If the
-  # proxy's identifier was not valid, then an exception will be thrown at this
-  # point.    
-  class TimezoneProxy < Timezone
-    # Construct a new TimezoneProxy for the given identifier. The identifier
-    # is not checked when constructing the proxy. It will be validated on the
-    # first conversion.
-    def self.new(identifier)
-      # Need to override new to undo the behaviour introduced in Timezone#new.
-      tzp = super()
-      tzp.instance_eval <<CODE
-        @identifier = identifier
-        @real_tz = nil
-CODE
-      tzp
+    # Load a marshalled Timezone.
+    def self._load(data)
+      Timezone.get(data)
     end
-        
-    # The identifier of the timezone, e.g. "Europe/Paris".
-    def identifier
-      @real_tz.nil? ? @identifier : @real_tz.identifier
-    end
-    
-    def periods #:nodoc:
-      if @real_tz.nil?
-        # We now need the actual data. Load in the real timezone.
-        @real_tz = Timezone.get(@identifier)
-      end
-      @real_tz.periods      
-    end        
-  end    
+  end        
 end

@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Indiana/Indianapolis'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module US #:nodoc:
-class East__m__Indiana < Definitions::America::Indiana::Indianapolis #:nodoc:
-setup_linked
-set_identifier('US/East-Indiana')
-end
-end
-end
+  module Definitions #:nodoc:
+    module US #:nodoc:
+      module East__m__Indiana #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'US/East-Indiana', 'America/Indiana/Indianapolis'
+      end
+    end
+  end
 end

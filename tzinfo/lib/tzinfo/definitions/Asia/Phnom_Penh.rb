@@ -1,16 +1,23 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Phnom_Penh < Timezone #:nodoc:
-setup
-set_identifier('Asia/Phnom_Penh')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10443039301,4320),0,Date::ITALY),25180,0,:LMT)}
-add_period(1906,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(10443039301,4320),0,Date::ITALY),DateTime.new0(Rational.new!(2612634701,1080),0,Date::ITALY),25580,0,:SMT)}
-add_period(1911,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(2612634701,1080),0,Date::ITALY),DateTime.new0(Rational.new!(58068557,24),0,Date::ITALY),25200,0,:ICT)}
-add_period(1912,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58068557,24),0,Date::ITALY),DateTime.new0(Rational.new!(14558773,6),0,Date::ITALY),28800,0,:ICT)}
-add_period(1931,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14558773,6),0,Date::ITALY),nil,25200,0,:ICT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Phnom_Penh #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Asia/Phnom_Penh' do |tz|
+          tz.offset :o0, 25180, 0, :LMT
+          tz.offset :o1, 25580, 0, :SMT
+          tz.offset :o2, 25200, 0, :ICT
+          tz.offset :o3, 28800, 0, :ICT
+          
+          tz.transition 1906, 6, :o1, 10443039301, 4320
+          tz.transition 1911, 3, :o2, 2612634701, 1080
+          tz.transition 1912, 4, :o3, 58068557, 24
+          tz.transition 1931, 4, :o2, 14558773, 6
+        end
+      end
+    end
+  end
 end

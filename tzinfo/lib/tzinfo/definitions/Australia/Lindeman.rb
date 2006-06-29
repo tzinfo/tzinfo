@@ -1,33 +1,39 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Australia #:nodoc:
-class Lindeman < Timezone #:nodoc:
-setup
-set_identifier('Australia/Lindeman')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52124992261,21600),0,Date::ITALY),35756,0,:LMT)}
-add_period(1894,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52124992261,21600),0,Date::ITALY),DateTime.new0(Rational.new!(3486569881,1440),0,Date::ITALY),36000,0,:EST)}
-add_period(1916,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(3486569881,1440),0,Date::ITALY),DateTime.new0(Rational.new!(19370497,8),0,Date::ITALY),36000,3600,:EST)}
-add_period(1917,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19370497,8),0,Date::ITALY),DateTime.new0(Rational.new!(14582161,6),0,Date::ITALY),36000,0,:EST)}
-add_period(1941,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(14582161,6),0,Date::ITALY),DateTime.new0(Rational.new!(19443577,8),0,Date::ITALY),36000,3600,:EST)}
-add_period(1942,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19443577,8),0,Date::ITALY),DateTime.new0(Rational.new!(14583775,6),0,Date::ITALY),36000,0,:EST)}
-add_period(1942,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(14583775,6),0,Date::ITALY),DateTime.new0(Rational.new!(19446489,8),0,Date::ITALY),36000,3600,:EST)}
-add_period(1943,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19446489,8),0,Date::ITALY),DateTime.new0(Rational.new!(14586001,6),0,Date::ITALY),36000,0,:EST)}
-add_period(1943,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14586001,6),0,Date::ITALY),DateTime.new0(Rational.new!(19449401,8),0,Date::ITALY),36000,3600,:EST)}
-add_period(1944,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19449401,8),0,Date::ITALY),57686400,36000,0,:EST)}
-add_period(1971,10) {TimezonePeriod.new(57686400,67968000,36000,3600,:EST)}
-add_period(1972,2) {TimezonePeriod.new(67968000,625593600,36000,0,:EST)}
-add_period(1989,10) {TimezonePeriod.new(625593600,636480000,36000,3600,:EST)}
-add_period(1990,3) {TimezonePeriod.new(636480000,657043200,36000,0,:EST)}
-add_period(1990,10) {TimezonePeriod.new(657043200,667929600,36000,3600,:EST)}
-add_period(1991,3) {TimezonePeriod.new(667929600,688492800,36000,0,:EST)}
-add_period(1991,10) {TimezonePeriod.new(688492800,699379200,36000,3600,:EST)}
-add_period(1992,2) {TimezonePeriod.new(699379200,719942400,36000,0,:EST)}
-add_period(1992,10) {TimezonePeriod.new(719942400,731433600,36000,3600,:EST)}
-add_period(1993,3) {TimezonePeriod.new(731433600,751996800,36000,0,:EST)}
-add_period(1993,10) {TimezonePeriod.new(751996800,762883200,36000,3600,:EST)}
-add_period(1994,3) {TimezonePeriod.new(762883200,nil,36000,0,:EST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Australia #:nodoc:
+      module Lindeman #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Australia/Lindeman' do |tz|
+          tz.offset :o0, 35756, 0, :LMT
+          tz.offset :o1, 36000, 0, :EST
+          tz.offset :o2, 36000, 3600, :EST
+          
+          tz.transition 1894, 12, :o1, 52124992261, 21600
+          tz.transition 1916, 12, :o2, 3486569881, 1440
+          tz.transition 1917, 3, :o1, 19370497, 8
+          tz.transition 1941, 12, :o2, 14582161, 6
+          tz.transition 1942, 3, :o1, 19443577, 8
+          tz.transition 1942, 9, :o2, 14583775, 6
+          tz.transition 1943, 3, :o1, 19446489, 8
+          tz.transition 1943, 10, :o2, 14586001, 6
+          tz.transition 1944, 3, :o1, 19449401, 8
+          tz.transition 1971, 10, :o2, 57686400
+          tz.transition 1972, 2, :o1, 67968000
+          tz.transition 1989, 10, :o2, 625593600
+          tz.transition 1990, 3, :o1, 636480000
+          tz.transition 1990, 10, :o2, 657043200
+          tz.transition 1991, 3, :o1, 667929600
+          tz.transition 1991, 10, :o2, 688492800
+          tz.transition 1992, 2, :o1, 699379200
+          tz.transition 1992, 10, :o2, 719942400
+          tz.transition 1993, 3, :o1, 731433600
+          tz.transition 1993, 10, :o2, 751996800
+          tz.transition 1994, 3, :o1, 762883200
+        end
+      end
+    end
+  end
 end

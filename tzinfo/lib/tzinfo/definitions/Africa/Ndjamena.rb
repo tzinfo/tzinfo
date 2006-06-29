@@ -1,15 +1,21 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Ndjamena < Timezone #:nodoc:
-setup
-set_identifier('Africa/Ndjamena')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(17419697699,7200),0,Date::ITALY),3612,0,:LMT)}
-add_period(1911,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(17419697699,7200),0,Date::ITALY),308703600,3600,0,:WAT)}
-add_period(1979,10) {TimezonePeriod.new(308703600,321314400,3600,3600,:WAST)}
-add_period(1980,3) {TimezonePeriod.new(321314400,nil,3600,0,:WAT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Ndjamena #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Ndjamena' do |tz|
+          tz.offset :o0, 3612, 0, :LMT
+          tz.offset :o1, 3600, 0, :WAT
+          tz.offset :o2, 3600, 3600, :WAST
+          
+          tz.transition 1911, 12, :o1, 17419697699, 7200
+          tz.transition 1979, 10, :o2, 308703600
+          tz.transition 1980, 3, :o1, 321314400
+        end
+      end
+    end
+  end
 end

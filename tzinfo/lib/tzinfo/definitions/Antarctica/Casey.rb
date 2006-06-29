@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Antarctica #:nodoc:
-class Casey < Timezone #:nodoc:
-setup
-set_identifier('Antarctica/Casey')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(4880445,2),0,Date::ITALY),0,0,:zzz)}
-add_period(1969,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(4880445,2),0,Date::ITALY),nil,28800,0,:WST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Antarctica #:nodoc:
+      module Casey #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Antarctica/Casey' do |tz|
+          tz.offset :o0, 0, 0, :zzz
+          tz.offset :o1, 28800, 0, :WST
+          
+          tz.transition 1969, 1, :o1, 4880445, 2
+        end
+      end
+    end
+  end
 end

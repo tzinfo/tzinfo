@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Kigali < Timezone #:nodoc:
-setup
-set_identifier('Africa/Kigali')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(13110953849,5400),0,Date::ITALY),7216,0,:LMT)}
-add_period(1935,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(13110953849,5400),0,Date::ITALY),nil,7200,0,:CAT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Kigali #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Kigali' do |tz|
+          tz.offset :o0, 7216, 0, :LMT
+          tz.offset :o1, 7200, 0, :CAT
+          
+          tz.transition 1935, 5, :o1, 13110953849, 5400
+        end
+      end
+    end
+  end
 end

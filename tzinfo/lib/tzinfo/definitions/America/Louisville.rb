@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Kentucky/Louisville'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Louisville < Definitions::America::Kentucky::Louisville #:nodoc:
-setup_linked
-set_identifier('America/Louisville')
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Louisville #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'America/Louisville', 'America/Kentucky/Louisville'
+      end
+    end
+  end
 end

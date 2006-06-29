@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Pacific/Easter'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Chile #:nodoc:
-class EasterIsland < Definitions::Pacific::Easter #:nodoc:
-setup_linked
-set_identifier('Chile/EasterIsland')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Chile #:nodoc:
+      module EasterIsland #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Chile/EasterIsland', 'Pacific/Easter'
+      end
+    end
+  end
 end

@@ -1,15 +1,21 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Kosrae < Timezone #:nodoc:
-setup
-set_identifier('Pacific/Kosrae')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52172317021,21600),0,Date::ITALY),39116,0,:LMT)}
-add_period(1900,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52172317021,21600),0,Date::ITALY),DateTime.new0(Rational.new!(58571881,24),0,Date::ITALY),39600,0,:KOST)}
-add_period(1969,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(58571881,24),0,Date::ITALY),915105600,43200,0,:KOST)}
-add_period(1998,12) {TimezonePeriod.new(915105600,nil,39600,0,:KOST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Kosrae #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Pacific/Kosrae' do |tz|
+          tz.offset :o0, 39116, 0, :LMT
+          tz.offset :o1, 39600, 0, :KOST
+          tz.offset :o2, 43200, 0, :KOST
+          
+          tz.transition 1900, 12, :o1, 52172317021, 21600
+          tz.transition 1969, 9, :o2, 58571881, 24
+          tz.transition 1998, 12, :o1, 915105600
+        end
+      end
+    end
+  end
 end

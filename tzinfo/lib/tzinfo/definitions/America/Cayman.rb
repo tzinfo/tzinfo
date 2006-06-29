@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Cayman < Timezone #:nodoc:
-setup
-set_identifier('America/Cayman')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52085564483,21600),0,Date::ITALY),-19532,0,:LMT)}
-add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52085564483,21600),0,Date::ITALY),DateTime.new0(Rational.new!(362915057,150),0,Date::ITALY),-18432,0,:KMT)}
-add_period(1912,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(362915057,150),0,Date::ITALY),nil,-18000,0,:EST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Cayman #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/Cayman' do |tz|
+          tz.offset :o0, -19532, 0, :LMT
+          tz.offset :o1, -18432, 0, :KMT
+          tz.offset :o2, -18000, 0, :EST
+          
+          tz.transition 1890, 1, :o1, 52085564483, 21600
+          tz.transition 1912, 2, :o2, 362915057, 150
+        end
+      end
+    end
+  end
 end

@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Guayaquil < Timezone #:nodoc:
-setup
-set_identifier('America/Guayaquil')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(5208556439,2160),0,Date::ITALY),-19160,0,:LMT)}
-add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(5208556439,2160),0,Date::ITALY),DateTime.new0(Rational.new!(1746966757,720),0,Date::ITALY),-18840,0,:QMT)}
-add_period(1931,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(1746966757,720),0,Date::ITALY),nil,-18000,0,:ECT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Guayaquil #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/Guayaquil' do |tz|
+          tz.offset :o0, -19160, 0, :LMT
+          tz.offset :o1, -18840, 0, :QMT
+          tz.offset :o2, -18000, 0, :ECT
+          
+          tz.transition 1890, 1, :o1, 5208556439, 2160
+          tz.transition 1931, 1, :o2, 1746966757, 720
+        end
+      end
+    end
+  end
 end

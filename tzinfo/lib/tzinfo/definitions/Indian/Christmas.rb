@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Indian #:nodoc:
-class Christmas < Timezone #:nodoc:
-setup
-set_identifier('Indian/Christmas')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52125664457,21600),0,Date::ITALY),25372,0,:LMT)}
-add_period(1895,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52125664457,21600),0,Date::ITALY),nil,25200,0,:CXT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Indian #:nodoc:
+      module Christmas #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Indian/Christmas' do |tz|
+          tz.offset :o0, 25372, 0, :LMT
+          tz.offset :o1, 25200, 0, :CXT
+          
+          tz.transition 1895, 1, :o1, 52125664457, 21600
+        end
+      end
+    end
+  end
 end

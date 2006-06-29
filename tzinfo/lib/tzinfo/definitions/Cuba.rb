@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Havana'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Cuba < Definitions::America::Havana #:nodoc:
-setup_linked
-set_identifier('Cuba')
-end
-end
+  module Definitions #:nodoc:
+    module Cuba #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Cuba', 'America/Havana'
+    end
+  end
 end

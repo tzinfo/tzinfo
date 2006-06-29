@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Lubumbashi < Timezone #:nodoc:
-setup
-set_identifier('Africa/Lubumbashi')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(1629610261,675),0,Date::ITALY),6592,0,:LMT)}
-add_period(1897,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(1629610261,675),0,Date::ITALY),nil,7200,0,:CAT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Lubumbashi #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Lubumbashi' do |tz|
+          tz.offset :o0, 6592, 0, :LMT
+          tz.offset :o1, 7200, 0, :CAT
+          
+          tz.transition 1897, 11, :o1, 1629610261, 675
+        end
+      end
+    end
+  end
 end

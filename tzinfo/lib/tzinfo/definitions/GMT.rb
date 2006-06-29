@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Etc/GMT'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class GMT < Definitions::Etc::GMT #:nodoc:
-setup_linked
-set_identifier('GMT')
-end
-end
+  module Definitions #:nodoc:
+    module GMT #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'GMT', 'Etc/GMT'
+    end
+  end
 end

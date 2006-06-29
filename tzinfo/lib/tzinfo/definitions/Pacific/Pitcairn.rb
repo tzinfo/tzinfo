@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Pitcairn < Timezone #:nodoc:
-setup
-set_identifier('Pacific/Pitcairn')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10434466921,4320),0,Date::ITALY),-31220,0,:LMT)}
-add_period(1901,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10434466921,4320),0,Date::ITALY),893665800,-30600,0,:PNT)}
-add_period(1998,4) {TimezonePeriod.new(893665800,nil,-28800,0,:PST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Pitcairn #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Pacific/Pitcairn' do |tz|
+          tz.offset :o0, -31220, 0, :LMT
+          tz.offset :o1, -30600, 0, :PNT
+          tz.offset :o2, -28800, 0, :PST
+          
+          tz.transition 1901, 1, :o1, 10434466921, 4320
+          tz.transition 1998, 4, :o2, 893665800
+        end
+      end
+    end
+  end
 end

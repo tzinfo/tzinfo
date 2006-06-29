@@ -1,17 +1,26 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Pago_Pago < Timezone #:nodoc:
-setup
-set_identifier('Pacific/Pago_Pago')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(2889041969,1200),0,Date::ITALY),45432,0,:LMT)}
-add_period(1879,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(2889041969,1200),0,Date::ITALY),DateTime.new0(Rational.new!(2902845569,1200),0,Date::ITALY),-40968,0,:LMT)}
-add_period(1911,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(2902845569,1200),0,Date::ITALY),DateTime.new0(Rational.new!(116797583,48),0,Date::ITALY),-41400,0,:SAMT)}
-add_period(1950,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(116797583,48),0,Date::ITALY),DateTime.new0(Rational.new!(58549967,24),0,Date::ITALY),-39600,0,:NST)}
-add_period(1967,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(58549967,24),0,Date::ITALY),439038000,-39600,0,:BST)}
-add_period(1983,11) {TimezonePeriod.new(439038000,nil,-39600,0,:SST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Pago_Pago #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Pacific/Pago_Pago' do |tz|
+          tz.offset :o0, 45432, 0, :LMT
+          tz.offset :o1, -40968, 0, :LMT
+          tz.offset :o2, -41400, 0, :SAMT
+          tz.offset :o3, -39600, 0, :NST
+          tz.offset :o4, -39600, 0, :BST
+          tz.offset :o5, -39600, 0, :SST
+          
+          tz.transition 1879, 7, :o1, 2889041969, 1200
+          tz.transition 1911, 1, :o2, 2902845569, 1200
+          tz.transition 1950, 1, :o3, 116797583, 48
+          tz.transition 1967, 4, :o4, 58549967, 24
+          tz.transition 1983, 11, :o5, 439038000
+        end
+      end
+    end
+  end
 end

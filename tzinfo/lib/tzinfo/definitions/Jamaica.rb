@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Jamaica'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Jamaica < Definitions::America::Jamaica #:nodoc:
-setup_linked
-set_identifier('Jamaica')
-end
-end
+  module Definitions #:nodoc:
+    module Jamaica #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Jamaica', 'America/Jamaica'
+    end
+  end
 end

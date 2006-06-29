@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Pacific/Auckland'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class NZ < Definitions::Pacific::Auckland #:nodoc:
-setup_linked
-set_identifier('NZ')
-end
-end
+  module Definitions #:nodoc:
+    module NZ #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'NZ', 'Pacific/Auckland'
+    end
+  end
 end

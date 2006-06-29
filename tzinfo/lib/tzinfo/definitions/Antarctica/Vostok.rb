@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Antarctica #:nodoc:
-class Vostok < Timezone #:nodoc:
-setup
-set_identifier('Antarctica/Vostok')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(4872377,2),0,Date::ITALY),0,0,:zzz)}
-add_period(1957,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(4872377,2),0,Date::ITALY),nil,21600,0,:VOST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Antarctica #:nodoc:
+      module Vostok #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Antarctica/Vostok' do |tz|
+          tz.offset :o0, 0, 0, :zzz
+          tz.offset :o1, 21600, 0, :VOST
+          
+          tz.transition 1957, 12, :o1, 4872377, 2
+        end
+      end
+    end
+  end
 end

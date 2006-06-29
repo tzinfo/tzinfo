@@ -1,18 +1,27 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Dhaka < Timezone #:nodoc:
-setup
-set_identifier('Asia/Dhaka')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(2083422167,864),0,Date::ITALY),21700,0,:LMT)}
-add_period(1889,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(2083422167,864),0,Date::ITALY),DateTime.new0(Rational.new!(524937943,216),0,Date::ITALY),21200,0,:HMT)}
-add_period(1941,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(524937943,216),0,Date::ITALY),DateTime.new0(Rational.new!(116663723,48),0,Date::ITALY),23400,0,:BURT)}
-add_period(1942,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(116663723,48),0,Date::ITALY),DateTime.new0(Rational.new!(116668957,48),0,Date::ITALY),19800,0,:IST)}
-add_period(1942,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(116668957,48),0,Date::ITALY),DateTime.new0(Rational.new!(116828123,48),0,Date::ITALY),23400,0,:BURT)}
-add_period(1951,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(116828123,48),0,Date::ITALY),38772000,21600,0,:DACT)}
-add_period(1971,3) {TimezonePeriod.new(38772000,nil,21600,0,:BDT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Dhaka #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Asia/Dhaka' do |tz|
+          tz.offset :o0, 21700, 0, :LMT
+          tz.offset :o1, 21200, 0, :HMT
+          tz.offset :o2, 23400, 0, :BURT
+          tz.offset :o3, 19800, 0, :IST
+          tz.offset :o4, 21600, 0, :DACT
+          tz.offset :o5, 21600, 0, :BDT
+          
+          tz.transition 1889, 12, :o1, 2083422167, 864
+          tz.transition 1941, 9, :o2, 524937943, 216
+          tz.transition 1942, 5, :o3, 116663723, 48
+          tz.transition 1942, 8, :o2, 116668957, 48
+          tz.transition 1951, 9, :o4, 116828123, 48
+          tz.transition 1971, 3, :o5, 38772000
+        end
+      end
+    end
+  end
 end

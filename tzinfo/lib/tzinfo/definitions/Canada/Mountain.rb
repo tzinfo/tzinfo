@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Edmonton'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Canada #:nodoc:
-class Mountain < Definitions::America::Edmonton #:nodoc:
-setup_linked
-set_identifier('Canada/Mountain')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Canada #:nodoc:
+      module Mountain #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Canada/Mountain', 'America/Edmonton'
+      end
+    end
+  end
 end

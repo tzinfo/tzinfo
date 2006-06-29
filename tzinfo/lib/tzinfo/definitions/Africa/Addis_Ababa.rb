@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Addis_Ababa < Timezone #:nodoc:
-setup
-set_identifier('Africa/Addis_Ababa')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(961625357,400),0,Date::ITALY),9288,0,:LMT)}
-add_period(1869,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(961625357,400),0,Date::ITALY),DateTime.new0(Rational.new!(5245113727,2160),0,Date::ITALY),9320,0,:ADMT)}
-add_period(1936,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(5245113727,2160),0,Date::ITALY),nil,10800,0,:EAT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Addis_Ababa #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Addis_Ababa' do |tz|
+          tz.offset :o0, 9288, 0, :LMT
+          tz.offset :o1, 9320, 0, :ADMT
+          tz.offset :o2, 10800, 0, :EAT
+          
+          tz.transition 1869, 12, :o1, 961625357, 400
+          tz.transition 1936, 5, :o2, 5245113727, 2160
+        end
+      end
+    end
+  end
 end

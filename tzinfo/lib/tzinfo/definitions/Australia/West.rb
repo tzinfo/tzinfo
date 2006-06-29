@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Australia/Perth'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Australia #:nodoc:
-class West < Definitions::Australia::Perth #:nodoc:
-setup_linked
-set_identifier('Australia/West')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Australia #:nodoc:
+      module West #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Australia/West', 'Australia/Perth'
+      end
+    end
+  end
 end

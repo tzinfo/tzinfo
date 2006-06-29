@@ -1,15 +1,21 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Antarctica #:nodoc:
-class DumontDUrville < Timezone #:nodoc:
-setup
-set_identifier('Antarctica/DumontDUrville')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(4864373,2),0,Date::ITALY),0,0,:zzz)}
-add_period(1947,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(4864373,2),0,Date::ITALY),DateTime.new0(Rational.new!(29208301,12),0,Date::ITALY),36000,0,:PMT)}
-add_period(1952,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(29208301,12),0,Date::ITALY),DateTime.new0(Rational.new!(4871557,2),0,Date::ITALY),0,0,:zzz)}
-add_period(1956,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(4871557,2),0,Date::ITALY),nil,36000,0,:DDUT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Antarctica #:nodoc:
+      module DumontDUrville #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Antarctica/DumontDUrville' do |tz|
+          tz.offset :o0, 0, 0, :zzz
+          tz.offset :o1, 36000, 0, :PMT
+          tz.offset :o2, 36000, 0, :DDUT
+          
+          tz.transition 1947, 1, :o1, 4864373, 2
+          tz.transition 1952, 1, :o0, 29208301, 12
+          tz.transition 1956, 11, :o2, 4871557, 2
+        end
+      end
+    end
+  end
 end

@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/New_York'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module US #:nodoc:
-class Eastern < Definitions::America::New_York #:nodoc:
-setup_linked
-set_identifier('US/Eastern')
-end
-end
-end
+  module Definitions #:nodoc:
+    module US #:nodoc:
+      module Eastern #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'US/Eastern', 'America/New_York'
+      end
+    end
+  end
 end

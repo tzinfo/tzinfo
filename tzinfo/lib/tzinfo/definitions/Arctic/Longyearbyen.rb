@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Oslo'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Arctic #:nodoc:
-class Longyearbyen < Definitions::Europe::Oslo #:nodoc:
-setup_linked
-set_identifier('Arctic/Longyearbyen')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Arctic #:nodoc:
+      module Longyearbyen #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Arctic/Longyearbyen', 'Europe/Oslo'
+      end
+    end
+  end
 end

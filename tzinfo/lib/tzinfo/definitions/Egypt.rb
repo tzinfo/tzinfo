@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Africa/Cairo'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Egypt < Definitions::Africa::Cairo #:nodoc:
-setup_linked
-set_identifier('Egypt')
-end
-end
+  module Definitions #:nodoc:
+    module Egypt #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Egypt', 'Africa/Cairo'
+    end
+  end
 end

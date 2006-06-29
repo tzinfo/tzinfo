@@ -1,16 +1,23 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Kampala < Timezone #:nodoc:
-setup
-set_identifier('Africa/Kampala')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10477850731,4320),0,Date::ITALY),7780,0,:LMT)}
-add_period(1928,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(10477850731,4320),0,Date::ITALY),DateTime.new0(Rational.new!(19407819,8),0,Date::ITALY),10800,0,:EAT)}
-add_period(1929,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(19407819,8),0,Date::ITALY),DateTime.new0(Rational.new!(116762467,48),0,Date::ITALY),9000,0,:BEAT)}
-add_period(1947,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(116762467,48),0,Date::ITALY),DateTime.new0(Rational.new!(14030434861,5760),0,Date::ITALY),9885,0,:BEAUT)}
-add_period(1956,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(14030434861,5760),0,Date::ITALY),nil,10800,0,:EAT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Kampala #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Kampala' do |tz|
+          tz.offset :o0, 7780, 0, :LMT
+          tz.offset :o1, 10800, 0, :EAT
+          tz.offset :o2, 9000, 0, :BEAT
+          tz.offset :o3, 9885, 0, :BEAUT
+          
+          tz.transition 1928, 6, :o1, 10477850731, 4320
+          tz.transition 1929, 12, :o2, 19407819, 8
+          tz.transition 1947, 12, :o3, 116762467, 48
+          tz.transition 1956, 12, :o1, 14030434861, 5760
+        end
+      end
+    end
+  end
 end

@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Chicago'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module US #:nodoc:
-class Central < Definitions::America::Chicago #:nodoc:
-setup_linked
-set_identifier('US/Central')
-end
-end
-end
+  module Definitions #:nodoc:
+    module US #:nodoc:
+      module Central #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'US/Central', 'America/Chicago'
+      end
+    end
+  end
 end

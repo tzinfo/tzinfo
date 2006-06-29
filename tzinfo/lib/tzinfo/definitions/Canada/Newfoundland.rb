@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/St_Johns'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Canada #:nodoc:
-class Newfoundland < Definitions::America::St_Johns #:nodoc:
-setup_linked
-set_identifier('Canada/Newfoundland')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Canada #:nodoc:
+      module Newfoundland #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Canada/Newfoundland', 'America/St_Johns'
+      end
+    end
+  end
 end

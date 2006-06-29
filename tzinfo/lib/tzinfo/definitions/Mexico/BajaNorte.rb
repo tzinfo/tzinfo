@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Tijuana'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Mexico #:nodoc:
-class BajaNorte < Definitions::America::Tijuana #:nodoc:
-setup_linked
-set_identifier('Mexico/BajaNorte')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Mexico #:nodoc:
+      module BajaNorte #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Mexico/BajaNorte', 'America/Tijuana'
+      end
+    end
+  end
 end

@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Denver'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Navajo < Definitions::America::Denver #:nodoc:
-setup_linked
-set_identifier('Navajo')
-end
-end
+  module Definitions #:nodoc:
+    module Navajo #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Navajo', 'America/Denver'
+    end
+  end
 end

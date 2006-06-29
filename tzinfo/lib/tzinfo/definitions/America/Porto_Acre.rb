@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Rio_Branco'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Porto_Acre < Definitions::America::Rio_Branco #:nodoc:
-setup_linked
-set_identifier('America/Porto_Acre')
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Porto_Acre #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'America/Porto_Acre', 'America/Rio_Branco'
+      end
+    end
+  end
 end

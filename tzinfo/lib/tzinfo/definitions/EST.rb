@@ -1,10 +1,14 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class EST < Timezone #:nodoc:
-setup
-set_identifier('EST')
-add_unbounded_start_period {TimezonePeriod.new(nil,nil,-18000,0,:EST)}
-end
-end
+  module Definitions #:nodoc:
+    module EST #:nodoc:
+      include TimezoneDefinition
+      
+      timezone 'EST' do |tz|
+        tz.offset :o0, -18000, 0, :EST
+        
+      end
+    end
+  end
 end

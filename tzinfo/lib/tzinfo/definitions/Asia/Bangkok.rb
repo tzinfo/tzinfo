@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Bangkok < Timezone #:nodoc:
-setup
-set_identifier('Asia/Bangkok')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52006648769,21600),0,Date::ITALY),24124,0,:LMT)}
-add_period(1879,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52006648769,21600),0,Date::ITALY),DateTime.new0(Rational.new!(52324168769,21600),0,Date::ITALY),24124,0,:BMT)}
-add_period(1920,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(52324168769,21600),0,Date::ITALY),nil,25200,0,:ICT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Bangkok #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Asia/Bangkok' do |tz|
+          tz.offset :o0, 24124, 0, :LMT
+          tz.offset :o1, 24124, 0, :BMT
+          tz.offset :o2, 25200, 0, :ICT
+          
+          tz.transition 1879, 12, :o1, 52006648769, 21600
+          tz.transition 1920, 3, :o2, 52324168769, 21600
+        end
+      end
+    end
+  end
 end

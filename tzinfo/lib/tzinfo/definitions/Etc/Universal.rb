@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Etc/UTC'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Etc #:nodoc:
-class Universal < Definitions::Etc::UTC #:nodoc:
-setup_linked
-set_identifier('Etc/Universal')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Etc #:nodoc:
+      module Universal #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Etc/Universal', 'Etc/UTC'
+      end
+    end
+  end
 end

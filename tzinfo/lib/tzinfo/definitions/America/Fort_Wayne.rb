@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Indiana/Indianapolis'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Fort_Wayne < Definitions::America::Indiana::Indianapolis #:nodoc:
-setup_linked
-set_identifier('America/Fort_Wayne')
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Fort_Wayne #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'America/Fort_Wayne', 'America/Indiana/Indianapolis'
+      end
+    end
+  end
 end

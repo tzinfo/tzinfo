@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Grenada < Timezone #:nodoc:
-setup
-set_identifier('America/Grenada')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(3483674887,1440),0,Date::ITALY),-14820,0,:LMT)}
-add_period(1911,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(3483674887,1440),0,Date::ITALY),nil,-14400,0,:AST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Grenada #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/Grenada' do |tz|
+          tz.offset :o0, -14820, 0, :LMT
+          tz.offset :o1, -14400, 0, :AST
+          
+          tz.transition 1911, 7, :o1, 3483674887, 1440
+        end
+      end
+    end
+  end
 end

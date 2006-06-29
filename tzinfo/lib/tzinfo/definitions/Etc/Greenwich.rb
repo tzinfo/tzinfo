@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Etc/GMT'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Etc #:nodoc:
-class Greenwich < Definitions::Etc::GMT #:nodoc:
-setup_linked
-set_identifier('Etc/Greenwich')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Etc #:nodoc:
+      module Greenwich #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Etc/Greenwich', 'Etc/GMT'
+      end
+    end
+  end
 end

@@ -28,4 +28,6 @@ $:.unshift(File.dirname(__FILE__)) unless
 require 'tzinfo/timezone'
 require 'tzinfo/country'
 require 'tzinfo/tzdataparser'
-require 'tzinfo/definitions'
+require 'tzinfo/timezone_proxy'
+require 'tzinfo/data_timezone'
+require 'tzinfo/linked_timezone'

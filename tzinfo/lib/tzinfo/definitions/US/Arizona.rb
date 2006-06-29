@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Phoenix'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module US #:nodoc:
-class Arizona < Definitions::America::Phoenix #:nodoc:
-setup_linked
-set_identifier('US/Arizona')
-end
-end
-end
+  module Definitions #:nodoc:
+    module US #:nodoc:
+      module Arizona #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'US/Arizona', 'America/Phoenix'
+      end
+    end
+  end
 end

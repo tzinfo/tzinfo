@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Ashgabat'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Ashkhabad < Definitions::Asia::Ashgabat #:nodoc:
-setup_linked
-set_identifier('Asia/Ashkhabad')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Ashkhabad #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Asia/Ashkhabad', 'Asia/Ashgabat'
+      end
+    end
+  end
 end

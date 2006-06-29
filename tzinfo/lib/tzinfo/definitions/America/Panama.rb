@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Panama < Timezone #:nodoc:
-setup
-set_identifier('America/Panama')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(13021391093,5400),0,Date::ITALY),-19088,0,:LMT)}
-add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(13021391093,5400),0,Date::ITALY),DateTime.new0(Rational.new!(8704993399,3600),0,Date::ITALY),-19176,0,:CMT)}
-add_period(1908,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(8704993399,3600),0,Date::ITALY),nil,-18000,0,:EST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Panama #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/Panama' do |tz|
+          tz.offset :o0, -19088, 0, :LMT
+          tz.offset :o1, -19176, 0, :CMT
+          tz.offset :o2, -18000, 0, :EST
+          
+          tz.transition 1890, 1, :o1, 13021391093, 5400
+          tz.transition 1908, 4, :o2, 8704993399, 3600
+        end
+      end
+    end
+  end
 end

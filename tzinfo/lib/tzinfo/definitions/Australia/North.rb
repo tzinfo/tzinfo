@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Australia/Darwin'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Australia #:nodoc:
-class North < Definitions::Australia::Darwin #:nodoc:
-setup_linked
-set_identifier('Australia/North')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Australia #:nodoc:
+      module North #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Australia/North', 'Australia/Darwin'
+      end
+    end
+  end
 end

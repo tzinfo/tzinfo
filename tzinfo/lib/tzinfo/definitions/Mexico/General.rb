@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Mexico_City'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Mexico #:nodoc:
-class General < Definitions::America::Mexico_City #:nodoc:
-setup_linked
-set_identifier('Mexico/General')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Mexico #:nodoc:
+      module General #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Mexico/General', 'America/Mexico_City'
+      end
+    end
+  end
 end

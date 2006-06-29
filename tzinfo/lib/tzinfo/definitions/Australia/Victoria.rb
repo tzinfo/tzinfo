@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Australia/Melbourne'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Australia #:nodoc:
-class Victoria < Definitions::Australia::Melbourne #:nodoc:
-setup_linked
-set_identifier('Australia/Victoria')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Australia #:nodoc:
+      module Victoria #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Australia/Victoria', 'Australia/Melbourne'
+      end
+    end
+  end
 end

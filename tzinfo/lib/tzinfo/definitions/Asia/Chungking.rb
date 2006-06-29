@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Chongqing'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Chungking < Definitions::Asia::Chongqing #:nodoc:
-setup_linked
-set_identifier('Asia/Chungking')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Chungking #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Asia/Chungking', 'Asia/Chongqing'
+      end
+    end
+  end
 end

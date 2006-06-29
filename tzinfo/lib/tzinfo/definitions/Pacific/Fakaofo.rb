@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Fakaofo < Timezone #:nodoc:
-setup
-set_identifier('Pacific/Fakaofo')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(26086168537,10800),0,Date::ITALY),-41096,0,:LMT)}
-add_period(1901,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(26086168537,10800),0,Date::ITALY),nil,-36000,0,:TKT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Fakaofo #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Pacific/Fakaofo' do |tz|
+          tz.offset :o0, -41096, 0, :LMT
+          tz.offset :o1, -36000, 0, :TKT
+          
+          tz.transition 1901, 1, :o1, 26086168537, 10800
+        end
+      end
+    end
+  end
 end

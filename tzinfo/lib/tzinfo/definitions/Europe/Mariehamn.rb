@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Helsinki'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Europe #:nodoc:
-class Mariehamn < Definitions::Europe::Helsinki #:nodoc:
-setup_linked
-set_identifier('Europe/Mariehamn')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Europe #:nodoc:
+      module Mariehamn #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Europe/Mariehamn', 'Europe/Helsinki'
+      end
+    end
+  end
 end

@@ -1,26 +1,23 @@
 == Version ?.?.? (tzdata v?????) - ???????????
 
-* Define const_missing methods in TZInfo::Definitions and all sub-modules of 
-  TZInfo::Definitions that load files for classes and modules contained within 
-  them. This allows Timezone instances to be used with Marshal.dump and 
-  Marshal.load and hence allows them to be stored in Rails sessions. 
-  Closes #4240.
 * Updated to tzdata version 2006g
   (http://article.gmane.org/gmane.comp.time.tz/1008).
+* New timezone data format. Timezone data now occupies less space on disk and
+  takes less memory once loaded. #4142.
+* Timezone data is defined in modules rather than classes. Timezone instances 
+  returned by Timezone.get are no longer instances of data classes, but instead
+  instances of new DataTimezone and LinkedTimezone classes.
+* Timezone instances can now be used with Marshal.dump and Marshal.load. #4240.
+* Added Timezone.get_proxy method that returns a TimezoneProxy object for a 
+  given identifier.
 * Country index data is now defined in a single module that is independent
   of the Country class implementation.
-* Country instances can now be used with Marshal.dump and Marshal.load 
-  Closes #4240.
+* Country instances can now be used with Marshal.dump and Marshal.load. #4240.
 * Country has a new zone_info method that returns CountryTimezone objects
   containing additional information about each Timezone (latitude, longitude
   and description).
 * Timezones within a Country are now returned in an order that makes 
   geographic sense.
-* Use class-scoped instance variables to store the Timezone identifier and 
-  singleton instance. Loading a linked zone no longer causes the parent
-  zone's identifier to be changed. The instance method of a linked zone class
-  also now returns an instance of the linked zone class rather than the parent
-  class. Closes #4502.
 * zdumptest utility now compares the TZInfo zone identifier with the zdump
   zone identifier.
 * zdumptestall utility now exits if not supplied with enough parameters.
@@ -29,6 +26,7 @@
   with no identifier method.
 * hash method defined on Country that returns the hash of the code.
 * hash method defined on Timezone that returns the hash of the identifier.
+* Miscellaneous API documentation corrections and improvements.
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006

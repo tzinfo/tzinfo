@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/London'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class GB < Definitions::Europe::London #:nodoc:
-setup_linked
-set_identifier('GB')
-end
-end
+  module Definitions #:nodoc:
+    module GB #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'GB', 'Europe/London'
+    end
+  end
 end

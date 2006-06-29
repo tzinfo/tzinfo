@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Antarctica/McMurdo'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Antarctica #:nodoc:
-class South_Pole < Definitions::Antarctica::McMurdo #:nodoc:
-setup_linked
-set_identifier('Antarctica/South_Pole')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Antarctica #:nodoc:
+      module South_Pole #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Antarctica/South_Pole', 'Antarctica/McMurdo'
+      end
+    end
+  end
 end

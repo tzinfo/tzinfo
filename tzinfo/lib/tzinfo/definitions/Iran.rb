@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Tehran'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Iran < Definitions::Asia::Tehran #:nodoc:
-setup_linked
-set_identifier('Iran')
-end
-end
+  module Definitions #:nodoc:
+    module Iran #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Iran', 'Asia/Tehran'
+    end
+  end
 end

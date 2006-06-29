@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Abidjan < Timezone #:nodoc:
-setup
-set_identifier('Africa/Abidjan')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(26129547121,10800),0,Date::ITALY),-968,0,:LMT)}
-add_period(1912,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(26129547121,10800),0,Date::ITALY),nil,0,0,:GMT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Abidjan #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Abidjan' do |tz|
+          tz.offset :o0, -968, 0, :LMT
+          tz.offset :o1, 0, 0, :GMT
+          
+          tz.transition 1912, 1, :o1, 26129547121, 10800
+        end
+      end
+    end
+  end
 end

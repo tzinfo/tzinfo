@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Tijuana'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Ensenada < Definitions::America::Tijuana #:nodoc:
-setup_linked
-set_identifier('America/Ensenada')
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Ensenada #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'America/Ensenada', 'America/Tijuana'
+      end
+    end
+  end
 end

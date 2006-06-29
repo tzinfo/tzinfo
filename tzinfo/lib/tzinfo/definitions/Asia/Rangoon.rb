@@ -1,16 +1,24 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Rangoon < Timezone #:nodoc:
-setup
-set_identifier('Asia/Rangoon')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(5200664903,2160),0,Date::ITALY),23080,0,:LMT)}
-add_period(1879,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(5200664903,2160),0,Date::ITALY),DateTime.new0(Rational.new!(5813578159,2400),0,Date::ITALY),23076,0,:RMT)}
-add_period(1919,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(5813578159,2400),0,Date::ITALY),DateTime.new0(Rational.new!(116663051,48),0,Date::ITALY),23400,0,:BURT)}
-add_period(1942,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(116663051,48),0,Date::ITALY),DateTime.new0(Rational.new!(19452625,8),0,Date::ITALY),32400,0,:JST)}
-add_period(1945,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(19452625,8),0,Date::ITALY),nil,23400,0,:MMT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Rangoon #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Asia/Rangoon' do |tz|
+          tz.offset :o0, 23080, 0, :LMT
+          tz.offset :o1, 23076, 0, :RMT
+          tz.offset :o2, 23400, 0, :BURT
+          tz.offset :o3, 32400, 0, :JST
+          tz.offset :o4, 23400, 0, :MMT
+          
+          tz.transition 1879, 12, :o1, 5200664903, 2160
+          tz.transition 1919, 12, :o2, 5813578159, 2400
+          tz.transition 1942, 4, :o3, 116663051, 48
+          tz.transition 1945, 5, :o4, 19452625, 8
+        end
+      end
+    end
+  end
 end

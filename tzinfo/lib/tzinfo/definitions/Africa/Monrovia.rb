@@ -1,15 +1,22 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Monrovia < Timezone #:nodoc:
-setup
-set_identifier('Africa/Monrovia')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52022445047,21600),0,Date::ITALY),-2588,0,:LMT)}
-add_period(1882,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(52022445047,21600),0,Date::ITALY),DateTime.new0(Rational.new!(52315600247,21600),0,Date::ITALY),-2588,0,:MMT)}
-add_period(1919,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(52315600247,21600),0,Date::ITALY),73529070,-2670,0,:LRT)}
-add_period(1972,5) {TimezonePeriod.new(73529070,nil,0,0,:GMT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Monrovia #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Monrovia' do |tz|
+          tz.offset :o0, -2588, 0, :LMT
+          tz.offset :o1, -2588, 0, :MMT
+          tz.offset :o2, -2670, 0, :LRT
+          tz.offset :o3, 0, 0, :GMT
+          
+          tz.transition 1882, 1, :o1, 52022445047, 21600
+          tz.transition 1919, 3, :o2, 52315600247, 21600
+          tz.transition 1972, 5, :o3, 73529070
+        end
+      end
+    end
+  end
 end

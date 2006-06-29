@@ -1,16 +1,24 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Saipan < Timezone #:nodoc:
-setup
-set_identifier('Pacific/Saipan')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(3448702217,1440),0,Date::ITALY),-51420,0,:LMT)}
-add_period(1844,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(3448702217,1440),0,Date::ITALY),DateTime.new0(Rational.new!(3478154537,1440),0,Date::ITALY),34980,0,:LMT)}
-add_period(1900,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(3478154537,1440),0,Date::ITALY),DateTime.new0(Rational.new!(19523961,8),0,Date::ITALY),32400,0,:MPT)}
-add_period(1969,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19523961,8),0,Date::ITALY),977493600,36000,0,:MPT)}
-add_period(2000,12) {TimezonePeriod.new(977493600,nil,36000,0,:ChST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Saipan #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Pacific/Saipan' do |tz|
+          tz.offset :o0, -51420, 0, :LMT
+          tz.offset :o1, 34980, 0, :LMT
+          tz.offset :o2, 32400, 0, :MPT
+          tz.offset :o3, 36000, 0, :MPT
+          tz.offset :o4, 36000, 0, :ChST
+          
+          tz.transition 1844, 12, :o1, 3448702217, 1440
+          tz.transition 1900, 12, :o2, 3478154537, 1440
+          tz.transition 1969, 9, :o3, 19523961, 8
+          tz.transition 2000, 12, :o4, 977493600
+        end
+      end
+    end
+  end
 end

@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Moscow'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class W__m__SU < Definitions::Europe::Moscow #:nodoc:
-setup_linked
-set_identifier('W-SU')
-end
-end
+  module Definitions #:nodoc:
+    module W__m__SU #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'W-SU', 'Europe/Moscow'
+    end
+  end
 end

@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Jerusalem'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Tel_Aviv < Definitions::Asia::Jerusalem #:nodoc:
-setup_linked
-set_identifier('Asia/Tel_Aviv')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Tel_Aviv #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Asia/Tel_Aviv', 'Asia/Jerusalem'
+      end
+    end
+  end
 end

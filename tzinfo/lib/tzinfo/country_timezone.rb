@@ -54,7 +54,7 @@ module TZInfo
     
     # The Timezone (actually a TimezoneProxy for performance reasons).
     def timezone
-      TimezoneProxy.new(@identifier)
+      Timezone.get_proxy(@identifier)
     end
     
     # if description is not nil, this method returns description; otherwise it

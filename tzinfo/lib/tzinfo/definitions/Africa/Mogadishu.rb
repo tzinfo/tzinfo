@@ -1,15 +1,21 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Mogadishu < Timezone #:nodoc:
-setup
-set_identifier('Africa/Mogadishu')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(26057898439,10800),0,Date::ITALY),10888,0,:LMT)}
-add_period(1893,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(26057898439,10800),0,Date::ITALY),DateTime.new0(Rational.new!(19410739,8),0,Date::ITALY),10800,0,:EAT)}
-add_period(1930,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(19410739,8),0,Date::ITALY),DateTime.new0(Rational.new!(116920291,48),0,Date::ITALY),9000,0,:BEAT)}
-add_period(1956,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(116920291,48),0,Date::ITALY),nil,10800,0,:EAT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Mogadishu #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Mogadishu' do |tz|
+          tz.offset :o0, 10888, 0, :LMT
+          tz.offset :o1, 10800, 0, :EAT
+          tz.offset :o2, 9000, 0, :BEAT
+          
+          tz.transition 1893, 10, :o1, 26057898439, 10800
+          tz.transition 1930, 12, :o2, 19410739, 8
+          tz.transition 1956, 12, :o1, 116920291, 48
+        end
+      end
+    end
+  end
 end

@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Pacific/Chatham'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class NZ__m__CHAT < Definitions::Pacific::Chatham #:nodoc:
-setup_linked
-set_identifier('NZ-CHAT')
-end
-end
+  module Definitions #:nodoc:
+    module NZ__m__CHAT #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'NZ-CHAT', 'Pacific/Chatham'
+    end
+  end
 end

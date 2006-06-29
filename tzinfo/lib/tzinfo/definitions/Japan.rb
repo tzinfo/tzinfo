@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Tokyo'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Japan < Definitions::Asia::Tokyo #:nodoc:
-setup_linked
-set_identifier('Japan')
-end
-end
+  module Definitions #:nodoc:
+    module Japan #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Japan', 'Asia/Tokyo'
+    end
+  end
 end

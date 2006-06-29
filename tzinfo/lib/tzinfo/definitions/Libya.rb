@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Africa/Tripoli'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Libya < Definitions::Africa::Tripoli #:nodoc:
-setup_linked
-set_identifier('Libya')
-end
-end
+  module Definitions #:nodoc:
+    module Libya #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Libya', 'Africa/Tripoli'
+    end
+  end
 end

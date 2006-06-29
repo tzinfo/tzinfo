@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Manaus'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Brazil #:nodoc:
-class West < Definitions::America::Manaus #:nodoc:
-setup_linked
-set_identifier('Brazil/West')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Brazil #:nodoc:
+      module West #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Brazil/West', 'America/Manaus'
+      end
+    end
+  end
 end

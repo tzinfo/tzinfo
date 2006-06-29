@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Adak'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module US #:nodoc:
-class Aleutian < Definitions::America::Adak #:nodoc:
-setup_linked
-set_identifier('US/Aleutian')
-end
-end
-end
+  module Definitions #:nodoc:
+    module US #:nodoc:
+      module Aleutian #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'US/Aleutian', 'America/Adak'
+      end
+    end
+  end
 end

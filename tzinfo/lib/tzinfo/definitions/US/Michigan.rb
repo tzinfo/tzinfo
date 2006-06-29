@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Detroit'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module US #:nodoc:
-class Michigan < Definitions::America::Detroit #:nodoc:
-setup_linked
-set_identifier('US/Michigan')
-end
-end
-end
+  module Definitions #:nodoc:
+    module US #:nodoc:
+      module Michigan #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'US/Michigan', 'America/Detroit'
+      end
+    end
+  end
 end

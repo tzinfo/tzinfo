@@ -1,15 +1,21 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Indian #:nodoc:
-class Antananarivo < Timezone #:nodoc:
-setup
-set_identifier('Indian/Antananarivo')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52255116749,21600),0,Date::ITALY),11404,0,:LMT)}
-add_period(1911,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(52255116749,21600),0,Date::ITALY),DateTime.new0(Rational.new!(7304404,3),0,Date::ITALY),10800,0,:EAT)}
-add_period(1954,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(7304404,3),0,Date::ITALY),DateTime.new0(Rational.new!(7304677,3),0,Date::ITALY),10800,3600,:EAST)}
-add_period(1954,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(7304677,3),0,Date::ITALY),nil,10800,0,:EAT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Indian #:nodoc:
+      module Antananarivo #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Indian/Antananarivo' do |tz|
+          tz.offset :o0, 11404, 0, :LMT
+          tz.offset :o1, 10800, 0, :EAT
+          tz.offset :o2, 10800, 3600, :EAST
+          
+          tz.transition 1911, 6, :o1, 52255116749, 21600
+          tz.transition 1954, 2, :o2, 7304404, 3
+          tz.transition 1954, 5, :o1, 7304677, 3
+        end
+      end
+    end
+  end
 end

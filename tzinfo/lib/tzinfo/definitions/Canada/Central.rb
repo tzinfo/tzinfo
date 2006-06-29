@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Winnipeg'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Canada #:nodoc:
-class Central < Definitions::America::Winnipeg #:nodoc:
-setup_linked
-set_identifier('Canada/Central')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Canada #:nodoc:
+      module Central #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Canada/Central', 'America/Winnipeg'
+      end
+    end
+  end
 end

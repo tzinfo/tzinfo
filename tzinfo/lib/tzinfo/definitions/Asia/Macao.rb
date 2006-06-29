@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Macau'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Macao < Definitions::Asia::Macau #:nodoc:
-setup_linked
-set_identifier('Asia/Macao')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Macao #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Asia/Macao', 'Asia/Macau'
+      end
+    end
+  end
 end

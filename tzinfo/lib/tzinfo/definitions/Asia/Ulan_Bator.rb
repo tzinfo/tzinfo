@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Ulaanbaatar'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Ulan_Bator < Definitions::Asia::Ulaanbaatar #:nodoc:
-setup_linked
-set_identifier('Asia/Ulan_Bator')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Ulan_Bator #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Asia/Ulan_Bator', 'Asia/Ulaanbaatar'
+      end
+    end
+  end
 end

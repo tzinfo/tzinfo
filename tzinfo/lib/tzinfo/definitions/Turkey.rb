@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Istanbul'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Turkey < Definitions::Europe::Istanbul #:nodoc:
-setup_linked
-set_identifier('Turkey')
-end
-end
+  module Definitions #:nodoc:
+    module Turkey #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Turkey', 'Europe/Istanbul'
+    end
+  end
 end

@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Antarctica #:nodoc:
-class Rothera < Timezone #:nodoc:
-setup
-set_identifier('Antarctica/Rothera')
-add_unbounded_start_period {TimezonePeriod.new(nil,218246400,0,0,:zzz)}
-add_period(1976,12) {TimezonePeriod.new(218246400,nil,-10800,0,:ROTT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Antarctica #:nodoc:
+      module Rothera #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Antarctica/Rothera' do |tz|
+          tz.offset :o0, 0, 0, :zzz
+          tz.offset :o1, -10800, 0, :ROTT
+          
+          tz.transition 1976, 12, :o1, 218246400
+        end
+      end
+    end
+  end
 end

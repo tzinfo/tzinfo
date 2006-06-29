@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Singapore'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Singapore < Definitions::Asia::Singapore #:nodoc:
-setup_linked
-set_identifier('Singapore')
-end
-end
+  module Definitions #:nodoc:
+    module Singapore #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Singapore', 'Asia/Singapore'
+    end
+  end
 end

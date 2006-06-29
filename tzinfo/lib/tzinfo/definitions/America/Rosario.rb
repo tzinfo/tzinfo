@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Argentina/Cordoba'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Rosario < Definitions::America::Argentina::Cordoba #:nodoc:
-setup_linked
-set_identifier('America/Rosario')
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Rosario #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'America/Rosario', 'America/Argentina/Cordoba'
+      end
+    end
+  end
 end

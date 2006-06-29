@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Shanghai'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class PRC < Definitions::Asia::Shanghai #:nodoc:
-setup_linked
-set_identifier('PRC')
-end
-end
+  module Definitions #:nodoc:
+    module PRC #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'PRC', 'Asia/Shanghai'
+    end
+  end
 end

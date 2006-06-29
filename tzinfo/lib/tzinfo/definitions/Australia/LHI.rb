@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Australia/Lord_Howe'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Australia #:nodoc:
-class LHI < Definitions::Australia::Lord_Howe #:nodoc:
-setup_linked
-set_identifier('Australia/LHI')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Australia #:nodoc:
+      module LHI #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Australia/LHI', 'Australia/Lord_Howe'
+      end
+    end
+  end
 end

@@ -1,19 +1,28 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Honolulu < Timezone #:nodoc:
-setup
-set_identifier('Pacific/Honolulu')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(104328926143,43200),0,Date::ITALY),-37886,0,:LMT)}
-add_period(1900,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(104328926143,43200),0,Date::ITALY),DateTime.new0(Rational.new!(116505265,48),0,Date::ITALY),-37800,0,:HST)}
-add_period(1933,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(116505265,48),0,Date::ITALY),DateTime.new0(Rational.new!(116506271,48),0,Date::ITALY),-37800,3600,:HDT)}
-add_period(1933,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(116506271,48),0,Date::ITALY),DateTime.new0(Rational.new!(116659201,48),0,Date::ITALY),-37800,0,:HST)}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(116659201,48),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-37800,3600,:HWT)}
-add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(116722991,48),0,Date::ITALY),-37800,3600,:HPT)}
-add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(116722991,48),0,Date::ITALY),DateTime.new0(Rational.new!(116752561,48),0,Date::ITALY),-37800,0,:HST)}
-add_period(1947,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(116752561,48),0,Date::ITALY),nil,-36000,0,:HST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Honolulu #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Pacific/Honolulu' do |tz|
+          tz.offset :o0, -37886, 0, :LMT
+          tz.offset :o1, -37800, 0, :HST
+          tz.offset :o2, -37800, 3600, :HDT
+          tz.offset :o3, -37800, 3600, :HWT
+          tz.offset :o4, -37800, 3600, :HPT
+          tz.offset :o5, -36000, 0, :HST
+          
+          tz.transition 1900, 1, :o1, 104328926143, 43200
+          tz.transition 1933, 4, :o2, 116505265, 48
+          tz.transition 1933, 5, :o1, 116506271, 48
+          tz.transition 1942, 2, :o3, 116659201, 48
+          tz.transition 1945, 8, :o4, 58360379, 24
+          tz.transition 1945, 9, :o1, 116722991, 48
+          tz.transition 1947, 6, :o5, 116752561, 48
+        end
+      end
+    end
+  end
 end

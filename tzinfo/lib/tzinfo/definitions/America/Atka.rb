@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Adak'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Atka < Definitions::America::Adak #:nodoc:
-setup_linked
-set_identifier('America/Atka')
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Atka #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'America/Atka', 'America/Adak'
+      end
+    end
+  end
 end

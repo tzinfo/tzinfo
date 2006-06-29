@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Indian #:nodoc:
-class Maldives < Timezone #:nodoc:
-setup
-set_identifier('Indian/Maldives')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(577851671,240),0,Date::ITALY),17640,0,:LMT)}
-add_period(1879,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(577851671,240),0,Date::ITALY),DateTime.new0(Rational.new!(584864231,240),0,Date::ITALY),17640,0,:MMT)}
-add_period(1959,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(584864231,240),0,Date::ITALY),nil,18000,0,:MVT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Indian #:nodoc:
+      module Maldives #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Indian/Maldives' do |tz|
+          tz.offset :o0, 17640, 0, :LMT
+          tz.offset :o1, 17640, 0, :MMT
+          tz.offset :o2, 18000, 0, :MVT
+          
+          tz.transition 1879, 12, :o1, 577851671, 240
+          tz.transition 1959, 12, :o2, 584864231, 240
+        end
+      end
+    end
+  end
 end

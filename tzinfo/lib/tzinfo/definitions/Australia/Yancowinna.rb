@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Australia/Broken_Hill'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Australia #:nodoc:
-class Yancowinna < Definitions::Australia::Broken_Hill #:nodoc:
-setup_linked
-set_identifier('Australia/Yancowinna')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Australia #:nodoc:
+      module Yancowinna #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Australia/Yancowinna', 'Australia/Broken_Hill'
+      end
+    end
+  end
 end

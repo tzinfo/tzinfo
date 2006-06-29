@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Bissau < Timezone #:nodoc:
-setup
-set_identifier('Africa/Bissau')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10450868587,4320),0,Date::ITALY),-3740,0,:LMT)}
-add_period(1911,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(10450868587,4320),0,Date::ITALY),157770000,-3600,0,:WAT)}
-add_period(1975,1) {TimezonePeriod.new(157770000,nil,0,0,:GMT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Bissau #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Bissau' do |tz|
+          tz.offset :o0, -3740, 0, :LMT
+          tz.offset :o1, -3600, 0, :WAT
+          tz.offset :o2, 0, 0, :GMT
+          
+          tz.transition 1911, 5, :o1, 10450868587, 4320
+          tz.transition 1975, 1, :o2, 157770000
+        end
+      end
+    end
+  end
 end

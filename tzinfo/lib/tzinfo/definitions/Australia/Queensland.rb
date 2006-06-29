@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Australia/Brisbane'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Australia #:nodoc:
-class Queensland < Definitions::Australia::Brisbane #:nodoc:
-setup_linked
-set_identifier('Australia/Queensland')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Australia #:nodoc:
+      module Queensland #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Australia/Queensland', 'Australia/Brisbane'
+      end
+    end
+  end
 end

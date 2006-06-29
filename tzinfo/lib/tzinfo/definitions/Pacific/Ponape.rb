@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Ponape < Timezone #:nodoc:
-setup
-set_identifier('Pacific/Ponape')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52172317307,21600),0,Date::ITALY),37972,0,:LMT)}
-add_period(1900,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52172317307,21600),0,Date::ITALY),nil,39600,0,:PONT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Ponape #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Pacific/Ponape' do |tz|
+          tz.offset :o0, 37972, 0, :LMT
+          tz.offset :o1, 39600, 0, :PONT
+          
+          tz.transition 1900, 12, :o1, 52172317307, 21600
+        end
+      end
+    end
+  end
 end

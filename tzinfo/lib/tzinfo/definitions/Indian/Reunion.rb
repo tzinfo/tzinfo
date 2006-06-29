@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Indian #:nodoc:
-class Reunion < Timezone #:nodoc:
-setup
-set_identifier('Indian/Reunion')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(3265904267,1350),0,Date::ITALY),13312,0,:LMT)}
-add_period(1911,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(3265904267,1350),0,Date::ITALY),nil,14400,0,:RET)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Indian #:nodoc:
+      module Reunion #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Indian/Reunion' do |tz|
+          tz.offset :o0, 13312, 0, :LMT
+          tz.offset :o1, 14400, 0, :RET
+          
+          tz.transition 1911, 5, :o1, 3265904267, 1350
+        end
+      end
+    end
+  end
 end

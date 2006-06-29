@@ -73,4 +73,12 @@ class TCTimezoneProxy < Test::Unit::TestCase
   def test_kind
     assert_kind_of(Timezone, TimezoneProxy.new('America/New_York'))
   end
+  
+  def test_marshal
+    tp = TimezoneProxy.new('Europe/London')
+    tp2 = Marshal.load(Marshal.dump(tp))
+    
+    assert_kind_of(TimezoneProxy, tp2)
+    assert_equal('Europe/London', tp2.identifier)
+  end
 end

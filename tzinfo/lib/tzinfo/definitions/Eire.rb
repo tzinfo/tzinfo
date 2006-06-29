@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Dublin'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Eire < Definitions::Europe::Dublin #:nodoc:
-setup_linked
-set_identifier('Eire')
-end
-end
+  module Definitions #:nodoc:
+    module Eire #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Eire', 'Europe/Dublin'
+    end
+  end
 end

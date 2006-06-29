@@ -1,15 +1,21 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Dar_es_Salaam < Timezone #:nodoc:
-setup
-set_identifier('Africa/Dar_es_Salaam')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52408995643,21600),0,Date::ITALY),9428,0,:LMT)}
-add_period(1930,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52408995643,21600),0,Date::ITALY),DateTime.new0(Rational.new!(19460411,8),0,Date::ITALY),10800,0,:EAT)}
-add_period(1947,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(19460411,8),0,Date::ITALY),DateTime.new0(Rational.new!(14038850221,5760),0,Date::ITALY),9885,0,:BEAUT)}
-add_period(1960,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(14038850221,5760),0,Date::ITALY),nil,10800,0,:EAT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Dar_es_Salaam #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Dar_es_Salaam' do |tz|
+          tz.offset :o0, 9428, 0, :LMT
+          tz.offset :o1, 10800, 0, :EAT
+          tz.offset :o2, 9885, 0, :BEAUT
+          
+          tz.transition 1930, 12, :o1, 52408995643, 21600
+          tz.transition 1947, 12, :o2, 19460411, 8
+          tz.transition 1960, 12, :o1, 14038850221, 5760
+        end
+      end
+    end
+  end
 end

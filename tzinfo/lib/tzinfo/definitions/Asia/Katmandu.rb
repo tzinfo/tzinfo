@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Katmandu < Timezone #:nodoc:
-setup
-set_identifier('Asia/Katmandu')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(52322204081,21600),0,Date::ITALY),20476,0,:LMT)}
-add_period(1919,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(52322204081,21600),0,Date::ITALY),504901800,19800,0,:IST)}
-add_period(1985,12) {TimezonePeriod.new(504901800,nil,20700,0,:NPT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Katmandu #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Asia/Katmandu' do |tz|
+          tz.offset :o0, 20476, 0, :LMT
+          tz.offset :o1, 19800, 0, :IST
+          tz.offset :o2, 20700, 0, :NPT
+          
+          tz.transition 1919, 12, :o1, 52322204081, 21600
+          tz.transition 1985, 12, :o2, 504901800
+        end
+      end
+    end
+  end
 end

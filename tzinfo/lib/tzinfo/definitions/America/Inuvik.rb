@@ -1,165 +1,176 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Inuvik < Timezone #:nodoc:
-setup
-set_identifier('America/Inuvik')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(578202449,240),0,Date::ITALY),-32040,0,:LMT)}
-add_period(1884,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(578202449,240),0,Date::ITALY),DateTime.new0(Rational.new!(29060375,12),0,Date::ITALY),-28800,0,:PST)}
-add_period(1918,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(29060375,12),0,Date::ITALY),DateTime.new0(Rational.new!(19375151,8),0,Date::ITALY),-28800,3600,:PDT)}
-add_period(1918,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(19375151,8),0,Date::ITALY),DateTime.new0(Rational.new!(29065247,12),0,Date::ITALY),-28800,0,:PST)}
-add_period(1919,5) {TimezonePeriod.new(DateTime.new0(Rational.new!(29065247,12),0,Date::ITALY),DateTime.new0(Rational.new!(58134331,24),0,Date::ITALY),-28800,3600,:PDT)}
-add_period(1919,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(58134331,24),0,Date::ITALY),DateTime.new0(Rational.new!(29164799,12),0,Date::ITALY),-28800,0,:PST)}
-add_period(1942,2) {TimezonePeriod.new(DateTime.new0(Rational.new!(29164799,12),0,Date::ITALY),DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),-28800,3600,:PWT)}
-add_period(1945,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(58360379,24),0,Date::ITALY),DateTime.new0(Rational.new!(19453831,8),0,Date::ITALY),-28800,3600,:PPT)}
-add_period(1945,9) {TimezonePeriod.new(DateTime.new0(Rational.new!(19453831,8),0,Date::ITALY),DateTime.new0(Rational.new!(14633255,6),0,Date::ITALY),-28800,0,:PST)}
-add_period(1965,4) {TimezonePeriod.new(DateTime.new0(Rational.new!(14633255,6),0,Date::ITALY),DateTime.new0(Rational.new!(14634389,6),0,Date::ITALY),-28800,7200,:PDDT)}
-add_period(1965,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(14634389,6),0,Date::ITALY),294228000,-28800,0,:PST)}
-add_period(1979,4) {TimezonePeriod.new(294228000,325674000,-25200,0,:MST)}
-add_period(1980,4) {TimezonePeriod.new(325674000,341395200,-25200,3600,:MDT)}
-add_period(1980,10) {TimezonePeriod.new(341395200,357123600,-25200,0,:MST)}
-add_period(1981,4) {TimezonePeriod.new(357123600,372844800,-25200,3600,:MDT)}
-add_period(1981,10) {TimezonePeriod.new(372844800,388573200,-25200,0,:MST)}
-add_period(1982,4) {TimezonePeriod.new(388573200,404899200,-25200,3600,:MDT)}
-add_period(1982,10) {TimezonePeriod.new(404899200,420022800,-25200,0,:MST)}
-add_period(1983,4) {TimezonePeriod.new(420022800,436348800,-25200,3600,:MDT)}
-add_period(1983,10) {TimezonePeriod.new(436348800,452077200,-25200,0,:MST)}
-add_period(1984,4) {TimezonePeriod.new(452077200,467798400,-25200,3600,:MDT)}
-add_period(1984,10) {TimezonePeriod.new(467798400,483526800,-25200,0,:MST)}
-add_period(1985,4) {TimezonePeriod.new(483526800,499248000,-25200,3600,:MDT)}
-add_period(1985,10) {TimezonePeriod.new(499248000,514976400,-25200,0,:MST)}
-add_period(1986,4) {TimezonePeriod.new(514976400,530697600,-25200,3600,:MDT)}
-add_period(1986,10) {TimezonePeriod.new(530697600,544611600,-25200,0,:MST)}
-add_period(1987,4) {TimezonePeriod.new(544611600,562147200,-25200,3600,:MDT)}
-add_period(1987,10) {TimezonePeriod.new(562147200,576061200,-25200,0,:MST)}
-add_period(1988,4) {TimezonePeriod.new(576061200,594201600,-25200,3600,:MDT)}
-add_period(1988,10) {TimezonePeriod.new(594201600,607510800,-25200,0,:MST)}
-add_period(1989,4) {TimezonePeriod.new(607510800,625651200,-25200,3600,:MDT)}
-add_period(1989,10) {TimezonePeriod.new(625651200,638960400,-25200,0,:MST)}
-add_period(1990,4) {TimezonePeriod.new(638960400,657100800,-25200,3600,:MDT)}
-add_period(1990,10) {TimezonePeriod.new(657100800,671014800,-25200,0,:MST)}
-add_period(1991,4) {TimezonePeriod.new(671014800,688550400,-25200,3600,:MDT)}
-add_period(1991,10) {TimezonePeriod.new(688550400,702464400,-25200,0,:MST)}
-add_period(1992,4) {TimezonePeriod.new(702464400,720000000,-25200,3600,:MDT)}
-add_period(1992,10) {TimezonePeriod.new(720000000,733914000,-25200,0,:MST)}
-add_period(1993,4) {TimezonePeriod.new(733914000,752054400,-25200,3600,:MDT)}
-add_period(1993,10) {TimezonePeriod.new(752054400,765363600,-25200,0,:MST)}
-add_period(1994,4) {TimezonePeriod.new(765363600,783504000,-25200,3600,:MDT)}
-add_period(1994,10) {TimezonePeriod.new(783504000,796813200,-25200,0,:MST)}
-add_period(1995,4) {TimezonePeriod.new(796813200,814953600,-25200,3600,:MDT)}
-add_period(1995,10) {TimezonePeriod.new(814953600,828867600,-25200,0,:MST)}
-add_period(1996,4) {TimezonePeriod.new(828867600,846403200,-25200,3600,:MDT)}
-add_period(1996,10) {TimezonePeriod.new(846403200,860317200,-25200,0,:MST)}
-add_period(1997,4) {TimezonePeriod.new(860317200,877852800,-25200,3600,:MDT)}
-add_period(1997,10) {TimezonePeriod.new(877852800,891766800,-25200,0,:MST)}
-add_period(1998,4) {TimezonePeriod.new(891766800,909302400,-25200,3600,:MDT)}
-add_period(1998,10) {TimezonePeriod.new(909302400,923216400,-25200,0,:MST)}
-add_period(1999,4) {TimezonePeriod.new(923216400,941356800,-25200,3600,:MDT)}
-add_period(1999,10) {TimezonePeriod.new(941356800,954666000,-25200,0,:MST)}
-add_period(2000,4) {TimezonePeriod.new(954666000,972806400,-25200,3600,:MDT)}
-add_period(2000,10) {TimezonePeriod.new(972806400,986115600,-25200,0,:MST)}
-add_period(2001,4) {TimezonePeriod.new(986115600,1004256000,-25200,3600,:MDT)}
-add_period(2001,10) {TimezonePeriod.new(1004256000,1018170000,-25200,0,:MST)}
-add_period(2002,4) {TimezonePeriod.new(1018170000,1035705600,-25200,3600,:MDT)}
-add_period(2002,10) {TimezonePeriod.new(1035705600,1049619600,-25200,0,:MST)}
-add_period(2003,4) {TimezonePeriod.new(1049619600,1067155200,-25200,3600,:MDT)}
-add_period(2003,10) {TimezonePeriod.new(1067155200,1081069200,-25200,0,:MST)}
-add_period(2004,4) {TimezonePeriod.new(1081069200,1099209600,-25200,3600,:MDT)}
-add_period(2004,10) {TimezonePeriod.new(1099209600,1112518800,-25200,0,:MST)}
-add_period(2005,4) {TimezonePeriod.new(1112518800,1130659200,-25200,3600,:MDT)}
-add_period(2005,10) {TimezonePeriod.new(1130659200,1143968400,-25200,0,:MST)}
-add_period(2006,4) {TimezonePeriod.new(1143968400,1162108800,-25200,3600,:MDT)}
-add_period(2006,10) {TimezonePeriod.new(1162108800,1173603600,-25200,0,:MST)}
-add_period(2007,3) {TimezonePeriod.new(1173603600,1194163200,-25200,3600,:MDT)}
-add_period(2007,11) {TimezonePeriod.new(1194163200,1205053200,-25200,0,:MST)}
-add_period(2008,3) {TimezonePeriod.new(1205053200,1225612800,-25200,3600,:MDT)}
-add_period(2008,11) {TimezonePeriod.new(1225612800,1236502800,-25200,0,:MST)}
-add_period(2009,3) {TimezonePeriod.new(1236502800,1257062400,-25200,3600,:MDT)}
-add_period(2009,11) {TimezonePeriod.new(1257062400,1268557200,-25200,0,:MST)}
-add_period(2010,3) {TimezonePeriod.new(1268557200,1289116800,-25200,3600,:MDT)}
-add_period(2010,11) {TimezonePeriod.new(1289116800,1300006800,-25200,0,:MST)}
-add_period(2011,3) {TimezonePeriod.new(1300006800,1320566400,-25200,3600,:MDT)}
-add_period(2011,11) {TimezonePeriod.new(1320566400,1331456400,-25200,0,:MST)}
-add_period(2012,3) {TimezonePeriod.new(1331456400,1352016000,-25200,3600,:MDT)}
-add_period(2012,11) {TimezonePeriod.new(1352016000,1362906000,-25200,0,:MST)}
-add_period(2013,3) {TimezonePeriod.new(1362906000,1383465600,-25200,3600,:MDT)}
-add_period(2013,11) {TimezonePeriod.new(1383465600,1394355600,-25200,0,:MST)}
-add_period(2014,3) {TimezonePeriod.new(1394355600,1414915200,-25200,3600,:MDT)}
-add_period(2014,11) {TimezonePeriod.new(1414915200,1425805200,-25200,0,:MST)}
-add_period(2015,3) {TimezonePeriod.new(1425805200,1446364800,-25200,3600,:MDT)}
-add_period(2015,11) {TimezonePeriod.new(1446364800,1457859600,-25200,0,:MST)}
-add_period(2016,3) {TimezonePeriod.new(1457859600,1478419200,-25200,3600,:MDT)}
-add_period(2016,11) {TimezonePeriod.new(1478419200,1489309200,-25200,0,:MST)}
-add_period(2017,3) {TimezonePeriod.new(1489309200,1509868800,-25200,3600,:MDT)}
-add_period(2017,11) {TimezonePeriod.new(1509868800,1520758800,-25200,0,:MST)}
-add_period(2018,3) {TimezonePeriod.new(1520758800,1541318400,-25200,3600,:MDT)}
-add_period(2018,11) {TimezonePeriod.new(1541318400,1552208400,-25200,0,:MST)}
-add_period(2019,3) {TimezonePeriod.new(1552208400,1572768000,-25200,3600,:MDT)}
-add_period(2019,11) {TimezonePeriod.new(1572768000,1583658000,-25200,0,:MST)}
-add_period(2020,3) {TimezonePeriod.new(1583658000,1604217600,-25200,3600,:MDT)}
-add_period(2020,11) {TimezonePeriod.new(1604217600,1615712400,-25200,0,:MST)}
-add_period(2021,3) {TimezonePeriod.new(1615712400,1636272000,-25200,3600,:MDT)}
-add_period(2021,11) {TimezonePeriod.new(1636272000,1647162000,-25200,0,:MST)}
-add_period(2022,3) {TimezonePeriod.new(1647162000,1667721600,-25200,3600,:MDT)}
-add_period(2022,11) {TimezonePeriod.new(1667721600,1678611600,-25200,0,:MST)}
-add_period(2023,3) {TimezonePeriod.new(1678611600,1699171200,-25200,3600,:MDT)}
-add_period(2023,11) {TimezonePeriod.new(1699171200,1710061200,-25200,0,:MST)}
-add_period(2024,3) {TimezonePeriod.new(1710061200,1730620800,-25200,3600,:MDT)}
-add_period(2024,11) {TimezonePeriod.new(1730620800,1741510800,-25200,0,:MST)}
-add_period(2025,3) {TimezonePeriod.new(1741510800,1762070400,-25200,3600,:MDT)}
-add_period(2025,11) {TimezonePeriod.new(1762070400,1772960400,-25200,0,:MST)}
-add_period(2026,3) {TimezonePeriod.new(1772960400,1793520000,-25200,3600,:MDT)}
-add_period(2026,11) {TimezonePeriod.new(1793520000,1805014800,-25200,0,:MST)}
-add_period(2027,3) {TimezonePeriod.new(1805014800,1825574400,-25200,3600,:MDT)}
-add_period(2027,11) {TimezonePeriod.new(1825574400,1836464400,-25200,0,:MST)}
-add_period(2028,3) {TimezonePeriod.new(1836464400,1857024000,-25200,3600,:MDT)}
-add_period(2028,11) {TimezonePeriod.new(1857024000,1867914000,-25200,0,:MST)}
-add_period(2029,3) {TimezonePeriod.new(1867914000,1888473600,-25200,3600,:MDT)}
-add_period(2029,11) {TimezonePeriod.new(1888473600,1899363600,-25200,0,:MST)}
-add_period(2030,3) {TimezonePeriod.new(1899363600,1919923200,-25200,3600,:MDT)}
-add_period(2030,11) {TimezonePeriod.new(1919923200,1930813200,-25200,0,:MST)}
-add_period(2031,3) {TimezonePeriod.new(1930813200,1951372800,-25200,3600,:MDT)}
-add_period(2031,11) {TimezonePeriod.new(1951372800,1962867600,-25200,0,:MST)}
-add_period(2032,3) {TimezonePeriod.new(1962867600,1983427200,-25200,3600,:MDT)}
-add_period(2032,11) {TimezonePeriod.new(1983427200,1994317200,-25200,0,:MST)}
-add_period(2033,3) {TimezonePeriod.new(1994317200,2014876800,-25200,3600,:MDT)}
-add_period(2033,11) {TimezonePeriod.new(2014876800,2025766800,-25200,0,:MST)}
-add_period(2034,3) {TimezonePeriod.new(2025766800,2046326400,-25200,3600,:MDT)}
-add_period(2034,11) {TimezonePeriod.new(2046326400,2057216400,-25200,0,:MST)}
-add_period(2035,3) {TimezonePeriod.new(2057216400,2077776000,-25200,3600,:MDT)}
-add_period(2035,11) {TimezonePeriod.new(2077776000,2088666000,-25200,0,:MST)}
-add_period(2036,3) {TimezonePeriod.new(2088666000,2109225600,-25200,3600,:MDT)}
-add_period(2036,11) {TimezonePeriod.new(2109225600,2120115600,-25200,0,:MST)}
-add_period(2037,3) {TimezonePeriod.new(2120115600,2140675200,-25200,3600,:MDT)}
-add_period(2037,11) {TimezonePeriod.new(2140675200,DateTime.new0(Rational.new!(19723975,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2038,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19723975,8),0,Date::ITALY),DateTime.new0(Rational.new!(14794409,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2038,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14794409,6),0,Date::ITALY),DateTime.new0(Rational.new!(19726887,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2039,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19726887,8),0,Date::ITALY),DateTime.new0(Rational.new!(14796593,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2039,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14796593,6),0,Date::ITALY),DateTime.new0(Rational.new!(19729799,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2040,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19729799,8),0,Date::ITALY),DateTime.new0(Rational.new!(14798777,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2040,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14798777,6),0,Date::ITALY),DateTime.new0(Rational.new!(19732711,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2041,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19732711,8),0,Date::ITALY),DateTime.new0(Rational.new!(14800961,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2041,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14800961,6),0,Date::ITALY),DateTime.new0(Rational.new!(19735623,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2042,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19735623,8),0,Date::ITALY),DateTime.new0(Rational.new!(14803145,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2042,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14803145,6),0,Date::ITALY),DateTime.new0(Rational.new!(19738535,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2043,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19738535,8),0,Date::ITALY),DateTime.new0(Rational.new!(14805329,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2043,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14805329,6),0,Date::ITALY),DateTime.new0(Rational.new!(19741503,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2044,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19741503,8),0,Date::ITALY),DateTime.new0(Rational.new!(14807555,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2044,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14807555,6),0,Date::ITALY),DateTime.new0(Rational.new!(19744415,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2045,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19744415,8),0,Date::ITALY),DateTime.new0(Rational.new!(14809739,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2045,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14809739,6),0,Date::ITALY),DateTime.new0(Rational.new!(19747327,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2046,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19747327,8),0,Date::ITALY),DateTime.new0(Rational.new!(14811923,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2046,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14811923,6),0,Date::ITALY),DateTime.new0(Rational.new!(19750239,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2047,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19750239,8),0,Date::ITALY),DateTime.new0(Rational.new!(14814107,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2047,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14814107,6),0,Date::ITALY),DateTime.new0(Rational.new!(19753151,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2048,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19753151,8),0,Date::ITALY),DateTime.new0(Rational.new!(14816291,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2048,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14816291,6),0,Date::ITALY),DateTime.new0(Rational.new!(19756119,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2049,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19756119,8),0,Date::ITALY),DateTime.new0(Rational.new!(14818517,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2049,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14818517,6),0,Date::ITALY),DateTime.new0(Rational.new!(19759031,8),0,Date::ITALY),-25200,0,:MST)}
-add_period(2050,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19759031,8),0,Date::ITALY),DateTime.new0(Rational.new!(14820701,6),0,Date::ITALY),-25200,3600,:MDT)}
-add_period(2050,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(14820701,6),0,Date::ITALY),nil,-25200,0,:MST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Inuvik #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/Inuvik' do |tz|
+          tz.offset :o0, -32040, 0, :LMT
+          tz.offset :o1, -28800, 0, :PST
+          tz.offset :o2, -28800, 3600, :PDT
+          tz.offset :o3, -28800, 3600, :PWT
+          tz.offset :o4, -28800, 3600, :PPT
+          tz.offset :o5, -28800, 7200, :PDDT
+          tz.offset :o6, -25200, 0, :MST
+          tz.offset :o7, -25200, 3600, :MDT
+          
+          tz.transition 1884, 1, :o1, 578202449, 240
+          tz.transition 1918, 4, :o2, 29060375, 12
+          tz.transition 1918, 10, :o1, 19375151, 8
+          tz.transition 1919, 5, :o2, 29065247, 12
+          tz.transition 1919, 11, :o1, 58134331, 24
+          tz.transition 1942, 2, :o3, 29164799, 12
+          tz.transition 1945, 8, :o4, 58360379, 24
+          tz.transition 1945, 9, :o1, 19453831, 8
+          tz.transition 1965, 4, :o5, 14633255, 6
+          tz.transition 1965, 10, :o1, 14634389, 6
+          tz.transition 1979, 4, :o6, 294228000
+          tz.transition 1980, 4, :o7, 325674000
+          tz.transition 1980, 10, :o6, 341395200
+          tz.transition 1981, 4, :o7, 357123600
+          tz.transition 1981, 10, :o6, 372844800
+          tz.transition 1982, 4, :o7, 388573200
+          tz.transition 1982, 10, :o6, 404899200
+          tz.transition 1983, 4, :o7, 420022800
+          tz.transition 1983, 10, :o6, 436348800
+          tz.transition 1984, 4, :o7, 452077200
+          tz.transition 1984, 10, :o6, 467798400
+          tz.transition 1985, 4, :o7, 483526800
+          tz.transition 1985, 10, :o6, 499248000
+          tz.transition 1986, 4, :o7, 514976400
+          tz.transition 1986, 10, :o6, 530697600
+          tz.transition 1987, 4, :o7, 544611600
+          tz.transition 1987, 10, :o6, 562147200
+          tz.transition 1988, 4, :o7, 576061200
+          tz.transition 1988, 10, :o6, 594201600
+          tz.transition 1989, 4, :o7, 607510800
+          tz.transition 1989, 10, :o6, 625651200
+          tz.transition 1990, 4, :o7, 638960400
+          tz.transition 1990, 10, :o6, 657100800
+          tz.transition 1991, 4, :o7, 671014800
+          tz.transition 1991, 10, :o6, 688550400
+          tz.transition 1992, 4, :o7, 702464400
+          tz.transition 1992, 10, :o6, 720000000
+          tz.transition 1993, 4, :o7, 733914000
+          tz.transition 1993, 10, :o6, 752054400
+          tz.transition 1994, 4, :o7, 765363600
+          tz.transition 1994, 10, :o6, 783504000
+          tz.transition 1995, 4, :o7, 796813200
+          tz.transition 1995, 10, :o6, 814953600
+          tz.transition 1996, 4, :o7, 828867600
+          tz.transition 1996, 10, :o6, 846403200
+          tz.transition 1997, 4, :o7, 860317200
+          tz.transition 1997, 10, :o6, 877852800
+          tz.transition 1998, 4, :o7, 891766800
+          tz.transition 1998, 10, :o6, 909302400
+          tz.transition 1999, 4, :o7, 923216400
+          tz.transition 1999, 10, :o6, 941356800
+          tz.transition 2000, 4, :o7, 954666000
+          tz.transition 2000, 10, :o6, 972806400
+          tz.transition 2001, 4, :o7, 986115600
+          tz.transition 2001, 10, :o6, 1004256000
+          tz.transition 2002, 4, :o7, 1018170000
+          tz.transition 2002, 10, :o6, 1035705600
+          tz.transition 2003, 4, :o7, 1049619600
+          tz.transition 2003, 10, :o6, 1067155200
+          tz.transition 2004, 4, :o7, 1081069200
+          tz.transition 2004, 10, :o6, 1099209600
+          tz.transition 2005, 4, :o7, 1112518800
+          tz.transition 2005, 10, :o6, 1130659200
+          tz.transition 2006, 4, :o7, 1143968400
+          tz.transition 2006, 10, :o6, 1162108800
+          tz.transition 2007, 3, :o7, 1173603600
+          tz.transition 2007, 11, :o6, 1194163200
+          tz.transition 2008, 3, :o7, 1205053200
+          tz.transition 2008, 11, :o6, 1225612800
+          tz.transition 2009, 3, :o7, 1236502800
+          tz.transition 2009, 11, :o6, 1257062400
+          tz.transition 2010, 3, :o7, 1268557200
+          tz.transition 2010, 11, :o6, 1289116800
+          tz.transition 2011, 3, :o7, 1300006800
+          tz.transition 2011, 11, :o6, 1320566400
+          tz.transition 2012, 3, :o7, 1331456400
+          tz.transition 2012, 11, :o6, 1352016000
+          tz.transition 2013, 3, :o7, 1362906000
+          tz.transition 2013, 11, :o6, 1383465600
+          tz.transition 2014, 3, :o7, 1394355600
+          tz.transition 2014, 11, :o6, 1414915200
+          tz.transition 2015, 3, :o7, 1425805200
+          tz.transition 2015, 11, :o6, 1446364800
+          tz.transition 2016, 3, :o7, 1457859600
+          tz.transition 2016, 11, :o6, 1478419200
+          tz.transition 2017, 3, :o7, 1489309200
+          tz.transition 2017, 11, :o6, 1509868800
+          tz.transition 2018, 3, :o7, 1520758800
+          tz.transition 2018, 11, :o6, 1541318400
+          tz.transition 2019, 3, :o7, 1552208400
+          tz.transition 2019, 11, :o6, 1572768000
+          tz.transition 2020, 3, :o7, 1583658000
+          tz.transition 2020, 11, :o6, 1604217600
+          tz.transition 2021, 3, :o7, 1615712400
+          tz.transition 2021, 11, :o6, 1636272000
+          tz.transition 2022, 3, :o7, 1647162000
+          tz.transition 2022, 11, :o6, 1667721600
+          tz.transition 2023, 3, :o7, 1678611600
+          tz.transition 2023, 11, :o6, 1699171200
+          tz.transition 2024, 3, :o7, 1710061200
+          tz.transition 2024, 11, :o6, 1730620800
+          tz.transition 2025, 3, :o7, 1741510800
+          tz.transition 2025, 11, :o6, 1762070400
+          tz.transition 2026, 3, :o7, 1772960400
+          tz.transition 2026, 11, :o6, 1793520000
+          tz.transition 2027, 3, :o7, 1805014800
+          tz.transition 2027, 11, :o6, 1825574400
+          tz.transition 2028, 3, :o7, 1836464400
+          tz.transition 2028, 11, :o6, 1857024000
+          tz.transition 2029, 3, :o7, 1867914000
+          tz.transition 2029, 11, :o6, 1888473600
+          tz.transition 2030, 3, :o7, 1899363600
+          tz.transition 2030, 11, :o6, 1919923200
+          tz.transition 2031, 3, :o7, 1930813200
+          tz.transition 2031, 11, :o6, 1951372800
+          tz.transition 2032, 3, :o7, 1962867600
+          tz.transition 2032, 11, :o6, 1983427200
+          tz.transition 2033, 3, :o7, 1994317200
+          tz.transition 2033, 11, :o6, 2014876800
+          tz.transition 2034, 3, :o7, 2025766800
+          tz.transition 2034, 11, :o6, 2046326400
+          tz.transition 2035, 3, :o7, 2057216400
+          tz.transition 2035, 11, :o6, 2077776000
+          tz.transition 2036, 3, :o7, 2088666000
+          tz.transition 2036, 11, :o6, 2109225600
+          tz.transition 2037, 3, :o7, 2120115600
+          tz.transition 2037, 11, :o6, 2140675200
+          tz.transition 2038, 3, :o7, 19723975, 8
+          tz.transition 2038, 11, :o6, 14794409, 6
+          tz.transition 2039, 3, :o7, 19726887, 8
+          tz.transition 2039, 11, :o6, 14796593, 6
+          tz.transition 2040, 3, :o7, 19729799, 8
+          tz.transition 2040, 11, :o6, 14798777, 6
+          tz.transition 2041, 3, :o7, 19732711, 8
+          tz.transition 2041, 11, :o6, 14800961, 6
+          tz.transition 2042, 3, :o7, 19735623, 8
+          tz.transition 2042, 11, :o6, 14803145, 6
+          tz.transition 2043, 3, :o7, 19738535, 8
+          tz.transition 2043, 11, :o6, 14805329, 6
+          tz.transition 2044, 3, :o7, 19741503, 8
+          tz.transition 2044, 11, :o6, 14807555, 6
+          tz.transition 2045, 3, :o7, 19744415, 8
+          tz.transition 2045, 11, :o6, 14809739, 6
+          tz.transition 2046, 3, :o7, 19747327, 8
+          tz.transition 2046, 11, :o6, 14811923, 6
+          tz.transition 2047, 3, :o7, 19750239, 8
+          tz.transition 2047, 11, :o6, 14814107, 6
+          tz.transition 2048, 3, :o7, 19753151, 8
+          tz.transition 2048, 11, :o6, 14816291, 6
+          tz.transition 2049, 3, :o7, 19756119, 8
+          tz.transition 2049, 11, :o6, 14818517, 6
+          tz.transition 2050, 3, :o7, 19759031, 8
+          tz.transition 2050, 11, :o6, 14820701, 6
+        end
+      end
+    end
+  end
 end

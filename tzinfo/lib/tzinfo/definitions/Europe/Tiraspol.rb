@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Chisinau'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Europe #:nodoc:
-class Tiraspol < Definitions::Europe::Chisinau #:nodoc:
-setup_linked
-set_identifier('Europe/Tiraspol')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Europe #:nodoc:
+      module Tiraspol #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Europe/Tiraspol', 'Europe/Chisinau'
+      end
+    end
+  end
 end

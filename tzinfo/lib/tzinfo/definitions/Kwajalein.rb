@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Pacific/Kwajalein'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Kwajalein < Definitions::Pacific::Kwajalein #:nodoc:
-setup_linked
-set_identifier('Kwajalein')
-end
-end
+  module Definitions #:nodoc:
+    module Kwajalein #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Kwajalein', 'Pacific/Kwajalein'
+    end
+  end
 end

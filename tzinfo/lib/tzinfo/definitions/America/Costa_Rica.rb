@@ -1,22 +1,29 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Costa_Rica < Timezone #:nodoc:
-setup
-set_identifier('America/Costa_Rica')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10417112929,4320),0,Date::ITALY),-20180,0,:LMT)}
-add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10417112929,4320),0,Date::ITALY),DateTime.new0(Rational.new!(10466084449,4320),0,Date::ITALY),-20180,0,:SJMT)}
-add_period(1921,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10466084449,4320),0,Date::ITALY),288770400,-21600,0,:CST)}
-add_period(1979,2) {TimezonePeriod.new(288770400,297234000,-21600,3600,:CDT)}
-add_period(1979,6) {TimezonePeriod.new(297234000,320220000,-21600,0,:CST)}
-add_period(1980,2) {TimezonePeriod.new(320220000,328683600,-21600,3600,:CDT)}
-add_period(1980,6) {TimezonePeriod.new(328683600,664264800,-21600,0,:CST)}
-add_period(1991,1) {TimezonePeriod.new(664264800,678344400,-21600,3600,:CDT)}
-add_period(1991,7) {TimezonePeriod.new(678344400,695714400,-21600,0,:CST)}
-add_period(1992,1) {TimezonePeriod.new(695714400,700635600,-21600,3600,:CDT)}
-add_period(1992,3) {TimezonePeriod.new(700635600,nil,-21600,0,:CST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Costa_Rica #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/Costa_Rica' do |tz|
+          tz.offset :o0, -20180, 0, :LMT
+          tz.offset :o1, -20180, 0, :SJMT
+          tz.offset :o2, -21600, 0, :CST
+          tz.offset :o3, -21600, 3600, :CDT
+          
+          tz.transition 1890, 1, :o1, 10417112929, 4320
+          tz.transition 1921, 1, :o2, 10466084449, 4320
+          tz.transition 1979, 2, :o3, 288770400
+          tz.transition 1979, 6, :o2, 297234000
+          tz.transition 1980, 2, :o3, 320220000
+          tz.transition 1980, 6, :o2, 328683600
+          tz.transition 1991, 1, :o3, 664264800
+          tz.transition 1991, 7, :o2, 678344400
+          tz.transition 1992, 1, :o3, 695714400
+          tz.transition 1992, 3, :o2, 700635600
+        end
+      end
+    end
+  end
 end

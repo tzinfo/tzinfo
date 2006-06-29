@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Dakar < Timezone #:nodoc:
-setup
-set_identifier('Africa/Dakar')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(26129547523,10800),0,Date::ITALY),-4184,0,:LMT)}
-add_period(1912,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(26129547523,10800),0,Date::ITALY),DateTime.new0(Rational.new!(58323517,24),0,Date::ITALY),-3600,0,:WAT)}
-add_period(1941,6) {TimezonePeriod.new(DateTime.new0(Rational.new!(58323517,24),0,Date::ITALY),nil,0,0,:GMT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Dakar #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Dakar' do |tz|
+          tz.offset :o0, -4184, 0, :LMT
+          tz.offset :o1, -3600, 0, :WAT
+          tz.offset :o2, 0, 0, :GMT
+          
+          tz.transition 1912, 1, :o1, 26129547523, 10800
+          tz.transition 1941, 6, :o2, 58323517, 24
+        end
+      end
+    end
+  end
 end

@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Anchorage'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module US #:nodoc:
-class Alaska < Definitions::America::Anchorage #:nodoc:
-setup_linked
-set_identifier('US/Alaska')
-end
-end
-end
+  module Definitions #:nodoc:
+    module US #:nodoc:
+      module Alaska #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'US/Alaska', 'America/Anchorage'
+      end
+    end
+  end
 end

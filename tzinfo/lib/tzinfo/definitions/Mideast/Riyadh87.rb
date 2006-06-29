@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Asia/Riyadh87'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Mideast #:nodoc:
-class Riyadh87 < Definitions::Asia::Riyadh87 #:nodoc:
-setup_linked
-set_identifier('Mideast/Riyadh87')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Mideast #:nodoc:
+      module Riyadh87 #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Mideast/Riyadh87', 'Asia/Riyadh87'
+      end
+    end
+  end
 end

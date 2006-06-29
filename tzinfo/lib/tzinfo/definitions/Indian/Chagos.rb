@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Indian #:nodoc:
-class Chagos < Timezone #:nodoc:
-setup
-set_identifier('Indian/Chagos')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10443929611,4320),0,Date::ITALY),17380,0,:LMT)}
-add_period(1906,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(10443929611,4320),0,Date::ITALY),820436400,18000,0,:IOT)}
-add_period(1995,12) {TimezonePeriod.new(820436400,nil,21600,0,:IOT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Indian #:nodoc:
+      module Chagos #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Indian/Chagos' do |tz|
+          tz.offset :o0, 17380, 0, :LMT
+          tz.offset :o1, 18000, 0, :IOT
+          tz.offset :o2, 21600, 0, :IOT
+          
+          tz.transition 1906, 12, :o1, 10443929611, 4320
+          tz.transition 1995, 12, :o2, 820436400
+        end
+      end
+    end
+  end
 end

@@ -1,10 +1,11 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Lisbon'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-class Portugal < Definitions::Europe::Lisbon #:nodoc:
-setup_linked
-set_identifier('Portugal')
-end
-end
+  module Definitions #:nodoc:
+    module Portugal #:nodoc:
+      include TimezoneDefinition
+      
+      linked_timezone 'Portugal', 'Europe/Lisbon'
+    end
+  end
 end

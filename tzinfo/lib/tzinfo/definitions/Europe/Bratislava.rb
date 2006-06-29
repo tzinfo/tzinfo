@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Prague'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Europe #:nodoc:
-class Bratislava < Definitions::Europe::Prague #:nodoc:
-setup_linked
-set_identifier('Europe/Bratislava')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Europe #:nodoc:
+      module Bratislava #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Europe/Bratislava', 'Europe/Prague'
+      end
+    end
+  end
 end

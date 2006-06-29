@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Rome'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Europe #:nodoc:
-class Vatican < Definitions::Europe::Rome #:nodoc:
-setup_linked
-set_identifier('Europe/Vatican')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Europe #:nodoc:
+      module Vatican #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Europe/Vatican', 'Europe/Rome'
+      end
+    end
+  end
 end

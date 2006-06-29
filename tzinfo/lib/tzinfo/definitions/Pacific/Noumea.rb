@@ -1,19 +1,25 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Noumea < Timezone #:nodoc:
-setup
-set_identifier('Pacific/Noumea')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(17419781071,7200),0,Date::ITALY),39948,0,:LMT)}
-add_period(1912,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(17419781071,7200),0,Date::ITALY),250002000,39600,0,:NCT)}
-add_period(1977,12) {TimezonePeriod.new(250002000,257342400,39600,3600,:NCST)}
-add_period(1978,2) {TimezonePeriod.new(257342400,281451600,39600,0,:NCT)}
-add_period(1978,12) {TimezonePeriod.new(281451600,288878400,39600,3600,:NCST)}
-add_period(1979,2) {TimezonePeriod.new(288878400,849366000,39600,0,:NCT)}
-add_period(1996,11) {TimezonePeriod.new(849366000,857228400,39600,3600,:NCST)}
-add_period(1997,3) {TimezonePeriod.new(857228400,nil,39600,0,:NCT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Noumea #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Pacific/Noumea' do |tz|
+          tz.offset :o0, 39948, 0, :LMT
+          tz.offset :o1, 39600, 0, :NCT
+          tz.offset :o2, 39600, 3600, :NCST
+          
+          tz.transition 1912, 1, :o1, 17419781071, 7200
+          tz.transition 1977, 12, :o2, 250002000
+          tz.transition 1978, 2, :o1, 257342400
+          tz.transition 1978, 12, :o2, 281451600
+          tz.transition 1979, 2, :o1, 288878400
+          tz.transition 1996, 11, :o2, 849366000
+          tz.transition 1997, 3, :o1, 857228400
+        end
+      end
+    end
+  end
 end

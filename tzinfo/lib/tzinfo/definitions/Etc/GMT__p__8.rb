@@ -1,12 +1,16 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Etc #:nodoc:
-class GMT__p__8 < Timezone #:nodoc:
-setup
-set_identifier('Etc/GMT+8')
-add_unbounded_start_period {TimezonePeriod.new(nil,nil,-28800,0,:'GMT+8')}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Etc #:nodoc:
+      module GMT__p__8 #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Etc/GMT+8' do |tz|
+          tz.offset :o0, -28800, 0, :'GMT+8'
+          
+        end
+      end
+    end
+  end
 end

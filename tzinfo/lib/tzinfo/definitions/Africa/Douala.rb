@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class Douala < Timezone #:nodoc:
-setup
-set_identifier('Africa/Douala')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(8709848903,3600),0,Date::ITALY),2328,0,:LMT)}
-add_period(1911,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(8709848903,3600),0,Date::ITALY),nil,3600,0,:WAT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module Douala #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/Douala' do |tz|
+          tz.offset :o0, 2328, 0, :LMT
+          tz.offset :o1, 3600, 0, :WAT
+          
+          tz.transition 1911, 12, :o1, 8709848903, 3600
+        end
+      end
+    end
+  end
 end

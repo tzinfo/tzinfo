@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Belgrade'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Europe #:nodoc:
-class Skopje < Definitions::Europe::Belgrade #:nodoc:
-setup_linked
-set_identifier('Europe/Skopje')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Europe #:nodoc:
+      module Skopje #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Europe/Skopje', 'Europe/Belgrade'
+      end
+    end
+  end
 end

@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/Europe/Istanbul'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Istanbul < Definitions::Europe::Istanbul #:nodoc:
-setup_linked
-set_identifier('Asia/Istanbul')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Istanbul #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Asia/Istanbul', 'Europe/Istanbul'
+      end
+    end
+  end
 end

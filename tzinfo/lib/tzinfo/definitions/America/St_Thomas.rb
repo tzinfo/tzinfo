@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class St_Thomas < Timezone #:nodoc:
-setup
-set_identifier('America/St_Thomas')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(6531890437,2700),0,Date::ITALY),-15584,0,:LMT)}
-add_period(1911,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(6531890437,2700),0,Date::ITALY),nil,-14400,0,:AST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module St_Thomas #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/St_Thomas' do |tz|
+          tz.offset :o0, -15584, 0, :LMT
+          tz.offset :o1, -14400, 0, :AST
+          
+          tz.transition 1911, 7, :o1, 6531890437, 2700
+        end
+      end
+    end
+  end
 end

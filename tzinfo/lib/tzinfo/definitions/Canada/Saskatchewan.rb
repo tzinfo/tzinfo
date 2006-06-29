@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Regina'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Canada #:nodoc:
-class Saskatchewan < Definitions::America::Regina #:nodoc:
-setup_linked
-set_identifier('Canada/Saskatchewan')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Canada #:nodoc:
+      module Saskatchewan #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Canada/Saskatchewan', 'America/Regina'
+      end
+    end
+  end
 end

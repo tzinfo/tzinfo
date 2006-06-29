@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Africa #:nodoc:
-class El_Aaiun < Timezone #:nodoc:
-setup
-set_identifier('Africa/El_Aaiun')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(728231561,300),0,Date::ITALY),-3168,0,:LMT)}
-add_period(1934,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(728231561,300),0,Date::ITALY),198291600,-3600,0,:WAT)}
-add_period(1976,4) {TimezonePeriod.new(198291600,nil,0,0,:WET)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Africa #:nodoc:
+      module El_Aaiun #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Africa/El_Aaiun' do |tz|
+          tz.offset :o0, -3168, 0, :LMT
+          tz.offset :o1, -3600, 0, :WAT
+          tz.offset :o2, 0, 0, :WET
+          
+          tz.transition 1934, 1, :o1, 728231561, 300
+          tz.transition 1976, 4, :o2, 198291600
+        end
+      end
+    end
+  end
 end

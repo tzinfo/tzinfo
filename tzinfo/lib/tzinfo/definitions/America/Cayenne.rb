@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Cayenne < Timezone #:nodoc:
-setup
-set_identifier('America/Cayenne')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(2612756137,1080),0,Date::ITALY),-12560,0,:LMT)}
-add_period(1911,7) {TimezonePeriod.new(DateTime.new0(Rational.new!(2612756137,1080),0,Date::ITALY),DateTime.new0(Rational.new!(7319294,3),0,Date::ITALY),-14400,0,:GFT)}
-add_period(1967,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(7319294,3),0,Date::ITALY),nil,-10800,0,:GFT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Cayenne #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'America/Cayenne' do |tz|
+          tz.offset :o0, -12560, 0, :LMT
+          tz.offset :o1, -14400, 0, :GFT
+          tz.offset :o2, -10800, 0, :GFT
+          
+          tz.transition 1911, 7, :o1, 2612756137, 1080
+          tz.transition 1967, 10, :o2, 7319294, 3
+        end
+      end
+    end
+  end
 end

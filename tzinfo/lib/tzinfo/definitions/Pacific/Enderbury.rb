@@ -1,15 +1,22 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Enderbury < Timezone #:nodoc:
-setup
-set_identifier('Pacific/Enderbury')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(10434467413,4320),0,Date::ITALY),-41060,0,:LMT)}
-add_period(1901,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(10434467413,4320),0,Date::ITALY),307627200,-43200,0,:PHOT)}
-add_period(1979,10) {TimezonePeriod.new(307627200,788958000,-39600,0,:PHOT)}
-add_period(1995,1) {TimezonePeriod.new(788958000,nil,46800,0,:PHOT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Enderbury #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Pacific/Enderbury' do |tz|
+          tz.offset :o0, -41060, 0, :LMT
+          tz.offset :o1, -43200, 0, :PHOT
+          tz.offset :o2, -39600, 0, :PHOT
+          tz.offset :o3, 46800, 0, :PHOT
+          
+          tz.transition 1901, 1, :o1, 10434467413, 4320
+          tz.transition 1979, 10, :o2, 307627200
+          tz.transition 1995, 1, :o3, 788958000
+        end
+      end
+    end
+  end
 end

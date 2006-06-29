@@ -1,14 +1,20 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Atlantic #:nodoc:
-class St_Helena < Timezone #:nodoc:
-setup
-set_identifier('Atlantic/St_Helena')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(2893642219,1200),0,Date::ITALY),-1368,0,:LMT)}
-add_period(1890,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(2893642219,1200),0,Date::ITALY),DateTime.new0(Rational.new!(2920377019,1200),0,Date::ITALY),-1368,0,:JMT)}
-add_period(1951,1) {TimezonePeriod.new(DateTime.new0(Rational.new!(2920377019,1200),0,Date::ITALY),nil,0,0,:GMT)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Atlantic #:nodoc:
+      module St_Helena #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Atlantic/St_Helena' do |tz|
+          tz.offset :o0, -1368, 0, :LMT
+          tz.offset :o1, -1368, 0, :JMT
+          tz.offset :o2, 0, 0, :GMT
+          
+          tz.transition 1890, 1, :o1, 2893642219, 1200
+          tz.transition 1951, 1, :o2, 2920377019, 1200
+        end
+      end
+    end
+  end
 end

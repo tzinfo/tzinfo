@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Argentina/Jujuy'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module America #:nodoc:
-class Jujuy < Definitions::America::Argentina::Jujuy #:nodoc:
-setup_linked
-set_identifier('America/Jujuy')
-end
-end
-end
+  module Definitions #:nodoc:
+    module America #:nodoc:
+      module Jujuy #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'America/Jujuy', 'America/Argentina/Jujuy'
+      end
+    end
+  end
 end

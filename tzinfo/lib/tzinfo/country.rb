@@ -106,7 +106,7 @@ module TZInfo
     #   (2) puts the most populous zones first, where that does not contradict (1).
     def zones
       zone_identifiers.collect {|id|
-        TimezoneProxy.new(id)
+        Timezone.get_proxy(id)        
       }
     end
     

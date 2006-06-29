@@ -1,18 +1,25 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Asia #:nodoc:
-class Pyongyang < Timezone #:nodoc:
-setup
-set_identifier('Asia/Pyongyang')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(3472370137,1440),0,Date::ITALY),30180,0,:LMT)}
-add_period(1889,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(3472370137,1440),0,Date::ITALY),DateTime.new0(Rational.new!(116007127,48),0,Date::ITALY),30600,0,:KST)}
-add_period(1904,11) {TimezonePeriod.new(DateTime.new0(Rational.new!(116007127,48),0,Date::ITALY),DateTime.new0(Rational.new!(19401969,8),0,Date::ITALY),32400,0,:KST)}
-add_period(1927,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(19401969,8),0,Date::ITALY),DateTime.new0(Rational.new!(116481943,48),0,Date::ITALY),30600,0,:KST)}
-add_period(1931,12) {TimezonePeriod.new(DateTime.new0(Rational.new!(116481943,48),0,Date::ITALY),DateTime.new0(Rational.new!(19478577,8),0,Date::ITALY),32400,0,:KST)}
-add_period(1954,3) {TimezonePeriod.new(DateTime.new0(Rational.new!(19478577,8),0,Date::ITALY),DateTime.new0(Rational.new!(14625127,6),0,Date::ITALY),28800,0,:KST)}
-add_period(1961,8) {TimezonePeriod.new(DateTime.new0(Rational.new!(14625127,6),0,Date::ITALY),nil,32400,0,:KST)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Asia #:nodoc:
+      module Pyongyang #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Asia/Pyongyang' do |tz|
+          tz.offset :o0, 30180, 0, :LMT
+          tz.offset :o1, 30600, 0, :KST
+          tz.offset :o2, 32400, 0, :KST
+          tz.offset :o3, 28800, 0, :KST
+          
+          tz.transition 1889, 12, :o1, 3472370137, 1440
+          tz.transition 1904, 11, :o2, 116007127, 48
+          tz.transition 1927, 12, :o1, 19401969, 8
+          tz.transition 1931, 12, :o2, 116481943, 48
+          tz.transition 1954, 3, :o3, 19478577, 8
+          tz.transition 1961, 8, :o2, 14625127, 6
+        end
+      end
+    end
+  end
 end

@@ -1,12 +1,13 @@
-require 'tzinfo/timezone'
-require 'tzinfo/definitions/America/Noronha'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Brazil #:nodoc:
-class DeNoronha < Definitions::America::Noronha #:nodoc:
-setup_linked
-set_identifier('Brazil/DeNoronha')
-end
-end
-end
+  module Definitions #:nodoc:
+    module Brazil #:nodoc:
+      module DeNoronha #:nodoc:
+        include TimezoneDefinition
+        
+        linked_timezone 'Brazil/DeNoronha', 'America/Noronha'
+      end
+    end
+  end
 end

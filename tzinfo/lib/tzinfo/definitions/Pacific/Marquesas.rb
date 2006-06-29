@@ -1,13 +1,18 @@
-require 'tzinfo/timezone'
+require 'tzinfo/timezone_definition'
+
 module TZInfo
-module Definitions #:nodoc:
-module Pacific #:nodoc:
-class Marquesas < Timezone #:nodoc:
-setup
-set_identifier('Pacific/Marquesas')
-add_unbounded_start_period {TimezonePeriod.new(nil,DateTime.new0(Rational.new!(193574151,80),0,Date::ITALY),-33480,0,:LMT)}
-add_period(1912,10) {TimezonePeriod.new(DateTime.new0(Rational.new!(193574151,80),0,Date::ITALY),nil,-34200,0,:MART)}
-end
-end
-end
+  module Definitions #:nodoc:
+    module Pacific #:nodoc:
+      module Marquesas #:nodoc:
+        include TimezoneDefinition
+        
+        timezone 'Pacific/Marquesas' do |tz|
+          tz.offset :o0, -33480, 0, :LMT
+          tz.offset :o1, -34200, 0, :MART
+          
+          tz.transition 1912, 10, :o1, 193574151, 80
+        end
+      end
+    end
+  end
 end
