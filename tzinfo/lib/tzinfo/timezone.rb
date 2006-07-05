@@ -35,6 +35,10 @@ module TZInfo
   class AmbiguousTime < StandardError
   end
   
+  # Thrown to indicate that no TimezonePeriod matching a given time could be found.
+  class PeriodNotFound < StandardError
+  end
+  
   # Thrown by Timezone#get if the identifier given is not valid.
   class InvalidTimezoneIdentifier < StandardError
   end
@@ -239,7 +243,7 @@ module TZInfo
     # Returns the set of TimezonePeriod instances that are valid for the given
     # local time as an array. If you just want a single period, use 
     # period_for_local instead and specify how abiguities should be resolved.
-    # Raises PeriodNotFound if no periods are found for the given time.
+    # Returns an empty array if no periods are found for the given time.
     def periods_for_local(local)
       raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
     end
@@ -281,8 +285,9 @@ module TZInfo
     def period_for_local(local, dst = nil)            
       results = periods_for_local(local)
       
-      # by this point, results must contain at least one period
-      if results.size < 2
+      if results.empty?
+        raise PeriodNotFound
+      elsif results.size < 2
         results.first
       else
         # ambiguous result try to resolve

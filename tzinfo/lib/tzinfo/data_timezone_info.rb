@@ -31,10 +31,6 @@ module TZInfo
   # periods_for_local. Indicates an error in the timezone data.
   class NoOffsetsDefined < StandardError
   end
-  
-  # Thrown to indicate that no TimezonePeriod matching a given time could be found.
-  class PeriodNotFound < StandardError
-  end
     
   # Represents a (non-linked) timezone defined in a data module.
   class DataTimezoneInfo < TimezoneInfo #:nodoc:
@@ -145,7 +141,7 @@ module TZInfo
     
     # Returns the set of TimezonePeriods for the given local time as an array.    
     # Results returned are ordered by increasing UTC start date.
-    # Raises PeriodNotFound if no periods are found for the given time.
+    # Returns an empty array if no periods are found for the given time.
     # Raises NoOffsetsDefined if no offsets have been defined.    
     def periods_for_local(local)
       unless @transitions.empty?
@@ -183,7 +179,6 @@ module TZInfo
           end
         end
         
-        raise PeriodNotFound if result.empty?
         result
       else
         raise NoOffsetsDefined, 'No offsets have been defined' unless @previous_offset

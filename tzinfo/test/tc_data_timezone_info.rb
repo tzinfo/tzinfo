@@ -181,8 +181,8 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
     assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(DateTime.new(1999,12, 1, 0, 0, 0)))
     assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Time.utc(    2000, 1, 1,10, 0, 0)))
     assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Time.utc(    2000, 4, 1,20, 1,39)))
-    assert_raise(PeriodNotFound) {                 dti.periods_for_local(Time.utc(    2000, 4, 1,20, 1,40))}
-    assert_raise(PeriodNotFound) {                 dti.periods_for_local(Time.utc(    2000, 4, 1,20,59,59))}
+    assert_equal([],                            dti.periods_for_local(Time.utc(    2000, 4, 1,20, 1,40)))
+    assert_equal([],                            dti.periods_for_local(Time.utc(    2000, 4, 1,20,59,59)))
     assert_equal([TimezonePeriod.new(t1,  t2)], dti.periods_for_local(Time.utc(    2000, 4, 1,21, 0, 0)))
     assert_equal([TimezonePeriod.new(t1,  t2)], dti.periods_for_local(DateTime.new(2000,10, 1,19,59,59)))
     assert_equal([TimezonePeriod.new(t1,  t2),
@@ -191,9 +191,9 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
                   TimezonePeriod.new(t2,  t3)], dti.periods_for_local(DateTime.new(2000,10, 1,20,59,59)))
     assert_equal([TimezonePeriod.new(t2,  t3)], dti.periods_for_local(Time.utc(    2000,10, 1,21, 0, 0)))
     assert_equal([TimezonePeriod.new(t2,  t3)], dti.periods_for_local(Time.utc(    2001, 3, 1,19,59,59)))
-    assert_raise(PeriodNotFound) {                 dti.periods_for_local(Time.utc(    2001, 3, 1,20, 0, 0))}
-    assert_raise(PeriodNotFound) {                 dti.periods_for_local(DateTime.new(2001, 3, 1,20, 30, 0))}
-    assert_raise(PeriodNotFound) {                 dti.periods_for_local(Time.utc(    2001, 3, 1,20,59,59).to_i)}
+    assert_equal([],                            dti.periods_for_local(Time.utc(    2001, 3, 1,20, 0, 0)))
+    assert_equal([],                            dti.periods_for_local(DateTime.new(2001, 3, 1,20, 30, 0)))
+    assert_equal([],                            dti.periods_for_local(Time.utc(    2001, 3, 1,20,59,59).to_i))
     assert_equal([TimezonePeriod.new(t3,  t4)], dti.periods_for_local(Time.utc(    2001, 3, 1,21, 0, 0)))
     assert_equal([TimezonePeriod.new(t3,  t4)], dti.periods_for_local(Time.utc(    2001, 4, 1,19,59,59)))
     assert_equal([TimezonePeriod.new(t3,  t4),
@@ -207,8 +207,8 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
     assert_equal([TimezonePeriod.new(t5,  t6)], dti.periods_for_local(Time.utc(    2002,10, 1,19,59,59)))
     assert_equal([TimezonePeriod.new(t6,  t7)], dti.periods_for_local(Time.utc(    2002,10, 1,20, 0, 0)))
     assert_equal([TimezonePeriod.new(t6,  t7)], dti.periods_for_local(Time.utc(    2003, 2, 1,19,59,59)))
-    assert_raise(PeriodNotFound) {                 dti.periods_for_local(Time.utc(    2003, 2, 1,20, 0, 0))}
-    assert_raise(PeriodNotFound) {                 dti.periods_for_local(Time.utc(    2003, 2, 1,20,59,59))}
+    assert_equal([],                            dti.periods_for_local(Time.utc(    2003, 2, 1,20, 0, 0)))
+    assert_equal([],                            dti.periods_for_local(Time.utc(    2003, 2, 1,20,59,59)))
     assert_equal([TimezonePeriod.new(t7, nil)], dti.periods_for_local(Time.utc(    2003, 2, 1,21, 0, 0)))
     assert_equal([TimezonePeriod.new(t7, nil)], dti.periods_for_local(Time.utc(    2004, 2, 1,20, 0, 0)))
     assert_equal([TimezonePeriod.new(t7, nil)], dti.periods_for_local(DateTime.new(2040, 2, 1,20, 0, 0)))

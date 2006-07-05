@@ -23,8 +23,7 @@ class TCDataTimezone < Test::Unit::TestCase
     end
     
     def periods_for_local(local)
-      @local = local
-      raise PeriodNotFound, 'Period not found' if @local_periods.empty?
+      @local = local      
       @local_periods
     end
   end    
@@ -59,11 +58,12 @@ class TCDataTimezone < Test::Unit::TestCase
   end
   
   def test_periods_for_local_not_found
-    tti = TestTimezoneInfo.new('Test/Zone', nil, [])
+    periods = []
+    tti = TestTimezoneInfo.new('Test/Zone', nil, periods)
     tz = DataTimezone.new(tti)
     
     t = Time.utc(2006, 6, 27, 22, 50, 12)
-    assert_raise(PeriodNotFound) { tz.periods_for_local(t) }
+    assert_same(periods, tz.periods_for_local(t))
     assert_same(t, tti.local)
   end    
 end

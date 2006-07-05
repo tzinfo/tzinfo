@@ -33,15 +33,10 @@ class TCTimezone < Test::Unit::TestCase
       @period_for_utc
     end
     
-    def periods_for_local(local)      
+    def periods_for_local(local)            
       local = TimeOrDateTime.wrap(local)
       raise "Unexpected local #{local} in periods_for_local" unless @expected.eql?(local)
-      
-      if @periods_for_local.empty?
-        raise PeriodNotFound, 'No periods found'
-      else
-        @periods_for_local.clone
-      end
+      @periods_for_local.clone        
     end
     
     private
@@ -311,13 +306,41 @@ class TCTimezone < Test::Unit::TestCase
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
     
-    dt = DateTime.new(2004,10,31,1,30,0)
+    dt = DateTime.new(2004,10,31,1, 0,0)
+    t = Time.utc(2004,10,31,1,30,0)
+    i = Time.utc(2004,10,31,1,59,59).to_i
     
-    tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+    dt_tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+    t_tz = TestTimezone.new('America/New_York', nil, [p1, p2], t)
+    i_tz = TestTimezone.new('America/New_York', nil, [p1, p2], i)
         
-    assert_raise(AmbiguousTime) do
-      tz.period_for_local(dt)
-    end
+    assert_raise(AmbiguousTime) { dt_tz.period_for_local(dt) }
+    assert_raise(AmbiguousTime) { t_tz.period_for_local(t) }
+    assert_raise(AmbiguousTime) { i_tz.period_for_local(i) }
+  end
+  
+  def test_period_for_local_not_found
+    o1 = TimezoneOffsetInfo.new(-18000, 0, :EST)
+    o2 = TimezoneOffsetInfo.new(-18000, 3600, :EDT)
+    
+    t1 = TimezoneTransitionInfo.new(o1, o2, 1067148000)
+    t2 = TimezoneTransitionInfo.new(o2, o1, 1081062000)
+    t3 = TimezoneTransitionInfo.new(o1, o2, 1099202400)    
+    
+    p1 = TimezonePeriod.new(t1, t2)
+    p2 = TimezonePeriod.new(t2, t3)
+    
+    dt = DateTime.new(2004,4,4,2,0,0)
+    t = Time.utc(2004,4,4,2,30,0)
+    i = Time.utc(2004,4,4,2,59,59).to_i
+    
+    dt_tz = TestTimezone.new('America/New_York', nil, [], dt)
+    t_tz = TestTimezone.new('America/New_York', nil, [], t)
+    i_tz = TestTimezone.new('America/New_York', nil, [], i)
+        
+    assert_raise(PeriodNotFound) { dt_tz.period_for_local(dt) }
+    assert_raise(PeriodNotFound) { t_tz.period_for_local(t) }
+    assert_raise(PeriodNotFound) { i_tz.period_for_local(i) }
   end
   
   def test_period_for_local_dst_flag_resolved
@@ -559,6 +582,30 @@ class TCTimezone < Test::Unit::TestCase
     i = Time.utc(2004,10,31,1,30,0).to_i
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], i)
     assert_raise(AmbiguousTime) { tz.local_to_utc(i) }    
+  end
+  
+  def test_local_to_utc_not_found
+    o1 = TimezoneOffsetInfo.new(-18000, 0, :EST)
+    o2 = TimezoneOffsetInfo.new(-18000, 3600, :EDT)
+    
+    t1 = TimezoneTransitionInfo.new(o1, o2, 1067148000)
+    t2 = TimezoneTransitionInfo.new(o2, o1, 1081062000)
+    t3 = TimezoneTransitionInfo.new(o1, o2, 1099202400)    
+    
+    p1 = TimezonePeriod.new(t1, t2)
+    p2 = TimezonePeriod.new(t2, t3)
+    
+    dt = DateTime.new(2004,4,4,2,0,0)
+    t = Time.utc(2004,4,4,2,30,0)
+    i = Time.utc(2004,4,4,2,59,59).to_i
+    
+    dt_tz = TestTimezone.new('America/New_York', nil, [], dt)
+    t_tz = TestTimezone.new('America/New_York', nil, [], t)
+    i_tz = TestTimezone.new('America/New_York', nil, [], i)
+        
+    assert_raise(PeriodNotFound) { dt_tz.local_to_utc(dt) }
+    assert_raise(PeriodNotFound) { t_tz.local_to_utc(t) }
+    assert_raise(PeriodNotFound) { i_tz.local_to_utc(i) }
   end
   
   def test_local_to_utc_dst_flag_resolved
