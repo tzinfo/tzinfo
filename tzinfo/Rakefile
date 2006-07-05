@@ -25,6 +25,9 @@ PKG_FILES = FileList[
   'test/**/*'
 ]
 
+RDOC_OPTIONS = %w[--exclude definitions --exclude indexes]
+RDOC_EXTRA_FILES = %w[README CHANGES]
+
 BUILD_TZ_CLASSES_DIR = 'lib/tzinfo.build_tz_classes'
 
 SPEC = Gem::Specification.new do |s|
@@ -40,8 +43,9 @@ SPEC = Gem::Specification.new do |s|
   end
   s.require_path = "lib"
   s.autorequire = "tzinfo"  
-  s.has_rdoc = false
-  s.extra_rdoc_files = ["README","CHANGES"]
+  s.has_rdoc = true
+  s.extra_rdoc_files = RDOC_EXTRA_FILES
+  s.rdoc_options = RDOC_OPTIONS
   s.rubyforge_project = "tzinfo"
 end
 
@@ -65,8 +69,9 @@ end
 Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title = "TZInfo"
-  rdoc.options << '--inline-source'  
-  rdoc.rdoc_files.include('README', 'CHANGES') 
+  rdoc.options << '--inline-source'
+  rdoc.options.concat RDOC_OPTIONS
+  rdoc.rdoc_files.include(*RDOC_EXTRA_FILES) 
   rdoc.rdoc_files.include('lib')  
 end
 

@@ -27,6 +27,9 @@
 * hash method defined on Country that returns the hash of the code.
 * hash method defined on Timezone that returns the hash of the identifier.
 * Miscellaneous API documentation corrections and improvements.
+* Timezone definition and indexes are now excluded from rdoc (the contents were
+  ignored with #:nodoc: anyway).
+* Installation of gem now causes rdoc API documentation to be generated. #4905.
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
