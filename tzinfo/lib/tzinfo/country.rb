@@ -87,7 +87,12 @@ module TZInfo
     # Alias for name.
     def to_s
       name
-    end    
+    end
+    
+    # Returns internal object state as a programmer-readable string.
+    def inspect
+      "#<#{self.class}: #{@info.code}>"
+    end
     
     # Returns a frozen array of all the zone identifiers for the country. These
     # are in an order that

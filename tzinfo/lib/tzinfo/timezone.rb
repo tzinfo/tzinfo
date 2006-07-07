@@ -192,7 +192,12 @@ module TZInfo
     # Returns a friendlier version of the idenfitifer.
     def to_s
       friendly_identifier
-    end   
+    end
+    
+    # Returns internal object state as a programmer-readable string.
+    def inspect
+      "#<#{self.class}: #{identifier}>"
+    end
     
     # Returns a friendlier version of the idenfitifer. Set skip_first_part to 
     # omit the first part of the identifier (typically a region name) where

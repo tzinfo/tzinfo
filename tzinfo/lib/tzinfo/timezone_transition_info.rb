@@ -118,5 +118,10 @@ module TZInfo
     def hash
       @offset.hash ^ @previous_offset.hash ^ @numerator_or_time.hash ^ @denominator.hash
     end
+    
+    # Returns internal object state as a programmer-readable string.
+    def inspect
+      "#<#{self.class}: #{at.inspect},#{@offset.inspect}>"      
+    end
   end
 end

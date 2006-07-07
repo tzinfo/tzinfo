@@ -57,6 +57,11 @@ module TZInfo
       @zone_identifiers
     end
     
+    # Returns internal object state as a programmer-readable string.
+    def inspect
+      "#<#{self.class}: #@code>"
+    end
+    
     # Returns a frozen array of all the timezones for the for the country as
     # CountryTimezone instances. These are in the order they were added using 
     # the timezone method.

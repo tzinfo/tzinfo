@@ -35,5 +35,10 @@ module TZInfo
       super(identifier)
       @link_to_identifier = link_to_identifier      
     end
+    
+    # Returns internal object state as a programmer-readable string.
+    def inspect
+      "#<#{self.class}: #@identifier,#@link_to_identifier>"
+    end
   end
 end

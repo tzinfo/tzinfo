@@ -31,5 +31,10 @@ module TZInfo
     def initialize(identifier)
       @identifier = identifier
     end
+    
+    # Returns internal object state as a programmer-readable string.
+    def inspect
+      "#<#{self.class}: #@identifier>"
+    end
   end
 end

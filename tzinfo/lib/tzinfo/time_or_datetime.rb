@@ -99,6 +99,11 @@ module TZInfo
       end
     end
     
+    # Returns internal object state as a programmer-readable string.
+    def inspect
+      "#<#{self.class}: #{@orig.inspect}>"
+    end
+    
     # Returns the year.
     def year
       if !@time.nil?

@@ -84,5 +84,10 @@ module TZInfo
     def hash
       @identifier.hash ^ @latitude.hash ^ @longitude.hash ^ @description.hash
     end
+    
+    # Returns internal object state as a programmer-readable string.
+    def inspect
+      "#<#{self.class}: #@identifier>"
+    end
   end
 end
