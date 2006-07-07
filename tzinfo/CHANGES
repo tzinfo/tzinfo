@@ -18,8 +18,10 @@
   and description).
 * Timezones within a Country are now returned in an order that makes 
   geographic sense.
-* zdumptest utility now compares the TZInfo zone identifier with the zdump
+* The zdumptest utility now compares the TZInfo zone identifier with the zdump
   zone identifier.
+* The zdumptest utility now checks local to utc conversions in addition to
+  utc to local conversions.
 * zdumptestall utility now exits if not supplied with enough parameters.
 * eql? method defined on Country and Timezone that is equivalent to ==.
 * == method of Timezone no longer raises an exception when passed an object
