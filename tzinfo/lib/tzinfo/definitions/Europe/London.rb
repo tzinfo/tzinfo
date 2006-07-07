@@ -11,6 +11,7 @@ module TZInfo
           tz.offset :o1, 0, 0, :GMT
           tz.offset :o2, 0, 3600, :BST
           tz.offset :o3, 0, 7200, :BDST
+          tz.offset :o4, 3600, 0, :BST
           
           tz.transition 1847, 12, :o1, 2760187969, 1152
           tz.transition 1916, 5, :o2, 29052055, 12
@@ -120,6 +121,7 @@ module TZInfo
           tz.transition 1967, 3, :o2, 29274823, 12
           tz.transition 1967, 10, :o1, 29277511, 12
           tz.transition 1968, 2, :o2, 29278855, 12
+          tz.transition 1968, 10, :o4, 58563755, 24
           tz.transition 1971, 10, :o1, 57722400
           tz.transition 1972, 3, :o2, 69818400
           tz.transition 1972, 10, :o1, 89172000

@@ -745,7 +745,8 @@ module TZInfo
           # Shuffle transitions up, eliminating any redundant transitions 
           # along the way.
           if to_i == 0 ||
-              @transitions[to_i - 1].total_offset != @transitions[from_i].total_offset ||
+              @transitions[to_i - 1].utc_offset != @transitions[from_i].utc_offset ||
+              @transitions[to_i - 1].std_offset != @transitions[from_i].std_offset ||
               @transitions[to_i - 1].zone_id != @transitions[from_i].zone_id
                       
             @transitions[to_i] = @transitions[from_i]

@@ -30,6 +30,10 @@
 * Timezone definition and indexes are now excluded from rdoc (the contents were
   ignored with #:nodoc: anyway).
 * Installation of gem now causes rdoc API documentation to be generated. #4905.
+* When optimizing transitions to generate zone definitions, check the
+  UTC and standard offsets rather than just the total offset to UTC. Fixes an
+  incorrect abbreviation issue with Europe/London, Europe/Dublin and 
+  Pacific/Auckland.
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
