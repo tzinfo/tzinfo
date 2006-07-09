@@ -3,7 +3,7 @@
 * Updated to tzdata version 2006g
   (http://article.gmane.org/gmane.comp.time.tz/1008).
 * New timezone data format. Timezone data now occupies less space on disk and
-  takes less memory once loaded. #4142.
+  takes less memory once loaded. #4142, #4144.
 * Timezone data is defined in modules rather than classes. Timezone instances 
   returned by Timezone.get are no longer instances of data classes, but instead
   instances of new DataTimezone and LinkedTimezone classes.
@@ -15,7 +15,7 @@
 * Country instances can now be used with Marshal.dump and Marshal.load. #4240.
 * Country has a new zone_info method that returns CountryTimezone objects
   containing additional information about each Timezone (latitude, longitude
-  and description).
+  and description). #4140.
 * Timezones within a Country are now returned in an order that makes 
   geographic sense.
 * The zdumptest utility now compares the TZInfo zone identifier with the zdump
