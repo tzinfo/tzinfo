@@ -155,8 +155,8 @@ module TZInfo
       # Loads in the index of countries if it hasn't already been loaded.
       def self.load_index
         unless @@countries
-          @@countries = {}
-          require 'tzinfo/indexes/countries'          
+          @@countries = {}          
+          load 'tzinfo/indexes/countries.rb'          
         end
       end
       

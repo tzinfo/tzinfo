@@ -136,4 +136,17 @@ class TCCountry < Test::Unit::TestCase
     # Should get back the same instance because load calls Country.get.
     assert_same(c, Marshal.load(Marshal.dump(c)))
   end
+  
+  def test_reload
+    # If country gets reloaded for some reason, it needs to force a reload of
+    # the country index.
+    
+    c = Country.get('US')
+    assert_equal('US', Country.get('US').code)
+    
+    load 'tzinfo/country.rb'
+    
+    c = Country.get('US')
+    assert_equal('US', Country.get('US').code)
+  end
 end
