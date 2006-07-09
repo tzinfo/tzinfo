@@ -204,7 +204,7 @@ module TZInfo
           nil
         else
           index = 0 if index < 0
-          0
+          @transitions_index[index]
         end
       end
       
