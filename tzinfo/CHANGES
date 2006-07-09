@@ -36,6 +36,7 @@
   UTC and standard offsets rather than just the total offset to UTC. Fixes an
   incorrect abbreviation issue with Europe/London, Europe/Dublin and 
   Pacific/Auckland.
+* Eliminating unnecessary .nil? calls to give a minor performance gain.
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006

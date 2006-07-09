@@ -43,7 +43,7 @@ module TZInfo
         
     # The identifier of the timezone, e.g. "Europe/Paris".
     def identifier
-      @real_timezone.nil? ? @identifier : @real_timezone.identifier
+      @real_timezone ? @real_timezone.identifier : @identifier
     end
     
     # Returns the TimezonePeriod for the given UTC time. utc can either be

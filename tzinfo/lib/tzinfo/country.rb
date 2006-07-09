@@ -46,7 +46,7 @@ module TZInfo
     def self.get(identifier)
       load_index
       instance = @@countries[identifier]                   
-      raise InvalidCountryCode.new, 'Invalid identifier' if instance.nil?
+      raise InvalidCountryCode.new, 'Invalid identifier' unless instance
       instance        
     end
     

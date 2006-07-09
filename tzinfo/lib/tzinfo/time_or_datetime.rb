@@ -54,8 +54,8 @@ module TZInfo
     
     # Returns the time as a Time.
     def to_time
-      if @time.nil?        
-        if !@timestamp.nil? 
+      unless @time        
+        if @timestamp 
           @time = Time.at(@timestamp).utc
         else
           @time = Time.utc(year, mon, mday, hour, min, sec)
@@ -67,7 +67,7 @@ module TZInfo
     
     # Returns the time as a DateTime.
     def to_datetime
-      if @datetime.nil?
+      unless @datetime
         @datetime = DateTime.new(year, mon, mday, hour, min, sec)
       end
       
@@ -76,7 +76,7 @@ module TZInfo
     
     # Returns the time as an integer timestamp.
     def to_i
-      if @timestamp.nil?
+      unless @timestamp
         @timestamp = to_time.to_i
       end
       
@@ -106,9 +106,9 @@ module TZInfo
     
     # Returns the year.
     def year
-      if !@time.nil?
+      if @time
         @time.year
-      elsif !@datetime.nil?
+      elsif @datetime
         @datetime.year
       else
         to_time.year
@@ -117,9 +117,9 @@ module TZInfo
     
     # Returns the month of the year (1..12).
     def mon
-      if !@time.nil?
+      if @time
         @time.mon
-      elsif !@datetime.nil?
+      elsif @datetime
         @datetime.mon
       else
         to_time.mon
@@ -129,9 +129,9 @@ module TZInfo
     
     # Returns the day of the month (1..n).
     def mday
-      if !@time.nil?
+      if @time
         @time.mday
-      elsif !@datetime.nil?
+      elsif @datetime
         @datetime.mday
       else
         to_time.mday
@@ -141,9 +141,9 @@ module TZInfo
     
     # Returns the hour of the day (0..23).
     def hour
-      if !@time.nil?
+      if @time
         @time.hour
-      elsif !@datetime.nil?
+      elsif @datetime
         @datetime.hour
       else
         to_time.hour
@@ -152,9 +152,9 @@ module TZInfo
     
     # Returns the minute of the hour (0..59).
     def min
-      if !@time.nil?
+      if @time
         @time.min
-      elsif !@datetime.nil?
+      elsif @datetime
         @datetime.min
       else
         to_time.min
@@ -163,9 +163,9 @@ module TZInfo
     
     # Returns the second of the minute (0..60). (60 for a leap second).
     def sec
-      if !@time.nil?
+      if @time
         @time.sec
-      elsif !@datetime.nil?
+      elsif @datetime
         @datetime.sec
       else
         to_time.sec

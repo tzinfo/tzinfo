@@ -67,7 +67,7 @@ module TZInfo
     # occurs.
     def at
       unless @at
-        if @denominator.nil? 
+        unless @denominator 
           @at = TimeOrDateTime.new(@numerator_or_time)
         else
           @at = TimeOrDateTime.new(DateTime.new0(Rational.new!(@numerator_or_time, @denominator), 0, Date::ITALY))

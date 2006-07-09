@@ -313,7 +313,7 @@ module TZInfo
           
           if results.is_a?(TimezonePeriod)
             results
-          elsif !results.nil? && results.size == 1
+          elsif results && results.size == 1
             results.first
           else          
             raise AmbiguousTime, "#{local} is an ambiguous local time."
