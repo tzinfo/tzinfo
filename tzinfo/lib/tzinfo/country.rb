@@ -39,14 +39,23 @@ module TZInfo
     include Comparable
     
     # Defined countries.
-    @@countries = nil        
+    @@countries = {}
+    
+    # Whether the countries index has been loaded yet.
+    @@index_loaded = false
     
     # Gets a Country by its ISO 3166 code. Raises an InvalidCountryCode 
     # exception if it couldn't be found.
     def self.get(identifier)
-      load_index
-      instance = @@countries[identifier]                   
-      raise InvalidCountryCode.new, 'Invalid identifier' unless instance
+      instance = @@countries[identifier]
+      
+      unless instance
+        info = Indexes::Countries.countries[identifier]        
+        raise InvalidCountryCode.new, 'Invalid identifier' unless info
+        instance = Country.new(info)
+        @@countries[identifier] = instance
+      end      
+      
       instance        
     end
     
@@ -65,13 +74,13 @@ module TZInfo
     # Returns an Array of all the valid country codes.
     def self.all_codes
       load_index
-      @@countries.keys      
+      Indexes::Countries.countries.keys
     end
     
     # Returns an Array of all the defined Countries.
     def self.all
       load_index
-      @@countries.values
+      Indexes::Countries.countries.keys.collect {|code| get(code)}
     end       
     
     # The ISO 3166 country code.
@@ -154,41 +163,16 @@ module TZInfo
     private
       # Loads in the index of countries if it hasn't already been loaded.
       def self.load_index
-        unless @@countries
-          @@countries = {}          
-          load 'tzinfo/indexes/countries.rb'          
-        end
-      end
-      
-      # Callback raised through CountryIndexDefinition as countries are
-      # defined. Creates new Country instances.
-      def self.country_defined(country_info)
-        @@countries[country_info.code] = Country.new(country_info)
-      end
+        unless @@index_loaded
+          require 'tzinfo/indexes/countries'
+          @@index_loaded = true
+        end        
+      end     
       
       # Called by Country.new to initialize a new Country instance. The info
       # parameter is a CountryInfo that defines the country.
       def setup(info)
         @info = info        
       end
-  end
-  
-  # The country index file includes CountryIndexDefinition which provides
-  # a country method used to define each country in the index.
-  module CountryIndexDefinition    
-    def self.append_features(base)
-      super
-      base.extend(ClassMethods)
-    end
-    
-    module ClassMethods
-      # Defines a country with an ISO 3166 country code, name and block. The
-      # block will be evaluated to obtain all the timezones for the country.
-      # Calls Country.country_defined with the definition of each country.
-      def country(code, name, &block)
-        country = CountryInfo.new(code, name, &block)
-        Country.send :country_defined, country
-      end
-    end
-  end    
+  end 
 end

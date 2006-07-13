@@ -304,17 +304,20 @@ module TZInfo
         
         File.open(dir + File::SEPARATOR + 'countries.rb', 'w') {|file|
           file.binmode        
-                  
+               
+          file.puts('require \'tzinfo/country_index_definition\'')
+          file.puts('')
           file.puts('module TZInfo')
-          file.puts('module Indexes')
-          file.puts('module Countries')
-          file.puts('include CountryIndexDefinition')
-                                       
+          file.puts('  module Indexes')
+          file.puts('    module Countries')
+          file.puts('      include CountryIndexDefinition')
+          file.puts('')
+          
           countries = @countries.values.sort {|c1,c2| c1.code <=> c2.code}  
           countries.each {|country| country.write_index_record(file)}
                     
-          file.puts('end') # end module Countries                    
-          file.puts('end') # end module Indexes
+          file.puts('    end') # end module Countries                    
+          file.puts('  end') # end module Indexes
           file.puts('end') # end module TZInfo
         }                      
       end
@@ -1126,13 +1129,16 @@ module TZInfo
     end  
     
     def write_index_record(file)
-      file.puts "country #{TZDataParser.quote_str(@code)}, #{TZDataParser.quote_str(@name)} do |c|"
+      s = "      country #{TZDataParser.quote_str(@code)}, #{TZDataParser.quote_str(@name)}"      
+      s << ' do |c|' if @zones.length > 0
+      
+      file.puts s
       
       @zones.each do |zone|
-        file.puts "  c.timezone #{TZDataParser.quote_str(zone.timezone.name)}, #{TZDataParser.new_rational(zone.location.latitude)}, #{TZDataParser.new_rational(zone.location.longitude)}#{zone.description.nil? ? '' : ', ' + TZDataParser.quote_str(zone.description)}" 
+        file.puts "        c.timezone #{TZDataParser.quote_str(zone.timezone.name)}, #{TZDataParser.new_rational(zone.location.latitude)}, #{TZDataParser.new_rational(zone.location.longitude)}#{zone.description.nil? ? '' : ', ' + TZDataParser.quote_str(zone.description)}" 
       end
       
-      file.puts 'end'
+      file.puts '      end' if @zones.length > 0
     end
   end
 end

@@ -22,6 +22,12 @@ class TCCountryInfo < Test::Unit::TestCase
     assert(ci.zone_identifiers.frozen?)
   end
   
+  def test_zone_identifiers_no_block
+    ci = CountryInfo.new('ZZ', 'Zzz')
+    assert(ci.zone_identifiers.empty?)
+    assert(ci.zone_identifiers.frozen?)
+  end
+  
   def test_zone_identifiers
     ci = CountryInfo.new('ZZ', 'Zzz') do |c|
       assert_same(ci, c)
@@ -41,6 +47,12 @@ class TCCountryInfo < Test::Unit::TestCase
     assert(ci.zones.frozen?)
   end
   
+  def test_zones_no_block
+    ci = CountryInfo.new('ZZ', 'Zzz')
+    assert(ci.zones.empty?)
+    assert(ci.zones.frozen?)
+  end
+  
   def test_zones
     ci = CountryInfo.new('ZZ', 'Zzz') do |c|
       assert_same(ci, c)
@@ -56,5 +68,5 @@ class TCCountryInfo < Test::Unit::TestCase
       CountryTimezone.new('ZZ/TimezoneD', Rational(-10, 3), Rational(-20, 7))],
       ci.zones)
     assert(ci.zones.frozen?)
-  end
+  end    
 end

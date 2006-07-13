@@ -68,12 +68,12 @@ module TZInfo
     def zones
       unless @zones
         @zones = []
-        @block.call(self)
+        @block.call(self) if @block
         @block = nil
         @zones.freeze
       end
       
       @zones
-    end
+    end    
   end
 end
