@@ -3,10 +3,12 @@
 # rake test - Runs all test cases.
 # rake package - Runs test cases and builds packages for distribution.
 # rake rdoc - Builds API documentation in doc dir.
-# rake build_tz_classes - Builds Timezone and Country classes. Expects to find
-#   source data in ../data.
-# rake build_tz_class zone=Zone/Name - Builds single Timezone class. Expects to
-#   find source data in ../data.
+# rake build_tz_classes - Builds Timezone modules and the Country index. 
+#   Expects to find source data in ../data.
+# rake build_tz_class zone=Zone/Name - Builds a single Timezone module. 
+#   Expects to find source data in ../data.
+# rake build_countries - Builds the Country index.
+#   Expects to find source data in ../data.
 
 require 'rake'
 require 'rake/testtask'
