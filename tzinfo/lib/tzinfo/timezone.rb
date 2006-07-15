@@ -430,7 +430,29 @@ module TZInfo
       [period.to_local(utc), period]
     end
     
-    alias :current_time_and_period :current_period_and_time        
+    alias :current_time_and_period :current_period_and_time
+
+    # Converts a time in UTC to local time and returns it as a string 
+    # according to the given format. The formatting is identical to 
+    # Time.strftime and DateTime.strftime, except %Z is replaced with the
+    # timezone abbreviation for the specified time (for example, EST or EDT).        
+    def strftime(format, utc = Time.now.utc)      
+      period = period_for_utc(utc)
+      local = period.to_local(utc)      
+      local = Time.at(local).utc unless local.kind_of?(Time) || local.kind_of?(DateTime)
+      abbreviation = period.abbreviation.to_s.gsub(/%/, '%%')
+      
+      format = format.gsub(/(.?)%Z/) do
+        if $1 == '%'
+          # return %%Z so the real strftime treats it as a literal %Z too
+          '%%Z'
+        else
+          "#$1#{abbreviation}"
+        end
+      end
+      
+      local.strftime(format)
+    end
     
     # Compare two Timezones based on their identifier. Returns -1 if tz is less
     # than self, 0 if tz is equal to self and +1 if tz is greater than self.

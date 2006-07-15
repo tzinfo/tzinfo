@@ -41,6 +41,9 @@
   Timezones/identifiers rather than just those associated with countries. #4146.
 * Added all_data_zones, all_data_zone_identifiers, all_linked_zones and
   all_linked_zone_identifiers class methods to Timezone.
+* Added a strftime method to Timezone that converts a time in UTC to local
+  time and then returns it formatted. %Z is replaced with the Timezone 
+  abbreviation for the given time (for example, EST or EDT). #4143.
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
