@@ -31,10 +31,10 @@ class TCCountryInfo < Test::Unit::TestCase
   def test_zone_identifiers
     ci = CountryInfo.new('ZZ', 'Zzz') do |c|
       assert_same(ci, c)
-      c.timezone('ZZ/TimezoneB', Rational(1, 2), Rational(1, 2), 'Timezone B')
-      c.timezone('ZZ/TimezoneA', Rational(1, 4), Rational(1, 4), 'Timezone A')
-      c.timezone('ZZ/TimezoneC', Rational(-10, 3), Rational(-20, 7), 'C')
-      c.timezone('ZZ/TimezoneD', Rational(-10, 3), Rational(-20, 7))
+      c.timezone('ZZ/TimezoneB', 1, 2, 1, 2, 'Timezone B')
+      c.timezone('ZZ/TimezoneA', 1, 4, 1, 4, 'Timezone A')
+      c.timezone('ZZ/TimezoneC', -10, 3, -20, 7, 'C')
+      c.timezone('ZZ/TimezoneD', -10, 3, -20, 7)
     end
     
     assert_equal(['ZZ/TimezoneB', 'ZZ/TimezoneA', 'ZZ/TimezoneC', 'ZZ/TimezoneD'], ci.zone_identifiers)
@@ -56,16 +56,16 @@ class TCCountryInfo < Test::Unit::TestCase
   def test_zones
     ci = CountryInfo.new('ZZ', 'Zzz') do |c|
       assert_same(ci, c)
-      c.timezone('ZZ/TimezoneB', Rational(1, 2), Rational(1, 2), 'Timezone B')
-      c.timezone('ZZ/TimezoneA', Rational(1, 4), Rational(1, 4), 'Timezone A')
-      c.timezone('ZZ/TimezoneC', Rational(-10, 3), Rational(-20, 7), 'C')
-      c.timezone('ZZ/TimezoneD', Rational(-10, 3), Rational(-20, 7))
+      c.timezone('ZZ/TimezoneB', 1, 2, 1, 2, 'Timezone B')
+      c.timezone('ZZ/TimezoneA', 1, 4, 1, 4, 'Timezone A')
+      c.timezone('ZZ/TimezoneC', -10, 3, -20, 7, 'C')
+      c.timezone('ZZ/TimezoneD', -10, 3, -20, 7)
     end
     
-    assert_equal([CountryTimezone.new('ZZ/TimezoneB', Rational(1, 2), Rational(1, 2), 'Timezone B'),
-      CountryTimezone.new('ZZ/TimezoneA', Rational(1, 4), Rational(1, 4), 'Timezone A'),
-      CountryTimezone.new('ZZ/TimezoneC', Rational(-10, 3), Rational(-20, 7), 'C'),
-      CountryTimezone.new('ZZ/TimezoneD', Rational(-10, 3), Rational(-20, 7))],
+    assert_equal([CountryTimezone.new('ZZ/TimezoneB', 1, 2, 1, 2, 'Timezone B'),
+      CountryTimezone.new('ZZ/TimezoneA', 1, 4, 1, 4, 'Timezone A'),
+      CountryTimezone.new('ZZ/TimezoneC', -10, 3, -20, 7, 'C'),
+      CountryTimezone.new('ZZ/TimezoneD', -10, 3, -20, 7)],
       ci.zones)
     assert(ci.zones.frozen?)
   end    

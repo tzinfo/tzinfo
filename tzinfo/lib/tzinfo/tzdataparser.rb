@@ -166,12 +166,7 @@ module TZInfo
     def self.quote_str(str)
       "'#{str.gsub(/'/, '\\\'')}'"
     end
-    
-    # Returns the string to construct a rational using the new! method.
-    def self.new_rational(rational)
-      "Rational.new!(#{rational.numerator},#{rational.denominator})"
-    end
-    
+        
     private
       # Loads all the Rule definitions from the tz data and stores them in
       # @rule_sets.
@@ -1135,7 +1130,7 @@ module TZInfo
       file.puts s
       
       @zones.each do |zone|
-        file.puts "        c.timezone #{TZDataParser.quote_str(zone.timezone.name)}, #{TZDataParser.new_rational(zone.location.latitude)}, #{TZDataParser.new_rational(zone.location.longitude)}#{zone.description.nil? ? '' : ', ' + TZDataParser.quote_str(zone.description)}" 
+        file.puts "        c.timezone #{TZDataParser.quote_str(zone.timezone.name)}, #{zone.location.latitude.numerator}, #{zone.location.latitude.denominator}, #{zone.location.longitude.numerator}, #{zone.location.longitude.denominator}#{zone.description.nil? ? '' : ', ' + TZDataParser.quote_str(zone.description)}" 
       end
       
       file.puts '      end' if @zones.length > 0

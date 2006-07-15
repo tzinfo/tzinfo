@@ -41,9 +41,12 @@ module TZInfo
     end
     
     # Called by the index data to define a timezone for the country.
-    def timezone(identifier, latitude, longitude, description = nil)
+    def timezone(identifier, latitude_numerator, latitude_denominator, 
+                 longitude_numerator, longitude_denominator, description = nil)
       # Currently only store the identifiers.
-      @zones << CountryTimezone.new(identifier, latitude, longitude, description)     
+      @zones << CountryTimezone.new(identifier, latitude_numerator, 
+        latitude_denominator, longitude_numerator, longitude_denominator,
+        description)     
     end
     
     # Returns a frozen array of all the zone identifiers for the country. These

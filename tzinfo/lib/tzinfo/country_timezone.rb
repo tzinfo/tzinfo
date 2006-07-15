@@ -28,13 +28,7 @@ module TZInfo
   # multiple countries).
   class CountryTimezone
     # The zone identifier.
-    attr_reader :identifier
-    
-    # The latitude of this timezone in degrees as a Rational.
-    attr_reader :latitude
-    
-    # The longitude of this timezone in degrees as a Rational.
-    attr_reader :longitude
+    attr_reader :identifier      
     
     # A description of this timezone in relation to the country, e.g. 
     # "Eastern Time". This is usually nil for countries having only a single
@@ -42,13 +36,18 @@ module TZInfo
     attr_reader :description
     
     # Creates a new CountryTimezone with a timezone identifier, latitude,
-    # longitude and description. The latitude and longitude should be specified
-    # as Rationals. CountryTimezone instances should not normally be 
-    # constructed manually.
-    def initialize(identifier, latitude, longitude, description = nil) #:nodoc:
+    # longitude and description. The latitude and longitude are specified as
+    # rationals - a numerator and denominator. For performance reasons, the 
+    # numerators and denominators must be specified in their lowest form.
+    #
+    # CountryTimezone instances should not normally be constructed manually.
+    def initialize(identifier, latitude_numerator, latitude_denominator, 
+                   longitude_numerator, longitude_denominator, description = nil) #:nodoc:
       @identifier = identifier
-      @latitude = latitude
-      @longitude = longitude
+      @latitude_numerator = latitude_numerator
+      @latitude_denominator = latitude_denominator
+      @longitude_numerator = longitude_numerator
+      @longitude_denominator = longitude_denominator      
       @description = description
     end
     
@@ -61,6 +60,16 @@ module TZInfo
     # returns timezone.friendly_identifier(true).
     def description_or_friendly_identifier
       description || timezone.friendly_identifier(true)
+    end
+    
+    # The latitude of this timezone in degrees as a Rational.
+    def latitude
+      @latitude ||= Rational.new!(@latitude_numerator, @latitude_denominator)
+    end
+    
+    # The longitude of this timezone in degrees as a Rational.
+    def longitude
+      @longitude ||= Rational.new!(@longitude_numerator, @longitude_denominator)
     end
     
     # Returns true if and only if the given CountryTimezone is equal to the
@@ -82,7 +91,8 @@ module TZInfo
     
     # Returns a hash of this CountryTimezone. 
     def hash
-      @identifier.hash ^ @latitude.hash ^ @longitude.hash ^ @description.hash
+      @identifier.hash ^ @latitude_numerator.hash ^ @latitude_denominator.hash ^ 
+        @longitude_numerator.hash ^ @longitude_denominator.hash ^ @description.hash
     end
     
     # Returns internal object state as a programmer-readable string.
