@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Macao #:nodoc:
+  module Definitions
+    module Asia
+      module Macao
         include TimezoneDefinition
         
         linked_timezone 'Asia/Macao', 'Asia/Macau'

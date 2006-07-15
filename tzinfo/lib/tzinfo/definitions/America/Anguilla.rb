@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Anguilla #:nodoc:
+  module Definitions
+    module America
+      module Anguilla
         include TimezoneDefinition
         
         timezone 'America/Anguilla' do |tz|

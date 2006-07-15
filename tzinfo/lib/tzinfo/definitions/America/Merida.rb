@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Merida #:nodoc:
+  module Definitions
+    module America
+      module Merida
         include TimezoneDefinition
         
         timezone 'America/Merida' do |tz|

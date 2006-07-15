@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Mariehamn #:nodoc:
+  module Definitions
+    module Europe
+      module Mariehamn
         include TimezoneDefinition
         
         linked_timezone 'Europe/Mariehamn', 'Europe/Helsinki'

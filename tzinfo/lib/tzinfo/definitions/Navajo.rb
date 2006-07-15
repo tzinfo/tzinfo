@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Navajo #:nodoc:
+  module Definitions
+    module Navajo
       include TimezoneDefinition
       
       linked_timezone 'Navajo', 'America/Denver'

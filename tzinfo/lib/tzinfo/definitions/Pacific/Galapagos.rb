@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Galapagos #:nodoc:
+  module Definitions
+    module Pacific
+      module Galapagos
         include TimezoneDefinition
         
         timezone 'Pacific/Galapagos' do |tz|

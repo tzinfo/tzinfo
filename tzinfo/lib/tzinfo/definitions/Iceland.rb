@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Iceland #:nodoc:
+  module Definitions
+    module Iceland
       include TimezoneDefinition
       
       linked_timezone 'Iceland', 'Atlantic/Reykjavik'

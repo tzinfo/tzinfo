@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Palau #:nodoc:
+  module Definitions
+    module Pacific
+      module Palau
         include TimezoneDefinition
         
         timezone 'Pacific/Palau' do |tz|

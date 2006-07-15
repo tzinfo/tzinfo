@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Jerusalem #:nodoc:
+  module Definitions
+    module Asia
+      module Jerusalem
         include TimezoneDefinition
         
         timezone 'Asia/Jerusalem' do |tz|

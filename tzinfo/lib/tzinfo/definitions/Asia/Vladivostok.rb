@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Vladivostok #:nodoc:
+  module Definitions
+    module Asia
+      module Vladivostok
         include TimezoneDefinition
         
         timezone 'Asia/Vladivostok' do |tz|

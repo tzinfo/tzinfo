@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Sakhalin #:nodoc:
+  module Definitions
+    module Asia
+      module Sakhalin
         include TimezoneDefinition
         
         timezone 'Asia/Sakhalin' do |tz|

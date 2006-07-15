@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Indian #:nodoc:
-      module Comoro #:nodoc:
+  module Definitions
+    module Indian
+      module Comoro
         include TimezoneDefinition
         
         timezone 'Indian/Comoro' do |tz|

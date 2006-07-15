@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Indian #:nodoc:
-      module Kerguelen #:nodoc:
+  module Definitions
+    module Indian
+      module Kerguelen
         include TimezoneDefinition
         
         timezone 'Indian/Kerguelen' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Auckland #:nodoc:
+  module Definitions
+    module Pacific
+      module Auckland
         include TimezoneDefinition
         
         timezone 'Pacific/Auckland' do |tz|

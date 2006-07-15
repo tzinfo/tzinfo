@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Indian #:nodoc:
-      module Mauritius #:nodoc:
+  module Definitions
+    module Indian
+      module Mauritius
         include TimezoneDefinition
         
         timezone 'Indian/Mauritius' do |tz|

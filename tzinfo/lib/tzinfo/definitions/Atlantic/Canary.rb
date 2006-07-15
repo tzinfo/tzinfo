@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Atlantic #:nodoc:
-      module Canary #:nodoc:
+  module Definitions
+    module Atlantic
+      module Canary
         include TimezoneDefinition
         
         timezone 'Atlantic/Canary' do |tz|

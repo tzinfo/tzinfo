@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module UTC #:nodoc:
+  module Definitions
+    module UTC
       include TimezoneDefinition
       
       linked_timezone 'UTC', 'Etc/UTC'

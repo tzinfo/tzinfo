@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Wallis #:nodoc:
+  module Definitions
+    module Pacific
+      module Wallis
         include TimezoneDefinition
         
         timezone 'Pacific/Wallis' do |tz|

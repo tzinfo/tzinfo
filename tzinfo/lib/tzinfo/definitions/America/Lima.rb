@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Lima #:nodoc:
+  module Definitions
+    module America
+      module Lima
         include TimezoneDefinition
         
         timezone 'America/Lima' do |tz|

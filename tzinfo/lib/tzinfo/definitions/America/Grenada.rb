@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Grenada #:nodoc:
+  module Definitions
+    module America
+      module Grenada
         include TimezoneDefinition
         
         timezone 'America/Grenada' do |tz|

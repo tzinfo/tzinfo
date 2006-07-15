@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module GMT0 #:nodoc:
+  module Definitions
+    module GMT0
       include TimezoneDefinition
       
       linked_timezone 'GMT0', 'Etc/GMT'

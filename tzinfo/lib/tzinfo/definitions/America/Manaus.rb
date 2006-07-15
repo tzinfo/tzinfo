@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Manaus #:nodoc:
+  module Definitions
+    module America
+      module Manaus
         include TimezoneDefinition
         
         timezone 'America/Manaus' do |tz|

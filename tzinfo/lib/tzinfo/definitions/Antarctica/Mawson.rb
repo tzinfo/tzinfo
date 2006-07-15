@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Antarctica #:nodoc:
-      module Mawson #:nodoc:
+  module Definitions
+    module Antarctica
+      module Mawson
         include TimezoneDefinition
         
         timezone 'Antarctica/Mawson' do |tz|

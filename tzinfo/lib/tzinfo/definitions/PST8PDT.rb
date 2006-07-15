@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module PST8PDT #:nodoc:
+  module Definitions
+    module PST8PDT
       include TimezoneDefinition
       
       timezone 'PST8PDT' do |tz|

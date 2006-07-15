@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Juneau #:nodoc:
+  module Definitions
+    module America
+      module Juneau
         include TimezoneDefinition
         
         timezone 'America/Juneau' do |tz|

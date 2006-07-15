@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module ROC #:nodoc:
+  module Definitions
+    module ROC
       include TimezoneDefinition
       
       linked_timezone 'ROC', 'Asia/Taipei'

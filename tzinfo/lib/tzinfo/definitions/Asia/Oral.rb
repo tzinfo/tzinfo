@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Oral #:nodoc:
+  module Definitions
+    module Asia
+      module Oral
         include TimezoneDefinition
         
         timezone 'Asia/Oral' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Norfolk #:nodoc:
+  module Definitions
+    module Pacific
+      module Norfolk
         include TimezoneDefinition
         
         timezone 'Pacific/Norfolk' do |tz|

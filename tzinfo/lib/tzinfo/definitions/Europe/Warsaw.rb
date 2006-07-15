@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Warsaw #:nodoc:
+  module Definitions
+    module Europe
+      module Warsaw
         include TimezoneDefinition
         
         timezone 'Europe/Warsaw' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Samoa #:nodoc:
+  module Definitions
+    module Pacific
+      module Samoa
         include TimezoneDefinition
         
         linked_timezone 'Pacific/Samoa', 'Pacific/Pago_Pago'

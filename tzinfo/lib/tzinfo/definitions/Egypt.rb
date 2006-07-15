@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Egypt #:nodoc:
+  module Definitions
+    module Egypt
       include TimezoneDefinition
       
       linked_timezone 'Egypt', 'Africa/Cairo'

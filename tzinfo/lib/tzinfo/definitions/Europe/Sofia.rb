@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Sofia #:nodoc:
+  module Definitions
+    module Europe
+      module Sofia
         include TimezoneDefinition
         
         timezone 'Europe/Sofia' do |tz|

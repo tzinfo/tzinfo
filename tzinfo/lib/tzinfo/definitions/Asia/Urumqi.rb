@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Urumqi #:nodoc:
+  module Definitions
+    module Asia
+      module Urumqi
         include TimezoneDefinition
         
         timezone 'Asia/Urumqi' do |tz|

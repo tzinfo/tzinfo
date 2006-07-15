@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Atlantic #:nodoc:
-      module Jan_Mayen #:nodoc:
+  module Definitions
+    module Atlantic
+      module Jan_Mayen
         include TimezoneDefinition
         
         linked_timezone 'Atlantic/Jan_Mayen', 'Europe/Oslo'

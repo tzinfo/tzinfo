@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Australia #:nodoc:
-      module Broken_Hill #:nodoc:
+  module Definitions
+    module Australia
+      module Broken_Hill
         include TimezoneDefinition
         
         timezone 'Australia/Broken_Hill' do |tz|

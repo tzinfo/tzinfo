@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Nicosia #:nodoc:
+  module Definitions
+    module Asia
+      module Nicosia
         include TimezoneDefinition
         
         timezone 'Asia/Nicosia' do |tz|

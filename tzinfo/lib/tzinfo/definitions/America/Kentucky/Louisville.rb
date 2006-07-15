@@ -1,10 +1,10 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Kentucky #:nodoc:
-        module Louisville #:nodoc:
+  module Definitions
+    module America
+      module Kentucky
+        module Louisville
           include TimezoneDefinition
           
           timezone 'America/Kentucky/Louisville' do |tz|

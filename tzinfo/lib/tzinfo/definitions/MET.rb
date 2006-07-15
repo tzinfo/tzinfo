@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module MET #:nodoc:
+  module Definitions
+    module MET
       include TimezoneDefinition
       
       timezone 'MET' do |tz|

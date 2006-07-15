@@ -1,10 +1,10 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module North_Dakota #:nodoc:
-        module Center #:nodoc:
+  module Definitions
+    module America
+      module North_Dakota
+        module Center
           include TimezoneDefinition
           
           timezone 'America/North_Dakota/Center' do |tz|

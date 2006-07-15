@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Australia #:nodoc:
-      module Yancowinna #:nodoc:
+  module Definitions
+    module Australia
+      module Yancowinna
         include TimezoneDefinition
         
         linked_timezone 'Australia/Yancowinna', 'Australia/Broken_Hill'

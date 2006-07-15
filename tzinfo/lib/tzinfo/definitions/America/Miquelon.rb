@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Miquelon #:nodoc:
+  module Definitions
+    module America
+      module Miquelon
         include TimezoneDefinition
         
         timezone 'America/Miquelon' do |tz|

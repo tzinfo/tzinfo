@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Antarctica #:nodoc:
-      module Rothera #:nodoc:
+  module Definitions
+    module Antarctica
+      module Rothera
         include TimezoneDefinition
         
         timezone 'Antarctica/Rothera' do |tz|

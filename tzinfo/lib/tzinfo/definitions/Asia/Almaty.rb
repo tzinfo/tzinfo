@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Almaty #:nodoc:
+  module Definitions
+    module Asia
+      module Almaty
         include TimezoneDefinition
         
         timezone 'Asia/Almaty' do |tz|

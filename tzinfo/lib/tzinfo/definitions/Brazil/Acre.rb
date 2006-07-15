@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Brazil #:nodoc:
-      module Acre #:nodoc:
+  module Definitions
+    module Brazil
+      module Acre
         include TimezoneDefinition
         
         linked_timezone 'Brazil/Acre', 'America/Rio_Branco'

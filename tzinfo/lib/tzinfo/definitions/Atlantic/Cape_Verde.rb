@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Atlantic #:nodoc:
-      module Cape_Verde #:nodoc:
+  module Definitions
+    module Atlantic
+      module Cape_Verde
         include TimezoneDefinition
         
         timezone 'Atlantic/Cape_Verde' do |tz|

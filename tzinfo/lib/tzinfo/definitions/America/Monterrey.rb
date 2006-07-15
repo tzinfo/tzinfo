@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Monterrey #:nodoc:
+  module Definitions
+    module America
+      module Monterrey
         include TimezoneDefinition
         
         timezone 'America/Monterrey' do |tz|

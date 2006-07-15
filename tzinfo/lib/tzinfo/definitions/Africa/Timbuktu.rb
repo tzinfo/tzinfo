@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Africa #:nodoc:
-      module Timbuktu #:nodoc:
+  module Definitions
+    module Africa
+      module Timbuktu
         include TimezoneDefinition
         
         linked_timezone 'Africa/Timbuktu', 'Africa/Bamako'

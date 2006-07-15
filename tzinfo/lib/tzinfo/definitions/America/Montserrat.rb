@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Montserrat #:nodoc:
+  module Definitions
+    module America
+      module Montserrat
         include TimezoneDefinition
         
         timezone 'America/Montserrat' do |tz|

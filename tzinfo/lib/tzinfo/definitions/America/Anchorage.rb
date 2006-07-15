@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Anchorage #:nodoc:
+  module Definitions
+    module America
+      module Anchorage
         include TimezoneDefinition
         
         timezone 'America/Anchorage' do |tz|

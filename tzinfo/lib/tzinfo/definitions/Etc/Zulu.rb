@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Etc #:nodoc:
-      module Zulu #:nodoc:
+  module Definitions
+    module Etc
+      module Zulu
         include TimezoneDefinition
         
         linked_timezone 'Etc/Zulu', 'Etc/UTC'

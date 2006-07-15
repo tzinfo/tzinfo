@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Australia #:nodoc:
-      module Lindeman #:nodoc:
+  module Definitions
+    module Australia
+      module Lindeman
         include TimezoneDefinition
         
         timezone 'Australia/Lindeman' do |tz|

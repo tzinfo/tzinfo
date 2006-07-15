@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Indian #:nodoc:
-      module Cocos #:nodoc:
+  module Definitions
+    module Indian
+      module Cocos
         include TimezoneDefinition
         
         timezone 'Indian/Cocos' do |tz|

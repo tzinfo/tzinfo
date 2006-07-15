@@ -1,10 +1,10 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Indiana #:nodoc:
-        module Knox #:nodoc:
+  module Definitions
+    module America
+      module Indiana
+        module Knox
           include TimezoneDefinition
           
           timezone 'America/Indiana/Knox' do |tz|

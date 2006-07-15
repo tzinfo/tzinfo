@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Poland #:nodoc:
+  module Definitions
+    module Poland
       include TimezoneDefinition
       
       linked_timezone 'Poland', 'Europe/Warsaw'

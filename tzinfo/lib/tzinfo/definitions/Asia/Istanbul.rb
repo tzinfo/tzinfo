@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Istanbul #:nodoc:
+  module Definitions
+    module Asia
+      module Istanbul
         include TimezoneDefinition
         
         linked_timezone 'Asia/Istanbul', 'Europe/Istanbul'

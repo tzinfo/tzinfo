@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Antarctica #:nodoc:
-      module South_Pole #:nodoc:
+  module Definitions
+    module Antarctica
+      module South_Pole
         include TimezoneDefinition
         
         linked_timezone 'Antarctica/South_Pole', 'Antarctica/McMurdo'

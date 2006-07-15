@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module St_Johns #:nodoc:
+  module Definitions
+    module America
+      module St_Johns
         include TimezoneDefinition
         
         timezone 'America/St_Johns' do |tz|

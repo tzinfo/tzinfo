@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Port__m__au__m__Prince #:nodoc:
+  module Definitions
+    module America
+      module Port__m__au__m__Prince
         include TimezoneDefinition
         
         timezone 'America/Port-au-Prince' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Yakutat #:nodoc:
+  module Definitions
+    module America
+      module Yakutat
         include TimezoneDefinition
         
         timezone 'America/Yakutat' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Chihuahua #:nodoc:
+  module Definitions
+    module America
+      module Chihuahua
         include TimezoneDefinition
         
         timezone 'America/Chihuahua' do |tz|

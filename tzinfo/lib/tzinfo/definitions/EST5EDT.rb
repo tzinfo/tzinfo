@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module EST5EDT #:nodoc:
+  module Definitions
+    module EST5EDT
       include TimezoneDefinition
       
       timezone 'EST5EDT' do |tz|

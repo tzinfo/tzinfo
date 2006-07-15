@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Katmandu #:nodoc:
+  module Definitions
+    module Asia
+      module Katmandu
         include TimezoneDefinition
         
         timezone 'Asia/Katmandu' do |tz|

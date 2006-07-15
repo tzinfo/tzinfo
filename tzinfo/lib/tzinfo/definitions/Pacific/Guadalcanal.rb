@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Guadalcanal #:nodoc:
+  module Definitions
+    module Pacific
+      module Guadalcanal
         include TimezoneDefinition
         
         timezone 'Pacific/Guadalcanal' do |tz|

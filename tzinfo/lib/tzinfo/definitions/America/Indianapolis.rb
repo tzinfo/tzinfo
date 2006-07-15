@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Indianapolis #:nodoc:
+  module Definitions
+    module America
+      module Indianapolis
         include TimezoneDefinition
         
         linked_timezone 'America/Indianapolis', 'America/Indiana/Indianapolis'

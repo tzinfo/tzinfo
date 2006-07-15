@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Indian #:nodoc:
-      module Christmas #:nodoc:
+  module Definitions
+    module Indian
+      module Christmas
         include TimezoneDefinition
         
         timezone 'Indian/Christmas' do |tz|

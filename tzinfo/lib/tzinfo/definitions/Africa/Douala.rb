@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Africa #:nodoc:
-      module Douala #:nodoc:
+  module Definitions
+    module Africa
+      module Douala
         include TimezoneDefinition
         
         timezone 'Africa/Douala' do |tz|

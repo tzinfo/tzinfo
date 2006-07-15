@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Guyana #:nodoc:
+  module Definitions
+    module America
+      module Guyana
         include TimezoneDefinition
         
         timezone 'America/Guyana' do |tz|

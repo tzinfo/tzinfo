@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module EET #:nodoc:
+  module Definitions
+    module EET
       include TimezoneDefinition
       
       timezone 'EET' do |tz|

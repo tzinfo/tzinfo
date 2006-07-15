@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Calcutta #:nodoc:
+  module Definitions
+    module Asia
+      module Calcutta
         include TimezoneDefinition
         
         timezone 'Asia/Calcutta' do |tz|

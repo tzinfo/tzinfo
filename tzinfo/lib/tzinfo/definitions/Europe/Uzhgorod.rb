@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Uzhgorod #:nodoc:
+  module Definitions
+    module Europe
+      module Uzhgorod
         include TimezoneDefinition
         
         timezone 'Europe/Uzhgorod' do |tz|

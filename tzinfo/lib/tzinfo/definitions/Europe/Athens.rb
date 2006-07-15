@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Athens #:nodoc:
+  module Definitions
+    module Europe
+      module Athens
         include TimezoneDefinition
         
         timezone 'Europe/Athens' do |tz|

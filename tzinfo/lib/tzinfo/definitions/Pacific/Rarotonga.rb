@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Rarotonga #:nodoc:
+  module Definitions
+    module Pacific
+      module Rarotonga
         include TimezoneDefinition
         
         timezone 'Pacific/Rarotonga' do |tz|

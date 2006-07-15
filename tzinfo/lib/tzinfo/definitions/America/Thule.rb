@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Thule #:nodoc:
+  module Definitions
+    module America
+      module Thule
         include TimezoneDefinition
         
         timezone 'America/Thule' do |tz|

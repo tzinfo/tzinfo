@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Antarctica #:nodoc:
-      module DumontDUrville #:nodoc:
+  module Definitions
+    module Antarctica
+      module DumontDUrville
         include TimezoneDefinition
         
         timezone 'Antarctica/DumontDUrville' do |tz|

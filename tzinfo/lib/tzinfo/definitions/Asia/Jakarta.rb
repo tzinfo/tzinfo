@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Jakarta #:nodoc:
+  module Definitions
+    module Asia
+      module Jakarta
         include TimezoneDefinition
         
         timezone 'Asia/Jakarta' do |tz|

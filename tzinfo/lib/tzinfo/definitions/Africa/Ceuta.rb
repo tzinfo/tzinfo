@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Africa #:nodoc:
-      module Ceuta #:nodoc:
+  module Definitions
+    module Africa
+      module Ceuta
         include TimezoneDefinition
         
         timezone 'Africa/Ceuta' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Dacca #:nodoc:
+  module Definitions
+    module Asia
+      module Dacca
         include TimezoneDefinition
         
         linked_timezone 'Asia/Dacca', 'Asia/Dhaka'

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Fiji #:nodoc:
+  module Definitions
+    module Pacific
+      module Fiji
         include TimezoneDefinition
         
         timezone 'Pacific/Fiji' do |tz|

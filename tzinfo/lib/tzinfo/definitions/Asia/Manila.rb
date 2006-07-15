@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Manila #:nodoc:
+  module Definitions
+    module Asia
+      module Manila
         include TimezoneDefinition
         
         timezone 'Asia/Manila' do |tz|

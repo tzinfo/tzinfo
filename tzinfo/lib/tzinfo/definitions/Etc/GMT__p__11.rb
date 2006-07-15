@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Etc #:nodoc:
-      module GMT__p__11 #:nodoc:
+  module Definitions
+    module Etc
+      module GMT__p__11
         include TimezoneDefinition
         
         timezone 'Etc/GMT+11' do |tz|

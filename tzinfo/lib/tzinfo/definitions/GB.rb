@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module GB #:nodoc:
+  module Definitions
+    module GB
       include TimezoneDefinition
       
       linked_timezone 'GB', 'Europe/London'

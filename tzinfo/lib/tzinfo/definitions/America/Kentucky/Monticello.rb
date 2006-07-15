@@ -1,10 +1,10 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Kentucky #:nodoc:
-        module Monticello #:nodoc:
+  module Definitions
+    module America
+      module Kentucky
+        module Monticello
           include TimezoneDefinition
           
           timezone 'America/Kentucky/Monticello' do |tz|

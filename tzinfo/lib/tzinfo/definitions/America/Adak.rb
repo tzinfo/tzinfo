@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Adak #:nodoc:
+  module Definitions
+    module America
+      module Adak
         include TimezoneDefinition
         
         timezone 'America/Adak' do |tz|

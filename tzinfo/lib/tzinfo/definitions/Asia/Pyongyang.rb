@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Pyongyang #:nodoc:
+  module Definitions
+    module Asia
+      module Pyongyang
         include TimezoneDefinition
         
         timezone 'Asia/Pyongyang' do |tz|

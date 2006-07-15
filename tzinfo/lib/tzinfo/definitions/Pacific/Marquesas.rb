@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Marquesas #:nodoc:
+  module Definitions
+    module Pacific
+      module Marquesas
         include TimezoneDefinition
         
         timezone 'Pacific/Marquesas' do |tz|

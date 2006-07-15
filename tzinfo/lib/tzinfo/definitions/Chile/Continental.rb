@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Chile #:nodoc:
-      module Continental #:nodoc:
+  module Definitions
+    module Chile
+      module Continental
         include TimezoneDefinition
         
         linked_timezone 'Chile/Continental', 'America/Santiago'

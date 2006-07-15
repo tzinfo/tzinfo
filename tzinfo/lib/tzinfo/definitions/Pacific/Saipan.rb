@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Saipan #:nodoc:
+  module Definitions
+    module Pacific
+      module Saipan
         include TimezoneDefinition
         
         timezone 'Pacific/Saipan' do |tz|

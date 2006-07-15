@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Kuala_Lumpur #:nodoc:
+  module Definitions
+    module Asia
+      module Kuala_Lumpur
         include TimezoneDefinition
         
         timezone 'Asia/Kuala_Lumpur' do |tz|

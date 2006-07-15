@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Enderbury #:nodoc:
+  module Definitions
+    module Pacific
+      module Enderbury
         include TimezoneDefinition
         
         timezone 'Pacific/Enderbury' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Canada #:nodoc:
-      module Pacific #:nodoc:
+  module Definitions
+    module Canada
+      module Pacific
         include TimezoneDefinition
         
         linked_timezone 'Canada/Pacific', 'America/Vancouver'

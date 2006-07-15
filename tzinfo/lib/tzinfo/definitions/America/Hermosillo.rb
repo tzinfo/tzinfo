@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Hermosillo #:nodoc:
+  module Definitions
+    module America
+      module Hermosillo
         include TimezoneDefinition
         
         timezone 'America/Hermosillo' do |tz|

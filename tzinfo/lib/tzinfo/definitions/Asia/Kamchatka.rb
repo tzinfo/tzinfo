@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Kamchatka #:nodoc:
+  module Definitions
+    module Asia
+      module Kamchatka
         include TimezoneDefinition
         
         timezone 'Asia/Kamchatka' do |tz|

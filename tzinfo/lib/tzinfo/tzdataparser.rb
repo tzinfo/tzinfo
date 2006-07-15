@@ -522,11 +522,11 @@ module TZInfo
         
         file.puts('module TZInfo')
         file.indent(2)
-        file.puts('module Definitions #:nodoc:')
+        file.puts('module Definitions')
         file.indent(2)                
         
         @name_elements.each do |part| 
-          file.puts("module #{part} #:nodoc:")
+          file.puts("module #{part}")
           file.indent(2)
         end
         

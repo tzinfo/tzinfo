@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Australia #:nodoc:
-      module Tasmania #:nodoc:
+  module Definitions
+    module Australia
+      module Tasmania
         include TimezoneDefinition
         
         linked_timezone 'Australia/Tasmania', 'Australia/Hobart'

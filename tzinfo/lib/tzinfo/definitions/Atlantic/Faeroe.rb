@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Atlantic #:nodoc:
-      module Faeroe #:nodoc:
+  module Definitions
+    module Atlantic
+      module Faeroe
         include TimezoneDefinition
         
         timezone 'Atlantic/Faeroe' do |tz|

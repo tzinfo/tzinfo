@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Andorra #:nodoc:
+  module Definitions
+    module Europe
+      module Andorra
         include TimezoneDefinition
         
         timezone 'Europe/Andorra' do |tz|

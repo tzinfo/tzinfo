@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Indian #:nodoc:
-      module Mahe #:nodoc:
+  module Definitions
+    module Indian
+      module Mahe
         include TimezoneDefinition
         
         timezone 'Indian/Mahe' do |tz|

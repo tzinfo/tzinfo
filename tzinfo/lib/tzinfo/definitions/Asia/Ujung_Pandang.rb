@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Ujung_Pandang #:nodoc:
+  module Definitions
+    module Asia
+      module Ujung_Pandang
         include TimezoneDefinition
         
         linked_timezone 'Asia/Ujung_Pandang', 'Asia/Makassar'

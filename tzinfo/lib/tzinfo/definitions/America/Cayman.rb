@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Cayman #:nodoc:
+  module Definitions
+    module America
+      module Cayman
         include TimezoneDefinition
         
         timezone 'America/Cayman' do |tz|

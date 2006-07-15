@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Hovd #:nodoc:
+  module Definitions
+    module Asia
+      module Hovd
         include TimezoneDefinition
         
         timezone 'Asia/Hovd' do |tz|

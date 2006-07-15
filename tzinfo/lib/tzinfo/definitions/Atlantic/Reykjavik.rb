@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Atlantic #:nodoc:
-      module Reykjavik #:nodoc:
+  module Definitions
+    module Atlantic
+      module Reykjavik
         include TimezoneDefinition
         
         timezone 'Atlantic/Reykjavik' do |tz|

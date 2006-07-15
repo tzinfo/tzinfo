@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Kiritimati #:nodoc:
+  module Definitions
+    module Pacific
+      module Kiritimati
         include TimezoneDefinition
         
         timezone 'Pacific/Kiritimati' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Chatham #:nodoc:
+  module Definitions
+    module Pacific
+      module Chatham
         include TimezoneDefinition
         
         timezone 'Pacific/Chatham' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Brazil #:nodoc:
-      module East #:nodoc:
+  module Definitions
+    module Brazil
+      module East
         include TimezoneDefinition
         
         linked_timezone 'Brazil/East', 'America/Sao_Paulo'

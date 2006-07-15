@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Indian #:nodoc:
-      module Antananarivo #:nodoc:
+  module Definitions
+    module Indian
+      module Antananarivo
         include TimezoneDefinition
         
         timezone 'Indian/Antananarivo' do |tz|

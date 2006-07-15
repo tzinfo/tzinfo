@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Atlantic #:nodoc:
-      module Bermuda #:nodoc:
+  module Definitions
+    module Atlantic
+      module Bermuda
         include TimezoneDefinition
         
         timezone 'Atlantic/Bermuda' do |tz|

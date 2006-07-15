@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Canada #:nodoc:
-      module Yukon #:nodoc:
+  module Definitions
+    module Canada
+      module Yukon
         include TimezoneDefinition
         
         linked_timezone 'Canada/Yukon', 'America/Whitehorse'

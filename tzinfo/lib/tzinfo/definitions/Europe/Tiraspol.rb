@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Tiraspol #:nodoc:
+  module Definitions
+    module Europe
+      module Tiraspol
         include TimezoneDefinition
         
         linked_timezone 'Europe/Tiraspol', 'Europe/Chisinau'

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Canada #:nodoc:
-      module East__m__Saskatchewan #:nodoc:
+  module Definitions
+    module Canada
+      module East__m__Saskatchewan
         include TimezoneDefinition
         
         linked_timezone 'Canada/East-Saskatchewan', 'America/Regina'

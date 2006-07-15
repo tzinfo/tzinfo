@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Guayaquil #:nodoc:
+  module Definitions
+    module America
+      module Guayaquil
         include TimezoneDefinition
         
         timezone 'America/Guayaquil' do |tz|

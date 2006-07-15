@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Asuncion #:nodoc:
+  module Definitions
+    module America
+      module Asuncion
         include TimezoneDefinition
         
         timezone 'America/Asuncion' do |tz|

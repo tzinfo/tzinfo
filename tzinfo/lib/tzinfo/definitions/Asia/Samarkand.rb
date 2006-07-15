@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Samarkand #:nodoc:
+  module Definitions
+    module Asia
+      module Samarkand
         include TimezoneDefinition
         
         timezone 'Asia/Samarkand' do |tz|

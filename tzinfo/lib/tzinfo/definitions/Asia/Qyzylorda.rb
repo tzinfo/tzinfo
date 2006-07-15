@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Qyzylorda #:nodoc:
+  module Definitions
+    module Asia
+      module Qyzylorda
         include TimezoneDefinition
         
         timezone 'Asia/Qyzylorda' do |tz|

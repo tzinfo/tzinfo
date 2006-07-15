@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module CST6CDT #:nodoc:
+  module Definitions
+    module CST6CDT
       include TimezoneDefinition
       
       timezone 'CST6CDT' do |tz|

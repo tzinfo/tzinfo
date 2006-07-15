@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Mexico #:nodoc:
-      module BajaSur #:nodoc:
+  module Definitions
+    module Mexico
+      module BajaSur
         include TimezoneDefinition
         
         linked_timezone 'Mexico/BajaSur', 'America/Mazatlan'

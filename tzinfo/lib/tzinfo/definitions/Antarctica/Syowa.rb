@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Antarctica #:nodoc:
-      module Syowa #:nodoc:
+  module Definitions
+    module Antarctica
+      module Syowa
         include TimezoneDefinition
         
         timezone 'Antarctica/Syowa' do |tz|

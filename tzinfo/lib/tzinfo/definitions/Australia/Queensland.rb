@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Australia #:nodoc:
-      module Queensland #:nodoc:
+  module Definitions
+    module Australia
+      module Queensland
         include TimezoneDefinition
         
         linked_timezone 'Australia/Queensland', 'Australia/Brisbane'

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Vilnius #:nodoc:
+  module Definitions
+    module Europe
+      module Vilnius
         include TimezoneDefinition
         
         timezone 'Europe/Vilnius' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Krasnoyarsk #:nodoc:
+  module Definitions
+    module Asia
+      module Krasnoyarsk
         include TimezoneDefinition
         
         timezone 'Asia/Krasnoyarsk' do |tz|

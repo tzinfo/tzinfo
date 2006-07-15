@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Curacao #:nodoc:
+  module Definitions
+    module America
+      module Curacao
         include TimezoneDefinition
         
         timezone 'America/Curacao' do |tz|

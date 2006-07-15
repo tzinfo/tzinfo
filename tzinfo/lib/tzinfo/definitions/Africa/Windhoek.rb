@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Africa #:nodoc:
-      module Windhoek #:nodoc:
+  module Definitions
+    module Africa
+      module Windhoek
         include TimezoneDefinition
         
         timezone 'Africa/Windhoek' do |tz|

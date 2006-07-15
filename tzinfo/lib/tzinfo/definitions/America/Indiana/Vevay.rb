@@ -1,10 +1,10 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Indiana #:nodoc:
-        module Vevay #:nodoc:
+  module Definitions
+    module America
+      module Indiana
+        module Vevay
           include TimezoneDefinition
           
           timezone 'America/Indiana/Vevay' do |tz|

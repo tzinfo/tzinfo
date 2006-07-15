@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Tel_Aviv #:nodoc:
+  module Definitions
+    module Asia
+      module Tel_Aviv
         include TimezoneDefinition
         
         linked_timezone 'Asia/Tel_Aviv', 'Asia/Jerusalem'

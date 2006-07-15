@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Inuvik #:nodoc:
+  module Definitions
+    module America
+      module Inuvik
         include TimezoneDefinition
         
         timezone 'America/Inuvik' do |tz|

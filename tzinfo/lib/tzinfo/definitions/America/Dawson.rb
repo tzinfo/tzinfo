@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Dawson #:nodoc:
+  module Definitions
+    module America
+      module Dawson
         include TimezoneDefinition
         
         timezone 'America/Dawson' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Kaliningrad #:nodoc:
+  module Definitions
+    module Europe
+      module Kaliningrad
         include TimezoneDefinition
         
         timezone 'Europe/Kaliningrad' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Colombo #:nodoc:
+  module Definitions
+    module Asia
+      module Colombo
         include TimezoneDefinition
         
         timezone 'Asia/Colombo' do |tz|

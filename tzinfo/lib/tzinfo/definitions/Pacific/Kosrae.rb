@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Kosrae #:nodoc:
+  module Definitions
+    module Pacific
+      module Kosrae
         include TimezoneDefinition
         
         timezone 'Pacific/Kosrae' do |tz|

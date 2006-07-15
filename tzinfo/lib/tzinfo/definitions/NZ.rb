@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module NZ #:nodoc:
+  module Definitions
+    module NZ
       include TimezoneDefinition
       
       linked_timezone 'NZ', 'Pacific/Auckland'

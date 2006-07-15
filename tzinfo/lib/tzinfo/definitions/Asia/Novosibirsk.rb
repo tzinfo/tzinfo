@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Novosibirsk #:nodoc:
+  module Definitions
+    module Asia
+      module Novosibirsk
         include TimezoneDefinition
         
         timezone 'Asia/Novosibirsk' do |tz|

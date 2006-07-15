@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Gambier #:nodoc:
+  module Definitions
+    module Pacific
+      module Gambier
         include TimezoneDefinition
         
         timezone 'Pacific/Gambier' do |tz|

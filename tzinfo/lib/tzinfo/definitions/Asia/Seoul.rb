@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Seoul #:nodoc:
+  module Definitions
+    module Asia
+      module Seoul
         include TimezoneDefinition
         
         timezone 'Asia/Seoul' do |tz|

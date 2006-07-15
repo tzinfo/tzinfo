@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Havana #:nodoc:
+  module Definitions
+    module America
+      module Havana
         include TimezoneDefinition
         
         timezone 'America/Havana' do |tz|

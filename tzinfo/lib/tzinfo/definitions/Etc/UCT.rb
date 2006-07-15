@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Etc #:nodoc:
-      module UCT #:nodoc:
+  module Definitions
+    module Etc
+      module UCT
         include TimezoneDefinition
         
         timezone 'Etc/UCT' do |tz|

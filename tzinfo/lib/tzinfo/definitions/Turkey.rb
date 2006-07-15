@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Turkey #:nodoc:
+  module Definitions
+    module Turkey
       include TimezoneDefinition
       
       linked_timezone 'Turkey', 'Europe/Istanbul'

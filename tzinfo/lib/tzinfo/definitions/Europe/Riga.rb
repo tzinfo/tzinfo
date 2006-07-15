@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Riga #:nodoc:
+  module Definitions
+    module Europe
+      module Riga
         include TimezoneDefinition
         
         timezone 'Europe/Riga' do |tz|

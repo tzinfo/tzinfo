@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Aqtau #:nodoc:
+  module Definitions
+    module Asia
+      module Aqtau
         include TimezoneDefinition
         
         timezone 'Asia/Aqtau' do |tz|

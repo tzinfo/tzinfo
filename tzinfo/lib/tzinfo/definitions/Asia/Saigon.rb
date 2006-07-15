@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Saigon #:nodoc:
+  module Definitions
+    module Asia
+      module Saigon
         include TimezoneDefinition
         
         timezone 'Asia/Saigon' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Porto_Velho #:nodoc:
+  module Definitions
+    module America
+      module Porto_Velho
         include TimezoneDefinition
         
         timezone 'America/Porto_Velho' do |tz|

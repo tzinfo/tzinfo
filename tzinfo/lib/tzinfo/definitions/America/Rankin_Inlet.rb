@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Rankin_Inlet #:nodoc:
+  module Definitions
+    module America
+      module Rankin_Inlet
         include TimezoneDefinition
         
         timezone 'America/Rankin_Inlet' do |tz|

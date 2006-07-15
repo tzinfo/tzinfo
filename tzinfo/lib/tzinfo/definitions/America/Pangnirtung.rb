@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Pangnirtung #:nodoc:
+  module Definitions
+    module America
+      module Pangnirtung
         include TimezoneDefinition
         
         timezone 'America/Pangnirtung' do |tz|

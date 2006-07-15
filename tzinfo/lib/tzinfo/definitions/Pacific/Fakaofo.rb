@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Fakaofo #:nodoc:
+  module Definitions
+    module Pacific
+      module Fakaofo
         include TimezoneDefinition
         
         timezone 'Pacific/Fakaofo' do |tz|

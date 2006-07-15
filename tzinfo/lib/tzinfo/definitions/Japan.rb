@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Japan #:nodoc:
+  module Definitions
+    module Japan
       include TimezoneDefinition
       
       linked_timezone 'Japan', 'Asia/Tokyo'

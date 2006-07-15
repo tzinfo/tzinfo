@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Pitcairn #:nodoc:
+  module Definitions
+    module Pacific
+      module Pitcairn
         include TimezoneDefinition
         
         timezone 'Pacific/Pitcairn' do |tz|

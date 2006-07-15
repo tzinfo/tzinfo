@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module US #:nodoc:
-      module Alaska #:nodoc:
+  module Definitions
+    module US
+      module Alaska
         include TimezoneDefinition
         
         linked_timezone 'US/Alaska', 'America/Anchorage'

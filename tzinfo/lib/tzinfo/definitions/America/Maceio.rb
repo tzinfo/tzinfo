@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Maceio #:nodoc:
+  module Definitions
+    module America
+      module Maceio
         include TimezoneDefinition
         
         timezone 'America/Maceio' do |tz|

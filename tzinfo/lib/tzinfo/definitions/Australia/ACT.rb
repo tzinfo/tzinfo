@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Australia #:nodoc:
-      module ACT #:nodoc:
+  module Definitions
+    module Australia
+      module ACT
         include TimezoneDefinition
         
         linked_timezone 'Australia/ACT', 'Australia/Sydney'

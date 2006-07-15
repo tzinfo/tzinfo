@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Midway #:nodoc:
+  module Definitions
+    module Pacific
+      module Midway
         include TimezoneDefinition
         
         timezone 'Pacific/Midway' do |tz|

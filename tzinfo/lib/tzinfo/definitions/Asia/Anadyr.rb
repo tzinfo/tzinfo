@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Anadyr #:nodoc:
+  module Definitions
+    module Asia
+      module Anadyr
         include TimezoneDefinition
         
         timezone 'Asia/Anadyr' do |tz|

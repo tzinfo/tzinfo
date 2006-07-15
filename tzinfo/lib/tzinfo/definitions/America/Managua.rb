@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Managua #:nodoc:
+  module Definitions
+    module America
+      module Managua
         include TimezoneDefinition
         
         timezone 'America/Managua' do |tz|

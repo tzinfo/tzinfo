@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Port_Moresby #:nodoc:
+  module Definitions
+    module Pacific
+      module Port_Moresby
         include TimezoneDefinition
         
         timezone 'Pacific/Port_Moresby' do |tz|

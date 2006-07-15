@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Australia #:nodoc:
-      module Victoria #:nodoc:
+  module Definitions
+    module Australia
+      module Victoria
         include TimezoneDefinition
         
         linked_timezone 'Australia/Victoria', 'Australia/Melbourne'

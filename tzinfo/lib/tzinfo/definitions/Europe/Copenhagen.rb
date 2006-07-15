@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Copenhagen #:nodoc:
+  module Definitions
+    module Europe
+      module Copenhagen
         include TimezoneDefinition
         
         timezone 'Europe/Copenhagen' do |tz|

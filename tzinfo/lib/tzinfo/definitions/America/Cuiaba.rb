@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Cuiaba #:nodoc:
+  module Definitions
+    module America
+      module Cuiaba
         include TimezoneDefinition
         
         timezone 'America/Cuiaba' do |tz|

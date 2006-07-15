@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Zagreb #:nodoc:
+  module Definitions
+    module Europe
+      module Zagreb
         include TimezoneDefinition
         
         linked_timezone 'Europe/Zagreb', 'Europe/Belgrade'

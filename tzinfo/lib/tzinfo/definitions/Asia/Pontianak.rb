@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Pontianak #:nodoc:
+  module Definitions
+    module Asia
+      module Pontianak
         include TimezoneDefinition
         
         timezone 'Asia/Pontianak' do |tz|

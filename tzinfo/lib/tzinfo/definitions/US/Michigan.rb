@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module US #:nodoc:
-      module Michigan #:nodoc:
+  module Definitions
+    module US
+      module Michigan
         include TimezoneDefinition
         
         linked_timezone 'US/Michigan', 'America/Detroit'

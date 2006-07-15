@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Brazil #:nodoc:
-      module West #:nodoc:
+  module Definitions
+    module Brazil
+      module West
         include TimezoneDefinition
         
         linked_timezone 'Brazil/West', 'America/Manaus'

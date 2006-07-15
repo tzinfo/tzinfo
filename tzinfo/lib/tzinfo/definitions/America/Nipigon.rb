@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Nipigon #:nodoc:
+  module Definitions
+    module America
+      module Nipigon
         include TimezoneDefinition
         
         timezone 'America/Nipigon' do |tz|

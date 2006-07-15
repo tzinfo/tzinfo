@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Nicosia #:nodoc:
+  module Definitions
+    module Europe
+      module Nicosia
         include TimezoneDefinition
         
         linked_timezone 'Europe/Nicosia', 'Asia/Nicosia'

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Iqaluit #:nodoc:
+  module Definitions
+    module America
+      module Iqaluit
         include TimezoneDefinition
         
         timezone 'America/Iqaluit' do |tz|

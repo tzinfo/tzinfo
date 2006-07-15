@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Cordoba #:nodoc:
+  module Definitions
+    module America
+      module Cordoba
         include TimezoneDefinition
         
         linked_timezone 'America/Cordoba', 'America/Argentina/Cordoba'

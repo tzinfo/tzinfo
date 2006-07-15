@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Godthab #:nodoc:
+  module Definitions
+    module America
+      module Godthab
         include TimezoneDefinition
         
         timezone 'America/Godthab' do |tz|

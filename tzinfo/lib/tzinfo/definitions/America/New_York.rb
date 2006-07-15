@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module New_York #:nodoc:
+  module Definitions
+    module America
+      module New_York
         include TimezoneDefinition
         
         timezone 'America/New_York' do |tz|

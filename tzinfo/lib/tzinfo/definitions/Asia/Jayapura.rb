@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Jayapura #:nodoc:
+  module Definitions
+    module Asia
+      module Jayapura
         include TimezoneDefinition
         
         timezone 'Asia/Jayapura' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Brazil #:nodoc:
-      module DeNoronha #:nodoc:
+  module Definitions
+    module Brazil
+      module DeNoronha
         include TimezoneDefinition
         
         linked_timezone 'Brazil/DeNoronha', 'America/Noronha'

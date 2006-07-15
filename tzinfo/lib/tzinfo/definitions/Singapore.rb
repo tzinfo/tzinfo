@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Singapore #:nodoc:
+  module Definitions
+    module Singapore
       include TimezoneDefinition
       
       linked_timezone 'Singapore', 'Asia/Singapore'

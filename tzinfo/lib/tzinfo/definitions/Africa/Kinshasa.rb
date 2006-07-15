@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Africa #:nodoc:
-      module Kinshasa #:nodoc:
+  module Definitions
+    module Africa
+      module Kinshasa
         include TimezoneDefinition
         
         timezone 'Africa/Kinshasa' do |tz|

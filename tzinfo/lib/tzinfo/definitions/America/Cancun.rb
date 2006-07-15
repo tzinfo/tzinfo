@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Cancun #:nodoc:
+  module Definitions
+    module America
+      module Cancun
         include TimezoneDefinition
         
         timezone 'America/Cancun' do |tz|

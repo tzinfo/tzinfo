@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Australia #:nodoc:
-      module Adelaide #:nodoc:
+  module Definitions
+    module Australia
+      module Adelaide
         include TimezoneDefinition
         
         timezone 'Australia/Adelaide' do |tz|

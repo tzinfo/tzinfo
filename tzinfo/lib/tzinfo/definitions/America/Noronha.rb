@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Noronha #:nodoc:
+  module Definitions
+    module America
+      module Noronha
         include TimezoneDefinition
         
         timezone 'America/Noronha' do |tz|

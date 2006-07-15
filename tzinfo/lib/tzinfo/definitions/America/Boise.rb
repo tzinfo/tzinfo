@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Boise #:nodoc:
+  module Definitions
+    module America
+      module Boise
         include TimezoneDefinition
         
         timezone 'America/Boise' do |tz|

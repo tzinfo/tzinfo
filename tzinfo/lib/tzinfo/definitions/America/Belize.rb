@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Belize #:nodoc:
+  module Definitions
+    module America
+      module Belize
         include TimezoneDefinition
         
         timezone 'America/Belize' do |tz|

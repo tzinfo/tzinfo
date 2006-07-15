@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Malta #:nodoc:
+  module Definitions
+    module Europe
+      module Malta
         include TimezoneDefinition
         
         timezone 'Europe/Malta' do |tz|

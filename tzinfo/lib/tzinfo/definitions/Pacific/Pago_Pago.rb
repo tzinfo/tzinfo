@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Pago_Pago #:nodoc:
+  module Definitions
+    module Pacific
+      module Pago_Pago
         include TimezoneDefinition
         
         timezone 'Pacific/Pago_Pago' do |tz|

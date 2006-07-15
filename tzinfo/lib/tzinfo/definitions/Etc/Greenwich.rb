@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Etc #:nodoc:
-      module Greenwich #:nodoc:
+  module Definitions
+    module Etc
+      module Greenwich
         include TimezoneDefinition
         
         linked_timezone 'Etc/Greenwich', 'Etc/GMT'

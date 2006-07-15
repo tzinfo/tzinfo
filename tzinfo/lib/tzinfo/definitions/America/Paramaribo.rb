@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Paramaribo #:nodoc:
+  module Definitions
+    module America
+      module Paramaribo
         include TimezoneDefinition
         
         timezone 'America/Paramaribo' do |tz|

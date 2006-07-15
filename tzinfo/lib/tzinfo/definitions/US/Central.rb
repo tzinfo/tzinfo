@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module US #:nodoc:
-      module Central #:nodoc:
+  module Definitions
+    module US
+      module Central
         include TimezoneDefinition
         
         linked_timezone 'US/Central', 'America/Chicago'

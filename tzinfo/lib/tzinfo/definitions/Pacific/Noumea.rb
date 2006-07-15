@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Noumea #:nodoc:
+  module Definitions
+    module Pacific
+      module Noumea
         include TimezoneDefinition
         
         timezone 'Pacific/Noumea' do |tz|

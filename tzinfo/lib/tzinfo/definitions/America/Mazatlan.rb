@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Mazatlan #:nodoc:
+  module Definitions
+    module America
+      module Mazatlan
         include TimezoneDefinition
         
         timezone 'America/Mazatlan' do |tz|

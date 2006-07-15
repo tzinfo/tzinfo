@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Johnston #:nodoc:
+  module Definitions
+    module Pacific
+      module Johnston
         include TimezoneDefinition
         
         timezone 'Pacific/Johnston' do |tz|

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Canada #:nodoc:
-      module Central #:nodoc:
+  module Definitions
+    module Canada
+      module Central
         include TimezoneDefinition
         
         linked_timezone 'Canada/Central', 'America/Winnipeg'

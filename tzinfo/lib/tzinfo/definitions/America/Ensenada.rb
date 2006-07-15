@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Ensenada #:nodoc:
+  module Definitions
+    module America
+      module Ensenada
         include TimezoneDefinition
         
         linked_timezone 'America/Ensenada', 'America/Tijuana'

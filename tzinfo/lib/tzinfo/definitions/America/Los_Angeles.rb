@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Los_Angeles #:nodoc:
+  module Definitions
+    module America
+      module Los_Angeles
         include TimezoneDefinition
         
         timezone 'America/Los_Angeles' do |tz|

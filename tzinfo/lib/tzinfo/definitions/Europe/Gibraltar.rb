@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Europe #:nodoc:
-      module Gibraltar #:nodoc:
+  module Definitions
+    module Europe
+      module Gibraltar
         include TimezoneDefinition
         
         timezone 'Europe/Gibraltar' do |tz|

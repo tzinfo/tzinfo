@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Atlantic #:nodoc:
-      module St_Helena #:nodoc:
+  module Definitions
+    module Atlantic
+      module St_Helena
         include TimezoneDefinition
         
         timezone 'Atlantic/St_Helena' do |tz|

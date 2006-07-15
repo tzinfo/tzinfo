@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Indian #:nodoc:
-      module Mayotte #:nodoc:
+  module Definitions
+    module Indian
+      module Mayotte
         include TimezoneDefinition
         
         timezone 'Indian/Mayotte' do |tz|

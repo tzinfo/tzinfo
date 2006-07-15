@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Bahrain #:nodoc:
+  module Definitions
+    module Asia
+      module Bahrain
         include TimezoneDefinition
         
         timezone 'Asia/Bahrain' do |tz|

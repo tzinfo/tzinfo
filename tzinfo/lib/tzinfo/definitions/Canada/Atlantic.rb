@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Canada #:nodoc:
-      module Atlantic #:nodoc:
+  module Definitions
+    module Canada
+      module Atlantic
         include TimezoneDefinition
         
         linked_timezone 'Canada/Atlantic', 'America/Halifax'

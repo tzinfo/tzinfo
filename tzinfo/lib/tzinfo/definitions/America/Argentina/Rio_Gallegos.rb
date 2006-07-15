@@ -1,10 +1,10 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Argentina #:nodoc:
-        module Rio_Gallegos #:nodoc:
+  module Definitions
+    module America
+      module Argentina
+        module Rio_Gallegos
           include TimezoneDefinition
           
           timezone 'America/Argentina/Rio_Gallegos' do |tz|

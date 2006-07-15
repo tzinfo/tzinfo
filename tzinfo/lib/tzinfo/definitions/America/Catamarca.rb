@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Catamarca #:nodoc:
+  module Definitions
+    module America
+      module Catamarca
         include TimezoneDefinition
         
         linked_timezone 'America/Catamarca', 'America/Argentina/Catamarca'

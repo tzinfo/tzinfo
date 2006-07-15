@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Grand_Turk #:nodoc:
+  module Definitions
+    module America
+      module Grand_Turk
         include TimezoneDefinition
         
         timezone 'America/Grand_Turk' do |tz|

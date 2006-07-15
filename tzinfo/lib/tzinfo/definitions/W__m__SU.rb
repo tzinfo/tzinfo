@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module W__m__SU #:nodoc:
+  module Definitions
+    module W__m__SU
       include TimezoneDefinition
       
       linked_timezone 'W-SU', 'Europe/Moscow'

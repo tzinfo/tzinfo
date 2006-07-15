@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Yerevan #:nodoc:
+  module Definitions
+    module Asia
+      module Yerevan
         include TimezoneDefinition
         
         timezone 'Asia/Yerevan' do |tz|

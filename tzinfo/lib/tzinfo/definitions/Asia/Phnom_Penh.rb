@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Phnom_Penh #:nodoc:
+  module Definitions
+    module Asia
+      module Phnom_Penh
         include TimezoneDefinition
         
         timezone 'Asia/Phnom_Penh' do |tz|

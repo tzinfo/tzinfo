@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Africa #:nodoc:
-      module Porto__m__Novo #:nodoc:
+  module Definitions
+    module Africa
+      module Porto__m__Novo
         include TimezoneDefinition
         
         timezone 'Africa/Porto-Novo' do |tz|

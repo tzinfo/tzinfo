@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Swift_Current #:nodoc:
+  module Definitions
+    module America
+      module Swift_Current
         include TimezoneDefinition
         
         timezone 'America/Swift_Current' do |tz|

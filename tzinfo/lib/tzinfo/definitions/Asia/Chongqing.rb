@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Chongqing #:nodoc:
+  module Definitions
+    module Asia
+      module Chongqing
         include TimezoneDefinition
         
         timezone 'Asia/Chongqing' do |tz|

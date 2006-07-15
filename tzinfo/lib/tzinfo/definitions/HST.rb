@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module HST #:nodoc:
+  module Definitions
+    module HST
       include TimezoneDefinition
       
       timezone 'HST' do |tz|

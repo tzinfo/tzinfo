@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module WET #:nodoc:
+  module Definitions
+    module WET
       include TimezoneDefinition
       
       timezone 'WET' do |tz|

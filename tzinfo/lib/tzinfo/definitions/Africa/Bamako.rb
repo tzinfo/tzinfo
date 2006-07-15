@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Africa #:nodoc:
-      module Bamako #:nodoc:
+  module Definitions
+    module Africa
+      module Bamako
         include TimezoneDefinition
         
         timezone 'Africa/Bamako' do |tz|

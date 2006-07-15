@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Glace_Bay #:nodoc:
+  module Definitions
+    module America
+      module Glace_Bay
         include TimezoneDefinition
         
         timezone 'America/Glace_Bay' do |tz|

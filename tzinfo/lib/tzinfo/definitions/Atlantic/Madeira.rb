@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Atlantic #:nodoc:
-      module Madeira #:nodoc:
+  module Definitions
+    module Atlantic
+      module Madeira
         include TimezoneDefinition
         
         timezone 'Atlantic/Madeira' do |tz|

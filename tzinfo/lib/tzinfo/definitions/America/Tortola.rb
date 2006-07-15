@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Tortola #:nodoc:
+  module Definitions
+    module America
+      module Tortola
         include TimezoneDefinition
         
         timezone 'America/Tortola' do |tz|

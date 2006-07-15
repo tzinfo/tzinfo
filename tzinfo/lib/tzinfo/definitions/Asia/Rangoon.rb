@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Rangoon #:nodoc:
+  module Definitions
+    module Asia
+      module Rangoon
         include TimezoneDefinition
         
         timezone 'Asia/Rangoon' do |tz|

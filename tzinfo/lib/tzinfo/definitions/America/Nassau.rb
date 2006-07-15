@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Nassau #:nodoc:
+  module Definitions
+    module America
+      module Nassau
         include TimezoneDefinition
         
         timezone 'America/Nassau' do |tz|

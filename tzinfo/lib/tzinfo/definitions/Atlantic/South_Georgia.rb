@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Atlantic #:nodoc:
-      module South_Georgia #:nodoc:
+  module Definitions
+    module Atlantic
+      module South_Georgia
         include TimezoneDefinition
         
         timezone 'Atlantic/South_Georgia' do |tz|

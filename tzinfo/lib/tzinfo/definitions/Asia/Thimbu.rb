@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Asia #:nodoc:
-      module Thimbu #:nodoc:
+  module Definitions
+    module Asia
+      module Thimbu
         include TimezoneDefinition
         
         linked_timezone 'Asia/Thimbu', 'Asia/Thimphu'

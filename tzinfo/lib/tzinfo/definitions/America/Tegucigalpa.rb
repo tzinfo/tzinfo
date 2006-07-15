@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module America #:nodoc:
-      module Tegucigalpa #:nodoc:
+  module Definitions
+    module America
+      module Tegucigalpa
         include TimezoneDefinition
         
         timezone 'America/Tegucigalpa' do |tz|

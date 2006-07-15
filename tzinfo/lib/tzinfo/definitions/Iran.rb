@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Iran #:nodoc:
+  module Definitions
+    module Iran
       include TimezoneDefinition
       
       linked_timezone 'Iran', 'Asia/Tehran'

@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Pacific #:nodoc:
-      module Kwajalein #:nodoc:
+  module Definitions
+    module Pacific
+      module Kwajalein
         include TimezoneDefinition
         
         timezone 'Pacific/Kwajalein' do |tz|

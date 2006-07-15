@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Jamaica #:nodoc:
+  module Definitions
+    module Jamaica
       include TimezoneDefinition
       
       linked_timezone 'Jamaica', 'America/Jamaica'

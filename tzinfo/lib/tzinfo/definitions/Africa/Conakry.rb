@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Africa #:nodoc:
-      module Conakry #:nodoc:
+  module Definitions
+    module Africa
+      module Conakry
         include TimezoneDefinition
         
         timezone 'Africa/Conakry' do |tz|

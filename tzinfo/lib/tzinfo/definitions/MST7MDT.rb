@@ -1,8 +1,8 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module MST7MDT #:nodoc:
+  module Definitions
+    module MST7MDT
       include TimezoneDefinition
       
       timezone 'MST7MDT' do |tz|

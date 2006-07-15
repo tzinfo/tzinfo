@@ -1,9 +1,9 @@
 require 'tzinfo/timezone_definition'
 
 module TZInfo
-  module Definitions #:nodoc:
-    module Mideast #:nodoc:
-      module Riyadh88 #:nodoc:
+  module Definitions
+    module Mideast
+      module Riyadh88
         include TimezoneDefinition
         
         linked_timezone 'Mideast/Riyadh88', 'Asia/Riyadh88'
