@@ -50,6 +50,7 @@ module TZInfo
       instance = @@countries[identifier]
       
       unless instance
+        load_index
         info = Indexes::Countries.countries[identifier]        
         raise InvalidCountryCode.new, 'Invalid identifier' unless info
         instance = Country.new(info)
