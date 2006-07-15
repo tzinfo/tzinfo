@@ -23,7 +23,6 @@
 require 'date'
 require 'tzinfo/country'
 require 'tzinfo/time_or_datetime'
-require 'tzinfo/timezone_definition'
 require 'tzinfo/timezone_period'
 
 module TZInfo
