@@ -68,6 +68,9 @@ module TZInfo
     # has already been loaded.
     @@loaded_zones = {}
     
+    # Whether the timezones index has been loaded yet.
+    @@index_loaded = false
+    
     # Returns a timezone by its identifier (e.g. "Europe/London", 
     # "America/Chicago" or "UTC").
     #
@@ -126,18 +129,51 @@ module TZInfo
       end
     end
     
-    # At the moment, returns the result of all_country_zones. May be changed
-    # in the future to return all the Timezone instances including
-    # non-country specific zones.
+    # Returns an array containing all the available Timezones.
+    #
+    # Returns TimezoneProxy objects to avoid the overhead of loading Timezone
+    # definitions until a conversion is actually required.
     def self.all
-      all_country_zones
+      get_proxies(all_identifiers)
     end
     
-    # At the moment, returns the result of all_country_zone_identifiers. May be changed
-    # in the future to return all the zone identifiers including
-    # non-country specific zones.
+    # Returns an array containing the identifiers of all the available 
+    # Timezones.
     def self.all_identifiers
-      all_country_zone_identifiers
+      load_index
+      Indexes::Timezones.timezones
+    end
+    
+    # Returns an array containing all the available Timezones that are based
+    # on data (are not links to other Timezones).
+    #
+    # Returns TimezoneProxy objects to avoid the overhead of loading Timezone
+    # definitions until a conversion is actually required.
+    def self.all_data_zones
+      get_proxies(all_data_zone_identifiers)
+    end
+    
+    # Returns an array containing the identifiers of all the available 
+    # Timezones that are based on data (are not links to other Timezones)..
+    def self.all_data_zone_identifiers
+      load_index
+      Indexes::Timezones.data_timezones
+    end
+    
+    # Returns an array containing all the available Timezones that are links
+    # to other Timezones.
+    #
+    # Returns TimezoneProxy objects to avoid the overhead of loading Timezone
+    # definitions until a conversion is actually required.
+    def self.all_linked_zones
+      get_proxies(all_linked_zone_identifiers)      
+    end
+    
+    # Returns an array containing the identifiers of all the available 
+    # Timezones that are links to other Timezones.
+    def self.all_linked_zone_identifiers
+      load_index
+      Indexes::Timezones.linked_timezones
     end
     
     # Returns all the Timezones defined for all Countries. This is not the
@@ -422,5 +458,20 @@ module TZInfo
     def self._load(data)
       Timezone.get(data)
     end
+    
+    private
+      # Loads in the index of timezones if it hasn't already been loaded.
+      def self.load_index
+        unless @@index_loaded
+          require 'tzinfo/indexes/timezones'
+          @@index_loaded = true
+        end        
+      end
+      
+      # Returns an array of proxies corresponding to the given array of 
+      # identifiers.
+      def self.get_proxies(identifiers)
+        identifiers.collect {|identifier| get_proxy(identifier)}
+      end
   end        
 end

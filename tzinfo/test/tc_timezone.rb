@@ -160,11 +160,36 @@ class TCTimezone < Test::Unit::TestCase
   end 
   
   def test_all
-    assert_equal(Timezone.all_country_zones, Timezone.all)
+    all = Timezone.all
+    expected = Indexes::Timezones.timezones.collect {|identifier| Timezone.get_proxy(identifier)}
+    assert_equal(expected, all)
   end
   
   def test_all_identifiers
-    assert_equal(Timezone.all_country_zone_identifiers, Timezone.all_identifiers)
+    all = Timezone.all_identifiers
+    assert_equal(Indexes::Timezones.timezones, all)
+  end
+  
+  def test_all_data_zones
+    all_data = Timezone.all_data_zones
+    expected = Indexes::Timezones.data_timezones.collect {|identifier| Timezone.get_proxy(identifier)}
+    assert_equal(expected, all_data)
+  end
+  
+  def test_all_data_zone_identifiers
+    all_data = Timezone.all_data_zone_identifiers
+    assert_equal(Indexes::Timezones.data_timezones, all_data)
+  end
+  
+  def test_all_linked_zones
+    all_linked = Timezone.all_linked_zones
+    expected = Indexes::Timezones.linked_timezones.collect {|identifier| Timezone.get_proxy(identifier)}
+    assert_equal(expected, all_linked)
+  end
+  
+  def test_all_linked_zone_identifiers
+    all_linked = Timezone.all_linked_zone_identifiers
+    assert_equal(Indexes::Timezones.linked_timezones, all_linked)
   end
   
   def test_all_country_zones

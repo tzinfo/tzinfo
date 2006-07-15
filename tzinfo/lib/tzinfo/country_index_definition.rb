@@ -25,7 +25,7 @@ require 'tzinfo/country_info'
 module TZInfo
   # The country index file includes CountryIndexDefinition which provides
   # a country method used to define each country in the index.
-  module CountryIndexDefinition    
+  module CountryIndexDefinition #:nodoc:
     def self.append_features(base)
       super
       base.extend(ClassMethods)

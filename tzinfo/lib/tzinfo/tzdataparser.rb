@@ -101,7 +101,9 @@ module TZInfo
             zone = @zones[id]
             zone.write_module(@output_dir)            
           }          
-        end        
+        end
+        
+        write_timezones_index
       end
       
       if @generate_countries        
@@ -315,6 +317,32 @@ module TZInfo
           file.puts('  end') # end module Indexes
           file.puts('end') # end module TZInfo
         }                      
+      end
+      
+      # Writes a timezone index file.
+      def write_timezones_index
+        dir = File.join(@output_dir, 'indexes')
+        FileUtils.mkdir_p(dir)
+        
+        File.open(File.join(dir, 'timezones.rb'), 'w') do |file|
+          file.binmode
+          
+          file.puts('require \'tzinfo/timezone_index_definition\'')
+          file.puts('')
+          file.puts('module TZInfo')
+          file.puts('  module Indexes')
+          file.puts('    module Timezones')
+          file.puts('      include TimezoneIndexDefinition')
+          file.puts('')
+          
+          zones = @zones.values.sort {|t1,t2| t1.name <=> t2.name}
+          zones.each {|zone| zone.write_index_record(file)}
+          
+          file.puts('    end') # end module Timezones
+          file.puts('  end') # end module Indexes
+          file.puts('end') # end module TZInfo
+        end
+        
       end
   end
   
@@ -536,6 +564,11 @@ module TZInfo
         file.puts("linked_timezone #{TZDataParser.quote_str(@name)}, #{TZDataParser.quote_str(@link_to.name)}")        
       }
     end
+    
+    # Writes an index record for this link.    
+    def write_index_record(file)
+      file.puts("      linked_timezone #{TZDataParser.quote_str(@name)}")
+    end
   end
   
   # A tz data Zone. Each line from the tz data is loaded as a TZDataObservance.
@@ -567,6 +600,11 @@ module TZInfo
         file.indent(-2)
         file.puts('end')
       }      
+    end
+    
+    # Writes an index record for this zone.    
+    def write_index_record(file)
+      file.puts("      timezone #{TZDataParser.quote_str(@name)}")
     end
     
     private
