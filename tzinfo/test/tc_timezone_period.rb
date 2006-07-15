@@ -421,18 +421,22 @@ class TCTimezonePeriod < Test::Unit::TestCase
     assert_not_equal(true, p1 == p10)
     assert_not_equal(true, p1 == p11)
     assert_not_equal(true, p1 == p12)
+    assert_not_equal(true, p1 == Object.new)
     
     assert_equal(true, p4 == p4)
     assert_equal(true, p4 == p5)
     assert_not_equal(true, p4 == p6)
+    assert_not_equal(true, p4 == Object.new)
     
     assert_equal(true, p7 == p7)
     assert_equal(true, p7 == p8)
     assert_not_equal(true, p7 == p9)
+    assert_not_equal(true, p7 == Object.new)
     
     assert_equal(true, p10 == p10)
     assert_equal(true, p10 == p11)
     assert_not_equal(true, p10 == p12)
+    assert_not_equal(true, p10 == Object.new)
   end
   
   def test_eql
@@ -468,18 +472,22 @@ class TCTimezonePeriod < Test::Unit::TestCase
     assert_not_equal(true, p1.eql?(p10))
     assert_not_equal(true, p1.eql?(p11))
     assert_not_equal(true, p1.eql?(p12))
+    assert_not_equal(true, p1.eql?(Object.new))
     
     assert_equal(true, p4.eql?(p4))
     assert_equal(true, p4.eql?(p5))
     assert_not_equal(true, p4.eql?(p6))
+    assert_not_equal(true, p4.eql?(Object.new))
     
     assert_equal(true, p7.eql?(p7))
     assert_equal(true, p7.eql?(p8))
     assert_not_equal(true, p7.eql?(p9))
+    assert_not_equal(true, p7.eql?(Object.new))
     
     assert_equal(true, p10.eql?(p10))
     assert_equal(true, p10.eql?(p11))
     assert_not_equal(true, p10.eql?(p12))
+    assert_not_equal(true, p10.eql?(Object.new))
   end
   
   def test_hash
