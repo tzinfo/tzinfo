@@ -3,9 +3,9 @@
 # rake test - Runs all test cases.
 # rake package - Runs test cases and builds packages for distribution.
 # rake rdoc - Builds API documentation in doc dir.
-# rake build_tz_classes - Builds Timezone modules and the Country index. 
+# rake build_tz_modules - Builds Timezone modules and the Country index. 
 #   Expects to find source data in ../data.
-# rake build_tz_class zone=Zone/Name - Builds a single Timezone module. 
+# rake build_tz_module zone=Zone/Name - Builds a single Timezone module. 
 #   Expects to find source data in ../data.
 # rake build_countries - Builds the Country index.
 #   Expects to find source data in ../data.
@@ -77,7 +77,7 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib')  
 end
 
-task :build_tz_classes do
+task :build_tz_modules do
   require 'lib/tzinfo/tzdataparser'
   
   FileUtils.mkdir_p(BUILD_TZ_CLASSES_DIR)
@@ -161,7 +161,7 @@ def exec_svn(params)
   raise "SVN exited with status #$?" if $? != 0  
 end
 
-task :build_tz_class do
+task :build_tz_module do
   require 'lib/tzinfo/tzdataparser'
   p = TZInfo::TZDataParser.new('../data', 'lib/tzinfo')
   p.generate_countries = false
