@@ -98,11 +98,11 @@ class TCTimezoneTransitionInfo < Test::Unit::TestCase
     assert_equal(true, t1 == t1)
     assert_equal(true, t1 == t2)
     assert_equal(true, t1 == t3)
-    assert_not_equal(true, t1 == t4)
-    assert_not_equal(true, t1 == t5)
-    assert_not_equal(true, t1 == t6)
-    assert_not_equal(true, t1 == t7)
-    assert_not_equal(true, t1 == Object.new)
+    assert_equal(false, t1 == t4)
+    assert_equal(false, t1 == t5)
+    assert_equal(false, t1 == t6)
+    assert_equal(false, t1 == t7)
+    assert_equal(false, t1 == Object.new)
   end
   
   def test_equality_datetime
@@ -124,11 +124,11 @@ class TCTimezoneTransitionInfo < Test::Unit::TestCase
     assert_equal(true, t1 == t1)
     assert_equal(true, t1 == t2)
     assert_equal(true, t1 == t3)
-    assert_not_equal(true, t1 == t4)
-    assert_not_equal(true, t1 == t5)
-    assert_not_equal(true, t1 == t6)
-    assert_not_equal(true, t1 == t7)
-    assert_not_equal(true, t1 == Object.new)
+    assert_equal(false, t1 == t4)
+    assert_equal(false, t1 == t5)
+    assert_equal(false, t1 == t6)
+    assert_equal(false, t1 == t7)
+    assert_equal(false, t1 == Object.new)
   end
   
   def test_eql_timestamp
@@ -147,11 +147,11 @@ class TCTimezoneTransitionInfo < Test::Unit::TestCase
       
     assert_equal(true, t1.eql?(t1))
     assert_equal(true, t1.eql?(t2))
-    assert_not_equal(true, t1.eql?(t3))
-    assert_not_equal(true, t1.eql?(t4))
-    assert_not_equal(true, t1.eql?(t5))
-    assert_not_equal(true, t1.eql?(t6))    
-    assert_not_equal(true, t1.eql?(Object.new))
+    assert_equal(false, t1.eql?(t3))
+    assert_equal(false, t1.eql?(t4))
+    assert_equal(false, t1.eql?(t5))
+    assert_equal(false, t1.eql?(t6))    
+    assert_equal(false, t1.eql?(Object.new))
   end
   
   def test_eql_datetime
@@ -170,11 +170,11 @@ class TCTimezoneTransitionInfo < Test::Unit::TestCase
       
     assert_equal(true, t1.eql?(t1))
     assert_equal(true, t1.eql?(t2))
-    assert_not_equal(true, t1.eql?(t3))
-    assert_not_equal(true, t1.eql?(t4))
-    assert_not_equal(true, t1.eql?(t5))
-    assert_not_equal(true, t1.eql?(t6))    
-    assert_not_equal(true, t1.eql?(Object.new))
+    assert_equal(false, t1.eql?(t3))
+    assert_equal(false, t1.eql?(t4))
+    assert_equal(false, t1.eql?(t5))
+    assert_equal(false, t1.eql?(t6))    
+    assert_equal(false, t1.eql?(Object.new))
   end
   
   def test_hash

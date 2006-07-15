@@ -278,22 +278,25 @@ class TCTimeOrDateTime < Test::Unit::TestCase
   
   def test_eql
     assert_equal(true, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))))
-    assert_not_equal(true, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
-    assert_not_equal(true, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(1143214323)))
-    assert_not_equal(true, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new('1143214323')))
-    assert_not_equal(true, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 4))))
+    assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
+    assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(1143214323)))
+    assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new('1143214323')))
+    assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 4))))
+    assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(Object.new))
     
-    assert_not_equal(true, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))))
+    assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))))
     assert_equal(true, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
-    assert_not_equal(true, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(1143214323)))
-    assert_not_equal(true, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new('1143214323')))
-    assert_not_equal(true, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 4))))
+    assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(1143214323)))
+    assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new('1143214323')))
+    assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 4))))
+    assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(Object.new))
     
-    assert_not_equal(true, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))))
-    assert_not_equal(true, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
+    assert_equal(false, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))))
+    assert_equal(false, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
     assert_equal(true, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(1143214323)))
     assert_equal(true, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new('1143214323')))
-    assert_not_equal(true, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(1143214324)))
+    assert_equal(false, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(1143214324)))
+    assert_equal(false, TimeOrDateTime.new(1143214323).eql?(Object.new))
   end
   
   def test_hash

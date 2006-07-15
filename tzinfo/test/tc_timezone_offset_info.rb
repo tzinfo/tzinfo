@@ -85,10 +85,10 @@ class TCTimezoneOffsetInfo < Test::Unit::TestCase
     
     assert_equal(true, o1 == o1)
     assert_equal(true, o1 == o2)
-    assert_not_equal(true, o1 == o3)
-    assert_not_equal(true, o1 == o4)
-    assert_not_equal(true, o1 == o5)
-    assert_not_equal(true, o1 == Object.new)
+    assert_equal(false, o1 == o3)
+    assert_equal(false, o1 == o4)
+    assert_equal(false, o1 == o5)
+    assert_equal(false, o1 == Object.new)
   end
   
   def test_eql
@@ -100,10 +100,10 @@ class TCTimezoneOffsetInfo < Test::Unit::TestCase
     
     assert_equal(true, o1.eql?(o1))
     assert_equal(true, o1.eql?(o2))
-    assert_not_equal(true, o1.eql?(o3))
-    assert_not_equal(true, o1.eql?(o4))
-    assert_not_equal(true, o1.eql?(o5))
-    assert_not_equal(true, o1.eql?(Object.new))
+    assert_equal(false, o1.eql?(o3))
+    assert_equal(false, o1.eql?(o4))
+    assert_equal(false, o1.eql?(o5))
+    assert_equal(false, o1.eql?(Object.new))
   end
   
   def test_hash

@@ -50,8 +50,8 @@ class TCTimezoneProxy < Test::Unit::TestCase
   
   def test_equals
     assert_equal(true, TimezoneProxy.new('Europe/London') == TimezoneProxy.new('Europe/London'))
-    assert_not_equal(true, TimezoneProxy.new('Europe/London') == TimezoneProxy.new('Europe/Paris'))
-    assert_not_equal(true, TimezoneProxy.new('Europe/London') == Object.new)
+    assert_equal(false, TimezoneProxy.new('Europe/London') == TimezoneProxy.new('Europe/Paris'))
+    assert_nil(TimezoneProxy.new('Europe/London') == Object.new)
   end
   
   def test_compare

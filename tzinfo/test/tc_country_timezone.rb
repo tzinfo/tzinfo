@@ -61,10 +61,10 @@ class TCCountryTimezone < Test::Unit::TestCase
     
     assert_equal(true, ct1 == ct1)
     assert_equal(true, ct1 == ct2)
-    assert_not_equal(true, ct1 == ct3)
-    assert_not_equal(true, ct1 == ct4)
-    assert_not_equal(true, ct1 == ct5)
-    assert_not_equal(true, ct1 == ct6)
+    assert_equal(false, ct1 == ct3)
+    assert_equal(false, ct1 == ct4)
+    assert_equal(false, ct1 == ct5)
+    assert_equal(false, ct1 == ct6)
   end
   
   def test_equality_2
@@ -72,13 +72,13 @@ class TCCountryTimezone < Test::Unit::TestCase
     ct2 = CountryTimezone.new('America/New_York', 48857, 1200, -266423, 3600, 'Eastern Time2')
     
     assert_equal(true, ct1 == ct1)
-    assert_not_equal(true, ct1 == ct2)    
+    assert_equal(false, ct1 == ct2)    
   end
   
   def test_equality_non_country_timezone
     ct = CountryTimezone.new('Europe/London', 2059, 40, -5, 16)
     
-    assert_not_equal(true, ct == Object.new)
+    assert_equal(false, ct == Object.new)
   end
   
   def test_eql_1
@@ -91,10 +91,10 @@ class TCCountryTimezone < Test::Unit::TestCase
     
     assert_equal(true, ct1.eql?(ct1))
     assert_equal(true, ct1.eql?(ct2))
-    assert_not_equal(true, ct1.eql?(ct3))
-    assert_not_equal(true, ct1.eql?(ct4))
-    assert_not_equal(true, ct1.eql?(ct5))
-    assert_not_equal(true, ct1.eql?(ct6))
+    assert_equal(false, ct1.eql?(ct3))
+    assert_equal(false, ct1.eql?(ct4))
+    assert_equal(false, ct1.eql?(ct5))
+    assert_equal(false, ct1.eql?(ct6))
   end
   
   def test_eql_2
@@ -102,13 +102,13 @@ class TCCountryTimezone < Test::Unit::TestCase
     ct2 = CountryTimezone.new('America/New_York', 48857, 1200, -266423, 3600, 'Eastern Time2')
     
     assert_equal(true, ct1.eql?(ct1))
-    assert_not_equal(true, ct1.eql?(ct2))    
+    assert_equal(false, ct1.eql?(ct2))    
   end
   
   def test_eql_non_country_timezone
     ct = CountryTimezone.new('Europe/London', 2059, 40, -5, 16)
     
-    assert_not_equal(true, ct.eql?(Object.new))
+    assert_equal(false, ct.eql?(Object.new))
   end
   
   def test_hash

@@ -754,16 +754,16 @@ class TCTimezone < Test::Unit::TestCase
   
   def test_equality
     assert_equal(true, TestTimezone.new('Europe/London') == TestTimezone.new('Europe/London'))
-    assert_not_equal(true, TestTimezone.new('Europe/London') == TestTimezone.new('Europe/london'))
-    assert_not_equal(true, TestTimezone.new('Europe/London') == TestTimezone.new('Europe/Paris'))
-    assert_not_equal(true, TestTimezone.new('Europe/London') == Object.new)
+    assert_equal(false, TestTimezone.new('Europe/London') == TestTimezone.new('Europe/london'))
+    assert_equal(false, TestTimezone.new('Europe/London') == TestTimezone.new('Europe/Paris'))
+    assert_nil(TestTimezone.new('Europe/London') == Object.new)
   end
   
   def test_eql
     assert_equal(true, TestTimezone.new('Europe/London').eql?(TestTimezone.new('Europe/London')))
-    assert_not_equal(true, TestTimezone.new('Europe/London').eql?(TestTimezone.new('Europe/london')))
-    assert_not_equal(true, TestTimezone.new('Europe/London').eql?(TestTimezone.new('Europe/Paris')))
-    assert_not_equal(true, TestTimezone.new('Europe/London') == Object.new)
+    assert_equal(false, TestTimezone.new('Europe/London').eql?(TestTimezone.new('Europe/london')))
+    assert_equal(false, TestTimezone.new('Europe/London').eql?(TestTimezone.new('Europe/Paris')))
+    assert_nil(TestTimezone.new('Europe/London') == Object.new)
   end
   
   def test_hash
