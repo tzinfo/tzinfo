@@ -166,7 +166,7 @@ module TZInfo
     # Encloses the string in single quotes and escapes any single quotes in
     # the content.
     def self.quote_str(str)
-      "'#{str.gsub(/'/, '\\\'')}'"
+      "'#{str.gsub('\'', '\\\\\'')}'"
     end
         
     private

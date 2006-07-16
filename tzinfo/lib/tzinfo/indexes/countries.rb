@@ -41,7 +41,7 @@ module TZInfo
         c.timezone 'Antarctica/Davis', -823, 12, 2339, 30, 'Davis Station, Vestfold Hills'
         c.timezone 'Antarctica/Casey', -3977, 60, 6631, 60, 'Casey Station, Bailey Peninsula'
         c.timezone 'Antarctica/Vostok', -392, 5, 1069, 10, 'Vostok Station, S Magnetic Pole'
-        c.timezone 'Antarctica/DumontDUrville', -200, 3, 8401, 60, 'Dumont-dUrville Base, Terre AdelieUrville Base, Terre Adelie'
+        c.timezone 'Antarctica/DumontDUrville', -200, 3, 8401, 60, 'Dumont-d\'Urville Base, Terre Adelie'
         c.timezone 'Antarctica/Syowa', -124211, 1800, 3959, 100, 'Syowa Station, E Ongul I'
       end
       country 'AR', 'Argentina' do |c|
@@ -196,7 +196,7 @@ module TZInfo
       country 'CH', 'Switzerland' do |c|
         c.timezone 'Europe/Zurich', 2843, 60, 128, 15
       end
-      country 'CI', 'Cote dIvoireIvoire' do |c|
+      country 'CI', 'Cote d\'Ivoire' do |c|
         c.timezone 'Africa/Abidjan', 319, 60, -121, 30
       end
       country 'CK', 'Cook Islands' do |c|
@@ -450,7 +450,7 @@ module TZInfo
         c.timezone 'Asia/Almaty', 173, 4, 1539, 20, 'most locations'
         c.timezone 'Asia/Qyzylorda', 224, 5, 982, 15, 'Qyzylorda (Kyzylorda, Kzyl-Orda)'
         c.timezone 'Asia/Aqtobe', 3017, 60, 343, 6, 'Aqtobe (Aktobe)'
-        c.timezone 'Asia/Aqtau', 2671, 60, 754, 15, 'Atyrau (Atirau, Guryev), Mangghystau (Mankistau)yev), Mangghystau (Mankistau)'
+        c.timezone 'Asia/Aqtau', 2671, 60, 754, 15, 'Atyrau (Atirau, Gur\'yev), Mangghystau (Mankistau)'
         c.timezone 'Asia/Oral', 3073, 60, 1027, 20, 'West Kazakhstan'
       end
       country 'LA', 'Laos' do |c|
@@ -783,7 +783,7 @@ module TZInfo
       country 'UA', 'Ukraine' do |c|
         c.timezone 'Europe/Kiev', 1513, 30, 1831, 60, 'most locations'
         c.timezone 'Europe/Uzhgorod', 2917, 60, 223, 10, 'Ruthenia'
-        c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozhye, E Luganskye, E Lugansk'
+        c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozh\'ye, E Lugansk'
         c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'central Crimea'
       end
       country 'UG', 'Uganda' do |c|
