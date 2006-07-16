@@ -35,7 +35,7 @@ module TZInfo
     end
     
     # Class methods for inclusion.
-    module ClassMethods
+    module ClassMethods #:nodoc:
       # Returns and yields a DataTimezoneInfo object to define a timezone.
       def timezone(identifier)
         yield @timezone = DataTimezoneInfo.new(identifier)

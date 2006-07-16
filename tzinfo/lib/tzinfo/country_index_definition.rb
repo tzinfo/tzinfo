@@ -31,7 +31,7 @@ module TZInfo
       base.extend(ClassMethods)
     end
     
-    module ClassMethods
+    module ClassMethods #:nodoc:
       # Defines a country with an ISO 3166 country code, name and block. The
       # block will be evaluated to obtain all the timezones for the country.
       # Calls Country.country_defined with the definition of each country.

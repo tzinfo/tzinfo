@@ -119,8 +119,8 @@ module TZInfo
       TimezoneProxy.new(identifier)
     end
     
-    # If identifier is nil calls super(), else calls get(identifier). An
-    # identfier should always be passed in when called externally.
+    # If identifier is nil calls super(), otherwise calls get. An identfier 
+    # should always be passed in when called externally.
     def self.new(identifier = nil)
       if identifier        
         get(identifier)
@@ -224,7 +224,7 @@ module TZInfo
       identifier
     end
     
-    # Returns a friendlier version of the idenfitifer.
+    # Returns a friendlier version of the identifier.
     def to_s
       friendly_identifier
     end
@@ -234,9 +234,16 @@ module TZInfo
       "#<#{self.class}: #{identifier}>"
     end
     
-    # Returns a friendlier version of the idenfitifer. Set skip_first_part to 
+    # Returns a friendlier version of the identifier. Set skip_first_part to 
     # omit the first part of the identifier (typically a region name) where
     # there is more than one part.
+    #
+    # For example:
+    #
+    #   Timezone.get('Europe/Paris').friendly_identifier(false)          #=> "Europe - Paris"
+    #   Timezone.get('Europe/Paris').friendly_identifier(true)           #=> "Paris"
+    #   Timezone.get('America/Indiana/Knox').friendly_identifier(false)  #=> "America - Knox, Indiana"
+    #   Timezone.get('America/Indiana/Knox').friendly_identifier(true)   #=> "Knox, Indiana"           
     def friendly_identifier(skip_first_part = false)
       parts = identifier.split('/')
       if parts.empty?
@@ -282,7 +289,7 @@ module TZInfo
     
     # Returns the set of TimezonePeriod instances that are valid for the given
     # local time as an array. If you just want a single period, use 
-    # period_for_local instead and specify how abiguities should be resolved.
+    # period_for_local instead and specify how ambiguities should be resolved.
     # Returns an empty array if no periods are found for the given time.
     def periods_for_local(local)
       raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
@@ -299,10 +306,10 @@ module TZInfo
     # transition from daylight savings time to standard time).
     #
     # In the first case (no equivalent UTC time), a PeriodNotFound exception
-    # will be thrown.
+    # will be raised.
     #
     # In the second case (more than one equivalent UTC time), an AmbiguousTime
-    # exception will be thrown unless the optional dst parameter or block
+    # exception will be raised unless the optional dst parameter or block
     # handles the ambiguity. 
     #
     # If the ambiguity is due to a transition from daylight savings time to
@@ -378,10 +385,10 @@ module TZInfo
     # transition from daylight savings time to standard time).
     #
     # In the first case (no equivalent UTC time), a PeriodNotFound exception
-    # will be thrown.
+    # will be raised.
     #
     # In the second case (more than one equivalent UTC time), an AmbiguousTime
-    # exception will be thrown unless the optional dst parameter or block
+    # exception will be raised unless the optional dst parameter or block
     # handles the ambiguity. 
     #
     # If the ambiguity is due to a transition from daylight savings time to
@@ -454,7 +461,7 @@ module TZInfo
       local.strftime(format)
     end
     
-    # Compare two Timezones based on their identifier. Returns -1 if tz is less
+    # Compares two Timezones based on their identifier. Returns -1 if tz is less
     # than self, 0 if tz is equal to self and +1 if tz is greater than self.
     def <=>(tz)
       identifier <=> tz.identifier
@@ -471,12 +478,12 @@ module TZInfo
       identifier.hash
     end
     
-    # Dump this Timezone for marshalling.
+    # Dumps this Timezone for marshalling.
     def _dump(limit)
       identifier
     end
     
-    # Load a marshalled Timezone.
+    # Loads a marshalled Timezone.
     def self._load(data)
       Timezone.get(data)
     end

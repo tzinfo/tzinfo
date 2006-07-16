@@ -29,7 +29,7 @@ module TZInfo
       base.extend(ClassMethods)
     end
     
-    module ClassMethods
+    module ClassMethods #:nodoc:
       # Defines a timezone based on data.
       def timezone(identifier)
         @timezones = [] unless @timezones

@@ -151,12 +151,12 @@ module TZInfo
       code.hash
     end
     
-    # Dump this Country for marshalling.
+    # Dumps this Country for marshalling.
     def _dump(limit)
       code
     end
     
-    # Load a marshalled Country.
+    # Loads a marshalled Country.
     def self._load(data)
       Country.get(data)
     end

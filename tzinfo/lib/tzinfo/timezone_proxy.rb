@@ -24,16 +24,17 @@ require 'tzinfo/timezone'
 
 module TZInfo
 
-  # A proxy class representing a timezone with a given identifier. It can be
-  # constructed with an identifier and behaves almost identically to a Timezone 
-  # loaded through Timezone.get. The first time an attempt is made to perform
-  # a conversion on the proxy, the real Timezone class is loaded. If the
-  # proxy's identifier was not valid, then an exception will be thrown at this
-  # point.    
+  # A proxy class representing a timezone with a given identifier. TimezoneProxy
+  # inherits from Timezone and can be treated like any Timezone loaded with
+  # Timezone.get.
+  #
+  # The first time an attempt is made to access the data for the timezone, the 
+  # real Timezone is loaded. If the proxy's identifier was not valid, then an 
+  # exception will be raised at this point.  
   class TimezoneProxy < Timezone
     # Construct a new TimezoneProxy for the given identifier. The identifier
     # is not checked when constructing the proxy. It will be validated on the
-    # first conversion.
+    # when the real Timezone is loaded.
     def self.new(identifier)
       # Need to override new to undo the behaviour introduced in Timezone#new.
       tzp = super()
@@ -56,17 +57,17 @@ module TZInfo
     # Returns the set of TimezonePeriod instances that are valid for the given
     # local time as an array. If you just want a single period, use 
     # period_for_local instead and specify how abiguities should be resolved.
-    # Raises PeriodNotFound if no periods are found for the given time.
+    # Returns an empty array if no periods are found for the given time.
     def periods_for_local(local)
       real_timezone.periods_for_local(local)
     end
     
-    # Dump this TimezoneProxy for marshalling.
+    # Dumps this TimezoneProxy for marshalling.
     def _dump(limit)
       identifier
     end
     
-    # Load a marshalled TimezoneProxy.
+    # Loads a marshalled TimezoneProxy.
     def self._load(data)
       TimezoneProxy.new(data)
     end

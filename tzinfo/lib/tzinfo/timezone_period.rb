@@ -70,7 +70,7 @@ module TZInfo
     
     # Offset from the local time where daylight savings is in effect (seconds).
     # E.g.: utc_offset could be -5 hours. Normally, std_offset would be 0. 
-    # During daylight savings, std_offset would become +1 hours.
+    # During daylight savings, std_offset would typically become +1 hours.
     def std_offset
       @offset.std_offset
     end

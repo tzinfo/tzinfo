@@ -26,12 +26,10 @@ require 'fileutils'
 module TZInfo
   
   # Parses tzdata from ftp://elsie.nci.nih.gov/pub/ and transforms it into 
-  # a set of Ruby classes that can be used through Timezone and Country.
+  # a set of Ruby modules that can be used through Timezone and Country.
   # 
-  # Normally, this class wouldn't be used. It is only run to create a new
-  # tzinfo version for a new version of the tzdata data.
-  #
-  # This process is extremely slow (optimization is required).
+  # Normally, this class wouldn't be used. It is only run to update the 
+  # timezone data and index modules.
   class TZDataParser    
     # Minimum year that will be considered.
     MIN_YEAR = 1800
@@ -56,8 +54,8 @@ module TZInfo
     attr_accessor :exclude_zones            
     
     # Initializes a new TZDataParser. input_dir must contain the extracted
-    # tzdata tarball. output_dir is the location to output the classes
-    # (in countries and definitions directories).
+    # tzdata tarball. output_dir is the location to output the modules
+    # (in definitions and indexes directories).
     def initialize(input_dir, output_dir)
       super()
       @input_dir = input_dir
