@@ -1,19 +1,19 @@
-== Version ?.?.? (tzdata v?????) - ???????????
+== Version 0.3.0 (tzdata v2006g) - 17-Jul-2006
 
 * New timezone data format. Timezone data now occupies less space on disk and
   takes less memory once loaded. #4142, #4144.
 * Timezone data is defined in modules rather than classes. Timezone instances 
-  returned by Timezone.get are no longer instances of data classes, but instead
-  instances of new DataTimezone and LinkedTimezone classes.
+  returned by Timezone.get are no longer instances of data classes, but are
+  instead instances of new DataTimezone and LinkedTimezone classes.
 * Timezone instances can now be used with Marshal.dump and Marshal.load. #4240.
-* Added Timezone.get_proxy method that returns a TimezoneProxy object for a 
+* Added a Timezone.get_proxy method that returns a TimezoneProxy object for a 
   given identifier.
 * Country index data is now defined in a single module that is independent
   of the Country class implementation.
 * Country instances can now be used with Marshal.dump and Marshal.load. #4240.
 * Country has a new zone_info method that returns CountryTimezone objects
-  containing additional information about each Timezone (latitude, longitude
-  and description). #4140.
+  containing additional information (latitude, longitude and a description) 
+  relating to each Timezone. #4140.
 * Timezones within a Country are now returned in an order that makes 
   geographic sense.
 * The zdumptest utility now checks local to utc conversions in addition to
@@ -27,15 +27,16 @@
 * hash method defined on Timezone that returns the hash of the identifier.
 * Miscellaneous API documentation corrections and improvements.
 * Timezone definition and indexes are now excluded from rdoc (the contents were
-  ignored with #:nodoc: anyway).
+  previously ignored with #:nodoc: anyway).
 * Removed no longer needed #:nodoc: directives from timezone data files (which
-  are now modules instead of classes and excluded from the rdoc build).
-* Installation of gem now causes rdoc API documentation to be generated. #4905.
+  are now excluded from the rdoc build).
+* Installation of the gem now causes rdoc API documentation to be generated. 
+  #4905.
 * When optimizing transitions to generate zone definitions, check the
-  UTC and standard offsets rather than just the total offset to UTC. Fixes an
-  incorrect abbreviation issue with Europe/London, Europe/Dublin and 
+  UTC and standard offsets separately rather than just the total offset to UTC.
+  Fixes an incorrect abbreviation issue with Europe/London, Europe/Dublin and 
   Pacific/Auckland.
-* Eliminating unnecessary .nil? calls to give a minor performance gain.
+* Eliminated unnecessary .nil? calls to give a minor performance gain.
 * Timezone.all and Timezone.all_identifiers now return all the 
   Timezones/identifiers rather than just those associated with countries. #4146.
 * Added all_data_zones, all_data_zone_identifiers, all_linked_zones and

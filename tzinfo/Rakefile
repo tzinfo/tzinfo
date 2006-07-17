@@ -16,7 +16,7 @@ require 'rake/rdoctask'
 require 'rake/gempackagetask'
 require 'fileutils'
 
-PKG_VERSION = "0.2.1"
+PKG_VERSION = "0.3.0"
 PKG_FILES = FileList[
   'CHANGES',
   'LICENSE',
