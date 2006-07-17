@@ -1,7 +1,5 @@
 == Version ?.?.? (tzdata v?????) - ???????????
 
-* Updated to tzdata version 2006g
-  (http://article.gmane.org/gmane.comp.time.tz/1008).
 * New timezone data format. Timezone data now occupies less space on disk and
   takes less memory once loaded. #4142, #4144.
 * Timezone data is defined in modules rather than classes. Timezone instances 
@@ -18,11 +16,8 @@
   and description). #4140.
 * Timezones within a Country are now returned in an order that makes 
   geographic sense.
-* The zdumptest utility now compares the TZInfo zone identifier with the zdump
-  zone identifier.
 * The zdumptest utility now checks local to utc conversions in addition to
   utc to local conversions.
-* zdumptestall utility now exits if not supplied with enough parameters.
 * eql? method defined on Country and Timezone that is equivalent to ==.
 * == method of Timezone no longer raises an exception when passed an object
   with no identifier method.
@@ -50,6 +45,20 @@
   abbreviation for the given time (for example, EST or EDT). #4143.
 * Fix escaping of quotes in TZDataParser. This affected country names and
   descriptions of timezones within countries.
+
+
+== Version 0.2.2 (tzdata v2006g) - 17-May-2006
+
+* Use class-scoped instance variables to store the Timezone identifier and 
+  singleton instance. Loading a linked zone no longer causes the parent
+  zone's identifier to be changed. The instance method of a linked zone class
+  also now returns an instance of the linked zone class rather than the parent
+  class. #4502.
+* The zdumptest utility now compares the TZInfo zone identifier with the zdump
+  zone identifier.
+* The zdumptestall utility now exits if not supplied with enough parameters.
+* Updated to tzdata version 2006g
+  (http://article.gmane.org/gmane.comp.time.tz/1008).
 
 
 == Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
