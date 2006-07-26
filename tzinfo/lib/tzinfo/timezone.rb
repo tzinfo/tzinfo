@@ -81,7 +81,9 @@ module TZInfo
         raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
         identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
         begin
-          require "tzinfo/definitions/#{identifier}"
+          # Use a temporary variable to avoid an rdoc warning
+          file = "tzinfo/definitions/#{identifier}"
+          require file
           
           m = Definitions
           identifier.split(/\//).each {|part|
