@@ -992,13 +992,13 @@ module TZInfo
     
     # Returns the absolute day of month for the given year and month.
     def to_absolute(year, month)
-      case
-        when @type == :last:
+      case @type
+        when :last
           last_day_in_month = (Date.new(year, month, 1) >> 1) - 1          
           offset = last_day_in_month.wday - @day_of_week
           offset = offset + 7 if offset < 0
           (last_day_in_month - offset).day
-        when @type == :comparison:
+        when :comparison
           pivot = Date.new(year, month, @day_of_month)         
           offset = @day_of_week - pivot.wday
           offset = -offset if @operator == :less_equal

@@ -1,3 +1,8 @@
+== Version ?.?.? (tzdata v?????) - ???????????
+
+* Remove colon from case statements to avoid warning in Ruby 1.8.5. #5198.
+
+
 == Version 0.3.0 (tzdata v2006g) - 17-Jul-2006
 
 * New timezone data format. Timezone data now occupies less space on disk and
