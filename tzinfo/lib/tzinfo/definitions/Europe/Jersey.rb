@@ -2,11 +2,11 @@ require 'tzinfo/timezone_definition'
 
 module TZInfo
   module Definitions
-    module America
-      module Coral_Harbour
+    module Europe
+      module Jersey
         include TimezoneDefinition
         
-        linked_timezone 'America/Coral_Harbour', 'America/Atikokan'
+        linked_timezone 'Europe/Jersey', 'Europe/London'
       end
     end
   end

@@ -78,94 +78,94 @@ module TZInfo
           tz.transition 2005, 10, :o1, 1130648400
           tz.transition 2006, 4, :o2, 1143957600
           tz.transition 2006, 10, :o1, 1162098000
-          tz.transition 2007, 4, :o2, 1175407200
-          tz.transition 2007, 10, :o1, 1193547600
-          tz.transition 2008, 4, :o2, 1207461600
-          tz.transition 2008, 10, :o1, 1224997200
-          tz.transition 2009, 4, :o2, 1238911200
-          tz.transition 2009, 10, :o1, 1256446800
-          tz.transition 2010, 4, :o2, 1270360800
-          tz.transition 2010, 10, :o1, 1288501200
-          tz.transition 2011, 4, :o2, 1301810400
-          tz.transition 2011, 10, :o1, 1319950800
-          tz.transition 2012, 4, :o2, 1333260000
-          tz.transition 2012, 10, :o1, 1351400400
-          tz.transition 2013, 4, :o2, 1365314400
-          tz.transition 2013, 10, :o1, 1382850000
-          tz.transition 2014, 4, :o2, 1396764000
-          tz.transition 2014, 10, :o1, 1414299600
-          tz.transition 2015, 4, :o2, 1428213600
-          tz.transition 2015, 10, :o1, 1445749200
-          tz.transition 2016, 4, :o2, 1459663200
-          tz.transition 2016, 10, :o1, 1477803600
-          tz.transition 2017, 4, :o2, 1491112800
-          tz.transition 2017, 10, :o1, 1509253200
-          tz.transition 2018, 4, :o2, 1522562400
-          tz.transition 2018, 10, :o1, 1540702800
-          tz.transition 2019, 4, :o2, 1554616800
-          tz.transition 2019, 10, :o1, 1572152400
-          tz.transition 2020, 4, :o2, 1586066400
-          tz.transition 2020, 10, :o1, 1603602000
-          tz.transition 2021, 4, :o2, 1617516000
-          tz.transition 2021, 10, :o1, 1635656400
-          tz.transition 2022, 4, :o2, 1648965600
-          tz.transition 2022, 10, :o1, 1667106000
-          tz.transition 2023, 4, :o2, 1680415200
-          tz.transition 2023, 10, :o1, 1698555600
-          tz.transition 2024, 4, :o2, 1712469600
-          tz.transition 2024, 10, :o1, 1730005200
-          tz.transition 2025, 4, :o2, 1743919200
-          tz.transition 2025, 10, :o1, 1761454800
-          tz.transition 2026, 4, :o2, 1775368800
-          tz.transition 2026, 10, :o1, 1792904400
-          tz.transition 2027, 4, :o2, 1806818400
-          tz.transition 2027, 10, :o1, 1824958800
-          tz.transition 2028, 4, :o2, 1838268000
-          tz.transition 2028, 10, :o1, 1856408400
-          tz.transition 2029, 4, :o2, 1869717600
-          tz.transition 2029, 10, :o1, 1887858000
-          tz.transition 2030, 4, :o2, 1901772000
-          tz.transition 2030, 10, :o1, 1919307600
-          tz.transition 2031, 4, :o2, 1933221600
-          tz.transition 2031, 10, :o1, 1950757200
-          tz.transition 2032, 4, :o2, 1964671200
-          tz.transition 2032, 10, :o1, 1982811600
-          tz.transition 2033, 4, :o2, 1996120800
-          tz.transition 2033, 10, :o1, 2014261200
-          tz.transition 2034, 4, :o2, 2027570400
-          tz.transition 2034, 10, :o1, 2045710800
-          tz.transition 2035, 4, :o2, 2059020000
-          tz.transition 2035, 10, :o1, 2077160400
-          tz.transition 2036, 4, :o2, 2091074400
-          tz.transition 2036, 10, :o1, 2108610000
-          tz.transition 2037, 4, :o2, 2122524000
-          tz.transition 2037, 10, :o1, 2140059600
-          tz.transition 2038, 4, :o2, 9862071, 4
-          tz.transition 2038, 10, :o1, 59177465, 24
-          tz.transition 2039, 4, :o2, 9863527, 4
-          tz.transition 2039, 10, :o1, 59186201, 24
-          tz.transition 2040, 4, :o2, 9864983, 4
-          tz.transition 2040, 10, :o1, 59194937, 24
-          tz.transition 2041, 4, :o2, 9866467, 4
-          tz.transition 2041, 10, :o1, 59203673, 24
-          tz.transition 2042, 4, :o2, 9867923, 4
-          tz.transition 2042, 10, :o1, 59212409, 24
-          tz.transition 2043, 4, :o2, 9869379, 4
-          tz.transition 2043, 10, :o1, 59221145, 24
-          tz.transition 2044, 4, :o2, 9870835, 4
-          tz.transition 2044, 10, :o1, 59230049, 24
-          tz.transition 2045, 4, :o2, 9872291, 4
-          tz.transition 2045, 10, :o1, 59238785, 24
-          tz.transition 2046, 4, :o2, 9873747, 4
-          tz.transition 2046, 10, :o1, 59247521, 24
-          tz.transition 2047, 4, :o2, 9875231, 4
-          tz.transition 2047, 10, :o1, 59256257, 24
-          tz.transition 2048, 4, :o2, 9876687, 4
-          tz.transition 2048, 10, :o1, 59264993, 24
-          tz.transition 2049, 4, :o2, 9878143, 4
-          tz.transition 2049, 10, :o1, 59273897, 24
-          tz.transition 2050, 4, :o2, 9879599, 4
-          tz.transition 2050, 10, :o1, 59282633, 24
+          tz.transition 2007, 3, :o2, 1173592800
+          tz.transition 2007, 11, :o1, 1194152400
+          tz.transition 2008, 3, :o2, 1205042400
+          tz.transition 2008, 11, :o1, 1225602000
+          tz.transition 2009, 3, :o2, 1236492000
+          tz.transition 2009, 11, :o1, 1257051600
+          tz.transition 2010, 3, :o2, 1268546400
+          tz.transition 2010, 11, :o1, 1289106000
+          tz.transition 2011, 3, :o2, 1299996000
+          tz.transition 2011, 11, :o1, 1320555600
+          tz.transition 2012, 3, :o2, 1331445600
+          tz.transition 2012, 11, :o1, 1352005200
+          tz.transition 2013, 3, :o2, 1362895200
+          tz.transition 2013, 11, :o1, 1383454800
+          tz.transition 2014, 3, :o2, 1394344800
+          tz.transition 2014, 11, :o1, 1414904400
+          tz.transition 2015, 3, :o2, 1425794400
+          tz.transition 2015, 11, :o1, 1446354000
+          tz.transition 2016, 3, :o2, 1457848800
+          tz.transition 2016, 11, :o1, 1478408400
+          tz.transition 2017, 3, :o2, 1489298400
+          tz.transition 2017, 11, :o1, 1509858000
+          tz.transition 2018, 3, :o2, 1520748000
+          tz.transition 2018, 11, :o1, 1541307600
+          tz.transition 2019, 3, :o2, 1552197600
+          tz.transition 2019, 11, :o1, 1572757200
+          tz.transition 2020, 3, :o2, 1583647200
+          tz.transition 2020, 11, :o1, 1604206800
+          tz.transition 2021, 3, :o2, 1615701600
+          tz.transition 2021, 11, :o1, 1636261200
+          tz.transition 2022, 3, :o2, 1647151200
+          tz.transition 2022, 11, :o1, 1667710800
+          tz.transition 2023, 3, :o2, 1678600800
+          tz.transition 2023, 11, :o1, 1699160400
+          tz.transition 2024, 3, :o2, 1710050400
+          tz.transition 2024, 11, :o1, 1730610000
+          tz.transition 2025, 3, :o2, 1741500000
+          tz.transition 2025, 11, :o1, 1762059600
+          tz.transition 2026, 3, :o2, 1772949600
+          tz.transition 2026, 11, :o1, 1793509200
+          tz.transition 2027, 3, :o2, 1805004000
+          tz.transition 2027, 11, :o1, 1825563600
+          tz.transition 2028, 3, :o2, 1836453600
+          tz.transition 2028, 11, :o1, 1857013200
+          tz.transition 2029, 3, :o2, 1867903200
+          tz.transition 2029, 11, :o1, 1888462800
+          tz.transition 2030, 3, :o2, 1899352800
+          tz.transition 2030, 11, :o1, 1919912400
+          tz.transition 2031, 3, :o2, 1930802400
+          tz.transition 2031, 11, :o1, 1951362000
+          tz.transition 2032, 3, :o2, 1962856800
+          tz.transition 2032, 11, :o1, 1983416400
+          tz.transition 2033, 3, :o2, 1994306400
+          tz.transition 2033, 11, :o1, 2014866000
+          tz.transition 2034, 3, :o2, 2025756000
+          tz.transition 2034, 11, :o1, 2046315600
+          tz.transition 2035, 3, :o2, 2057205600
+          tz.transition 2035, 11, :o1, 2077765200
+          tz.transition 2036, 3, :o2, 2088655200
+          tz.transition 2036, 11, :o1, 2109214800
+          tz.transition 2037, 3, :o2, 2120104800
+          tz.transition 2037, 11, :o1, 2140664400
+          tz.transition 2038, 3, :o2, 9861987, 4
+          tz.transition 2038, 11, :o1, 59177633, 24
+          tz.transition 2039, 3, :o2, 9863443, 4
+          tz.transition 2039, 11, :o1, 59186369, 24
+          tz.transition 2040, 3, :o2, 9864899, 4
+          tz.transition 2040, 11, :o1, 59195105, 24
+          tz.transition 2041, 3, :o2, 9866355, 4
+          tz.transition 2041, 11, :o1, 59203841, 24
+          tz.transition 2042, 3, :o2, 9867811, 4
+          tz.transition 2042, 11, :o1, 59212577, 24
+          tz.transition 2043, 3, :o2, 9869267, 4
+          tz.transition 2043, 11, :o1, 59221313, 24
+          tz.transition 2044, 3, :o2, 9870751, 4
+          tz.transition 2044, 11, :o1, 59230217, 24
+          tz.transition 2045, 3, :o2, 9872207, 4
+          tz.transition 2045, 11, :o1, 59238953, 24
+          tz.transition 2046, 3, :o2, 9873663, 4
+          tz.transition 2046, 11, :o1, 59247689, 24
+          tz.transition 2047, 3, :o2, 9875119, 4
+          tz.transition 2047, 11, :o1, 59256425, 24
+          tz.transition 2048, 3, :o2, 9876575, 4
+          tz.transition 2048, 11, :o1, 59265161, 24
+          tz.transition 2049, 3, :o2, 9878059, 4
+          tz.transition 2049, 11, :o1, 59274065, 24
+          tz.transition 2050, 3, :o2, 9879515, 4
+          tz.transition 2050, 11, :o1, 59282801, 24
         end
       end
     end

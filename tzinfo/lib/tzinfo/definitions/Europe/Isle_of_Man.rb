@@ -2,11 +2,11 @@ require 'tzinfo/timezone_definition'
 
 module TZInfo
   module Definitions
-    module America
-      module Coral_Harbour
+    module Europe
+      module Isle_of_Man
         include TimezoneDefinition
         
-        linked_timezone 'America/Coral_Harbour', 'America/Atikokan'
+        linked_timezone 'Europe/Isle_of_Man', 'Europe/London'
       end
     end
   end

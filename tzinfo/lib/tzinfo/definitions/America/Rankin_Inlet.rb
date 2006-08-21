@@ -7,7 +7,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'America/Rankin_Inlet' do |tz|
-          tz.offset :o0, -22120, 0, :LMT
+          tz.offset :o0, -22100, 0, :LMT
           tz.offset :o1, -21600, 0, :CST
           tz.offset :o2, -21600, 3600, :CDT
           tz.offset :o3, -21600, 3600, :CWT
@@ -15,7 +15,7 @@ module TZInfo
           tz.offset :o5, -21600, 7200, :CDDT
           tz.offset :o6, -18000, 0, :EST
           
-          tz.transition 1884, 1, :o1, 5203821793, 2160
+          tz.transition 1884, 1, :o1, 2081528717, 864
           tz.transition 1918, 4, :o2, 14530187, 6
           tz.transition 1918, 10, :o1, 58125451, 24
           tz.transition 1919, 5, :o2, 14532623, 6

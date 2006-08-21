@@ -48,7 +48,7 @@ module TZInfo
         c.timezone 'America/Argentina/Buenos_Aires', -173, 5, -1169, 20, 'Buenos Aires (BA, CF)'
         c.timezone 'America/Argentina/Cordoba', -157, 5, -3851, 60, 'most locations (CB, CC, CN, ER, FM, LP, MN, NQ, RN, SA, SE, SF, SL)'
         c.timezone 'America/Argentina/Jujuy', -1451, 60, -653, 10, 'Jujuy (JY)'
-        c.timezone 'America/Argentina/Tucuman', -157, 5, -3851, 60, 'Tucuman (TM)'
+        c.timezone 'America/Argentina/Tucuman', -1609, 60, -3913, 60, 'Tucuman (TM)'
         c.timezone 'America/Argentina/Catamarca', -427, 15, -3947, 60, 'Catamarca (CT), Chubut (CH)'
         c.timezone 'America/Argentina/La_Rioja', -883, 30, -1337, 20, 'La Rioja (LR)'
         c.timezone 'America/Argentina/San_Juan', -473, 15, -4111, 60, 'San Juan (SJ)'
@@ -154,27 +154,28 @@ module TZInfo
         c.timezone 'America/Belize', 35, 2, -441, 5
       end
       country 'CA', 'Canada' do |c|
-        c.timezone 'America/St_Johns', 1427, 30, -3163, 60, 'Newfoundland Island'
-        c.timezone 'America/Halifax', 893, 20, -318, 5, 'Atlantic Time - Nova Scotia (most places), W Labrador, E Quebec & PEI'
+        c.timezone 'America/St_Johns', 1427, 30, -3163, 60, 'Newfoundland Time, including SE Labrador'
+        c.timezone 'America/Halifax', 893, 20, -318, 5, 'Atlantic Time - Nova Scotia (most places), PEI'
         c.timezone 'America/Glace_Bay', 231, 5, -1199, 20, 'Atlantic Time - Nova Scotia - places that did not observe DST 1966-1971'
         c.timezone 'America/Moncton', 461, 10, -3887, 60, 'Atlantic Time - New Brunswick'
-        c.timezone 'America/Goose_Bay', 160, 3, -725, 12, 'Atlantic Time - E Labrador'
+        c.timezone 'America/Goose_Bay', 160, 3, -725, 12, 'Atlantic Time - Labrador - most locations'
+        c.timezone 'America/Blanc-Sablon', 617, 12, -3427, 60, 'Atlantic Standard Time - Quebec - Lower North Shore'
         c.timezone 'America/Montreal', 2731, 60, -2207, 30, 'Eastern Time - Quebec - most locations'
         c.timezone 'America/Toronto', 873, 20, -4763, 60, 'Eastern Time - Ontario - most locations'
         c.timezone 'America/Nipigon', 2941, 60, -1324, 15, 'Eastern Time - Ontario & Quebec - places that did not observe DST 1967-1973'
         c.timezone 'America/Thunder_Bay', 2903, 60, -357, 4, 'Eastern Time - Thunder Bay, Ontario'
         c.timezone 'America/Pangnirtung', 992, 15, -986, 15, 'Eastern Time - Pangnirtung, Nunavut'
         c.timezone 'America/Iqaluit', 956, 15, -1027, 15, 'Eastern Time - east Nunavut'
-        c.timezone 'America/Coral_Harbour', 962, 15, -499, 6, 'Eastern Standard Time - Southampton Island'
-        c.timezone 'America/Rankin_Inlet', 251, 4, -553, 6, 'Central Time - central Nunavut'
+        c.timezone 'America/Atikokan', 175531, 3600, -54973, 600, 'Eastern Standard Time - Atikokan, Ontario and Southampton I, Nunavut'
+        c.timezone 'America/Rankin_Inlet', 3769, 60, -331499, 3600, 'Central Time - central Nunavut'
         c.timezone 'America/Winnipeg', 2993, 60, -1943, 20, 'Central Time - Manitoba & west Ontario'
-        c.timezone 'America/Rainy_River', 2923, 60, -5669, 60, 'Central Time - Rainy River & Fort Frances, Ontario'
+        c.timezone 'America/Rainy_River', 2923, 60, -2837, 30, 'Central Time - Rainy River & Fort Frances, Ontario'
         c.timezone 'America/Cambridge_Bay', 1381, 20, -1261, 12, 'Central Time - west Nunavut'
         c.timezone 'America/Regina', 252, 5, -2093, 20, 'Central Standard Time - Saskatchewan - most locations'
         c.timezone 'America/Swift_Current', 3017, 60, -647, 6, 'Central Standard Time - Saskatchewan - midwest'
         c.timezone 'America/Edmonton', 1071, 20, -1702, 15, 'Mountain Time - Alberta, east British Columbia & west Saskatchewan'
         c.timezone 'America/Yellowknife', 1249, 20, -2287, 20, 'Mountain Time - central Northwest Territories'
-        c.timezone 'America/Inuvik', 821, 12, -227, 2, 'Mountain Time - west Northwest Territories'
+        c.timezone 'America/Inuvik', 246059, 3600, -8023, 60, 'Mountain Time - west Northwest Territories'
         c.timezone 'America/Dawson_Creek', 1793, 30, -3607, 30, 'Mountain Standard Time - Dawson Creek & Fort Saint John, British Columbia'
         c.timezone 'America/Vancouver', 739, 15, -7387, 60, 'Pacific Time - west British Columbia'
         c.timezone 'America/Whitehorse', 3643, 60, -2701, 20, 'Pacific Time - south Yukon'
@@ -211,10 +212,10 @@ module TZInfo
       end
       country 'CN', 'China' do |c|
         c.timezone 'Asia/Shanghai', 937, 30, 1822, 15, 'east China - Beijing, Guangdong, Shanghai, etc.'
-        c.timezone 'Asia/Harbin', 183, 4, 7601, 60, 'Heilongjiang'
-        c.timezone 'Asia/Chongqing', 887, 30, 1279, 12, 'central China - Gansu, Guizhou, Sichuan, Yunnan, etc.'
-        c.timezone 'Asia/Urumqi', 219, 5, 1051, 12, 'Tibet & most of Xinjiang Uyghur'
-        c.timezone 'Asia/Kashgar', 2369, 60, 4559, 60, 'southwest Xinjiang Uyghur'
+        c.timezone 'Asia/Harbin', 183, 4, 7601, 60, 'Heilongjiang (except Mohe), Jilin'
+        c.timezone 'Asia/Chongqing', 887, 30, 1279, 12, 'central China - Sichuan, Yunnan, Guangxi, Shaanxi, Guizhou, etc.'
+        c.timezone 'Asia/Urumqi', 219, 5, 1051, 12, 'most of Tibet & Xinjiang'
+        c.timezone 'Asia/Kashgar', 2369, 60, 4559, 60, 'west Tibet & Xinjiang'
       end
       country 'CO', 'Colombia' do |c|
         c.timezone 'America/Bogota', 23, 5, -889, 12
@@ -317,6 +318,9 @@ module TZInfo
       country 'GF', 'French Guiana' do |c|
         c.timezone 'America/Cayenne', 74, 15, -157, 3
       end
+      country 'GG', 'Guernsey' do |c|
+        c.timezone 'Europe/Guernsey', 989, 20, -38, 15
+      end
       country 'GH', 'Ghana' do |c|
         c.timezone 'Africa/Accra', 111, 20, -13, 60
       end
@@ -326,7 +330,7 @@ module TZInfo
       country 'GL', 'Greenland' do |c|
         c.timezone 'America/Godthab', 3851, 60, -776, 15, 'most locations'
         c.timezone 'America/Danmarkshavn', 2303, 30, -56, 3, 'east coast, north of Scoresbysund'
-        c.timezone 'America/Scoresbysund', 141, 2, -89, 4, 'Scoresbysund / Ittoqqortoormiit'
+        c.timezone 'America/Scoresbysund', 4229, 60, -659, 30, 'Scoresbysund / Ittoqqortoormiit'
         c.timezone 'America/Thule', 2297, 30, -4127, 60, 'Thule / Pituffik'
       end
       country 'GM', 'Gambia' do |c|
@@ -387,6 +391,9 @@ module TZInfo
       country 'IL', 'Israel' do |c|
         c.timezone 'Asia/Jerusalem', 953, 30, 1057, 30
       end
+      country 'IM', 'Isle of Man' do |c|
+        c.timezone 'Europe/Isle_of_Man', 1083, 20, -67, 15
+      end
       country 'IN', 'India' do |c|
         c.timezone 'Asia/Calcutta', 338, 15, 2651, 30
       end
@@ -404,6 +411,9 @@ module TZInfo
       end
       country 'IT', 'Italy' do |c|
         c.timezone 'Europe/Rome', 419, 10, 749, 60
+      end
+      country 'JE', 'Jersey' do |c|
+        c.timezone 'Europe/Jersey', 246, 5, -157, 60
       end
       country 'JM', 'Jamaica' do |c|
         c.timezone 'America/Jamaica', 18, 1, -384, 5
@@ -658,7 +668,8 @@ module TZInfo
       country 'RU', 'Russia' do |c|
         c.timezone 'Europe/Kaliningrad', 3283, 60, 41, 2, 'Moscow-01 - Kaliningrad'
         c.timezone 'Europe/Moscow', 223, 4, 451, 12, 'Moscow+00 - west Russia'
-        c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'Moscow+01 - Caspian Sea'
+        c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'Moscow+00 - Caspian Sea'
+        c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'Moscow+01 - Samara, Udmurtia'
         c.timezone 'Asia/Yekaterinburg', 1137, 20, 303, 5, 'Moscow+02 - Urals'
         c.timezone 'Asia/Omsk', 55, 1, 367, 5, 'Moscow+03 - west Siberia'
         c.timezone 'Asia/Novosibirsk', 1651, 30, 995, 12, 'Moscow+03 - Novosibirsk'
