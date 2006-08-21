@@ -1,4 +1,4 @@
-* Regenerate Timezone classes if necessary (rake build_tz_classes)
+* Regenerate Timezone modules if necessary (rake build_tz_modules)
 * Update CHANGES
 * Update version number in Rakefile
 * Regenerate rdoc (rake rdoc)
