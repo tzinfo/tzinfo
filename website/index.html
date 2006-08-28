@@ -14,7 +14,7 @@
     <p>
       TZInfo is a Ruby library that uses the standard <a href="http://www.twinsun.com/tz/tz-link.htm">tz (Olson) database</a> to provide
       daylight savings aware transformations between times in different time zones.
-      The tz database is compiled into Ruby classes which are packaged in the release.
+      The tz database is compiled into Ruby modules which are packaged in the release.
       No external zoneinfo files are required at runtime.
     </p>
     <h2>Installation and Usage</h2>
@@ -30,23 +30,53 @@
       There are two TZInfo <a href="http://rubyforge.org/mail/?group_id=894">mailing lists</a>:
     </p>
     <ul>
-      <li><a href="http://rubyforge.org/pipermail/tzinfo-announce/">announce</a> - Announcements of new versions, etc.</li>
+      <li><a href="http://rubyforge.org/mailman/listinfo/tzinfo-announce">announce</a> - Announcements of new versions, etc.</li>
       <li><a href="http://rubyforge.org/mailman/listinfo/tzinfo-users">users</a> - General discussion about TZInfo. Please post any questions you have to this list.</li>
     </ul>
     <h2>RubyForge</h2>
     <p>
       The RubyForge project page for TZInfo can be found at <a href="http://rubyforge.org/projects/tzinfo/">http://rubyforge.org/projects/tzinfo/</a>.
     </p>
-    <h2>References</h2>
     <p>
-      <a href="http://scott.elitists.net/">Scott Barron</a> of <a href="http://lunchboxsoftware.com/">Lunchbox Software</a>
-      has written an article on <a href="http://lunchroom.lunchboxsoftware.com/pages/tzinfo_rails">using TZInfo with Ruby on Rails</a>.
+      Please use the <a href="http://rubyforge.org/tracker/?group_id=894">Tracker</a> to submit any bugs or feature
+      requests. You can download releases from the <a href="http://rubyforge.org/frs/?group_id=894">File list</a>.
+      The source code is available through <a href="http://rubyforge.org/scm/?group_id=894">SVN</a>.
     </p>
+    <h2>Ruby on Rails</h2>
+    <h3>Articles</h3>
+    <ul>
+      <li>
+        <p>
+          <a href="http://scott.elitists.net/">Scott Barron</a>
+          has written an article on <a href="http://lunchroom.lunchboxsoftware.com/pages/tzinfo_rails">using TZInfo with Ruby on Rails</a>.
+        </p>
+        <p>
+          Note that the article was based on version 0.0.1 of TZInfo. There is now an easier way to display a drop-down select list of
+          time zones than is described. With TZInfo v0.0.3 and later you can use
+        </p>
+        <pre>&lt;%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %&gt;</pre>
+        <p>
+          instead of having to use the placeholder TzForSelect class.
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="http://marklunds.com/">Peter Marklund</a> has written a
+          <a href="http://marklunds.com/articles/one/311">Timezone Aware Datetime Picker</a> recipe that uses TZInfo.
+        </p>
+      </li>
+    </ul>
+    <h3>Plugin</h3>
     <p>
-      Note that the article was based on version 0.0.1 of TZInfo. There is now an easier way to display a drop-down select list of
-      time zones than is described. With TZInfo v0.0.3 and later you can use</p>
-      <pre>&lt;%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %&gt;</pre>
-      <p>instead of having to use the placeholder TzForSelect class.
+      <a href="http://jamis.jamisbuck.org/">Jamis Buck</a> has released a plugin that replaces the Rails
+      TimeZone class with one that uses TZInfo to do the conversions. To install it run:
+    </p>
+    <pre>ruby script/plugin install tzinfo_timezone</pre>
+    <p>
+      The plugin can be found in the Ruby on Rails SVN repository at
+      <a href="http://dev.rubyonrails.org/svn/rails/plugins/tzinfo_timezone/">http://dev.rubyonrails.org/svn/rails/plugins/tzinfo_timezone/</a>.
+      See the <a href="http://dev.rubyonrails.org/svn/rails/plugins/tzinfo_timezone/README">README file</a> for
+      more information.
     </p>
     <h2>Alternatives</h2>
     <h3>Ruby/TZFile</h3>
@@ -64,7 +94,7 @@
       <small>
         <a href="http://phil.ross.org.uk/">Phil Ross</a>
         <br />
-        3rd April 2006
+        28th August 2006
       </small>
     </p>
   </body>
