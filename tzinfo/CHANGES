@@ -1,3 +1,8 @@
+== Version ?.?.? (tzdata v?????) - ???????????
+
+* Updated to tzdata version 2006k
+  (http://article.gmane.org/gmane.comp.time.tz/1180).
+
 == Version 0.3.1 (tzdata v2006j) - 21-Aug-2006
 
 * Remove colon from case statements to avoid warning in Ruby 1.8.5. #5198.
