@@ -123,11 +123,11 @@ module TZInfo
           tz.transition 2005, 4, :o2, 1114725600
           tz.transition 2005, 9, :o1, 1128027600
           tz.transition 2006, 4, :o2, 1146175200
-          tz.transition 2006, 9, :o1, 1159135200
+          tz.transition 2006, 9, :o1, 1158872400
           tz.transition 2007, 4, :o2, 1177624800
-          tz.transition 2007, 9, :o1, 1189720800
+          tz.transition 2007, 9, :o1, 1190926800
           tz.transition 2008, 4, :o2, 1209074400
-          tz.transition 2008, 9, :o1, 1220392800
+          tz.transition 2008, 9, :o1, 1222376400
           tz.transition 2009, 4, :o2, 1240524000
           tz.transition 2009, 9, :o1, 1253826000
           tz.transition 2010, 4, :o2, 1272578400

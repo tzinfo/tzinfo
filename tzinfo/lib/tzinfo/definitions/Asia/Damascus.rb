@@ -99,7 +99,7 @@ module TZInfo
           tz.transition 2005, 3, :o2, 1112306400
           tz.transition 2005, 9, :o1, 1128114000
           tz.transition 2006, 3, :o2, 1143842400
-          tz.transition 2006, 9, :o1, 1159650000
+          tz.transition 2006, 9, :o1, 1158872400
           tz.transition 2007, 3, :o2, 1175378400
           tz.transition 2007, 9, :o1, 1191186000
           tz.transition 2008, 3, :o2, 1207000800
