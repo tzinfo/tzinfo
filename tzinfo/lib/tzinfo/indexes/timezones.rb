@@ -426,6 +426,7 @@ module TZInfo
       linked_timezone 'Europe/Nicosia'
       timezone 'Europe/Oslo'
       timezone 'Europe/Paris'
+      linked_timezone 'Europe/Podgorica'
       timezone 'Europe/Prague'
       timezone 'Europe/Riga'
       timezone 'Europe/Rome'

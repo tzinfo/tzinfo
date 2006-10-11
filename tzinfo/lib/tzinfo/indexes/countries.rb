@@ -223,9 +223,6 @@ module TZInfo
       country 'CR', 'Costa Rica' do |c|
         c.timezone 'America/Costa_Rica', 149, 15, -1009, 12
       end
-      country 'CS', 'Serbia and Montenegro' do |c|
-        c.timezone 'Europe/Belgrade', 269, 6, 41, 2
-      end
       country 'CU', 'Cuba' do |c|
         c.timezone 'America/Havana', 347, 15, -2471, 30
       end
@@ -505,6 +502,9 @@ module TZInfo
       country 'MD', 'Moldova' do |c|
         c.timezone 'Europe/Chisinau', 47, 1, 173, 6
       end
+      country 'ME', 'Montenegro' do |c|
+        c.timezone 'Europe/Podgorica', 2567, 60, 292, 15
+      end
       country 'MG', 'Madagascar' do |c|
         c.timezone 'Indian/Antananarivo', -227, 12, 2851, 60
       end
@@ -664,6 +664,9 @@ module TZInfo
       end
       country 'RO', 'Romania' do |c|
         c.timezone 'Europe/Bucharest', 1333, 30, 261, 10
+      end
+      country 'RS', 'Serbia' do |c|
+        c.timezone 'Europe/Belgrade', 269, 6, 41, 2
       end
       country 'RU', 'Russia' do |c|
         c.timezone 'Europe/Kaliningrad', 3283, 60, 41, 2, 'Moscow-01 - Kaliningrad'
