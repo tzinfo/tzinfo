@@ -20,7 +20,7 @@ module TZInfo
           tz.transition 1965, 10, :o1, 7317146, 3
           tz.transition 1966, 3, :o2, 19513485, 8
           tz.transition 1966, 10, :o1, 7318241, 3
-          tz.transition 1967, 4, :o2, 19516653, 8
+          tz.transition 1967, 4, :o2, 19516661, 8
           tz.transition 1967, 10, :o1, 7319294, 3
           tz.transition 1968, 4, :o2, 19519629, 8
           tz.transition 1968, 10, :o1, 7320407, 3
@@ -28,12 +28,6 @@ module TZInfo
           tz.transition 1969, 10, :o3, 7321499, 3
           tz.transition 1974, 1, :o4, 128142000
           tz.transition 1974, 5, :o3, 136605600
-          tz.transition 1974, 10, :o4, 150260400
-          tz.transition 1975, 4, :o3, 165981600
-          tz.transition 1975, 10, :o4, 181710000
-          tz.transition 1976, 4, :o3, 197431200
-          tz.transition 1976, 10, :o4, 213159600
-          tz.transition 1977, 4, :o3, 228880800
           tz.transition 1982, 5, :o5, 389070000
           tz.transition 1982, 10, :o6, 403070400
           tz.transition 1983, 3, :o5, 416372400
@@ -44,14 +38,14 @@ module TZInfo
           tz.transition 1985, 10, :o6, 498024000
           tz.transition 1986, 3, :o5, 510721200
           tz.transition 1986, 10, :o6, 529473600
-          tz.transition 1987, 3, :o5, 542775600
+          tz.transition 1987, 4, :o5, 545194800
           tz.transition 1987, 10, :o6, 560923200
           tz.transition 1988, 3, :o5, 574225200
-          tz.transition 1988, 10, :o6, 592372800
+          tz.transition 1988, 10, :o6, 591768000
           tz.transition 1989, 3, :o5, 605674800
           tz.transition 1989, 10, :o6, 624427200
-          tz.transition 1990, 3, :o5, 637124400
-          tz.transition 1990, 10, :o6, 655876800
+          tz.transition 1990, 3, :o5, 637729200
+          tz.transition 1990, 9, :o6, 653457600
           tz.transition 1991, 3, :o5, 668574000
           tz.transition 1991, 10, :o6, 687326400
           tz.transition 1992, 3, :o5, 700628400
@@ -64,7 +58,7 @@ module TZInfo
           tz.transition 1995, 10, :o6, 813729600
           tz.transition 1996, 3, :o5, 826426800
           tz.transition 1996, 10, :o6, 845179200
-          tz.transition 1997, 3, :o5, 857876400
+          tz.transition 1997, 3, :o5, 859690800
           tz.transition 1997, 10, :o6, 876628800
           tz.transition 1998, 3, :o5, 889930800
           tz.transition 1998, 9, :o6, 906868800

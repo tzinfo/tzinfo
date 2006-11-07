@@ -105,6 +105,8 @@ module TZInfo
           tz.transition 2003, 4, :o3, 1049605200
           tz.transition 2003, 10, :o2, 1067144400
           tz.transition 2004, 4, :o3, 1081054800
+          tz.transition 2006, 10, :o2, 1162098000
+          tz.transition 2007, 4, :o3, 1175403600
           tz.transition 2007, 10, :o2, 1193547600
           tz.transition 2008, 4, :o3, 1207458000
           tz.transition 2008, 10, :o2, 1224997200
