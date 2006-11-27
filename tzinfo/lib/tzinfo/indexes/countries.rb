@@ -410,7 +410,7 @@ module TZInfo
         c.timezone 'Europe/Rome', 419, 10, 749, 60
       end
       country 'JE', 'Jersey' do |c|
-        c.timezone 'Europe/Jersey', 246, 5, -157, 60
+        c.timezone 'Europe/Jersey', 246, 5, -127, 60
       end
       country 'JM', 'Jamaica' do |c|
         c.timezone 'America/Jamaica', 18, 1, -384, 5
@@ -503,7 +503,7 @@ module TZInfo
         c.timezone 'Europe/Chisinau', 47, 1, 173, 6
       end
       country 'ME', 'Montenegro' do |c|
-        c.timezone 'Europe/Podgorica', 2567, 60, 292, 15
+        c.timezone 'Europe/Podgorica', 1273, 30, 289, 15
       end
       country 'MG', 'Madagascar' do |c|
         c.timezone 'Indian/Antananarivo', -227, 12, 2851, 60
