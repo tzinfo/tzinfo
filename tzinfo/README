@@ -14,10 +14,9 @@ Ruby modules (which are packaged with this release).
 To convert a time in UTC to a local time in the America/New_York timezone, you
 can do the following:
 
-  require_gem 'tzinfo'
-  include TZInfo
+  require 'tzinfo'
   
-  tz = Timezone.get('America/New_York')
+  tz = TZInfo::Timezone.get('America/New_York')
   local = tz.utc_to_local(Time.utc(2005,8,29,15,35,0))
 
 Note that the Time returned will look like it is UTC (Time.zone will return 
@@ -44,10 +43,10 @@ identifier for the period (in this case EDT).
   id = period.zone_identifier
   
 In all the above examples, instances of Time can be used instead of DateTime.
-Timezone.utc_to_local and Timezone.local_to_utc both return the type they are 
+Timezone#utc_to_local and Timezone#local_to_utc both return the type they are 
 passed.
 
-You can get the current local time in a Timezone with the Timezone.now method:
+You can get the current local time in a Timezone with the Timezone#now method:
 
   now = tz.now
 
@@ -57,7 +56,7 @@ or Integers (Time#to_i). The return type will be the same as the type passed in.
 You can also access Timezones by Country (ISO 3166 country code). The following 
 gets all the Timezone identifiers for the US:
 
-  us = Country.get('US')
+  us = TZInfo::Country.get('US')
   timezones = us.zone_identifiers
   
 The zone_info method of Country provides an additional description and
