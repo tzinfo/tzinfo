@@ -73,7 +73,8 @@ module TZInfo
         c.timezone 'Australia/Lindeman', -304, 15, 149, 1, 'Queensland - Holiday Islands'
         c.timezone 'Australia/Adelaide', -419, 12, 1663, 12, 'South Australia'
         c.timezone 'Australia/Darwin', -187, 15, 785, 6, 'Northern Territory'
-        c.timezone 'Australia/Perth', -639, 20, 2317, 20, 'Western Australia'
+        c.timezone 'Australia/Perth', -639, 20, 2317, 20, 'Western Australia - most locations'
+        c.timezone 'Australia/Eucla', -1903, 60, 1933, 15, 'Western Australia - Eucla area'
       end
       country 'AW', 'Aruba' do |c|
         c.timezone 'America/Aruba', 25, 2, -2069, 30
@@ -205,7 +206,7 @@ module TZInfo
       end
       country 'CL', 'Chile' do |c|
         c.timezone 'America/Santiago', -669, 20, -212, 3, 'most locations'
-        c.timezone 'Pacific/Easter', -163, 6, -2189, 20, 'Easter Island & Sala y Gomez'
+        c.timezone 'Pacific/Easter', -543, 20, -3283, 30, 'Easter Island & Sala y Gomez'
       end
       country 'CM', 'Cameroon' do |c|
         c.timezone 'Africa/Douala', 81, 20, 97, 10
@@ -270,7 +271,7 @@ module TZInfo
         c.timezone 'Africa/El_Aaiun', 543, 20, -66, 5
       end
       country 'ER', 'Eritrea' do |c|
-        c.timezone 'Africa/Asmera', 46, 3, 2333, 60
+        c.timezone 'Africa/Asmara', 46, 3, 2333, 60
       end
       country 'ES', 'Spain' do |c|
         c.timezone 'Europe/Madrid', 202, 5, -221, 60, 'mainland'
@@ -294,8 +295,8 @@ module TZInfo
         c.timezone 'Pacific/Ponape', 209, 30, 9493, 60, 'Ponape (Pohnpei)'
         c.timezone 'Pacific/Kosrae', 319, 60, 9779, 60, 'Kosrae'
       end
-      country 'FO', 'Faeroe Islands' do |c|
-        c.timezone 'Atlantic/Faeroe', 3721, 60, -203, 30
+      country 'FO', 'Faroe Islands' do |c|
+        c.timezone 'Atlantic/Faroe', 3721, 60, -203, 30
       end
       country 'FR', 'France' do |c|
         c.timezone 'Europe/Paris', 733, 15, 7, 3
