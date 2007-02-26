@@ -8,14 +8,14 @@ module TZInfo
         
         timezone 'Pacific/Easter' do |tz|
           tz.offset :o0, -26264, 0, :LMT
-          tz.offset :o1, -26264, 0, :EMT
+          tz.offset :o1, -26248, 0, :EMT
           tz.offset :o2, -25200, 3600, :EASST
           tz.offset :o3, -25200, 0, :EAST
           tz.offset :o4, -21600, 0, :EAST
           tz.offset :o5, -21600, 3600, :EASST
           
           tz.transition 1890, 1, :o1, 26042783083, 10800
-          tz.transition 1932, 9, :o2, 26211079483, 10800
+          tz.transition 1932, 9, :o2, 26211079481, 10800
           tz.transition 1942, 6, :o3, 7291535, 3
           tz.transition 1942, 8, :o2, 58333745, 24
           tz.transition 1946, 9, :o3, 19456517, 8

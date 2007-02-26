@@ -131,6 +131,7 @@ module TZInfo
       timezone 'America/Indiana/Petersburg'
       timezone 'America/Indiana/Vevay'
       timezone 'America/Indiana/Vincennes'
+      timezone 'America/Indiana/Winamac'
       linked_timezone 'America/Indianapolis'
       timezone 'America/Inuvik'
       timezone 'America/Iqaluit'
