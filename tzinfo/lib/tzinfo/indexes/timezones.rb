@@ -180,6 +180,7 @@ module TZInfo
       timezone 'America/Rankin_Inlet'
       timezone 'America/Recife'
       timezone 'America/Regina'
+      timezone 'America/Resolute'
       timezone 'America/Rio_Branco'
       linked_timezone 'America/Rosario'
       timezone 'America/Santiago'

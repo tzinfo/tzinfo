@@ -7,56 +7,52 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'America/Pangnirtung' do |tz|
-          tz.offset :o0, -15776, 0, :LMT
+          tz.offset :o0, 0, 0, :zzz
           tz.offset :o1, -14400, 0, :AST
-          tz.offset :o2, -14400, 3600, :ADT
-          tz.offset :o3, -14400, 3600, :AWT
-          tz.offset :o4, -14400, 3600, :APT
-          tz.offset :o5, -14400, 7200, :ADDT
+          tz.offset :o2, -14400, 3600, :AWT
+          tz.offset :o3, -14400, 3600, :APT
+          tz.offset :o4, -14400, 7200, :ADDT
+          tz.offset :o5, -14400, 3600, :ADT
           tz.offset :o6, -18000, 3600, :EDT
           tz.offset :o7, -18000, 0, :EST
           tz.offset :o8, -21600, 0, :CST
           tz.offset :o9, -21600, 3600, :CDT
           
-          tz.transition 1884, 1, :o1, 6504777043, 2700
-          tz.transition 1918, 4, :o2, 9686791, 4
-          tz.transition 1918, 10, :o1, 58125449, 24
-          tz.transition 1919, 5, :o2, 9688415, 4
-          tz.transition 1919, 11, :o1, 19378109, 8
-          tz.transition 1942, 2, :o3, 9721599, 4
-          tz.transition 1945, 8, :o4, 58360379, 24
+          tz.transition 1921, 1, :o1, 4845381, 2
+          tz.transition 1942, 2, :o2, 9721599, 4
+          tz.transition 1945, 8, :o3, 58360379, 24
           tz.transition 1945, 9, :o1, 58361489, 24
-          tz.transition 1965, 4, :o5, 7316627, 3
+          tz.transition 1965, 4, :o4, 7316627, 3
           tz.transition 1965, 10, :o1, 7317194, 3
-          tz.transition 1980, 4, :o2, 325663200
+          tz.transition 1980, 4, :o5, 325663200
           tz.transition 1980, 10, :o1, 341384400
-          tz.transition 1981, 4, :o2, 357112800
+          tz.transition 1981, 4, :o5, 357112800
           tz.transition 1981, 10, :o1, 372834000
-          tz.transition 1982, 4, :o2, 388562400
+          tz.transition 1982, 4, :o5, 388562400
           tz.transition 1982, 10, :o1, 404888400
-          tz.transition 1983, 4, :o2, 420012000
+          tz.transition 1983, 4, :o5, 420012000
           tz.transition 1983, 10, :o1, 436338000
-          tz.transition 1984, 4, :o2, 452066400
+          tz.transition 1984, 4, :o5, 452066400
           tz.transition 1984, 10, :o1, 467787600
-          tz.transition 1985, 4, :o2, 483516000
+          tz.transition 1985, 4, :o5, 483516000
           tz.transition 1985, 10, :o1, 499237200
-          tz.transition 1986, 4, :o2, 514965600
+          tz.transition 1986, 4, :o5, 514965600
           tz.transition 1986, 10, :o1, 530686800
-          tz.transition 1987, 4, :o2, 544600800
+          tz.transition 1987, 4, :o5, 544600800
           tz.transition 1987, 10, :o1, 562136400
-          tz.transition 1988, 4, :o2, 576050400
+          tz.transition 1988, 4, :o5, 576050400
           tz.transition 1988, 10, :o1, 594190800
-          tz.transition 1989, 4, :o2, 607500000
+          tz.transition 1989, 4, :o5, 607500000
           tz.transition 1989, 10, :o1, 625640400
-          tz.transition 1990, 4, :o2, 638949600
+          tz.transition 1990, 4, :o5, 638949600
           tz.transition 1990, 10, :o1, 657090000
-          tz.transition 1991, 4, :o2, 671004000
+          tz.transition 1991, 4, :o5, 671004000
           tz.transition 1991, 10, :o1, 688539600
-          tz.transition 1992, 4, :o2, 702453600
+          tz.transition 1992, 4, :o5, 702453600
           tz.transition 1992, 10, :o1, 719989200
-          tz.transition 1993, 4, :o2, 733903200
+          tz.transition 1993, 4, :o5, 733903200
           tz.transition 1993, 10, :o1, 752043600
-          tz.transition 1994, 4, :o2, 765352800
+          tz.transition 1994, 4, :o5, 765352800
           tz.transition 1994, 10, :o1, 783493200
           tz.transition 1995, 4, :o6, 796802400
           tz.transition 1995, 10, :o7, 814946400

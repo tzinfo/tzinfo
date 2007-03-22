@@ -18,7 +18,7 @@ module TZInfo
           tz.transition 1908, 4, :o1, 652876793, 270
           tz.transition 1932, 10, :o2, 655293293, 270
           tz.transition 1942, 1, :o3, 38886211, 16
-          tz.transition 1945, 7, :o2, 19453345, 8
+          tz.transition 1945, 9, :o2, 19453769, 8
           tz.transition 1948, 4, :o4, 38922755, 16
           tz.transition 1950, 4, :o2, 14600413, 6
           tz.transition 1963, 12, :o5, 39014323, 16
