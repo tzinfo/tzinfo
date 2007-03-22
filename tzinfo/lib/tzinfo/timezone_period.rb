@@ -20,8 +20,6 @@
 # THE SOFTWARE.
 #++
 
-# TODO: Turn this into the real TimezonePeriod.
-
 require 'tzinfo/offset_rationals'
 require 'tzinfo/time_or_datetime'
 
