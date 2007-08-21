@@ -41,7 +41,7 @@ module TZInfo
         c.timezone 'Antarctica/Davis', -823, 12, 2339, 30, 'Davis Station, Vestfold Hills'
         c.timezone 'Antarctica/Casey', -3977, 60, 6631, 60, 'Casey Station, Bailey Peninsula'
         c.timezone 'Antarctica/Vostok', -392, 5, 1069, 10, 'Vostok Station, S Magnetic Pole'
-        c.timezone 'Antarctica/DumontDUrville', -200, 3, 8401, 60, 'Dumont-d\'Urville Base, Terre Adelie'
+        c.timezone 'Antarctica/DumontDUrville', -200, 3, 8401, 60, 'Dumont-d\'Urville Station, Terre Adelie'
         c.timezone 'Antarctica/Syowa', -124211, 1800, 3959, 100, 'Syowa Station, E Ongul I'
       end
       country 'AR', 'Argentina' do |c|
@@ -77,7 +77,7 @@ module TZInfo
         c.timezone 'Australia/Eucla', -1903, 60, 1933, 15, 'Western Australia - Eucla area'
       end
       country 'AW', 'Aruba' do |c|
-        c.timezone 'America/Aruba', 25, 2, -2069, 30
+        c.timezone 'America/Aruba', 25, 2, -2099, 30
       end
       country 'AX', 'Aaland Islands' do |c|
         c.timezone 'Europe/Mariehamn', 601, 10, 399, 20
@@ -172,10 +172,10 @@ module TZInfo
         c.timezone 'America/Rankin_Inlet', 3769, 60, -331499, 3600, 'Central Time - central Nunavut'
         c.timezone 'America/Winnipeg', 2993, 60, -1943, 20, 'Central Time - Manitoba & west Ontario'
         c.timezone 'America/Rainy_River', 2923, 60, -2837, 30, 'Central Time - Rainy River & Fort Frances, Ontario'
-        c.timezone 'America/Cambridge_Bay', 1381, 20, -1261, 12, 'Central Time - west Nunavut'
         c.timezone 'America/Regina', 252, 5, -2093, 20, 'Central Standard Time - Saskatchewan - most locations'
         c.timezone 'America/Swift_Current', 3017, 60, -647, 6, 'Central Standard Time - Saskatchewan - midwest'
         c.timezone 'America/Edmonton', 1071, 20, -1702, 15, 'Mountain Time - Alberta, east British Columbia & west Saskatchewan'
+        c.timezone 'America/Cambridge_Bay', 24881, 360, -37819, 360, 'Mountain Time - west Nunavut'
         c.timezone 'America/Yellowknife', 1249, 20, -2287, 20, 'Mountain Time - central Northwest Territories'
         c.timezone 'America/Inuvik', 246059, 3600, -8023, 60, 'Mountain Time - west Northwest Territories'
         c.timezone 'America/Dawson_Creek', 1793, 30, -3607, 30, 'Mountain Standard Time - Dawson Creek & Fort Saint John, British Columbia'
@@ -306,7 +306,7 @@ module TZInfo
         c.timezone 'Africa/Libreville', 23, 60, 189, 20
       end
       country 'GB', 'Britain (UK)' do |c|
-        c.timezone 'Europe/London', 2059, 40, -5, 16
+        c.timezone 'Europe/London', 6181, 120, -451, 3600
       end
       country 'GD', 'Grenada' do |c|
         c.timezone 'America/Grenada', 241, 20, -247, 4
@@ -799,14 +799,14 @@ module TZInfo
       country 'UA', 'Ukraine' do |c|
         c.timezone 'Europe/Kiev', 1513, 30, 1831, 60, 'most locations'
         c.timezone 'Europe/Uzhgorod', 2917, 60, 223, 10, 'Ruthenia'
-        c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozh\'ye, E Lugansk'
+        c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozh\'ye, E Lugansk / Zaporizhia, E Luhansk'
         c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'central Crimea'
       end
       country 'UG', 'Uganda' do |c|
         c.timezone 'Africa/Kampala', 19, 60, 389, 12
       end
       country 'UM', 'US minor outlying islands' do |c|
-        c.timezone 'Pacific/Johnston', 17, 1, -337, 2, 'Johnston Atoll'
+        c.timezone 'Pacific/Johnston', 67, 4, -10171, 60, 'Johnston Atoll'
         c.timezone 'Pacific/Midway', 1693, 60, -5321, 30, 'Midway Islands'
         c.timezone 'Pacific/Wake', 1157, 60, 9997, 60, 'Wake Island'
       end
@@ -816,12 +816,13 @@ module TZInfo
         c.timezone 'America/Kentucky/Louisville', 9181, 240, -154367, 1800, 'Eastern Time - Kentucky - Louisville area'
         c.timezone 'America/Kentucky/Monticello', 132587, 3600, -101819, 1200, 'Eastern Time - Kentucky - Wayne County'
         c.timezone 'America/Indiana/Indianapolis', 23861, 600, -310169, 3600, 'Eastern Time - Indiana - most locations'
+        c.timezone 'America/Indiana/Vincennes', 69619, 1800, -315103, 3600, 'Eastern Time - Indiana - Daviess, Dubois, Knox & Martin Counties'
         c.timezone 'America/Indiana/Knox', 9911, 240, -693, 8, 'Eastern Time - Indiana - Starke County'
         c.timezone 'America/Indiana/Winamac', 29557, 720, -311771, 3600, 'Eastern Time - Indiana - Pulaski County'
         c.timezone 'America/Indiana/Marengo', 17269, 450, -310841, 3600, 'Eastern Time - Indiana - Crawford County'
         c.timezone 'America/Indiana/Vevay', 34873, 900, -153121, 1800, 'Eastern Time - Indiana - Switzerland County'
         c.timezone 'America/Chicago', 837, 20, -1753, 20, 'Central Time'
-        c.timezone 'America/Indiana/Vincennes', 69619, 1800, -315103, 3600, 'Central Time - Indiana - Daviess, Dubois, Knox, Martin & Perry Counties'
+        c.timezone 'America/Indiana/Tell_City', 136631, 3600, -312341, 3600, 'Central Time - Indiana - Perry County'
         c.timezone 'America/Indiana/Petersburg', 138571, 3600, -314203, 3600, 'Central Time - Indiana - Pike County'
         c.timezone 'America/Menominee', 40597, 900, -105137, 1200, 'Central Time - Michigan - Dickinson, Gogebic, Iron & Menominee Counties'
         c.timezone 'America/North_Dakota/Center', 169619, 3600, -121559, 1200, 'Central Time - North Dakota - Oliver County'

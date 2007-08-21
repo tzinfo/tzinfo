@@ -129,6 +129,7 @@ module TZInfo
       timezone 'America/Indiana/Knox'
       timezone 'America/Indiana/Marengo'
       timezone 'America/Indiana/Petersburg'
+      timezone 'America/Indiana/Tell_City'
       timezone 'America/Indiana/Vevay'
       timezone 'America/Indiana/Vincennes'
       timezone 'America/Indiana/Winamac'
