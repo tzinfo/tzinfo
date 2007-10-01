@@ -1,3 +1,9 @@
+== Version 0.3.5 (tzdata v2007h) - 1-Oct-2007
+
+* Updated to tzdata version 2007h
+  (http://article.gmane.org/gmane.comp.time.tz/1878).
+
+
 == Version 0.3.4 (tzdata v2007g) - 21-Aug-2007
 
 * Updated to tzdata version 2007g
