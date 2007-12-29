@@ -112,6 +112,9 @@ module TZInfo
       country 'BJ', 'Benin' do |c|
         c.timezone 'Africa/Porto-Novo', 389, 60, 157, 60
       end
+      country 'BL', 'St Barthelemy' do |c|
+        c.timezone 'America/St_Barthelemy', 1073, 60, -1257, 20
+      end
       country 'BM', 'Bermuda' do |c|
         c.timezone 'Atlantic/Bermuda', 1937, 60, -1943, 30
       end
@@ -506,6 +509,9 @@ module TZInfo
       end
       country 'ME', 'Montenegro' do |c|
         c.timezone 'Europe/Podgorica', 1273, 30, 289, 15
+      end
+      country 'MF', 'St Martin (French part)' do |c|
+        c.timezone 'America/Marigot', 271, 15, -757, 12
       end
       country 'MG', 'Madagascar' do |c|
         c.timezone 'Indian/Antananarivo', -227, 12, 2851, 60
