@@ -1,7 +1,8 @@
-== Version ?.?.? (tzdata v?????) - ??????????
+== Version 0.3.6 (tzdata v2007k) - 1-Jan-2008
 
 * Updated to tzdata version 2007k
   (http://article.gmane.org/gmane.comp.time.tz/2029).
+* Removed deprecated RubyGems autorequire option.
 
 
 == Version 0.3.5 (tzdata v2007h) - 1-Oct-2007

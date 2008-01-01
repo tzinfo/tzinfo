@@ -16,7 +16,7 @@ require 'rake/rdoctask'
 require 'rake/gempackagetask'
 require 'fileutils'
 
-PKG_VERSION = "0.3.5"
+PKG_VERSION = "0.3.6"
 PKG_FILES = FileList[
   'CHANGES',
   'LICENSE',
@@ -44,7 +44,6 @@ SPEC = Gem::Specification.new do |s|
     item.include?(".svn")
   end
   s.require_path = "lib"
-  s.autorequire = "tzinfo"  
   s.has_rdoc = true
   s.extra_rdoc_files = RDOC_EXTRA_FILES
   s.rdoc_options = RDOC_OPTIONS
