@@ -721,8 +721,7 @@ module TZInfo
         c.timezone 'Europe/Ljubljana', 921, 20, 871, 60
       end
       country 'SJ', 'Svalbard & Jan Mayen' do |c|
-        c.timezone 'Arctic/Longyearbyen', 78, 1, 16, 1, 'Svalbard'
-        c.timezone 'Atlantic/Jan_Mayen', 4259, 60, -97, 12, 'Jan Mayen'
+        c.timezone 'Arctic/Longyearbyen', 78, 1, 16, 1
       end
       country 'SK', 'Slovakia' do |c|
         c.timezone 'Europe/Bratislava', 963, 20, 1027, 60
