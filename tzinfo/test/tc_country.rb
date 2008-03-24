@@ -116,13 +116,13 @@ class TCCountry < Test::Unit::TestCase
   def test_equality
     assert_equal(true, Country.get('GB') == Country.get('GB'))
     assert_equal(false, Country.get('GB') == Country.get('US'))
-    assert_nil(Country.get('GB') == Object.new)
+    assert(!(Country.get('GB') == Object.new))
   end
   
   def test_eql
     assert_equal(true, Country.get('GB').eql?(Country.get('GB')))
     assert_equal(false, Country.get('GB').eql?(Country.get('US')))
-    assert_nil(Country.get('GB').eql?(Object.new))
+    assert(!Country.get('GB').eql?(Object.new))
   end
   
   def test_hash

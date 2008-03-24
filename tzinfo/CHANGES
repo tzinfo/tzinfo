@@ -6,6 +6,8 @@
   available instead of DateTime.new0 when constructing transition times.
   DateTime.new! was added in Ruby 1.8.6. DateTime.new0 was removed in
   Ruby 1.9.0. Thanks to Joshua Peek for reporting this. Closes #17606.
+* Modify some of the equality test cases to cope with the differences
+  between Ruby 1.8.6 and Ruby 1.9.0.
 
 
 == Version 0.3.7 (tzdata v2008a) - 10-Mar-2008

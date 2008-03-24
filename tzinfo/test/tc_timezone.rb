@@ -781,14 +781,14 @@ class TCTimezone < Test::Unit::TestCase
     assert_equal(true, TestTimezone.new('Europe/London') == TestTimezone.new('Europe/London'))
     assert_equal(false, TestTimezone.new('Europe/London') == TestTimezone.new('Europe/london'))
     assert_equal(false, TestTimezone.new('Europe/London') == TestTimezone.new('Europe/Paris'))
-    assert_nil(TestTimezone.new('Europe/London') == Object.new)
+    assert(!(TestTimezone.new('Europe/London') == Object.new))
   end
   
   def test_eql
     assert_equal(true, TestTimezone.new('Europe/London').eql?(TestTimezone.new('Europe/London')))
     assert_equal(false, TestTimezone.new('Europe/London').eql?(TestTimezone.new('Europe/london')))
     assert_equal(false, TestTimezone.new('Europe/London').eql?(TestTimezone.new('Europe/Paris')))
-    assert_nil(TestTimezone.new('Europe/London') == Object.new)
+    assert(!TestTimezone.new('Europe/London').eql?(Object.new))
   end
   
   def test_hash
