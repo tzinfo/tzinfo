@@ -46,7 +46,8 @@ module TZInfo
       end
       country 'AR', 'Argentina' do |c|
         c.timezone 'America/Argentina/Buenos_Aires', -173, 5, -1169, 20, 'Buenos Aires (BA, CF)'
-        c.timezone 'America/Argentina/Cordoba', -157, 5, -3851, 60, 'most locations (CB, CC, CN, ER, FM, LP, MN, NQ, RN, SA, SE, SF, SL)'
+        c.timezone 'America/Argentina/Cordoba', -157, 5, -3851, 60, 'most locations (CB, CC, CN, ER, FM, LP, MN, NQ, RN, SA, SE, SF)'
+        c.timezone 'America/Argentina/San_Luis', -1999, 60, -1327, 20, 'San Luis (SL)'
         c.timezone 'America/Argentina/Jujuy', -1451, 60, -653, 10, 'Jujuy (JY)'
         c.timezone 'America/Argentina/Tucuman', -1609, 60, -3913, 60, 'Tucuman (TM)'
         c.timezone 'America/Argentina/Catamarca', -427, 15, -3947, 60, 'Catamarca (CT), Chubut (CH)'
@@ -397,7 +398,7 @@ module TZInfo
         c.timezone 'Europe/Isle_of_Man', 1083, 20, -67, 15
       end
       country 'IN', 'India' do |c|
-        c.timezone 'Asia/Calcutta', 338, 15, 2651, 30
+        c.timezone 'Asia/Kolkata', 338, 15, 2651, 30
       end
       country 'IO', 'British Indian Ocean Territory' do |c|
         c.timezone 'Indian/Chagos', -22, 3, 869, 12
@@ -867,7 +868,7 @@ module TZInfo
         c.timezone 'America/St_Thomas', 367, 20, -974, 15
       end
       country 'VN', 'Vietnam' do |c|
-        c.timezone 'Asia/Saigon', 43, 4, 320, 3
+        c.timezone 'Asia/Ho_Chi_Minh', 43, 4, 320, 3
       end
       country 'VU', 'Vanuatu' do |c|
         c.timezone 'Pacific/Efate', -53, 3, 2021, 12
