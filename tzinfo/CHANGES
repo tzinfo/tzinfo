@@ -1,3 +1,10 @@
+== Version ?.?.? (tzdata v?????) - ???????????
+
+* Support loading timezone data in the latest trunk versions of Ruby 1.9.
+  Rational.new! is now private, so call it using Rational.send :new! instead.
+  Thanks to Jeremy Kemper and Pratik Naik for spotting this. Closes #19184.
+
+
 == Version 0.3.8 (tzdata v2008b) - 24-Mar-2008
 
 * Updated to tzdata version 2008b

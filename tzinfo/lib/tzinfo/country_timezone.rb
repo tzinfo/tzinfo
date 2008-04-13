@@ -64,12 +64,12 @@ module TZInfo
     
     # The latitude of this timezone in degrees as a Rational.
     def latitude
-      @latitude ||= Rational.new!(@latitude_numerator, @latitude_denominator)
+      @latitude ||= Rational.send(:new!, @latitude_numerator, @latitude_denominator)
     end
     
     # The longitude of this timezone in degrees as a Rational.
     def longitude
-      @longitude ||= Rational.new!(@longitude_numerator, @longitude_denominator)
+      @longitude ||= Rational.send(:new!, @longitude_numerator, @longitude_denominator)
     end
     
     # Returns true if and only if the given CountryTimezone is equal to the
