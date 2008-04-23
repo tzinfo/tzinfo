@@ -1,5 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
+require File.join(File.dirname(__FILE__), 'test_utils')
 require 'tzinfo/linked_timezone'
 require 'tzinfo/linked_timezone_info'
 
@@ -48,18 +49,23 @@ class TCLinkedTimezone < Test::Unit::TestCase
   
   def setup
     # Redefine Timezone.get to return a fake timezone.
-    
-    def Timezone.get(identifier)
-      raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier == 'Invalid/Identifier'
-      
-      @timezones ||= {}
-      @timezones[identifier] ||= TestTimezone.new(identifier, identifier == 'Test/No/Local')        
+    # Use without_warnings to suppress redefined get method warning.
+    without_warnings do
+      def Timezone.get(identifier)
+        raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier == 'Invalid/Identifier'
+       
+        @timezones ||= {}
+        @timezones[identifier] ||= TestTimezone.new(identifier, identifier == 'Test/No/Local')        
+      end
     end
   end
   
   def teardown
     # Re-require timezone to reset.
-    load 'tzinfo/timezone.rb'
+    # Suppress redefined method warnings.
+    without_warnings do
+      load 'tzinfo/timezone.rb'
+    end
   end
   
   def test_identifier

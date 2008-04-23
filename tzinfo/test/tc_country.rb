@@ -1,5 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
+require File.join(File.dirname(__FILE__), 'test_utils')
 require 'tzinfo/country'
 
 include TZInfo
@@ -143,8 +144,11 @@ class TCCountry < Test::Unit::TestCase
     
     c = Country.get('US')
     assert_equal('US', Country.get('US').code)
-    
-    load 'tzinfo/country.rb'
+
+    # Suppress redefined method warnings.
+    without_warnings do
+      load 'tzinfo/country.rb'
+    end
     
     c = Country.get('US')
     assert_equal('US', Country.get('US').code)

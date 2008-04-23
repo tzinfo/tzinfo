@@ -195,8 +195,8 @@ class TCTimezone < Test::Unit::TestCase
   def test_all_country_zones
     # Probably should relax this test - just need all the zones, don't care
     # about order.
-    expected = Country.all.inject([]) {|expected,country|
-      expected += country.zones
+    expected = Country.all.inject([]) {|result,country|
+      result += country.zones
     }
     expected.uniq!
     
@@ -215,8 +215,8 @@ class TCTimezone < Test::Unit::TestCase
   def test_all_country_zone_identifiers
     # Probably should relax this test - just need all the zones, don't care
     # about order.
-    expected = Country.all.inject([]) {|expected,country|
-      expected += country.zone_identifiers
+    expected = Country.all.inject([]) {|result,country|
+      result += country.zone_identifiers
     }
     expected.uniq!
         

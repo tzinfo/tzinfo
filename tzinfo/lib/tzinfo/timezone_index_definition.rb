@@ -27,21 +27,22 @@ module TZInfo
     def self.append_features(base)
       super
       base.extend(ClassMethods)
+      base.instance_eval do
+        @timezones = []
+        @data_timezones = []
+        @linked_timezones = []
+      end
     end
     
     module ClassMethods #:nodoc:
       # Defines a timezone based on data.
       def timezone(identifier)
-        @timezones = [] unless @timezones
-        @data_timezones = [] unless @data_timezones
         @timezones << identifier
         @data_timezones << identifier
       end
       
       # Defines a timezone which is a link to another timezone.
       def linked_timezone(identifier)
-        @timezones = [] unless @timezones
-        @linked_timezones = [] unless @linked_timezones
         @timezones << identifier
         @linked_timezones << identifier
       end
@@ -49,14 +50,12 @@ module TZInfo
       # Returns a frozen array containing the identifiers of all the timezones.
       # Identifiers appear in the order they were defined in the index.
       def timezones
-        @timezones = [] unless @timezones
         @timezones.freeze
       end
       
       # Returns a frozen array containing the identifiers of all data timezones.
       # Identifiers appear in the order they were defined in the index.
       def data_timezones
-        @data_timezones = [] unless @data_timezones
         @data_timezones.freeze
       end
       
@@ -64,7 +63,6 @@ module TZInfo
       # timezones. Identifiers appear in the order they were defined in 
       # the index.
       def linked_timezones
-        @linked_timezones = [] unless @linked_timezones
         @linked_timezones.freeze
       end      
     end

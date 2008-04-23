@@ -29,6 +29,7 @@ module TZInfo
     def self.append_features(base)
       super
       base.extend(ClassMethods)
+      base.instance_eval { @countries = {} }
     end
     
     module ClassMethods #:nodoc:
@@ -36,7 +37,6 @@ module TZInfo
       # block will be evaluated to obtain all the timezones for the country.
       # Calls Country.country_defined with the definition of each country.
       def country(code, name, &block)
-        @countries = {} unless @countries
         @countries[code] = CountryInfo.new(code, name, &block)      
       end
       
