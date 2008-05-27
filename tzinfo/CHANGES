@@ -1,5 +1,7 @@
 == Version ?.?.? (tzdata v?????) - ???????????
 
+* Updated to tzdata version 2008c
+  (http://article.gmane.org/gmane.comp.time.tz/2183).
 * Support loading timezone data in the latest trunk versions of Ruby 1.9.
   Rational.new! is now private, so call it using Rational.send :new! instead.
   Thanks to Jeremy Kemper and Pratik Naik for spotting this. Closes #19184.
