@@ -21,7 +21,8 @@ module TZInfo
           tz.transition 1943, 10, :o3, 58344037, 24
           tz.transition 1944, 4, :o4, 58348405, 24
           tz.transition 1944, 10, :o3, 58352773, 24
-          tz.transition 1945, 4, :o2, 29178571, 12
+          tz.transition 1945, 4, :o4, 58357141, 24
+          tz.transition 1945, 4, :o2, 58357141, 24
           tz.transition 1979, 3, :o5, 291762000
           tz.transition 1979, 9, :o2, 307576800
           tz.transition 1980, 4, :o5, 323816400

@@ -186,6 +186,7 @@ module TZInfo
       timezone 'America/Resolute'
       timezone 'America/Rio_Branco'
       linked_timezone 'America/Rosario'
+      timezone 'America/Santarem'
       timezone 'America/Santiago'
       timezone 'America/Santo_Domingo'
       timezone 'America/Sao_Paulo'

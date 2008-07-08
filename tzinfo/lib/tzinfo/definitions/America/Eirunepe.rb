@@ -10,6 +10,7 @@ module TZInfo
           tz.offset :o0, -16768, 0, :LMT
           tz.offset :o1, -18000, 0, :ACT
           tz.offset :o2, -18000, 3600, :ACST
+          tz.offset :o3, -14400, 0, :AMT
           
           tz.transition 1914, 1, :o1, 3267180487, 1350
           tz.transition 1931, 10, :o2, 14559709, 6
@@ -42,6 +43,7 @@ module TZInfo
           tz.transition 1988, 2, :o1, 571204800
           tz.transition 1993, 10, :o2, 750834000
           tz.transition 1994, 2, :o1, 761716800
+          tz.transition 2008, 6, :o3, 1214283600
         end
       end
     end
