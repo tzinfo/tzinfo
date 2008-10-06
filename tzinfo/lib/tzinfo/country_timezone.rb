@@ -21,6 +21,7 @@
 #++
 
 require 'tzinfo/timezone'
+require 'tzinfo/ruby_core_support'
 
 module TZInfo
   # A Timezone within a Country. This contains extra information about the
@@ -64,12 +65,12 @@ module TZInfo
     
     # The latitude of this timezone in degrees as a Rational.
     def latitude
-      @latitude ||= Rational.send(:new!, @latitude_numerator, @latitude_denominator)
+      @latitude ||= RubyCoreSupport.rational_new!(@latitude_numerator, @latitude_denominator)
     end
     
     # The longitude of this timezone in degrees as a Rational.
     def longitude
-      @longitude ||= Rational.send(:new!, @longitude_numerator, @longitude_denominator)
+      @longitude ||= RubyCoreSupport.rational_new!(@longitude_numerator, @longitude_denominator)
     end
     
     # Returns true if and only if the given CountryTimezone is equal to the

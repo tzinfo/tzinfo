@@ -1,3 +1,11 @@
+== Version ?.?.? (tzdata v?????) - ???????????
+
+* Rational.new! has now been removed in Ruby 1.9. Only use Rational.new!
+  if it is available (it is preferable in Ruby 1.8 for performance
+  reasons). Thanks to Jeremy Kemper and Pratik Naik for spotting this.
+  Closes #22312.
+
+
 == Version 0.3.10 (tzdata v2008f) - 16-Sep-2008
 
 * Updated to tzdata version 2008f
