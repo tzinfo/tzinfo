@@ -415,7 +415,7 @@ class TCTimeOrDateTime < Test::Unit::TestCase
       t + 1           
     }
       
-    assert_not_nil(t2)
+    assert t2
     assert_instance_of(TimeOrDateTime, t2)
     assert_equal(1143214324, t2.to_orig)
   end

@@ -8,24 +8,25 @@ class TCTimezoneProxy < Test::Unit::TestCase
   def test_not_exist
     proxy = TimezoneProxy.new('Nothing/Special')
     assert_equal('Nothing/Special', proxy.identifier)
-    assert_raise(InvalidTimezoneIdentifier) { proxy.now }
-    assert_raise(InvalidTimezoneIdentifier) { proxy.current_period }
-    assert_raise(InvalidTimezoneIdentifier) { proxy.current_period_and_time }
-    assert_raise(InvalidTimezoneIdentifier) { proxy.current_time_and_period }
-    assert_raise(InvalidTimezoneIdentifier) { proxy.utc_to_local(DateTime.new(2006,1,1,0,0,0)) }
-    assert_raise(InvalidTimezoneIdentifier) { proxy.local_to_utc(DateTime.new(2006,1,1,0,0,0)) }
-    assert_raise(InvalidTimezoneIdentifier) { proxy.period_for_utc(DateTime.new(2006,1,1,0,0,0)) }
-    assert_raise(InvalidTimezoneIdentifier) { proxy.period_for_local(DateTime.new(2006,1,1,0,0,0)) }
+    assert_raises(InvalidTimezoneIdentifier) { proxy.now }
+    assert_raises(InvalidTimezoneIdentifier) { proxy.current_period }
+    assert_raises(InvalidTimezoneIdentifier) { proxy.current_period_and_time }
+    assert_raises(InvalidTimezoneIdentifier) { proxy.current_time_and_period }
+    assert_raises(InvalidTimezoneIdentifier) { proxy.utc_to_local(DateTime.new(2006,1,1,0,0,0)) }
+    assert_raises(InvalidTimezoneIdentifier) { proxy.local_to_utc(DateTime.new(2006,1,1,0,0,0)) }
+    assert_raises(InvalidTimezoneIdentifier) { proxy.period_for_utc(DateTime.new(2006,1,1,0,0,0)) }
+    assert_raises(InvalidTimezoneIdentifier) { proxy.period_for_local(DateTime.new(2006,1,1,0,0,0)) }
   end
   
   def test_valid
     proxy = TimezoneProxy.new('Europe/London')
     assert_equal('Europe/London', proxy.identifier)
     
-    assert_nothing_raised { proxy.now }
-    assert_nothing_raised { proxy.current_period }
-    assert_nothing_raised { proxy.current_period_and_time }
-    assert_nothing_raised { proxy.current_time_and_period }
+    # Test nothing raised
+    proxy.now
+    proxy.current_period
+    proxy.current_period_and_time
+    proxy.current_time_and_period
     
     real = Timezone.get('Europe/London')
     

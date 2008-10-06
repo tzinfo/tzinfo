@@ -74,7 +74,7 @@ class TCLinkedTimezone < Test::Unit::TestCase
   end
   
   def test_invalid_linked_identifier
-    assert_raise(InvalidTimezoneIdentifier) { LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Invalid/Identifier')) }
+    assert_raises(InvalidTimezoneIdentifier) { LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Invalid/Identifier')) }
   end
   
   def test_period_for_utc
@@ -97,7 +97,7 @@ class TCLinkedTimezone < Test::Unit::TestCase
     tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/No/Local'))
     linked_tz = Timezone.get('Test/No/Local')
     t = Time.utc(2006, 6, 27, 23, 12, 28)
-    assert_raise(PeriodNotFound) { tz.periods_for_local(t) }
+    assert_raises(PeriodNotFound) { tz.periods_for_local(t) }
     assert_same(t, linked_tz.local)
   end  
 end

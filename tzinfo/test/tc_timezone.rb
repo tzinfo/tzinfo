@@ -76,15 +76,15 @@ class TCTimezone < Test::Unit::TestCase
   end
   
   def test_get_not_exist
-    assert_raise(InvalidTimezoneIdentifier) { Timezone.get('Nowhere/Special') }
+    assert_raises(InvalidTimezoneIdentifier) { Timezone.get('Nowhere/Special') }
   end
   
   def test_get_invalid
-    assert_raise(InvalidTimezoneIdentifier) { Timezone.get('../Definitions/UTC') }
+    assert_raises(InvalidTimezoneIdentifier) { Timezone.get('../Definitions/UTC') }
   end
   
   def test_get_nil
-    assert_raise(InvalidTimezoneIdentifier) { Timezone.get(nil) }
+    assert_raises(InvalidTimezoneIdentifier) { Timezone.get(nil) }
   end
   
   def test_get_plus
@@ -101,7 +101,7 @@ class TCTimezone < Test::Unit::TestCase
   
   def test_get_case    
     Timezone.get('Europe/Prague')
-    assert_raise(InvalidTimezoneIdentifier) { Timezone.get('Europe/prague') }
+    assert_raises(InvalidTimezoneIdentifier) { Timezone.get('Europe/prague') }
   end
   
   def test_get_proxy_valid
@@ -125,29 +125,29 @@ class TCTimezone < Test::Unit::TestCase
   def test_new_no_args
     tz = Timezone.new
     
-    assert_raise(UnknownTimezone) { tz.identifier }
-    assert_raise(UnknownTimezone) { tz.friendly_identifier }
-    assert_raise(UnknownTimezone) { tz.utc_to_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raise(UnknownTimezone) { tz.local_to_utc(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raise(UnknownTimezone) { tz.period_for_utc(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raise(UnknownTimezone) { tz.periods_for_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raise(UnknownTimezone) { tz.period_for_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raise(UnknownTimezone) { tz.now }
-    assert_raise(UnknownTimezone) { tz.current_period_and_time } 
+    assert_raises(UnknownTimezone) { tz.identifier }
+    assert_raises(UnknownTimezone) { tz.friendly_identifier }
+    assert_raises(UnknownTimezone) { tz.utc_to_local(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.local_to_utc(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.period_for_utc(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.periods_for_local(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.period_for_local(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.now }
+    assert_raises(UnknownTimezone) { tz.current_period_and_time } 
   end
   
   def test_new_nil
     tz = Timezone.new(nil)
     
-    assert_raise(UnknownTimezone) { tz.identifier }
-    assert_raise(UnknownTimezone) { tz.friendly_identifier }
-    assert_raise(UnknownTimezone) { tz.utc_to_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raise(UnknownTimezone) { tz.local_to_utc(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raise(UnknownTimezone) { tz.period_for_utc(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raise(UnknownTimezone) { tz.periods_for_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raise(UnknownTimezone) { tz.period_for_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raise(UnknownTimezone) { tz.now }
-    assert_raise(UnknownTimezone) { tz.current_period_and_time } 
+    assert_raises(UnknownTimezone) { tz.identifier }
+    assert_raises(UnknownTimezone) { tz.friendly_identifier }
+    assert_raises(UnknownTimezone) { tz.utc_to_local(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.local_to_utc(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.period_for_utc(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.periods_for_local(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.period_for_local(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.now }
+    assert_raises(UnknownTimezone) { tz.current_period_and_time } 
   end
   
   def test_new_arg
@@ -156,7 +156,7 @@ class TCTimezone < Test::Unit::TestCase
   end
   
   def test_new_arg_not_exist    
-    assert_raise(InvalidTimezoneIdentifier) { Timezone.new('Nowhere/Special') }
+    assert_raises(InvalidTimezoneIdentifier) { Timezone.new('Nowhere/Special') }
   end 
   
   def test_all
@@ -245,12 +245,12 @@ class TCTimezone < Test::Unit::TestCase
   end    
   
   def test_identifier
-    assert_raise(UnknownTimezone) { Timezone.new.identifier }    
+    assert_raises(UnknownTimezone) { Timezone.new.identifier }    
     assert_equal('Europe/Paris', TestTimezone.new('Europe/Paris').identifier)
   end
   
   def test_name
-    assert_raise(UnknownTimezone) { Timezone.new.name }    
+    assert_raises(UnknownTimezone) { Timezone.new.name }    
     assert_equal('Europe/Paris', TestTimezone.new('Europe/Paris').name)    
   end
   
@@ -315,7 +315,7 @@ class TCTimezone < Test::Unit::TestCase
     dt = DateTime.new(2004,4,4,2,30,0)
     tz = TestTimezone.new('America/New_York', nil, [], dt)
     
-    assert_raise(PeriodNotFound) do
+    assert_raises(PeriodNotFound) do
       tz.period_for_local(dt)
     end
   end
@@ -339,9 +339,9 @@ class TCTimezone < Test::Unit::TestCase
     t_tz = TestTimezone.new('America/New_York', nil, [p1, p2], t)
     i_tz = TestTimezone.new('America/New_York', nil, [p1, p2], i)
         
-    assert_raise(AmbiguousTime) { dt_tz.period_for_local(dt) }
-    assert_raise(AmbiguousTime) { t_tz.period_for_local(t) }
-    assert_raise(AmbiguousTime) { i_tz.period_for_local(i) }
+    assert_raises(AmbiguousTime) { dt_tz.period_for_local(dt) }
+    assert_raises(AmbiguousTime) { t_tz.period_for_local(t) }
+    assert_raises(AmbiguousTime) { i_tz.period_for_local(i) }
   end
   
   def test_period_for_local_not_found
@@ -363,9 +363,9 @@ class TCTimezone < Test::Unit::TestCase
     t_tz = TestTimezone.new('America/New_York', nil, [], t)
     i_tz = TestTimezone.new('America/New_York', nil, [], i)
         
-    assert_raise(PeriodNotFound) { dt_tz.period_for_local(dt) }
-    assert_raise(PeriodNotFound) { t_tz.period_for_local(t) }
-    assert_raise(PeriodNotFound) { i_tz.period_for_local(i) }
+    assert_raises(PeriodNotFound) { dt_tz.period_for_local(dt) }
+    assert_raises(PeriodNotFound) { t_tz.period_for_local(t) }
+    assert_raises(PeriodNotFound) { i_tz.period_for_local(i) }
   end
   
   def test_period_for_local_dst_flag_resolved
@@ -404,7 +404,7 @@ class TCTimezone < Test::Unit::TestCase
     
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
     
-    assert_raise(BlockCalled) {
+    assert_raises(BlockCalled) {
       tz.period_for_local(dt) {|periods|        
         assert_equal([p1, p2], periods)
         
@@ -440,14 +440,14 @@ class TCTimezone < Test::Unit::TestCase
     
     tz = TestTimezone.new('Europe/Warsaw', nil, [p1, p2], dt)
         
-    assert_raise(BlockCalled) {
+    assert_raises(BlockCalled) {
       tz.period_for_local(dt, true) {|periods|
         assert_equal([p1, p2], periods)        
         raise BlockCalled, 'should be raised'
       }
     }
     
-    assert_raise(BlockCalled) {
+    assert_raises(BlockCalled) {
       tz.period_for_local(dt, false) {|periods|
         assert_equal([p1, p2], periods)
         raise BlockCalled, 'should be raised'
@@ -470,19 +470,19 @@ class TCTimezone < Test::Unit::TestCase
     
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
         
-    assert_raise(AmbiguousTime) do
+    assert_raises(AmbiguousTime) do
       tz.period_for_local(dt) {|periods| nil}
     end
     
-    assert_raise(AmbiguousTime) do
+    assert_raises(AmbiguousTime) do
       tz.period_for_local(dt) {|periods| periods}
     end
     
-    assert_raise(AmbiguousTime) do
+    assert_raises(AmbiguousTime) do
       tz.period_for_local(dt) {|periods| []}
     end
     
-    assert_raise(AmbiguousTime) do
+    assert_raises(AmbiguousTime) do
       tz.period_for_local(dt) {|periods| raise AmbiguousTime, 'Ambiguous time'}
     end
   end
@@ -574,15 +574,15 @@ class TCTimezone < Test::Unit::TestCase
   def test_local_to_utc_invalid
     dt = DateTime.new(2004,4,4,2,30,0)
     tz = TestTimezone.new('America/New_York', nil, [], dt)        
-    assert_raise(PeriodNotFound) { tz.local_to_utc(dt) }
+    assert_raises(PeriodNotFound) { tz.local_to_utc(dt) }
     
     t = Time.utc(2004,4,4,2,30,0)
     tz = TestTimezone.new('America/New_York', nil, [], t)        
-    assert_raise(PeriodNotFound) { tz.local_to_utc(t) }
+    assert_raises(PeriodNotFound) { tz.local_to_utc(t) }
     
     i = Time.utc(2004,4,4,2,30,0).to_i
     tz = TestTimezone.new('America/New_York', nil, [], i)        
-    assert_raise(PeriodNotFound) { tz.local_to_utc(i) }    
+    assert_raises(PeriodNotFound) { tz.local_to_utc(i) }    
   end
   
   def test_local_to_utc_ambiguous
@@ -598,15 +598,15 @@ class TCTimezone < Test::Unit::TestCase
     
     dt = DateTime.new(2004,10,31,1,30,0)    
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
-    assert_raise(AmbiguousTime) { tz.local_to_utc(dt) }
+    assert_raises(AmbiguousTime) { tz.local_to_utc(dt) }
     
     t = Time.utc(2004,10,31,1,30,0)
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], t)
-    assert_raise(AmbiguousTime) { tz.local_to_utc(t) }
+    assert_raises(AmbiguousTime) { tz.local_to_utc(t) }
 
     i = Time.utc(2004,10,31,1,30,0).to_i
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], i)
-    assert_raise(AmbiguousTime) { tz.local_to_utc(i) }    
+    assert_raises(AmbiguousTime) { tz.local_to_utc(i) }    
   end
   
   def test_local_to_utc_not_found
@@ -628,9 +628,9 @@ class TCTimezone < Test::Unit::TestCase
     t_tz = TestTimezone.new('America/New_York', nil, [], t)
     i_tz = TestTimezone.new('America/New_York', nil, [], i)
         
-    assert_raise(PeriodNotFound) { dt_tz.local_to_utc(dt) }
-    assert_raise(PeriodNotFound) { t_tz.local_to_utc(t) }
-    assert_raise(PeriodNotFound) { i_tz.local_to_utc(i) }
+    assert_raises(PeriodNotFound) { dt_tz.local_to_utc(dt) }
+    assert_raises(PeriodNotFound) { t_tz.local_to_utc(t) }
+    assert_raises(PeriodNotFound) { i_tz.local_to_utc(i) }
   end
   
   def test_local_to_utc_dst_flag_resolved
@@ -667,7 +667,7 @@ class TCTimezone < Test::Unit::TestCase
     dt = DateTime.new(2004,10,31,1,30,0)    
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
     
-    assert_raise(BlockCalled) {
+    assert_raises(BlockCalled) {
       tz.local_to_utc(dt) {|periods|
         assert_equal([p1, p2], periods)                
         
@@ -703,14 +703,14 @@ class TCTimezone < Test::Unit::TestCase
     
     tz = TestTimezone.new('Europe/Warsaw', nil, [p1, p2], dt)
         
-    assert_raise(BlockCalled) do
+    assert_raises(BlockCalled) do
       tz.local_to_utc(dt, true) do |periods|
         assert_equal([p1, p2], periods)        
         raise BlockCalled, 'should be raised'
       end
     end
     
-    assert_raise(BlockCalled) do
+    assert_raises(BlockCalled) do
       tz.local_to_utc(dt, false) do |periods|
         assert_equal([p1, p2], periods)        
         raise BlockCalled, 'should be raised'
@@ -740,10 +740,10 @@ class TCTimezone < Test::Unit::TestCase
     dt = DateTime.new(2004,10,31,1,30,0)
     tz = Timezone.get('America/New_York')
     
-    assert_raise(AmbiguousTime) { tz.local_to_utc(dt) {|periods| nil} }    
-    assert_raise(AmbiguousTime) { tz.local_to_utc(dt) {|periods| periods} }     
-    assert_raise(AmbiguousTime) { tz.local_to_utc(dt) {|periods| []} }    
-    assert_raise(AmbiguousTime) { tz.local_to_utc(dt) {|periods| raise AmbiguousTime, 'Ambiguous time'} }
+    assert_raises(AmbiguousTime) { tz.local_to_utc(dt) {|periods| nil} }    
+    assert_raises(AmbiguousTime) { tz.local_to_utc(dt) {|periods| periods} }     
+    assert_raises(AmbiguousTime) { tz.local_to_utc(dt) {|periods| []} }    
+    assert_raises(AmbiguousTime) { tz.local_to_utc(dt) {|periods| raise AmbiguousTime, 'Ambiguous time'} }
   end
   
   def test_now

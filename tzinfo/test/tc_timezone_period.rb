@@ -38,7 +38,7 @@ class TCTimezonePeriod < Test::Unit::TestCase
     start_t = TimezoneTransitionInfo.new(dst, std, 1136073600)
     end_t = TimezoneTransitionInfo.new(std, dst, 1136160000)
       
-    assert_raise(ArgumentError) { TimezonePeriod.new(start_t, end_t, special) }
+    assert_raises(ArgumentError) { TimezonePeriod.new(start_t, end_t, special) }
   end
   
   def test_initialize_start
@@ -69,7 +69,7 @@ class TCTimezonePeriod < Test::Unit::TestCase
     special = TimezoneOffsetInfo.new(0, 0, :SPECIAL)
     start_t = TimezoneTransitionInfo.new(dst, std, 1136073600)   
       
-    assert_raise(ArgumentError) { TimezonePeriod.new(start_t, nil, special) }
+    assert_raises(ArgumentError) { TimezonePeriod.new(start_t, nil, special) }
   end
   
   def test_initialize_end
@@ -100,11 +100,11 @@ class TCTimezonePeriod < Test::Unit::TestCase
     special = TimezoneOffsetInfo.new(0, 0, :SPECIAL)
     end_t = TimezoneTransitionInfo.new(std, dst, 1136160000)
       
-    assert_raise(ArgumentError) { TimezonePeriod.new(nil, end_t, special) }    
+    assert_raises(ArgumentError) { TimezonePeriod.new(nil, end_t, special) }    
   end
   
   def test_initialize
-    assert_raise(ArgumentError) { TimezonePeriod.new(nil, nil) }
+    assert_raises(ArgumentError) { TimezonePeriod.new(nil, nil) }
   end
   
   def test_initialize_offset

@@ -24,8 +24,8 @@ class TCTimezoneMelbourne < Test::Unit::TestCase
     assert_equal(DateTime.new(2004,10,30,15,59,59), tz.local_to_utc(DateTime.new(2004,10,31,1,59,59)))
     assert_equal(DateTime.new(2004,10,30,16,0,0), tz.local_to_utc(DateTime.new(2004,10,31,3,0,0)))
     
-    assert_raise(PeriodNotFound) { tz.local_to_utc(DateTime.new(2004,10,31,2,0,0)) }
-    assert_raise(AmbiguousTime) { tz.local_to_utc(DateTime.new(2004,3,28,2,0,0)) }
+    assert_raises(PeriodNotFound) { tz.local_to_utc(DateTime.new(2004,10,31,2,0,0)) }
+    assert_raises(AmbiguousTime) { tz.local_to_utc(DateTime.new(2004,3,28,2,0,0)) }
     
     assert_equal(:EST, tz.period_for_utc(DateTime.new(2004,3,27,15,59,59)).zone_identifier)
     assert_equal(:EST, tz.period_for_utc(DateTime.new(2004,3,27,16,0,0)).zone_identifier)
@@ -71,8 +71,8 @@ class TCTimezoneMelbourne < Test::Unit::TestCase
     assert_equal(DateTime.new(1942,9,26,15,59,59), tz.local_to_utc(DateTime.new(1942,9,27,1,59,59)))
     assert_equal(DateTime.new(1942,9,26,16,0,0), tz.local_to_utc(DateTime.new(1942,9,27,3,0,0)))
     
-    assert_raise(PeriodNotFound) { tz.local_to_utc(DateTime.new(1942,9,27,2,0,0)) }
-    assert_raise(AmbiguousTime) { tz.local_to_utc(DateTime.new(1942,3,29,1,0,0)) }
+    assert_raises(PeriodNotFound) { tz.local_to_utc(DateTime.new(1942,9,27,2,0,0)) }
+    assert_raises(AmbiguousTime) { tz.local_to_utc(DateTime.new(1942,3,29,1,0,0)) }
     
     assert_equal(:EST, tz.period_for_utc(DateTime.new(1942,3,28,14,59,59)).zone_identifier)
     assert_equal(:EST, tz.period_for_utc(DateTime.new(1942,3,28,15,0,0)).zone_identifier)

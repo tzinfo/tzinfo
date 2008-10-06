@@ -6,6 +6,8 @@
   if it is available (it is preferable in Ruby 1.8 for performance
   reasons). Thanks to Jeremy Kemper and Pratik Naik for spotting this.
   Closes #22312.
+* Apply patch from Pratik Naik to replace assert calls that have been
+  deprecated in Ruby 1.9. Closes #22308.
 
 
 == Version 0.3.10 (tzdata v2008f) - 16-Sep-2008

@@ -9,36 +9,36 @@ class TCCountry < Test::Unit::TestCase
   def test_get_valid
     c = Country.get('GB')
     
-    assert_not_nil(c)
+    assert c
     assert_equal('GB', c.code)
   end
     
   def test_get_not_exist
-    assert_raise(InvalidCountryCode) {
+    assert_raises(InvalidCountryCode) {
       Country.get('ZZ')
     }
   end
   
   def test_get_invalid
-    assert_raise(InvalidCountryCode) {
+    assert_raises(InvalidCountryCode) {
       Country.get('../Countries/GB')
     }
   end
   
   def test_get_nil
-    assert_raise(InvalidCountryCode) {
+    assert_raises(InvalidCountryCode) {
       Country.get(nil)
     }
   end
   
   def test_get_case    
-    assert_raise(InvalidCountryCode) {
+    assert_raises(InvalidCountryCode) {
       Country.get('gb')
     }
   end
     
   def test_new_nil
-    assert_raise(InvalidCountryCode) {
+    assert_raises(InvalidCountryCode) {
       c = Country.new(nil)
     }        
   end
@@ -49,7 +49,7 @@ class TCCountry < Test::Unit::TestCase
   end
   
   def test_new_arg_not_exist    
-    assert_raise(InvalidCountryCode) {
+    assert_raises(InvalidCountryCode) {
       Country.new('ZZ')
     }
   end 
