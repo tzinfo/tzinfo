@@ -1,13 +1,13 @@
-== Version ?.?.? (tzdata v?????) - ???????????
+== Version 0.3.11 (tzdata v2008g) - 7-Oct-2008
 
 * Updated to tzdata version 2008g
   (http://article.gmane.org/gmane.comp.time.tz/2335).
-* Rational.new! has now been removed in Ruby 1.9. Only use Rational.new!
-  if it is available (it is preferable in Ruby 1.8 for performance
-  reasons). Thanks to Jeremy Kemper and Pratik Naik for spotting this.
-  Closes #22312.
-* Apply patch from Pratik Naik to replace assert calls that have been
-  deprecated in Ruby 1.9. Closes #22308.
+* Support Ruby 1.9.0-5. Rational.new! has now been removed in Ruby 1.9.
+  Only use Rational.new! if it is available (it is preferable in Ruby 1.8
+  for performance reasons). Thanks to Jeremy Kemper and Pratik Naik for
+  reporting this. Closes #22312.
+* Apply a patch from Pratik Naik to replace assert calls that have been
+  deprecated in the Ruby svn trunk. Closes #22308.
 
 
 == Version 0.3.10 (tzdata v2008f) - 16-Sep-2008
