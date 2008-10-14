@@ -611,7 +611,7 @@ module TZInfo
         c.timezone 'Pacific/Nauru', -31, 60, 2003, 12
       end
       country 'NU', 'Niue' do |c|
-        c.timezone 'Pacific/Niue', -1141, 60, 2039, 12
+        c.timezone 'Pacific/Niue', -1141, 60, -2039, 12
       end
       country 'NZ', 'New Zealand' do |c|
         c.timezone 'Pacific/Auckland', -553, 15, 5243, 30, 'most locations'
