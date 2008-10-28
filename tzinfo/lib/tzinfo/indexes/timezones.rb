@@ -71,6 +71,7 @@ module TZInfo
       timezone 'America/Argentina/La_Rioja'
       timezone 'America/Argentina/Mendoza'
       timezone 'America/Argentina/Rio_Gallegos'
+      timezone 'America/Argentina/Salta'
       timezone 'America/Argentina/San_Juan'
       timezone 'America/Argentina/San_Luis'
       timezone 'America/Argentina/Tucuman'
