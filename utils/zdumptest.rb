@@ -21,6 +21,10 @@ def resolve_ambiguity(periods, identifier, tzi_period)
   end
 end
 
+if ARGV.length > 0
+  TZInfo::ZoneinfoTimezoneInfo.zoneinfo_dir = ARGV[0]
+end
+
 STDIN.each {|line|
  if line =~ /^([^\s]+)\s+([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]+)\s[A-Z]+\s=\s([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]+)\s([A-Za-z0-9+\-]+)\sisdst=([01])/ then
    begin

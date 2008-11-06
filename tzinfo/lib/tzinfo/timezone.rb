@@ -24,6 +24,7 @@ require 'date'
 require 'tzinfo/country'
 require 'tzinfo/time_or_datetime'
 require 'tzinfo/timezone_period'
+require 'tzinfo/zoneinfo_timezone_info'
 
 module TZInfo
   # Indicate a specified time in a local timezone has more than one
@@ -79,34 +80,8 @@ module TZInfo
       instance = @@loaded_zones[identifier]
       unless instance  
         raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
-        identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
-        begin
-          # Use a temporary variable to avoid an rdoc warning
-          file = "tzinfo/definitions/#{identifier}"
-          require file
-          
-          m = Definitions
-          identifier.split(/\//).each {|part|
-            m = m.const_get(part)
-          }
-          
-          info = m.get
-          
-          # Could make Timezone subclasses register an interest in an info
-          # type. Since there are currently only two however, there isn't
-          # much point.
-          if info.kind_of?(DataTimezoneInfo)
-            instance = DataTimezone.new(info)
-          elsif info.kind_of?(LinkedTimezoneInfo)
-            instance = LinkedTimezone.new(info)
-          else
-            raise InvalidTimezoneIdentifier, "No handler for info type #{info.class}"
-          end
-          
-          @@loaded_zones[instance.identifier] = instance         
-        rescue LoadError, NameError => e
-          raise InvalidTimezoneIdentifier, e.message
-        end
+        instance = DataTimezone.new(ZoneinfoTimezoneInfo.new(identifier))      
+        @@loaded_zones[instance.identifier] = instance        
       end
       
       instance

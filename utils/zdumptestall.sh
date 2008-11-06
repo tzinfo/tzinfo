@@ -17,6 +17,6 @@ find . ! -name localtime ! -name posixrules ! -name '*.tab' ! -name 'Factory' -t
   while read zone
   do
     echo "Testing zone $zone"
-    $zdump -v $zone | ./zdumptest.rb
+    $zdump -v $zone | ./zdumptest.rb $zoneinfo
   done
 }
