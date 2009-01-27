@@ -173,7 +173,7 @@ module TZInfo
         c.timezone 'America/Thunder_Bay', 2903, 60, -357, 4, 'Eastern Time - Thunder Bay, Ontario'
         c.timezone 'America/Iqaluit', 956, 15, -1027, 15, 'Eastern Time - east Nunavut - most locations'
         c.timezone 'America/Pangnirtung', 992, 15, -986, 15, 'Eastern Time - Pangnirtung, Nunavut'
-        c.timezone 'America/Resolute', 33613, 450, -22759, 240, 'Eastern Time - Resolute, Nunavut'
+        c.timezone 'America/Resolute', 33613, 450, -22759, 240, 'Eastern Standard Time - Resolute, Nunavut'
         c.timezone 'America/Atikokan', 175531, 3600, -54973, 600, 'Eastern Standard Time - Atikokan, Ontario and Southampton I, Nunavut'
         c.timezone 'America/Rankin_Inlet', 3769, 60, -331499, 3600, 'Central Time - central Nunavut'
         c.timezone 'America/Winnipeg', 2993, 60, -1943, 20, 'Central Time - Manitoba & west Ontario'
@@ -606,7 +606,7 @@ module TZInfo
         c.timezone 'Europe/Oslo', 719, 12, 43, 4
       end
       country 'NP', 'Nepal' do |c|
-        c.timezone 'Asia/Katmandu', 1663, 60, 5119, 60
+        c.timezone 'Asia/Kathmandu', 1663, 60, 5119, 60
       end
       country 'NR', 'Nauru' do |c|
         c.timezone 'Pacific/Nauru', -31, 60, 2003, 12
