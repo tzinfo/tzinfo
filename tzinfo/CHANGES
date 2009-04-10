@@ -1,3 +1,10 @@
+== Version ?????? - ?????????
+
+* Untaint the timezone module filename after validation to allow use
+  with $SAFE == 1 (e.g. under mod_ruby). Thanks to Dmitry Borodaenko for
+  the suggestion. Closes #25349.
+
+
 == Version 0.3.12 (tzdata v2008i) - 12-Nov-2008
 
 * Updated to tzdata version 2008i
