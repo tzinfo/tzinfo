@@ -122,6 +122,22 @@ class TCTimezone < Test::Unit::TestCase
     assert_equal('../Invalid/Identifier', proxy.identifier)
   end
   
+  def test_get_tainted_loaded
+    Timezone.get('Europe/Andorra')
+  
+    safe_test do
+      tz = Timezone.get('Europe/Andorra'.taint)
+      assert_equal('Europe/Andorra', tz.identifier)
+    end
+  end
+  
+  def test_get_tainted_not_loaded
+    safe_test do
+      tz = Timezone.get('Europe/Amsterdam'.taint)
+      assert_equal('Europe/Amsterdam', tz.identifier)
+    end
+  end
+  
   def test_new_no_args
     tz = Timezone.new
     

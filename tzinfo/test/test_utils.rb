@@ -9,4 +9,13 @@ module Kernel
       $-v = old_verbose
     end
   end
+  
+  def safe_test(level = 1)
+    thread = Thread.new do
+      $SAFE = level
+      yield
+    end
+    
+    thread.join
+  end
 end
