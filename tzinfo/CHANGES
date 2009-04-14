@@ -1,7 +1,7 @@
-== Version 0.3.?? (tzdata v2009e) - ???????????
+== Version 0.3.?? (tzdata v2009f) - ???????????
 
-* Updated to tzdata version 2009e
-  (http://article.gmane.org/gmane.comp.time.tz/2650).
+* Updated to tzdata version 2009f
+  (http://article.gmane.org/gmane.comp.time.tz/2668).
 * Untaint the timezone module filename after validation to allow use
   with $SAFE == 1 (e.g. under mod_ruby). Thanks to Dmitry Borodaenko for
   the suggestion. Closes #25349.
