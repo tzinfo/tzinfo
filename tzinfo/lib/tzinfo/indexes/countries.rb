@@ -152,7 +152,7 @@ module TZInfo
       end
       country 'BV', 'Bouvet Island'
       country 'BW', 'Botswana' do |c|
-        c.timezone 'Africa/Gaborone', -103, 4, 311, 12
+        c.timezone 'Africa/Gaborone', -493, 20, 311, 12
       end
       country 'BY', 'Belarus' do |c|
         c.timezone 'Europe/Minsk', 539, 10, 827, 30
@@ -585,7 +585,7 @@ module TZInfo
         c.timezone 'Africa/Windhoek', -677, 30, 171, 10
       end
       country 'NC', 'New Caledonia' do |c|
-        c.timezone 'Pacific/Noumea', -334, 15, 331, 2
+        c.timezone 'Pacific/Noumea', -334, 15, 3329, 20
       end
       country 'NE', 'Niger' do |c|
         c.timezone 'Africa/Niamey', 811, 60, 127, 60
@@ -787,7 +787,7 @@ module TZInfo
         c.timezone 'Africa/Tunis', 184, 5, 611, 60
       end
       country 'TO', 'Tonga' do |c|
-        c.timezone 'Pacific/Tongatapu', -127, 6, 1051, 6
+        c.timezone 'Pacific/Tongatapu', -127, 6, -1051, 6
       end
       country 'TR', 'Turkey' do |c|
         c.timezone 'Europe/Istanbul', 2461, 60, 869, 30
@@ -855,7 +855,7 @@ module TZInfo
         c.timezone 'Asia/Tashkent', 124, 3, 693, 10, 'east Uzbekistan'
       end
       country 'VA', 'Vatican City' do |c|
-        c.timezone 'Europe/Vatican', 419, 10, 249, 20
+        c.timezone 'Europe/Vatican', 9428, 225, 44831, 3600
       end
       country 'VC', 'St Vincent' do |c|
         c.timezone 'America/St_Vincent', 263, 20, -1837, 30
