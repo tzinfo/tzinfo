@@ -2,6 +2,8 @@
 
 * Updated to tzdata version 2009k
   (http://article.gmane.org/gmane.comp.time.tz/2807).
+* Include current directory in load path to allow running tests on
+  Ruby 1.9.2, which doesn't include it by default any more.
 
 
 == Version 0.3.13 (tzdata v2009f) - 15-Apr-2009

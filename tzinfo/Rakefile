@@ -61,7 +61,7 @@ Rake::TestTask.new('test') do |t|
   # timezone isn't GMT). This won't work on Windows.
   ENV['TZ'] = 'America/Los_Angeles'
 
-  t.libs << 'test'
+  t.libs << '.'
   t.pattern = 'test/tc_*.rb'
   t.verbose = true
 end
