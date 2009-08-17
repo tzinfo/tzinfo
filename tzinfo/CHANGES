@@ -1,7 +1,7 @@
-== Version ?????? (tzdata v2009k) - ???????????
+== Version ?????? (tzdata v2009l) - ???????????
 
-* Updated to tzdata version 2009k
-  (http://article.gmane.org/gmane.comp.time.tz/2807).
+* Updated to tzdata version 2009l
+  (http://article.gmane.org/gmane.comp.time.tz/2818).
 * Include current directory in load path to allow running tests on
   Ruby 1.9.2, which doesn't include it by default any more.
 
