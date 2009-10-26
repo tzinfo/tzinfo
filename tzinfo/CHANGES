@@ -3,6 +3,7 @@
 * Updated to tzdata version 2009p
   (http://article.gmane.org/gmane.comp.time.tz/2953).
 * Added a description to the gem spec.
+* List test files in test_files instead of files in the gem spec.
 
 
 == Version 0.3.14 (tzdata v2009l) - 19-Aug-2009
