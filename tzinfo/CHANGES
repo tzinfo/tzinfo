@@ -1,7 +1,7 @@
-== Version ?????? (tzdata v2009u) - ???????????
+== Version 0.3.16 (tzdata v2009u) - 5-Jan-2010
 
-* Support the use of '-' to denote '0' as an offset. Used for the first time
-  in the SAVE field in tzdata v2009u.
+* Support the use of '-' to denote '0' as an offset in the tz data files.
+  Used for the first time in the SAVE field in tzdata v2009u.
 * Updated to tzdata version 2009u
   (http://article.gmane.org/gmane.comp.time.tz/3053).
 
