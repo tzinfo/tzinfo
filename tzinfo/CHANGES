@@ -1,3 +1,9 @@
+== Version ?????? (tzdata v2009p) - ???????????
+
+* Support the use of '-' to denote '0' as an offset. Used for the first time
+  in the SAVE field in tzdata v2009u.
+
+
 == Version 0.3.15 (tzdata v2009p) - 26-Oct-2009
 
 * Updated to tzdata version 2009p
