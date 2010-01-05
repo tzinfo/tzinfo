@@ -277,6 +277,7 @@ module TZInfo
       timezone 'Asia/Manila'
       timezone 'Asia/Muscat'
       timezone 'Asia/Nicosia'
+      timezone 'Asia/Novokuznetsk'
       timezone 'Asia/Novosibirsk'
       timezone 'Asia/Omsk'
       timezone 'Asia/Oral'

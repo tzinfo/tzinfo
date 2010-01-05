@@ -687,6 +687,7 @@ module TZInfo
         c.timezone 'Asia/Yekaterinburg', 1137, 20, 303, 5, 'Moscow+02 - Urals'
         c.timezone 'Asia/Omsk', 55, 1, 367, 5, 'Moscow+03 - west Siberia'
         c.timezone 'Asia/Novosibirsk', 1651, 30, 995, 12, 'Moscow+03 - Novosibirsk'
+        c.timezone 'Asia/Novokuznetsk', 215, 4, 5227, 60, 'Moscow+03 - Novokuznetsk'
         c.timezone 'Asia/Krasnoyarsk', 3361, 60, 557, 6, 'Moscow+04 - Yenisei River'
         c.timezone 'Asia/Irkutsk', 784, 15, 313, 3, 'Moscow+05 - Lake Baikal'
         c.timezone 'Asia/Yakutsk', 62, 1, 389, 3, 'Moscow+06 - Lena River'

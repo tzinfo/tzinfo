@@ -9,10 +9,12 @@ module TZInfo
         timezone 'Antarctica/Davis' do |tz|
           tz.offset :o0, 0, 0, :zzz
           tz.offset :o1, 25200, 0, :DAVT
+          tz.offset :o2, 18000, 0, :DAVT
           
           tz.transition 1957, 1, :o1, 4871703, 2
           tz.transition 1964, 10, :o0, 58528805, 24
           tz.transition 1969, 2, :o1, 4880507, 2
+          tz.transition 2009, 10, :o2, 1255806000
         end
       end
     end
