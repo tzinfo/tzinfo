@@ -4,7 +4,8 @@
 * Regenerate rdoc (rake rdoc)
 * Build new gem, zip and tar.gz (rake package)
 * Commit and tag release
-* Upload gem, tar.gz, zip.
-* Upload documentation.
+* Upload gem, tar.gz, zip to rubyforge.
+* `gem push` new gem to gemcutter.
+* Upload documentation to rubyforge.
 * Write news item / announcement mailing list post.
 * Update RAA page (http://raa.ruby-lang.org/project/tzinfo).
