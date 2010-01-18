@@ -1,3 +1,9 @@
+== Version ?????? (tzdata v2010a) - ??????????
+
+* Updated to tzdata version 2010a
+  (http://article.gmane.org/gmane.comp.time.tz/3069).
+
+
 == Version 0.3.16 (tzdata v2009u) - 5-Jan-2010
 
 * Support the use of '-' to denote '0' as an offset in the tz data files.
