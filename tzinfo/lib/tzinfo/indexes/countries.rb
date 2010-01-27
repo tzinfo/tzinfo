@@ -568,11 +568,14 @@ module TZInfo
         c.timezone 'America/Mexico_City', 97, 5, -1983, 20, 'Central Time - most locations'
         c.timezone 'America/Cancun', 253, 12, -2603, 30, 'Central Time - Quintana Roo'
         c.timezone 'America/Merida', 629, 30, -5377, 60, 'Central Time - Campeche, Yucatan'
-        c.timezone 'America/Monterrey', 77, 3, -6019, 60, 'Central Time - Coahuila, Durango, Nuevo Leon, Tamaulipas'
+        c.timezone 'America/Monterrey', 77, 3, -6019, 60, 'Mexican Central Time - Coahuila, Durango, Nuevo Leon, Tamaulipas away from US border'
+        c.timezone 'America/Matamoros', 155, 6, -195, 2, 'US Central Time - Coahuila, Durango, Nuevo Leon, Tamaulipas near US border'
         c.timezone 'America/Mazatlan', 1393, 60, -1277, 12, 'Mountain Time - S Baja, Nayarit, Sinaloa'
-        c.timezone 'America/Chihuahua', 859, 30, -1273, 12, 'Mountain Time - Chihuahua'
+        c.timezone 'America/Chihuahua', 859, 30, -1273, 12, 'Mexican Mountain Time - Chihuahua away from US border'
+        c.timezone 'America/Ojinaga', 887, 30, -1253, 12, 'US Mountain Time - Chihuahua near US border'
         c.timezone 'America/Hermosillo', 436, 15, -3329, 30, 'Mountain Standard Time - Sonora'
-        c.timezone 'America/Tijuana', 488, 15, -7021, 60, 'Pacific Time'
+        c.timezone 'America/Tijuana', 488, 15, -7021, 60, 'US Pacific Time - Baja California near US border'
+        c.timezone 'America/Santa_Isabel', 303, 10, -1723, 15, 'Mexican Pacific Time - Baja California away from US border'
       end
       country 'MY', 'Malaysia' do |c|
         c.timezone 'Asia/Kuala_Lumpur', 19, 6, 1017, 10, 'peninsular Malaysia'
