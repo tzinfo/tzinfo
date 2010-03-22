@@ -218,6 +218,7 @@ module TZInfo
       timezone 'Antarctica/Casey'
       timezone 'Antarctica/Davis'
       timezone 'Antarctica/DumontDUrville'
+      timezone 'Antarctica/Macquarie'
       timezone 'Antarctica/Mawson'
       timezone 'Antarctica/McMurdo'
       timezone 'Antarctica/Palmer'
