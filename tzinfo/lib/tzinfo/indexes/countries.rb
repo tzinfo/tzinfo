@@ -687,7 +687,7 @@ module TZInfo
         c.timezone 'Europe/Kaliningrad', 3283, 60, 41, 2, 'Moscow-01 - Kaliningrad'
         c.timezone 'Europe/Moscow', 223, 4, 451, 12, 'Moscow+00 - west Russia'
         c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'Moscow+00 - Caspian Sea'
-        c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'Moscow+01 - Samara, Udmurtia'
+        c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'Moscow - Samara, Udmurtia'
         c.timezone 'Asia/Yekaterinburg', 1137, 20, 303, 5, 'Moscow+02 - Urals'
         c.timezone 'Asia/Omsk', 55, 1, 367, 5, 'Moscow+03 - west Siberia'
         c.timezone 'Asia/Novosibirsk', 1651, 30, 995, 12, 'Moscow+03 - Novosibirsk'
@@ -698,8 +698,8 @@ module TZInfo
         c.timezone 'Asia/Vladivostok', 259, 6, 1979, 15, 'Moscow+07 - Amur River'
         c.timezone 'Asia/Sakhalin', 1409, 30, 1427, 10, 'Moscow+07 - Sakhalin Island'
         c.timezone 'Asia/Magadan', 1787, 30, 754, 5, 'Moscow+08 - Magadan'
-        c.timezone 'Asia/Kamchatka', 3181, 60, 3173, 20, 'Moscow+09 - Kamchatka'
-        c.timezone 'Asia/Anadyr', 259, 4, 10649, 60, 'Moscow+10 - Bering Sea'
+        c.timezone 'Asia/Kamchatka', 3181, 60, 3173, 20, 'Moscow+08 - Kamchatka'
+        c.timezone 'Asia/Anadyr', 259, 4, 10649, 60, 'Moscow+08 - Bering Sea'
       end
       country 'RW', 'Rwanda' do |c|
         c.timezone 'Africa/Kigali', -39, 20, 451, 15
