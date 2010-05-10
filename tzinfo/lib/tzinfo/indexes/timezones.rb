@@ -81,6 +81,7 @@ module TZInfo
       timezone 'America/Atikokan'
       linked_timezone 'America/Atka'
       timezone 'America/Bahia'
+      timezone 'America/Bahia_Banderas'
       timezone 'America/Barbados'
       timezone 'America/Belem'
       timezone 'America/Belize'

@@ -577,6 +577,7 @@ module TZInfo
         c.timezone 'America/Hermosillo', 436, 15, -3329, 30, 'Mountain Standard Time - Sonora'
         c.timezone 'America/Tijuana', 488, 15, -7021, 60, 'US Pacific Time - Baja California near US border'
         c.timezone 'America/Santa_Isabel', 303, 10, -1723, 15, 'Mexican Pacific Time - Baja California away from US border'
+        c.timezone 'America/Bahia_Banderas', 104, 5, -421, 4, 'Mexican Central Time - Bahia de Banderas'
       end
       country 'MY', 'Malaysia' do |c|
         c.timezone 'Asia/Kuala_Lumpur', 19, 6, 1017, 10, 'peninsular Malaysia'
