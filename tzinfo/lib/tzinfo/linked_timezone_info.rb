@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006 Philip Ross
+# Copyright (c) 2006-2010 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,8 +19,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #++
-
-require 'tzinfo/timezone_info'
 
 module TZInfo
   # Represents a linked timezone defined in a data module.

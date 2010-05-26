@@ -1,7 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
 require File.join(File.dirname(__FILE__), 'test_utils')
-require 'tzinfo/country'
+require 'tzinfo'
 
 include TZInfo
 

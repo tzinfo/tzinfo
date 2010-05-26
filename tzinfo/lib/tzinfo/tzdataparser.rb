@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005 Philip Ross
+# Copyright (c) 2005-2010 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -298,10 +298,8 @@ module TZInfo
         FileUtils.mkdir_p(dir)
         
         File.open(dir + File::SEPARATOR + 'countries.rb', 'w') {|file|
-          file.binmode        
-               
-          file.puts('require \'tzinfo/country_index_definition\'')
-          file.puts('')
+          file.binmode
+          
           file.puts('module TZInfo')
           file.puts('  module Indexes')
           file.puts('    module Countries')
@@ -325,8 +323,6 @@ module TZInfo
         File.open(File.join(dir, 'timezones.rb'), 'w') do |file|
           file.binmode
           
-          file.puts('require \'tzinfo/timezone_index_definition\'')
-          file.puts('')
           file.puts('module TZInfo')
           file.puts('  module Indexes')
           file.puts('    module Timezones')
@@ -514,9 +510,6 @@ module TZInfo
         def file.puts(s)
           super("#{' ' * (@tz_indent || 0)}#{s}")
         end
-        
-        file.puts('require \'tzinfo/timezone_definition\'')
-        file.puts('')        
         
         file.puts('module TZInfo')
         file.indent(2)

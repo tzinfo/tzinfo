@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006 Philip Ross
+# Copyright (c) 2006-2010 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,12 +19,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #++
-
-require 'tzinfo/time_or_datetime'
-require 'tzinfo/timezone_info'
-require 'tzinfo/timezone_offset_info'
-require 'tzinfo/timezone_period'
-require 'tzinfo/timezone_transition_info'
 
 module TZInfo
   # Thrown if no offsets have been defined when calling period_for_utc or

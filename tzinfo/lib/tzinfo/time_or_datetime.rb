@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006 Philip Ross
+# Copyright (c) 2006-2010 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@
 
 require 'date'
 require 'time'
-require 'tzinfo/offset_rationals'
 
 module TZInfo
   # Used by TZInfo internally to represent either a Time, DateTime or integer

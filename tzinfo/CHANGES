@@ -8,6 +8,11 @@
 * Ruby 1.9.2 has deprecated "require 'rational'", but older versions of
   Ruby need rational to be required. Require rational only when the Rational
   module has not already been loaded.
+* Remove circular requires (now a warning in Ruby 1.9.2). Instead of using
+  requires in each file for dependencies, tzinfo.rb now requires all tzinfo
+  files. If you were previously requiring files within the tzinfo directory
+  (e.g. require 'tzinfo/timezone'), then you will now have to
+  require 'tzinfo' instead.
 
 
 == Version 0.3.20 (tzdata v2010i) - 19-Apr-2010
