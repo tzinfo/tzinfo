@@ -1,8 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
 require File.join(File.dirname(__FILE__), 'test_utils')
-require 'tzinfo/linked_timezone'
-require 'tzinfo/linked_timezone_info'
+require 'tzinfo'
 
 include TZInfo
 

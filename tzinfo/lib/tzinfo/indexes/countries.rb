@@ -1,5 +1,3 @@
-require 'tzinfo/country_index_definition'
-
 module TZInfo
   module Indexes
     module Countries

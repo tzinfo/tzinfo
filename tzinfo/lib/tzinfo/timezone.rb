@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2006 Philip Ross
+# Copyright (c) 2005-2010 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,6 @@
 #++
 
 require 'date'
-require 'tzinfo/country'
-require 'tzinfo/time_or_datetime'
-require 'tzinfo/timezone_period'
 
 module TZInfo
   # Indicate a specified time in a local timezone has more than one

@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
-require 'tzinfo/time_or_datetime'
+require 'tzinfo'
 
 include TZInfo
 

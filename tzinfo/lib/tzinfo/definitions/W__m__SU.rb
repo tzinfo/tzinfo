@@ -1,5 +1,3 @@
-require 'tzinfo/timezone_definition'
-
 module TZInfo
   module Definitions
     module W__m__SU

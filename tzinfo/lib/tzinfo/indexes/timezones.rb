@@ -1,5 +1,3 @@
-require 'tzinfo/timezone_index_definition'
-
 module TZInfo
   module Indexes
     module Timezones
