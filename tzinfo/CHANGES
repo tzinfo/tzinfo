@@ -1,5 +1,7 @@
 == Version ?????? - ?????????
 
+* Include current directory in load path to allow running tests on
+  Ruby 1.9.2, which doesn't include it by default any more.
 * Untaint the timezone module filename after validation to allow use
   with $SAFE == 1 (e.g. under mod_ruby). Thanks to Dmitry Borodaenko for
   the suggestion. Closes #25349.
