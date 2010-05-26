@@ -145,12 +145,12 @@ module TZInfo
     # Parses an offset string [-]h:m:s (minutes and seconds are optional). Returns
     # the offset in seconds.
     def self.parse_offset(offset)
-      raise "Invalid time: #{offset}" if offset !~ /^(-)?([0-9]+)(:([0-9]+)(:([0-9]+))?)?$/
+      raise "Invalid time: #{offset}" if offset !~ /^(-)?(?:([0-9]+)(?::([0-9]+)(?::([0-9]+))?)?)?$/
       
       negative = !$1.nil?      
-      hour = $2.to_i
-      minute = $4.nil? ? 0 : $4.to_i
-      second = $6.nil? ? 0 : $6.to_i
+      hour = $2.nil? ? 0 : $2.to_i
+      minute = $3.nil? ? 0 : $3.to_i
+      second = $4.nil? ? 0 : $4.to_i
       
       seconds = hour
       seconds = seconds * 60
