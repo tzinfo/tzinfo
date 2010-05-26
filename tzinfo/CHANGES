@@ -1,6 +1,7 @@
 == Version ?????? - ?????????
 
 * Added a description to the gem spec.
+* List test files in test_files instead of files in the gem spec.
 * Include current directory in load path to allow running tests on
   Ruby 1.9.2, which doesn't include it by default any more.
 * Untaint the timezone module filename after validation to allow use
