@@ -20,7 +20,7 @@
 # THE SOFTWARE.
 #++
 
-require 'rational'
+require 'rational' unless defined?(Rational)
 require 'tzinfo/ruby_core_support'
 
 module TZInfo
