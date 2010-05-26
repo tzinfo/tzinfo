@@ -2,6 +2,8 @@
 
 * Support the use of '-' to denote '0' as an offset. Used for the first time
   in the SAVE field in tzdata v2009u.
+* Change invalid timezone check to exclude characters not used in timezone
+  identifiers and avoid 'character class has duplicated range' warnings.
 * Added a description to the gem spec.
 * List test files in test_files instead of files in the gem spec.
 * Include current directory in load path to allow running tests on

@@ -78,7 +78,7 @@ module TZInfo
     def self.get(identifier)
       instance = @@loaded_zones[identifier]
       unless instance  
-        raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-z0-9\+\-_]+(\/[A-z0-9\+\-_]+)*$/
+        raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-Za-z0-9\+\-_]+(\/[A-Za-z0-9\+\-_]+)*$/
         identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
         begin
           # Use a temporary variable to avoid an rdoc warning
