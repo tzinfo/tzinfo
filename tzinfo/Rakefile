@@ -40,6 +40,7 @@ SPEC = Gem::Specification.new do |s|
   s.homepage = "http://tzinfo.rubyforge.org/"
   s.platform = Gem::Platform::RUBY
   s.summary = "Daylight-savings aware timezone library"  
+  s.description = "TZInfo is a Ruby library that uses the standard tz (Olson) database to provide daylight savings aware transformations between times in different time zones."
   s.files = PKG_FILES.delete_if do |item|
     item.include?(".svn")
   end
