@@ -2,6 +2,8 @@
 
 * Updated to tzdata version 2010j
   (http://article.gmane.org/gmane.comp.time.tz/3225).
+* Change invalid timezone check to exclude characters not used in timezone
+  identifiers and avoid 'character class has duplicated range' warnings.
 
 
 == Version 0.3.20 (tzdata v2010i) - 19-Apr-2010
