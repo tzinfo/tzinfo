@@ -1,3 +1,9 @@
+== Version ?????? (tzdata v2010k) - ???????????
+
+* Updated to tzdata version 2010k
+  (http://article.gmane.org/gmane.comp.time.tz/3337).
+
+
 == Version 0.3.22 (tzdata v2010j) - 29-May-2010
 
 * Corrected file permissions issue with 0.3.21 release.

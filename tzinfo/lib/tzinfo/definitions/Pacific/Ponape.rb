@@ -4,12 +4,7 @@ module TZInfo
       module Ponape
         include TimezoneDefinition
         
-        timezone 'Pacific/Ponape' do |tz|
-          tz.offset :o0, 37972, 0, :LMT
-          tz.offset :o1, 39600, 0, :PONT
-          
-          tz.transition 1900, 12, :o1, 52172317307, 21600
-        end
+        linked_timezone 'Pacific/Ponape', 'Pacific/Pohnpei'
       end
     end
   end

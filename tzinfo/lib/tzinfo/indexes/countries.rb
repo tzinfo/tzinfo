@@ -297,8 +297,8 @@ module TZInfo
         c.timezone 'Atlantic/Stanley', -517, 10, -1157, 20
       end
       country 'FM', 'Micronesia' do |c|
-        c.timezone 'Pacific/Truk', 89, 12, 9107, 60, 'Truk (Chuuk) and Yap'
-        c.timezone 'Pacific/Ponape', 209, 30, 9493, 60, 'Ponape (Pohnpei)'
+        c.timezone 'Pacific/Chuuk', 89, 12, 9107, 60, 'Chuuk (Truk) and Yap'
+        c.timezone 'Pacific/Pohnpei', 209, 30, 9493, 60, 'Pohnpei (Ponape)'
         c.timezone 'Pacific/Kosrae', 319, 60, 9779, 60, 'Kosrae'
       end
       country 'FO', 'Faroe Islands' do |c|

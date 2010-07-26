@@ -4,7 +4,7 @@ module TZInfo
       module Yap
         include TimezoneDefinition
         
-        linked_timezone 'Pacific/Yap', 'Pacific/Truk'
+        linked_timezone 'Pacific/Yap', 'Pacific/Chuuk'
       end
     end
   end

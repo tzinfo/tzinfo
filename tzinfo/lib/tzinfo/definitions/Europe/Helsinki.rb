@@ -14,10 +14,10 @@ module TZInfo
           tz.transition 1921, 4, :o2, 26166352651, 10800
           tz.transition 1942, 4, :o3, 29165429, 12
           tz.transition 1942, 10, :o2, 19445083, 8
-          tz.transition 1981, 3, :o3, 354675600
-          tz.transition 1981, 9, :o2, 370400400
-          tz.transition 1982, 3, :o3, 386125200
-          tz.transition 1982, 9, :o2, 401850000
+          tz.transition 1981, 3, :o3, 354672000
+          tz.transition 1981, 9, :o2, 370396800
+          tz.transition 1982, 3, :o3, 386121600
+          tz.transition 1982, 9, :o2, 401846400
           tz.transition 1983, 3, :o3, 417574800
           tz.transition 1983, 9, :o2, 433299600
           tz.transition 1984, 3, :o3, 449024400
