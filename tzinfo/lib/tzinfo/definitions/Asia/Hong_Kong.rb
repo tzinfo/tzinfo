@@ -77,8 +77,6 @@ module TZInfo
           tz.transition 1975, 10, :o1, 182889000
           tz.transition 1976, 4, :o2, 198617400
           tz.transition 1976, 10, :o1, 214338600
-          tz.transition 1977, 4, :o2, 230067000
-          tz.transition 1977, 10, :o1, 245788200
           tz.transition 1979, 5, :o2, 295385400
           tz.transition 1979, 10, :o1, 309292200
         end
