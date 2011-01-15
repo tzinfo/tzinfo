@@ -1,9 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TZInfo - Ruby Timezone Library</title>
@@ -43,58 +39,22 @@
       The source code is available through <a href="http://rubyforge.org/scm/?group_id=894">SVN</a>.
     </p>
     <h2>Ruby on Rails</h2>
-    <h3>Articles</h3>
-    <ul>
-      <li>
-        <p>
-          <a href="http://scott.elitists.net/">Scott Barron</a>
-          has written an article on <a href="http://lunchroom.lunchboxsoftware.com/pages/tzinfo_rails">using TZInfo with Ruby on Rails</a>.
-        </p>
-        <p>
-          Note that the article was based on version 0.0.1 of TZInfo. There is now an easier way to display a drop-down select list of
-          time zones than is described. With TZInfo v0.0.3 and later you can use
-        </p>
-        <pre>&lt;%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %&gt;</pre>
-        <p>
-          instead of having to use the placeholder TzForSelect class.
-        </p>
-      </li>
-      <li>
-        <p>
-          <a href="http://marklunds.com/">Peter Marklund</a> has written a
-          <a href="http://marklunds.com/articles/one/311">Timezone Aware Datetime Picker</a> recipe that uses TZInfo.
-        </p>
-      </li>
-    </ul>
-    <h3>Plugin</h3>
     <p>
-      <a href="http://jamis.jamisbuck.org/">Jamis Buck</a> has released a plugin that replaces the Rails
-      TimeZone class with one that uses TZInfo to do the conversions. To install it run:
-    </p>
-    <pre>ruby script/plugin install tzinfo_timezone</pre>
-    <p>
-      The plugin can be found in the Ruby on Rails SVN repository at
-      <a href="http://dev.rubyonrails.org/svn/rails/plugins/tzinfo_timezone/">http://dev.rubyonrails.org/svn/rails/plugins/tzinfo_timezone/</a>.
-      See the <a href="http://dev.rubyonrails.org/svn/rails/plugins/tzinfo_timezone/README">README file</a> for
-      more information.
+      Ruby on Rails (version 2.1 and later) uses TZInfo for timezone support. Rails can automatically store times in UTC
+      and convert to the user's timezone for display. See <a href="http://wiki.rubyonrails.org/howtos/time-zones">Working wth Time Zones</a> in
+      the Ruby on Rails Wiki for details.
     </p>
     <h2>Alternatives</h2>
     <h3>Ruby/TZFile</h3>
     <p>
-      <a href="http://cvs.m17n.org/~akr/ruby-tzfile/">Ruby/TZFile</a> provides a similar interface to TZInfo, but
+      <a href="http://www.a-k-r.org/ruby-tzfile/">Ruby/TZFile</a> provides a similar interface to TZInfo, but
       requires you to have zoneinfo files available locally.
-    </p>
-    <h3>Ruby on Rails TimeZone Class</h3>
-    <p>
-      <a href="http://www.rubyonrails.com">Ruby on Rails</a> provides a simple
-      <a href="http://api.rubyonrails.com/classes/TimeZone.html">TimeZone</a> class. This does not have
-      any support for daylight savings.
     </p>
     <p>
       <small>
-        <a href="http://phil.ross.org.uk/">Phil Ross</a>
+        <a href="http://philross.co.uk">Phil Ross</a>
         <br />
-        28th August 2006
+        15th January 2011
       </small>
     </p>
   </body>
