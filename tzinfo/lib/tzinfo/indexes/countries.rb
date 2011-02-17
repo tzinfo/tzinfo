@@ -386,8 +386,8 @@ module TZInfo
       country 'ID', 'Indonesia' do |c|
         c.timezone 'Asia/Jakarta', -37, 6, 534, 5, 'Java & Sumatra'
         c.timezone 'Asia/Pontianak', -1, 30, 328, 3, 'west & central Borneo'
-        c.timezone 'Asia/Makassar', -307, 60, 597, 5, 'east & south Borneo, Celebes, Bali, Nusa Tengarra, west Timor'
-        c.timezone 'Asia/Jayapura', -38, 15, 1407, 10, 'Irian Jaya & the Moluccas'
+        c.timezone 'Asia/Makassar', -307, 60, 597, 5, 'east & south Borneo, Sulawesi (Celebes), Bali, Nusa Tengarra, west Timor'
+        c.timezone 'Asia/Jayapura', -38, 15, 1407, 10, 'west New Guinea (Irian Jaya) & Malukus (Moluccas)'
       end
       country 'IE', 'Ireland' do |c|
         c.timezone 'Europe/Dublin', 160, 3, -25, 4
@@ -839,6 +839,7 @@ module TZInfo
         c.timezone 'America/Menominee', 40597, 900, -105137, 1200, 'Central Time - Michigan - Dickinson, Gogebic, Iron & Menominee Counties'
         c.timezone 'America/North_Dakota/Center', 169619, 3600, -121559, 1200, 'Central Time - North Dakota - Oliver County'
         c.timezone 'America/North_Dakota/New_Salem', 9369, 200, -121693, 1200, 'Central Time - North Dakota - Morton County (except Mandan area)'
+        c.timezone 'America/North_Dakota/Beulah', 56717, 1200, -916, 9, 'Central Time - North Dakota - Mercer County'
         c.timezone 'America/Denver', 47687, 1200, -125981, 1200, 'Mountain Time'
         c.timezone 'America/Boise', 157009, 3600, -46481, 400, 'Mountain Time - south Idaho & east Oregon'
         c.timezone 'America/Shiprock', 33107, 900, -391271, 3600, 'Mountain Time - Navajo'

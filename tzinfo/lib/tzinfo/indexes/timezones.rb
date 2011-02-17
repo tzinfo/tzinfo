@@ -169,6 +169,7 @@ module TZInfo
       timezone 'America/Nipigon'
       timezone 'America/Nome'
       timezone 'America/Noronha'
+      timezone 'America/North_Dakota/Beulah'
       timezone 'America/North_Dakota/Center'
       timezone 'America/North_Dakota/New_Salem'
       timezone 'America/Ojinaga'
