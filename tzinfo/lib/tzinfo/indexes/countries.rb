@@ -847,9 +847,11 @@ module TZInfo
         c.timezone 'America/Los_Angeles', 30647, 900, -212837, 1800, 'Pacific Time'
         c.timezone 'America/Anchorage', 44077, 720, -539641, 3600, 'Alaska Time'
         c.timezone 'America/Juneau', 209887, 3600, -483911, 3600, 'Alaska Time - Alaska panhandle'
+        c.timezone 'America/Sitka', 41167, 720, -487087, 3600, 'Alaska Time - southeast Alaska panhandle'
         c.timezone 'America/Yakutat', 214369, 3600, -251509, 1800, 'Alaska Time - Alaska panhandle neck'
         c.timezone 'America/Nome', 58051, 900, -595463, 3600, 'Alaska Time - west Alaska'
         c.timezone 'America/Adak', 1297, 25, -635969, 3600, 'Aleutian Islands'
+        c.timezone 'America/Metlakatla', 198457, 3600, -18947, 144, 'Metlakatla Time - Annette Island'
         c.timezone 'Pacific/Honolulu', 15341, 720, -18943, 120, 'Hawaii'
       end
       country 'UY', 'Uruguay' do |c|
