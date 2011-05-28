@@ -40,8 +40,6 @@ module TZInfo
       end
     end
     
-    HALF_DAYS_IN_DAY = rational_new!(1, 2)
-    
     # Ruby 1.8.6 introduced new! and deprecated new0.
     # Ruby 1.9.0 removed new0.
     # Ruby trunk revision 31668 removed the new! method.
@@ -57,6 +55,8 @@ module TZInfo
         DateTime.new0(ajd, of, sg)
       end
     else
+      HALF_DAYS_IN_DAY = rational_new!(1, 2)
+
       def self.datetime_new!(ajd = 0, of = 0, sg = Date::ITALY)
         # Convert from an Astronomical Julian Day number to a civil Julian Day number.
         jd = ajd + of + HALF_DAYS_IN_DAY
