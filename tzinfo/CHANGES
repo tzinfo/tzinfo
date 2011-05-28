@@ -20,6 +20,10 @@
 * Untaint the timezone module filename after validation to allow use
   with $SAFE == 1 (e.g. under mod_ruby). Thanks to Dmitry Borodaenko for
   the suggestion. Closes #25349.
+* Support Ruby trunk revision 31668 and later, which removed the 
+  DateTime.new! method. Make RubyCoreSupport.datetime_new! fallback to
+  DateTime.jd instead. Thanks to Aaron Patterson for reporting the removal of
+  the new! method (issue #29233).
 
 
 == Version 0.3.12 (tzdata v2008i) - 12-Nov-2008

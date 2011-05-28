@@ -40,16 +40,27 @@ module TZInfo
       end
     end
     
+    HALF_DAYS_IN_DAY = rational_new!(1, 2)
+    
     # Ruby 1.8.6 introduced new! and deprecated new0.
     # Ruby 1.9.0 removed new0.
-    # We still need to support new0 for older versions of Ruby.
+    # Ruby trunk revision 31668 removed the new! method.
+    # Still support new0 for better performance on older versions of Ruby (indicates that
+    # the rational has already been reduced to its lowest terms).
+    # Fallback to jd with conversion from ajd if new! and new0 are unavailable.
     if DateTime.respond_to? :new!
       def self.datetime_new!(ajd = 0, of = 0, sg = Date::ITALY)
         DateTime.new!(ajd, of, sg)
       end
-    else
+    elsif DateTime.respond_to? :new0
       def self.datetime_new!(ajd = 0, of = 0, sg = Date::ITALY)
         DateTime.new0(ajd, of, sg)
+      end
+    else
+      def self.datetime_new!(ajd = 0, of = 0, sg = Date::ITALY)
+        # Convert from an Astromical Julian Day Number to a (civil) Julian Day Number.
+        jd = ajd + of + HALF_DAYS_IN_DAY
+        DateTime.jd(jd, 0, 0, 0, of, sg)
       end
     end
   end
