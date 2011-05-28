@@ -58,7 +58,7 @@ module TZInfo
       end
     else
       def self.datetime_new!(ajd = 0, of = 0, sg = Date::ITALY)
-        # Convert from an Astromical Julian Day Number to a (civil) Julian Day Number.
+        # Convert from an Astronomical Julian Day number to a civil Julian Day number.
         jd = ajd + of + HALF_DAYS_IN_DAY
         DateTime.jd(jd, 0, 0, 0, of, sg)
       end
