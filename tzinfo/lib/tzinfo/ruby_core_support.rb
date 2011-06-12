@@ -43,8 +43,8 @@ module TZInfo
     # Ruby 1.8.6 introduced new! and deprecated new0.
     # Ruby 1.9.0 removed new0.
     # Ruby trunk revision 31668 removed the new! method.
-    # Still support new0 for better performance on older versions of Ruby (indicates that
-    # the rational has already been reduced to its lowest terms).
+    # Still support new0 for better performance on older versions of Ruby (new0 indicates
+    # that the rational has already been reduced to its lowest terms).
     # Fallback to jd with conversion from ajd if new! and new0 are unavailable.
     if DateTime.respond_to? :new!
       def self.datetime_new!(ajd = 0, of = 0, sg = Date::ITALY)
@@ -60,7 +60,19 @@ module TZInfo
       def self.datetime_new!(ajd = 0, of = 0, sg = Date::ITALY)
         # Convert from an Astronomical Julian Day number to a civil Julian Day number.
         jd = ajd + of + HALF_DAYS_IN_DAY
-        DateTime.jd(jd, 0, 0, 0, of, sg)
+        
+        # Ruby trunk revision 31862 changed the behaviour of DateTime.jd so that it will no
+        # longer accept a fractional civil Julian Day number if further arguments are specified.
+        # Calculate the hours, minutes and seconds to pass to jd.
+        
+        jd_i = jd.to_i
+        hours = (jd - jd_i) * 24
+        hours_i = hours.to_i
+        minutes = (hours - hours_i) * 60
+        minutes_i = minutes.to_i
+        seconds = (minutes - minutes_i) * 60
+        
+        DateTime.jd(jd_i, hours_i, minutes_i, seconds, of, sg)
       end
     end
   end
