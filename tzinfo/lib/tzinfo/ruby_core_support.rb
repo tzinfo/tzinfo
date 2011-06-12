@@ -66,6 +66,7 @@ module TZInfo
         # Calculate the hours, minutes and seconds to pass to jd.
         
         jd_i = jd.to_i
+        jd_i -= 1 if jd < 0
         hours = (jd - jd_i) * 24
         hours_i = hours.to_i
         minutes = (hours - hours_i) * 60
