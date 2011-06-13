@@ -1,9 +1,8 @@
-== Version ?????? (tzdata v2011g) - ???????????
+== Version 0.3.28 (tzdata v2011g) - 13-Jun-2011
 
-* Support Ruby trunk revision 31668 and later, which removed the 
-  DateTime.new! method. Make RubyCoreSupport.datetime_new! fallback to
-  DateTime.jd instead. Thanks to Aaron Patterson for reporting the removal of
-  the new! method (issue #29233).
+* Add support for Ruby 1.9.3 (trunk revision 31668 and later). Thanks to 
+  Aaron Patterson for reporting the problems running on the new version.
+  Closes #29233.
 
 
 == Version 0.3.27 (tzdata v2011g) - 26-Apr-2011
