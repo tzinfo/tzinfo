@@ -42,6 +42,29 @@ class TCTimezone < Test::Unit::TestCase
       end
   end
   
+  def setup
+    @orig_default_dst = Timezone.default_dst
+  end
+  
+  def teardown
+    Timezone.default_dst = @orig_default_dst
+  end
+  
+  def test_default_dst_initial_value
+    assert_nil(Timezone.default_dst)
+  end
+  
+  def test_set_default_dst
+    Timezone.default_dst = true
+    assert_equal(true, Timezone.default_dst)
+    Timezone.default_dst = false
+    assert_equal(false, Timezone.default_dst)
+    Timezone.default_dst = nil
+    assert_nil(Timezone.default_dst)
+    Timezone.default_dst = 0
+    assert_equal(true, Timezone.default_dst)
+  end
+  
   def test_get_valid_1
     tz = Timezone.get('Europe/London')
     
@@ -383,6 +406,52 @@ class TCTimezone < Test::Unit::TestCase
     assert_raises(PeriodNotFound) { i_tz.period_for_local(i) }
   end
   
+  def test_period_for_local_default_dst_set_true
+    Timezone.default_dst = true
+    
+    o1 = TimezoneOffsetInfo.new(-18000, 0, :EST)
+    o2 = TimezoneOffsetInfo.new(-18000, 3600, :EDT)
+    
+    t1 = TimezoneTransitionInfo.new(o2, o1, 1081062000)
+    t2 = TimezoneTransitionInfo.new(o1, o2, 1099202400)
+    t3 = TimezoneTransitionInfo.new(o2, o1, 1112511600)
+    
+    p1 = TimezonePeriod.new(t1, t2)
+    p2 = TimezonePeriod.new(t2, t3)
+    
+    dt = DateTime.new(2004,10,31,1,30,0)
+    
+    tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+    
+    assert_equal(p1, tz.period_for_local(dt))
+    assert_equal(p1, tz.period_for_local(dt, true))
+    assert_equal(p2, tz.period_for_local(dt, false))
+    assert_raises(AmbiguousTime) { tz.period_for_local(dt, nil) }
+  end
+  
+  def test_period_for_local_default_dst_set_false
+    Timezone.default_dst = false
+    
+    o1 = TimezoneOffsetInfo.new(-18000, 0, :EST)
+    o2 = TimezoneOffsetInfo.new(-18000, 3600, :EDT)
+    
+    t1 = TimezoneTransitionInfo.new(o2, o1, 1081062000)
+    t2 = TimezoneTransitionInfo.new(o1, o2, 1099202400)
+    t3 = TimezoneTransitionInfo.new(o2, o1, 1112511600)
+    
+    p1 = TimezonePeriod.new(t1, t2)
+    p2 = TimezonePeriod.new(t2, t3)
+    
+    dt = DateTime.new(2004,10,31,1,30,0)
+    
+    tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+    
+    assert_equal(p2, tz.period_for_local(dt))
+    assert_equal(p1, tz.period_for_local(dt, true))
+    assert_equal(p2, tz.period_for_local(dt, false))
+    assert_raises(AmbiguousTime) { tz.period_for_local(dt, nil) }
+  end
+  
   def test_period_for_local_dst_flag_resolved
     o1 = TimezoneOffsetInfo.new(-18000, 0, :EST)
     o2 = TimezoneOffsetInfo.new(-18000, 3600, :EDT)
@@ -646,6 +715,52 @@ class TCTimezone < Test::Unit::TestCase
     assert_raises(PeriodNotFound) { dt_tz.local_to_utc(dt) }
     assert_raises(PeriodNotFound) { t_tz.local_to_utc(t) }
     assert_raises(PeriodNotFound) { i_tz.local_to_utc(i) }
+  end
+  
+  def test_local_to_utc_default_dst_set_true
+    Timezone.default_dst = true
+  
+    o1 = TimezoneOffsetInfo.new(-18000, 0, :EST)
+    o2 = TimezoneOffsetInfo.new(-18000, 3600, :EDT)
+    
+    t1 = TimezoneTransitionInfo.new(o2, o1, 1081062000)
+    t2 = TimezoneTransitionInfo.new(o1, o2, 1099202400)
+    t3 = TimezoneTransitionInfo.new(o2, o1, 1112511600)
+    
+    p1 = TimezonePeriod.new(t1, t2)
+    p2 = TimezonePeriod.new(t2, t3)
+    
+    dt = DateTime.new(2004,10,31,1,30,0)    
+    tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+    
+    assert_equal(DateTime.new(2004,10,31,5,30,0), tz.local_to_utc(dt))    
+    assert_equal(DateTime.new(2004,10,31,5,30,0), tz.local_to_utc(dt, true))
+    assert_equal(DateTime.new(2004,10,31,6,30,0), tz.local_to_utc(dt, false))
+    assert_raises(AmbiguousTime) { tz.local_to_utc(dt, nil) }
+    assert_equal(DateTime.new(2004,10,31,5,30,0), tz.local_to_utc(dt) {|periods| raise BlockCalled, 'should not be called' })
+  end
+  
+  def test_local_to_utc_default_dst_set_false
+    Timezone.default_dst = false
+  
+    o1 = TimezoneOffsetInfo.new(-18000, 0, :EST)
+    o2 = TimezoneOffsetInfo.new(-18000, 3600, :EDT)
+    
+    t1 = TimezoneTransitionInfo.new(o2, o1, 1081062000)
+    t2 = TimezoneTransitionInfo.new(o1, o2, 1099202400)
+    t3 = TimezoneTransitionInfo.new(o2, o1, 1112511600)
+    
+    p1 = TimezonePeriod.new(t1, t2)
+    p2 = TimezonePeriod.new(t2, t3)
+    
+    dt = DateTime.new(2004,10,31,1,30,0)    
+    tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+        
+    assert_equal(DateTime.new(2004,10,31,6,30,0), tz.local_to_utc(dt))
+    assert_equal(DateTime.new(2004,10,31,6,30,0), tz.local_to_utc(dt, false))
+    assert_equal(DateTime.new(2004,10,31,5,30,0), tz.local_to_utc(dt, true))
+    assert_raises(AmbiguousTime) { tz.local_to_utc(dt, nil) }
+    assert_equal(DateTime.new(2004,10,31,6,30,0), tz.local_to_utc(dt) {|periods| raise BlockCalled, 'should not be called' })
   end
   
   def test_local_to_utc_dst_flag_resolved

@@ -68,6 +68,26 @@ module TZInfo
     # Whether the timezones index has been loaded yet.
     @@index_loaded = false
     
+    # Default value of the dst parameter of the local_to_utc and 
+    # period_for_local methods.
+    @@default_dst = nil
+    
+    # Sets the default value of the optional dst parameter of the 
+    # local_to_utc and period_for_local methods. Can be set to nil, true or 
+    # false.
+    #
+    # The value of default_dst defaults to nil if unset.
+    def self.default_dst=(value)
+      @@default_dst = value.nil? ? nil : !!value
+    end
+    
+    # Gets the default value of the optional dst parameter of the 
+    # local_to_utc and period_for_local methods. Can be set to nil, true or 
+    # false.
+    def self.default_dst
+      @@default_dst
+    end
+    
     # Returns a timezone by its identifier (e.g. "Europe/London", 
     # "America/Chicago" or "UTC").
     #
@@ -328,7 +348,12 @@ module TZInfo
     # array of the periods that need to be resolved. The block can select and
     # return a single period or return nil or an empty array
     # to cause an AmbiguousTime exception to be raised.
-    def period_for_local(local, dst = nil)            
+    #
+    # The default value of the dst parameter can be specified by setting
+    # Timezone.default_dst. If default_dst is not set, or is set to nil, then
+    # an AmbiguousTime exception will be raised in ambiguous situations unless
+    # a block is given to resolve the ambiguity.
+    def period_for_local(local, dst = Timezone.default_dst)
       results = periods_for_local(local)
       
       if results.empty?
@@ -406,7 +431,12 @@ module TZInfo
     # array of the periods that need to be resolved. The block can return a
     # single period to use to convert the time or return nil or an empty array
     # to cause an AmbiguousTime exception to be raised.
-    def local_to_utc(local, dst = nil)
+    #
+    # The default value of the dst parameter can be specified by setting
+    # Timezone.default_dst. If default_dst is not set, or is set to nil, then
+    # an AmbiguousTime exception will be raised in ambiguous situations unless
+    # a block is given to resolve the ambiguity.
+    def local_to_utc(local, dst = Timezone.default_dst)
       TimeOrDateTime.wrap(local) {|wrapped|
         if block_given?
           period = period_for_local(wrapped, dst) {|periods| yield periods }
