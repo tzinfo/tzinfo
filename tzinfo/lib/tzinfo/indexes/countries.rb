@@ -24,9 +24,6 @@ module TZInfo
       country 'AM', 'Armenia' do |c|
         c.timezone 'Asia/Yerevan', 2411, 60, 89, 2
       end
-      country 'AN', 'Netherlands Antilles' do |c|
-        c.timezone 'America/Curacao', 731, 60, -69, 1
-      end
       country 'AO', 'Angola' do |c|
         c.timezone 'Africa/Luanda', -44, 5, 397, 30
       end
@@ -124,6 +121,9 @@ module TZInfo
       end
       country 'BO', 'Bolivia' do |c|
         c.timezone 'America/La_Paz', -33, 2, -1363, 20
+      end
+      country 'BQ', 'Bonaire Sint Eustatius & Saba' do |c|
+        c.timezone 'America/Kralendijk', 14581, 1200, -20483, 300
       end
       country 'BR', 'Brazil' do |c|
         c.timezone 'America/Noronha', -77, 20, -389, 12, 'Atlantic islands'
@@ -235,6 +235,9 @@ module TZInfo
       end
       country 'CV', 'Cape Verde' do |c|
         c.timezone 'Atlantic/Cape_Verde', 179, 12, -1411, 60
+      end
+      country 'CW', 'Curacao' do |c|
+        c.timezone 'America/Curacao', 731, 60, -69, 1
       end
       country 'CX', 'Christmas Island' do |c|
         c.timezone 'Indian/Christmas', -125, 12, 6343, 60
@@ -753,6 +756,9 @@ module TZInfo
       end
       country 'SV', 'El Salvador' do |c|
         c.timezone 'America/El_Salvador', 137, 10, -446, 5
+      end
+      country 'SX', 'Sint Maarten' do |c|
+        c.timezone 'America/Lower_Princes', 12997, 720, -22697, 360
       end
       country 'SY', 'Syria' do |c|
         c.timezone 'Asia/Damascus', 67, 2, 363, 10

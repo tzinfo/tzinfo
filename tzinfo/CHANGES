@@ -1,5 +1,7 @@
-== Version ?????? (tzdata v2011g) - ???????????
+== Version ?????? (tzdata v2011h) - ???????????
 
+* Updated to tzdata version 2011h
+  (http://article.gmane.org/gmane.comp.time.tz/3814).
 * Allow the default value of the local_to_utc and period_for_local dst 
   parameter to be specified globally with a Timezone.default_dst attribute.
   Thanks to Kurt Werle for the suggestion and patch.
