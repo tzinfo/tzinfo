@@ -29,6 +29,7 @@ module TZInfo
       timezone 'Africa/Gaborone'
       timezone 'Africa/Harare'
       timezone 'Africa/Johannesburg'
+      timezone 'Africa/Juba'
       timezone 'Africa/Kampala'
       timezone 'Africa/Khartoum'
       timezone 'Africa/Kigali'

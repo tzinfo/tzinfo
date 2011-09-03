@@ -172,7 +172,7 @@ module TZInfo
         c.timezone 'America/Thunder_Bay', 2903, 60, -357, 4, 'Eastern Time - Thunder Bay, Ontario'
         c.timezone 'America/Iqaluit', 956, 15, -1027, 15, 'Eastern Time - east Nunavut - most locations'
         c.timezone 'America/Pangnirtung', 992, 15, -986, 15, 'Eastern Time - Pangnirtung, Nunavut'
-        c.timezone 'America/Resolute', 33613, 450, -22759, 240, 'Eastern Standard Time - Resolute, Nunavut'
+        c.timezone 'America/Resolute', 33613, 450, -22759, 240, 'Central Standard Time - Resolute, Nunavut'
         c.timezone 'America/Atikokan', 175531, 3600, -54973, 600, 'Eastern Standard Time - Atikokan, Ontario and Southampton I, Nunavut'
         c.timezone 'America/Rankin_Inlet', 3769, 60, -331499, 3600, 'Central Time - central Nunavut'
         c.timezone 'America/Winnipeg', 2993, 60, -1943, 20, 'Central Time - Manitoba & west Ontario'
@@ -750,6 +750,9 @@ module TZInfo
       end
       country 'SR', 'Suriname' do |c|
         c.timezone 'America/Paramaribo', 35, 6, -331, 6
+      end
+      country 'SS', 'South Sudan' do |c|
+        c.timezone 'Africa/Juba', 97, 20, 158, 5
       end
       country 'ST', 'Sao Tome & Principe' do |c|
         c.timezone 'Africa/Sao_Tome', 1, 3, 101, 15
