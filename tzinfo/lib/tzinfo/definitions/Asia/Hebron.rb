@@ -1,18 +1,18 @@
 module TZInfo
   module Definitions
     module Asia
-      module Gaza
+      module Hebron
         include TimezoneDefinition
         
-        timezone 'Asia/Gaza' do |tz|
-          tz.offset :o0, 8272, 0, :LMT
+        timezone 'Asia/Hebron' do |tz|
+          tz.offset :o0, 8423, 0, :LMT
           tz.offset :o1, 7200, 0, :EET
           tz.offset :o2, 7200, 3600, :EET
           tz.offset :o3, 7200, 3600, :EEST
           tz.offset :o4, 7200, 0, :IST
           tz.offset :o5, 7200, 3600, :IDT
           
-          tz.transition 1900, 9, :o1, 13042584383, 5400
+          tz.transition 1900, 9, :o1, 208681349977, 86400
           tz.transition 1940, 5, :o2, 29157377, 12
           tz.transition 1942, 10, :o1, 19445315, 8
           tz.transition 1943, 4, :o2, 4861631, 2
@@ -97,13 +97,15 @@ module TZInfo
           tz.transition 2007, 3, :o3, 1175378400
           tz.transition 2007, 9, :o1, 1189638000
           tz.transition 2008, 3, :o3, 1207000800
-          tz.transition 2008, 8, :o1, 1219957200
+          tz.transition 2008, 8, :o1, 1220216400
           tz.transition 2009, 3, :o3, 1238104800
           tz.transition 2009, 9, :o1, 1252018800
           tz.transition 2010, 3, :o3, 1269640860
           tz.transition 2010, 8, :o1, 1281474000
-          tz.transition 2011, 4, :o3, 1301738460
+          tz.transition 2011, 4, :o3, 1301652060
           tz.transition 2011, 7, :o1, 1312146000
+          tz.transition 2011, 8, :o3, 1314655200
+          tz.transition 2011, 10, :o1, 1317600000
         end
       end
     end

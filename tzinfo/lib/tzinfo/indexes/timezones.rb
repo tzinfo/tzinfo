@@ -260,6 +260,7 @@ module TZInfo
       timezone 'Asia/Dushanbe'
       timezone 'Asia/Gaza'
       timezone 'Asia/Harbin'
+      timezone 'Asia/Hebron'
       timezone 'Asia/Ho_Chi_Minh'
       timezone 'Asia/Hong_Kong'
       timezone 'Asia/Hovd'

@@ -660,7 +660,8 @@ module TZInfo
         c.timezone 'America/Puerto_Rico', 11081, 600, -118991, 1800
       end
       country 'PS', 'Palestine' do |c|
-        c.timezone 'Asia/Gaza', 63, 2, 517, 15
+        c.timezone 'Asia/Gaza', 63, 2, 517, 15, 'Gaza Strip'
+        c.timezone 'Asia/Hebron', 473, 15, 7019, 200, 'West Bank'
       end
       country 'PT', 'Portugal' do |c|
         c.timezone 'Europe/Lisbon', 2323, 60, -137, 15, 'mainland'
