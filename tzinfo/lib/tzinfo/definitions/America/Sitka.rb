@@ -5,7 +5,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'America/Sitka' do |tz|
-          tz.offset :o0, -53927, 0, :LMT
+          tz.offset :o0, 53927, 0, :LMT
           tz.offset :o1, -32473, 0, :LMT
           tz.offset :o2, -28800, 0, :PST
           tz.offset :o3, -28800, 3600, :PWT
@@ -15,7 +15,7 @@ module TZInfo
           tz.offset :o7, -32400, 0, :AKST
           tz.offset :o8, -32400, 3600, :AKDT
           
-          tz.transition 1867, 10, :o1, 207641501927, 86400
+          tz.transition 1867, 10, :o1, 207641394073, 86400
           tz.transition 1900, 8, :o2, 208677805273, 86400
           tz.transition 1942, 2, :o3, 29164799, 12
           tz.transition 1945, 8, :o4, 58360379, 24
