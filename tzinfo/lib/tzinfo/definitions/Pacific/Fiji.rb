@@ -19,7 +19,7 @@ module TZInfo
           tz.transition 2010, 10, :o2, 1287842400
           tz.transition 2011, 3, :o1, 1299333600
           tz.transition 2011, 10, :o2, 1319292000
-          tz.transition 2012, 2, :o1, 1330178400
+          tz.transition 2012, 1, :o1, 1327154400
         end
       end
     end
