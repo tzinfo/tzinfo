@@ -13,7 +13,7 @@ module TZInfo
           
           tz.transition 1902, 6, :o1, 17394592799, 7200
           tz.transition 1918, 4, :o2, 9686791, 4
-          tz.transition 1918, 10, :o1, 58125545, 24
+          tz.transition 1918, 10, :o1, 58125449, 24
           tz.transition 1942, 2, :o3, 9721599, 4
           tz.transition 1945, 8, :o4, 58360379, 24
           tz.transition 1945, 9, :o1, 58361489, 24

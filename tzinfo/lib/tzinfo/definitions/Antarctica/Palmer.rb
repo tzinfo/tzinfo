@@ -78,16 +78,16 @@ module TZInfo
           tz.transition 2006, 10, :o6, 1160884800
           tz.transition 2007, 3, :o5, 1173582000
           tz.transition 2007, 10, :o6, 1192334400
-          tz.transition 2008, 3, :o5, 1205031600
+          tz.transition 2008, 3, :o5, 1206846000
           tz.transition 2008, 10, :o6, 1223784000
           tz.transition 2009, 3, :o5, 1237086000
           tz.transition 2009, 10, :o6, 1255233600
-          tz.transition 2010, 3, :o5, 1268535600
+          tz.transition 2010, 4, :o5, 1270350000
           tz.transition 2010, 10, :o6, 1286683200
-          tz.transition 2011, 3, :o5, 1299985200
-          tz.transition 2011, 10, :o6, 1318132800
-          tz.transition 2012, 3, :o5, 1331434800
-          tz.transition 2012, 10, :o6, 1350187200
+          tz.transition 2011, 5, :o5, 1304823600
+          tz.transition 2011, 8, :o6, 1313899200
+          tz.transition 2012, 4, :o5, 1335668400
+          tz.transition 2012, 9, :o6, 1346558400
           tz.transition 2013, 3, :o5, 1362884400
           tz.transition 2013, 10, :o6, 1381636800
           tz.transition 2014, 3, :o5, 1394334000
