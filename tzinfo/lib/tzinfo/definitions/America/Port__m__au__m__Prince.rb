@@ -46,6 +46,8 @@ module TZInfo
           tz.transition 2005, 10, :o2, 1130644800
           tz.transition 2006, 4, :o3, 1143954000
           tz.transition 2006, 10, :o2, 1162094400
+          tz.transition 2012, 3, :o3, 1331449200
+          tz.transition 2012, 11, :o2, 1352008800
         end
       end
     end
