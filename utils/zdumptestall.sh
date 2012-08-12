@@ -1,5 +1,7 @@
 #!/bin/bash
 
+MAXYEAR=2050
+
 if [ $# -ne 2 ]
 then
   echo "Usage: $0 <zoneinfoDir> <zdumpCommand>"
@@ -17,6 +19,6 @@ find . ! -name localtime ! -name posixrules ! -name '*.tab' ! -name 'Factory' -t
   while read zone
   do
     echo "Testing zone $zone"
-    $zdump -v $zone | ./zdumptest.rb
+    $zdump -c ${MAXYEAR} -v $zone | ./zdumptest.rb
   done
 }

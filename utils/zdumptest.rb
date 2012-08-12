@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # Reads zdump formatted lines from stdin. Uses the UTC time in the zdump line
 # to calculate the local time and zone identifier using TZInfo. If there is
