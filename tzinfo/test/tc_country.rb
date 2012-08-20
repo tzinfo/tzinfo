@@ -1,11 +1,17 @@
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
-require 'test/unit'
-require File.join(File.dirname(__FILE__), 'test_utils')
-require 'tzinfo'
+require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
 class TCCountry < Test::Unit::TestCase
+  def setup
+    @orig_data_source = DataSource.current
+    Country.send :class_variable_set, :@@countries, {}
+  end
+  
+  def teardown
+    DataSource.set(@orig_data_source)
+  end
+  
   def test_get_valid
     c = Country.get('GB')
     
@@ -152,5 +158,37 @@ class TCCountry < Test::Unit::TestCase
     
     c = Country.get('US')
     assert_equal('US', Country.get('US').code)
+  end
+  
+  def test_get_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Country.get('GB')
+    end
+  end
+  
+  def test_new_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Country.new('GB')
+    end
+  end
+  
+  def test_all_codes_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Country.all_codes
+    end
+  end
+  
+  def test_all_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Country.all
+    end
   end
 end

@@ -1,6 +1,4 @@
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
-require 'test/unit'
-require 'tzinfo'
+require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 

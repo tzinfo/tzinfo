@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2008-2010 Philip Ross
+# Copyright (c) 2008-2012 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -74,6 +74,32 @@ module TZInfo
         seconds = (minutes - minutes_i) * 60
         
         DateTime.jd(jd_i, hours_i, minutes_i, seconds, of, sg)
+      end
+    end
+    
+    begin
+      Time.at(-1)
+      Time.at(-2147483648)
+      
+      def self.time_supports_negative
+        true
+      end
+    rescue ArgumentError
+      def self.time_supports_negative
+        false
+      end
+    end
+    
+    begin
+      Time.at(-2147483649)
+      Time.at(2147483648)
+      
+      def self.time_supports_64bit
+        true
+      end
+    rescue RangeError
+      def self.time_supports_64bit
+        false
       end
     end
   end

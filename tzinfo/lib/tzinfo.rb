@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2010 Philip Ross
+# Copyright (c) 2005-2012 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,9 @@
 
 # Add the directory containing this file to the start of the load path if it
 # isn't there already.
-$:.unshift(File.dirname(__FILE__)) unless
-  $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
-
+unless $:.include?(File.expand_path(File.dirname(__FILE__)))
+  $:.unshift(File.expand_path(File.dirname(__FILE__)))
+end
 
 require 'tzinfo/ruby_core_support'
 require 'tzinfo/offset_rationals'
@@ -40,6 +40,11 @@ require 'tzinfo/timezone_index_definition'
 require 'tzinfo/timezone_info'
 require 'tzinfo/data_timezone_info'
 require 'tzinfo/linked_timezone_info'
+require 'tzinfo/zoneinfo_timezone_info'
+
+require 'tzinfo/data_source'
+require 'tzinfo/ruby_data_source'
+require 'tzinfo/zoneinfo_data_source'
 
 require 'tzinfo/timezone_period'
 require 'tzinfo/timezone'

@@ -1,6 +1,4 @@
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
-require 'test/unit'
-require 'tzinfo'
+require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
@@ -10,12 +8,10 @@ class TCCountryIndexDefinition < Test::Unit::TestCase
     include CountryIndexDefinition
     
     country 'ZZ', 'Country One' do |c|
-      raise 'Not a CountryInfo' unless c.kind_of?(CountryInfo)
       c.timezone 'Test/Zone/1', 3, 2, 41,20
     end
     
     country 'AA', 'Aland' do |c|
-      raise 'Not a CountryInfo' unless c.kind_of?(CountryInfo)
       c.timezone 'Test/Zone/3', 71,30, 358, 15
       c.timezone 'Test/Zone/2', 41, 20, 211, 30
     end
@@ -27,7 +23,6 @@ class TCCountryIndexDefinition < Test::Unit::TestCase
     include CountryIndexDefinition
     
     country 'CO', 'First Country' do |c|
-      raise 'Not a CountryInfo' unless c.kind_of?(CountryInfo)
     end
   end
   

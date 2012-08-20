@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2012 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -28,31 +28,25 @@ module TZInfo
     attr_reader :name
     
     # Constructs a new CountryInfo with an ISO 3166 country code, name and 
-    # block. The block will be evaluated to obtain the timezones for the country
-    # (when they are first needed).
-    def initialize(code, name, &block)
+    # block. The block will be evaluated to obtain the timezones for the 
+    # country. When the block is evaluated depends on the evaluate_immediately
+    # parameter. If false, the block is evaluated when the zones are first 
+    # needed. If true, the block is evaluated during the constructor.
+    def initialize(code, name, evaluate_immediately = false, &block)
       @code = code
       @name = name
       @block = block
       @zones = nil
       @zone_identifiers = nil
-    end
-    
-    # Called by the index data to define a timezone for the country.
-    def timezone(identifier, latitude_numerator, latitude_denominator, 
-                 longitude_numerator, longitude_denominator, description = nil)
-      # Currently only store the identifiers.
-      @zones << CountryTimezone.new(identifier, latitude_numerator, 
-        latitude_denominator, longitude_numerator, longitude_denominator,
-        description)     
+      
+      zones if evaluate_immediately
     end
     
     # Returns a frozen array of all the zone identifiers for the country. These
     # are in the order they were added using the timezone method.
     def zone_identifiers
       unless @zone_identifiers
-        @zone_identifiers = zones.collect {|zone| zone.identifier}
-        @zone_identifiers.freeze
+        @zone_identifiers = zones.collect {|zone| zone.identifier}.freeze
       end
       
       @zone_identifiers
@@ -68,13 +62,31 @@ module TZInfo
     # the timezone method.
     def zones
       unless @zones
-        @zones = []
-        @block.call(self) if @block
+        zones = Zones.new
+        @block.call(zones) if @block
         @block = nil
-        @zones.freeze
+        @zones = zones.list.freeze
       end
       
       @zones
-    end    
+    end
+    
+    # An instance of the Zones class is passed to the block used to define
+    # timezones.
+    class Zones #:nodoc:
+      attr_reader :list
+    
+      def initialize
+        @list = []
+      end
+    
+      # Called by the index data to define a timezone for the country.
+      def timezone(identifier, latitude_numerator, latitude_denominator, 
+                   longitude_numerator, longitude_denominator, description = nil)          
+        @list << CountryTimezone.new(identifier, latitude_numerator, 
+          latitude_denominator, longitude_numerator, longitude_denominator,
+          description)     
+      end
+    end
   end
 end

@@ -1,6 +1,4 @@
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
-require 'test/unit'
-require 'tzinfo'
+require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
@@ -30,7 +28,6 @@ class TCCountryInfo < Test::Unit::TestCase
   
   def test_zone_identifiers
     ci = CountryInfo.new('ZZ', 'Zzz') do |c|
-      assert_same(ci, c)
       c.timezone('ZZ/TimezoneB', 1, 2, 1, 2, 'Timezone B')
       c.timezone('ZZ/TimezoneA', 1, 4, 1, 4, 'Timezone A')
       c.timezone('ZZ/TimezoneC', -10, 3, -20, 7, 'C')
@@ -55,7 +52,6 @@ class TCCountryInfo < Test::Unit::TestCase
   
   def test_zones
     ci = CountryInfo.new('ZZ', 'Zzz') do |c|
-      assert_same(ci, c)
       c.timezone('ZZ/TimezoneB', 1, 2, 1, 2, 'Timezone B')
       c.timezone('ZZ/TimezoneA', 1, 4, 1, 4, 'Timezone A')
       c.timezone('ZZ/TimezoneC', -10, 3, -20, 7, 'C')
@@ -68,5 +64,27 @@ class TCCountryInfo < Test::Unit::TestCase
       CountryTimezone.new('ZZ/TimezoneD', -10, 3, -20, 7)],
       ci.zones)
     assert(ci.zones.frozen?)
-  end    
+  end
+  
+  def test_evaluate_immediately
+    block_called = false
+    
+    ci = CountryInfo.new('ZZ', 'Zzz', true) do |c|
+      block_called = true
+    end
+    
+    assert_equal(true, block_called)
+  end
+  
+  def test_deferred_evaluate
+    block_called = false
+    
+    ci = CountryInfo.new('ZZ', 'Zzz', false) do |c|
+      block_called = true
+    end
+    
+    assert_equal(false, block_called)
+    ci.zones
+    assert_equal(true, block_called)
+  end
 end

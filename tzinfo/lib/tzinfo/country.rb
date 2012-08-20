@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2010 Philip Ross
+# Copyright (c) 2005-2012 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -47,9 +47,7 @@ module TZInfo
       instance = @@countries[identifier]
       
       unless instance
-        load_index
-        info = Indexes::Countries.countries[identifier]        
-        raise InvalidCountryCode.new, 'Invalid identifier' unless info
+        info = data_source.load_country_info(identifier)  
         instance = Country.new(info)
         @@countries[identifier] = instance
       end      
@@ -71,14 +69,12 @@ module TZInfo
     
     # Returns an Array of all the valid country codes.
     def self.all_codes
-      load_index
-      Indexes::Countries.countries.keys
+      data_source.country_codes
     end
     
     # Returns an Array of all the defined Countries.
     def self.all
-      load_index
-      Indexes::Countries.countries.keys.collect {|code| get(code)}
+      data_source.country_codes.collect {|code| get(code)}
     end       
     
     # The ISO 3166 country code.
@@ -159,18 +155,15 @@ module TZInfo
     end
     
     private
-      # Loads in the index of countries if it hasn't already been loaded.
-      def self.load_index
-        unless @@index_loaded
-          require 'tzinfo/indexes/countries'
-          @@index_loaded = true
-        end        
-      end     
-      
       # Called by Country.new to initialize a new Country instance. The info
       # parameter is a CountryInfo that defines the country.
       def setup(info)
         @info = info        
+      end
+      
+      # Returns the current DataSource
+      def self.data_source
+        DataSource.current
       end
   end 
 end

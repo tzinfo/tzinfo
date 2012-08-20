@@ -1,7 +1,4 @@
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
-require 'test/unit'
-require File.join(File.dirname(__FILE__), 'test_utils')
-require 'tzinfo'
+require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
@@ -44,10 +41,13 @@ class TCTimezone < Test::Unit::TestCase
   
   def setup
     @orig_default_dst = Timezone.default_dst
+    @orig_data_source = DataSource.current
+    Timezone.send :class_variable_set, :@@loaded_zones, {}
   end
   
   def teardown
     Timezone.default_dst = @orig_default_dst
+    DataSource.set(@orig_data_source)
   end
   
   def test_default_dst_initial_value
@@ -73,9 +73,21 @@ class TCTimezone < Test::Unit::TestCase
   end
   
   def test_get_valid_2
+    # When running the tests with ZoneinfoDataSource on Windows, this won't
+    # return a LinkedTimezone. Check what the data source is and perform
+    # the appropriate checks.
+    
+    linked = !DataSource.current.kind_of?(ZoneinfoDataSource) ||
+      DataSource.current.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
+        
     tz = Timezone.get('UTC')
     
-    assert_kind_of(LinkedTimezone, tz)    
+    if linked
+      assert_kind_of(LinkedTimezone, tz)  
+    else
+      assert_kind_of(DataTimezone, tz)
+    end
+    
     assert_equal('UTC', tz.identifier)
   end
   
@@ -102,18 +114,6 @@ class TCTimezone < Test::Unit::TestCase
   
   def test_get_nil
     assert_raises(InvalidTimezoneIdentifier) { Timezone.get(nil) }
-  end
-  
-  def test_get_plus
-    tz = Timezone.get('Etc/GMT+1')
-    
-    assert_equal('Etc/GMT+1', tz.identifier)
-  end
-  
-  def test_get_minus
-    tz = Timezone.get('Etc/GMT-1')
-    
-    assert_equal('Etc/GMT-1', tz.identifier)
   end
   
   def test_get_case    
@@ -152,7 +152,7 @@ class TCTimezone < Test::Unit::TestCase
   # http://groups.google.com/group/ruby-talk-google/browse_thread/thread/170a7205555cedfc
   # It doesn't appear to be possible to require a file from the load path in Ruby 1.9.
   if RUBY_VERSION !~ /^1.9/
-    def test_get_tainted_not_loaded
+    def test_get_tainted_not_previously_loaded
       safe_test do
         tz = Timezone.get('Europe/Amsterdam'.taint)
         assert_equal('Europe/Amsterdam', tz.identifier)
@@ -199,35 +199,35 @@ class TCTimezone < Test::Unit::TestCase
   
   def test_all
     all = Timezone.all
-    expected = Indexes::Timezones.timezones.collect {|identifier| Timezone.get_proxy(identifier)}
+    expected = DataSource.current.timezone_identifiers.collect {|identifier| Timezone.get_proxy(identifier)}
     assert_equal(expected, all)
   end
   
   def test_all_identifiers
     all = Timezone.all_identifiers
-    assert_equal(Indexes::Timezones.timezones, all)
+    assert_equal(DataSource.current.timezone_identifiers, all)
   end
   
   def test_all_data_zones
     all_data = Timezone.all_data_zones
-    expected = Indexes::Timezones.data_timezones.collect {|identifier| Timezone.get_proxy(identifier)}
+    expected = DataSource.current.data_timezone_identifiers.collect {|identifier| Timezone.get_proxy(identifier)}
     assert_equal(expected, all_data)
   end
   
   def test_all_data_zone_identifiers
     all_data = Timezone.all_data_zone_identifiers
-    assert_equal(Indexes::Timezones.data_timezones, all_data)
+    assert_equal(DataSource.current.data_timezone_identifiers, all_data)
   end
   
   def test_all_linked_zones
     all_linked = Timezone.all_linked_zones
-    expected = Indexes::Timezones.linked_timezones.collect {|identifier| Timezone.get_proxy(identifier)}
+    expected = DataSource.current.linked_timezone_identifiers.collect {|identifier| Timezone.get_proxy(identifier)}
     assert_equal(expected, all_linked)
   end
   
   def test_all_linked_zone_identifiers
     all_linked = Timezone.all_linked_zone_identifiers
-    assert_equal(Indexes::Timezones.linked_timezones, all_linked)
+    assert_equal(DataSource.current.linked_timezone_identifiers, all_linked)
   end
   
   def test_all_country_zones
@@ -933,17 +933,30 @@ class TCTimezone < Test::Unit::TestCase
   end
   
   def test_marshal_linked
+    # When running the tests with ZoneinfoDataSource on Windows, this won't
+    # return a LinkedTimezone. Check what the data source is and perform
+    # the appropriate checks.
+    
+    linked = !DataSource.current.kind_of?(ZoneinfoDataSource) ||
+      DataSource.current.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
+  
     tz = Timezone.get('UTC')
-    assert_kind_of(LinkedTimezone, tz)
+    
+    if linked
+      assert_kind_of(LinkedTimezone, tz)
+    else
+      assert_kind_of(DataTimezone, tz)
+    end
+    
     assert_same(tz, Marshal.load(Marshal.dump(tz)))    
   end
   
   def test_strftime_datetime
     tz = Timezone.get('Europe/London')
-    assert_equal('23:12:02 BST', tz.strftime('%H:%M:%S %Z', DateTime.new(1965, 7, 15, 22, 12, 2)))
-    assert_equal('BST', tz.strftime('%Z', DateTime.new(1965, 7, 15, 22, 12, 2)))
-    assert_equal('%ZBST', tz.strftime('%%Z%Z', DateTime.new(1965, 7, 15, 22, 12, 2)))
-    assert_equal('BST BST', tz.strftime('%Z %Z', DateTime.new(1965, 7, 15, 22, 12, 2)))
+    assert_equal('23:12:02 BST', tz.strftime('%H:%M:%S %Z', DateTime.new(2006, 7, 15, 22, 12, 2)))
+    assert_equal('BST', tz.strftime('%Z', DateTime.new(2006, 7, 15, 22, 12, 2)))
+    assert_equal('%ZBST', tz.strftime('%%Z%Z', DateTime.new(2006, 7, 15, 22, 12, 2)))
+    assert_equal('BST BST', tz.strftime('%Z %Z', DateTime.new(2006, 7, 15, 22, 12, 2)))
   end
   
   def test_strftime_time
@@ -961,4 +974,68 @@ class TCTimezone < Test::Unit::TestCase
     assert_equal('%ZBST', tz.strftime('%%Z%Z', Time.utc(2006, 7, 15, 22, 12, 2).to_i))
     assert_equal('BST BST', tz.strftime('%Z %Z', Time.utc(2006, 7, 15, 22, 12, 2).to_i))
   end
+  
+  def test_get_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Timezone.get('Europe/London')
+    end
+  end
+  
+  def test_new_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Timezone.new('Europe/London')
+    end
+  end
+  
+  def test_all_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Timezone.all
+    end
+  end
+  
+  def test_all_identifiers_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Timezone.all_identifiers
+    end
+  end
+  
+  def test_all_data_zones_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Timezone.all_data_zones
+    end
+  end
+  
+  def test_all_data_zone_identifiers_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Timezone.all_data_zone_identifiers
+    end
+  end
+
+  def test_all_linked_zones_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Timezone.all_linked_zones
+    end
+  end
+
+  def test_all_linked_zone_identifiers_missing_data_source
+    DataSource.set(DataSource.new)
+    
+    assert_raises(MissingDataSourceError) do
+      Timezone.all_linked_zone_identifiers
+    end
+  end  
 end

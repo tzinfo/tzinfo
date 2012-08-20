@@ -3,11 +3,16 @@
 TZInfo[http://tzinfo.rubyforge.org] uses the tz database 
 (http://www.twinsun.com/tz/tz-link.htm) to provide
 daylight-savings aware transformations between times in different timezones.
-This is the same database as used for zoneinfo on Unix machines.
+This is the same database as used to create the zoneinfo directory on *nix 
+machines.
 
-The tz database has been imported (using TZDataParser) and turned into a set of
-Ruby modules (which are packaged with this release).
+TZInfo can load data from:
 
+1. Ruby modules generated from the tz database and included with TZInfo.
+2. A zoneinfo directory, typically packaged with your operating system.
+
+By default the Ruby modules will be used. Please refer to the documentation of
+TZInfo::DataSource.set for information about changing the data source.
 
 == Example usage
 

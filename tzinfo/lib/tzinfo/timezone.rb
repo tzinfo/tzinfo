@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2010 Philip Ross
+# Copyright (c) 2005-2012 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -64,10 +64,7 @@ module TZInfo
     # Cache of loaded zones by identifier to avoid using require if a zone
     # has already been loaded.
     @@loaded_zones = {}
-    
-    # Whether the timezones index has been loaded yet.
-    @@index_loaded = false
-    
+        
     # Default value of the dst parameter of the local_to_utc and 
     # period_for_local methods.
     @@default_dst = nil
@@ -95,35 +92,20 @@ module TZInfo
     def self.get(identifier)
       instance = @@loaded_zones[identifier]
       unless instance  
-        raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-Za-z0-9\+\-_]+(\/[A-Za-z0-9\+\-_]+)*$/
-        identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
-        begin
-          # Use a temporary variable to avoid an rdoc warning
-          file = "tzinfo/definitions/#{identifier}".untaint
-          require file
-          
-          m = Definitions
-          identifier.split(/\//).each {|part|
-            m = m.const_get(part)
-          }
-          
-          info = m.get
-          
-          # Could make Timezone subclasses register an interest in an info
-          # type. Since there are currently only two however, there isn't
-          # much point.
-          if info.kind_of?(DataTimezoneInfo)
-            instance = DataTimezone.new(info)
-          elsif info.kind_of?(LinkedTimezoneInfo)
-            instance = LinkedTimezone.new(info)
-          else
-            raise InvalidTimezoneIdentifier, "No handler for info type #{info.class}"
-          end
-          
-          @@loaded_zones[instance.identifier] = instance         
-        rescue LoadError, NameError => e
-          raise InvalidTimezoneIdentifier, e.message
+        info = data_source.load_timezone_info(identifier)
+                
+        # Could make Timezone subclasses register an interest in an info
+        # type. Since there are currently only two however, there isn't
+        # much point.
+        if info.kind_of?(DataTimezoneInfo)
+          instance = DataTimezone.new(info)
+        elsif info.kind_of?(LinkedTimezoneInfo)
+          instance = LinkedTimezone.new(info)
+        else
+          raise InvalidTimezoneIdentifier, "No handler for info type #{info.class}"
         end
+        
+        @@loaded_zones[instance.identifier] = instance         
       end
       
       instance
@@ -159,8 +141,7 @@ module TZInfo
     # Returns an array containing the identifiers of all the available 
     # Timezones.
     def self.all_identifiers
-      load_index
-      Indexes::Timezones.timezones
+      data_source.timezone_identifiers
     end
     
     # Returns an array containing all the available Timezones that are based
@@ -175,8 +156,7 @@ module TZInfo
     # Returns an array containing the identifiers of all the available 
     # Timezones that are based on data (are not links to other Timezones)..
     def self.all_data_zone_identifiers
-      load_index
-      Indexes::Timezones.data_timezones
+      data_source.data_timezone_identifiers
     end
     
     # Returns an array containing all the available Timezones that are links
@@ -191,8 +171,7 @@ module TZInfo
     # Returns an array containing the identifiers of all the available 
     # Timezones that are links to other Timezones.
     def self.all_linked_zone_identifiers
-      load_index
-      Indexes::Timezones.linked_timezones
+      data_source.linked_timezone_identifiers
     end
     
     # Returns all the Timezones defined for all Countries. This is not the
@@ -517,19 +496,16 @@ module TZInfo
       Timezone.get(data)
     end
     
-    private
-      # Loads in the index of timezones if it hasn't already been loaded.
-      def self.load_index
-        unless @@index_loaded
-          require 'tzinfo/indexes/timezones'
-          @@index_loaded = true
-        end        
-      end
-      
+    private      
       # Returns an array of proxies corresponding to the given array of 
       # identifiers.
       def self.get_proxies(identifiers)
         identifiers.collect {|identifier| get_proxy(identifier)}
+      end
+      
+      # Returns the current DataSource
+      def self.data_source
+        DataSource.current
       end
   end        
 end
