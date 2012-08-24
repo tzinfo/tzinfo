@@ -144,7 +144,7 @@ module TZInfo
     private
     
     # Creates a DataSource instance for use as the default. Used if
-    # no prefernce has been specified manually.
+    # no preference has been specified manually.
     def self.create_default_data_source
       RubyDataSource.new
     end
