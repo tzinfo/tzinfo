@@ -159,17 +159,11 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
   def test_load_timezone_info_linked
     info = @data_source.load_timezone_info('UTC')
     
-    # On platforms that don't support symlinks, 'UTC' wil be created as a copy, 
-    # so will return a ZoneinfoTimezoneInfo
+    # On platforms that don't support symlinks, 'UTC' will be created as a copy.
+    # Either way, a ZoneinfoTimezoneInfo should be returned.
     
-    if File.symlink?(File.join(@data_source.zoneinfo_dir, 'UTC'))
-      assert_kind_of(LinkedTimezoneInfo, info)
-      assert_equal('UTC', info.identifier)
-      assert_equal('Etc/UTC', info.link_to_identifier)
-    else
-      assert_kind_of(ZoneinfoTimezoneInfo, info)
-      assert_equal('UTC', info.identifier)
-    end
+    assert_kind_of(ZoneinfoTimezoneInfo, info)
+    assert_equal('UTC', info.identifier)
   end
   
   def test_load_timezone_info_does_not_exist
@@ -213,7 +207,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
     end
   end
   
-    def test_load_timezone_info_directory
+  def test_load_timezone_info_directory
     Dir.mktmpdir('tzinfo_test') do |dir|
       FileUtils.touch(File.join(dir, 'zone.tab'))
       FileUtils.touch(File.join(dir, 'iso3166.tab'))
@@ -231,22 +225,27 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
   
   def test_load_timezone_info_linked_absolute_outside
     Dir.mktmpdir('tzinfo_test') do |dir|
-      FileUtils.touch(File.join(dir, 'zone.tab'))
-      FileUtils.touch(File.join(dir, 'iso3166.tab'))
-      
-      file = File.join(dir, 'localtime')
-      
-      begin
-        FileUtils.ln_s('/etc/localtime', file)
-      rescue NotImplementedError
-        # Symlinks not supported on this platform - skip test
-        return
-      end
-      
-      data_source = ZoneinfoDataSource.new(dir)
-      
-      assert_raises(InvalidTimezoneIdentifier) do
-        data_source.load_timezone_info('localtime')
+      Dir.mktmpdir('tzinfo_test') do |outside|
+        outside_file = File.join(outside, 'EST')
+        FileUtils.cp(File.join(@data_source.zoneinfo_dir, 'EST'), outside_file)
+        
+        FileUtils.touch(File.join(dir, 'zone.tab'))
+        FileUtils.touch(File.join(dir, 'iso3166.tab'))
+        
+        file = File.join(dir, 'EST')
+        
+        begin
+          FileUtils.ln_s(outside_file, file)
+        rescue NotImplementedError
+          # Symlinks not supported on this platform - skip test
+          return
+        end
+        
+        data_source = ZoneinfoDataSource.new(dir)
+        
+        info = data_source.load_timezone_info('EST')
+        assert_kind_of(ZoneinfoTimezoneInfo, info)
+        assert_equal('EST', info.identifier)
       end
     end
   end
@@ -270,14 +269,18 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
       data_source = ZoneinfoDataSource.new(dir)
       
       info = data_source.load_timezone_info('Link')
-      assert_kind_of(LinkedTimezoneInfo, info)
+      assert_kind_of(ZoneinfoTimezoneInfo, info)
       assert_equal('Link', info.identifier)
-      assert_equal('EST', info.link_to_identifier)
     end
   end
 
   def test_load_timezone_info_linked_relative_outside
-    Dir.mktmpdir('tzinfo_test') do |dir|
+    Dir.mktmpdir('tzinfo_test') do |root|
+      FileUtils.cp(File.join(@data_source.zoneinfo_dir, 'EST'), File.join(root, 'outside'))
+      
+      dir = File.join(root, 'zoneinfo')
+      FileUtils.mkdir(dir)
+      
       FileUtils.touch(File.join(dir, 'zone.tab'))
       FileUtils.touch(File.join(dir, 'iso3166.tab'))
       
@@ -297,13 +300,13 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
       
       data_source = ZoneinfoDataSource.new(dir)
       
-      assert_raises(InvalidTimezoneIdentifier) do
-        data_source.load_timezone_info('Link')
-      end
+      info = data_source.load_timezone_info('Link')
+      assert_kind_of(ZoneinfoTimezoneInfo, info)
+      assert_equal('Link', info.identifier)
       
-      assert_raises(InvalidTimezoneIdentifier) do
-        data_source.load_timezone_info('Subdir/Link')
-      end
+      info = data_source.load_timezone_info('Subdir/Link')
+      assert_kind_of(ZoneinfoTimezoneInfo, info)
+      assert_equal('Subdir/Link', info.identifier)
     end
   end
   
@@ -337,19 +340,16 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
       data_source = ZoneinfoDataSource.new(dir)
       
       info = data_source.load_timezone_info('Subdir/Link')
-      assert_kind_of(LinkedTimezoneInfo, info)
+      assert_kind_of(ZoneinfoTimezoneInfo, info)
       assert_equal('Subdir/Link', info.identifier)
-      assert_equal('Subdir/EST', info.link_to_identifier)
       
       info = data_source.load_timezone_info('Subdir/Link2')
-      assert_kind_of(LinkedTimezoneInfo, info)
+      assert_kind_of(ZoneinfoTimezoneInfo, info)
       assert_equal('Subdir/Link2', info.identifier)
-      assert_equal('EST', info.link_to_identifier)
       
       info = data_source.load_timezone_info('Subdir2/Link')
-      assert_kind_of(LinkedTimezoneInfo, info)
+      assert_kind_of(ZoneinfoTimezoneInfo, info)
       assert_equal('Subdir2/Link', info.identifier)
-      assert_equal('Subdir/EST', info.link_to_identifier)
     end
   end
   
@@ -424,31 +424,12 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
     entries = entries.select do |file|
       if !file.include?('.')
         file.untaint
-        
-        if File.symlink?(file)
-          link = File.readlink(file)
-          
-          if Pathname.new(File.readlink(file)).absolute?
-            false
-          else
-            link.untaint
-            expanded_link = File.expand_path(File.join(File.dirname(file), link))
-            expanded_link[0, prefix.length] == prefix
-          end
-        elsif File.file?(file)
-          true
-        else                  
-          false
-        end
+        File.file?(file)
       else
         false      
       end
     end
-    
-    if block_given?
-      entries = entries.select {|file| yield file}
-    end
-    
+       
     entries = entries.collect {|file| file[directory.length + File::SEPARATOR.length, file.length - directory.length - File::SEPARATOR.length]}
     
     # Exclude right (with leapseconds) and posix (copy) directories, localtime and posixrules
@@ -470,10 +451,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
   end
   
   def test_data_timezone_identifiers
-    expected = get_timezone_filenames(@data_source.zoneinfo_dir) do |file|
-      !File.symlink?(file)
-    end
-  
+    expected = get_timezone_filenames(@data_source.zoneinfo_dir)
     all_data = @data_source.data_timezone_identifiers
     assert_kind_of(Array, all_data)
     assert_array_same_items(expected, all_data)
@@ -481,13 +459,9 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
   end
   
   def test_linked_timezone_identifiers
-    expected = get_timezone_filenames(@data_source.zoneinfo_dir) do |file|
-      File.symlink?(file)
-    end
-    
     all_linked = @data_source.linked_timezone_identifiers
     assert_kind_of(Array, all_linked)
-    assert_array_same_items(expected, all_linked)
+    assert_equal(true, all_linked.empty?)
     assert_equal(true, all_linked.frozen?)
   end
   

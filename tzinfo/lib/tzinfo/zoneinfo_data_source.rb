@@ -116,7 +116,7 @@ module TZInfo
       load_timezone_index
       
       begin
-        if @timezone_index.data_identifiers.include?(identifier)
+        if @timezone_index.include?(identifier)
           identifier.untaint
           path = File.join(@zoneinfo_dir, identifier)
           
@@ -125,13 +125,6 @@ module TZInfo
           rescue InvalidZoneinfoFile => e
             raise InvalidTimezoneIdentifier, e.message
           end
-        elsif @timezone_index.linked_identifiers.include?(identifier)
-          identifier.untaint
-          path = File.join(@zoneinfo_dir, identifier)
-        
-          link = read_symlink(path)
-          raise InvalidTimezoneIdentifier, 'Invalid identifier (symbolic link outside of zoneinfo directory)' unless link
-          LinkedTimezoneInfo.new(identifier, link)
         else
           raise InvalidTimezoneIdentifier, 'Invalid identifier'
         end
@@ -145,21 +138,25 @@ module TZInfo
     # Returns an array of all the available timezone identifiers.
     def timezone_identifiers
       load_timezone_index
-      @timezone_index.timezones
+      @timezone_index
     end
     
     # Returns an array of all the available timezone identifiers for
     # data timezones (i.e. those that actually contain definitions).
+    #
+    # For ZoneinfoDataSource, this will always be identical to 
+    # timezone_identifers.
     def data_timezone_identifiers
       load_timezone_index
-      @timezone_index.data_identifiers
+      @timezone_index
     end
     
     # Returns an array of all the available timezone identifiers that
     # are links to other timezones.
+    #
+    # For ZoneinfoDataSource, this will always be an empty array.
     def linked_timezone_identifiers
-      load_timezone_index
-      @timezone_index.linked_identifiers
+      [].freeze
     end
     
     # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2
@@ -196,40 +193,24 @@ module TZInfo
     def valid_zoneinfo_dir?(path)
       File.directory?(path) && File.file?(File.join(path, 'zone.tab')) && File.file?(File.join(path, 'iso3166.tab'))
     end
-    
-    # Reads a symlink and determines whether it points inside the zoneinfo
-    # directory. If it does, the relative path to @zoneinfo_dir is returned.
-    # If the link is to outside @zoneinfo_dir, nil is returned.
-    def read_symlink(path)
-      link = File.readlink(path)        
-
-      if Pathname.new(link).relative?
-        link.untaint
-        link = File.expand_path(File.join(File.dirname(path), link))
-      end
-      
-      unless link[0, @zoneinfo_prefix.length] == @zoneinfo_prefix
-        nil
-      end
-
-      link[@zoneinfo_prefix.length, link.length - @zoneinfo_prefix.length]
-    end
-    
+       
     # Unless called before, scans @zoneinfo_dir looking for all the data
     # and linked zones.
     def load_timezone_index
       unless @timezone_index
-        data_identifiers = []
-        linked_identifiers = []
-        enum_timezones(nil, data_identifiers, linked_identifiers, 
-          ['localtime', 'posix', 'posixrules', 'right', 'Factory'])
-        @timezone_index = TimezoneIndex.new(data_identifiers, linked_identifiers)
+        index = []
+        
+        enum_timezones(nil, ['localtime', 'posix', 'posixrules', 'right', 'Factory']) do |identifier|
+          index << identifier
+        end
+        
+        @timezone_index = index.sort.freeze
       end
     end
     
     # Recursively scans a directory of timezones, populating data_identifiers
     # and linked_timezones.
-    def enum_timezones(dir, data_identifiers, linked_identifiers, exclude = [])
+    def enum_timezones(dir, exclude = [], &block)
       Dir.foreach(dir ? File.join(@zoneinfo_dir, dir) : @zoneinfo_dir) do |entry|
         unless entry =~ /\./ || exclude.include?(entry)
           entry.untaint
@@ -237,11 +218,9 @@ module TZInfo
           full_path = File.join(@zoneinfo_dir, path)
  
           if File.directory?(full_path)
-            enum_timezones(path, data_identifiers, linked_identifiers)
-          elsif File.symlink?(full_path)
-            linked_identifiers << path if read_symlink(full_path)            
+            enum_timezones(path, [], &block)
           elsif File.file?(full_path)
-            data_identifiers << path
+            yield path
           end
         end
       end
@@ -307,20 +286,6 @@ module TZInfo
       result += Rational(seconds.to_i, 3600) if seconds
       result = -result if sign == '-'
       result
-    end
-    
-    # An index of the timezone identifiers available in the zoneinfo directory,
-    # divided into data and linked zones.
-    class TimezoneIndex #:nodoc:
-      attr_reader :timezones
-      attr_reader :data_identifiers
-      attr_reader :linked_identifiers
-      
-      def initialize(data_identifiers, linked_identifiers)
-        @timezones = (data_identifiers + linked_identifiers).sort.freeze
-        @data_identifiers = data_identifiers.sort.freeze
-        @linked_identifiers = linked_identifiers.sort.freeze
-      end
     end
     
     # A struct used when reading the zone.tab file.
