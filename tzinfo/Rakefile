@@ -76,7 +76,7 @@ end
 
 package_task = Rake::GemPackageTask.new(SPEC) do |pkg|
   pkg.need_zip = true
-  pkg.need_tar_gz = true
+  pkg.need_tar = true
   pkg.tar_command = '__tar_with_owner__'
 end
 

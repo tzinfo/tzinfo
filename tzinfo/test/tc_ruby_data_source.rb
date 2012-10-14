@@ -68,19 +68,19 @@ class TCRubyDataSource < Test::Unit::TestCase
   
   def test_timezone_identifiers
     all = @data_source.timezone_identifiers
-    assert_equal(Indexes::Timezones.timezones, all)
+    assert_equal(TZInfo::Data::Indexes::Timezones.timezones, all)
     assert_equal(true, all.frozen?)
   end
   
   def test_data_timezone_identifiers
     all_data = @data_source.data_timezone_identifiers
-    assert_equal(Indexes::Timezones.data_timezones, all_data)
+    assert_equal(TZInfo::Data::Indexes::Timezones.data_timezones, all_data)
     assert_equal(true, all_data.frozen?)
   end
   
   def test_linked_timezone_identifiers
     all_linked = @data_source.linked_timezone_identifiers
-    assert_equal(Indexes::Timezones.linked_timezones, all_linked)
+    assert_equal(TZInfo::Data::Indexes::Timezones.linked_timezones, all_linked)
     assert_equal(true, all_linked.frozen?)
   end
   
@@ -122,7 +122,7 @@ class TCRubyDataSource < Test::Unit::TestCase
   
   def test_country_codes
     codes = @data_source.country_codes
-    assert_equal(Indexes::Countries.countries.keys, codes)
+    assert_equal(TZInfo::Data::Indexes::Countries.countries.keys, codes)
     assert_equal(true, codes.frozen?)
   end
 end

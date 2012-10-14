@@ -6,13 +6,18 @@ daylight-savings aware transformations between times in different timezones.
 This is the same database as used to create the zoneinfo directory on *nix 
 machines.
 
+
+== Data Sources
+
 TZInfo can load data from:
 
-1. Ruby modules generated from the tz database and included with TZInfo.
+1. Ruby modules generated from the tz database and included in a separate 
+   TZInfo Data library.
 2. A zoneinfo directory, typically packaged with your operating system.
 
 By default the Ruby modules will be used. Please refer to the documentation of
-TZInfo::DataSource.set for information about changing the data source.
+TZInfo::DataSource.set for information regarding changing the data source.
+
 
 == Example usage
 
@@ -77,6 +82,9 @@ The latest version of TZInfo can be found at
 
 * http://rubyforge.org/frs/?group_id=894
 
+
+== Documentation
+
 API documentation can be found at 
 
 * http://tzinfo.rubyforge.org/doc/
@@ -84,14 +92,15 @@ API documentation can be found at
 
 == Installation
 
-The preferred method of installing TZInfo is through the GEM file (RubyGems[http://docs.rubygems.org/] required):
+The preferred method of installing TZInfo is using RubyGems[http://docs.rubygems.org/]:
 
-  % gem install tzinfo-x.y.z.gem
-  
-or to automatically download and install:
+  % gem install tzinfo
 
-  % gem install tzinfo --remote
-  
+To use the Ruby modules as the data source, you'll also need to install
+TZInfo Data:
+
+  % gem install tzinfo-data
+
 
 == License
 

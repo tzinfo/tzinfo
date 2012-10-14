@@ -2,6 +2,14 @@ require 'test/unit'
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'tzinfo'))
 require 'fileutils'
 
+# tzinfo-data contains a cut down copy of tzinfo-data for use in the tests.
+# Add it to the load path.
+unless $:.include?(File.join(File.expand_path(File.dirname(__FILE__)), 'tzinfo-data'))
+  $:.unshift(File.join(File.expand_path(File.dirname(__FILE__)), 'tzinfo-data').untaint)
+  
+  puts $:.inspect
+end
+
 module TestUtils
   ZONEINFO_SYMLINKS = [
     ['localtime', 'America/New_York'],

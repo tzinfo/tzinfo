@@ -28,6 +28,9 @@ module TZInfo
   #
   # TZInfo::DataSource.set(:ruby)
   class RubyDataSource < DataSource
+    # Base path for require.
+    REQUIRE_PATH = File.join('tzinfo', 'data', 'definitions')
+    
     # Whether the timezone index has been loaded yet.
     @@timezone_index_loaded = false
     
@@ -41,13 +44,13 @@ module TZInfo
       raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-Za-z0-9\+\-_]+(\/[A-Za-z0-9\+\-_]+)*$/
       
       identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
+      identifier.untaint
+      identifier = identifier.split('/')
       begin
-        # Use a temporary variable to avoid an rdoc warning
-        file = "tzinfo/definitions/#{identifier}".untaint
-        require file
+        require_definition(identifier)
         
-        m = Definitions
-        identifier.split(/\//).each {|part|
+        m = Data::Definitions
+        identifier.each {|part|
           m = m.const_get(part)
         }
         
@@ -60,21 +63,21 @@ module TZInfo
     # Returns an array of all the available timezone identifiers.
     def timezone_identifiers
       load_timezone_index
-      Indexes::Timezones.timezones
+      Data::Indexes::Timezones.timezones
     end
     
     # Returns an array of all the available timezone identifiers for
     # data timezones (i.e. those that actually contain definitions).
     def data_timezone_identifiers
       load_timezone_index
-      Indexes::Timezones.data_timezones
+      Data::Indexes::Timezones.data_timezones
     end
     
     # Returns an array of all the available timezone identifiers that
     # are links to other timezones.
     def linked_timezone_identifiers
       load_timezone_index
-      Indexes::Timezones.linked_timezones
+      Data::Indexes::Timezones.linked_timezones
     end
     
     # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2
@@ -82,7 +85,7 @@ module TZInfo
     # or the code is invalid.
     def load_country_info(code)
       load_country_index
-      info = Indexes::Countries.countries[code]
+      info = Data::Indexes::Countries.countries[code]
       raise InvalidCountryCode.new, 'Invalid country code' unless info
       info
     end
@@ -91,7 +94,7 @@ module TZInfo
     # country codes.
     def country_codes
       load_country_index
-      Indexes::Countries.countries.keys.freeze
+      Data::Indexes::Countries.countries.keys.freeze
     end
     
     # Returns the name of this DataSource.
@@ -101,6 +104,26 @@ module TZInfo
     
     private
     
+    # Requires a zone definition by its identifier (split on /).
+    def require_definition(identifier)
+      require_data(*(['definitions'] + identifier))
+    end
+    
+    # Requires an index by its name.
+    def self.require_index(name)
+      require_data(*['indexes', name])
+    end
+    
+    # Requires a file from tzinfo/data.
+    def require_data(*file)
+      self.class.require_data(*file)
+    end
+    
+    # Requires a file from tzinfo/data.
+    def self.require_data(*file)
+      require File.join('tzinfo', 'data', *file)
+    end
+    
     # Loads in the index of timezones if it hasn't already been loaded.
     def load_timezone_index
       self.class.load_timezone_index
@@ -109,7 +132,7 @@ module TZInfo
     # Loads in the index of timezones if it hasn't already been loaded.
     def self.load_timezone_index
       unless @@timezone_index_loaded
-        require 'tzinfo/indexes/timezones'
+        require_index('timezones')
         @@timezone_index_loaded = true
       end        
     end
@@ -122,8 +145,8 @@ module TZInfo
     # Loads in the index of countries if it hasn't already been loaded.
     def self.load_country_index
       unless @@country_index_loaded
-        require 'tzinfo/indexes/countries'
-        @@country_index_Loaded = true
+        require_index('countries')
+        @@country_index_loaded = true
       end
     end
   end
