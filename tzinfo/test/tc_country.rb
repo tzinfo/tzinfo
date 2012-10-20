@@ -163,7 +163,7 @@ class TCCountry < Test::Unit::TestCase
   def test_get_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Country.get('GB')
     end
   end
@@ -171,7 +171,7 @@ class TCCountry < Test::Unit::TestCase
   def test_new_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Country.new('GB')
     end
   end
@@ -179,7 +179,7 @@ class TCCountry < Test::Unit::TestCase
   def test_all_codes_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Country.all_codes
     end
   end
@@ -187,7 +187,7 @@ class TCCountry < Test::Unit::TestCase
   def test_all_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Country.all
     end
   end

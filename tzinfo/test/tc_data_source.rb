@@ -26,11 +26,80 @@ class TCDataSource < Test::Unit::TestCase
     assert_kind_of(InitDataSource, data_source)
   end
   
-  def test_current_default
-    DataSource.send :class_variable_set, :@@current, nil
+  def test_current_default_ruby_only    
+    code = <<-EOF
+      require 'tmpdir'
+      
+      begin
+        Dir.mktmpdir('tzinfo_test_dir') do |dir|
+          TZInfo::ZoneinfoDataSource.search_paths = [dir]
+          
+          puts TZInfo::DataSource.current.class
+        end
+      rescue Exception => e
+        puts "Unexpected exception: \#{e}"
+      end
+    EOF
     
-    data_source = DataSource.current
-    assert_kind_of(RubyDataSource, data_source)
+    assert_sub_process_returns(['TZInfo::RubyDataSource'], code, [TZINFO_TEST_DATA_DIR])
+  end
+  
+  def test_current_default_zoneinfo_only
+    code = <<-EOF
+      require 'tmpdir'
+      
+      begin
+        Dir.mktmpdir('tzinfo_test_dir') do |dir|
+          TZInfo::ZoneinfoDataSource.search_paths = [dir, '#{TZINFO_TEST_ZONEINFO_DIR}']
+          
+          puts TZInfo::DataSource.current.class
+          puts TZInfo::DataSource.current.zoneinfo_dir
+        end
+      rescue Exception => e
+        puts "Unexpected exception: \#{e}"
+      end
+    EOF
+    
+    assert_sub_process_returns(
+      ['TZInfo::ZoneinfoDataSource', TZINFO_TEST_ZONEINFO_DIR], 
+      code)
+  end
+  
+  def test_current_default_ruby_and_zoneinfo
+    code = <<-EOF
+      begin
+        TZInfo::ZoneinfoDataSource.search_paths = ['#{TZINFO_TEST_ZONEINFO_DIR}']
+          
+        puts TZInfo::DataSource.current.class
+      rescue Exception => e
+        puts "Unexpected exception: \#{e}"
+      end
+    EOF
+    
+    assert_sub_process_returns(['TZInfo::RubyDataSource'], code, [TZINFO_TEST_DATA_DIR])
+  end
+  
+  def test_current_default_no_data
+    code = <<-EOF
+      require 'tmpdir'
+      
+      begin
+        Dir.mktmpdir('tzinfo_test_dir') do |dir|
+          TZInfo::ZoneinfoDataSource.search_paths = [dir]
+          
+          begin
+            data_source = TZInfo::DataSource.current
+            puts "No exception raised, returned \#{data_source} instead"
+          rescue Exception => e
+            puts e.class
+          end
+        end
+      rescue Exception => e
+        puts "Unexpected exception: \#{e}"
+      end
+    EOF
+    
+    assert_sub_process_returns(['TZInfo::DataSourceNotFound'], code)
   end
   
   def test_set_instance

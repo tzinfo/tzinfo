@@ -1,14 +1,16 @@
+TESTS_DIR = File.expand_path(File.dirname(__FILE__)).untaint
+TZINFO_LIB_DIR = File.expand_path(File.join(TESTS_DIR, '..', 'lib'))
+TZINFO_TEST_DATA_DIR = File.join(TESTS_DIR, 'tzinfo-data')
+TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
+
 require 'test/unit'
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'tzinfo'))
+require File.join(TZINFO_LIB_DIR, 'tzinfo')
 require 'fileutils'
+require 'rbconfig'
 
 # tzinfo-data contains a cut down copy of tzinfo-data for use in the tests.
 # Add it to the load path.
-unless $:.include?(File.join(File.expand_path(File.dirname(__FILE__)), 'tzinfo-data'))
-  $:.unshift(File.join(File.expand_path(File.dirname(__FILE__)), 'tzinfo-data').untaint)
-  
-  puts $:.inspect
-end
+$:.unshift(TZINFO_TEST_DATA_DIR) unless $:.include?(TZINFO_TEST_DATA_DIR)
 
 module TestUtils
   ZONEINFO_SYMLINKS = [
@@ -17,17 +19,15 @@ module TestUtils
   
 
   def self.prepare_test_zoneinfo_dir
-    dir = File.expand_path(File.join(File.dirname(__FILE__), 'zoneinfo'))
-    
     ZONEINFO_SYMLINKS.each do |file, target|
-      path = File.join(dir, file)
+      path = File.join(TZINFO_TEST_ZONEINFO_DIR, file)
       
       File.delete(path) if File.exists?(path)
     
       begin
         FileUtils.ln_s(target, path)
       rescue NotImplementedError
-        target_path = File.join(dir, target)
+        target_path = File.join(TZINFO_TEST_ZONEINFO_DIR, target)
         FileUtils.cp(target_path, path)
       end
     end
@@ -64,6 +64,26 @@ module Kernel
     
     assert_block(full_message) do
       (expected.size ==  actual.size) && (expected - actual == [])
+    end
+  end
+  
+  def assert_sub_process_returns(expected_lines, code, extra_load_path = [], required = ['tzinfo'])
+    ruby = File.join(RbConfig::CONFIG['bindir'], 
+      RbConfig::CONFIG['ruby_install_name'] + RbConfig::CONFIG['EXEEXT'])
+      
+    load_path = [TZINFO_LIB_DIR] + extra_load_path
+    load_path = load_path.collect {|p| "-I \"#{p}\""}.join(' ')
+    
+    required = required.collect {|r| "-r \"#{r}\""}.join(' ')
+      
+    IO.popen("\"#{ruby}\" #{load_path} #{required}", 'r+') do |process|
+      process.puts(code)
+      process.flush
+      process.close_write
+      
+      actual_lines = process.readlines
+      actual_lines = actual_lines.collect {|l| l.chomp}
+      assert_equal(expected_lines, actual_lines)
     end
   end
 end

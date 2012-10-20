@@ -15,8 +15,16 @@ TZInfo can load data from:
    TZInfo Data library.
 2. A zoneinfo directory, typically packaged with your operating system.
 
-By default the Ruby modules will be used. Please refer to the documentation of
-TZInfo::DataSource.set for information regarding changing the data source.
+By default the TZInfo Data Ruby modules will be used. If TZInfo Data is not
+available (i.e. if require 'tzinfo/data' fails), then TZInfo will search for
+a zoneinfo directory instead (using the paths specified in
+TZInfo::ZoneinfoDataSource::DEFAULT_SEARCH_PATHS).
+
+If no data source can be found, a TZInfo::DataSourceNotFound exception will be
+raised when TZInfo is used.
+
+The default data source selection can be overridden using 
+TZInfo::DataSource.set.
 
 
 == Example usage

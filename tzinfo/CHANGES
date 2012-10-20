@@ -3,10 +3,12 @@
 * Allow TZInfo to be used with different data sources instead of just the
   built-in Ruby module data files.
 * Include a data source that allows TZInfo to load data from the binary
-  zoneinfo files produced by zic and included with many Linux/Unix
+  zoneinfo files produced by zic and included with many Linux and Unix
   distributions.
 * Remove the definition and index Ruby modules from TZInfo and move them into
   a separate TZInfo Data library (available as the tzinfo-data gem).
+* Default to using the TZInfo Data library as the data source if it is 
+  installed, otherwise use zoneinfo files instead.
 * Put the full path to the TZInfo lib directory on the search path when
   requiring 'tzinfo' instead of a relative path.
 

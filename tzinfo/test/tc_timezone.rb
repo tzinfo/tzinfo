@@ -978,7 +978,7 @@ class TCTimezone < Test::Unit::TestCase
   def test_get_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Timezone.get('Europe/London')
     end
   end
@@ -986,7 +986,7 @@ class TCTimezone < Test::Unit::TestCase
   def test_new_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Timezone.new('Europe/London')
     end
   end
@@ -994,7 +994,7 @@ class TCTimezone < Test::Unit::TestCase
   def test_all_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Timezone.all
     end
   end
@@ -1002,7 +1002,7 @@ class TCTimezone < Test::Unit::TestCase
   def test_all_identifiers_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Timezone.all_identifiers
     end
   end
@@ -1010,7 +1010,7 @@ class TCTimezone < Test::Unit::TestCase
   def test_all_data_zones_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Timezone.all_data_zones
     end
   end
@@ -1018,7 +1018,7 @@ class TCTimezone < Test::Unit::TestCase
   def test_all_data_zone_identifiers_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Timezone.all_data_zone_identifiers
     end
   end
@@ -1026,7 +1026,7 @@ class TCTimezone < Test::Unit::TestCase
   def test_all_linked_zones_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Timezone.all_linked_zones
     end
   end
@@ -1034,7 +1034,7 @@ class TCTimezone < Test::Unit::TestCase
   def test_all_linked_zone_identifiers_missing_data_source
     DataSource.set(DataSource.new)
     
-    assert_raises(MissingDataSourceError) do
+    assert_raises(InvalidDataSource) do
       Timezone.all_linked_zone_identifiers
     end
   end  

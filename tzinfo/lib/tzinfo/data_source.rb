@@ -21,8 +21,15 @@
 #++
 
 module TZInfo
-  # Exception raised when no data source has been found.
-  class MissingDataSourceError < StandardError
+  # Exception raised if the DataSource is used doesn't implement one of the
+  # required methods.
+  class InvalidDataSource < StandardError
+  end
+  
+  # Exception raised if no data source could be found (i.e. 'tzinfo/data'
+  # cannot be found on the load path and no valid zoneinfo directory can be 
+  # found on the system).
+  class DataSourceNotFound < StandardError
   end
 
   # The base class for data sources of timezone and country data.
@@ -98,37 +105,37 @@ module TZInfo
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the 
     # identifier is invalid.
     def load_timezone_info(identifier)
-      raise MissingDataSourceError
+      raise InvalidDataSource, 'load_timezone_info not defined'
     end
     
     # Returns an array of all the available timezone identifiers.
     def timezone_identifiers
-      raise MissingDataSourceError
+      raise InvalidDataSource, 'timezone_identifiers not defined'
     end
     
     # Returns an array of all the available timezone identifiers for
     # data timezones (i.e. those that actually contain definitions).
     def data_timezone_identifiers
-      raise MissingDataSourceError
+      raise InvalidDataSource, 'data_timezone_identifiers not defined'
     end
     
     # Returns an array of all the available timezone identifiers that
     # are links to other timezones.
     def linked_timezone_identifiers
-      raise MissingDataSourceError
+      raise InvalidDataSource, 'linked_timezone_identifiers not defined'
     end
     
     # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2
     # country code. Raises InvalidCountryCode if the country could not be found
     # or the code is invalid.
     def load_country_info(code)
-      raise MissingDataSourceError
+      raise InvalidDataSource, 'load_country_info not defined'
     end
     
     # Returns an array of all the available ISO 3166-1 alpha-2
     # country codes.
     def country_codes
-      raise MissingDataSourceError
+      raise InvalidDataSource, 'country_codes not defined'
     end
     
     # Returns the name of this DataSource.
@@ -146,7 +153,21 @@ module TZInfo
     # Creates a DataSource instance for use as the default. Used if
     # no preference has been specified manually.
     def self.create_default_data_source
-      RubyDataSource.new
+      has_tzinfo_data = false
+      
+      begin
+        require 'tzinfo/data'
+        has_tzinfo_data = true
+      rescue LoadError
+      end
+    
+      return RubyDataSource.new if has_tzinfo_data
+      
+      begin
+        return ZoneinfoDataSource.new
+      rescue ZoneinfoDirectoryNotFound
+        raise DataSourceNotFound, 'No data source could be found. Either install tzinfo-data or specify the location to your zoneinfo files with TZInfo::ZoneinfoDataSource.search_paths='
+      end
     end
   end
 end
