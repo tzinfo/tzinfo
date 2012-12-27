@@ -6,7 +6,7 @@
 
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'rubygems'
 require 'rubygems/package_task'
 require 'fileutils'
@@ -32,10 +32,9 @@ package_task = Gem::PackageTask.new(spec) do |pkg|
   pkg.tar_command = '__tar_with_owner__'
 end
 
-Rake::RDocTask.new do |rdoc|
+RDoc::Task.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title = "TZInfo Data"
-  rdoc.options << '--inline-source'
   rdoc.options.concat spec.rdoc_options
   rdoc.rdoc_files.include(spec.extra_rdoc_files) 
   rdoc.rdoc_files.include('lib')  
