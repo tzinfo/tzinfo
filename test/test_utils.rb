@@ -3,14 +3,16 @@ TZINFO_LIB_DIR = File.expand_path(File.join(TESTS_DIR, '..', 'lib'))
 TZINFO_TEST_DATA_DIR = File.join(TESTS_DIR, 'tzinfo-data')
 TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
 
-require 'test/unit'
-require File.join(TZINFO_LIB_DIR, 'tzinfo')
-require 'fileutils'
-require 'rbconfig'
+$:.unshift(TZINFO_LIB_DIR) unless $:.include?(TZINFO_LIB_DIR)
 
 # tzinfo-data contains a cut down copy of tzinfo-data for use in the tests.
 # Add it to the load path.
 $:.unshift(TZINFO_TEST_DATA_DIR) unless $:.include?(TZINFO_TEST_DATA_DIR)
+
+require 'test/unit'
+require 'tzinfo'
+require 'fileutils'
+require 'rbconfig'
 
 module TestUtils
   ZONEINFO_SYMLINKS = [

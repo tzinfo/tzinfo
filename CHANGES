@@ -9,8 +9,10 @@
   a separate TZInfo Data library (available as the tzinfo-data gem).
 * Default to using the TZInfo Data library as the data source if it is 
   installed, otherwise use zoneinfo files instead.
-* Put the full path to the TZInfo lib directory on the search path when
-  requiring 'tzinfo' instead of a relative path.
+* Don't add the tzinfo lib directory to the search path when requiring 'tzinfo'.
+  The tzinfo lib directory must now be in the search path before 'tzinfo' is
+  required.
+
 
 From the 0.3 branch:
 

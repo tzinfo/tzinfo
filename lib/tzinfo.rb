@@ -20,12 +20,6 @@
 # THE SOFTWARE.
 #++
 
-# Add the directory containing this file to the start of the load path if it
-# isn't there already.
-unless $:.include?(File.expand_path(File.dirname(__FILE__)))
-  $:.unshift(File.expand_path(File.dirname(__FILE__)))
-end
-
 require 'tzinfo/ruby_core_support'
 require 'tzinfo/offset_rationals'
 require 'tzinfo/time_or_datetime'
