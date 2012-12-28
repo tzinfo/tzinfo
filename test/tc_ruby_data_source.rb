@@ -54,15 +54,10 @@ class TCRubyDataSource < Test::Unit::TestCase
     assert_equal('Etc/GMT-1', info.identifier)
   end
 
-  # Disable test in Ruby 1.9. See:
-  # http://groups.google.com/group/ruby-talk-google/browse_thread/thread/170a7205555cedfc
-  # It doesn't appear to be possible to require a file from the load path in Ruby 1.9.
-  if RUBY_VERSION !~ /^1.9/
-    def test_load_timezone_info_tainted
-      safe_test do
-        info = @data_source.load_timezone_info('Europe/Amsterdam'.taint)
-        assert_equal('Europe/Amsterdam', info.identifier)
-      end
+  def test_load_timezone_info_tainted
+    safe_test do
+      info = @data_source.load_timezone_info('Europe/Amsterdam'.taint)
+      assert_equal('Europe/Amsterdam', info.identifier)
     end
   end
   
