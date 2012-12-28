@@ -547,7 +547,5 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
         assert_period(:LT, -12094, 0, false, nil, nil, info)
       end
     end
-  end 
-  
-  # todo: tests around double-dst (std_offset not handled correctly at the moment)
+  end
 end
