@@ -65,7 +65,7 @@ module Kernel
     full_message = build_message(message, "<?> expected by was <?>.", expected, actual)
     
     assert_block(full_message) do
-      (expected.size ==  actual.size) && (expected - actual == [])
+      (expected.size == actual.size) && (expected - actual == [])
     end
   end
   
