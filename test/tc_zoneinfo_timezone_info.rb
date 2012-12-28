@@ -534,10 +534,13 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_load_in_safe_mode
-    safe_test do
-      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
-          
-      tzif_test(offsets, []) do |path, format|
+    offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+        
+    tzif_test(offsets, []) do |path, format|
+      # untaint only required for Ruby 1.9.2
+      path.untaint
+      
+      safe_test do        
         info = ZoneinfoTimezoneInfo.new('Zone/three', path)
         assert_equal('Zone/three', info.identifier)
         
