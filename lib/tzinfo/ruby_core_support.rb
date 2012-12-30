@@ -102,5 +102,18 @@ module TZInfo
         false
       end
     end
+    
+    
+    # Call String#force_encoding if this version of Ruby has encoding support
+    # otherwise treat as a no-op.
+    if String.method_defined?(:force_encoding)
+      def self.force_encoding(str, encoding)
+        str.force_encoding(encoding)
+      end
+    else
+      def self.force_encoding(str, encoding)
+        str
+      end
+    end
   end
 end

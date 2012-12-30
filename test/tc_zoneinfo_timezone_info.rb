@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 require 'tempfile'
 
@@ -76,7 +78,18 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
     convert_times_to_i(leaps)    
     
     abbrevs = offsets.collect {|o| o[:abbrev]}.uniq
-    abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.length + 1}
+    
+    if abbrevs.length > 0
+      abbrevs = abbrevs.collect {|a| a.encode('UTF-8')} if abbrevs.first.respond_to?(:encode)    
+    
+      if abbrevs.first.respond_to?(:bytesize)
+        abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.bytesize + 1}
+      else
+        abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.length + 1}
+      end
+    else
+      abbrevs_length = 0
+    end
   
     b32_transitions = select_with_32bit_values(transitions)    
     b32_leaps = select_with_32bit_values(leaps)
@@ -101,8 +114,9 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
         file.write([offset[:gmtoff], offset[:isdst] ? 1 : 0, abbrev_offset].pack('NCC'))
       end
       
-      unless abbrevs.empty?
-        file.write(abbrevs.join("\0") + "\0")
+      abbrevs.each do |a|
+        file.write(a)
+        file.write("\0")
       end
       
       b32_leaps.each do |leap|
@@ -131,8 +145,9 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
           file.write([offset[:gmtoff], offset[:isdst] ? 1 : 0, abbrev_offset].pack('NCC'))
         end
         
-        unless abbrevs.empty?
-          file.write(abbrevs.join("\0") + "\0")
+        abbrevs.each do |a|
+          file.write(a)
+          file.write("\0")
         end
         
         leaps.each do |leap|          
@@ -546,6 +561,26 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
         
         assert_period(:LT, -12094, 0, false, nil, nil, info)
       end
+    end
+  end
+  
+  def test_load_encoding
+    # tzfile.5 doesn't specify an encoding, but the source data is in ASCII.
+    # ZoneinfoTimezoneInfo will load as UTF-8 (a superset of ASCII).
+  
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST©'}]
+      
+    transitions = [
+      {:at => Time.utc(1971,  1,  2), :offset_index => 1}]
+  
+    tzif_test(offsets, transitions) do |path, format|     
+      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
+      assert_equal('Zone/One', info.identifier)
+      
+      assert_period(:LMT,     3542,    0, false,                    nil, Time.utc(1971,  1,  2), info)
+      assert_period(:"XST©",  3600,    0, false, Time.utc(1971,  1,  2),                    nil, info)
     end
   end
 end

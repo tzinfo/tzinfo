@@ -103,6 +103,8 @@ module TZInfo
       
       # Parses a zoneinfo file and intializes the DataTimezoneInfo structures.
       def parse(file)
+        file.binmode
+      
         magic, ttisgmtcnt, ttisstdcnt, leapcnt, timecnt, typecnt, charcnt =
           check_read(file, 44).unpack('a5 x15 NNNNNN')
 
@@ -167,7 +169,7 @@ module TZInfo
         abbrev = check_read(file, charcnt)
 
         offsets.each do |o|
-          o[:abbr] = abbrev[o[:abbr_index]...abbrev.index("\0", o[:abbr_index])]
+          o[:abbr] = RubyCoreSupport.force_encoding(abbrev[o[:abbr_index]...abbrev.index("\0", o[:abbr_index])], 'UTF-8')
         end
         
         transitions.each do |t|
