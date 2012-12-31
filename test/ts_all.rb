@@ -4,4 +4,4 @@ ENV['TZ'] = 'America/Los_Angeles'
 
 Dir[File.join(File.expand_path(File.dirname(__FILE__)), 'tc_*.rb')].each {|t| require t}
 
-puts "Using #{DataSource.current}"
+puts "Using #{DataSource.get}"

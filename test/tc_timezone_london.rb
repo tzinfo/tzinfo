@@ -55,7 +55,7 @@ class TCTimezoneLondon < Test::Unit::TestCase
     # that don't support Times before the epoch (i.e. Ruby < 1.9 on Windows) 
     # because it relates to the year 1961.
     
-    if !DataSource.current.kind_of?(ZoneinfoDataSource) || RubyCoreSupport.time_supports_negative
+    if !DataSource.get.kind_of?(ZoneinfoDataSource) || RubyCoreSupport.time_supports_negative
       #Europe/London  Sun Mar 26 01:59:59 1961 UTC = Sun Mar 26 01:59:59 1961 GMT isdst=0 gmtoff=0
       #Europe/London  Sun Mar 26 02:00:00 1961 UTC = Sun Mar 26 03:00:00 1961 BST isdst=1 gmtoff=3600
       #Europe/London  Sun Oct 29 01:59:59 1961 UTC = Sun Oct 29 02:59:59 1961 BST isdst=1 gmtoff=3600
@@ -109,7 +109,7 @@ class TCTimezoneLondon < Test::Unit::TestCase
     # because it relates to the period following the transition prior to the
     # epoch.
     
-    if !DataSource.current.kind_of?(ZoneinfoDataSource) || RubyCoreSupport.time_supports_negative
+    if !DataSource.get.kind_of?(ZoneinfoDataSource) || RubyCoreSupport.time_supports_negative
       #Europe/London  Sat Oct 26 23:00:00 1968 UTC = Sun Oct 27 00:00:00 1968 GMT isdst=0 gmtoff=3600
       #Europe/London  Sun Oct 31 01:59:59 1971 UTC = Sun Oct 31 02:59:59 1971 GMT isdst=0 gmtoff=3600
       

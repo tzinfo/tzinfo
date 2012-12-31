@@ -55,7 +55,7 @@ class TCTimezoneNewYork < Test::Unit::TestCase
     # that don't support Times before the epoch (i.e. Ruby < 1.9 on Windows) 
     # because it relates to the year 1957.
     
-    if !DataSource.current.kind_of?(ZoneinfoDataSource) || RubyCoreSupport.time_supports_negative
+    if !DataSource.get.kind_of?(ZoneinfoDataSource) || RubyCoreSupport.time_supports_negative
       #America/New_York  Sun Apr 28 06:59:59 1957 UTC = Sun Apr 28 01:59:59 1957 EST isdst=0 gmtoff=-18000
       #America/New_York  Sun Apr 28 07:00:00 1957 UTC = Sun Apr 28 03:00:00 1957 EDT isdst=1 gmtoff=-14400
       #America/New_York  Sun Oct 27 05:59:59 1957 UTC = Sun Oct 27 01:59:59 1957 EDT isdst=1 gmtoff=-14400

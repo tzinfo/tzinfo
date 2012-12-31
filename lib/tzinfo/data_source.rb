@@ -37,12 +37,12 @@ module TZInfo
   # Use DataSource.set to change the data source being used.
   class DataSource
     # The currently selected data source.
-    @@current = nil
+    @@instance = nil
         
     # Returns the currently selected data source.
-    def self.current
-      set(create_default_data_source) unless @@current
-      @@current
+    def self.get
+      set(create_default_data_source) unless @@instance
+      @@instance
     end
     
     # Sets the currently selected data source for Timezone and Country data.
@@ -90,12 +90,12 @@ module TZInfo
     # used as a data source.
     def self.set(data_source_or_type, *args)
       if data_source_or_type.kind_of?(DataSource)
-        @@current = data_source_or_type
+        @@instance = data_source_or_type
       elsif data_source_or_type == :ruby
-        @@current = RubyDataSource.new
+        @@instance = RubyDataSource.new
       elsif data_source_or_type == :zoneinfo
         raise ArgumentError, "wrong number of arguments #{args.length} for 1" if args.length > 1
-        @@current = ZoneinfoDataSource.new(*args)
+        @@instance = ZoneinfoDataSource.new(*args)
       else
         raise ArgumentError, 'data_source_or_type must be a DataSource instance or a data source type (:ruby)'
       end

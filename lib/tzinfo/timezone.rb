@@ -505,7 +505,7 @@ module TZInfo
       
       # Returns the current DataSource
       def self.data_source
-        DataSource.current
+        DataSource.get
       end
   end        
 end

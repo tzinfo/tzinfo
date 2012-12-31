@@ -41,7 +41,7 @@ class TCTimezone < Test::Unit::TestCase
   
   def setup
     @orig_default_dst = Timezone.default_dst
-    @orig_data_source = DataSource.current
+    @orig_data_source = DataSource.get
     Timezone.send :class_variable_set, :@@loaded_zones, {}
   end
   
@@ -77,8 +77,8 @@ class TCTimezone < Test::Unit::TestCase
     # return a LinkedTimezone. Check what the data source is and perform
     # the appropriate checks.
     
-    linked = !DataSource.current.kind_of?(ZoneinfoDataSource) ||
-      DataSource.current.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
+    linked = !DataSource.get.kind_of?(ZoneinfoDataSource) ||
+      DataSource.get.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
         
     tz = Timezone.get('UTC')
     
@@ -194,35 +194,35 @@ class TCTimezone < Test::Unit::TestCase
   
   def test_all
     all = Timezone.all
-    expected = DataSource.current.timezone_identifiers.collect {|identifier| Timezone.get_proxy(identifier)}
+    expected = DataSource.get.timezone_identifiers.collect {|identifier| Timezone.get_proxy(identifier)}
     assert_equal(expected, all)
   end
   
   def test_all_identifiers
     all = Timezone.all_identifiers
-    assert_equal(DataSource.current.timezone_identifiers, all)
+    assert_equal(DataSource.get.timezone_identifiers, all)
   end
   
   def test_all_data_zones
     all_data = Timezone.all_data_zones
-    expected = DataSource.current.data_timezone_identifiers.collect {|identifier| Timezone.get_proxy(identifier)}
+    expected = DataSource.get.data_timezone_identifiers.collect {|identifier| Timezone.get_proxy(identifier)}
     assert_equal(expected, all_data)
   end
   
   def test_all_data_zone_identifiers
     all_data = Timezone.all_data_zone_identifiers
-    assert_equal(DataSource.current.data_timezone_identifiers, all_data)
+    assert_equal(DataSource.get.data_timezone_identifiers, all_data)
   end
   
   def test_all_linked_zones
     all_linked = Timezone.all_linked_zones
-    expected = DataSource.current.linked_timezone_identifiers.collect {|identifier| Timezone.get_proxy(identifier)}
+    expected = DataSource.get.linked_timezone_identifiers.collect {|identifier| Timezone.get_proxy(identifier)}
     assert_equal(expected, all_linked)
   end
   
   def test_all_linked_zone_identifiers
     all_linked = Timezone.all_linked_zone_identifiers
-    assert_equal(DataSource.current.linked_timezone_identifiers, all_linked)
+    assert_equal(DataSource.get.linked_timezone_identifiers, all_linked)
   end
   
   def test_all_country_zones
@@ -932,8 +932,8 @@ class TCTimezone < Test::Unit::TestCase
     # return a LinkedTimezone. Check what the data source is and perform
     # the appropriate checks.
     
-    linked = !DataSource.current.kind_of?(ZoneinfoDataSource) ||
-      DataSource.current.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
+    linked = !DataSource.get.kind_of?(ZoneinfoDataSource) ||
+      DataSource.get.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
   
     tz = Timezone.get('UTC')
     

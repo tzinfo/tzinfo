@@ -4,7 +4,7 @@ include TZInfo
 
 class TCCountry < Test::Unit::TestCase
   def setup
-    @orig_data_source = DataSource.current
+    @orig_data_source = DataSource.get
     Country.send :class_variable_set, :@@countries, {}
   end
   

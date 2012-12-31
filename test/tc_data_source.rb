@@ -11,7 +11,7 @@ class TCDataSource < Test::Unit::TestCase
   end
   
   def setup
-    @orig_data_source = DataSource.current
+    @orig_data_source = DataSource.get
     DataSource.set(InitDataSource.new)
     @orig_search_paths = ZoneinfoDataSource.search_paths.clone
   end
@@ -21,12 +21,12 @@ class TCDataSource < Test::Unit::TestCase
     ZoneinfoDataSource.search_paths = @orig_search_paths
   end
   
-  def test_current
-    data_source = DataSource.current
+  def test_get
+    data_source = DataSource.get
     assert_kind_of(InitDataSource, data_source)
   end
   
-  def test_current_default_ruby_only    
+  def test_get_default_ruby_only    
     code = <<-EOF
       require 'tmpdir'
       
@@ -34,7 +34,7 @@ class TCDataSource < Test::Unit::TestCase
         Dir.mktmpdir('tzinfo_test_dir') do |dir|
           TZInfo::ZoneinfoDataSource.search_paths = [dir]
           
-          puts TZInfo::DataSource.current.class
+          puts TZInfo::DataSource.get.class
         end
       rescue Exception => e
         puts "Unexpected exception: \#{e}"
@@ -44,7 +44,7 @@ class TCDataSource < Test::Unit::TestCase
     assert_sub_process_returns(['TZInfo::RubyDataSource'], code, [TZINFO_TEST_DATA_DIR])
   end
   
-  def test_current_default_zoneinfo_only
+  def test_get_default_zoneinfo_only
     code = <<-EOF
       require 'tmpdir'
       
@@ -52,8 +52,8 @@ class TCDataSource < Test::Unit::TestCase
         Dir.mktmpdir('tzinfo_test_dir') do |dir|
           TZInfo::ZoneinfoDataSource.search_paths = [dir, '#{TZINFO_TEST_ZONEINFO_DIR}']
           
-          puts TZInfo::DataSource.current.class
-          puts TZInfo::DataSource.current.zoneinfo_dir
+          puts TZInfo::DataSource.get.class
+          puts TZInfo::DataSource.get.zoneinfo_dir
         end
       rescue Exception => e
         puts "Unexpected exception: \#{e}"
@@ -65,12 +65,12 @@ class TCDataSource < Test::Unit::TestCase
       code)
   end
   
-  def test_current_default_ruby_and_zoneinfo
+  def test_get_default_ruby_and_zoneinfo
     code = <<-EOF
       begin
         TZInfo::ZoneinfoDataSource.search_paths = ['#{TZINFO_TEST_ZONEINFO_DIR}']
           
-        puts TZInfo::DataSource.current.class
+        puts TZInfo::DataSource.get.class
       rescue Exception => e
         puts "Unexpected exception: \#{e}"
       end
@@ -79,7 +79,7 @@ class TCDataSource < Test::Unit::TestCase
     assert_sub_process_returns(['TZInfo::RubyDataSource'], code, [TZINFO_TEST_DATA_DIR])
   end
   
-  def test_current_default_no_data
+  def test_get_default_no_data
     code = <<-EOF
       require 'tmpdir'
       
@@ -88,7 +88,7 @@ class TCDataSource < Test::Unit::TestCase
           TZInfo::ZoneinfoDataSource.search_paths = [dir]
           
           begin
-            data_source = TZInfo::DataSource.current
+            data_source = TZInfo::DataSource.get
             puts "No exception raised, returned \#{data_source} instead"
           rescue Exception => e
             puts e.class
@@ -104,13 +104,13 @@ class TCDataSource < Test::Unit::TestCase
   
   def test_set_instance
     DataSource.set(DummyDataSource.new)
-    data_source = DataSource.current
+    data_source = DataSource.get
     assert_kind_of(DummyDataSource, data_source)
   end
   
   def test_set_standard_ruby
     DataSource.set(:ruby)
-    data_source = DataSource.current
+    data_source = DataSource.get
     assert_kind_of(RubyDataSource, data_source)
   end
   
@@ -122,7 +122,7 @@ class TCDataSource < Test::Unit::TestCase
       ZoneinfoDataSource.search_paths = [dir]
       
       DataSource.set(:zoneinfo)
-      data_source = DataSource.current
+      data_source = DataSource.get
       assert_kind_of(ZoneinfoDataSource, data_source)
       assert_equal(dir, data_source.zoneinfo_dir)      
     end
@@ -134,7 +134,7 @@ class TCDataSource < Test::Unit::TestCase
       FileUtils.touch(File.join(dir, 'zone.tab'))      
       
       DataSource.set(:zoneinfo, dir)
-      data_source = DataSource.current
+      data_source = DataSource.get
       assert_kind_of(ZoneinfoDataSource, data_source)
       assert_equal(dir, data_source.zoneinfo_dir)      
     end
@@ -148,7 +148,7 @@ class TCDataSource < Test::Unit::TestCase
         DataSource.set(:zoneinfo)
       end
       
-      assert_kind_of(InitDataSource, DataSource.current)
+      assert_kind_of(InitDataSource, DataSource.get)
     end
   end
   
@@ -158,7 +158,7 @@ class TCDataSource < Test::Unit::TestCase
         DataSource.set(:zoneinfo, dir)
       end
       
-      assert_kind_of(InitDataSource, DataSource.current)      
+      assert_kind_of(InitDataSource, DataSource.get)      
     end
   end
   
@@ -167,6 +167,6 @@ class TCDataSource < Test::Unit::TestCase
       DataSource.set(:zoneinfo, 1, 2)
     end
     
-    assert_kind_of(InitDataSource, DataSource.current)
+    assert_kind_of(InitDataSource, DataSource.get)
   end
 end
