@@ -409,7 +409,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
     end
   end
   
-  def test_load_timezone_info_tainted_zoneinfo_dir_safe_mode
+  def test_load_timezone_info_tainted_zoneinfo_dir
     data_source = ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
     info = data_source.load_timezone_info('Europe/London')
     assert_kind_of(ZoneinfoTimezoneInfo, info)
