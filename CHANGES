@@ -12,6 +12,10 @@
 * Don't add the tzinfo lib directory to the search path when requiring 'tzinfo'.
   The tzinfo lib directory must now be in the search path before 'tzinfo' is
   required.
+* Fix TimezoneTransitionInfo#eql? incorrectly returning false when running on 
+  Ruby 2.0.
+* Change eql? and == implementations to test the class of the passed in object
+  instead of checking individual properties with 'respond_to?'.
 
 
 From the 0.3 branch:

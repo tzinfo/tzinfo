@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2012 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -74,10 +74,9 @@ module TZInfo
     # current CountryTimezone (has the same identifer, latitude, longitude
     # and description).
     def ==(ct)
-      ct.respond_to?(:identifier) && ct.respond_to?(:latitude) &&
-      ct.respond_to?(:longitude)  && ct.respond_to?(:description) &&
-      identifier == ct.identifier  && latitude == ct.latitude &&
-      longitude == ct.longitude   && description == ct.description         
+      ct.kind_of?(CountryTimezone) &&
+        identifier == ct.identifier  && latitude == ct.latitude &&
+        longitude == ct.longitude   && description == ct.description         
     end
             
     # Returns true if and only if the given CountryTimezone is equal to the

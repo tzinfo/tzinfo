@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2012 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -98,7 +98,7 @@ module TZInfo
     # considered to be equal by == if offset, previous_offset and at are all 
     # equal.
     def ==(tti)
-      tti.respond_to?(:offset) && tti.respond_to?(:previous_offset) && tti.respond_to?(:at) &&
+      tti.kind_of?(TimezoneTransitionInfo) &&
         offset == tti.offset && previous_offset == tti.previous_offset && at == tti.at
     end
     
@@ -109,8 +109,7 @@ module TZInfo
     # which just requires the at times to be equal regardless of how they were
     # originally specified.
     def eql?(tti)
-      tti.respond_to?(:offset) && tti.respond_to?(:previous_offset) &&
-        tti.respond_to?(:numerator_or_time) && tti.respond_to?(:denominator) &&
+      tti.kind_of?(TimezoneTransitionInfo) &&
         offset == tti.offset && previous_offset == tti.previous_offset &&
         numerator_or_time == tti.numerator_or_time && denominator == tti.denominator        
     end

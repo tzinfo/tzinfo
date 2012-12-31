@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2012 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -251,7 +251,7 @@ module TZInfo
     # constructed with the same type (DateTime, Time or timestamp) as this 
     # TimeOrDateTime.
     def eql?(todt)
-      todt.respond_to?(:to_orig) && to_orig.eql?(todt.to_orig)      
+      todt.kind_of?(TimeOrDateTime) && to_orig.eql?(todt.to_orig)      
     end
     
     # Returns a hash of this TimeOrDateTime.
