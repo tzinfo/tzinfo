@@ -103,8 +103,6 @@ module TZInfo
       
       # Parses a zoneinfo file and intializes the DataTimezoneInfo structures.
       def parse(file)
-        file.binmode
-      
         magic, ttisgmtcnt, ttisstdcnt, leapcnt, timecnt, typecnt, charcnt =
           check_read(file, 44).unpack('a5 x15 NNNNNN')
 

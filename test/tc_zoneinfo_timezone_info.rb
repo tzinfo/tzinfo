@@ -583,4 +583,23 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
       assert_period(:"XST©",  3600,    0, false, Time.utc(1971,  1,  2),                    nil, info)
     end
   end
+  
+  def test_load_binmode
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'}]
+      
+    # Transition time that includes CRLF (4EFF0D0A).
+    # Test that this doesn't get corrupted by translating CRLF to LF.
+    transitions = [
+      {:at => Time.utc(2011, 12, 31, 13, 24, 26), :offset_index => 1}]
+  
+    tzif_test(offsets, transitions) do |path, format|     
+      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
+      assert_equal('Zone/One', info.identifier)
+      
+      assert_period(:LMT, 3542, 0, false,                                nil, Time.utc(2011, 12, 31, 13, 24, 26), info)
+      assert_period(:XST, 3600, 0, false, Time.utc(2011, 12, 31, 13, 24, 26),                                nil, info)
+    end
+  end
 end
