@@ -62,7 +62,11 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
   end
   
   def write_tzif(format, offsets, transitions, leaps = [], options = {})
-    magic = options[:override_magic]
+    
+    # Options for testing malformed zoneinfo files.
+    magic = options[:magic]
+    abbrev_separator = options[:abbrev_separator] || "\0"
+    abbrev_offset_base = options[:abbrev_offset_base] || 0
       
     unless magic
       if format == 1
@@ -83,9 +87,9 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
       abbrevs = abbrevs.collect {|a| a.encode('UTF-8')} if abbrevs.first.respond_to?(:encode)    
     
       if abbrevs.first.respond_to?(:bytesize)
-        abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.bytesize + 1}
+        abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.bytesize + abbrev_separator.bytesize}
       else
-        abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.length + 1}
+        abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.length + abbrev_separator.length}
       end
     else
       abbrevs_length = 0
@@ -108,15 +112,15 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
       
       offsets.each do |offset|
         index = abbrevs.index(offset[:abbrev])
-        abbrev_offset = 0
+        abbrev_offset = abbrev_offset_base
         0.upto(index - 1) {|i| abbrev_offset += abbrevs[i].length + 1}
       
         file.write([offset[:gmtoff], offset[:isdst] ? 1 : 0, abbrev_offset].pack('NCC'))
       end
-      
+          
       abbrevs.each do |a|
         file.write(a)
-        file.write("\0")
+        file.write(abbrev_separator)
       end
       
       b32_leaps.each do |leap|
@@ -139,7 +143,7 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
         
         offsets.each do |offset|
           index = abbrevs.index(offset[:abbrev])
-          abbrev_offset = 0
+          abbrev_offset = abbrev_offset_base
           0.upto(index - 1) {|i| abbrev_offset += abbrevs[i].length + 1}
         
           file.write([offset[:gmtoff], offset[:isdst] ? 1 : 0, abbrev_offset].pack('NCC'))
@@ -147,7 +151,7 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
         
         abbrevs.each do |a|
           file.write(a)
-          file.write("\0")
+          file.write(abbrev_separator)
         end
         
         leaps.each do |leap|          
@@ -282,7 +286,7 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
     ['TZif3', 'tzif2', '12345'].each do |magic|    
       offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
           
-      tzif_test(offsets, [], [], :override_magic => magic) do |path, format|        
+      tzif_test(offsets, [], [], :magic => magic) do |path, format|        
         assert_raises(InvalidZoneinfoFile) do
           ZoneinfoTimezoneInfo.new('Zone2', path)
         end
@@ -297,6 +301,36 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
       
       assert_raises(InvalidZoneinfoFile) do
         ZoneinfoTimezoneInfo.new('Zone3', file.path)
+      end
+    end
+  end
+  
+  def test_load_missing_abbrev_null_termination
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false,  :abbrev => 'XST'}]
+      
+    transitions = [
+      {:at => Time.utc(2000, 1, 1), :offset_index => 1}]
+            
+    tzif_test(offsets, transitions, [], :abbrev_separator => '^') do |path, format|
+      assert_raises(InvalidZoneinfoFile) do
+        ZoneinfoTimezoneInfo.new('Zone', path)
+      end
+    end
+  end
+  
+  def test_load_out_of_range_abbrev_offsets
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false,  :abbrev => 'XST'}]
+      
+    transitions = [
+      {:at => Time.utc(2000, 1, 1), :offset_index => 1}]
+            
+    tzif_test(offsets, transitions, [], :abbrev_offset_base => 8) do |path, format|
+      assert_raises(InvalidZoneinfoFile) do
+        ZoneinfoTimezoneInfo.new('Zone', path)
       end
     end
   end

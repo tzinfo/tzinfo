@@ -167,7 +167,13 @@ module TZInfo
         abbrev = check_read(file, charcnt)
 
         offsets.each do |o|
-          o[:abbr] = RubyCoreSupport.force_encoding(abbrev[o[:abbr_index]...abbrev.index("\0", o[:abbr_index])], 'UTF-8')
+          abbrev_start = o[:abbr_index]         
+          raise InvalidZoneinfoFile, "Abbreviation index is out of range in file '#{file.path}'" unless abbrev_start < abbrev.length
+          
+          abbrev_end = abbrev.index("\0", abbrev_start)
+          raise InvalidZoneinfoFile, "Missing abbreviation null terminator in file '#{file.path}'" unless abbrev_end
+
+          o[:abbr] = RubyCoreSupport.force_encoding(abbrev[abbrev_start...abbrev_end], 'UTF-8')
         end
         
         transitions.each do |t|
