@@ -36,7 +36,7 @@ end
 
 RDoc::Task.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
-  rdoc.title = "TZInfo Data"
+  rdoc.title = 'TZInfo'
   rdoc.options.concat spec.rdoc_options
   rdoc.rdoc_files.include(spec.extra_rdoc_files) 
   rdoc.rdoc_files.include('lib')  

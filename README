@@ -1,30 +1,46 @@
 = TZInfo -- Daylight-savings aware timezone support for Ruby
 
-TZInfo[http://tzinfo.rubyforge.org] uses the tz database 
-(http://www.twinsun.com/tz/tz-link.htm) to provide
-daylight-savings aware transformations between times in different timezones.
-This is the same database as used to create the zoneinfo directory on *nix 
-machines.
+TZInfo[http://tzinfo.rubyforge.org] provides daylight-savings aware 
+transformations between times in different timezones.
 
 
 == Data Sources
 
 TZInfo can load data from:
 
-1. Ruby modules generated from the tz database and included in a separate 
-   TZInfo Data library.
+1. Ruby modules generated from the IANA Timezone Database and included in the 
+   separate TZInfo::Data library (tzinfo-data gem).
 2. A zoneinfo directory, typically packaged with your operating system.
 
-By default the TZInfo Data Ruby modules will be used. If TZInfo Data is not
+By default the TZInfo::Data Ruby modules will be used. If TZInfo::Data is not
 available (i.e. if require 'tzinfo/data' fails), then TZInfo will search for
 a zoneinfo directory instead (using the paths specified in
 TZInfo::ZoneinfoDataSource::DEFAULT_SEARCH_PATHS).
 
 If no data source can be found, a TZInfo::DataSourceNotFound exception will be
-raised when TZInfo is used.
+raised when using TZInfo.
 
 The default data source selection can be overridden using 
 TZInfo::DataSource.set.
+
+
+== Installation
+
+TZInfo can be installed using the gem command:
+
+  $ gem install tzinfo
+
+To use the Ruby modules as the data source, you'll also need to install
+TZInfo::Data:
+
+  $ gem install tzinfo-data
+  
+
+== Download
+
+Tar, Zip and RubyGem packages of TZInfo can be downloaded from:
+
+* http://rubyforge.org/frs/?group_id=894
 
 
 == Example usage
@@ -84,13 +100,6 @@ The above covers the most common uses of Timezone and Country. For more detail,
 see the API documentation for the individual classes.
 
 
-== Download
-
-The latest version of TZInfo can be found at
-
-* http://rubyforge.org/frs/?group_id=894
-
-
 == Documentation
 
 API documentation can be found at 
@@ -98,26 +107,14 @@ API documentation can be found at
 * http://tzinfo.rubyforge.org/doc/
 
 
-== Installation
-
-The preferred method of installing TZInfo is using RubyGems[http://docs.rubygems.org/]:
-
-  % gem install tzinfo
-
-To use the Ruby modules as the data source, you'll also need to install
-TZInfo Data:
-
-  % gem install tzinfo-data
-
-
 == License
 
-TZInfo is released under the MIT[http://opensource.org/licenses/mit-license.html] license.
+TZInfo is released under the MIT license, see LICENSE for details.
 
 
 == Support
 
-Please post to the TZInfo Users mailing list (http://rubyforge.org/mailman/listinfo/tzinfo-users)
+Please post to the {TZInfo Users mailing list}[http://rubyforge.org/mailman/listinfo/tzinfo-users]
 if you require assistance or have any suggestions.
 
 Alternatively, you can contact the author Philip Ross directly at phil.ross@gmail.com.

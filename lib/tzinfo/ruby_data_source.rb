@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2012 Philip Ross
+# Copyright (c) 2012-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,12 +21,12 @@
 #++
 
 module TZInfo
-  # A DataSource that loads data from the set of Ruby modules included with
-  # TZInfo.
+  # A DataSource that loads data from the set of Ruby modules included in the
+  # TZInfo::Data library (tzinfo-data gem).
   #
-  # To use this DataSource, do the following:
+  # To have TZInfo use this DataSource, you can do the following:
   #
-  # TZInfo::DataSource.set(:ruby)
+  #   TZInfo::DataSource.set(:ruby)
   class RubyDataSource < DataSource
     # Base path for require.
     REQUIRE_PATH = File.join('tzinfo', 'data', 'definitions')

@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2012 Philip Ross
+# Copyright (c) 2012-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -47,46 +47,47 @@ module TZInfo
     
     # Sets the currently selected data source for Timezone and Country data.
     #
-    # This should usually be set to one of the standard data source types:
+    # This should usually be set to one of the two standard data source types:
     #
-    #   :ruby - read data from the Ruby modules included with TZInfo
-    #   :zoneinfo - read data from the zoneinfo files included with most
-    #               *nix distributions (e.g. in /usr/share/zoneinfo)
+    # * +:ruby+ - read data from the Ruby modules included in the TZInfo::Data 
+    #   library (tzinfo-data gem).
+    # * +:zoneinfo+ - read data from the zoneinfo files included with most
+    #   Unix-like operating sytems (e.g. in /usr/share/zoneinfo).
     #
     # To set TZInfo to use one of the standard data source types, call
-    # DataSource.set in one of the following ways:
+    # \TZInfo::DataSource.set in one of the following ways:
     #
     #   TZInfo::DataSource.set(:ruby)
     #   TZInfo::DataSource.set(:zoneinfo)
     #   TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir)
     #
-    # DataSource.set(:zoneinfo) will automatically search for the zoneinfo
+    # \DataSource.set(:zoneinfo) will automatically search for the zoneinfo
     # directory by checking the paths specified in 
     # ZoneinfoDataSource.search_paths. ZoneinfoDirectoryNotFound will be raised
     # if no valid zoneinfo directory could be found.
     #
-    # DataSource.set(:zoneinfo, zoneinfo_dir) uses the specified zoneinfo
+    # \DataSource.set(:zoneinfo, zoneinfo_dir) uses the specified zoneinfo
     # directory as the data source. If the directory is not a valid zoneinfo
     # directory, an InvalidZoneinfoDirectory exception will be raised.
     #
     # You can create your own custom data source class. It must extend from
     # TZInfo::DataSource and implement the following methods:
     #
-    #   load_timezone_info
-    #   timezone_identifiers
-    #   data_timezone_identifiers
-    #   linked_timezone_identifiers
-    #   load_country_info
-    #   country_codes
+    # * \load_timezone_info
+    # * \timezone_identifiers
+    # * \data_timezone_identifiers
+    # * \linked_timezone_identifiers
+    # * \load_country_info
+    # * \country_codes
     #
-    # To make TZInfo use your data source, call DataSource.set as follows:
+    # To make TZInfo use your data source, call \DataSource.set as follows:
     #
     #   TZInfo::DataSource.set(MyDataSource.new)
     #
-    # To avoid inconsistent data, if DataSource.set is used, it should be 
+    # To avoid inconsistent data, if \DataSource.set is used, it should be 
     # called before accessing any Timezone or Country data.
     #
-    # If DataSource.set is not called, the included Ruby data modules will be
+    # If \DataSource.set is not called, the included Ruby data modules will be
     # used as a data source.
     def self.set(data_source_or_type, *args)
       if data_source_or_type.kind_of?(DataSource)

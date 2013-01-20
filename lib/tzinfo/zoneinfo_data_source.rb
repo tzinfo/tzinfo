@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2012 Philip Ross
+# Copyright (c) 2012-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -39,14 +39,15 @@ module TZInfo
   end
   
   # A DataSource that loads data from a 'zoneinfo' directory containing
-  # compiled "TZif" version 2 files in addition to zones.tab and iso3166.tab
-  # index files.
+  # compiled "TZif" version 2 (or earlier) files in addition to zones.tab 
+  # and iso3166.tab index files.
   #
-  # To load the system zoneinfo files, do the following:
+  # To have TZInfo load the system zoneinfo files, you can do the following:
   #
   #   TZInfo::DataSource.set(:zoneinfo)
   #
-  # To load zoneinfo files from a particular directory, do the following:
+  # To load zoneinfo files from a particular directory, you can pass the
+  # directory to TZInfo::DataSource.set:
   #
   #   TZInfo::DataSource.set(:zoneinfo, directory)  
   class ZoneinfoDataSource < DataSource

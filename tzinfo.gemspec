@@ -2,7 +2,7 @@ Gem::Specification.new do |s|
   s.name = 'tzinfo'
   s.version = '1.0.0.pre1'  
   s.summary = 'Daylight-savings aware timezone library'
-  s.description = 'TZInfo is a Ruby library that uses the standard tz (Olson) database to provide daylight savings aware transformations between times in different time zones.'
+  s.description = 'TZInfo is a Ruby library that provides daylight savings aware transformations between times in different time zones.'
   s.author = 'Philip Ross'
   s.email = 'phil.ross@gmail.com'
   s.homepage = 'http://tzinfo.rubyforge.org'
