@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2012 Philip Ross
+# Copyright (c) 2005-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -55,9 +55,6 @@ module TZInfo
   #
   # Each time conversion method returns an object of the same type it was 
   # passed.
-  #
-  # The timezone information all comes from the tz database
-  # (see http://www.twinsun.com/tz/tz-link.htm)
   class Timezone
     include Comparable
     

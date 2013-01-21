@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,8 +21,8 @@
 #++
 
 module TZInfo
-  # Represents a timezone defined in a data module.
-  class TimezoneInfo #:nodoc:
+  # Represents a timezone defined by a data source.
+  class TimezoneInfo
     
     # The timezone identifier.
     attr_reader :identifier
@@ -35,6 +35,18 @@ module TZInfo
     # Returns internal object state as a programmer-readable string.
     def inspect
       "#<#{self.class}: #@identifier>"
+    end
+    
+    # Returns the TimezonePeriod for the given UTC time.
+    def period_for_utc(utc)
+      raise NotImplementedError, 'Subclasses must override period_for_utc'
+    end
+    
+    # Returns the set of TimezonePeriods for the given local time as an array.    
+    # Results returned are ordered by increasing UTC start date.
+    # Returns an empty array if no periods are found for the given time.
+    def periods_for_local(local)
+      raise NotImplementedError, 'Subclasses must override periods_for_local'
     end
   end
 end

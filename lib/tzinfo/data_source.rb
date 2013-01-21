@@ -39,7 +39,7 @@ module TZInfo
     # The currently selected data source.
     @@instance = nil
         
-    # Returns the currently selected data source.
+    # Returns the currently selected DataSource instance.
     def self.get
       set(create_default_data_source) unless @@instance
       @@instance

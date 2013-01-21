@@ -42,12 +42,13 @@ module TZInfo
   # compiled "TZif" version 2 (or earlier) files in addition to zones.tab 
   # and iso3166.tab index files.
   #
-  # To have TZInfo load the system zoneinfo files, you can do the following:
+  # To have TZInfo load the system zoneinfo files, call TZInfo::DataSource.set 
+  # as follows:
   #
   #   TZInfo::DataSource.set(:zoneinfo)
   #
-  # To load zoneinfo files from a particular directory, you can pass the
-  # directory to TZInfo::DataSource.set:
+  # To load zoneinfo files from a particular directory, pass the directory to 
+  # TZInfo::DataSource.set:
   #
   #   TZInfo::DataSource.set(:zoneinfo, directory)  
   class ZoneinfoDataSource < DataSource

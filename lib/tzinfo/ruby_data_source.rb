@@ -24,7 +24,7 @@ module TZInfo
   # A DataSource that loads data from the set of Ruby modules included in the
   # TZInfo::Data library (tzinfo-data gem).
   #
-  # To have TZInfo use this DataSource, you can do the following:
+  # To have TZInfo use this DataSource, call TZInfo::DataSource.set as follows:
   #
   #   TZInfo::DataSource.set(:ruby)
   class RubyDataSource < DataSource

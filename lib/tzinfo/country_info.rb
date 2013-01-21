@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2012 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,9 @@
 #++
 
 module TZInfo  
-  # Class to store the data loaded from the country index. Instances of this
-  # class are passed to the blocks in the index that define timezones.
-  class CountryInfo #:nodoc:
+  # Represents a country and references to its timezones as returned by a
+  # DataSource.
+  class CountryInfo
     attr_reader :code
     attr_reader :name
     
@@ -73,7 +73,7 @@ module TZInfo
     
     # An instance of the Zones class is passed to the block used to define
     # timezones.
-    class Zones #:nodoc:
+    class Zones
       attr_reader :list
     
       def initialize

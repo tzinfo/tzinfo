@@ -1,4 +1,4 @@
-= TZInfo -- Daylight-savings aware timezone support for Ruby
+= TZInfo - Daylight-savings aware timezone support for Ruby
 
 TZInfo[http://tzinfo.rubyforge.org] provides daylight-savings aware 
 transformations between times in different timezones.
@@ -6,13 +6,15 @@ transformations between times in different timezones.
 
 == Data Sources
 
-TZInfo can load data from:
+TZInfo requires a source of timezone data. There are two built-in options:
 
-1. Ruby modules generated from the IANA Timezone Database and included in the 
-   separate TZInfo::Data library (tzinfo-data gem).
-2. A zoneinfo directory, typically packaged with your operating system.
+1. The TZInfo::Data library (the tzinfo-data gem). TZInfo::Data contains a set 
+   of Ruby modules that are generated from the {IANA Time Zone Database}[http://www.iana.org/time-zones].
+2. A zoneinfo directory on your system. Most Unix-like systems include a 
+   zoneinfo directory containing timezone definitions. These are also generated
+   from the {IANA Time Zone Database}[http://www.iana.org/time-zones].
 
-By default the TZInfo::Data Ruby modules will be used. If TZInfo::Data is not
+By default the TZInfo::Data source will be used. If TZInfo::Data is not
 available (i.e. if require 'tzinfo/data' fails), then TZInfo will search for
 a zoneinfo directory instead (using the paths specified in
 TZInfo::ZoneinfoDataSource::DEFAULT_SEARCH_PATHS).
@@ -45,15 +47,15 @@ Tar, Zip and RubyGem packages of TZInfo can be downloaded from:
 
 == Example usage
 
-To convert a time in UTC to a local time in the America/New_York timezone, you
-can do the following:
+The following code will obtain the America/New_York timezone and covert a time
+in UTC to local New York time:
 
   require 'tzinfo'
   
   tz = TZInfo::Timezone.get('America/New_York')
   local = tz.utc_to_local(Time.utc(2005,8,29,15,35,0))
 
-Note that the Time returned will look like it is UTC (Time.zone will return 
+Note that the Time returned will look like it is UTC (local.zone will return 
 "UTC"). This is because it is not currently possible to change the offset of 
 an individual Time instance.
   
@@ -73,31 +75,28 @@ the Timezone.period_for_utc and Timezone.period_for_local methods can be used.
 Both of these methods return TimezonePeriod objects. The following gets the 
 identifier for the period (in this case EDT).
 
-  period = tz.period_for_utc(DateTime.new(2005,8,29,15,35,0))
+  period = tz.period_for_utc(Time.utc(2005,8,29,15,35,0))
   id = period.zone_identifier
   
-In all the above examples, instances of Time can be used instead of DateTime.
-Timezone#utc_to_local and Timezone#local_to_utc both return the type they are 
-passed.
-
-You can get the current local time in a Timezone with the Timezone#now method:
+The current local time in a Timezone can be obtained with the Timezone#now
+method:
 
   now = tz.now
 
 All methods in TZInfo that take a time can be used with either Time, DateTime
 or Integers (Time#to_i). The return type will be the same as the type passed in.
   
-You can also access Timezones by Country (ISO 3166 country code). The following 
-gets all the Timezone identifiers for the US:
+Timezones can also be accessed by Country (using an ISO 3166 country code). The
+following gets all the Timezone identifiers for the US:
 
   us = TZInfo::Country.get('US')
   timezones = us.zone_identifiers
   
-The zone_info method of Country provides an additional description and
+The Country#zone_info method provides an additional description and geographic 
 location for each Timezone in the Country.
   
-The above covers the most common uses of Timezone and Country. For more detail,
-see the API documentation for the individual classes.
+The above covers the most common uses TZInfo. For more detail, please refer to
+the API documentation for the Timezone and Country classes.
 
 
 == Documentation
