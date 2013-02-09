@@ -1,16 +1,34 @@
 require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
+require 'rational'
 
 include TZInfo
 
 class TCTimeOrDateTime < Test::Unit::TestCase
   def test_initialize_time
-    TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))    
+    TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000))
   end
   
   def test_initialize_time_local 
-    tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3))    
-    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), tdt.to_time)    
+    tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3))
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), tdt.to_time)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), tdt.to_orig)
     assert_equal('UTC', tdt.to_time.zone)
+  end
+  
+  def test_intialize_time_local_usec
+    tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3, 721123))
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123), tdt.to_time)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123), tdt.to_orig)
+    assert_equal('UTC', tdt.to_time.zone)
+  end
+  
+  if Time.utc(2013, 1, 1).respond_to?(:nsec)
+    def test_initialize_time_local_nsec
+      tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)))
+      assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)), tdt.to_time)
+      assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)), tdt.to_orig)
+      assert_equal('UTC', tdt.to_time.zone)
+    end
   end
   
   def test_initialize_datetime_offset
@@ -23,28 +41,41 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))
   end
   
-  def test_initialize_int
+  def test_initialize_timestamp
     TimeOrDateTime.new(1143214323)
   end
   
-  def test_initialize_string
+  def test_initialize_timestamp_string
     TimeOrDateTime.new('1143214323')
   end
   
   def test_to_time
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).to_time)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123),
+      TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721123)).to_time)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).to_time)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123),
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000))).to_time)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new(1143214323).to_time)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new('1143214323').to_time)
   end
   
+  def test_to_time_trunc_to_usec
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123),
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(7211239, 10000000))).to_time)
+  end
+  
   def test_to_datetime
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).to_datetime)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000)),
+      TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721123)).to_datetime)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000)),
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000))).to_datetime)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).to_datetime)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3),
@@ -53,11 +84,29 @@ class TCTimeOrDateTime < Test::Unit::TestCase
       TimeOrDateTime.new('1143214323').to_datetime)
   end
   
+  def test_to_datetime_ruby186_bug
+    # DateTime.new in Ruby 1.8.6 won't allow a time to be specified using 
+    # fractions of a second that is within the 60th second of a minute.
+    
+    # TimeOrDateTime has a workaround for this issue.
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 59) + Rational(721123, 86400000000),
+      TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 59, 721123)).to_datetime)
+  end
+  
+  def test_to_datetime_trunc_to_usec
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000)),
+      TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(9, 10))).to_datetime)
+  end
+  
   def test_to_i
     assert_equal(1143214323,
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).to_i)
     assert_equal(1143214323,
+      TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).to_i)
+    assert_equal(1143214323,
       TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).to_i)
+    assert_equal(1143214323,
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).to_i)
     assert_equal(1143214323,
       TimeOrDateTime.new(1143214323).to_i)
     assert_equal(1143214323,
@@ -67,8 +116,12 @@ class TCTimeOrDateTime < Test::Unit::TestCase
   def test_to_orig
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721000),
+      TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)),
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).to_orig)
     assert_equal(1143214323,
       TimeOrDateTime.new(1143214323).to_orig)
     assert_equal(1143214323,
@@ -134,6 +187,20 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(3, TimeOrDateTime.new(1143214323).sec)
   end
   
+  def test_usec
+    assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).usec)
+    assert_equal(721123, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721123)).usec)
+    assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).usec)
+    assert_equal(721123, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123,1000000))).usec)
+    assert_equal(0, TimeOrDateTime.new(1143214323).usec)
+  end
+
+  def test_usec_after_to_i
+    val = TimeOrDateTime.new(Time.utc(2013, 2, 4, 22, 10, 33, 598000))
+    assert_equal(Time.utc(2013, 2, 4, 22, 10, 33).to_i, val.to_i)
+    assert_equal(598000, val.usec)
+  end
+    
   def test_compare_timeordatetime_time
     assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 4)))
     assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(Time.utc(2007, 3, 24, 15, 32, 3)))
@@ -152,6 +219,13 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 2)))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(Time.utc(2005, 3, 24, 15, 32, 3)))
+    
+    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500001)))
+    assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)))
+    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 499999)))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500001)))
+    assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 499999)))
   end
   
   def test_compare_timeordatetime_datetime
@@ -172,6 +246,13 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 2)))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(DateTime.new(1960, 3, 24, 15, 32, 3)))
+    
+    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500001, 1000000))))
+    assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))))
+    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(499999, 1000000))))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500001, 1000000))))
+    assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(499999, 1000000))))
   end
   
   def test_compare_timeordatetime_timestamp
@@ -212,6 +293,13 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> Time.utc(2006, 3, 24, 15, 32, 3))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> Time.utc(2006, 3, 24, 15, 32, 2))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> Time.utc(2005, 3, 24, 15, 32, 3))
+    
+    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500001))
+    assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500000))
+    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> Time.utc(2006, 3, 24, 15, 32, 3, 499999))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500001))
+    assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500000))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> Time.utc(2006, 3, 24, 15, 32, 3, 499999))
   end
   
   def test_compare_datetime
@@ -232,6 +320,13 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> DateTime.new(2006, 3, 24, 15, 32, 3))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> DateTime.new(2006, 3, 24, 15, 32, 2))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> DateTime.new(1960, 3, 24, 15, 32, 3))
+    
+    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500001, 1000000)))
+    assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000)))
+    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(499999, 1000000)))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500001, 1000000)))
+    assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000)))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(499999, 1000000)))
   end
   
   def test_compare_timestamp
@@ -282,12 +377,23 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 4))))
     assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(Object.new))
     
+    assert_equal(true, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000))))
+    assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)))))
+    assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 722000))))
+    assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).eql?(Object.new))
+    
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))))
     assert_equal(true, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(1143214323)))
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new('1143214323')))
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 4))))
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(Object.new))
+    
+    assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000))))
+    assert_equal(true, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)))))
+    assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(722, 1000)))))
+    assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).eql?(Object.new))
+
     
     assert_equal(false, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))))
     assert_equal(false, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
@@ -306,41 +412,67 @@ class TCTimeOrDateTime < Test::Unit::TestCase
   
   def test_add
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) + 0).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) + 0).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) + 0).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) + 0).to_orig)
     assert_equal(1143214323, (TimeOrDateTime.new(1143214323) + 0).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) + 1).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) + 1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) + 1).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) + 1).to_orig)
     assert_equal(1143214324, (TimeOrDateTime.new(1143214323) + 1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) + (-1)).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 2, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) + (-1)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) + (-1)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) + (-1)).to_orig)
     assert_equal(1143214322, (TimeOrDateTime.new(1143214323) + (-1)).to_orig)
   end
   
   def test_subtract     
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) - 0).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) - 0).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - 0).to_orig)   
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - 0).to_orig)   
     assert_equal(1143214323, (TimeOrDateTime.new(1143214323) - 0).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) - 1).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 2, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) - 1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - 1).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - 1).to_orig)
     assert_equal(1143214322, (TimeOrDateTime.new(1143214323) - 1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) - (-1)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - (-1)).to_orig)
     assert_equal(1143214324, (TimeOrDateTime.new(1143214323) - (-1)).to_orig)
   end
   
   def test_add_with_convert
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).add_with_convert(0).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721000), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).add_with_convert(0).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).add_with_convert(0).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).add_with_convert(0).to_orig)
     assert_equal(1143214323, TimeOrDateTime.new(1143214323).add_with_convert(0).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).add_with_convert(1).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).add_with_convert(1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).add_with_convert(1).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).add_with_convert(1).to_orig)
     assert_equal(1143214324, TimeOrDateTime.new(1143214323).add_with_convert(1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).add_with_convert(-1).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 2, 721000), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).add_with_convert(-1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).add_with_convert(-1).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).add_with_convert(-1).to_orig)
     assert_equal(1143214322, TimeOrDateTime.new(1143214323).add_with_convert(-1).to_orig)
     
     assert_equal(DateTime.new(1969, 12, 31, 23, 59, 59), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0)).add_with_convert(-1).to_orig)
     assert_equal(DateTime.new(2038, 1, 19, 3, 14, 8), TimeOrDateTime.new(Time.utc(2038, 1, 19, 3, 14, 7)).add_with_convert(1).to_orig)
+    
+    # Using RubyCoreSupport.datetime_new because of Ruby 1.8.6 bug in DateTime 
+    # (where it doesn't consider times in the 60th second of each minute to be valid).
+    assert_equal(RubyCoreSupport.datetime_new(1969, 12, 31, 23, 59, 59 + Rational(892,1000)), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0, 892000)).add_with_convert(-1).to_orig)
+    assert_equal(DateTime.new(2038, 1, 19, 3, 14, 8 + Rational(892,1000)), TimeOrDateTime.new(Time.utc(2038, 1, 19, 3, 14, 7, 892000)).add_with_convert(1).to_orig)
+    
+    assert_equal(DateTime.new(1969, 12, 31, 23, 59, 59), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0).to_i).add_with_convert(-1).to_orig)
+    assert_equal(DateTime.new(2038, 1, 19, 3, 14, 8), TimeOrDateTime.new(Time.utc(2038, 1, 19, 3, 14, 7).to_i).add_with_convert(1).to_orig)
   end
   
   def test_wrap_time

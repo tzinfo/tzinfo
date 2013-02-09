@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2008-2012 Philip Ross
+# Copyright (c) 2008-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -77,6 +77,24 @@ module TZInfo
       end
     end
     
+    # DateTime in Ruby 1.8.6 doesn't consider times within the 60th second to be
+    # valid. When attempting to specify such a DateTime, subtract the fractional
+    # part and then add it back later
+    if Date.respond_to?(:valid_time?) && !Date.valid_time?(0, 0, rational_new!(59001, 1000)) # 0:0:59.001
+      def self.datetime_new(y=-4712, m=1, d=1, h=0, min=0, s=0, of=0, sg=Date::ITALY)
+        if !s.kind_of?(Integer) && s > 59
+          dt = DateTime.new(y, m, d, h, min, 59, of, sg)
+          dt + (s - 59) / 86400
+        else
+          DateTime.new(y, m, d, h, min, s, of, sg)
+        end
+      end
+    else
+      def self.datetime_new(y=-4712, m=1, d=1, h=0, min=0, s=0, of=0, sg=Date::ITALY)
+        DateTime.new(y, m, d, h, min, s, of, sg)
+      end    
+    end    
+    
     begin
       Time.at(-1)
       Time.at(-2147483648)
@@ -103,6 +121,17 @@ module TZInfo
       end
     end
     
+    # Return the result of Time#nsec if it exists, otherwise return the
+    # result of Time#usec * 1000.
+    if Time.method_defined?(:nsec)
+      def self.time_nsec(time)
+        time.nsec
+      end
+    else
+      def self.time_nsec(time)
+        time.usec * 1000
+      end
+    end
     
     # Call String#force_encoding if this version of Ruby has encoding support
     # otherwise treat as a no-op.

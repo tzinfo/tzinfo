@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2012 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,31 @@
 #++
 
 require 'date'
+require 'rational'
 require 'time'
 
 module TZInfo
-  # Used by TZInfo internally to represent either a Time, DateTime or integer
-  # timestamp (seconds since 1970-01-01 00:00:00).
+  # Used by TZInfo internally to represent either a Time, DateTime or
+  # an Integer timestamp (seconds since 1970-01-01 00:00:00).
   class TimeOrDateTime #:nodoc:
     include Comparable
     
     # Constructs a new TimeOrDateTime. timeOrDateTime can be a Time, DateTime
-    # or an integer. If using a Time or DateTime, any time zone information is 
-    # ignored.
+    # or Integer. If using a Time or DateTime, any time zone information 
+    # is ignored.
     def initialize(timeOrDateTime)
       @time = nil
       @datetime = nil
       @timestamp = nil
       
       if timeOrDateTime.is_a?(Time)
-        @time = timeOrDateTime        
-        @time = Time.utc(@time.year, @time.mon, @time.mday, @time.hour, @time.min, @time.sec) unless @time.zone == 'UTC'        
+        @time = timeOrDateTime
+        
+        # Avoid using the slower Rational class unless necessary.
+        nsec = RubyCoreSupport.time_nsec(@time)
+        usec = nsec % 1000 == 0 ? nsec / 1000 : Rational(nsec, 1000)
+        
+        @time = Time.utc(@time.year, @time.mon, @time.mday, @time.hour, @time.min, @time.sec, usec) unless @time.zone == 'UTC'        
         @orig = @time
       elsif timeOrDateTime.is_a?(DateTime)
         @datetime = timeOrDateTime
@@ -52,12 +58,15 @@ module TZInfo
     end
     
     # Returns the time as a Time.
+    #
+    # When converting from a DateTime, the result is truncated to microsecond
+    # precision.
     def to_time
-      unless @time        
-        if @timestamp 
+      unless @time
+        if @timestamp
           @time = Time.at(@timestamp).utc
         else
-          @time = Time.utc(year, mon, mday, hour, min, sec)
+          @time = Time.utc(year, mon, mday, hour, min, sec, usec)
         end
       end
       
@@ -65,9 +74,15 @@ module TZInfo
     end
     
     # Returns the time as a DateTime.
+    #
+    # When converting from a Time, the result is truncated to microsecond
+    # precision.
     def to_datetime
       unless @datetime
-        @datetime = DateTime.new(year, mon, mday, hour, min, sec)
+        # Avoid using Rational unless necessary.
+        u = usec
+        s = u == 0 ? sec : Rational(sec * 1000000 + u, 1000000)
+        @datetime = RubyCoreSupport.datetime_new(year, mon, mday, hour, min, s)
       end
       
       @datetime
@@ -171,30 +186,44 @@ module TZInfo
       end
     end
     
-    # Compares this TimeOrDateTime with another Time, DateTime, integer
-    # timestamp or TimeOrDateTime. Returns -1, 0 or +1 depending whether the 
-    # receiver is less than, equal to, or greater than timeOrDateTime.
-    #
-    # Milliseconds and smaller units are ignored in the comparison.
-    def <=>(timeOrDateTime)
-      if timeOrDateTime.is_a?(TimeOrDateTime)            
-        orig = timeOrDateTime.to_orig
+    # Returns the number of microseconds for the time.
+    def usec      
+      if @time
+        @time.usec
+      elsif @datetime
+        # Ruby 1.8 has sec_fraction (of which the documentation says
+        # 'I do NOT recommend you to use this method'). sec_fraction no longer
+        # exists in Ruby 1.9.
         
-        if @orig.is_a?(DateTime) || orig.is_a?(DateTime)
-          # If either is a DateTime, assume it is there for a reason 
-          # (i.e. for range).
-          to_datetime <=> timeOrDateTime.to_datetime
-        elsif orig.is_a?(Time)
-          to_time <=> timeOrDateTime.to_time
-        else
-          to_i <=> timeOrDateTime.to_i
-        end        
-      elsif @orig.is_a?(DateTime) || timeOrDateTime.is_a?(DateTime)
+        # Calculate the sec_fraction from the day_fraction.
+        ((@datetime.day_fraction - OffsetRationals.rational_for_offset(@datetime.hour * 3600 + @datetime.min * 60 + @datetime.sec)) * 86400000000).to_i
+      else 
+        0
+      end
+    end
+    
+    # Compares this TimeOrDateTime with another Time, DateTime, timestamp 
+    # (Integer) or TimeOrDateTime. Returns -1, 0 or +1 depending 
+    # whether the receiver is less than, equal to, or greater than 
+    # timeOrDateTime.
+    #
+    # Comparisons involving a DateTime will be performed using DateTime#<=>.
+    # Comparisons that don't involve a DateTime, but include a Time will be
+    # performed with Time#<=>. Otherwise comparisons will be performed with
+    # Integer#<=>.    
+    def <=>(timeOrDateTime)
+      unless timeOrDateTime.is_a?(TimeOrDateTime)
+        timeOrDateTime = TimeOrDateTime.wrap(timeOrDateTime)
+      end
+          
+      orig = timeOrDateTime.to_orig
+      
+      if @orig.is_a?(DateTime) || orig.is_a?(DateTime)
         # If either is a DateTime, assume it is there for a reason 
-        # (i.e. for range).        
-        to_datetime <=> TimeOrDateTime.wrap(timeOrDateTime).to_datetime
-      elsif timeOrDateTime.is_a?(Time)
-        to_time <=> timeOrDateTime
+        # (i.e. for its larger range of acceptable values on 32-bit systems).
+        to_datetime <=> timeOrDateTime.to_datetime
+      elsif @orig.is_a?(Time) || orig.is_a?(Time)
+        to_time <=> timeOrDateTime.to_time
       else
         to_i <=> timeOrDateTime.to_i
       end
@@ -211,7 +240,7 @@ module TZInfo
         if @orig.is_a?(DateTime)
           TimeOrDateTime.new(@orig + OffsetRationals.rational_for_offset(seconds))
         else
-          # + defined for Time and integer timestamps
+          # + defined for Time and Integer
           TimeOrDateTime.new(@orig + seconds)
         end
       end
@@ -262,12 +291,14 @@ module TZInfo
     # If no block is given, returns a TimeOrDateTime wrapping the given 
     # timeOrDateTime. If a block is specified, a TimeOrDateTime is constructed
     # and passed to the block. The result of the block must be a TimeOrDateTime.
-    # to_orig will be called on the result and the result of to_orig will be
-    # returned.
     #
-    # timeOrDateTime can be a Time, DateTime, integer timestamp or TimeOrDateTime.
-    # If a TimeOrDateTime is passed in, no new TimeOrDateTime will be constructed,
-    # the passed in value will be used.
+    # The result of the block will be converted to the type of the originally 
+    # passed in timeOrDateTime and then returned as the result of wrap.
+    #
+    # timeOrDateTime can be a Time, DateTime, timestamp (Integer) or 
+    # TimeOrDateTime. If a TimeOrDateTime is passed in, no new TimeOrDateTime 
+    # will be constructed and the value passed to wrap will be used when 
+    # calling the block.
     def self.wrap(timeOrDateTime)      
       t = timeOrDateTime.is_a?(TimeOrDateTime) ? timeOrDateTime : TimeOrDateTime.new(timeOrDateTime)        
       
@@ -275,7 +306,7 @@ module TZInfo
         t = yield t
         
         if timeOrDateTime.is_a?(TimeOrDateTime)
-          t          
+          t
         elsif timeOrDateTime.is_a?(Time)
           t.to_time
         elsif timeOrDateTime.is_a?(DateTime)

@@ -50,13 +50,19 @@ class TCTimezoneOffsetInfo < Test::Unit::TestCase
     
     assert_equal(1148949080, o1.to_local(1148931080))
     assert_equal(Time.utc(2006, 5, 30, 0, 31, 20), o1.to_local(Time.utc(2006, 5, 29, 19, 31, 20)))
+    assert_equal(Time.utc(2006, 5, 30, 0, 31, 20, 782000), o1.to_local(Time.utc(2006, 5, 29, 19, 31, 20, 782000)))
     assert_equal(DateTime.new(2006, 5, 30, 0, 31, 20), o1.to_local(DateTime.new(2006, 5, 29, 19, 31, 20)))
+    assert_equal(DateTime.new(2006, 5, 30, 0, 31, 20 + Rational(782, 1000)), o1.to_local(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(782, 1000))))
+    assert_equal(1148949080, o1.to_local(1148931080))
     assert(TimeOrDateTime.new(1148949080).eql?(o1.to_local(TimeOrDateTime.new(1148931080))))
     
     assert_equal(1148931080, o2.to_local(1148931080))
     assert_equal(Time.utc(2006, 5, 29, 19, 31, 20), o2.to_local(Time.utc(2006, 5, 29, 19, 31, 20)))
+    assert_equal(Time.utc(2006, 5, 29, 19, 31, 20, 123000), o2.to_local(Time.utc(2006, 5, 29, 19, 31, 20, 123000)))
     assert_equal(DateTime.new(2006, 5, 29, 19, 31, 20), o2.to_local(DateTime.new(2006, 5, 29, 19, 31, 20)))
-    assert(TimeOrDateTime.new(1148931080).eql?(o2.to_local(TimeOrDateTime.new(1148931080))))    
+    assert_equal(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(123, 1000)), o2.to_local(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(123, 1000))))
+    assert_equal(1148931080, o2.to_local(1148931080))
+    assert(TimeOrDateTime.new(1148931080).eql?(o2.to_local(TimeOrDateTime.new(1148931080))))
   end
   
   def test_to_utc
@@ -65,12 +71,18 @@ class TCTimezoneOffsetInfo < Test::Unit::TestCase
     
     assert_equal(1148913080, o1.to_utc(1148931080))
     assert_equal(Time.utc(2006, 5, 29, 14, 31, 20), o1.to_utc(Time.utc(2006, 5, 29, 19, 31, 20)))
+    assert_equal(Time.utc(2006, 5, 29, 14, 31, 20, 913000), o1.to_utc(Time.utc(2006, 5, 29, 19, 31, 20, 913000)))
     assert_equal(DateTime.new(2006, 5, 29, 14, 31, 20), o1.to_utc(DateTime.new(2006, 5, 29, 19, 31, 20)))
+    assert_equal(DateTime.new(2006, 5, 29, 14, 31, 20 + Rational(913,1000)), o1.to_utc(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(913,1000))))
+    assert_equal(1148913080, o1.to_utc(1148931080))
     assert(TimeOrDateTime.new(1148913080).eql?(o1.to_utc(TimeOrDateTime.new(1148931080))))
     
     assert_equal(1148931080, o2.to_local(1148931080))
     assert_equal(Time.utc(2006, 5, 29, 19, 31, 20), o2.to_local(Time.utc(2006, 5, 29, 19, 31, 20)))
+    assert_equal(Time.utc(2006, 5, 29, 19, 31, 20, 323000), o2.to_local(Time.utc(2006, 5, 29, 19, 31, 20, 323000)))
     assert_equal(DateTime.new(2006, 5, 29, 19, 31, 20), o2.to_local(DateTime.new(2006, 5, 29, 19, 31, 20)))
+    assert_equal(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(323, 1000)), o2.to_local(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(323, 1000))))
+    assert_equal(1148931080, o2.to_utc(1148931080))
     assert(TimeOrDateTime.new(1148931080).eql?(o2.to_local(TimeOrDateTime.new(1148931080))))    
   end
   
