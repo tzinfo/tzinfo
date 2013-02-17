@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2012 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ module TZInfo
     # seconds since the epoch. If denominator is specified numerator_or_time
     # and denominator are used to create a DateTime as follows:
     # 
-    #  DateTime.new!(Rational.send(:new!, numerator_or_time, denominator), 0, Date::ITALY)
+    #  RubyCoreSupport.datetime_new!(RubyCoreSupport.rational_new!(numerator_or_time, denominator), 0, Date::ITALY)
     #
     # For performance reasons, the numerator and denominator must be specified
     # in their lowest form.
