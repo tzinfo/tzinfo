@@ -254,9 +254,11 @@ module TZInfo
       self + (-seconds)
     end
    
-    # Similar to the + operator, but for cases where adding would cause a 
-    # timestamp or time to go out of the allowed range, converts to a DateTime
-    # based TimeOrDateTime.
+    # Similar to the + operator, but converts to a DateTime based TimeOrDateTime
+    # where the  Time or Integer timestamp to go out of the allowed range for a 
+    # Time, converts to a DateTime based TimeOrDateTime.
+    #
+    # Note that the range of Time varies based on the platform.
     def add_with_convert(seconds)
       if seconds == 0
         self
@@ -267,7 +269,7 @@ module TZInfo
           # A Time or timestamp.
           result = to_i + seconds
           
-          if result < 0 || result > 2147483647
+          if ((result > 2147483647 || result < -2147483648) && !RubyCoreSupport.time_supports_64bit) || (result < 0 && !RubyCoreSupport.time_supports_negative)
             result = TimeOrDateTime.new(to_datetime + OffsetRationals.rational_for_offset(seconds))
           else
             result = TimeOrDateTime.new(@orig + seconds)
