@@ -33,6 +33,9 @@ module TZInfo
     # Constructs a new TimeOrDateTime. timeOrDateTime can be a Time, DateTime
     # or Integer. If using a Time or DateTime, any time zone information 
     # is ignored.
+    #
+    # Integer timestamps must be within the range supported by Time on the
+    # platform being used.    
     def initialize(timeOrDateTime)
       @time = nil
       @datetime = nil
@@ -53,6 +56,11 @@ module TZInfo
         @orig = @datetime
       else
         @timestamp = timeOrDateTime.to_i
+        
+        if !RubyCoreSupport.time_supports_64bit && (@timestamp > 2147483647 || @timestamp < 2147483648 || (@timestamp < 0 && !RubyCoreSupport.time_supports_negative))
+          raise RangeError, 'Timestamp is outside the supported range of Time on this platform'
+        end
+        
         @orig = @timestamp
       end
     end

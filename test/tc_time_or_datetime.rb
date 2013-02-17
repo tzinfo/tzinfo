@@ -49,6 +49,34 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     TimeOrDateTime.new('1143214323')
   end
   
+  unless RubyCoreSupport.time_supports_64bit
+    # Only define this test for non-64bit platforms. Some 64-bit Rubies support
+    # greater than 64-bit, others support less than the full range. In either
+    # case, times at the far ends of the range are so far in the future or past
+    # that they are not going to turn up in timezone data.  
+    def test_initialize_timestamp_supported_range      
+      assert_equal((2 ** 31) - 1, TimeOrDateTime.new((2 ** 31) - 1).to_orig)
+    
+      assert_raises(RangeError) do
+        TimeOrDateTime.new(2 ** 31)
+      end
+    
+      if RubyCoreSupport.time_supports_negative
+        assert_equal(-(2 ** 31), TimeOrDateTime.new(-(2 ** 31)).to_orig)
+      
+        assert_raises(RangeError) do
+          TimeOrDateTime.new(-(2 ** 31) - 1)
+        end
+      else
+        assert_equal(0, TimeOrDateTime.new(0).to_orig)
+      
+        assert_raises(RangeError) do
+          TimeOrDateTime.new(-1)
+        end
+      end
+    end
+  end
+  
   def test_to_time
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).to_time)
