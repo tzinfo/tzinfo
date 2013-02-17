@@ -51,24 +51,16 @@ class TCTimezoneTransitionInfo < Test::Unit::TestCase
   
   def test_local_end_before_negative_32bit
     t = TimezoneTransitionInfo.new(TimezoneOffsetInfo.new(-7200, 3600, :TDT),
-      TimezoneOffsetInfo.new(-7200, 0, :TST), -2147482800)
+      TimezoneOffsetInfo.new(-7200, 0, :TST), 19325859, 8)
       
-    if RubyCoreSupport.time_supports_64bit
-      assert(TimeOrDateTime.new(Time.utc(1901, 12, 13, 19, 0, 0).to_i).eql?(t.local_end))
-    else
-      assert(TimeOrDateTime.new(DateTime.new(1901, 12, 13, 19, 0, 0)).eql?(t.local_end))
-    end
+    assert(TimeOrDateTime.new(DateTime.new(1901, 12, 13, 19, 0, 0)).eql?(t.local_end))
   end
   
   def test_local_start_before_negative_32bit
     t = TimezoneTransitionInfo.new(TimezoneOffsetInfo.new(-7200, 3600, :TDT),
-      TimezoneOffsetInfo.new(-7200, 0, :TST), -2147482800)
+      TimezoneOffsetInfo.new(-7200, 0, :TST), 19325859, 8)
       
-    if RubyCoreSupport.time_supports_64bit
-      assert(TimeOrDateTime.new(Time.utc(1901, 12, 13, 20, 0, 0).to_i).eql?(t.local_start))
-    else
-      assert(TimeOrDateTime.new(DateTime.new(1901, 12, 13, 20, 0, 0)).eql?(t.local_start))
-    end
+    assert(TimeOrDateTime.new(DateTime.new(1901, 12, 13, 20, 0, 0)).eql?(t.local_start))
   end
   
   def test_local_end_before_epoch
