@@ -57,7 +57,7 @@ module TZInfo
       else
         @timestamp = timeOrDateTime.to_i
         
-        if !RubyCoreSupport.time_supports_64bit && (@timestamp > 2147483647 || @timestamp < 2147483648 || (@timestamp < 0 && !RubyCoreSupport.time_supports_negative))
+        if !RubyCoreSupport.time_supports_64bit && (@timestamp > 2147483647 || @timestamp < -2147483648 || (@timestamp < 0 && !RubyCoreSupport.time_supports_negative))
           raise RangeError, 'Timestamp is outside the supported range of Time on this platform'
         end
         
