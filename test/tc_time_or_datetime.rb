@@ -5,7 +5,9 @@ include TZInfo
 
 class TCTimeOrDateTime < Test::Unit::TestCase
   def test_initialize_time
-    TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000))
+    assert_nothing_raised do
+      TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000))
+    end
   end
   
   def test_initialize_time_local 
@@ -38,15 +40,21 @@ class TCTimeOrDateTime < Test::Unit::TestCase
   end
   
   def test_initialize_datetime
-    TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))
+    assert_nothing_raised do
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))
+    end
   end
   
   def test_initialize_timestamp
-    TimeOrDateTime.new(1143214323)
+    assert_nothing_raised do
+      TimeOrDateTime.new(1143214323)
+    end
   end
   
   def test_initialize_timestamp_string
-    TimeOrDateTime.new('1143214323')
+    assert_nothing_raised do
+      TimeOrDateTime.new('1143214323')
+    end
   end
   
   unless RubyCoreSupport.time_supports_64bit
@@ -503,7 +511,7 @@ class TCTimeOrDateTime < Test::Unit::TestCase
       else
         assert_equal(DateTime.new(1901, 12, 13, 20, 45, 51), TimeOrDateTime.new(Time.utc(1901, 12, 13, 20, 45, 52)).add_with_convert(-1).to_orig)
         assert_equal(DateTime.new(1901, 12, 13, 20, 45, 51), TimeOrDateTime.new(-2147483648).add_with_convert(-1).to_orig)
-        assert_equal(DateTime.new(1901, 12, 13, 20, 45, 51 + Rational(892,1000)), TimeOrDateTime.new(Time.utc(1901, 12, 13, 20, 45, 51, 892000)).add_with_convert(-1).to_orig)
+        assert_equal(DateTime.new(1901, 12, 13, 20, 45, 51 + Rational(892,1000)), TimeOrDateTime.new(Time.utc(1901, 12, 13, 20, 45, 52, 892000)).add_with_convert(-1).to_orig)
       end
     else
       assert_equal(DateTime.new(1969, 12, 31, 23, 59, 59), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0)).add_with_convert(-1).to_orig)
