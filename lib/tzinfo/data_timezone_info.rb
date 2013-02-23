@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -62,7 +62,7 @@ module TZInfo
     # raised if the offset_id cannot be found. numerator_or_time and
     # denomiator specify the time the transition occurs as. See 
     # TimezoneTransitionInfo for more detail about specifying times.
-    def transition(year, month, offset_id, numerator_or_time, denominator = nil)
+    def transition(year, month, offset_id, numerator_or_timestamp, denominator_or_numerator = nil, denominator = nil)
       offset = @offsets[offset_id]      
       raise ArgumentError, 'Offset not found' unless offset
             
@@ -87,7 +87,7 @@ module TZInfo
       end
       
       @transitions << TimezoneTransitionInfo.new(offset, @previous_offset, 
-        numerator_or_time, denominator)
+        numerator_or_timestamp, denominator_or_numerator, denominator)
       @last_year = year
       @last_month = month             
       @previous_offset = offset

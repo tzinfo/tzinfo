@@ -12,8 +12,9 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   def test_offset
     dti = DataTimezoneInfo.new('Test/Zone')
     
-    # Test nothing raised
-    dti.offset :o1, -18000, 3600, :TEST
+    assert_nothing_raised do
+      dti.offset :o1, -18000, 3600, :TEST
+    end
   end
   
   def test_offset_already_defined
@@ -24,20 +25,31 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
     assert_raises(ArgumentError) { dti.offset :o1, 3600, 3600, :TESTD }
   end
   
-  def test_transition_time
+  def test_transition_timestamp
     dti = DataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
     
-    # Test nothing raised
-    dti.transition 2006, 6, :o1, 1149368400
+    assert_nothing_raised do
+      dti.transition 2006, 6, :o1, 1149368400
+    end
   end
   
   def test_transition_datetime
     dti = DataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
     
-    # Test nothing raised
-    dti.transition 2006, 6, :o1, 19631123, 8
+    assert_nothing_raised do
+      dti.transition 2006, 6, :o1, 19631123, 8
+    end
+  end
+  
+  def test_transition_timestamp_and_datetime
+    dti = DataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -18000, 3600, :TEST
+    
+    assert_nothing_raised do
+      dti.transition 2006, 6, :o1, 1149368400, 19631123, 8
+    end
   end
   
   def test_transition_invalid_offset
@@ -83,7 +95,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
     dti.transition 2000,  4, :o2, Time.utc(2000, 4,1,1,0,0).to_i
     dti.transition 2000, 10, :o3, Time.utc(2000,10,1,1,0,0).to_i
     dti.transition 2001,  3, :o2, 58847269, 24                    # (2001, 3,1,1,0,0)
-    dti.transition 2001,  4, :o4, Time.utc(2001, 4,1,1,0,0).to_i
+    dti.transition 2001,  4, :o4, Time.utc(2001, 4,1,1,0,0).to_i, 58848013, 24
     dti.transition 2001, 10, :o3, Time.utc(2001,10,1,1,0,0).to_i
     dti.transition 2002, 10, :o3, Time.utc(2002,10,1,1,0,0).to_i
     dti.transition 2003,  2, :o2, Time.utc(2003, 2,1,1,0,0).to_i
@@ -154,7 +166,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
     dti.offset :o4, -21600, 3600, :TESTD
     
     dti.transition 2000,  4, :o2, 58839277, 24                   # 2000,4,2,1,0,0
-    dti.transition 2000, 10, :o3, Time.utc(2000,10,2,1,0,0).to_i
+    dti.transition 2000, 10, :o3, Time.utc(2000,10,2,1,0,0).to_i, 58843669, 24
     dti.transition 2001,  3, :o2, Time.utc(2001, 3,2,1,0,0).to_i
     dti.transition 2001,  4, :o4, Time.utc(2001, 4,2,1,0,0).to_i
     dti.transition 2001, 10, :o3, Time.utc(2001,10,2,1,0,0).to_i
@@ -276,5 +288,36 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
     assert_raises(NoOffsetsDefined) { dti.periods_for_local(DateTime.new(2005,1,1,0,0,0)) }
     assert_raises(NoOffsetsDefined) { dti.periods_for_local(Time.utc(2005,1,1,0,0,0)) }
     assert_raises(NoOffsetsDefined) { dti.periods_for_local(Time.utc(2005,1,1,0,0,0).to_i) }
+  end
+  
+  def test_datetime_and_timestamp_use
+    dti = DataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, 0,    0, :TESTS
+    dti.offset :o2, 0, 3600, :TESTD    
+    
+    dti.transition 1901, 12, :o2, -2147483649, 69573092117, 28800
+    dti.transition 1969, 12, :o1, -1, 210866759999, 86400
+    dti.transition 2001,  9, :o2, 1000000000, 529666909, 216
+    dti.transition 2038,  1, :o1, 2147483648, 3328347557, 1350
+    
+    if RubyCoreSupport.time_supports_negative && RubyCoreSupport.time_supports_64bit
+      assert(dti.period_for_utc(DateTime.new(1901,12,13,20,45,51)).start_transition.at.eql?(TimeOrDateTime.new(-2147483649)))
+    else
+      assert(dti.period_for_utc(DateTime.new(1901,12,13,20,45,51)).start_transition.at.eql?(TimeOrDateTime.new(DateTime.new(1901,12,13,20,45,51))))
+    end
+    
+    if RubyCoreSupport.time_supports_negative          
+      assert(dti.period_for_utc(DateTime.new(1969,12,31,23,59,59)).start_transition.at.eql?(TimeOrDateTime.new(-1)))
+    else
+      assert(dti.period_for_utc(DateTime.new(1969,12,31,23,59,59)).start_transition.at.eql?(TimeOrDateTime.new(DateTime.new(1969,12,31,23,59,59))))
+    end
+    
+    assert(dti.period_for_utc(DateTime.new(2001,9,9,2,46,40)).start_transition.at.eql?(TimeOrDateTime.new(1000000000)))
+        
+    if RubyCoreSupport.time_supports_64bit
+      assert(dti.period_for_utc(DateTime.new(2038,1,19,3,14,8)).start_transition.at.eql?(TimeOrDateTime.new(2147483648)))
+    else
+      assert(dti.period_for_utc(DateTime.new(2038,1,19,3,14,8)).start_transition.at.eql?(TimeOrDateTime.new(DateTime.new(2038,1,19,3,14,8))))
+    end
   end
 end

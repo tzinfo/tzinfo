@@ -37,26 +37,57 @@ module TZInfo
     attr_reader :numerator_or_time
     protected :numerator_or_time
     
-    # Either the denominotor of the DateTime if the transition time is defined
+    # Either the denominator of the DateTime if the transition time is defined
     # as a DateTime, otherwise nil. 
     attr_reader :denominator
     protected :denominator
     
     # Creates a new TimezoneTransitionInfo with the given offset, 
-    # previous_offset (both TimezoneOffsetInfo instances) and UTC time. 
-    # if denominator is nil, numerator_or_time is treated as a number of 
-    # seconds since the epoch. If denominator is specified numerator_or_time
-    # and denominator are used to create a DateTime as follows:
+    # previous_offset (both TimezoneOffsetInfo instances) and UTC time.
+    #
+    # The time can be specified as a timestamp, as a rational to create a
+    # DateTime or as both.
+    #
+    # If both a timestamp and rational are given, then the rational will only
+    # be used if the timestamp falls outside of the range of Time on the
+    # platform being used at runtime.
+    #
+    # DateTimes are created from the rational as follows:
     # 
     #  RubyCoreSupport.datetime_new!(RubyCoreSupport.rational_new!(numerator_or_time, denominator), 0, Date::ITALY)
     #
     # For performance reasons, the numerator and denominator must be specified
     # in their lowest form.
-    def initialize(offset, previous_offset, numerator_or_time, denominator = nil)
+    def initialize(offset, previous_offset, numerator_or_timestamp, denominator_or_numerator = nil, denominator = nil)
       @offset = offset
       @previous_offset = previous_offset
-      @numerator_or_time = numerator_or_time
-      @denominator = denominator
+      
+      if denominator
+        numerator = denominator_or_numerator
+        timestamp = numerator_or_timestamp
+      elsif denominator_or_numerator
+        numerator = numerator_or_timestamp
+        denominator = denominator_or_numerator
+        timestamp = nil
+      else
+        numerator = nil
+        denominator = nil
+        timestamp = numerator_or_timestamp
+      end
+      
+      # Determine whether to use the timestamp or the numerator and denominator.
+      if numerator && (
+        !timestamp || 
+        (timestamp < 0 && !RubyCoreSupport.time_supports_negative) || 
+        ((timestamp < -2147483648 || timestamp > 2147483647) && !RubyCoreSupport.time_supports_64bit)
+        )
+        
+        @numerator_or_time = numerator
+        @denominator = denominator
+      else
+        @numerator_or_time = timestamp
+        @denominator = nil
+      end
       
       @at = nil
       @local_end = nil
