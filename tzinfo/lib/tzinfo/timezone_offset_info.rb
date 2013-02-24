@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006 Philip Ross
+# Copyright (c) 2006-2012 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -71,7 +71,7 @@ module TZInfo
     # Returns true if and only if toi has the same utc_offset, std_offset
     # and abbreviation as this TimezoneOffsetInfo.
     def ==(toi)
-      toi.respond_to?(:utc_offset) && toi.respond_to?(:std_offset) && toi.respond_to?(:abbreviation) &&
+      toi.kind_of?(TimezoneOffsetInfo) &&
         utc_offset == toi.utc_offset && std_offset == toi.std_offset && abbreviation == toi.abbreviation
     end
     

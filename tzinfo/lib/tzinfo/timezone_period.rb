@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2010 Philip Ross
+# Copyright (c) 2005-2012 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -165,17 +165,19 @@ module TZInfo
     # Returns true if this TimezonePeriod is equal to p. This compares the 
     # start_transition, end_transition and offset using ==.
     def ==(p)
-      p.respond_to?(:start_transition) && p.respond_to?(:end_transition) &&
-        p.respond_to?(:offset) && start_transition == p.start_transition &&
-        end_transition == p.end_transition && offset == p.offset
+      p.kind_of?(TimezonePeriod) &&
+        start_transition == p.start_transition &&
+        end_transition == p.end_transition &&
+        offset == p.offset
     end
     
     # Returns true if this TimezonePeriods is equal to p. This compares the
     # start_transition, end_transition and offset using eql?
     def eql?(p)
-      p.respond_to?(:start_transition) && p.respond_to?(:end_transition) &&
-        p.respond_to?(:offset) && start_transition.eql?(p.start_transition) &&
-        end_transition.eql?(p.end_transition) && offset.eql?(p.offset)
+      p.kind_of?(TimezonePeriod) &&
+        start_transition.eql?(p.start_transition) &&
+        end_transition.eql?(p.end_transition) &&
+        offset.eql?(p.offset)
     end
     
     # Returns a hash of this TimezonePeriod.

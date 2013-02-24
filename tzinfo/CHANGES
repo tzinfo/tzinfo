@@ -2,6 +2,10 @@
 
 * Updated to tzdata version 2012j
   (http://mm.icann.org/pipermail/tz-announce/2012-November/000008.html).
+* Fix TimezoneTransitionInfo#eql? incorrectly returning false when running on 
+  Ruby 2.0.
+* Change eql? and == implementations to test the class of the passed in object
+  instead of checking individual properties with 'respond_to?'.
 
 
 == Version 0.3.35 (tzdata v2012i) - 4-Nov-2012
