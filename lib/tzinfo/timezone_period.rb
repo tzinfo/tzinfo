@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2012 Philip Ross
+# Copyright (c) 2005-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -28,14 +28,17 @@ module TZInfo
   class TimezonePeriod
     # The TimezoneTransitionInfo that defines the start of this TimezonePeriod 
     # (may be nil if unbounded).
-    attr_reader :start_transition
+    attr_reader :start_transition #:nodoc:
+    protected :start_transition
     
     # The TimezoneTransitionInfo that defines the end of this TimezonePeriod
     # (may be nil if unbounded).
-    attr_reader :end_transition
+    attr_reader :end_transition #:nodoc:
+    protected :end_transition
     
     # The TimezoneOffsetInfo for this period.
-    attr_reader :offset    
+    attr_reader :offset #:nodoc:
+    protected :offset
     
     # Initializes a new TimezonePeriod.
     def initialize(start_transition, end_transition, offset = nil)
@@ -96,9 +99,19 @@ module TZInfo
       @start_transition ? @start_transition.at.to_datetime : nil
     end
     
+    # The start time of the period in UTC as a Time. May be nil if unbounded.
+    def utc_start_time
+      @start_transition ? @start_transition.at.to_time : nil
+    end
+    
     # The end time of the period in UTC as a DateTime. May be nil if unbounded.
     def utc_end
       @end_transition ? @end_transition.at.to_datetime : nil
+    end
+    
+    # The end time of the period in UTC as a Time. May be nil if unbounded.
+    def utc_end_time
+      @end_transition ? @end_transition.at.to_time : nil
     end
     
     # The start time of the period in local time as a DateTime. May be nil if 
@@ -107,10 +120,22 @@ module TZInfo
       @start_transition ? @start_transition.local_start.to_datetime : nil
     end
     
+    # The start time of the period in local time as a Time. May be nil if 
+    # unbounded.
+    def local_start_time
+      @start_transition ? @start_transition.local_start.to_time : nil
+    end
+    
     # The end time of the period in local time as a DateTime. May be nil if 
     # unbounded.
     def local_end
       @end_transition ? @end_transition.local_end.to_datetime : nil
+    end
+    
+    # The end time of the period in local time as a Time. May be nil if 
+    # unbounded.
+    def local_end_time
+      @end_transition ? @end_transition.local_end.to_time : nil
     end
     
     # true if daylight savings is in effect for this period; otherwise false.

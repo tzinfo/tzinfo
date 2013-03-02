@@ -18,6 +18,13 @@
   Ruby 2.0.
 * Change eql? and == implementations to test the class of the passed in object
   instead of checking individual properties with 'respond_to?'.
+* Add utc_start_time, utc_end_time, local_start_time and local_end_time instance
+  methods to TimezonePeriod. These return an identical value as the existing
+  utc_start, utc_end, local_start and local_end methods, but return Time
+  instances instead of DateTime.
+* Make the start_transition, end_transition and offset properties of
+  TimezonePeriod protected. To access properties of the period, callers should
+  use other TimezonePeriod instance methods instead (issue #7655).
 
 
 From the 0.3 branch:

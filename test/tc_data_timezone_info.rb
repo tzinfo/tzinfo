@@ -301,23 +301,23 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
     dti.transition 2038,  1, :o1, 2147483648, 3328347557, 1350
     
     if RubyCoreSupport.time_supports_negative && RubyCoreSupport.time_supports_64bit
-      assert(dti.period_for_utc(DateTime.new(1901,12,13,20,45,51)).start_transition.at.eql?(TimeOrDateTime.new(-2147483649)))
+      assert(dti.period_for_utc(DateTime.new(1901,12,13,20,45,51)).send(:start_transition).at.eql?(TimeOrDateTime.new(-2147483649)))
     else
-      assert(dti.period_for_utc(DateTime.new(1901,12,13,20,45,51)).start_transition.at.eql?(TimeOrDateTime.new(DateTime.new(1901,12,13,20,45,51))))
+      assert(dti.period_for_utc(DateTime.new(1901,12,13,20,45,51)).send(:start_transition).at.eql?(TimeOrDateTime.new(DateTime.new(1901,12,13,20,45,51))))
     end
     
     if RubyCoreSupport.time_supports_negative          
-      assert(dti.period_for_utc(DateTime.new(1969,12,31,23,59,59)).start_transition.at.eql?(TimeOrDateTime.new(-1)))
+      assert(dti.period_for_utc(DateTime.new(1969,12,31,23,59,59)).send(:start_transition).at.eql?(TimeOrDateTime.new(-1)))
     else
-      assert(dti.period_for_utc(DateTime.new(1969,12,31,23,59,59)).start_transition.at.eql?(TimeOrDateTime.new(DateTime.new(1969,12,31,23,59,59))))
+      assert(dti.period_for_utc(DateTime.new(1969,12,31,23,59,59)).send(:start_transition).at.eql?(TimeOrDateTime.new(DateTime.new(1969,12,31,23,59,59))))
     end
     
-    assert(dti.period_for_utc(DateTime.new(2001,9,9,2,46,40)).start_transition.at.eql?(TimeOrDateTime.new(1000000000)))
+    assert(dti.period_for_utc(DateTime.new(2001,9,9,2,46,40)).send(:start_transition).at.eql?(TimeOrDateTime.new(1000000000)))
         
     if RubyCoreSupport.time_supports_64bit
-      assert(dti.period_for_utc(DateTime.new(2038,1,19,3,14,8)).start_transition.at.eql?(TimeOrDateTime.new(2147483648)))
+      assert(dti.period_for_utc(DateTime.new(2038,1,19,3,14,8)).send(:start_transition).at.eql?(TimeOrDateTime.new(2147483648)))
     else
-      assert(dti.period_for_utc(DateTime.new(2038,1,19,3,14,8)).start_transition.at.eql?(TimeOrDateTime.new(DateTime.new(2038,1,19,3,14,8))))
+      assert(dti.period_for_utc(DateTime.new(2038,1,19,3,14,8)).send(:start_transition).at.eql?(TimeOrDateTime.new(DateTime.new(2038,1,19,3,14,8))))
     end
   end
 end

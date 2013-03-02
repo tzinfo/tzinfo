@@ -23,17 +23,17 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
     assert_equal(dst, period.dst?)
     
     if start_at
-      assert_not_nil(period.start_transition)
-      assert_equal(start_at, period.start_transition.at.to_time)
+      assert_not_nil(period.utc_start_time)
+      assert_equal(start_at, period.utc_start_time)
     else
-      assert_nil(period.start_transition)
+      assert_nil(period.utc_start_time)
     end
     
     if end_at
-      assert_not_nil(period.end_transition)
-      assert_equal(end_at, period.end_transition.at.to_time)
+      assert_not_nil(period.utc_end_time)
+      assert_equal(end_at, period.utc_end_time)
     else
-      assert_nil(period.end_transition)
+      assert_nil(period.utc_end_time)
     end
   end
   
