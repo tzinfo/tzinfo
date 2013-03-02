@@ -5,11 +5,11 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'America/Nassau' do |tz|
-          tz.offset :o0, -18564, 0, :LMT
+          tz.offset :o0, -18570, 0, :LMT
           tz.offset :o1, -18000, 0, :EST
           tz.offset :o2, -18000, 3600, :EDT
           
-          tz.transition 1912, 3, :o1, 17420138747, 7200
+          tz.transition 1912, 3, :o1, 6968055499, 2880
           tz.transition 1964, 4, :o2, 58524283, 24
           tz.transition 1964, 10, :o1, 9754775, 4
           tz.transition 1965, 4, :o2, 58533019, 24

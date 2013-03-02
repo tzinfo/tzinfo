@@ -5,11 +5,11 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Europe/Vienna' do |tz|
-          tz.offset :o0, 3920, 0, :LMT
+          tz.offset :o0, 3921, 0, :LMT
           tz.offset :o1, 3600, 0, :CET
           tz.offset :o2, 3600, 3600, :CEST
           
-          tz.transition 1893, 3, :o1, 2605558811, 1080
+          tz.transition 1893, 3, :o1, 69481568293, 28800
           tz.transition 1916, 4, :o2, 29051813, 12
           tz.transition 1916, 9, :o1, 58107299, 24
           tz.transition 1917, 4, :o2, 58112029, 24

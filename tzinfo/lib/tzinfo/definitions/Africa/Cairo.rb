@@ -5,11 +5,11 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Africa/Cairo' do |tz|
-          tz.offset :o0, 7500, 0, :LMT
+          tz.offset :o0, 7509, 0, :LMT
           tz.offset :o1, 7200, 0, :EET
           tz.offset :o2, 7200, 3600, :EEST
           
-          tz.transition 1900, 9, :o1, 695604503, 288
+          tz.transition 1900, 9, :o1, 69560450297, 28800
           tz.transition 1940, 7, :o2, 29157905, 12
           tz.transition 1940, 9, :o1, 19439227, 8
           tz.transition 1941, 4, :o2, 29161193, 12

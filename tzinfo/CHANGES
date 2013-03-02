@@ -1,7 +1,7 @@
-== Version ?????? (tzdata v2012j) - ??????????
+== Version ?????? (tzdata v2013a) - ??????????
 
-* Updated to tzdata version 2012j
-  (http://mm.icann.org/pipermail/tz-announce/2012-November/000008.html).
+* Updated to tzdata version 2013a
+  (http://mm.icann.org/pipermail/tz-announce/2013-March/000009.html).
 * Fix TimezoneTransitionInfo#eql? incorrectly returning false when running on 
   Ruby 2.0.
 * Change eql? and == implementations to test the class of the passed in object
