@@ -33,9 +33,10 @@ module TZInfo
     
     # Class methods for inclusion.
     module ClassMethods #:nodoc:
-      # Returns and yields a DataTimezoneInfo object to define a timezone.
+      # Returns and yields a TransitionDataTimezoneInfo object to define a 
+      # timezone.
       def timezone(identifier)
-        yield @timezone = DataTimezoneInfo.new(identifier)
+        yield @timezone = TransitionDataTimezoneInfo.new(identifier)
       end
       
       # Defines a linked timezone.

@@ -73,7 +73,7 @@ class TCTimezoneDefinition < Test::Unit::TestCase
   end
     
   def test_data
-    assert_kind_of(DataTimezoneInfo, DataTest.get)
+    assert_kind_of(TransitionDataTimezoneInfo, DataTest.get)
     assert_equal('Test/Data/Zone', DataTest.get.identifier)
     assert_equal(:LMT, DataTest.get.period_for_utc(DateTime.new(1847,12,1,0,1,14)).abbreviation)
     assert_equal(:GMT, DataTest.get.period_for_utc(DateTime.new(1847,12,1,0,1,15)).abbreviation)
@@ -86,7 +86,7 @@ class TCTimezoneDefinition < Test::Unit::TestCase
   end
   
   def test_double_data
-    assert_kind_of(DataTimezoneInfo, DoubleDataTest.get)
+    assert_kind_of(TransitionDataTimezoneInfo, DoubleDataTest.get)
     assert_equal('Test/Data/Zone2', DoubleDataTest.get.identifier)
     assert_equal(:LMT, DoubleDataTest.get.period_for_utc(DateTime.new(1847,12,1,0,1,14)).abbreviation)
     assert_equal(:GMT, DoubleDataTest.get.period_for_utc(DateTime.new(1847,12,1,0,1,15)).abbreviation)
@@ -105,7 +105,7 @@ class TCTimezoneDefinition < Test::Unit::TestCase
   end
   
   def test_linked_data
-    assert_kind_of(DataTimezoneInfo, LinkedDataTest.get)
+    assert_kind_of(TransitionDataTimezoneInfo, LinkedDataTest.get)
     assert_equal('Test/Data/Zone2', LinkedDataTest.get.identifier)
     assert_equal(:LMT, LinkedDataTest.get.period_for_utc(DateTime.new(1847,12,1,0,1,14)).abbreviation)
     assert_equal(:GMT, LinkedDataTest.get.period_for_utc(DateTime.new(1847,12,1,0,1,15)).abbreviation)

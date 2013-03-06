@@ -13,4 +13,11 @@ class TCLinkedTimezoneInfo < Test::Unit::TestCase
     lti = LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked')
     assert_equal('Test/Linked', lti.link_to_identifier)
   end
+  
+  def test_construct_timezone
+    lti = LinkedTimezoneInfo.new('Test/Zone', 'Europe/London')
+    tz = lti.create_timezone
+    assert_kind_of(LinkedTimezone, tz)
+    assert_equal('Test/Zone', tz.identifier)
+  end
 end

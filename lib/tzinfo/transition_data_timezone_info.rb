@@ -26,10 +26,11 @@ module TZInfo
   class NoOffsetsDefined < StandardError
   end
     
-  # Represents a (non-linked) timezone defined in a data module.
-  class DataTimezoneInfo < TimezoneInfo #:nodoc:
+  # Represents a data timezone defined by a set of offsets and a set 
+  # of transitions
+  class TransitionDataTimezoneInfo < DataTimezoneInfo #:nodoc:
             
-    # Constructs a new TimezoneInfo with its identifier.
+    # Constructs a new TransitionDataTimezoneInfo with its identifier.
     def initialize(identifier)   
       super(identifier)
       @offsets = {}

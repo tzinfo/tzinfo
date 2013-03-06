@@ -34,6 +34,7 @@ require 'tzinfo/timezone_index_definition'
 require 'tzinfo/timezone_info'
 require 'tzinfo/data_timezone_info'
 require 'tzinfo/linked_timezone_info'
+require 'tzinfo/transition_data_timezone_info'
 require 'tzinfo/zoneinfo_timezone_info'
 
 require 'tzinfo/data_source'

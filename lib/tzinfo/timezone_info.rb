@@ -37,16 +37,10 @@ module TZInfo
       "#<#{self.class}: #@identifier>"
     end
     
-    # Returns the TimezonePeriod for the given UTC time.
-    def period_for_utc(utc)
-      raise NotImplementedError, 'Subclasses must override period_for_utc'
-    end
-    
-    # Returns the set of TimezonePeriods for the given local time as an array.    
-    # Results returned are ordered by increasing UTC start date.
-    # Returns an empty array if no periods are found for the given time.
-    def periods_for_local(local)
-      raise NotImplementedError, 'Subclasses must override periods_for_local'
+    # Constructs a Timezone instance for the timezone represented by this
+    # TimezoneInfo.
+    def create_timezone
+      raise NotImplementedError, 'Subclasses must override create_timezone'
     end
   end
 end

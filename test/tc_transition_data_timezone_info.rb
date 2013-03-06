@@ -2,15 +2,15 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCDataTimezoneInfo < Test::Unit::TestCase
+class TCTransitionDataTimezoneInfo < Test::Unit::TestCase
   
   def test_identifier
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     assert_equal('Test/Zone', dti.identifier)
   end
 
   def test_offset
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     
     assert_nothing_raised do
       dti.offset :o1, -18000, 3600, :TEST
@@ -18,7 +18,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_offset_already_defined
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, 3600, 0, :TEST
     dti.offset :o2, 1800, 0, :TEST2
     
@@ -26,7 +26,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_transition_timestamp
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
     
     assert_nothing_raised do
@@ -35,7 +35,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_transition_datetime
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
     
     assert_nothing_raised do
@@ -44,7 +44,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_transition_timestamp_and_datetime
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
     
     assert_nothing_raised do
@@ -53,7 +53,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_transition_invalid_offset
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
     
     dti.transition 2006, 6, :o1, 1149368400
@@ -62,13 +62,13 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_transition_no_offsets
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     
     assert_raises(ArgumentError) { dti.transition 2006, 6, :o1, 1149368400 }
   end
   
   def test_transition_invalid_order_month
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
     
     dti.transition 2006, 6, :o1, 1149368400
@@ -77,7 +77,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_transition_invalid_order_year
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
     
     dti.transition 2006, 6, :o1, 1149368400
@@ -86,7 +86,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end   
   
   def test_period_for_utc
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -17900,    0, :TESTLMT
     dti.offset :o2, -18000, 3600, :TESTD
     dti.offset :o3, -18000,    0, :TESTS
@@ -139,7 +139,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
     
   def test_period_for_utc_no_transitions
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -17900, 0, :TESTLMT
     dti.offset :o2, -18000, 0, :TEST
     
@@ -151,7 +151,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
     
   def test_period_for_utc_no_offsets
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     
     assert_raises(NoOffsetsDefined) { dti.period_for_utc(DateTime.new(2005,1,1,0,0,0)) }
     assert_raises(NoOffsetsDefined) { dti.period_for_utc(Time.utc(2005,1,1,0,0,0)) }
@@ -159,7 +159,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_periods_for_local
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -17900,    0, :TESTLMT
     dti.offset :o2, -18000, 3600, :TESTD
     dti.offset :o3, -18000,    0, :TESTS
@@ -225,7 +225,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
       
   def test_periods_for_local_warsaw
-    dti = DataTimezoneInfo.new('Test/Europe/Warsaw')
+    dti = TransitionDataTimezoneInfo.new('Test/Europe/Warsaw')
     dti.offset :o1, 5040,    0, :LMT
     dti.offset :o2, 5040,    0, :WMT
     dti.offset :o3, 3600,    0, :CET
@@ -249,7 +249,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
     
   def test_periods_for_local_boundary
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -3600, 0, :TESTD
     dti.offset :o2, -3600, 0, :TESTS
     
@@ -271,7 +271,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
     
   def test_periods_for_local_no_transitions
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -17900, 0, :TESTLMT
     dti.offset :o2, -18000, 0, :TEST
     
@@ -283,7 +283,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
     
   def test_periods_for_local_no_offsets
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     
     assert_raises(NoOffsetsDefined) { dti.periods_for_local(DateTime.new(2005,1,1,0,0,0)) }
     assert_raises(NoOffsetsDefined) { dti.periods_for_local(Time.utc(2005,1,1,0,0,0)) }
@@ -291,7 +291,7 @@ class TCDataTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_datetime_and_timestamp_use
-    dti = DataTimezoneInfo.new('Test/Zone')
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, 0,    0, :TESTS
     dti.offset :o2, 0, 3600, :TESTD    
     

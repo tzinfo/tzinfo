@@ -88,20 +88,10 @@ module TZInfo
     # Raises InvalidTimezoneIdentifier if the timezone couldn't be found.
     def self.get(identifier)
       instance = @@loaded_zones[identifier]
+      
       unless instance  
         info = data_source.load_timezone_info(identifier)
-                
-        # Could make Timezone subclasses register an interest in an info
-        # type. Since there are currently only two however, there isn't
-        # much point.
-        if info.kind_of?(DataTimezoneInfo)
-          instance = DataTimezone.new(info)
-        elsif info.kind_of?(LinkedTimezoneInfo)
-          instance = LinkedTimezone.new(info)
-        else
-          raise InvalidTimezoneIdentifier, "No handler for info type #{info.class}"
-        end
-        
+        instance = info.create_timezone
         @@loaded_zones[instance.identifier] = instance         
       end
       

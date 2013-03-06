@@ -102,7 +102,11 @@ module TZInfo
       end
     end
     
-    # Returns a TimezoneInfo instance for a given identifier. 
+    # Returns a TimezoneInfo instance for a given identifier. The TimezoneInfo
+    # instance should derive from either DataTimzoneInfo for timezones that
+    # define their own data or LinkedTimezoneInfo for links or aliases to
+    # other timezones.
+    #
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the 
     # identifier is invalid.
     def load_timezone_info(identifier)
