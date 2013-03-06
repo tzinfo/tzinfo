@@ -6,8 +6,8 @@
   zoneinfo files produced by zic and included with many Linux and Unix
   distributions.
 * Remove the definition and index Ruby modules from TZInfo and move them into
-  a separate TZInfo Data library (available as the tzinfo-data gem).
-* Default to using the TZInfo Data library as the data source if it is 
+  a separate TZInfo::Data library (available as the tzinfo-data gem).
+* Default to using the TZInfo::Data library as the data source if it is 
   installed, otherwise use zoneinfo files instead.
 * Preserve the nanoseconds of local timezone Time objects when performing 
   conversions (issue #29705).

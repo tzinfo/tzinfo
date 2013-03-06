@@ -95,6 +95,8 @@ module TZInfo
       end    
     end    
     
+    # Returns true if Time on the runtime platform supports Times defined
+    # by negative 32-bit timestamps, otherwise false.
     begin
       Time.at(-1)
       Time.at(-2147483648)
@@ -108,6 +110,8 @@ module TZInfo
       end
     end
     
+    # Returns true if Time on the runtime platform supports Times defined by
+    # 64-bit timestamps, otherwise false.
     begin
       Time.at(-2147483649)
       Time.at(2147483648)
