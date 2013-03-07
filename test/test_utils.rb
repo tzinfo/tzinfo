@@ -62,7 +62,7 @@ module Kernel
   end
   
   def assert_array_same_items(expected, actual, message = nil)
-    full_message = build_message(message, "<?> expected by was <?>.", expected, actual)
+    full_message = build_message(message, "<?> expected but was <?>.", expected, actual)
     
     assert_block(full_message) do
       (expected.size == actual.size) && (expected - actual == [])
