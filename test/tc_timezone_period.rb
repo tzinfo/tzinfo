@@ -380,7 +380,11 @@ class TCTimezonePeriod < Test::Unit::TestCase
     p1 = TimezonePeriod.new(t1, nil)
     
     assert_equal(DateTime.new(1969,12,31,23,0,0), p1.local_start)
-    assert_equal(Time.utc(1969,12,31,23,0,0), p1.local_start_time)
+    
+    # Conversion to Time will fail on systems that don't support negative times.
+    if RubyCoreSupport.time_supports_negative
+      assert_equal(Time.utc(1969,12,31,23,0,0), p1.local_start_time)
+    end
   end
   
   def test_time_boundary_end
@@ -391,7 +395,11 @@ class TCTimezonePeriod < Test::Unit::TestCase
     p1 = TimezonePeriod.new(nil, t1)
     
     assert_equal(DateTime.new(2038,1,19,4,0,0), p1.local_end)
-    assert_equal(Time.utc(2038,1,19,4,0,0), p1.local_end_time)
+    
+    # Conversion to Time will fail on systems that don't support 64-bit times
+    if RubyCoreSupport.time_supports_64bit
+      assert_equal(Time.utc(2038,1,19,4,0,0), p1.local_end_time)
+    end
   end
   
   def test_equality
