@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2012 Philip Ross
+# Copyright (c) 2005-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -50,6 +50,8 @@ require 'tzinfo/timezone_proxy'
 
 require 'tzinfo/country_index_definition'
 require 'tzinfo/country_info'
+require 'tzinfo/ruby_country_info'
+require 'tzinfo/zoneinfo_country_info'
 
 require 'tzinfo/country'
 require 'tzinfo/country_timezone'

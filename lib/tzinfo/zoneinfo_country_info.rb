@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,29 +20,31 @@
 # THE SOFTWARE.
 #++
 
-module TZInfo
-  # The country index file includes CountryIndexDefinition which provides
-  # a country method used to define each country in the index.
-  module CountryIndexDefinition #:nodoc:
-    def self.append_features(base)
-      super
-      base.extend(ClassMethods)
-      base.instance_eval { @countries = {} }
+module TZInfo  
+  # Represents information about a country returned by ZoneinfoDataSource.
+  class ZoneinfoCountryInfo < CountryInfo #:nodoc:
+    # Constructs a new CountryInfo with an ISO 3166 country code, name and 
+    # an array of CountryTimezones.
+    def initialize(code, name, zones)
+      super(code, name)
+      @zones = zones.dup.freeze
+      @zone_identifiers = nil
     end
     
-    module ClassMethods #:nodoc:
-      # Defines a country with an ISO 3166 country code, name and block. The
-      # block will be evaluated to obtain all the timezones for the country.
-      # Calls Country.country_defined with the definition of each country.
-      def country(code, name, &block)
-        @countries[code] = RubyCountryInfo.new(code, name, &block)      
+    # Returns a frozen array of all the zone identifiers for the country ordered
+    # geographically, most populous first.
+    def zone_identifiers
+      unless @zone_identifiers
+        @zone_identifiers = zones.collect {|zone| zone.identifier}.freeze
       end
       
-      # Returns a frozen hash of all the countries that have been defined in
-      # the index.
-      def countries
-        @countries.freeze
-      end
+      @zone_identifiers
+    end
+    
+    # Returns a frozen array of all the timezones for the for the country 
+    # ordered geographically, most populous first.
+    def zones
+      @zones
     end
   end
 end

@@ -2,32 +2,32 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCCountryInfo < Test::Unit::TestCase
+class TCRubyCountryInfo < Test::Unit::TestCase
   
   def test_code
-    ci = CountryInfo.new('ZZ', 'Zzz') {|c| }
+    ci = RubyCountryInfo.new('ZZ', 'Zzz') {|c| }
     assert_equal('ZZ', ci.code)
   end
   
   def test_name
-    ci = CountryInfo.new('ZZ', 'Zzz') {|c| }
+    ci = RubyCountryInfo.new('ZZ', 'Zzz') {|c| }
     assert_equal('Zzz', ci.name)
   end
   
   def test_zone_identifiers_empty
-    ci = CountryInfo.new('ZZ', 'Zzz') {|c| }
+    ci = RubyCountryInfo.new('ZZ', 'Zzz') {|c| }
     assert(ci.zone_identifiers.empty?)
     assert(ci.zone_identifiers.frozen?)
   end
   
   def test_zone_identifiers_no_block
-    ci = CountryInfo.new('ZZ', 'Zzz')
+    ci = RubyCountryInfo.new('ZZ', 'Zzz')
     assert(ci.zone_identifiers.empty?)
     assert(ci.zone_identifiers.frozen?)
   end
   
   def test_zone_identifiers
-    ci = CountryInfo.new('ZZ', 'Zzz') do |c|
+    ci = RubyCountryInfo.new('ZZ', 'Zzz') do |c|
       c.timezone('ZZ/TimezoneB', 1, 2, 1, 2, 'Timezone B')
       c.timezone('ZZ/TimezoneA', 1, 4, 1, 4, 'Timezone A')
       c.timezone('ZZ/TimezoneC', -10, 3, -20, 7, 'C')
@@ -39,19 +39,19 @@ class TCCountryInfo < Test::Unit::TestCase
   end
   
   def test_zones_empty
-    ci = CountryInfo.new('ZZ', 'Zzz') {|c| }
+    ci = RubyCountryInfo.new('ZZ', 'Zzz') {|c| }
     assert(ci.zones.empty?)
     assert(ci.zones.frozen?)
   end
   
   def test_zones_no_block
-    ci = CountryInfo.new('ZZ', 'Zzz')
+    ci = RubyCountryInfo.new('ZZ', 'Zzz')
     assert(ci.zones.empty?)
     assert(ci.zones.frozen?)
   end
   
   def test_zones
-    ci = CountryInfo.new('ZZ', 'Zzz') do |c|
+    ci = RubyCountryInfo.new('ZZ', 'Zzz') do |c|
       c.timezone('ZZ/TimezoneB', 1, 2, 1, 2, 'Timezone B')
       c.timezone('ZZ/TimezoneA', 1, 4, 1, 4, 'Timezone A')
       c.timezone('ZZ/TimezoneC', -10, 3, -20, 7, 'C')
@@ -66,20 +66,10 @@ class TCCountryInfo < Test::Unit::TestCase
     assert(ci.zones.frozen?)
   end
   
-  def test_evaluate_immediately
-    block_called = false
-    
-    ci = CountryInfo.new('ZZ', 'Zzz', true) do |c|
-      block_called = true
-    end
-    
-    assert_equal(true, block_called)
-  end
-  
   def test_deferred_evaluate
     block_called = false
     
-    ci = CountryInfo.new('ZZ', 'Zzz', false) do |c|
+    ci = RubyCountryInfo.new('ZZ', 'Zzz') do |c|
       block_called = true
     end
     

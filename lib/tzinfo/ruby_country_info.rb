@@ -21,25 +21,16 @@
 #++
 
 module TZInfo  
-  # Represents a country and references to its timezones as returned by a
-  # DataSource.
-  class CountryInfo
-    attr_reader :code
-    attr_reader :name
-    
+  # Represents information about a country returned by RubyDataSource.
+  class RubyCountryInfo < CountryInfo #:nodoc:
     # Constructs a new CountryInfo with an ISO 3166 country code, name and 
     # block. The block will be evaluated to obtain the timezones for the 
-    # country. When the block is evaluated depends on the evaluate_immediately
-    # parameter. If false, the block is evaluated when the zones are first 
-    # needed. If true, the block is evaluated during the constructor.
-    def initialize(code, name, evaluate_immediately = false, &block)
-      @code = code
-      @name = name
+    # country when the zones are first needed.
+    def initialize(code, name, &block)
+      super(code, name)
       @block = block
       @zones = nil
       @zone_identifiers = nil
-      
-      zones if evaluate_immediately
     end
     
     # Returns a frozen array of all the zone identifiers for the country. These
@@ -50,11 +41,6 @@ module TZInfo
       end
       
       @zone_identifiers
-    end
-    
-    # Returns internal object state as a programmer-readable string.
-    def inspect
-      "#<#{self.class}: #@code>"
     end
     
     # Returns a frozen array of all the timezones for the for the country as
@@ -73,7 +59,7 @@ module TZInfo
     
     # An instance of the Zones class is passed to the block used to define
     # timezones.
-    class Zones
+    class Zones #:nodoc:
       attr_reader :list
     
       def initialize

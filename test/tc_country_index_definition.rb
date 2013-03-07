@@ -35,17 +35,20 @@ class TCCountryIndexDefinition < Test::Unit::TestCase
     aa = hash['AA']
     te = hash['TE']
     
+    assert_kind_of(RubyCountryInfo, zz)
     assert_equal('ZZ', zz.code)
     assert_equal('Country One', zz.name)
     assert_equal(1, zz.zones.length)
     assert_equal('Test/Zone/1', zz.zones[0].identifier)
     
+    assert_kind_of(RubyCountryInfo, aa)
     assert_equal('AA', aa.code)
     assert_equal('Aland', aa.name)
     assert_equal(2, aa.zones.length)
     assert_equal('Test/Zone/3', aa.zones[0].identifier)
     assert_equal('Test/Zone/2', aa.zones[1].identifier)
     
+    assert_kind_of(RubyCountryInfo, te)
     assert_equal('TE', te.code)
     assert_equal('Three', te.name)
     assert_equal(0, te.zones.length)    
@@ -58,6 +61,7 @@ class TCCountryIndexDefinition < Test::Unit::TestCase
     
     co = hash['CO']
     
+    assert_kind_of(RubyCountryInfo, co)
     assert_equal('CO', co.code)
     assert_equal('First Country', co.name)
     assert_equal(0, co.zones.length)

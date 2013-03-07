@@ -250,7 +250,9 @@ module TZInfo
               zone_identifier = $16
               description = $17
               
-              (zones[code] ||= []) << CountryZoneDefinition.new(zone_identifier, latitude, longitude, description)
+              (zones[code] ||= []) << 
+                CountryTimezone.new(zone_identifier, latitude.numerator, latitude.denominator, 
+                                    longitude.numerator, longitude.denominator, description)
             end
           end
         end
@@ -264,14 +266,7 @@ module TZInfo
             if line =~ /\A([A-Z]{2})\t(.+)\z/
               code = $1
               name = $2
-              countries[code] = CountryInfo.new(code, name, true) do |ci|
-                (zones[code] || []).each do |zone|
-                  ci.timezone(zone.identifier, 
-                    zone.latitude.numerator, zone.latitude.denominator,
-                    zone.longitude.numerator, zone.longitude.denominator,
-                    zone.description)
-                end
-              end
+              countries[code] = ZoneinfoCountryInfo.new(code, name, zones[code] || [])
             end
           end
         end
@@ -287,8 +282,5 @@ module TZInfo
       result = -result if sign == '-'
       result
     end
-    
-    # A struct used when reading the zone.tab file.
-    CountryZoneDefinition = Struct.new(:identifier, :latitude, :longitude, :description)
   end
 end
