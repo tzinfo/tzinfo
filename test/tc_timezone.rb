@@ -73,16 +73,10 @@ class TCTimezone < Test::Unit::TestCase
   end
   
   def test_get_valid_2
-    # When running the tests with ZoneinfoDataSource on Windows, this won't
-    # return a LinkedTimezone. Check what the data source is and perform
-    # the appropriate checks.
-    
-    linked = !DataSource.get.kind_of?(ZoneinfoDataSource) ||
-      DataSource.get.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
-        
     tz = Timezone.get('UTC')
     
-    if linked
+    # ZoneinfoDataSource doesn't return LinkedTimezoneInfo for any timezone.
+    if DataSource.get.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
       assert_kind_of(LinkedTimezone, tz)  
     else
       assert_kind_of(DataTimezone, tz)
@@ -985,16 +979,10 @@ class TCTimezone < Test::Unit::TestCase
   end
   
   def test_marshal_linked
-    # When running the tests with ZoneinfoDataSource on Windows, this won't
-    # return a LinkedTimezone. Check what the data source is and perform
-    # the appropriate checks.
-    
-    linked = !DataSource.get.kind_of?(ZoneinfoDataSource) ||
-      DataSource.get.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
-  
     tz = Timezone.get('UTC')
     
-    if linked
+    # ZoneinfoDataSource doesn't return LinkedTimezoneInfo for any timezone.
+    if DataSource.get.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
       assert_kind_of(LinkedTimezone, tz)
     else
       assert_kind_of(DataTimezone, tz)
