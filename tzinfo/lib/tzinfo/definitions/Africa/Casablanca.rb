@@ -42,24 +42,38 @@ module TZInfo
           tz.transition 2012, 8, :o2, 1345428000
           tz.transition 2012, 9, :o1, 1348970400
           tz.transition 2013, 4, :o2, 1367114400
+          tz.transition 2013, 7, :o1, 1373335200
+          tz.transition 2013, 8, :o2, 1375927200
           tz.transition 2013, 9, :o1, 1380420000
           tz.transition 2014, 4, :o2, 1398564000
+          tz.transition 2014, 6, :o1, 1404007200
+          tz.transition 2014, 7, :o2, 1406599200
           tz.transition 2014, 9, :o1, 1411869600
           tz.transition 2015, 4, :o2, 1430013600
+          tz.transition 2015, 6, :o1, 1434592800
+          tz.transition 2015, 7, :o2, 1437184800
           tz.transition 2015, 9, :o1, 1443319200
           tz.transition 2016, 4, :o2, 1461463200
+          tz.transition 2016, 6, :o1, 1465264800
+          tz.transition 2016, 7, :o2, 1467856800
           tz.transition 2016, 9, :o1, 1474768800
           tz.transition 2017, 4, :o2, 1493517600
+          tz.transition 2017, 5, :o1, 1495850400
+          tz.transition 2017, 6, :o2, 1498442400
           tz.transition 2017, 9, :o1, 1506218400
           tz.transition 2018, 4, :o2, 1524967200
+          tz.transition 2018, 5, :o1, 1526436000
+          tz.transition 2018, 6, :o2, 1529028000
           tz.transition 2018, 9, :o1, 1538272800
           tz.transition 2019, 4, :o2, 1556416800
+          tz.transition 2019, 5, :o1, 1557108000
+          tz.transition 2019, 6, :o2, 1559700000
           tz.transition 2019, 9, :o1, 1569722400
-          tz.transition 2020, 4, :o2, 1587866400
+          tz.transition 2020, 5, :o2, 1590285600
           tz.transition 2020, 9, :o1, 1601172000
-          tz.transition 2021, 4, :o2, 1619316000
+          tz.transition 2021, 5, :o2, 1620871200
           tz.transition 2021, 9, :o1, 1632621600
-          tz.transition 2022, 4, :o2, 1650765600
+          tz.transition 2022, 5, :o2, 1651543200
           tz.transition 2022, 9, :o1, 1664071200
           tz.transition 2023, 4, :o2, 1682820000
           tz.transition 2023, 9, :o1, 1695520800
