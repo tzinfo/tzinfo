@@ -53,12 +53,15 @@ module Kernel
   end
   
   def safe_test(level = 1)
-    thread = Thread.new do
-      $SAFE = level
-      yield
+    # Don't run on JRuby. It doesn't support SAFE levels.
+    if RUBY_PLATFORM != 'java'
+      thread = Thread.new do
+        $SAFE = level
+        yield
+      end
+      
+      thread.join
     end
-    
-    thread.join
   end
   
   def assert_array_same_items(expected, actual, message = nil)
