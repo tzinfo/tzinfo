@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2012 Philip Ross
+# Copyright (c) 2012-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 
 module TZInfo
   module Data
-    # TZInfo Data version information.
+    # TZInfo::Data version information.
     module Version
       # The format used for the data. The only format currently supported by
       # TZInfo is version 1.
