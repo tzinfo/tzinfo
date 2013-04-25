@@ -38,7 +38,6 @@ module TZInfo
         c.timezone 'Antarctica/Vostok', -392, 5, 1069, 10, 'Vostok Station, Lake Vostok'
         c.timezone 'Antarctica/DumontDUrville', -200, 3, 8401, 60, 'Dumont-d\'Urville Station, Terre Adelie'
         c.timezone 'Antarctica/Syowa', -124211, 1800, 3959, 100, 'Syowa Station, E Ongul I'
-        c.timezone 'Antarctica/Macquarie', -109, 2, 3179, 20, 'Macquarie Island Station, Macquarie Island'
       end
       country 'AR', 'Argentina' do |c|
         c.timezone 'America/Argentina/Buenos_Aires', -173, 5, -1169, 20, 'Buenos Aires (BA, CF)'
@@ -62,6 +61,7 @@ module TZInfo
       end
       country 'AU', 'Australia' do |c|
         c.timezone 'Australia/Lord_Howe', -631, 20, 1909, 12, 'Lord Howe Island'
+        c.timezone 'Antarctica/Macquarie', -109, 2, 3179, 20, 'Macquarie Island'
         c.timezone 'Australia/Hobart', -2573, 60, 8839, 60, 'Tasmania - most locations'
         c.timezone 'Australia/Currie', -599, 15, 2158, 15, 'Tasmania - King Island'
         c.timezone 'Australia/Melbourne', -2269, 60, 4349, 30, 'Victoria'
