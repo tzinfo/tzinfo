@@ -14,4 +14,27 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.extra_rdoc_files = ['README', 'CHANGES', 'LICENSE']
   s.required_ruby_version = '>= 1.8.6'
+
+  s.post_install_message = <<END
+
+TZInfo Timezone Data has been Moved
+===================================
+
+The timezone data previously included with TZInfo as Ruby modules has now been
+moved to a separate tzinfo-data gem. TZInfo also now supports using the system
+zoneinfo files on Linux, Mac OS X and other Unix operating systems.
+
+If you want to continue using the Ruby timezone modules, or you are using an
+operating system that does not include zoneinfo files (such as
+Microsoft Windows), you will need to install tzinfo-data by running:
+
+gem install tzinfo-data
+
+If tzinfo-data is installed, TZInfo will use the Ruby timezone modules.
+Otherwise, it will attempt to find the system zoneinfo files. Please refer to
+the TZInfo documentation (available from http://tzinfo.rubyforge.org) for
+further information.
+
+END
+
 end
