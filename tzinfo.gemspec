@@ -32,7 +32,7 @@ gem install tzinfo-data
 
 If tzinfo-data is installed, TZInfo will use the Ruby timezone modules.
 Otherwise, it will attempt to find the system zoneinfo files. Please refer to
-the TZInfo documentation (available from http://tzinfo.rubyforge.org) for
+the TZInfo documentation (available from https://rubygems.org/gems/tzinfo) for
 further information.
 
 END
