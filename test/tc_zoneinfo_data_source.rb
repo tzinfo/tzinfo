@@ -1,5 +1,6 @@
 require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 require 'fileutils'
+require 'pathname'
 require 'tmpdir'
 
 include TZInfo
@@ -88,7 +89,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
       
       ZoneinfoDataSource.search_paths = ['.']
       data_source = ZoneinfoDataSource.new
-      assert_equal(File.expand_path(dir), data_source.zoneinfo_dir)
+      assert_equal(Pathname.new(dir).realpath, Pathname.new(dir).realpath)
       
       # Change out of the directory to allow it to be deleted on Windows.
       FileUtils.chdir(@orig_pwd)
@@ -132,7 +133,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
       FileUtils.chdir(dir)
       
       data_source = ZoneinfoDataSource.new('.')
-      assert_equal(File.expand_path(dir), data_source.zoneinfo_dir)
+      assert_equal(Pathname.new(dir).realpath, Pathname.new(dir).realpath)
       
       # Change out of the directory to allow it to be deleted on Windows.
       FileUtils.chdir(@orig_pwd)
