@@ -13,12 +13,12 @@ class TCDataSource < Test::Unit::TestCase
   def setup
     @orig_data_source = DataSource.get
     DataSource.set(InitDataSource.new)
-    @orig_search_paths = ZoneinfoDataSource.search_paths.clone
+    @orig_search_path = ZoneinfoDataSource.search_path.clone
   end
   
   def teardown
     DataSource.set(@orig_data_source)
-    ZoneinfoDataSource.search_paths = @orig_search_paths
+    ZoneinfoDataSource.search_path = @orig_search_path
   end
   
   def test_get
@@ -32,7 +32,7 @@ class TCDataSource < Test::Unit::TestCase
       
       begin
         Dir.mktmpdir('tzinfo_test_dir') do |dir|
-          TZInfo::ZoneinfoDataSource.search_paths = [dir]
+          TZInfo::ZoneinfoDataSource.search_path = [dir]
           
           puts TZInfo::DataSource.get.class
         end
@@ -50,7 +50,7 @@ class TCDataSource < Test::Unit::TestCase
       
       begin
         Dir.mktmpdir('tzinfo_test_dir') do |dir|
-          TZInfo::ZoneinfoDataSource.search_paths = [dir, '#{TZINFO_TEST_ZONEINFO_DIR}']
+          TZInfo::ZoneinfoDataSource.search_path = [dir, '#{TZINFO_TEST_ZONEINFO_DIR}']
           
           puts TZInfo::DataSource.get.class
           puts TZInfo::DataSource.get.zoneinfo_dir
@@ -68,7 +68,7 @@ class TCDataSource < Test::Unit::TestCase
   def test_get_default_ruby_and_zoneinfo
     code = <<-EOF
       begin
-        TZInfo::ZoneinfoDataSource.search_paths = ['#{TZINFO_TEST_ZONEINFO_DIR}']
+        TZInfo::ZoneinfoDataSource.search_path = ['#{TZINFO_TEST_ZONEINFO_DIR}']
           
         puts TZInfo::DataSource.get.class
       rescue Exception => e
@@ -85,7 +85,7 @@ class TCDataSource < Test::Unit::TestCase
       
       begin
         Dir.mktmpdir('tzinfo_test_dir') do |dir|
-          TZInfo::ZoneinfoDataSource.search_paths = [dir]
+          TZInfo::ZoneinfoDataSource.search_path = [dir]
           
           begin
             data_source = TZInfo::DataSource.get
@@ -119,7 +119,7 @@ class TCDataSource < Test::Unit::TestCase
       FileUtils.touch(File.join(dir, 'iso3166.tab'))
       FileUtils.touch(File.join(dir, 'zone.tab'))
               
-      ZoneinfoDataSource.search_paths = [dir]
+      ZoneinfoDataSource.search_path = [dir]
       
       DataSource.set(:zoneinfo)
       data_source = DataSource.get
@@ -142,7 +142,7 @@ class TCDataSource < Test::Unit::TestCase
   
   def test_set_standard_zoneinfo_search_not_found
     Dir.mktmpdir('tzinfo_test_dir') do |dir|
-      ZoneinfoDataSource.search_paths = [dir]
+      ZoneinfoDataSource.search_path = [dir]
       
       assert_raises(ZoneinfoDirectoryNotFound) do
         DataSource.set(:zoneinfo)

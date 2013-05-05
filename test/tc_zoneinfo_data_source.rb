@@ -9,7 +9,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
   ZONEINFO_DIR = File.join(File.expand_path(File.dirname(__FILE__)), 'zoneinfo').untaint
   
   def setup
-    @orig_search_paths = ZoneinfoDataSource.search_paths.clone
+    @orig_search_path = ZoneinfoDataSource.search_path.clone
     @orig_pwd = FileUtils.pwd
     
     # A zoneinfo directory containing files needed by the tests.
@@ -18,24 +18,39 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
   end
   
   def teardown
-    ZoneinfoDataSource.search_paths = @orig_search_paths
+    ZoneinfoDataSource.search_path = @orig_search_path
     FileUtils.chdir(@orig_pwd)
   end
   
-  def test_default_search_paths
-    assert_equal(['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'], ZoneinfoDataSource.search_paths)
-    assert_equal(false, ZoneinfoDataSource.search_paths.frozen?)
+  def test_default_search_path
+    assert_equal(['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'], ZoneinfoDataSource.search_path)
+    assert_equal(false, ZoneinfoDataSource.search_path.frozen?)
   end
   
-  def test_set_search_paths_default
-    ZoneinfoDataSource.search_paths = nil
-    assert_equal(['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'], ZoneinfoDataSource.search_paths)
-    assert_equal(false, ZoneinfoDataSource.search_paths.frozen?)
+  def test_set_search_path_default
+    ZoneinfoDataSource.search_path = ['/tmp/zoneinfo1', '/tmp/zoneinfo2']
+    assert_equal(['/tmp/zoneinfo1', '/tmp/zoneinfo2'], ZoneinfoDataSource.search_path)
+    
+    ZoneinfoDataSource.search_path = nil
+    assert_equal(['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'], ZoneinfoDataSource.search_path)
+    assert_equal(false, ZoneinfoDataSource.search_path.frozen?)
   end
   
-  def test_set_search_paths
-    ZoneinfoDataSource.search_paths = ['/tmp/zoneinfo1', '/tmp/zoneinfo2']
-    assert_equal(['/tmp/zoneinfo1', '/tmp/zoneinfo2'], ZoneinfoDataSource.search_paths)
+  def test_set_search_path_array
+    path = ['/tmp/zoneinfo1', '/tmp/zoneinfo2']
+    ZoneinfoDataSource.search_path = path
+    assert_equal(['/tmp/zoneinfo1', '/tmp/zoneinfo2'], ZoneinfoDataSource.search_path)
+    assert_not_same(path, ZoneinfoDataSource.search_path)
+  end
+  
+  def test_set_search_path_array_to_s  
+    ZoneinfoDataSource.search_path = [Pathname.new('/tmp/zoneinfo3')]
+    assert_equal(['/tmp/zoneinfo3'], ZoneinfoDataSource.search_path)
+  end
+  
+  def test_set_search_path_string
+    ZoneinfoDataSource.search_path = ['/tmp/zoneinfo4', '/tmp/zoneinfo5'].join(File::PATH_SEPARATOR)
+    assert_equal(['/tmp/zoneinfo4', '/tmp/zoneinfo5'], ZoneinfoDataSource.search_path)
   end
   
   def test_new_search
@@ -49,7 +64,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
             FileUtils.touch(File.join(dir4, 'zone.tab'))
             FileUtils.touch(File.join(dir4, 'iso3166.tab'))
             
-            ZoneinfoDataSource.search_paths = [file, dir2, dir3, dir4]
+            ZoneinfoDataSource.search_path = [file, dir2, dir3, dir4]
             
             data_source = ZoneinfoDataSource.new
             assert_equal(dir4, data_source.zoneinfo_dir)
@@ -69,7 +84,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
             FileUtils.touch(File.join(dir2, 'zone.tab'))
             FileUtils.touch(File.join(dir3, 'iso3166.tab'))
             
-            ZoneinfoDataSource.search_paths = [file, dir2, dir3, dir4]
+            ZoneinfoDataSource.search_path = [file, dir2, dir3, dir4]
                       
             assert_raises(ZoneinfoDirectoryNotFound) do
               ZoneinfoDataSource.new
@@ -87,7 +102,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
       
       FileUtils.chdir(dir)
       
-      ZoneinfoDataSource.search_paths = ['.']
+      ZoneinfoDataSource.search_path = ['.']
       data_source = ZoneinfoDataSource.new
       assert_equal(Pathname.new(dir).realpath, Pathname.new(dir).realpath)
       

@@ -30,7 +30,7 @@ module TZInfo
   
   # A ZoneinfoDirectoryNotFound exception is raised if no valid zoneinfo 
   # directory could be found when checking the paths listed in
-  # ZoneinfoDataSource.search_paths. A valid zoneinfo directory is one that
+  # ZoneinfoDataSource.search_path. A valid zoneinfo directory is one that
   # contains index files named iso3166.tab and zone.tab as well as other 
   # timezone files).
   class ZoneinfoDirectoryNotFound < StandardError
@@ -50,29 +50,40 @@ module TZInfo
   #
   #   TZInfo::DataSource.set(:zoneinfo, directory)  
   class ZoneinfoDataSource < DataSource
-    # The default value ZoneInfoDataSource.search_paths.
-    DEFAULT_SEARCH_PATHS = ['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'].freeze
+    # The default value of ZoneInfoDataSource.search_path.
+    DEFAULT_SEARCH_PATH = ['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'].freeze
     
     # Paths to be checked to find the system zoneinfo directory.
-    @@search_paths = DEFAULT_SEARCH_PATHS.dup
+    @@search_path = DEFAULT_SEARCH_PATH.dup
     
-    # An array of paths that will be checked to find the system zoneinfo
-    # directory. The returned array can be modified to adjust the 
-    # searched paths.
+    # An Array of directories that will be checked to find the system zoneinfo
+    # directory.
+    #
+    # Directories are checked in the order they appear in the Array.
     #
     # The default value is ['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'].
-    def self.search_paths
-      @@search_paths
+    def self.search_path
+      @@search_path
     end
     
-    # Sets the paths to be checked to find the system zoneinfo directory.
+    # Sets the directories to be checked when locating the system zoneinfo 
+    # directory.
     #
-    # Set to nil to revert back to the default paths.
-    def self.search_paths=(search_paths)
-      if search_paths
-        @@search_paths = search_paths
+    # Can be set to an Array of directories or a String containing directories
+    # separated with File::PATH_SEPARATOR.
+    #
+    # Directories are checked in the order they appear in the Array or String.
+    #
+    # Set to nil to revert to the default paths.
+    def self.search_path=(search_path)
+      if search_path
+        if search_path.kind_of?(String)
+          @@search_path = search_path.split(File::PATH_SEPARATOR)
+        else
+          @@search_path = search_path.collect {|p| p.to_s}
+        end
       else
-        @@search_paths = DEFAULT_SEARCH_PATHS.dup
+        @@search_path = DEFAULT_SEARCH_PATH.dup
       end
     end
     
@@ -86,9 +97,9 @@ module TZInfo
     # iso3166.tab files, InvalidZoneinfoDirectory will be raised.
     # 
     # If zoneinfo_dir is not specified or nil, the paths referenced in
-    # search_paths are searched to find a valid zoneinfo directory (containing
-    # zone.tab and iso3166.tab files). If no valid zoneinfo directory is found
-    # ZoneinfoDirectoryNotFound will be raised.
+    # search_path are searched in order to find a valid zoneinfo directory 
+    # (one that contains files named zone.tab and iso3166.tab). If no valid 
+    # zoneinfo directory is found ZoneinfoDirectoryNotFound will be raised.
     def initialize(zoneinfo_dir = nil)
       if zoneinfo_dir
         unless valid_zoneinfo_dir?(zoneinfo_dir)
@@ -96,12 +107,12 @@ module TZInfo
         end
         @zoneinfo_dir = zoneinfo_dir
       else
-        @zoneinfo_dir = self.class.search_paths.detect do |path|
+        @zoneinfo_dir = self.class.search_path.detect do |path|
           valid_zoneinfo_dir?(path)
         end
         
         unless @zoneinfo_dir
-          raise ZoneinfoDirectoryNotFound, "None of the paths included in TZInfo::ZoneinfoDataSource.search_paths are valid zoneinfo directories."
+          raise ZoneinfoDirectoryNotFound, "None of the paths included in TZInfo::ZoneinfoDataSource.search_path are valid zoneinfo directories."
         end
       end
       
