@@ -1,3 +1,8 @@
+# encoding: UTF-8
+
+# This file contains data derived from the IANA Time Zone Database
+# (http://www.iana.org/time-zones).
+
 module TZInfo
   module Data
     module Indexes
@@ -277,6 +282,7 @@ module TZInfo
         timezone 'Asia/Kashgar'
         timezone 'Asia/Kathmandu'
         linked_timezone 'Asia/Katmandu'
+        timezone 'Asia/Khandyga'
         timezone 'Asia/Kolkata'
         timezone 'Asia/Krasnoyarsk'
         timezone 'Asia/Kuala_Lumpur'
@@ -321,6 +327,7 @@ module TZInfo
         timezone 'Asia/Ulaanbaatar'
         linked_timezone 'Asia/Ulan_Bator'
         timezone 'Asia/Urumqi'
+        timezone 'Asia/Ust-Nera'
         timezone 'Asia/Vientiane'
         timezone 'Asia/Vladivostok'
         timezone 'Asia/Yakutsk'
@@ -429,6 +436,7 @@ module TZInfo
         timezone 'Europe/Brussels'
         timezone 'Europe/Bucharest'
         timezone 'Europe/Budapest'
+        linked_timezone 'Europe/Busingen'
         timezone 'Europe/Chisinau'
         timezone 'Europe/Copenhagen'
         timezone 'Europe/Dublin'

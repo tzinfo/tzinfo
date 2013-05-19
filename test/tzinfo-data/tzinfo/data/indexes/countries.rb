@@ -1,3 +1,8 @@
+# encoding: UTF-8
+
+# This file contains data derived from the IANA Time Zone Database
+# (http://www.iana.org/time-zones).
+
 module TZInfo
   module Data
     module Indexes
@@ -39,7 +44,6 @@ module TZInfo
           c.timezone 'Antarctica/Vostok', -392, 5, 1069, 10, 'Vostok Station, Lake Vostok'
           c.timezone 'Antarctica/DumontDUrville', -200, 3, 8401, 60, 'Dumont-d\'Urville Station, Terre Adelie'
           c.timezone 'Antarctica/Syowa', -124211, 1800, 3959, 100, 'Syowa Station, E Ongul I'
-          c.timezone 'Antarctica/Macquarie', -109, 2, 3179, 20, 'Macquarie Island Station, Macquarie Island'
         end
         country 'AR', 'Argentina' do |c|
           c.timezone 'America/Argentina/Buenos_Aires', -173, 5, -1169, 20, 'Buenos Aires (BA, CF)'
@@ -63,6 +67,7 @@ module TZInfo
         end
         country 'AU', 'Australia' do |c|
           c.timezone 'Australia/Lord_Howe', -631, 20, 1909, 12, 'Lord Howe Island'
+          c.timezone 'Antarctica/Macquarie', -109, 2, 3179, 20, 'Macquarie Island'
           c.timezone 'Australia/Hobart', -2573, 60, 8839, 60, 'Tasmania - most locations'
           c.timezone 'Australia/Currie', -599, 15, 2158, 15, 'Tasmania - King Island'
           c.timezone 'Australia/Melbourne', -2269, 60, 4349, 30, 'Victoria'
@@ -251,7 +256,8 @@ module TZInfo
           c.timezone 'Europe/Prague', 601, 12, 433, 30
         end
         country 'DE', 'Germany' do |c|
-          c.timezone 'Europe/Berlin', 105, 2, 401, 30
+          c.timezone 'Europe/Berlin', 105, 2, 401, 30, 'most locations'
+          c.timezone 'Europe/Busingen', 477, 10, 521, 60, 'Busingen'
         end
         country 'DJ', 'Djibouti' do |c|
           c.timezone 'Africa/Djibouti', 58, 5, 863, 20
@@ -700,8 +706,10 @@ module TZInfo
           c.timezone 'Asia/Krasnoyarsk', 3361, 60, 557, 6, 'Moscow+04 - Yenisei River'
           c.timezone 'Asia/Irkutsk', 784, 15, 313, 3, 'Moscow+05 - Lake Baikal'
           c.timezone 'Asia/Yakutsk', 62, 1, 389, 3, 'Moscow+06 - Lena River'
+          c.timezone 'Asia/Khandyga', 225563, 3600, 243997, 1800, 'Moscow+06 - Tomponsky, Ust-Maysky'
           c.timezone 'Asia/Vladivostok', 259, 6, 1979, 15, 'Moscow+07 - Amur River'
           c.timezone 'Asia/Sakhalin', 1409, 30, 1427, 10, 'Moscow+07 - Sakhalin Island'
+          c.timezone 'Asia/Ust-Nera', 232417, 3600, 10742, 75, 'Moscow+07 - Oymyakonsky'
           c.timezone 'Asia/Magadan', 1787, 30, 754, 5, 'Moscow+08 - Magadan'
           c.timezone 'Asia/Kamchatka', 3181, 60, 3173, 20, 'Moscow+08 - Kamchatka'
           c.timezone 'Asia/Anadyr', 259, 4, 10649, 60, 'Moscow+08 - Bering Sea'
