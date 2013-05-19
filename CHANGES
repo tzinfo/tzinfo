@@ -319,9 +319,9 @@
 * The zdumptest utility now checks local to utc conversions in addition to
   utc to local conversions.
 * eql? method defined on Country and Timezone that is equivalent to ==.
-* == method of Timezone no longer raises an exception when passed an object
+* The == method of Timezone no longer raises an exception when passed an object
   with no identifier method.
-* == method of Country no longer raises an exception when passed an object
+* The == method of Country no longer raises an exception when passed an object
   with no code method.
 * hash method defined on Country that returns the hash of the code.
 * hash method defined on Timezone that returns the hash of the identifier.
