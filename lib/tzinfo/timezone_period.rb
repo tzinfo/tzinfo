@@ -23,8 +23,8 @@
 module TZInfo
   # A period of time in a timezone where the same offset from UTC applies.
   #
-  # All the methods that take times accept instances of Time, DateTime or
-  # integer timestamps.
+  # All the methods that take times accept instances of Time or DateTime as well
+  # as Integer timestamps.
   class TimezonePeriod
     # The TimezoneTransitionInfo that defines the start of this TimezonePeriod 
     # (may be nil if unbounded).

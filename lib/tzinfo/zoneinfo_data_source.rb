@@ -32,7 +32,7 @@ module TZInfo
   # directory could be found when checking the paths listed in
   # ZoneinfoDataSource.search_path. A valid zoneinfo directory is one that
   # contains index files named iso3166.tab and zone.tab as well as other 
-  # timezone files).
+  # timezone files.
   class ZoneinfoDirectoryNotFound < StandardError
   end
   

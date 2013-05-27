@@ -14,89 +14,104 @@ TZInfo requires a source of timezone data. There are two built-in options:
    zoneinfo directory containing timezone definitions. These are also generated
    from the {IANA Time Zone Database}[http://www.iana.org/time-zones].
 
-By default the TZInfo::Data source will be used. If TZInfo::Data is not
-available (i.e. if require 'tzinfo/data' fails), then TZInfo will search for
-a zoneinfo directory instead (using the paths specified in
-TZInfo::ZoneinfoDataSource::DEFAULT_SEARCH_PATHS).
+By default, TZInfo::Data will be used. If TZInfo::Data is not available (i.e. 
+if require 'tzinfo/data' fails), then TZInfo will search for a zoneinfo
+directory instead (using the search path specified by 
+TZInfo::ZoneinfoDataSource::DEFAULT_SEARCH_PATH).
 
 If no data source can be found, a TZInfo::DataSourceNotFound exception will be
-raised when using TZInfo.
+raised when TZInfo is used.
 
 The default data source selection can be overridden using 
 TZInfo::DataSource.set.
 
+Custom data sources can also be used. See TZInfo::DataSource.set for
+further details.
+
 
 == Installation
 
-TZInfo can be installed using the gem command:
+The TZInfo gem can be installed by running:
 
   $ gem install tzinfo
 
-To use the Ruby modules as the data source, you'll also need to install
-TZInfo::Data:
+To use the Ruby modules as the data source, TZInfo::Data will also need to be
+installed:
 
   $ gem install tzinfo-data
   
 
 == Download
 
-Tar, Zip and RubyGem packages of TZInfo can be downloaded from:
-
-* http://rubyforge.org/frs/?group_id=894
+Tar, Zip and RubyGem packages of TZInfo and TZInfo::Data can be downloaded from
+http://rubyforge.org/frs/?group_id=894
 
 
 == Example usage
 
-The following code will obtain the America/New_York timezone and covert a time
-in UTC to local New York time:
+The following code will obtain the America/New_York timezone (as an instance
+of TZInfo::Timezone) and covert a time in UTC to local New York time:
 
   require 'tzinfo'
   
   tz = TZInfo::Timezone.get('America/New_York')
   local = tz.utc_to_local(Time.utc(2005,8,29,15,35,0))
 
-Note that the Time returned will look like it is UTC (local.zone will return 
-"UTC"). This is because it is not currently possible to change the offset of 
-an individual Time instance.
+Note that the local Time returned will have a UTC timezone (local.zone will 
+return "UTC"). This is because the Ruby Time class only supports two timezones: 
+UTC and the current system local timezone.
   
-To convert from a local time to UTC, the local_to_utc method can be used. 
+To convert from a local time to UTC, the local_to_utc method can be used as
+follows:
 
   utc = tz.local_to_utc(local)
 
-Note that the timezone information of the time you pass in is ignored. The
-following two lines will return the same result regardless of the local 
-timezone:
+Note that the timezone information of the local Time object is ignored (TZInfo
+will just read the date and time and treat them as if there were in the 'tz'
+timezone). The following two lines will return the same result regardless of 
+the system's local timezone:
 
   tz.local_to_utc(Time.local(2006,6,26,1,0,0))
   tz.local_to_utc(Time.utc(2006,6,26,1,0,0))
   
-To get information about the rules in force at a particular UTC or local time,
-the Timezone.period_for_utc and Timezone.period_for_local methods can be used.
-Both of these methods return TimezonePeriod objects. The following gets the 
-identifier for the period (in this case EDT).
+To obtain information about the rules in force at a particular UTC or local 
+time, the TZInfo::Timezone.period_for_utc and TZInfo::Timezone.period_for_local
+methods can be used. Both of these methods return TZInfo::TimezonePeriod 
+objects. The following gets the identifier for the period (in this case EDT).
 
   period = tz.period_for_utc(Time.utc(2005,8,29,15,35,0))
   id = period.zone_identifier
   
-The current local time in a Timezone can be obtained with the Timezone#now
-method:
+The current local time in a Timezone can be obtained with the 
+TZInfo::Timezone#now method:
 
   now = tz.now
 
-All methods in TZInfo that take a time can be used with either Time, DateTime
-or Integers (Time#to_i). The return type will be the same as the type passed in.
-  
-Timezones can also be accessed by Country (using an ISO 3166 country code). The
-following gets all the Timezone identifiers for the US:
+All methods in TZInfo that operate on a time can be used with either Time or 
+DateTime instances or with Integer timestamps (i.e. as returned by Time#to_i). 
+The type of the values returned will match the the type passed in.
+
+A list of all the available Timezone identifiers can be obtained using the
+TZInfo::Timezone.all_identifiers method. TZInfo::Timezone.all can be called
+to get an Array of all the TZInfo::Timezone instances.
+
+Timezones can also be accessed by country (using an ISO 3166-1 alpha-2 country 
+code). The following code retrieves the TZInfo::Country instance representing 
+the USA (country code 'US') and then gets all the Timezone identifiers used in 
+the USA.
 
   us = TZInfo::Country.get('US')
   timezones = us.zone_identifiers
   
-The Country#zone_info method provides an additional description and geographic 
-location for each Timezone in the Country.
+The TZInfo::Country#zone_info method provides an additional description and 
+geographic location for each Timezone in a Country.
+
+A list of all the available country codes can be obtained using the
+TZInfo::Country.all_codes method. TZInfo::Country.all can be called to get an 
+Array of all the Country instances.
   
-The above covers the most common uses TZInfo. For more detail, please refer to
-the API documentation for the Timezone and Country classes.
+For further detail, please refer to the API documentation for the 
+TZInfo::Timezone and TZInfo::Country classes.
 
 
 == Documentation
@@ -115,5 +130,3 @@ TZInfo is released under the MIT license, see LICENSE for details.
 
 Please post to the {TZInfo Users mailing list}[http://rubyforge.org/mailman/listinfo/tzinfo-users]
 if you require assistance or have any suggestions.
-
-Alternatively, you can contact the author Philip Ross directly at phil.ross@gmail.com.

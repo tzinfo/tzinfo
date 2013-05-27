@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2012 Philip Ross
+# Copyright (c) 2005-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
 #++
 
 module TZInfo
-  # Thrown by Country#get if the code given is not valid.
+  # Raised by Country#get if the code given is not valid.
   class InvalidCountryCode < StandardError
   end
   
@@ -99,8 +99,9 @@ module TZInfo
     
     # Returns a frozen array of all the zone identifiers for the country. These
     # are in an order that
-    #   (1) makes some geographical sense, and
-    #   (2) puts the most populous zones first, where that does not contradict (1).
+    #
+    # 1. makes some geographical sense, and
+    # 2. puts the most populous zones first, where that does not contradict 1.
     def zone_identifiers
       @info.zone_identifiers
     end
@@ -110,8 +111,9 @@ module TZInfo
     # objects to avoid the overhead of loading Timezone definitions until
     # a conversion is actually required. The Timezones are returned in an order
     # that
-    #   (1) makes some geographical sense, and
-    #   (2) puts the most populous zones first, where that does not contradict (1).
+    #
+    # 1. makes some geographical sense, and
+    # 2. puts the most populous zones first, where that does not contradict 1.
     def zones
       zone_identifiers.collect {|id|
         Timezone.get_proxy(id)        
@@ -121,8 +123,9 @@ module TZInfo
     # Returns a frozen array of all the timezones for the for the country as
     # CountryTimezone instances (containing extra information about each zone). 
     # These are in an order that
-    #   (1) makes some geographical sense, and
-    #   (2) puts the most populous zones first, where that does not contradict (1).
+    #
+    # 1. makes some geographical sense, and
+    # 2. puts the most populous zones first, where that does not contradict 1.
     def zone_info
       @info.zones
     end

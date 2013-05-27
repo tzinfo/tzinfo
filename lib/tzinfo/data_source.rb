@@ -21,14 +21,14 @@
 #++
 
 module TZInfo
-  # Exception raised if the DataSource is used doesn't implement one of the
-  # required methods.
+  # InvalidDataSource is raised if the DataSource is used doesn't implement one 
+  # of the required methods.
   class InvalidDataSource < StandardError
   end
   
-  # Exception raised if no data source could be found (i.e. 'tzinfo/data'
-  # cannot be found on the load path and no valid zoneinfo directory can be 
-  # found on the system).
+  # DataSourceNotFound is raised if no data source could be found (i.e. 
+  # if 'tzinfo/data' cannot be found on the load path and no valid zoneinfo 
+  # directory can be found on the system).
   class DataSourceNotFound < StandardError
   end
 
@@ -70,8 +70,8 @@ module TZInfo
     # directory as the data source. If the directory is not a valid zoneinfo
     # directory, an InvalidZoneinfoDirectory exception will be raised.
     #
-    # You can create your own custom data source class. It must extend from
-    # TZInfo::DataSource and implement the following methods:
+    # Custom data sources can be created by subclassing TZInfo::DataSource and
+    # implementing the following methods:
     #
     # * \load_timezone_info
     # * \timezone_identifiers
@@ -80,15 +80,19 @@ module TZInfo
     # * \load_country_info
     # * \country_codes
     #
-    # To make TZInfo use your data source, call \DataSource.set as follows:
+    # To have TZInfo use the custom data source, call \DataSource.set 
+    # as follows:
     #
-    #   TZInfo::DataSource.set(MyDataSource.new)
+    #   TZInfo::DataSource.set(CustomDataSource.new)
     #
-    # To avoid inconsistent data, if \DataSource.set is used, it should be 
-    # called before accessing any Timezone or Country data.
+    # To avoid inconsistent data, \DataSource.set should be called before
+    # accessing any Timezone or Country data.
     #
-    # If \DataSource.set is not called, the included Ruby data modules will be
-    # used as a data source.
+    # If \DataSource.set is not called, TZInfo will use TZInfo::Data as the
+    # data source. If TZInfo::Data is not available (i.e. if 
+    # require 'tzinfo/data' fails), then TZInfo will search for a zoneinfo 
+    # directory instead (using the search path specified by
+    # TZInfo::ZoneinfoDataSource::DEFAULT_SEARCH_PATH).
     def self.set(data_source_or_type, *args)
       if data_source_or_type.kind_of?(DataSource)
         @@instance = data_source_or_type

@@ -23,23 +23,27 @@
 require 'date'
 
 module TZInfo
-  # Indicate a specified time in a local timezone has more than one
-  # possible time in UTC. This happens when switching from daylight savings time 
-  # to normal time where the clocks are rolled back. Thrown by period_for_local
-  # and local_to_utc when using an ambiguous time and not specifying any 
-  # means to resolve the ambiguity.
+  # AmbiguousTime is raised to indicates that a specified time in a local 
+  # timezone has more than one possible equivalent UTC time. This happens when 
+  # transitioning from daylight savings time to standard time where the clocks 
+  # are rolled back.
+  #
+  # AmbiguousTime is raised by period_for_local and local_to_utc when using an 
+  # ambiguous time and not specifying any means to resolve the ambiguity.
   class AmbiguousTime < StandardError
   end
   
-  # Thrown to indicate that no TimezonePeriod matching a given time could be found.
+  # PeriodNotFound is raised to indicate that no TimezonePeriod matching a given
+  # time could be found.
   class PeriodNotFound < StandardError
   end
   
-  # Thrown by Timezone#get if the identifier given is not valid.
+  # Raised by Timezone#get if the identifier given is not valid.
   class InvalidTimezoneIdentifier < StandardError
   end
   
-  # Thrown if an attempt is made to use a timezone created with Timezone.new(nil).
+  # Raised if an attempt is made to use a timezone created with
+  # Timezone.new(nil).
   class UnknownTimezone < StandardError
   end
   

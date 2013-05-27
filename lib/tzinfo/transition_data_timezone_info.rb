@@ -21,7 +21,7 @@
 #++
 
 module TZInfo
-  # Thrown if no offsets have been defined when calling period_for_utc or
+  # Raised if no offsets have been defined when calling period_for_utc or
   # periods_for_local. Indicates an error in the timezone data.
   class NoOffsetsDefined < StandardError
   end
