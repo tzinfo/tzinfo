@@ -25,7 +25,7 @@ module TZInfo
   class InvalidCountryCode < StandardError
   end
   
-  # An ISO 3166 country. Can be used to get a list of Timezones for a country.
+  # An ISO 3166-1 country. Can be used to get a list of Timezones for a country.
   # For example:
   #
   #  us = Country.get('US')
@@ -41,8 +41,8 @@ module TZInfo
     # Whether the countries index has been loaded yet.
     @@index_loaded = false
     
-    # Gets a Country by its ISO 3166 code. Raises an InvalidCountryCode 
-    # exception if it couldn't be found.
+    # Gets a Country by its ISO 3166-1 alpha-2 code. Raises an 
+    # InvalidCountryCode exception if it couldn't be found.
     def self.get(identifier)
       instance = @@countries[identifier]
       
@@ -77,7 +77,7 @@ module TZInfo
       data_source.country_codes.collect {|code| get(code)}
     end       
     
-    # The ISO 3166 country code.
+    # The ISO 3166-1 alpha-2 country code.
     def code
       @info.code
     end
