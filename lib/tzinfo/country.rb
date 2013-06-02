@@ -25,13 +25,18 @@ module TZInfo
   class InvalidCountryCode < StandardError
   end
   
-  # An ISO 3166-1 country. Can be used to get a list of Timezones for a country.
-  # For example:
+  # The Country class represents an ISO 3166-1 country. It can be used to 
+  # obtain a list of Timezones for a country. For example:
   #
   #  us = Country.get('US')
   #  us.zone_identifiers
   #  us.zones
   #  us.zone_info
+  #
+  # Country information available through TZInfo is intended as an aid for 
+  # users, to help them select time zone data appropriate for their practical 
+  # needs. It is not intended to take or endorse any position on legal or 
+  # territorial claims.
   class Country
     include Comparable
     
