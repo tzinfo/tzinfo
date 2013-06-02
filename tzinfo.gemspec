@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'tzinfo'
-  s.version = '1.0.0.pre1'  
+  s.version = '1.0.0'  
   s.summary = 'Daylight savings aware timezone library'
   s.description = 'TZInfo provides daylight savings aware transformations between times in different time zones.'
   s.author = 'Philip Ross'

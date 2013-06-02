@@ -1,4 +1,4 @@
-== Version ?????? - ?????????
+== Version 1.0.0 - 2-Jun-2013
 
 * Allow TZInfo to be used with different data sources instead of just the
   built-in Ruby module data files.
