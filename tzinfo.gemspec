@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
 
   s.post_install_message = <<END
 
-TZInfo Timezone Data has been Moved
-===================================
+TZInfo Timezone Data has Moved
+==============================
 
 The timezone data previously included with TZInfo as Ruby modules has now been
 moved to a separate tzinfo-data gem. TZInfo also now supports using the system
