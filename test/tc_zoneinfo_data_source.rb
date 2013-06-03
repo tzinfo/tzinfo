@@ -460,20 +460,16 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
     prefix = File.expand_path(directory) + File::SEPARATOR
     
     entries = entries.select do |file|
-      if !file.include?('.')
-        file.untaint
-        File.file?(file)
-      else
-        false      
-      end
+      file.untaint
+      File.file?(file)
     end
        
     entries = entries.collect {|file| file[directory.length + File::SEPARATOR.length, file.length - directory.length - File::SEPARATOR.length]}
-    
-    # Exclude right (with leapseconds) and posix (copy) directories, localtime and posixrules
+
+    # Exclude right (with leapseconds) and posix (copy) directories; .tab files; localtime, posixrules and Factory zones
     entries = entries.select do |file| 
-      file !~ /\A(posix|right)\// && 
-        file !~ /(\A|\/)\.svn\// &&
+      file !~ /\A(posix|right)\// &&
+        file !~ /\.tab\z/ &&
         !%w(localtime posixrules Factory).include?(file)
     end
     

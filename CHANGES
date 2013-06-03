@@ -1,3 +1,9 @@
+== Version ????? - ??????????
+
+* Fix a test case failure when running tests from a directory containing a 
+  dot '.' in the path (issue #29751).
+
+
 == Version 1.0.0 - 2-Jun-2013
 
 * Allow TZInfo to be used with different data sources instead of just the
