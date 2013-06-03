@@ -205,8 +205,8 @@ module TZInfo
       File.directory?(path) && File.file?(File.join(path, 'zone.tab')) && File.file?(File.join(path, 'iso3166.tab'))
     end
        
-    # Unless called before, scans @zoneinfo_dir looking for all the data
-    # and linked zones.
+    # Unless already called, scans @zoneinfo_dir looking for the available
+    # timezone identifiers.
     def load_timezone_index
       unless @timezone_index
         index = []
@@ -219,8 +219,8 @@ module TZInfo
       end
     end
     
-    # Recursively scans a directory of timezones, populating data_identifiers
-    # and linked_timezones.
+    # Recursively scans a directory of timezones, calling the passed in block
+    # for each identifier found.
     def enum_timezones(dir, exclude = [], &block)
       Dir.foreach(dir ? File.join(@zoneinfo_dir, dir) : @zoneinfo_dir) do |entry|
         unless entry =~ /\./ || exclude.include?(entry)
