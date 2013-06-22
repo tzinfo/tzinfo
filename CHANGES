@@ -1,7 +1,7 @@
-== Version ????? - ??????????
+== Version 1.0.1 - 22-Jun-2013
 
-* Fix a test case failure when running tests from a directory containing a 
-  dot '.' in the path (issue #29751).
+* Fix a test case failure when tests are run from a directory that contains a
+  dot in the path (issue #29751).
 
 
 == Version 1.0.0 - 2-Jun-2013
