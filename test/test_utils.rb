@@ -101,6 +101,12 @@ module Kernel
     load_path = [TZINFO_LIB_DIR] + extra_load_path
     load_path = load_path.collect {|p| "-I \"#{p}\""}.join(' ')
     
+    # If RubyGems is loaded in the current process, then require it in the
+    # sub-process, as it may be needed in order to require dependencies.
+    if defined?(Gem) && Gem.instance_of?(Module)
+      required = ['rubygems'] + required
+    end
+    
     required = required.collect {|r| "-r \"#{r}\""}.join(' ')
       
     IO.popen("\"#{ruby}\" #{load_path} #{required}", 'r+') do |process|
