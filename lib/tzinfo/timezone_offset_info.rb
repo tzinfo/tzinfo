@@ -22,7 +22,7 @@
 
 module TZInfo
   # Represents an offset defined in a Timezone data file.
-  class TimezoneOffsetInfo #:nodoc:
+  class TimezoneOffsetInfo
     # The base offset of the timezone from UTC in seconds.
     attr_reader :utc_offset
     

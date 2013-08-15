@@ -44,7 +44,17 @@ module TZInfo
     def identifier
       @real_timezone ? @real_timezone.identifier : @identifier
     end
-    
+
+    # Returns array of all TimezoneOffsetInfo for this Timezone.
+    def all_offsets
+      real_timezone.all_offsets
+    end
+
+    # Returns array of all TimezoneTransitionInfo for this Timezone.
+    def all_transitions
+      real_timezone.all_transitions
+    end
+
     # Returns the TimezonePeriod for the given UTC time. utc can either be
     # a DateTime, Time or integer timestamp (Time.to_i). Any timezone 
     # information in utc is ignored (it is treated as a UTC time).        
