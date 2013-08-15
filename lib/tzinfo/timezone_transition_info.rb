@@ -97,6 +97,10 @@ module TZInfo
     # A TimeOrDateTime instance representing the UTC time when this transition
     # occurs.
     def at
+      # Thread-safey: It is possible that the value of @at may be calculated
+      # multiple times in concurrently executing threads. It is not worth the
+      # overhead of locking to ensure that @at is only calculated once.
+      
       unless @at
         unless @denominator 
           @at = TimeOrDateTime.new(@numerator_or_time)
@@ -114,6 +118,11 @@ module TZInfo
     # causes the previous observance to end (calculated from at using 
     # previous_offset).
     def local_end
+      # Thread-safey: It is possible that the value of @local_end may be 
+      # calculated multiple times in concurrently executing threads. It is not 
+      # worth the overhead of locking to ensure that @local_end is only 
+      # calculated once.
+    
       @local_end = at.add_with_convert(@previous_offset.utc_total_offset) unless @local_end      
       @local_end
     end
@@ -121,6 +130,11 @@ module TZInfo
     # A TimeOrDateTime instance representing the local time when this transition
     # causes the next observance to start (calculated from at using offset).
     def local_start
+      # Thread-safey: It is possible that the value of @local_start may be 
+      # calculated multiple times in concurrently executing threads. It is not 
+      # worth the overhead of locking to ensure that @local_start is only 
+      # calculated once.
+    
       @local_start = at.add_with_convert(@offset.utc_total_offset) unless @local_start
       @local_start
     end

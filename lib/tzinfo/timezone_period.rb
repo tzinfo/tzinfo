@@ -88,6 +88,11 @@ module TZInfo
     
     # Total offset from UTC (days). Result is a Rational.
     def utc_total_offset_rational
+      # Thread-safey: It is possible that the value of 
+      # @utc_total_offset_rational may be calculated multiple times in 
+      # concurrently executing threads. It is not worth the overhead of locking
+      # to ensure that @zone_identifiers is only calculated once.
+    
       unless @utc_total_offset_rational
         @utc_total_offset_rational = OffsetRationals.rational_for_offset(utc_total_offset) 
       end

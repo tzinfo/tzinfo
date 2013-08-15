@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.extra_rdoc_files = ['README', 'CHANGES', 'LICENSE']
   s.required_ruby_version = '>= 1.8.6'
+  s.add_dependency 'thread_safe', '~> 0.1'
 
   s.post_install_message = <<END
 

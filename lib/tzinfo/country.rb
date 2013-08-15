@@ -20,6 +20,8 @@
 # THE SOFTWARE.
 #++
 
+require 'thread_safe'
+
 module TZInfo
   # Raised by Country#get if the code given is not valid.
   class InvalidCountryCode < StandardError
@@ -41,7 +43,7 @@ module TZInfo
     include Comparable
     
     # Defined countries.
-    @@countries = {}
+    @@countries = ThreadSafe::Cache.new
     
     # Whether the countries index has been loaded yet.
     @@index_loaded = false
@@ -52,6 +54,13 @@ module TZInfo
       instance = @@countries[identifier]
       
       unless instance
+        # Thread-safety: It is possible that multiple equivalent Country 
+        # instances could be created here in concurrently executing threads. 
+        # The consequences of this are that the data may be loaded more than 
+        # once (depending on the data source) and memoized calculations could
+        # be discarded. The performance benefit of ensuring that only a single
+        # instance is created is unlikely to be worth the overhead of only
+        # allowing one Country to be loaded at a time.
         info = data_source.load_country_info(identifier)  
         instance = Country.new(info)
         @@countries[identifier] = instance

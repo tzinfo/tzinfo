@@ -70,6 +70,11 @@ module TZInfo
     # When converting from a DateTime, the result is truncated to microsecond
     # precision.
     def to_time
+      # Thread-safey: It is possible that the value of @time may be 
+      # calculated multiple times in concurrently executing threads. It is not 
+      # worth the overhead of locking to ensure that @time is only 
+      # calculated once.
+    
       unless @time
         if @timestamp
           @time = Time.at(@timestamp).utc
@@ -86,6 +91,11 @@ module TZInfo
     # When converting from a Time, the result is truncated to microsecond
     # precision.
     def to_datetime
+      # Thread-safey: It is possible that the value of @datetime may be 
+      # calculated multiple times in concurrently executing threads. It is not 
+      # worth the overhead of locking to ensure that @datetime is only 
+      # calculated once.
+    
       unless @datetime
         # Avoid using Rational unless necessary.
         u = usec
@@ -98,6 +108,11 @@ module TZInfo
     
     # Returns the time as an integer timestamp.
     def to_i
+      # Thread-safey: It is possible that the value of @timestamp may be 
+      # calculated multiple times in concurrently executing threads. It is not 
+      # worth the overhead of locking to ensure that @timestamp is only 
+      # calculated once.
+    
       unless @timestamp
         @timestamp = to_time.to_i
       end

@@ -118,14 +118,14 @@ module TZInfo
       
       @zoneinfo_dir = File.expand_path(@zoneinfo_dir).freeze
       @zoneinfo_prefix = (@zoneinfo_dir + File::SEPARATOR).freeze
+      @timezone_index = load_timezone_index.freeze
+      @country_index = load_country_index.freeze
     end
     
     # Returns a TimezoneInfo instance for a given identifier. 
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the 
     # identifier is invalid.
     def load_timezone_info(identifier)
-      load_timezone_index
-      
       begin
         if @timezone_index.include?(identifier)
           identifier.untaint
@@ -148,7 +148,6 @@ module TZInfo
     
     # Returns an array of all the available timezone identifiers.
     def timezone_identifiers
-      load_timezone_index
       @timezone_index
     end
     
@@ -158,7 +157,6 @@ module TZInfo
     # For ZoneinfoDataSource, this will always be identical to 
     # timezone_identifers.
     def data_timezone_identifiers
-      load_timezone_index
       @timezone_index
     end
     
@@ -174,7 +172,6 @@ module TZInfo
     # country code. Raises InvalidCountryCode if the country could not be found
     # or the code is invalid.
     def load_country_info(code)
-      load_country_index
       info = @country_index[code]
       raise InvalidCountryCode.new, 'Invalid country code' unless info
       info
@@ -183,7 +180,6 @@ module TZInfo
     # Returns an array of all the available ISO 3166-1 alpha-2
     # country codes.
     def country_codes
-      load_country_index
       @country_index.keys.freeze
     end
     
@@ -205,18 +201,16 @@ module TZInfo
       File.directory?(path) && File.file?(File.join(path, 'zone.tab')) && File.file?(File.join(path, 'iso3166.tab'))
     end
        
-    # Unless already called, scans @zoneinfo_dir looking for the available
-    # timezone identifiers.
+    # Scans @zoneinfo_dir and returns an Array of available timezone 
+    # identifiers.
     def load_timezone_index
-      unless @timezone_index
-        index = []
-        
-        enum_timezones(nil, ['localtime', 'posix', 'posixrules', 'right', 'Factory']) do |identifier|
-          index << identifier
-        end
-        
-        @timezone_index = index.sort.freeze
+      index = []
+      
+      enum_timezones(nil, ['localtime', 'posix', 'posixrules', 'right', 'Factory']) do |identifier|
+        index << identifier
       end
+      
+      index.sort
     end
     
     # Recursively scans a directory of timezones, calling the passed in block
@@ -237,53 +231,51 @@ module TZInfo
       end
     end
     
-    # Unless called before, uses the iso3166.tab and zone.tab files to build
-    # an index of the available countries and their timezones.
+    # Uses the iso3166.tab and zone.tab files to build an index of the 
+    # available countries and their timezones.
     def load_country_index
-      unless @country_index
-        zones = {}
-        
-        File.open(File.join(@zoneinfo_dir, 'zone.tab')) do |file|
-          file.each_line do |line|
-            line.chomp!
+      zones = {}
+      
+      File.open(File.join(@zoneinfo_dir, 'zone.tab')) do |file|
+        file.each_line do |line|
+          line.chomp!
+          
+          if line =~ /\A([A-Z]{2})\t(?:([+\-])(\d{2})(\d{2})([+\-])(\d{3})(\d{2})|([+\-])(\d{2})(\d{2})(\d{2})([+\-])(\d{3})(\d{2})(\d{2}))\t([^\t]+)(?:\t([^\t]+))?\z/
+            code = $1
             
-            if line =~ /\A([A-Z]{2})\t(?:([+\-])(\d{2})(\d{2})([+\-])(\d{3})(\d{2})|([+\-])(\d{2})(\d{2})(\d{2})([+\-])(\d{3})(\d{2})(\d{2}))\t([^\t]+)(?:\t([^\t]+))?\z/
-              code = $1
-              
-              if $2
-                latitude = dms_to_rational($2, $3, $4)
-                longitude = dms_to_rational($5, $6, $7)
-              else
-                latitude = dms_to_rational($8, $9, $10, $11)
-                longitude = dms_to_rational($12, $13, $14, $15)
-              end
-              
-              zone_identifier = $16
-              description = $17
-              
-              (zones[code] ||= []) << 
-                CountryTimezone.new(zone_identifier, latitude.numerator, latitude.denominator, 
-                                    longitude.numerator, longitude.denominator, description)
+            if $2
+              latitude = dms_to_rational($2, $3, $4)
+              longitude = dms_to_rational($5, $6, $7)
+            else
+              latitude = dms_to_rational($8, $9, $10, $11)
+              longitude = dms_to_rational($12, $13, $14, $15)
             end
+            
+            zone_identifier = $16
+            description = $17
+            
+            (zones[code] ||= []) << 
+              CountryTimezone.new(zone_identifier, latitude.numerator, latitude.denominator, 
+                                  longitude.numerator, longitude.denominator, description)
           end
         end
-        
-        countries = {}
-        
-        File.open(File.join(@zoneinfo_dir, 'iso3166.tab')) do |file|
-          file.each_line do |line|
-            line.chomp!
-            
-            if line =~ /\A([A-Z]{2})\t(.+)\z/
-              code = $1
-              name = $2
-              countries[code] = ZoneinfoCountryInfo.new(code, name, zones[code] || [])
-            end
-          end
-        end
-        
-        @country_index = countries
       end
+      
+      countries = {}
+      
+      File.open(File.join(@zoneinfo_dir, 'iso3166.tab')) do |file|
+        file.each_line do |line|
+          line.chomp!
+          
+          if line =~ /\A([A-Z]{2})\t(.+)\z/
+            code = $1
+            name = $2
+            countries[code] = ZoneinfoCountryInfo.new(code, name, zones[code] || [])
+          end
+        end
+      end
+      
+      countries
     end
     
     # Converts degrees, miunutes and seconds to a Rational

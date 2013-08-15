@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2010 Philip Ross
+# Copyright (c) 2005-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -77,6 +77,10 @@ module TZInfo
       end  
     
       def real_timezone
+        # Thread-safey: It is possible that the value of @real_timezone may be 
+        # calculated multiple times in concurrently executing threads. It is not 
+        # worth the overhead of locking to ensure that @real_timezone is only 
+        # calculated once.
         @real_timezone ||= Timezone.get(@identifier)
       end     
   end 

@@ -20,6 +20,8 @@
 # THE SOFTWARE.
 #++
 
+require 'thread'
+
 module TZInfo
   # InvalidDataSource is raised if the DataSource is used doesn't implement one 
   # of the required methods.
@@ -38,10 +40,29 @@ module TZInfo
   class DataSource
     # The currently selected data source.
     @@instance = nil
+    
+    # Mutex used to ensure the default data source is only created once.
+    @@default_mutex = Mutex.new
         
     # Returns the currently selected DataSource instance.
     def self.get
-      set(create_default_data_source) unless @@instance
+      # If a DataSource hasn't been manually set when the first request is
+      # made to obtain a DataSource, then a Default data source is created.
+      
+      # This is done at the first request rather than when TZInfo is loaded to
+      # avoid unnecessary (or in some cases potentially harmful) attempts to 
+      # find a suitable DataSource.
+      
+      # A Mutex is used to ensure that only a single default instance is
+      # created (having two different DataSources in use simultaneously could 
+      # cause unexpected results).
+      
+      unless @@instance
+        @@default_mutex.synchronize do
+          set(create_default_data_source) unless @@instance
+        end
+      end      
+      
       @@instance
     end
     

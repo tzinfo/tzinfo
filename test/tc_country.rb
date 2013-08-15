@@ -27,7 +27,7 @@ include TZInfo
 class TCCountry < Test::Unit::TestCase
   def setup
     @orig_data_source = DataSource.get
-    Country.send :class_variable_set, :@@countries, {}
+    Country.send :class_variable_set, :@@countries, ThreadSafe::Cache.new
   end
   
   def teardown

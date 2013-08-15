@@ -64,7 +64,7 @@ class TCTimezone < Test::Unit::TestCase
   def setup
     @orig_default_dst = Timezone.default_dst
     @orig_data_source = DataSource.get
-    Timezone.send :class_variable_set, :@@loaded_zones, {}
+    Timezone.send :class_variable_set, :@@loaded_zones, ThreadSafe::Cache.new
   end
   
   def teardown

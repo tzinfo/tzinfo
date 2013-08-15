@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -85,7 +85,7 @@ module TZInfo
        45000 => RubyCoreSupport.rational_new!(25,48),
        46800 => RubyCoreSupport.rational_new!(13,24),
        48600 => RubyCoreSupport.rational_new!(9,16),
-       50400 => RubyCoreSupport.rational_new!(7,12)}
+       50400 => RubyCoreSupport.rational_new!(7,12)}.freeze
     
     # Returns a Rational expressing the fraction of a day that offset in 
     # seconds represents (i.e. equivalent to Rational(offset, 86400)). 

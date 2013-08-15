@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2012 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -62,11 +62,19 @@ module TZInfo
     
     # The latitude of this timezone in degrees as a Rational.
     def latitude
+      # Thread-safey: It is possible that the value of @latitude may be 
+      # calculated multiple times in concurrently executing threads. It is not 
+      # worth the overhead of locking to ensure that @latitude is only 
+      # calculated once.
       @latitude ||= RubyCoreSupport.rational_new!(@latitude_numerator, @latitude_denominator)
     end
     
     # The longitude of this timezone in degrees as a Rational.
     def longitude
+      # Thread-safey: It is possible that the value of @longitude may be 
+      # calculated multiple times in concurrently executing threads. It is not 
+      # worth the overhead of locking to ensure that @longitude is only 
+      # calculated once.
       @longitude ||= RubyCoreSupport.rational_new!(@longitude_numerator, @longitude_denominator)
     end
     

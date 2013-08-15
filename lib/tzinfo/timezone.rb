@@ -21,6 +21,7 @@
 #++
 
 require 'date'
+require 'thread_safe'
 
 module TZInfo
   # AmbiguousTime is raised to indicates that a specified time in a local 
@@ -64,7 +65,7 @@ module TZInfo
     
     # Cache of loaded zones by identifier to avoid using require if a zone
     # has already been loaded.
-    @@loaded_zones = {}
+    @@loaded_zones = ThreadSafe::Cache.new
         
     # Default value of the dst parameter of the local_to_utc and 
     # period_for_local methods.
@@ -93,7 +94,14 @@ module TZInfo
     def self.get(identifier)
       instance = @@loaded_zones[identifier]
       
-      unless instance  
+      unless instance
+        # Thread-safety: It is possible that multiple equivalent Timezone 
+        # instances could be created here in concurrently executing threads. 
+        # The consequences of this are that the data may be loaded more than 
+        # once (depending on the data source) and memoized calculations could
+        # be discarded. The performance benefit of ensuring that only a single
+        # instance is created is unlikely to be worth the overhead of only
+        # allowing one Timezone to be loaded at a time.
         info = data_source.load_timezone_info(identifier)
         instance = info.create_timezone
         @@loaded_zones[instance.identifier] = instance         
