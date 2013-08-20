@@ -25,7 +25,7 @@ require 'date'
 module TZInfo
   # Represents an transition from one timezone offset to another at a particular
   # date and time.
-  class TimezoneTransitionInfo #:nodoc:
+  class TimezoneTransitionInfo
     # The offset this transition changes to (a TimezoneOffsetInfo instance).
     attr_reader :offset
     

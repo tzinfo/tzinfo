@@ -23,6 +23,17 @@
 module TZInfo
 
   class LinkedTimezone < InfoTimezone #:nodoc:
+
+    # Returns array of all TimezoneOffsetInfo for this Timezone.
+    def all_offsets
+      @linked_timezone.all_offsets
+    end
+
+    # Returns array of all TimezoneTransitionInfo for this Timezone.
+    def all_transitions
+      @linked_timezone.all_transitions
+    end
+
     # Returns the TimezonePeriod for the given UTC time. utc can either be
     # a DateTime, Time or integer timestamp (Time.to_i). Any timezone 
     # information in utc is ignored (it is treated as a UTC time).        

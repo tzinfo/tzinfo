@@ -29,7 +29,12 @@ module TZInfo
   # Represents a data timezone defined by a set of offsets and a set 
   # of transitions
   class TransitionDataTimezoneInfo < DataTimezoneInfo #:nodoc:
-            
+    # Hash with offset_id as key and instances of TimezoneOffsetInfo as values.
+    attr_reader :offsets
+
+    # Array of all Transitions (instances of TimezoneTransitionInfo) for this Timezone.
+    attr_reader :transitions
+
     # Constructs a new TransitionDataTimezoneInfo with its identifier.
     def initialize(identifier)   
       super(identifier)

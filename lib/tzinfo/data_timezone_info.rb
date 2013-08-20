@@ -23,7 +23,17 @@
 module TZInfo
   # Represents a defined timezone containing transition data.
   class DataTimezoneInfo < TimezoneInfo  
-  
+
+    # Returns hash with offset_id as key and instances of TimezoneOffsetInfo as values.
+    def offsets
+      raise NotImplementedError, 'Subclasses must override offsets'
+    end
+
+    # Returns array of all Transitions (instances of TimezoneTransitionInfo) for this Timezone.
+    def transitions
+      raise NotImplementedError, 'Subclasses must override transitions'
+    end
+
     # Returns the TimezonePeriod for the given UTC time.
     def period_for_utc(utc)
       raise NotImplementedError, 'Subclasses must override period_for_utc'
