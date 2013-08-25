@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -42,8 +42,8 @@ module TZInfo
       info.periods_for_local(local)
     end
     
-    # Returns an Array of TimezoneTransitionInfo instances representing the
-    # times where the timezone's current offset or abbreviation changes.
+    # Returns an Array of TimezoneTransition instances representing the times
+    # where the UTC offset of the timezone changes.
     #
     # Transitions are returned up to a given date and time up to a given date 
     # and time, specified in UTC (utc_to).

@@ -67,7 +67,7 @@ class TCLinkedTimezone < Test::Unit::TestCase
         @identifier = identifier
         @no_local_periods = no_local_periods
         
-        # Don't have to be real TimezonePeriod or TimezoneTransitionInfo objects
+        # Don't have to be real TimezonePeriod or TimezoneTransition objects
         # (nothing will use them).
         @utc_period = Object.new
         @local_periods = [Object.new, Object.new]

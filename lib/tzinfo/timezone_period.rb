@@ -26,17 +26,17 @@ module TZInfo
   # All the methods that take times accept instances of Time or DateTime as well
   # as Integer timestamps.
   class TimezonePeriod
-    # The TimezoneTransitionInfo that defines the start of this TimezonePeriod 
+    # The TimezoneTransition that defines the start of this TimezonePeriod 
     # (may be nil if unbounded).
     attr_reader :start_transition #:nodoc:
     protected :start_transition
     
-    # The TimezoneTransitionInfo that defines the end of this TimezonePeriod
+    # The TimezoneTransition that defines the end of this TimezonePeriod
     # (may be nil if unbounded).
     attr_reader :end_transition #:nodoc:
     protected :end_transition
     
-    # The TimezoneOffsetInfo for this period.
+    # The TimezoneOffset for this period.
     attr_reader :offset
     
     # Initializes a new TimezonePeriod.

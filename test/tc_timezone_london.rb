@@ -74,14 +74,14 @@ class TCTimezoneLondon < Test::Unit::TestCase
     transitions = tz.transitions_up_to(DateTime.new(2005,1,1,0,0,0), DateTime.new(2004,1,1,0,0,0))
     assert_equal(2, transitions.length)
     assert_equal(TimeOrDateTime.new(DateTime.new(2004,3,28,1,0,0)), transitions[0].at)
-    assert_equal(TimezoneOffsetInfo.new(0, 0, :GMT), transitions[0].previous_offset)
-    assert_equal(TimezoneOffsetInfo.new(0, 3600, :BST), transitions[0].offset)
+    assert_equal(TimezoneOffset.new(0, 0, :GMT), transitions[0].previous_offset)
+    assert_equal(TimezoneOffset.new(0, 3600, :BST), transitions[0].offset)
     assert_equal(TimeOrDateTime.new(DateTime.new(2004,10,31,1,0,0)), transitions[1].at)
-    assert_equal(TimezoneOffsetInfo.new(0, 3600, :BST), transitions[1].previous_offset)
-    assert_equal(TimezoneOffsetInfo.new(0, 0, :GMT), transitions[1].offset)
+    assert_equal(TimezoneOffset.new(0, 3600, :BST), transitions[1].previous_offset)
+    assert_equal(TimezoneOffset.new(0, 0, :GMT), transitions[1].offset)
     
     offsets = tz.offsets_up_to(DateTime.new(2005,1,1,0,0,0), DateTime.new(2004,1,1,0,0,0))
-    assert_array_same_items([TimezoneOffsetInfo.new(0, 0, :GMT), TimezoneOffsetInfo.new(0, 3600, :BST)], offsets)
+    assert_array_same_items([TimezoneOffset.new(0, 0, :GMT), TimezoneOffset.new(0, 3600, :BST)], offsets)
   end 
   
   def test_1961
@@ -139,14 +139,14 @@ class TCTimezoneLondon < Test::Unit::TestCase
       transitions = tz.transitions_up_to(DateTime.new(1962,1,1,0,0,0), DateTime.new(1961,1,1,0,0,0))
       assert_equal(2, transitions.length)
       assert_equal(TimeOrDateTime.new(DateTime.new(1961,3,26,2,0,0)), transitions[0].at)
-      assert_equal(TimezoneOffsetInfo.new(0, 0, :GMT), transitions[0].previous_offset)
-      assert_equal(TimezoneOffsetInfo.new(0, 3600, :BST), transitions[0].offset)
+      assert_equal(TimezoneOffset.new(0, 0, :GMT), transitions[0].previous_offset)
+      assert_equal(TimezoneOffset.new(0, 3600, :BST), transitions[0].offset)
       assert_equal(TimeOrDateTime.new(DateTime.new(1961,10,29,2,0,0)), transitions[1].at)
-      assert_equal(TimezoneOffsetInfo.new(0, 3600, :BST), transitions[1].previous_offset)
-      assert_equal(TimezoneOffsetInfo.new(0, 0, :GMT), transitions[1].offset)
+      assert_equal(TimezoneOffset.new(0, 3600, :BST), transitions[1].previous_offset)
+      assert_equal(TimezoneOffset.new(0, 0, :GMT), transitions[1].offset)
       
       offsets = tz.offsets_up_to(DateTime.new(1962,1,1,0,0,0), DateTime.new(1961,1,1,0,0,0))
-      assert_array_same_items([TimezoneOffsetInfo.new(0, 0, :GMT), TimezoneOffsetInfo.new(0, 3600, :BST)], offsets)
+      assert_array_same_items([TimezoneOffset.new(0, 0, :GMT), TimezoneOffset.new(0, 3600, :BST)], offsets)
     end
   end 
   

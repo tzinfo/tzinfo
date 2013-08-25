@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -40,8 +40,8 @@ module TZInfo
       @linked_timezone.periods_for_local(local)
     end
     
-    # Returns an Array of transitions (TimezoneTransitionInfo instances) up to
-    # a given date and time, specified using UTC (utc_to).
+    # Returns an Array of transitions (TimezoneTransition instances) up to a 
+    # given date and time, specified using UTC (utc_to).
     #
     # By default, all transitions will be returned, from the first up to utc_to.
     #

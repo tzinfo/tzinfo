@@ -25,11 +25,11 @@ require 'date'
 module TZInfo
   # Represents an transition from one timezone offset to another at a particular
   # date and time.
-  class TimezoneTransitionInfo #:nodoc:
-    # The offset this transition changes to (a TimezoneOffsetInfo instance).
+  class TimezoneTransition
+    # The offset this transition changes to (a TimezoneOffset instance).
     attr_reader :offset
     
-    # The offset this transition changes from (a TimezoneOffsetInfo instance).
+    # The offset this transition changes from (a TimezoneOffset instance).
     attr_reader :previous_offset
     
     # The numerator of the DateTime if the transition time is defined as a 
@@ -42,8 +42,8 @@ module TZInfo
     attr_reader :denominator
     protected :denominator
     
-    # Creates a new TimezoneTransitionInfo with the given offset, 
-    # previous_offset (both TimezoneOffsetInfo instances) and UTC time.
+    # Creates a new TimezoneTransition with the given offset, 
+    # previous_offset (both TimezoneOffset instances) and UTC time.
     #
     # The time can be specified as a timestamp, as a rational to create a
     # DateTime or as both.
@@ -139,28 +139,28 @@ module TZInfo
       @local_start
     end
     
-    # Returns true if this TimezoneTransitionInfo is equal to the given
-    # TimezoneTransitionInfo. Two TimezoneTransitionInfo instances are 
+    # Returns true if this TimezoneTransition is equal to the given
+    # TimezoneTransition. Two TimezoneTransition instances are 
     # considered to be equal by == if offset, previous_offset and at are all 
     # equal.
     def ==(tti)
-      tti.kind_of?(TimezoneTransitionInfo) &&
+      tti.kind_of?(TimezoneTransition) &&
         offset == tti.offset && previous_offset == tti.previous_offset && at == tti.at
     end
     
-    # Returns true if this TimezoneTransitionInfo is equal to the given
-    # TimezoneTransitionInfo. Two TimezoneTransitionInfo instances are 
+    # Returns true if this TimezoneTransition is equal to the given
+    # TimezoneTransition. Two TimezoneTransition instances are 
     # considered to be equal by eql? if offset, previous_offset, 
     # numerator_or_time and denominator are all equal. This is stronger than ==,
     # which just requires the at times to be equal regardless of how they were
     # originally specified.
     def eql?(tti)
-      tti.kind_of?(TimezoneTransitionInfo) &&
+      tti.kind_of?(TimezoneTransition) &&
         offset == tti.offset && previous_offset == tti.previous_offset &&
         numerator_or_time == tti.numerator_or_time && denominator == tti.denominator        
     end
     
-    # Returns a hash of this TimezoneTransitionInfo instance.
+    # Returns a hash of this TimezoneTransition instance.
     def hash
       @offset.hash ^ @previous_offset.hash ^ @numerator_or_time.hash ^ @denominator.hash
     end

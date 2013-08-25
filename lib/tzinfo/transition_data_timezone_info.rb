@@ -52,7 +52,7 @@ module TZInfo
     def offset(id, utc_offset, std_offset, abbreviation)
       raise ArgumentError, 'Offset already defined' if @offsets.has_key?(id)
       
-      offset = TimezoneOffsetInfo.new(utc_offset, std_offset, abbreviation)
+      offset = TimezoneOffset.new(utc_offset, std_offset, abbreviation)
       @offsets[id] = offset
       @previous_offset = offset unless @previous_offset
     end
@@ -62,7 +62,7 @@ module TZInfo
     # offset_id refers to an id defined with offset. ArgumentError will be 
     # raised if the offset_id cannot be found. numerator_or_time and
     # denomiator specify the time the transition occurs as. See 
-    # TimezoneTransitionInfo for more detail about specifying times.
+    # TimezoneTransition for more detail about specifying times.
     def transition(year, month, offset_id, numerator_or_timestamp, denominator_or_numerator = nil, denominator = nil)
       offset = @offsets[offset_id]      
       raise ArgumentError, 'Offset not found' unless offset
@@ -87,7 +87,7 @@ module TZInfo
         @start_month = month        
       end
       
-      @transitions << TimezoneTransitionInfo.new(offset, @previous_offset, 
+      @transitions << TimezoneTransition.new(offset, @previous_offset, 
         numerator_or_timestamp, denominator_or_numerator, denominator)
       @last_year = year
       @last_month = month             
@@ -183,8 +183,8 @@ module TZInfo
       end
     end
     
-    # Returns an Array of TimezoneTransitionInfo instances representing the
-    # times where the timezone's current offset or abbreviation changes.
+    # Returns an Array of TimezoneTransition instances representing the times
+    # where the UTC offset of the timezone changes.
     #
     # Transitions are returned up to a given date and time up to a given date 
     # and time, specified in UTC (utc_to).

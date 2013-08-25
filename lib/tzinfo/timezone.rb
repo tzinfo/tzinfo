@@ -293,8 +293,8 @@ module TZInfo
       raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
     end
     
-    # Returns an Array of TimezoneTransitionInfo instances representing the
-    # times where the timezone's current offset or abbreviation changes.
+    # Returns an Array of TimezoneTransition instances representing the times
+    # where the UTC offset of the timezone changes.
     #
     # Transitions are returned up to a given date and time up to a given date 
     # and time, specified in UTC (utc_to).
@@ -455,7 +455,7 @@ module TZInfo
     
     # Returns information about offsets used by the Timezone up to a given
     # date and time, specified using UTC (utc_to). The information is returned
-    # as an Array of TimezoneOffsetInfo instances.
+    # as an Array of TimezoneOffset instances.
     #
     # A from date and time may also be supplied using the utc_from parameter
     # (also specified in UTC). If utc_from is not nil, only offsets used from 

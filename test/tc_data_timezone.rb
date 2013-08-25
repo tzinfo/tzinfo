@@ -96,7 +96,7 @@ class TCDataTimezone < Test::Unit::TestCase
   end
   
   def test_transitions_up_to
-    # Don't need actual TimezoneTransitionInfo instances. DataTimezone isn't
+    # Don't need actual TimezoneTransition instances. DataTimezone isn't
     # supposed to do anything with them apart from return them.
     transitions = [Object.new, Object.new]
     tti = TestTimezoneInfo.new('Test/Zone', nil, nil, transitions)

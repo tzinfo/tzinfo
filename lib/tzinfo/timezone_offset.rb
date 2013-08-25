@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2012 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 
 module TZInfo
   # Represents an offset defined in a Timezone data file.
-  class TimezoneOffsetInfo #:nodoc:
+  class TimezoneOffset
     # The base offset of the timezone from UTC in seconds.
     attr_reader :utc_offset
     
@@ -39,8 +39,8 @@ module TZInfo
     # symbol.
     attr_reader :abbreviation
     
-    # Constructs a new TimezoneOffsetInfo. utc_offset and std_offset are
-    # specified in seconds.
+    # Constructs a new TimezoneOffset. utc_offset and std_offset are specified 
+    # in seconds.
     def initialize(utc_offset, std_offset, abbreviation)
       @utc_offset = utc_offset
       @std_offset = std_offset      
@@ -69,19 +69,19 @@ module TZInfo
     end
     
     # Returns true if and only if toi has the same utc_offset, std_offset
-    # and abbreviation as this TimezoneOffsetInfo.
+    # and abbreviation as this TimezoneOffset.
     def ==(toi)
-      toi.kind_of?(TimezoneOffsetInfo) &&
+      toi.kind_of?(TimezoneOffset) &&
         utc_offset == toi.utc_offset && std_offset == toi.std_offset && abbreviation == toi.abbreviation
     end
     
     # Returns true if and only if toi has the same utc_offset, std_offset
-    # and abbreviation as this TimezoneOffsetInfo.
+    # and abbreviation as this TimezoneOffset.
     def eql?(toi)
       self == toi
     end
     
-    # Returns a hash of this TimezoneOffsetInfo.
+    # Returns a hash of this TimezoneOffset.
     def hash
       utc_offset.hash ^ std_offset.hash ^ abbreviation.hash
     end

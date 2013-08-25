@@ -27,7 +27,7 @@ require 'time'
 module TZInfo
   # Used by TZInfo internally to represent either a Time, DateTime or
   # an Integer timestamp (seconds since 1970-01-01 00:00:00).
-  class TimeOrDateTime #:nodoc:
+  class TimeOrDateTime
     include Comparable
     
     # Constructs a new TimeOrDateTime. timeOrDateTime can be a Time, DateTime

@@ -36,8 +36,8 @@ module TZInfo
       raise NotImplementedError, 'Subclasses must override periods_for_local'
     end
     
-    # Returns an Array of TimezoneTransitionInfo instances representing the
-    # times where the timezone's current offset or abbreviation changes.
+    # Returns an Array of TimezoneTransition instances representing the times
+    # where the UTC offset of the timezone changes.
     #
     # Transitions are returned up to a given date and time up to a given date 
     # and time, specified in UTC (utc_to).

@@ -26,8 +26,8 @@ require 'tzinfo/time_or_datetime'
 
 require 'tzinfo/timezone_definition'
 
-require 'tzinfo/timezone_offset_info'
-require 'tzinfo/timezone_transition_info'
+require 'tzinfo/timezone_offset'
+require 'tzinfo/timezone_transition'
 
 require 'tzinfo/timezone_index_definition'
 
