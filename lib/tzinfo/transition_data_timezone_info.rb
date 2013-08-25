@@ -183,6 +183,77 @@ module TZInfo
       end
     end
     
+    # Returns an Array of TimezoneTransitionInfo instances representing the
+    # times where the timezone's current offset or abbreviation changes.
+    #
+    # Transitions are returned up to a given date and time up to a given date 
+    # and time, specified in UTC (utc_to).
+    #
+    # A from date and time may also be supplied using the utc_from parameter
+    # (also specified in UTC). If utc_from is not nil, only transitions from 
+    # that date and time onwards will be returned.
+    #
+    # Comparisons with utc_to are exclusive. Comparisons with utc_from are
+    # inclusive. If a transition falls precisely on utc_to, it will be excluded.
+    # If a transition falls on utc_from, it will be included.
+    #
+    # Transitions returned are ordered by when they occur, from earliest to 
+    # latest.
+    #
+    # utc_to and utc_from can be specified using either DateTime, Time or 
+    # integer timestamps (Time.to_i).
+    #
+    # If utc_from is specified and utc_to is not greater than utc_from, then
+    # transitions_up_to raises an ArgumentError exception.
+    def transitions_up_to(utc_to, utc_from = nil)
+      utc_to = TimeOrDateTime.wrap(utc_to)
+      utc_from = utc_from ? TimeOrDateTime.wrap(utc_from) : nil
+      
+      if utc_from && utc_to <= utc_from
+        raise ArgumentError, 'utc_to must be greater than utc_from'
+      end
+      
+      unless @transitions.empty?
+        if utc_from
+          from = transition_after_start(transition_index(utc_from.year, utc_from.mon))
+          
+          if from
+            while from < @transitions.length && @transitions[from].at < utc_from
+              from += 1
+            end
+            
+            if from >= @transitions.length
+              return []
+            end
+          else
+            # utc_from is later than last transition.
+            return []
+          end
+        else
+          from = 0
+        end
+        
+        to = transition_before_end(transition_index(utc_to.year, utc_to.mon))
+        
+        if to
+          while to >= 0 && @transitions[to].at >= utc_to
+            to -= 1
+          end
+          
+          if to < 0
+            return []
+          end
+        else
+          # utc_to is earlier than first transition.
+          return []
+        end
+
+        @transitions[from..to]
+      else
+        []
+      end
+    end
+    
     private
       # Returns the index into the @transitions_index array for a given year 
       # and month.

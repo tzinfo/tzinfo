@@ -70,6 +70,18 @@ class TCTimezoneMelbourne < Test::Unit::TestCase
     assert_equal(36000, tz.period_for_local(DateTime.new(2004,3,28,2,0,0), false).utc_total_offset)
     assert_equal(36000, tz.period_for_local(DateTime.new(2004,10,31,1,59,59)).utc_total_offset)
     assert_equal(39600, tz.period_for_local(DateTime.new(2004,10,31,3,0,0)).utc_total_offset)
+    
+    transitions = tz.transitions_up_to(DateTime.new(2005,1,1,0,0,0), DateTime.new(2004,1,1,0,0,0))
+    assert_equal(2, transitions.length)
+    assert_equal(TimeOrDateTime.new(DateTime.new(2004,3,27,16,0,0)), transitions[0].at)
+    assert_equal(TimezoneOffsetInfo.new(36000, 3600, :EST), transitions[0].previous_offset)
+    assert_equal(TimezoneOffsetInfo.new(36000, 0, :EST), transitions[0].offset)
+    assert_equal(TimeOrDateTime.new(DateTime.new(2004,10,30,16,0,0)), transitions[1].at)
+    assert_equal(TimezoneOffsetInfo.new(36000, 0, :EST), transitions[1].previous_offset)
+    assert_equal(TimezoneOffsetInfo.new(36000, 3600, :EST), transitions[1].offset)
+    
+    offsets = tz.offsets_up_to(DateTime.new(2005,1,1,0,0,0), DateTime.new(2004,1,1,0,0,0))
+    assert_array_same_items([TimezoneOffsetInfo.new(36000, 0, :EST), TimezoneOffsetInfo.new(36000, 3600, :EST)], offsets)
   end  
 
   def test_1942
@@ -122,6 +134,18 @@ class TCTimezoneMelbourne < Test::Unit::TestCase
       assert_equal(36000, tz.period_for_local(DateTime.new(1942,3,29,1,0,0), false).utc_total_offset)
       assert_equal(36000, tz.period_for_local(DateTime.new(1942,9,27,1,59,59)).utc_total_offset)
       assert_equal(39600, tz.period_for_local(DateTime.new(1942,9,27,3,0,0)).utc_total_offset)
+      
+      transitions = tz.transitions_up_to(DateTime.new(1943,1,1,0,0,0), DateTime.new(1942,1,1,0,0,0))
+      assert_equal(2, transitions.length)
+      assert_equal(TimeOrDateTime.new(DateTime.new(1942,3,28,15,0,0)), transitions[0].at)
+      assert_equal(TimezoneOffsetInfo.new(36000, 3600, :EST), transitions[0].previous_offset)
+      assert_equal(TimezoneOffsetInfo.new(36000, 0, :EST), transitions[0].offset)
+      assert_equal(TimeOrDateTime.new(DateTime.new(1942,9,26,16,0,0)), transitions[1].at)
+      assert_equal(TimezoneOffsetInfo.new(36000, 0, :EST), transitions[1].previous_offset)
+      assert_equal(TimezoneOffsetInfo.new(36000, 3600, :EST), transitions[1].offset)
+      
+      offsets = tz.offsets_up_to(DateTime.new(1943,1,1,0,0,0), DateTime.new(1942,1,1,0,0,0))
+      assert_array_same_items([TimezoneOffsetInfo.new(36000, 0, :EST), TimezoneOffsetInfo.new(36000, 3600, :EST)], offsets)
     end
   end
 

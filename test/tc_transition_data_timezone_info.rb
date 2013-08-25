@@ -312,6 +312,106 @@ class TCTransitionDataTimezoneInfo < Test::Unit::TestCase
     assert_raises(NoOffsetsDefined) { dti.periods_for_local(Time.utc(2005,1,1,0,0,0).to_i) }
   end
   
+  def test_transitions_up_to
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900,    0, :TESTLMT
+    dti.offset :o2, -18000, 3600, :TESTD
+    dti.offset :o3, -18000,    0, :TESTS
+    dti.offset :o4, -21600, 3600, :TESTD
+    
+    dti.transition 2010,  4, :o2, Time.utc(2010, 4,1,1,0,0).to_i
+    dti.transition 2010, 10, :o3, Time.utc(2010,10,1,1,0,0).to_i
+    dti.transition 2011,  3, :o2, 58934917, 24                    # (2011, 3,1,1,0,0)
+    dti.transition 2011,  4, :o4, Time.utc(2011, 4,1,1,0,0).to_i, 58935661, 24
+    dti.transition 2011, 10, :o3, Time.utc(2011,10,1,1,0,0).to_i
+    
+    o1 = TimezoneOffsetInfo.new(-17900, 0,    :TESTLMT)
+    o2 = TimezoneOffsetInfo.new(-18000, 3600, :TESTD)
+    o3 = TimezoneOffsetInfo.new(-18000, 0,    :TESTS)
+    o4 = TimezoneOffsetInfo.new(-21600, 3600, :TESTD)
+    
+    t1 = TimezoneTransitionInfo.new(o2, o1, Time.utc(2010, 4,1,1,0,0).to_i)
+    t2 = TimezoneTransitionInfo.new(o3, o2, Time.utc(2010,10,1,1,0,0).to_i)
+    t3 = TimezoneTransitionInfo.new(o2, o3, Time.utc(2011, 3,1,1,0,0).to_i)
+    t4 = TimezoneTransitionInfo.new(o4, o2, Time.utc(2011, 4,1,1,0,0).to_i)
+    t5 = TimezoneTransitionInfo.new(o3, o4, Time.utc(2011,10,1,1,0,0).to_i)
+    
+    assert_equal([], dti.transitions_up_to(Time.utc(2010,4,1,1,0,0)))
+    assert_equal([], dti.transitions_up_to(Time.utc(2010,4,1,1,0,0), Time.utc(2000,1,1,0,0,0)))
+    assert_equal([t1], dti.transitions_up_to(Time.utc(2010,4,1,1,0,1)))
+    assert_equal([t1], dti.transitions_up_to(Time.utc(2010,4,1,1,0,1), Time.utc(2000,1,1,0,0,0)))
+    assert_equal([t2,t3,t4], dti.transitions_up_to(Time.utc(2011,4,1,1,0,1), Time.utc(2010,10,1,1,0,0)))
+    assert_equal([t2,t3,t4], dti.transitions_up_to(Time.utc(2011,10,1,1,0,0), Time.utc(2010,4,1,1,0,1)))
+    assert_equal([t3], dti.transitions_up_to(Time.utc(2011,4,1,1,0,0), Time.utc(2010,10,1,1,0,1)))
+    assert_equal([], dti.transitions_up_to(Time.utc(2011,3,1,1,0,0), Time.utc(2010,10,1,1,0,1)))
+    assert_equal([t1,t2,t3,t4], dti.transitions_up_to(Time.utc(2011,10,1,1,0,0)))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1)))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,0,1)))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1), Time.utc(2010,4,1,1,0,0)))
+    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1), Time.utc(2010,4,1,1,0,1)))
+    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1), Time.utc(2010,4,1,1,0,0,1)))
+    assert_equal([t5], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0), Time.utc(2011,10,1,1,0,0)))
+    assert_equal([], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0), Time.utc(2011,10,1,1,0,1)))
+
+    assert_equal([], dti.transitions_up_to(Time.utc(2010,4,1,1,0,0).to_i))
+    assert_equal([], dti.transitions_up_to(Time.utc(2010,4,1,1,0,0).to_i, Time.utc(2000,1,1,0,0,0).to_i))
+    assert_equal([t1], dti.transitions_up_to(Time.utc(2010,4,1,1,0,1).to_i))
+    assert_equal([t1], dti.transitions_up_to(Time.utc(2010,4,1,1,0,1).to_i, Time.utc(2000,1,1,0,0,0).to_i))
+    assert_equal([t2,t3,t4], dti.transitions_up_to(Time.utc(2011,4,1,1,0,1).to_i, Time.utc(2010,10,1,1,0,0).to_i))
+    assert_equal([t2,t3,t4], dti.transitions_up_to(Time.utc(2011,10,1,1,0,0).to_i, Time.utc(2010,4,1,1,0,1).to_i))
+    assert_equal([t3], dti.transitions_up_to(Time.utc(2011,4,1,1,0,0).to_i, Time.utc(2010,10,1,1,0,1).to_i))
+    assert_equal([], dti.transitions_up_to(Time.utc(2011,3,1,1,0,0).to_i, Time.utc(2010,10,1,1,0,1).to_i))
+    assert_equal([t1,t2,t3,t4], dti.transitions_up_to(Time.utc(2011,10,1,1,0,0).to_i))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1).to_i))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1).to_i, Time.utc(2010,4,1,1,0,0).to_i))
+    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1).to_i, Time.utc(2010,4,1,1,0,1).to_i))
+    assert_equal([t5], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0).to_i, Time.utc(2011,10,1,1,0,0).to_i))
+    assert_equal([], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0).to_i, Time.utc(2011,10,1,1,0,1).to_i))
+    
+    assert_equal([], dti.transitions_up_to(DateTime.new(2010,4,1,1,0,0)))
+    assert_equal([], dti.transitions_up_to(DateTime.new(2010,4,1,1,0,0), DateTime.new(2000,1,1,0,0,0)))
+    assert_equal([t1], dti.transitions_up_to(DateTime.new(2010,4,1,1,0,1)))
+    assert_equal([t1], dti.transitions_up_to(DateTime.new(2010,4,1,1,0,1), DateTime.new(2000,1,1,0,0,0)))
+    assert_equal([t2,t3,t4], dti.transitions_up_to(DateTime.new(2011,4,1,1,0,1), DateTime.new(2010,10,1,1,0,0)))
+    assert_equal([t2,t3,t4], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,0), DateTime.new(2010,4,1,1,0,1)))
+    assert_equal([t3], dti.transitions_up_to(DateTime.new(2011,4,1,1,0,0), DateTime.new(2010,10,1,1,0,1)))
+    assert_equal([], dti.transitions_up_to(DateTime.new(2011,3,1,1,0,0), DateTime.new(2010,10,1,1,0,1)))
+    assert_equal([t1,t2,t3,t4], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,0)))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1)))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,Rational(1,1000000))))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,0)))
+    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,1)))
+    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,Rational(1,1000000))))
+    assert_equal([t5], dti.transitions_up_to(DateTime.new(2015,1,1,0,0,0), DateTime.new(2011,10,1,1,0,0)))
+    assert_equal([], dti.transitions_up_to(DateTime.new(2015,1,1,0,0,0), DateTime.new(2011,10,1,1,0,1)))
+  end
+  
+  def test_transitions_up_to_no_transitions
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+        
+    assert_equal([], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0)))
+    assert_equal([], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0).to_i))
+    assert_equal([], dti.transitions_up_to(DateTime.new(2015,1,1,0,0,0)))
+  end
+  
+  def test_transitions_up_to_utc_to_not_greater_than_utc_from
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+    
+    assert_raises(ArgumentError) do
+      dti.transitions_up_to(Time.utc(2012,8,1,0,0,0), Time.utc(2013,8,1,0,0,0))
+    end
+    
+    assert_raises(ArgumentError) do
+      dti.transitions_up_to(Time.utc(2012,8,1,0,0,0).to_i, Time.utc(2012,8,1,0,0,0).to_i)
+    end
+    
+    assert_raises(ArgumentError) do
+      dti.transitions_up_to(DateTime.new(2012,8,1,0,0,0), DateTime.new(2012,8,1,0,0,0))
+    end
+  end
+  
   def test_datetime_and_timestamp_use
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, 0,    0, :TESTS

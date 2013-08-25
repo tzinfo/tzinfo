@@ -40,6 +40,24 @@ module TZInfo
       @linked_timezone.periods_for_local(local)
     end
     
+    # Returns an Array of transitions (TimezoneTransitionInfo instances) up to
+    # a given date and time, specified using UTC (utc_to).
+    #
+    # By default, all transitions will be returned, from the first up to utc_to.
+    #
+    # A from date and time may also be supplied using the utc_from parameter
+    # (also specified in UTC), in which case only transitions from that date
+    # and time will be returned.
+    #
+    # Comparisons with utc_to and utc_from are inclusive. If a transition falls 
+    # precisely on either utc_to or utc_from, it will be returned.
+    #
+    # utc_to and utc_from can be specified using either DateTime, Time or 
+    # integer timestamps (Time.to_i).
+    def transitions_up_to(utc_to, utc_from = nil)
+      @linked_timezone.transitions_up_to(utc_to, utc_from)
+    end
+    
     protected
       def setup(info)
         super(info)

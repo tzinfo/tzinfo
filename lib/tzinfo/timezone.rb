@@ -21,6 +21,7 @@
 #++
 
 require 'date'
+require 'set'
 require 'thread_safe'
 
 module TZInfo
@@ -292,6 +293,32 @@ module TZInfo
       raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
     end
     
+    # Returns an Array of TimezoneTransitionInfo instances representing the
+    # times where the timezone's current offset or abbreviation changes.
+    #
+    # Transitions are returned up to a given date and time up to a given date 
+    # and time, specified in UTC (utc_to).
+    #
+    # A from date and time may also be supplied using the utc_from parameter
+    # (also specified in UTC). If utc_from is not nil, only transitions from 
+    # that date and time onwards will be returned.
+    #
+    # Comparisons with utc_to are exclusive. Comparisons with utc_from are
+    # inclusive. If a transition falls precisely on utc_to, it will be excluded.
+    # If a transition falls on utc_from, it will be included.
+    #
+    # Transitions returned are ordered by when they occur, from earliest to 
+    # latest.
+    #
+    # utc_to and utc_from can be specified using either DateTime, Time or 
+    # integer timestamps (Time.to_i).
+    #
+    # If utc_from is specified and utc_to is not greater than utc_from, then
+    # transitions_up_to raises an ArgumentError exception.
+    def transitions_up_to(utc_to, utc_from = nil)
+      raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
+    end
+    
     # Returns the TimezonePeriod for the given local time. local can either be
     # a DateTime, Time or integer timestamp (Time.to_i). Any timezone 
     # information in local is ignored (it is treated as a time in the current 
@@ -424,6 +451,59 @@ module TZInfo
         
         period.to_utc(wrapped)
       }
+    end
+    
+    # Returns information about offsets used by the Timezone up to a given
+    # date and time, specified using UTC (utc_to). The information is returned
+    # as an Array of TimezoneOffsetInfo instances.
+    #
+    # A from date and time may also be supplied using the utc_from parameter
+    # (also specified in UTC). If utc_from is not nil, only offsets used from 
+    # that date and time forward will be returned.
+    #
+    # Comparisons with utc_to are exclusive. Comparisons with utc_from are
+    # inclusive.
+    #
+    # Offsets may be returned in any order.
+    #
+    # utc_to and utc_from can be specified using either DateTime, Time or 
+    # integer timestamps (Time.to_i).
+    #
+    # If utc_from is specified and utc_to is not greater than utc_from, then
+    # offsets_up_to raises an ArgumentError exception.
+    def offsets_up_to(utc_to, utc_from = nil)
+      utc_to = TimeOrDateTime.wrap(utc_to)
+      transitions = transitions_up_to(utc_to, utc_from)
+      
+      if transitions.empty?
+        # No transitions in the range, find the period that covers it.
+
+        if utc_from
+          # Use the from date as it is inclusive.
+          period = period_for_utc(utc_from)
+        else
+          # utc_to is exclusive, so this can't be used with period_for_utc.
+          # However, any time earlier than utc_to can be used.
+          
+          # Subtract 1 hour (since this is one of the cached OffsetRationals).
+          # Use add_with_convert so that conversion to DateTime is performed if
+          # required.
+          period = period_for_utc(utc_to.add_with_convert(-3600))
+        end
+      
+        [period.send(:offset)]
+      else
+        result = Set.new
+        
+        first = transitions.first        
+        result << first.previous_offset unless utc_from && first.at == utc_from
+        
+        transitions.each do |t|
+          result << t.offset
+        end
+        
+        result.to_a
+      end
     end
     
     # Returns the current time in the timezone as a Time.

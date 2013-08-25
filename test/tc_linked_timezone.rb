@@ -29,8 +29,11 @@ class TCLinkedTimezone < Test::Unit::TestCase
   class TestTimezone < Timezone
     attr_reader :utc_period
     attr_reader :local_periods
+    attr_reader :up_to_transitions
     attr_reader :utc
-    attr_reader :local    
+    attr_reader :local
+    attr_reader :utc_to
+    attr_reader :utc_from
     
     def self.new(identifier, no_local_periods = false)
       tz = super()
@@ -53,14 +56,22 @@ class TCLinkedTimezone < Test::Unit::TestCase
       @local_periods
     end
     
+    def transitions_up_to(utc_to, utc_from = nil)
+      @utc_to = utc_to
+      @utc_from = utc_from
+      @up_to_transitions
+    end
+    
     private
       def setup(identifier, no_local_periods)
         @identifier = identifier
         @no_local_periods = no_local_periods
         
-        # Doesn't have to be a real TimezonePeriod (nothing attempts to use it).
+        # Don't have to be real TimezonePeriod or TimezoneTransitionInfo objects
+        # (nothing will use them).
         @utc_period = Object.new
         @local_periods = [Object.new, Object.new]
+        @up_to_transitions = [Object.new, Object.new]
       end
   end
   
@@ -117,5 +128,15 @@ class TCLinkedTimezone < Test::Unit::TestCase
     t = Time.utc(2006, 6, 27, 23, 12, 28)
     assert_raises(PeriodNotFound) { tz.periods_for_local(t) }
     assert_same(t, linked_tz.local)
-  end  
+  end
+  
+  def test_transitions_up_to
+    tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
+    linked_tz = Timezone.get('Test/Linked')
+    utc_to = Time.utc(2013, 1, 1, 0, 0, 0)
+    utc_from = Time.utc(2012, 1, 1, 0, 0, 0)
+    assert_same(linked_tz.up_to_transitions, tz.transitions_up_to(utc_to, utc_from))
+    assert_same(utc_to, linked_tz.utc_to)
+    assert_same(utc_from, linked_tz.utc_from)
+  end
 end

@@ -37,8 +37,7 @@ module TZInfo
     protected :end_transition
     
     # The TimezoneOffsetInfo for this period.
-    attr_reader :offset #:nodoc:
-    protected :offset
+    attr_reader :offset
     
     # Initializes a new TimezonePeriod.
     def initialize(start_transition, end_transition, offset = nil)

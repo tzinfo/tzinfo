@@ -52,6 +52,10 @@ class TCTimezone < Test::Unit::TestCase
       @periods_for_local.clone        
     end
     
+    def transitions_up_to(utc_to, utc_from = nil)
+      raise 'transitions_up_to called'
+    end
+    
     private
       def setup(identifier, period_for_utc, periods_for_local, expected)
         @identifier = identifier
@@ -59,6 +63,97 @@ class TCTimezone < Test::Unit::TestCase
         @periods_for_local = periods_for_local || []
         @expected = TimeOrDateTime.wrap(expected)
       end
+  end
+  
+  class OffsetsUpToTestTimezone < Timezone
+    def self.new(identifier, expected_utc_to, expected_utc_from, transitions_up_to)
+      t = super()
+      t.send(:setup, identifier, expected_utc_to, expected_utc_from, transitions_up_to)
+      t      
+    end
+    
+    def identifier
+      @identifier
+    end
+    
+    def period_for_utc(utc)
+      raise 'period_for_utc called'
+    end
+    
+    def periods_for_local(local)
+      raise 'periods_for_local called'
+    end
+    
+    def transitions_up_to(utc_to, utc_from = nil)
+      utc_to = TimeOrDateTime.wrap(utc_to)
+      raise "Unexpected utc_to #{utc_to || 'nil'} in transitions_up_to" unless @expected_utc_to.eql?(utc_to)
+      
+      utc_from = utc_from ? TimeOrDateTime.wrap(utc_from) : nil
+      raise "Unexpected utc_from #{utc_from || 'nil'} in transitions_up_to" unless @expected_utc_from.eql?(utc_from)
+      
+      if utc_from && utc_to <= utc_from
+        raise ArgumentError, 'utc_to must be greater than utc_from'
+      end
+      
+      @transitions_up_to
+    end
+    
+    private
+    
+    def setup(identifier, expected_utc_to, expected_utc_from, transitions_up_to)
+      @identifier = identifier
+      @expected_utc_to = TimeOrDateTime.wrap(expected_utc_to)
+      @expected_utc_from = expected_utc_from ? TimeOrDateTime.wrap(expected_utc_from) : nil
+      @transitions_up_to = transitions_up_to
+    end
+  end
+  
+  class OffsetsUpToNoTransitionsTestTimezone < Timezone
+    def self.new(identifier, expected_utc_to, expected_utc_from, period_for_utc)
+      t = super()
+      t.send(:setup, identifier, expected_utc_to, expected_utc_from, period_for_utc)
+      t      
+    end
+    
+    def identifier
+      @identifier
+    end
+    
+    def period_for_utc(utc)
+      utc = TimeOrDateTime.wrap(utc)
+      
+      raise "Unexpected utc #{utc} in period_for_utc (should be utc_from)" if @expected_utc_from && !@expected_utc_from.eql?(utc)
+      raise "Unexpected utc #{utc} in period_for_utc (should be < utc_to)" if !@expected_utc_from && @expected_utc_to <= utc
+      
+      @period_for_utc
+    end
+    
+    def periods_for_local(local)
+      raise 'periods_for_local called'
+    end
+    
+    def transitions_up_to(utc_to, utc_from = nil)
+      utc_to = TimeOrDateTime.wrap(utc_to)
+      raise "Unexpected utc_to #{utc_to || 'nil'} in transitions_up_to" unless @expected_utc_to.eql?(utc_to)
+      
+      utc_from = utc_from ? TimeOrDateTime.wrap(utc_from) : nil
+      raise "Unexpected utc_from #{utc_from || 'nil'} in transitions_up_to" unless @expected_utc_from.eql?(utc_from)
+      
+      if utc_from && utc_to <= utc_from
+        raise ArgumentError, 'utc_to must be greater than utc_from'
+      end
+      
+      []
+    end
+    
+    private
+    
+    def setup(identifier, expected_utc_to, expected_utc_from, period_for_utc)
+      @identifier = identifier
+      @expected_utc_to = TimeOrDateTime.wrap(expected_utc_to)
+      @expected_utc_from = expected_utc_from ? TimeOrDateTime.wrap(expected_utc_from) : nil
+      @period_for_utc = period_for_utc
+    end
   end
   
   def setup
@@ -182,7 +277,8 @@ class TCTimezone < Test::Unit::TestCase
     assert_raises(UnknownTimezone) { tz.periods_for_local(DateTime.new(2006,1,1,1,0,0)) }
     assert_raises(UnknownTimezone) { tz.period_for_local(DateTime.new(2006,1,1,1,0,0)) }
     assert_raises(UnknownTimezone) { tz.now }
-    assert_raises(UnknownTimezone) { tz.current_period_and_time } 
+    assert_raises(UnknownTimezone) { tz.current_period_and_time }
+    assert_raises(UnknownTimezone) { tz.transitions_up_to(DateTime.new(2006,1,1,1,0,0)) }
   end
   
   def test_new_nil
@@ -196,7 +292,8 @@ class TCTimezone < Test::Unit::TestCase
     assert_raises(UnknownTimezone) { tz.periods_for_local(DateTime.new(2006,1,1,1,0,0)) }
     assert_raises(UnknownTimezone) { tz.period_for_local(DateTime.new(2006,1,1,1,0,0)) }
     assert_raises(UnknownTimezone) { tz.now }
-    assert_raises(UnknownTimezone) { tz.current_period_and_time } 
+    assert_raises(UnknownTimezone) { tz.current_period_and_time }
+    assert_raises(UnknownTimezone) { tz.transitions_up_to(DateTime.new(2006,1,1,1,0,0)) }
   end
   
   def test_new_arg
@@ -942,6 +1039,123 @@ class TCTimezone < Test::Unit::TestCase
     assert_raises(AmbiguousTime) { tz.local_to_utc(dt) {|periods| periods} }     
     assert_raises(AmbiguousTime) { tz.local_to_utc(dt) {|periods| []} }    
     assert_raises(AmbiguousTime) { tz.local_to_utc(dt) {|periods| raise AmbiguousTime, 'Ambiguous time'} }
+  end
+  
+  def test_offsets_up_to
+    o1 = TimezoneOffsetInfo.new(-17900, 0,    :TESTLMT)
+    o2 = TimezoneOffsetInfo.new(-18000, 3600, :TESTD)
+    o3 = TimezoneOffsetInfo.new(-18000, 0,    :TESTS)
+    o4 = TimezoneOffsetInfo.new(-21600, 3600, :TESTD)
+    o5 = TimezoneOffsetInfo.new(-21600, 0,    :TESTS)
+    
+    t1 = TimezoneTransitionInfo.new(o2, o1, Time.utc(2010, 4,1,1,0,0).to_i)
+    t2 = TimezoneTransitionInfo.new(o3, o2, Time.utc(2010,10,1,1,0,0).to_i)
+    t3 = TimezoneTransitionInfo.new(o2, o3, Time.utc(2011, 3,1,1,0,0).to_i)
+    t4 = TimezoneTransitionInfo.new(o4, o2, Time.utc(2011, 4,1,1,0,0).to_i)
+    t5 = TimezoneTransitionInfo.new(o3, o4, Time.utc(2011,10,1,1,0,0).to_i)
+    t6 = TimezoneTransitionInfo.new(o5, o3, Time.utc(2012, 3,1,1,0,0).to_i)
+    
+    assert_array_same_items([o1, o2, o3, o4, o5], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,3,1,1,0,1), nil, [t1, t2, t3, t4, t5, t6]).
+      offsets_up_to(Time.utc(2012,3,1,1,0,1)))
+    assert_array_same_items([o2, o3, o4, o5], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,3,1,1,0,1), Time.utc(2010,4,1,1,0,0), [t1, t2, t3, t4, t5, t6]).
+      offsets_up_to(Time.utc(2012,3,1,1,0,1), Time.utc(2010,4,1,1,0,0)))
+    assert_array_same_items([o1, o2, o3, o4], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,3,1,1,0,0), nil, [t1, t2, t3, t4, t5]).
+      offsets_up_to(Time.utc(2012,3,1,1,0,0)))
+    assert_array_same_items([o2, o3, o4, o5], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,3,1,1,0,1), Time.utc(2010,4,1,1,0,1), [t2, t3, t4, t5, t6]).
+      offsets_up_to(Time.utc(2012,3,1,1,0,1), Time.utc(2010,4,1,1,0,1)))
+    assert_array_same_items([o2, o3], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2011,3,1,2,0,0), Time.utc(2011,3,1,0,0,0), [t3]).
+      offsets_up_to(Time.utc(2011,3,1,2,0,0), Time.utc(2011,3,1,0,0,0)))
+    assert_array_same_items([o3, o4], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,3,1,1,0,0), Time.utc(2011,4,1,1,0,0), [t4, t5]).
+      offsets_up_to(Time.utc(2012,3,1,1,0,0), Time.utc(2011,4,1,1,0,0)))
+
+    assert_array_same_items([o1, o2, o3, o4, o5], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,3,1,1,0,1).to_i, nil, [t1, t2, t3, t4, t5, t6]).
+      offsets_up_to(Time.utc(2012,3,1,1,0,1).to_i))
+    assert_array_same_items([o2, o3, o4, o5], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,3,1,1,0,1).to_i, Time.utc(2010,4,1,1,0,0).to_i, [t1, t2, t3, t4, t5, t6]).
+      offsets_up_to(Time.utc(2012,3,1,1,0,1).to_i, Time.utc(2010,4,1,1,0,0).to_i))
+    assert_array_same_items([o1, o2, o3, o4], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,3,1,1,0,0).to_i, nil, [t1, t2, t3, t4, t5]).
+      offsets_up_to(Time.utc(2012,3,1,1,0,0).to_i))
+    assert_array_same_items([o2, o3, o4, o5], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,3,1,1,0,1).to_i, Time.utc(2010,4,1,1,0,1).to_i, [t2, t3, t4, t5, t6]).
+      offsets_up_to(Time.utc(2012,3,1,1,0,1).to_i, Time.utc(2010,4,1,1,0,1).to_i))
+    assert_array_same_items([o2, o3], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2011,3,1,2,0,0).to_i, Time.utc(2011,3,1,0,0,0).to_i, [t3]).
+      offsets_up_to(Time.utc(2011,3,1,2,0,0).to_i, Time.utc(2011,3,1,0,0,0).to_i))
+    assert_array_same_items([o3, o4], 
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,3,1,1,0,0).to_i, Time.utc(2011,4,1,1,0,0).to_i, [t4, t5]).
+      offsets_up_to(Time.utc(2012,3,1,1,0,0).to_i, Time.utc(2011,4,1,1,0,0).to_i))
+      
+    assert_array_same_items([o1, o2, o3, o4, o5], 
+      OffsetsUpToTestTimezone.new('Test/Zone', DateTime.new(2012,3,1,1,0,1), nil, [t1, t2, t3, t4, t5, t6]).
+      offsets_up_to(DateTime.new(2012,3,1,1,0,1)))
+    assert_array_same_items([o2, o3, o4, o5], 
+      OffsetsUpToTestTimezone.new('Test/Zone', DateTime.new(2012,3,1,1,0,1), DateTime.new(2010,4,1,1,0,0), [t1, t2, t3, t4, t5, t6]).
+      offsets_up_to(DateTime.new(2012,3,1,1,0,1), DateTime.new(2010,4,1,1,0,0)))
+    assert_array_same_items([o1, o2, o3, o4], 
+      OffsetsUpToTestTimezone.new('Test/Zone', DateTime.new(2012,3,1,1,0,0), nil, [t1, t2, t3, t4, t5]).
+      offsets_up_to(DateTime.new(2012,3,1,1,0,0)))
+    assert_array_same_items([o2, o3, o4, o5], 
+      OffsetsUpToTestTimezone.new('Test/Zone', DateTime.new(2012,3,1,1,0,1), DateTime.new(2010,4,1,1,0,1), [t2, t3, t4, t5, t6]).
+      offsets_up_to(DateTime.new(2012,3,1,1,0,1), DateTime.new(2010,4,1,1,0,1)))
+    assert_array_same_items([o2, o3], 
+      OffsetsUpToTestTimezone.new('Test/Zone', DateTime.new(2011,3,1,2,0,0), DateTime.new(2011,3,1,0,0,0), [t3]).
+      offsets_up_to(DateTime.new(2011,3,1,2,0,0), DateTime.new(2011,3,1,0,0,0)))
+    assert_array_same_items([o3, o4], 
+      OffsetsUpToTestTimezone.new('Test/Zone', DateTime.new(2012,3,1,1,0,0), DateTime.new(2011,4,1,1,0,0), [t4, t5]).
+      offsets_up_to(DateTime.new(2012,3,1,1,0,0), DateTime.new(2011,4,1,1,0,0)))
+  end
+  
+  def test_offsets_up_to_no_transitions
+    o = TimezoneOffsetInfo.new(600, 0, :LMT)
+    p = TimezonePeriod.new(nil, nil, o)
+        
+    assert_array_same_items([o],
+      OffsetsUpToNoTransitionsTestTimezone.new('Test/Zone', Time.utc(2000,1,1,1,0,0), nil, p).
+      offsets_up_to(Time.utc(2000,1,1,1,0,0)))
+    assert_array_same_items([o],
+      OffsetsUpToNoTransitionsTestTimezone.new('Test/Zone', Time.utc(2000,1,1,1,0,0), Time.utc(1990,1,1,1,0,0), p).
+      offsets_up_to(Time.utc(2000,1,1,1,0,0), Time.utc(1990,1,1,1,0,0)))
+      
+    assert_array_same_items([o],
+      OffsetsUpToNoTransitionsTestTimezone.new('Test/Zone', Time.utc(2000,1,1,1,0,0).to_i, nil, p).
+      offsets_up_to(Time.utc(2000,1,1,1,0,0).to_i))
+    assert_array_same_items([o],
+      OffsetsUpToNoTransitionsTestTimezone.new('Test/Zone', Time.utc(2000,1,1,1,0,0).to_i, Time.utc(1990,1,1,1,0,0).to_i, p).
+      offsets_up_to(Time.utc(2000,1,1,1,0,0).to_i, Time.utc(1990,1,1,1,0,0).to_i))
+      
+    assert_array_same_items([o],
+      OffsetsUpToNoTransitionsTestTimezone.new('Test/Zone', DateTime.new(2000,1,1,1,0,0), nil, p).
+      offsets_up_to(DateTime.new(2000,1,1,1,0,0)))
+    assert_array_same_items([o],
+      OffsetsUpToNoTransitionsTestTimezone.new('Test/Zone', DateTime.new(2000,1,1,1,0,0), DateTime.new(1990,1,1,1,0,0), p).
+      offsets_up_to(DateTime.new(2000,1,1,1,0,0), DateTime.new(1990,1,1,1,0,0)))
+  end
+  
+  def test_offsets_up_to_utc_to_not_greater_than_utc_from
+    o = TimezoneOffsetInfo.new(600, 0, :LMT)
+    
+    assert_raises(ArgumentError) do
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,8,1,0,0,0), Time.utc(2012,8,1,0,0,0), []).
+        offsets_up_to(Time.utc(2012,8,1,0,0,0), Time.utc(2012,8,1,0,0,0))
+    end
+    
+    assert_raises(ArgumentError) do
+      OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,8,1,0,0,0).to_i, Time.utc(2012,8,1,0,0,0).to_i, []).
+        offsets_up_to(Time.utc(2012,8,1,0,0,0).to_i, Time.utc(2012,8,1,0,0,0).to_i)
+    end
+    
+    assert_raises(ArgumentError) do
+      OffsetsUpToTestTimezone.new('Test/Zone', DateTime.new(2012,8,1,0,0,0), DateTime.new(2012,8,1,0,0,0), []).
+        offsets_up_to(DateTime.new(2012,8,1,0,0,0), DateTime.new(2012,8,1,0,0,0))
+    end
   end
   
   def test_now

@@ -36,6 +36,32 @@ module TZInfo
       raise NotImplementedError, 'Subclasses must override periods_for_local'
     end
     
+    # Returns an Array of TimezoneTransitionInfo instances representing the
+    # times where the timezone's current offset or abbreviation changes.
+    #
+    # Transitions are returned up to a given date and time up to a given date 
+    # and time, specified in UTC (utc_to).
+    #
+    # A from date and time may also be supplied using the utc_from parameter
+    # (also specified in UTC). If utc_from is not nil, only transitions from 
+    # that date and time onwards will be returned.
+    #
+    # Comparisons with utc_to are exclusive. Comparisons with utc_from are
+    # inclusive. If a transition falls precisely on utc_to, it will be excluded.
+    # If a transition falls on utc_from, it will be included.
+    #
+    # Transitions returned are ordered by when they occur, from earliest to 
+    # latest.
+    #
+    # utc_to and utc_from can be specified using either DateTime, Time or 
+    # integer timestamps (Time.to_i).
+    #
+    # If utc_from is specified and utc_to is not greater than utc_from, then
+    # transitions_up_to raises an ArgumentError exception.
+    def transitions_up_to(utc_to, utc_from = nil)
+      raise NotImplementedError, 'Subclasses must override transitions_up_to'
+    end
+    
     # Constructs a Timezone instance for the timezone represented by this
     # DataTimezoneInfo.
     def create_timezone
