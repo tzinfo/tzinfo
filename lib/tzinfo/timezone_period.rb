@@ -121,25 +121,25 @@ module TZInfo
     # The start time of the period in local time as a DateTime. May be nil if 
     # unbounded.
     def local_start
-      @start_transition ? @start_transition.local_start.to_datetime : nil
+      @start_transition ? @start_transition.local_start_at.to_datetime : nil
     end
     
     # The start time of the period in local time as a Time. May be nil if 
     # unbounded.
     def local_start_time
-      @start_transition ? @start_transition.local_start.to_time : nil
+      @start_transition ? @start_transition.local_start_at.to_time : nil
     end
     
     # The end time of the period in local time as a DateTime. May be nil if 
     # unbounded.
     def local_end
-      @end_transition ? @end_transition.local_end.to_datetime : nil
+      @end_transition ? @end_transition.local_end_at.to_datetime : nil
     end
     
     # The end time of the period in local time as a Time. May be nil if 
     # unbounded.
     def local_end_time
-      @end_transition ? @end_transition.local_end.to_time : nil
+      @end_transition ? @end_transition.local_end_at.to_time : nil
     end
     
     # true if daylight savings is in effect for this period; otherwise false.
@@ -172,13 +172,13 @@ module TZInfo
     # true if the given local DateTime is after the start of the period 
     # (inclusive); otherwise false.
     def local_after_start?(local)
-      !@start_transition || @start_transition.local_start <= local
+      !@start_transition || @start_transition.local_start_at <= local
     end
     
     # true if the given local DateTime is before the end of the period 
     # (exclusive); otherwise false.
     def local_before_end?(local)
-      !@end_transition || @end_transition.local_end > local
+      !@end_transition || @end_transition.local_end_at > local
     end
     
     # Converts a UTC DateTime to local time based on the offset of this period.

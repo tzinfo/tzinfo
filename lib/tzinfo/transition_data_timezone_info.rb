@@ -148,9 +148,9 @@ module TZInfo
         result = []
        
         start_index = transition_after_start(index - 1)       
-        if start_index && @transitions[start_index].local_end > local           
+        if start_index && @transitions[start_index].local_end_at > local
           if start_index > 0
-            if @transitions[start_index - 1].local_start <= local 
+            if @transitions[start_index - 1].local_start_at <= local
               result << TimezonePeriod.new(@transitions[start_index - 1], @transitions[start_index])
             end
           else
@@ -164,9 +164,9 @@ module TZInfo
           start_index = end_index unless start_index
           
           start_index.upto(transition_before_end(index + 1)) do |i|
-            if @transitions[i].local_start <= local
+            if @transitions[i].local_start_at <= local
               if i + 1 < @transitions.length
-                if @transitions[i + 1].local_end > local
+                if @transitions[i + 1].local_end_at > local
                   result << TimezonePeriod.new(@transitions[i], @transitions[i + 1])
                 end
               else

@@ -35,8 +35,8 @@ module TZInfo
     def initialize(offset, previous_offset)
       @offset = offset
       @previous_offset = previous_offset
-      @local_end = nil
-      @local_start = nil
+      @local_end_at = nil
+      @local_start_at = nil
     end
     
     # A TimeOrDateTime instance representing the UTC time when this transition
@@ -45,29 +45,64 @@ module TZInfo
       raise NotImplementedError, 'Subclasses must override at'
     end
     
+    # The UTC time when this transition occurs, returned as a DateTime instance.
+    def datetime
+      at.to_datetime
+    end
+    
+    
+    # The UTC time when this transition occurs, returned as a Time instance.
+    def time
+      at.to_time
+    end
+    
     # A TimeOrDateTime instance representing the local time when this transition
     # causes the previous observance to end (calculated from at using 
     # previous_offset).
-    def local_end
-      # Thread-safey: It is possible that the value of @local_end may be 
+    def local_end_at
+      # Thread-safey: It is possible that the value of @local_end_at may be
       # calculated multiple times in concurrently executing threads. It is not 
-      # worth the overhead of locking to ensure that @local_end is only 
+      # worth the overhead of locking to ensure that @local_end_at is only
       # calculated once.
     
-      @local_end = at.add_with_convert(@previous_offset.utc_total_offset) unless @local_end      
-      @local_end
+      @local_end_at = at.add_with_convert(@previous_offset.utc_total_offset) unless @local_end_at
+      @local_end_at
+    end
+    
+    # The local time when this transition causes the previous observance to end,
+    # returned as a DateTime instance.
+    def local_end
+      local_end_at.to_datetime
+    end
+    
+    # The local time when this transition causes the previous observance to end,
+    # returned as a Time instance.
+    def local_end_time
+      local_end_at.to_time
     end
     
     # A TimeOrDateTime instance representing the local time when this transition
     # causes the next observance to start (calculated from at using offset).
-    def local_start
-      # Thread-safey: It is possible that the value of @local_start may be 
+    def local_start_at
+      # Thread-safey: It is possible that the value of @local_start_at may be
       # calculated multiple times in concurrently executing threads. It is not 
-      # worth the overhead of locking to ensure that @local_start is only 
+      # worth the overhead of locking to ensure that @local_start_at is only
       # calculated once.
     
-      @local_start = at.add_with_convert(@offset.utc_total_offset) unless @local_start
-      @local_start
+      @local_start_at = at.add_with_convert(@offset.utc_total_offset) unless @local_start_at
+      @local_start_at
+    end
+    
+    # The local time when this transition causes the next observance to start,
+    # returned as a DateTime instance.
+    def local_start
+      local_start_at.to_datetime
+    end
+    
+    # The local time when this transition causes the next observance to start,
+    # returned as a Time instance.
+    def local_start_time
+      local_start_at.to_time
     end
     
     # Returns true if this TimezoneTransition is equal to the given
