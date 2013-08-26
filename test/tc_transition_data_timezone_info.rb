@@ -128,14 +128,14 @@ class TCTransitionDataTimezoneInfo < Test::Unit::TestCase
     o3 = TimezoneOffset.new(-18000, 0,    :TESTS)
     o4 = TimezoneOffset.new(-21600, 3600, :TESTD)
     
-    t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 4,1,1,0,0).to_i)
-    t2 = TimezoneTransition.new(o3, o2, Time.utc(2000,10,1,1,0,0).to_i)
-    t3 = TimezoneTransition.new(o2, o3, Time.utc(2001, 3,1,1,0,0).to_i)
-    t4 = TimezoneTransition.new(o4, o2, Time.utc(2001, 4,1,1,0,0).to_i)
-    t5 = TimezoneTransition.new(o3, o4, Time.utc(2001,10,1,1,0,0).to_i)
-    t6 = TimezoneTransition.new(o3, o3, Time.utc(2002,10,1,1,0,0).to_i)
-    t7 = TimezoneTransition.new(o2, o3, Time.utc(2003, 2,1,1,0,0).to_i)
-    t8 = TimezoneTransition.new(o3, o2, Time.utc(2003, 3,1,1,0,0).to_i)     
+    t1 = TimezoneTransitionDefinition.new(o2, o1, Time.utc(2000, 4,1,1,0,0).to_i)
+    t2 = TimezoneTransitionDefinition.new(o3, o2, Time.utc(2000,10,1,1,0,0).to_i)
+    t3 = TimezoneTransitionDefinition.new(o2, o3, Time.utc(2001, 3,1,1,0,0).to_i)
+    t4 = TimezoneTransitionDefinition.new(o4, o2, Time.utc(2001, 4,1,1,0,0).to_i)
+    t5 = TimezoneTransitionDefinition.new(o3, o4, Time.utc(2001,10,1,1,0,0).to_i)
+    t6 = TimezoneTransitionDefinition.new(o3, o3, Time.utc(2002,10,1,1,0,0).to_i)
+    t7 = TimezoneTransitionDefinition.new(o2, o3, Time.utc(2003, 2,1,1,0,0).to_i)
+    t8 = TimezoneTransitionDefinition.new(o3, o2, Time.utc(2003, 3,1,1,0,0).to_i)
     
     assert_equal(TimezonePeriod.new(nil, t1), dti.period_for_utc(DateTime.new(1960, 1,1,1, 0, 0)))
     assert_equal(TimezonePeriod.new(nil, t1), dti.period_for_utc(DateTime.new(1999,12,1,0, 0, 0)))
@@ -200,13 +200,13 @@ class TCTransitionDataTimezoneInfo < Test::Unit::TestCase
     o3 = TimezoneOffset.new(-18000,    0, :TESTS)
     o4 = TimezoneOffset.new(-21600, 3600, :TESTD)
     
-    t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 4,2,1,0,0).to_i)
-    t2 = TimezoneTransition.new(o3, o2, Time.utc(2000,10,2,1,0,0).to_i)
-    t3 = TimezoneTransition.new(o2, o3, Time.utc(2001, 3,2,1,0,0).to_i)
-    t4 = TimezoneTransition.new(o4, o2, Time.utc(2001, 4,2,1,0,0).to_i)
-    t5 = TimezoneTransition.new(o3, o4, Time.utc(2001,10,2,1,0,0).to_i)
-    t6 = TimezoneTransition.new(o3, o3, Time.utc(2002,10,2,1,0,0).to_i)
-    t7 = TimezoneTransition.new(o2, o3, Time.utc(2003, 2,2,1,0,0).to_i)
+    t1 = TimezoneTransitionDefinition.new(o2, o1, Time.utc(2000, 4,2,1,0,0).to_i)
+    t2 = TimezoneTransitionDefinition.new(o3, o2, Time.utc(2000,10,2,1,0,0).to_i)
+    t3 = TimezoneTransitionDefinition.new(o2, o3, Time.utc(2001, 3,2,1,0,0).to_i)
+    t4 = TimezoneTransitionDefinition.new(o4, o2, Time.utc(2001, 4,2,1,0,0).to_i)
+    t5 = TimezoneTransitionDefinition.new(o3, o4, Time.utc(2001,10,2,1,0,0).to_i)
+    t6 = TimezoneTransitionDefinition.new(o3, o3, Time.utc(2002,10,2,1,0,0).to_i)
+    t7 = TimezoneTransitionDefinition.new(o2, o3, Time.utc(2003, 2,2,1,0,0).to_i)
     
     
     assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(DateTime.new(1960, 1, 1, 1, 0, 0)))
@@ -262,9 +262,9 @@ class TCTransitionDataTimezoneInfo < Test::Unit::TestCase
     o3 = TimezoneOffset.new(3600,    0, :CET)
     o4 = TimezoneOffset.new(3600, 3600, :CEST)
     
-    t1 = TimezoneTransition.new(o2, o1, 288925853, 120)
-    t2 = TimezoneTransition.new(o3, o2, 290485733, 120)
-    t3 = TimezoneTransition.new(o4, o3,  29051813,  12)
+    t1 = TimezoneTransitionDefinition.new(o2, o1, 288925853, 120)
+    t2 = TimezoneTransitionDefinition.new(o3, o2, 290485733, 120)
+    t3 = TimezoneTransitionDefinition.new(o4, o3,  29051813,  12)
     
     assert_equal([TimezonePeriod.new(t1, t2),
                   TimezonePeriod.new(t2, t3)], dti.periods_for_local(DateTime.new(1915,8,4,23,40,0)))      
@@ -280,7 +280,7 @@ class TCTransitionDataTimezoneInfo < Test::Unit::TestCase
     o1 = TimezoneOffset.new(-3600, 0, :TESTD)
     o2 = TimezoneOffset.new(-3600, 0, :TESTS)
     
-    t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,7,1,0,0,0).to_i)
+    t1 = TimezoneTransitionDefinition.new(o2, o1, Time.utc(2000,7,1,0,0,0).to_i)
                 
     # 2000-07-01 00:00:00 UTC is 2000-06-30 23:00:00 UTC-1
     # hence to find periods for local times between 2000-06-30 23:00:00
@@ -330,11 +330,11 @@ class TCTransitionDataTimezoneInfo < Test::Unit::TestCase
     o3 = TimezoneOffset.new(-18000, 0,    :TESTS)
     o4 = TimezoneOffset.new(-21600, 3600, :TESTD)
     
-    t1 = TimezoneTransition.new(o2, o1, Time.utc(2010, 4,1,1,0,0).to_i)
-    t2 = TimezoneTransition.new(o3, o2, Time.utc(2010,10,1,1,0,0).to_i)
-    t3 = TimezoneTransition.new(o2, o3, Time.utc(2011, 3,1,1,0,0).to_i)
-    t4 = TimezoneTransition.new(o4, o2, Time.utc(2011, 4,1,1,0,0).to_i)
-    t5 = TimezoneTransition.new(o3, o4, Time.utc(2011,10,1,1,0,0).to_i)
+    t1 = TimezoneTransitionDefinition.new(o2, o1, Time.utc(2010, 4,1,1,0,0).to_i)
+    t2 = TimezoneTransitionDefinition.new(o3, o2, Time.utc(2010,10,1,1,0,0).to_i)
+    t3 = TimezoneTransitionDefinition.new(o2, o3, Time.utc(2011, 3,1,1,0,0).to_i)
+    t4 = TimezoneTransitionDefinition.new(o4, o2, Time.utc(2011, 4,1,1,0,0).to_i)
+    t5 = TimezoneTransitionDefinition.new(o3, o4, Time.utc(2011,10,1,1,0,0).to_i)
     
     assert_equal([], dti.transitions_up_to(Time.utc(2010,4,1,1,0,0)))
     assert_equal([], dti.transitions_up_to(Time.utc(2010,4,1,1,0,0), Time.utc(2000,1,1,0,0,0)))

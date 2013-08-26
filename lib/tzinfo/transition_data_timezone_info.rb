@@ -87,7 +87,7 @@ module TZInfo
         @start_month = month        
       end
       
-      @transitions << TimezoneTransition.new(offset, @previous_offset, 
+      @transitions << TimezoneTransitionDefinition.new(offset, @previous_offset,
         numerator_or_timestamp, denominator_or_numerator, denominator)
       @last_year = year
       @last_month = month             

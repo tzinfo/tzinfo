@@ -28,6 +28,7 @@ require 'tzinfo/timezone_definition'
 
 require 'tzinfo/timezone_offset'
 require 'tzinfo/timezone_transition'
+require 'tzinfo/timezone_transition_definition'
 
 require 'tzinfo/timezone_index_definition'
 
