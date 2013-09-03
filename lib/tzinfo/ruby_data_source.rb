@@ -44,7 +44,12 @@ module TZInfo
       raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier !~ /^[A-Za-z0-9\+\-_]+(\/[A-Za-z0-9\+\-_]+)*$/
       
       identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
+      
+      # Untaint identifier after it has been reassigned to a new string. We
+      # don't want to modify the original identifier. identifier may also be 
+      # frozen and therefore cannot be untainted.
       identifier.untaint
+      
       identifier = identifier.split('/')
       begin
         require_definition(identifier)

@@ -265,14 +265,36 @@ class TCTimezone < Test::Unit::TestCase
     Timezone.get('Europe/Andorra')
   
     safe_test do
-      tz = Timezone.get('Europe/Andorra'.taint)
+      identifier = 'Europe/Andorra'.taint
+      assert(identifier.tainted?)
+      tz = Timezone.get(identifier)
+      assert_equal('Europe/Andorra', tz.identifier)
+      assert(identifier.tainted?)
+    end
+  end
+  
+  def test_get_tainted_and_frozen_loaded
+    Timezone.get('Europe/Andorra')
+  
+    safe_test do
+      tz = Timezone.get('Europe/Andorra'.taint.freeze)
       assert_equal('Europe/Andorra', tz.identifier)
     end
   end
   
   def test_get_tainted_not_previously_loaded
     safe_test do
-      tz = Timezone.get('Europe/Amsterdam'.taint)
+      identifier = 'Europe/Andorra'.taint
+      assert(identifier.tainted?)
+      tz = Timezone.get(identifier)
+      assert_equal('Europe/Andorra', tz.identifier)
+      assert(identifier.tainted?)
+    end
+  end
+  
+  def test_get_tainted_and_frozen_not_previously_loaded
+    safe_test do
+      tz = Timezone.get('Europe/Amsterdam'.taint.freeze)
       assert_equal('Europe/Amsterdam', tz.identifier)
     end
   end

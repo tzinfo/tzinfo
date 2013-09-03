@@ -64,6 +64,44 @@ class TCCountry < Test::Unit::TestCase
       Country.get('gb')
     }
   end
+  
+  def test_get_tainted_loaded
+    Country.get('GB')
+  
+    safe_test do
+      code = 'GB'.taint
+      assert(code.tainted?)
+      country = Country.get(code)
+      assert_equal('GB', country.code)
+      assert(code.tainted?)
+    end
+  end
+  
+  def test_get_tainted_and_frozen_loaded
+    Country.get('GB')
+  
+    safe_test do
+      country = Country.get('GB'.taint.freeze)
+      assert_equal('GB', country.code)
+    end
+  end
+  
+  def test_get_tainted_not_previously_loaded
+    safe_test do
+      code = 'GB'.taint
+      assert(code.tainted?)
+      country = Country.get(code)
+      assert_equal('GB', country.code)
+      assert(code.tainted?)
+    end
+  end
+  
+  def test_get_tainted_and_frozen_not_previously_loaded
+    safe_test do
+      country = Country.get('GB'.taint.freeze)
+      assert_equal('GB', country.code)
+    end
+  end
     
   def test_new_nil
     assert_raises(InvalidCountryCode) {

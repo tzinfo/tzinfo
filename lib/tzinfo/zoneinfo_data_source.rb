@@ -128,8 +128,12 @@ module TZInfo
     def load_timezone_info(identifier)
       begin
         if @timezone_index.include?(identifier)
-          identifier.untaint
           path = File.join(@zoneinfo_dir, identifier)
+          
+          # Untaint path rather than identifier. We don't want to modify 
+          # identifier. identifier may also be frozen and therefore cannot be
+          # untainted.
+          path.untaint
           
           begin
             ZoneinfoTimezoneInfo.new(identifier, path)
