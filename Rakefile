@@ -35,6 +35,8 @@ begin
 rescue LoadError, RuntimeError
 end
 
+task :default => [:test]
+
 spec = eval(File.read('tzinfo.gemspec'))
 
 class TZInfoPackageTask < Gem::PackageTask
