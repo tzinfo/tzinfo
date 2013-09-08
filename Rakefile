@@ -35,6 +35,8 @@ begin
 rescue LoadError, RuntimeError
 end
 
+BASE_DIR = File.expand_path(File.dirname(__FILE__))
+
 task :default => [:test]
 
 spec = eval(File.read('tzinfo.gemspec'))
@@ -105,7 +107,8 @@ def setup_tests(test_task, type)
   # timezone isn't GMT). This won't work on Windows.
   ENV['TZ'] = 'America/Los_Angeles'
   
-  test_task.pattern = File.join(File.expand_path(File.dirname(__FILE__)), 'test', "ts_all_#{type}.rb")
+  test_task.libs = [File.join(BASE_DIR, 'lib')]
+  test_task.pattern = File.join(BASE_DIR, 'test', "ts_all_#{type}.rb")
 end
 
 Rake::TestTask.new(:test_ruby) do |t|
