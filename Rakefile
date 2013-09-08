@@ -103,10 +103,6 @@ task :test => [:test_ruby, :test_zoneinfo] do
 end
 
 def setup_tests(test_task, type)
-  # Force a particular timezone to be local (helps find issues when local
-  # timezone isn't GMT). This won't work on Windows.
-  ENV['TZ'] = 'America/Los_Angeles'
-  
   test_task.libs = [File.join(BASE_DIR, 'lib')]
   test_task.pattern = File.join(BASE_DIR, 'test', "ts_all_#{type}.rb")
 end
