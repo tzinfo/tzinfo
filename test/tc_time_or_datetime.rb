@@ -36,14 +36,14 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3))
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), tdt.to_time)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), tdt.to_orig)
-    assert_equal('UTC', tdt.to_time.zone)
+    assert(tdt.to_time.utc?)
   end
   
   def test_intialize_time_local_usec
     tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3, 721123))
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123), tdt.to_time)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123), tdt.to_orig)
-    assert_equal('UTC', tdt.to_time.zone)
+    assert(tdt.to_time.utc?)
   end
   
   if Time.utc(2013, 1, 1).respond_to?(:nsec)
@@ -51,7 +51,7 @@ class TCTimeOrDateTime < Test::Unit::TestCase
       tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)))
       assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)), tdt.to_time)
       assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)), tdt.to_orig)
-      assert_equal('UTC', tdt.to_time.zone)
+      assert(tdt.to_time.utc?)
     end
   end
   

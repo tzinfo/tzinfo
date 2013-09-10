@@ -75,8 +75,8 @@ module Kernel
   end
   
   def safe_test(options = {})
-    # JRuby doesn't support SAFE levels
-    available = RUBY_PLATFORM != 'java'
+    # JRuby and Rubinus don't support SAFE levels.
+    available = !(defined?(RUBY_ENGINE) && %w(jruby rbx).include?(RUBY_ENGINE))
    
     if available || options[:unavailable] != :skip
       thread = Thread.new do
@@ -101,7 +101,6 @@ module Kernel
       RbConfig::CONFIG['ruby_install_name'] + RbConfig::CONFIG['EXEEXT'])
       
     load_path = [TZINFO_LIB_DIR] + extra_load_path
-    load_path = load_path.collect {|p| "-I \"#{p}\""}.join(' ')
     
     # If RubyGems is loaded in the current process, then require it in the
     # sub-process, as it may be needed in order to require dependencies.
@@ -109,9 +108,22 @@ module Kernel
       required = ['rubygems'] + required
     end
     
-    required = required.collect {|r| "-r \"#{r}\""}.join(' ')
+    if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
+      # Stop Rubinus from operating as irb.
+      args = ' -'
+    else
+      args = ''
+    end
+
+    IO.popen("\"#{ruby}\"#{args}", 'r+') do |process|
+      load_path.each do |p|
+        process.puts("$:.unshift('#{p.gsub("'", "\\\\'")}')")        
+      end
       
-    IO.popen("\"#{ruby}\" #{load_path} #{required}", 'r+') do |process|
+      required.each do |r|
+        process.puts("require '#{r.gsub("'", "\\\\'")}'")
+      end
+      
       process.puts(code)
       process.flush
       process.close_write

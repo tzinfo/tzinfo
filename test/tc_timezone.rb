@@ -780,13 +780,13 @@ class TCTimezone < Test::Unit::TestCase
     assert_equal(0, TestTimezone.new('Europe/London', period, [], dtu).utc_to_local(dtu).offset)
     assert_equal(0, TestTimezone.new('Europe/London', period, [], dtu2).utc_to_local(dtu2).offset)    
     assert_equal(0, TestTimezone.new('Europe/London', period, [], t).utc_to_local(t).utc_offset)
-    assert_equal('UTC', TestTimezone.new('Europe/London', period, [], t).utc_to_local(t).zone)
+    assert(TestTimezone.new('Europe/London', period, [], t).utc_to_local(t).utc?)
     assert_equal(0, TestTimezone.new('Europe/London', period, [], t2).utc_to_local(t2).utc_offset)
-    assert_equal('UTC', TestTimezone.new('Europe/London', period, [], t2).utc_to_local(t2).zone)
+    assert(TestTimezone.new('Europe/London', period, [], t2).utc_to_local(t2).utc?)
     assert_equal(0, TestTimezone.new('Europe/London', period, [], tu).utc_to_local(tu).utc_offset)
-    assert_equal('UTC', TestTimezone.new('Europe/London', period, [], tu).utc_to_local(tu).zone)
+    assert(TestTimezone.new('Europe/London', period, [], tu).utc_to_local(tu).utc?)
     assert_equal(0, TestTimezone.new('Europe/London', period, [], tu2).utc_to_local(tu2).utc_offset)
-    assert_equal('UTC', TestTimezone.new('Europe/London', period, [], tu2).utc_to_local(tu2).zone)
+    assert(TestTimezone.new('Europe/London', period, [], tu2).utc_to_local(tu2).utc?)
   end
   
   def test_local_to_utc
@@ -840,13 +840,13 @@ class TCTimezone < Test::Unit::TestCase
     assert_equal(0, TestTimezone.new('Europe/London', nil, [period], dtu).local_to_utc(dtu).offset)
     assert_equal(0, TestTimezone.new('Europe/London', nil, [period], dtu2).local_to_utc(dtu2).offset)
     assert_equal(0, TestTimezone.new('Europe/London', nil, [period], t).local_to_utc(t).utc_offset)
-    assert_equal('UTC', TestTimezone.new('Europe/London', nil, [period], t).local_to_utc(t).zone)
+    assert(TestTimezone.new('Europe/London', nil, [period], t).local_to_utc(t).utc?)
     assert_equal(0, TestTimezone.new('Europe/London', nil, [period], t2).local_to_utc(t2).utc_offset)
-    assert_equal('UTC', TestTimezone.new('Europe/London', nil, [period], t2).local_to_utc(t2).zone)
+    assert(TestTimezone.new('Europe/London', nil, [period], t2).local_to_utc(t2).utc?)
     assert_equal(0, TestTimezone.new('Europe/London', nil, [period], tu).local_to_utc(tu).utc_offset)
-    assert_equal('UTC', TestTimezone.new('Europe/London', nil, [period], tu).local_to_utc(tu).zone)
+    assert(TestTimezone.new('Europe/London', nil, [period], tu).local_to_utc(tu).utc?)
     assert_equal(0, TestTimezone.new('Europe/London', nil, [period], tu2).local_to_utc(tu2).utc_offset)
-    assert_equal('UTC', TestTimezone.new('Europe/London', nil, [period], tu2).local_to_utc(tu2).zone)
+    assert(TestTimezone.new('Europe/London', nil, [period], tu2).local_to_utc(tu2).utc?)
   end
   
   def test_local_to_utc_invalid
