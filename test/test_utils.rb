@@ -74,11 +74,13 @@ module Kernel
     end
   end
   
-  def safe_test(level = 1)
-    # Don't run on JRuby. It doesn't support SAFE levels.
-    if RUBY_PLATFORM != 'java'
+  def safe_test(options = {})
+    # JRuby doesn't support SAFE levels
+    available = RUBY_PLATFORM != 'java'
+   
+    if available || options[:unavailable] != :skip
       thread = Thread.new do
-        $SAFE = level
+        $SAFE = options[:level] || 1 if available
         yield
       end
       

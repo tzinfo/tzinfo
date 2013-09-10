@@ -450,7 +450,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
   end
   
   def test_load_timezone_info_tainted_zoneinfo_dir_safe_mode
-    safe_test do
+    safe_test(:unavailable => :skip) do
       assert_raises(SecurityError) do
         ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
       end
