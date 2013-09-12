@@ -89,17 +89,24 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
     
     # Options for testing malformed zoneinfo files.
     magic = options[:magic]
+    section2_magic = options[:section2_magic]
     abbrev_separator = options[:abbrev_separator] || "\0"
     abbrev_offset_base = options[:abbrev_offset_base] || 0
       
     unless magic
       if format == 1
         magic = "TZif\0"
-      elsif format == 2
-        magic = 'TZif2'
+      elsif format >= 2
+        magic = "TZif#{format}"
       else
         raise ArgumentError, 'Invalid format specified'
       end
+    end
+    
+    if section2_magic.kind_of?(Proc)
+      section2_magic = section2_magic.call(format)
+    else
+      section2_magic = magic unless section2_magic
     end
     
     convert_times_to_i(transitions)
@@ -155,9 +162,9 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
         file.write("\0" * offsets.length * 2)
       end
       
-      if format == 2
+      if format >= 2
         file.write(
-          [magic, offsets.length, offsets.length, leaps.length, 
+          [section2_magic, offsets.length, offsets.length, leaps.length, 
            transitions.length, offsets.length, abbrevs_length].pack('a5 x15 NNNNNN'))
     
         unless transitions.empty?
@@ -198,8 +205,11 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
   end
   
   def tzif_test(offsets, transitions, leaps = [], options = {}, &block)
-    write_tzif(1, offsets, transitions, leaps, options, &block)
-    write_tzif(2, offsets, transitions, leaps, options, &block)
+    min_format = options[:min_format] || 1
+    
+    min_format.upto(3) do |format|
+      write_tzif(format, offsets, transitions, leaps, options, &block)
+    end
   end
   
   def test_load
@@ -307,12 +317,39 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
   end
   
   def test_load_invalid_magic
-    ['TZif3', 'tzif2', '12345'].each do |magic|    
+    ['TZif4', 'tzif2', '12345'].each do |magic|    
       offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
           
       tzif_test(offsets, [], [], :magic => magic) do |path, format|        
         assert_raises(InvalidZoneinfoFile) do
           ZoneinfoTimezoneInfo.new('Zone2', path)
+        end
+      end
+    end
+  end
+  
+  def test_load_invalid_section2_magic
+    ['TZif4', 'tzif2', '12345'].each do |section2_magic|    
+      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+          
+      tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|        
+        assert_raises(InvalidZoneinfoFile) do
+          ZoneinfoTimezoneInfo.new('Zone4', path)
+        end
+      end
+    end
+  end
+  
+  def test_load_mismatched_section2_magic
+    minus_one = Proc.new {|f| f == 2 ? "TZif\0" : "TZif#{f - 1}" }
+    plus_one = Proc.new {|f| "TZif#{f + 1}" }
+    
+    [minus_one, plus_one].each do |section2_magic|    
+      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+          
+      tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|        
+        assert_raises(InvalidZoneinfoFile) do
+          ZoneinfoTimezoneInfo.new('Zone5', path)
         end
       end
     end
@@ -402,10 +439,11 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
   
   def test_load_64bit
     # Some platforms support 64-bit Times, others only 32-bit. The TZif version
-    # 2 format contains both 32-bit and 64-bit times. 
+    # 2 and later format contains both 32-bit and 64-bit times. 
     
-    # Where 64-bit is supported and a TZif 2 file is provided, the 64-bit times
-    # should be used, otherwise the 32-bit information should be used.
+    # Where 64-bit is supported and a TZif 2 or later file is provided, the 
+    # 64-bit times should be used, otherwise the 32-bit information should be 
+    # used.
       
     begin
       Time.at(-2147483649)
@@ -431,7 +469,7 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
       info = ZoneinfoTimezoneInfo.new('Zone/SixtyFour', path)
       assert_equal('Zone/SixtyFour', info.identifier)
   
-      if supports_64bit && format == 2
+      if supports_64bit && format >= 2
         assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1850,  1,  2), info)
         assert_period(:XST,  3600,    0, false, Time.utc(1850,  1,  2), Time.utc(2003,  4, 22), info)
         assert_period(:XDT,  3600, 3600,  true, Time.utc(2003,  4, 22), Time.utc(2003, 10, 21), info)
