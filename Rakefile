@@ -66,8 +66,6 @@ end
 if defined?(RDoc) && defined?(RDoc::Task)
   RDoc::Task.new do |rdoc|
     rdoc.rdoc_dir = 'doc'
-    rdoc.title = 'TZInfo'
-    rdoc.main = 'README'
     rdoc.options.concat spec.rdoc_options
     rdoc.rdoc_files.include(spec.extra_rdoc_files) 
     rdoc.rdoc_files.include('lib')  
