@@ -66,7 +66,7 @@ module TZInfo
     
     # Cache of loaded zones by identifier to avoid using require if a zone
     # has already been loaded.
-    @@loaded_zones = ThreadSafe::Cache.new
+    @@loaded_zones = nil
         
     # Default value of the dst parameter of the local_to_utc and 
     # period_for_local methods.
@@ -575,7 +575,13 @@ module TZInfo
       Timezone.get(data)
     end
     
-    private      
+    private
+      # Initializes @@loaded_zones.
+      def self.init_loaded_zones
+        @@loaded_zones = ThreadSafe::Cache.new
+      end
+      init_loaded_zones
+    
       # Returns an array of proxies corresponding to the given array of 
       # identifiers.
       def self.get_proxies(identifiers)

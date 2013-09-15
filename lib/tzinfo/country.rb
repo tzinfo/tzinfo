@@ -43,7 +43,7 @@ module TZInfo
     include Comparable
     
     # Defined countries.
-    @@countries = ThreadSafe::Cache.new
+    @@countries = nil
     
     # Whether the countries index has been loaded yet.
     @@index_loaded = false
@@ -177,6 +177,11 @@ module TZInfo
       def setup(info)
         @info = info        
       end
+      
+      def self.init_countries
+        @@countries = ThreadSafe::Cache.new
+      end
+      init_countries
       
       # Returns the current DataSource
       def self.data_source
