@@ -25,12 +25,9 @@ require 'rubygems/package_task'
 require 'fileutils'
 require 'rake/testtask'
 
-# Ignore errors loading rdoc and rdoc/task (rdoc.rb is not included in Ruby 1.8,
-# rdoc/task.rb is not included prior to Ruby 1.9.2 and on Ruby 1.9.2, the 
-# built-in version of rdoc/task.rb is not compatible with later versions of 
-# rake - causing a RuntimeError to be raised when required).
+# Ignore errors loading rdoc/task (the rdoc tasks will be excluded if
+# rdoc is unavailable).
 begin
-  require 'rdoc'
   require 'rdoc/task'
 rescue LoadError, RuntimeError
 end
