@@ -22,6 +22,8 @@
 
 module TZInfo  
   # Represents information about a country returned by RubyDataSource.
+  #
+  # @private
   class RubyCountryInfo < CountryInfo #:nodoc:
     # Constructs a new CountryInfo with an ISO 3166 country code, name and 
     # block. The block will be evaluated to obtain the timezones for the 
@@ -69,6 +71,8 @@ module TZInfo
     
     # An instance of the Zones class is passed to the block used to define
     # timezones.
+    #
+    # @private
     class Zones #:nodoc:
       attr_reader :list
     

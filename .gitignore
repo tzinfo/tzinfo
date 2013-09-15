@@ -1,4 +1,5 @@
-.rbx
 doc
-pkg
 Gemfile.lock
+pkg
+.rbx
+.yardoc

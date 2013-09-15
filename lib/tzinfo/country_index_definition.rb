@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,8 @@
 module TZInfo
   # The country index file includes CountryIndexDefinition which provides
   # a country method used to define each country in the index.
+  #
+  # @private
   module CountryIndexDefinition #:nodoc:
     def self.append_features(base)
       super
@@ -30,6 +32,9 @@ module TZInfo
       base.instance_eval { @countries = {} }
     end
     
+    # Class methods for inclusion.
+    #
+    # @private
     module ClassMethods #:nodoc:
       # Defines a country with an ISO 3166 country code, name and block. The
       # block will be evaluated to obtain all the timezones for the country.

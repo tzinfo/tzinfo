@@ -27,7 +27,9 @@ module TZInfo
   end
     
   # Represents a data timezone defined by a set of offsets and a set 
-  # of transitions
+  # of transitions.
+  #
+  # @private
   class TransitionDataTimezoneInfo < DataTimezoneInfo #:nodoc:
             
     # Constructs a new TransitionDataTimezoneInfo with its identifier.

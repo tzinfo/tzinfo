@@ -23,6 +23,8 @@
 module TZInfo
 
   # A Timezone based on a DataTimezoneInfo.
+  #
+  # @private
   class DataTimezone < InfoTimezone #:nodoc:
     
     # Returns the TimezonePeriod for the given UTC time. utc can either be

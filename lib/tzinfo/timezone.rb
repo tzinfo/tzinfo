@@ -66,10 +66,14 @@ module TZInfo
     
     # Cache of loaded zones by identifier to avoid using require if a zone
     # has already been loaded.
+    #
+    # @!visibility private
     @@loaded_zones = nil
         
     # Default value of the dst parameter of the local_to_utc and 
     # period_for_local methods.
+    #
+    # @!visibility private
     @@default_dst = nil
     
     # Sets the default value of the optional dst parameter of the 

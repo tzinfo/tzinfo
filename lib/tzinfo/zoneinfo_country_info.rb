@@ -22,6 +22,8 @@
 
 module TZInfo  
   # Represents information about a country returned by ZoneinfoDataSource.
+  #
+  # @private
   class ZoneinfoCountryInfo < CountryInfo #:nodoc:
     # Constructs a new CountryInfo with an ISO 3166 country code, name and 
     # an array of CountryTimezones.

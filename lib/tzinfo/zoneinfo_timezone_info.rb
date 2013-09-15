@@ -27,6 +27,8 @@ module TZInfo
   end
 
   # Represents a timezone defined by a compiled zoneinfo TZif (\0 or 2) file.
+  #
+  # @private
   class ZoneinfoTimezoneInfo < TransitionDataTimezoneInfo #:nodoc:
     
     # Constructs the new ZoneinfoTimezoneInfo with an identifier and path

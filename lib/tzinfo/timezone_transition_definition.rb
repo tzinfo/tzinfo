@@ -21,6 +21,10 @@
 #++
 
 module TZInfo
+  # A TimezoneTransition defined by as integer timestamp, as a rational to
+  # create a DateTime or as both.
+  #
+  # @private 
   class TimezoneTransitionDefinition < TimezoneTransition #:nodoc:
     # The numerator of the DateTime if the transition time is defined as a 
     # DateTime, otherwise the transition time as a timestamp.

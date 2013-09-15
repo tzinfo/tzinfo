@@ -1,0 +1,6 @@
+--no-private
+lib/**/*.rb
+-
+CHANGES
+LICENSE
+README

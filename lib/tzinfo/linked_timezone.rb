@@ -22,6 +22,9 @@
 
 module TZInfo
 
+  # A Timezone based on a LinkedTimezoneInfo.
+  #
+  # @private
   class LinkedTimezone < InfoTimezone #:nodoc:
     # Returns the TimezonePeriod for the given UTC time. utc can either be
     # a DateTime, Time or integer timestamp (Time.to_i). Any timezone 

@@ -26,6 +26,8 @@ require 'rational' unless defined?(Rational)
 module TZInfo
   
   # Methods to support different versions of Ruby.
+  #
+  # @private
   module RubyCoreSupport #:nodoc:
   
     # Use Rational.new! for performance reasons in Ruby 1.8.

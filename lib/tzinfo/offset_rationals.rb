@@ -26,7 +26,9 @@ module TZInfo
   
   # Provides a method for getting Rationals for a timezone offset in seconds.
   # Pre-reduced rationals are returned for all the half-hour intervals between
-  # -14 and +14 hours to avoid having to call gcd at runtime.  
+  # -14 and +14 hours to avoid having to call gcd at runtime.
+  #
+  # @private
   module OffsetRationals #:nodoc:
     @@rational_cache = {
       -50400 => RubyCoreSupport.rational_new!(-7,12), 
