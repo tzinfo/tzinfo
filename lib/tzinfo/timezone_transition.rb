@@ -23,7 +23,7 @@
 require 'date'
 
 module TZInfo
-  # Represents an transition from one timezone offset to another at a particular
+  # Represents a transition from one timezone offset to another at a particular
   # date and time.
   class TimezoneTransition
     # The offset this transition changes to (a TimezoneOffset instance).
@@ -32,6 +32,9 @@ module TZInfo
     # The offset this transition changes from (a TimezoneOffset instance).
     attr_reader :previous_offset
     
+    # Initializes a new TimezoneTransition.
+    #
+    # TimezoneTransition instances should not normally be constructed manually.
     def initialize(offset, previous_offset)
       @offset = offset
       @previous_offset = previous_offset
@@ -49,7 +52,6 @@ module TZInfo
     def datetime
       at.to_datetime
     end
-    
     
     # The UTC time when this transition occurs, returned as a Time instance.
     def time

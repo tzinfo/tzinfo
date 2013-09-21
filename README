@@ -114,6 +114,14 @@ For further detail, please refer to the API documentation for the
 TZInfo::Timezone and TZInfo::Country classes.
 
 
+== Thread-Safety
+
+The TZInfo::Country and TZInfo::Timezone classes are thread-safe. It is safe to 
+use class and instance methods of TZInfo::Country and TZInfo::Timezone in 
+concurrently executing threads. Instances of both classes can be shared across 
+thread boundaries.
+
+
 == Documentation
 
 API documentation can be found at 

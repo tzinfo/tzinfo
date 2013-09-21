@@ -109,10 +109,10 @@ module TZInfo
     # To avoid inconsistent data, \DataSource.set should be called before
     # accessing any Timezone or Country data.
     #
-    # If \DataSource.set is not called, TZInfo will use TZInfo::Data as the
-    # data source. If TZInfo::Data is not available (i.e. if 
-    # require 'tzinfo/data' fails), then TZInfo will search for a zoneinfo 
-    # directory instead (using the search path specified by
+    # If \DataSource.set is not called, TZInfo will by default use TZInfo::Data 
+    # as the data source. If TZInfo::Data is not available (i.e. if require 
+    # 'tzinfo/data' fails), then TZInfo will search for a zoneinfo directory 
+    # instead (using the search path specified by
     # TZInfo::ZoneinfoDataSource::DEFAULT_SEARCH_PATH).
     def self.set(data_source_or_type, *args)
       if data_source_or_type.kind_of?(DataSource)

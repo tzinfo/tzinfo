@@ -49,8 +49,8 @@ module TZInfo
   class UnknownTimezone < StandardError
   end
   
-  # Timezone is the base class of all timezones. It provides a factory method
-  # get to access timezones by identifier. Once a specific Timezone has been
+  # Timezone is the base class of all timezones. It provides a factory method,
+  # 'get', to access timezones by identifier. Once a specific Timezone has been
   # retrieved, DateTimes, Times and timestamps can be converted between the UTC 
   # and the local time for the zone. For example:
   #
@@ -61,6 +61,10 @@ module TZInfo
   #
   # Each time conversion method returns an object of the same type it was 
   # passed.
+  #
+  # The Timezone class is thread-safe. It is safe to use class and instance 
+  # methods of Timezone in concurrently executing threads. Instances of Timezone
+  # can be shared across thread boundaries.
   class Timezone
     include Comparable
     

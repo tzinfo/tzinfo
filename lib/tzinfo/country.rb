@@ -35,6 +35,10 @@ module TZInfo
   #  us.zones
   #  us.zone_info
   #
+  # The Country class is thread-safe. It is safe to use class and instance 
+  # methods of Country in concurrently executing threads. Instances of Country
+  # can be shared across thread boundaries.
+  #
   # Country information available through TZInfo is intended as an aid for 
   # users, to help them select time zone data appropriate for their practical 
   # needs. It is not intended to take or endorse any position on legal or 

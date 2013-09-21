@@ -40,6 +40,8 @@ module TZInfo
     attr_reader :offset
     
     # Initializes a new TimezonePeriod.
+    #
+    # TimezonePeriod instances should not normally be constructed manually.
     def initialize(start_transition, end_transition, offset = nil)
       @start_transition = start_transition
       @end_transition = end_transition
