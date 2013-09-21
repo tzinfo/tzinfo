@@ -216,6 +216,32 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
     end
   end
   
+  def test_load_timezone_info_ignored_file
+    assert_raises(InvalidTimezoneIdentifier) do
+      @data_source.load_timezone_info('localtime')
+    end
+  end
+  
+  def test_load_timezone_info_ignored_plus_version_file
+    # Mac OS X includes a file named +VERSION containing the tzdata version.
+    
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      FileUtils.touch(File.join(dir, 'zone.tab'))
+      FileUtils.touch(File.join(dir, 'iso3166.tab'))
+      
+      File.open(File.join(dir, '+VERSION'), 'w') do |f|
+        f.binmode
+        f.write("2013a\n")
+      end
+      
+      data_source = ZoneinfoDataSource.new(dir)
+      
+      assert_raises(InvalidTimezoneIdentifier) do
+        data_source.load_timezone_info('+VERSION')
+      end
+    end
+  end
+  
   def test_load_timezone_info_nil
     assert_raises(InvalidTimezoneIdentifier) do
       @data_source.load_timezone_info(nil)
@@ -516,6 +542,24 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
       assert_kind_of(Array, all)
       assert_array_same_items(expected, all)
       assert_equal(true, all.frozen?)
+    end
+  end
+  
+  def test_timezone_identifiers_ignored_plus_version_file
+    # Mac OS X includes a file named +VERSION containing the tzdata version.
+    
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      FileUtils.touch(File.join(dir, 'zone.tab'))
+      FileUtils.touch(File.join(dir, 'iso3166.tab'))
+      FileUtils.cp(File.join(@data_source.zoneinfo_dir, 'EST'), File.join(dir, 'EST'))
+      
+      File.open(File.join(dir, '+VERSION'), 'w') do |f|
+        f.binmode
+        f.write("2013a\n")
+      end
+      
+      data_source = ZoneinfoDataSource.new(dir)
+      assert_array_same_items(['EST'], data_source.timezone_identifiers)
     end
   end
   

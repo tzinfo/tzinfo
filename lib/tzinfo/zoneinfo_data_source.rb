@@ -255,7 +255,13 @@ module TZInfo
     def load_timezone_index
       index = []
       
-      enum_timezones(nil, ['localtime', 'posix', 'posixrules', 'right', 'Factory']) do |identifier|
+      # Ignoring particular files:
+      # +VERSION is included in Mac OS X.
+      # localtime current local timezone (may be a link).
+      # posix, posixrules and right are directories containing other versions of the zoneinfo files.
+      # Factory is the compiled in default timezone.
+      
+      enum_timezones(nil, ['+VERSION', 'localtime', 'posix', 'posixrules', 'right', 'Factory']) do |identifier|
         index << identifier
       end
       
