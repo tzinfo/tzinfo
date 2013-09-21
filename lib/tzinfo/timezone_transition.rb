@@ -20,8 +20,6 @@
 # THE SOFTWARE.
 #++
 
-require 'date'
-
 module TZInfo
   # Represents a transition from one timezone offset to another at a particular
   # date and time.
