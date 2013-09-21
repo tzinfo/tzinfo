@@ -48,7 +48,52 @@ module TZInfo
   # To load zoneinfo files from a particular directory, pass the directory to 
   # TZInfo::DataSource.set:
   #
-  #   TZInfo::DataSource.set(:zoneinfo, directory)  
+  #   TZInfo::DataSource.set(:zoneinfo, directory)
+  #
+  # Note that the platform used at runtime may limit the range of available
+  # transition data that can be loaded from zoneinfo files. There are two
+  # factors to consider:
+  #
+  # First of all, the zoneinfo support in TZInfo makes use of Ruby's Time class. 
+  # On 32-bit builds of Ruby 1.8, the Time class only supports 32-bit 
+  # timestamps. This means that only Times between 1901-12-13 20:45:52 and
+  # 2038-01-19 03:14:07 can be represented. Furthermore, certain platforms only
+  # allow for positive 32-bit timestamps (notably Windows), making the earliest
+  # representable time 1970-01-01 00:00:00.
+  #
+  # 64-bit builds of Ruby 1.8 and all builds of Ruby 1.9 support 64-bit 
+  # timestamps. This means that there is no practical restriction on the range
+  # of the Time class on these platforms.
+  #
+  # TZInfo will only load transitions that fall within the supported range of
+  # the Time class. Any queries performed on times outside of this range may
+  # give inaccurate results.
+  #
+  # The second factor concerns the zoneinfo files. Versions of the 'zic' tool
+  # (used to build zoneinfo files) that were released prior to February 2006
+  # created zoneinfo files that used 32-bit integers for transition timestamps.
+  # Later versions of zic produce zoneinfo files that use 64-bit integers. If
+  # you have 32-bit zoneinfo files on your system, then any queries falling
+  # outside of the range 1901-12-13 20:45:52 to 2038-01-19 03:14:07 may be
+  # inaccurate.
+  #
+  # Most modern platforms include 64-bit zoneinfo files. However, Mac OS X (up
+  # to at least 10.8.4) still uses 32-bit zoneinfo files.
+  #
+  # To check whether your zoneinfo files contain 32-bit or 64-bit transition
+  # data, you can run the following code (substituting the identifier of the 
+  # zone you want to test for zone_identifier):
+  #
+  #   TZInfo::DataSource.set(:zoneinfo)
+  #   dir = TZInfo::DataSource.get.zoneinfo_dir
+  #   File.open(File.join(dir, zone_identifier), 'r') {|f| f.read(5) }
+  #
+  # If the last line returns "TZif\\x00", then you have a 32-bit zoneinfo file.
+  # If it returns "TZif2" or "TZif3" then you have a 64-bit zoneinfo file.
+  #
+  # If you require support for 64-bit transitions, but are restricted to 32-bit
+  # zoneinfo support, then you may want to consider using TZInfo::RubyDataSource 
+  # instead.
   class ZoneinfoDataSource < DataSource
     # The default value of ZoneInfoDataSource.search_path.
     DEFAULT_SEARCH_PATH = ['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'].freeze
