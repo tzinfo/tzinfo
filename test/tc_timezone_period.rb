@@ -45,6 +45,9 @@ class TCTimezonePeriod < Test::Unit::TestCase
       
     p = TimezonePeriod.new(start_t, end_t)
     
+    assert_same(start_t, p.start_transition)
+    assert_same(end_t, p.end_transition)
+    assert_same(dst, p.offset)
     assert_equal(DateTime.new(2006,1,1,0,0,0), p.utc_start)
     assert_equal(Time.utc(2006,1,1,0,0,0), p.utc_start_time)
     assert_equal(DateTime.new(2006,1,2,0,0,0), p.utc_end)
@@ -78,6 +81,9 @@ class TCTimezonePeriod < Test::Unit::TestCase
       
     p = TimezonePeriod.new(start_t, nil)
     
+    assert_same(start_t, p.start_transition)
+    assert_nil(p.end_transition)
+    assert_same(dst, p.offset)
     assert_equal(DateTime.new(2006,1,1,0,0,0), p.utc_start)
     assert_equal(Time.utc(2006,1,1,0,0,0), p.utc_start_time)
     assert_nil(p.utc_end)
@@ -110,6 +116,9 @@ class TCTimezonePeriod < Test::Unit::TestCase
       
     p = TimezonePeriod.new(nil, end_t)
     
+    assert_nil(p.start_transition)
+    assert_same(end_t, p.end_transition)
+    assert_same(dst, p.offset)
     assert_nil(p.utc_start)
     assert_nil(p.utc_start_time)
     assert_equal(DateTime.new(2006,1,2,0,0,0), p.utc_end)
@@ -144,6 +153,9 @@ class TCTimezonePeriod < Test::Unit::TestCase
       
     p = TimezonePeriod.new(nil, nil, special)
     
+    assert_nil(p.start_transition)
+    assert_nil(p.end_transition)
+    assert_same(special, p.offset)
     assert_nil(p.utc_start)
     assert_nil(p.utc_start_time)
     assert_nil(p.utc_end)

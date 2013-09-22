@@ -499,7 +499,7 @@ module TZInfo
           period = period_for_utc(utc_to.add_with_convert(-3600))
         end
       
-        [period.send(:offset)]
+        [period.offset]
       else
         result = Set.new
         

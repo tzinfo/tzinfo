@@ -28,13 +28,11 @@ module TZInfo
   class TimezonePeriod
     # The TimezoneTransition that defines the start of this TimezonePeriod 
     # (may be nil if unbounded).
-    attr_reader :start_transition #:nodoc:
-    protected :start_transition
+    attr_reader :start_transition
     
     # The TimezoneTransition that defines the end of this TimezonePeriod
     # (may be nil if unbounded).
-    attr_reader :end_transition #:nodoc:
-    protected :end_transition
+    attr_reader :end_transition
     
     # The TimezoneOffset for this period.
     attr_reader :offset
