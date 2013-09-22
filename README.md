@@ -1,7 +1,7 @@
 TZInfo - Ruby Timezone Library
 ==============================
 
-[TZInfo](http://tzinfo.rubyforge.org) provides daylight savings aware 
+[TZInfo](http://tzinfo.github.io) provides daylight savings aware 
 transformations between times in different timezones.
 
 
@@ -43,13 +43,6 @@ installed:
 
     gem install tzinfo-data
   
-
-Download
---------
-
-Tar, Zip and RubyGem packages of TZInfo and TZInfo::Data can be downloaded from
-http://rubyforge.org/frs/?group_id=894
-
 
 Example Usage
 -------------
@@ -131,9 +124,7 @@ thread boundaries.
 Documentation
 -------------
 
-API documentation can be found at 
-
-* http://tzinfo.rubyforge.org/doc/
+API documentation for TZInfo is available on [RubyDoc.info](http://rubydoc.info/gems/tzinfo/frames).
 
 
 License
@@ -142,8 +133,14 @@ License
 TZInfo is released under the MIT license, see LICENSE for details.
 
 
-Support
--------
+Source Code
+-----------
 
-Please post to the [TZInfo Users mailing list](http://rubyforge.org/mailman/listinfo/tzinfo-users)
-if you require assistance or have any suggestions.
+Source code for TZInfo is available on [GitHub](https://github.com/tzinfo/tzinfo).
+
+
+Issue Tracker
+-------------
+
+Please post any bugs, issues, feature requests or questions to the 
+[GitHub issue tracker](https://github.com/tzinfo/tzinfo/issues).
