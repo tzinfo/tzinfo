@@ -70,7 +70,6 @@ if defined?(RDoc) && defined?(RDoc::Task)
 end
 
 Rake::Task[package_task.package_dir_path].enhance do
-  File.chmod(0755, package_task.package_dir_path)
   recurse_chmod(package_task.package_dir_path)
 end
 
