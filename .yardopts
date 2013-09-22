@@ -1,6 +1,6 @@
 --no-private
 lib/**/*.rb
 -
-CHANGES
+CHANGES.md
 LICENSE
-README
+README.md

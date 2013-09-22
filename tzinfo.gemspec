@@ -7,14 +7,14 @@ Gem::Specification.new do |s|
   s.email = 'phil.ross@gmail.com'
   s.homepage = 'http://tzinfo.github.io'
   s.license = 'MIT' 
-  s.files = ['CHANGES', 'LICENSE', 'Rakefile', 'README', '.yardopts', 'lib', 'test'] +
+  s.files = ['CHANGES.md', 'LICENSE', 'Rakefile', 'README.md', '.yardopts', 'lib', 'test'] +
             Dir['lib/**/*.rb'].delete_if {|f| f.include?('.svn')} +
             Dir['test/**/*'].delete_if {|f| f.include?('.svn')}
   s.platform = Gem::Platform::RUBY
   s.require_path = 'lib'
   s.rdoc_options << '--title' << 'TZInfo' << 
-                    '--main' << 'README'
-  s.extra_rdoc_files = ['README', 'CHANGES', 'LICENSE']
+                    '--main' << 'README.md'
+  s.extra_rdoc_files = ['README.md', 'CHANGES.md', 'LICENSE']
   s.required_ruby_version = '>= 1.8.6'
   s.add_dependency 'thread_safe', '~> 0.1'
 

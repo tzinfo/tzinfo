@@ -1,10 +1,12 @@
-== Version 1.0.1 - 22-Jun-2013
+Version 1.0.1 - 22-Jun-2013
+---------------------------
 
 * Fix a test case failure when tests are run from a directory that contains a
   dot in the path (issue #29751).
 
 
-== Version 1.0.0 - 2-Jun-2013
+Version 1.0.0 - 2-Jun-2013
+--------------------------
 
 * Allow TZInfo to be used with different data sources instead of just the
   built-in Ruby module data files.
@@ -29,13 +31,15 @@
   use other TimezonePeriod instance methods instead (issue #7655).
 
 
-== Version 0.3.37 (tzdata v2013b) - 11-Mar-2013
+Version 0.3.37 (tzdata v2013b) - 11-Mar-2013
+--------------------------------------------
 
 * Updated to tzdata version 2013b
   (http://mm.icann.org/pipermail/tz-announce/2013-March/000010.html).
 
 
-== Version 0.3.36 (tzdata v2013a) - 3-Mar-2013
+Version 0.3.36 (tzdata v2013a) - 3-Mar-2013
+-------------------------------------------
 
 * Updated to tzdata version 2013a
   (http://mm.icann.org/pipermail/tz-announce/2013-March/000009.html).
@@ -45,43 +49,50 @@
   instead of checking individual properties with 'respond_to?'.
 
 
-== Version 0.3.35 (tzdata v2012i) - 4-Nov-2012
+Version 0.3.35 (tzdata v2012i) - 4-Nov-2012
+-------------------------------------------
 
 * Updated to tzdata version 2012i
   (http://mm.icann.org/pipermail/tz-announce/2012-November/000007.html).
 
 
-== Version 0.3.34 (tzdata v2012h) - 27-Oct-2012
+Version 0.3.34 (tzdata v2012h) - 27-Oct-2012
+--------------------------------------------
 
 * Updated to tzdata version 2012h
   (http://mm.icann.org/pipermail/tz-announce/2012-October/000006.html).
 
 
-== Version 0.3.33 (tzdata v2012c) - 8-Apr-2012
+Version 0.3.33 (tzdata v2012c) - 8-Apr-2012
+-------------------------------------------
 
 * Updated to tzdata version 2012c
   (http://article.gmane.org/gmane.comp.time.tz/4859).
 
 
-== Version 0.3.32 (tzdata v2012b) - 4-Mar-2012
+Version 0.3.32 (tzdata v2012b) - 4-Mar-2012
+-------------------------------------------
 
 * Updated to tzdata version 2012b
   (http://article.gmane.org/gmane.comp.time.tz/4756).
 
 
-== Version 0.3.31 (tzdata v2011n) - 6-Nov-2011
+Version 0.3.31 (tzdata v2011n) - 6-Nov-2011
+-------------------------------------------
 
 * Updated to tzdata version 2011n
   (http://article.gmane.org/gmane.comp.time.tz/4434).
 
 
-== Version 0.3.30 (tzdata v2011k) - 29-Sep-2011
+Version 0.3.30 (tzdata v2011k) - 29-Sep-2011
+--------------------------------------------
 
 * Updated to tzdata version 2011k
   (http://article.gmane.org/gmane.comp.time.tz/4084).
 
 
-== Version 0.3.29 (tzdata v2011h) - 27-Jun-2011
+Version 0.3.29 (tzdata v2011h) - 27-Jun-2011
+--------------------------------------------
 
 * Updated to tzdata version 2011h
   (http://article.gmane.org/gmane.comp.time.tz/3814).
@@ -90,49 +101,57 @@
   Thanks to Kurt Werle for the suggestion and patch.
 
 
-== Version 0.3.28 (tzdata v2011g) - 13-Jun-2011
+ Version 0.3.28 (tzdata v2011g) - 13-Jun-2011
+--------------------------------------------=
 
 * Add support for Ruby 1.9.3 (trunk revision 31668 and later). Thanks to 
   Aaron Patterson for reporting the problems running on the new version.
   Closes #29233.
 
 
-== Version 0.3.27 (tzdata v2011g) - 26-Apr-2011
+Version 0.3.27 (tzdata v2011g) - 26-Apr-2011
+--------------------------------------------
 
 * Updated to tzdata version 2011g
   (http://article.gmane.org/gmane.comp.time.tz/3758).
 
 
-== Version 0.3.26 (tzdata v2011e) - 2-Apr-2011
+Version 0.3.26 (tzdata v2011e) - 2-Apr-2011
+-------------------------------------------
 
 * Updated to tzdata version 2011e
   (http://article.gmane.org/gmane.comp.time.tz/3707).
 
 
-== Version 0.3.25 (tzdata v2011d) - 14-Mar-2011
+Version 0.3.25 (tzdata v2011d) - 14-Mar-2011
+--------------------------------------------
 
 * Updated to tzdata version 2011d
   (http://article.gmane.org/gmane.comp.time.tz/3662).
 
 
-== Version 0.3.24 (tzdata v2010o) - 15-Jan-2011
+Version 0.3.24 (tzdata v2010o) - 15-Jan-2011
+--------------------------------------------
 
 * Updated to tzdata version 2010o
   (http://article.gmane.org/gmane.comp.time.tz/3473).
 
 
-== Version 0.3.23 (tzdata v2010l) - 19-Aug-2010
+Version 0.3.23 (tzdata v2010l) - 19-Aug-2010
+--------------------------------------------
 
 * Updated to tzdata version 2010l
   (http://article.gmane.org/gmane.comp.time.tz/3354).
 
 
-== Version 0.3.22 (tzdata v2010j) - 29-May-2010
+Version 0.3.22 (tzdata v2010j) - 29-May-2010
+--------------------------------------------
 
 * Corrected file permissions issue with 0.3.21 release.
 
 
-== Version 0.3.21 (tzdata v2010j) - 28-May-2010
+Version 0.3.21 (tzdata v2010j) - 28-May-2010
+--------------------------------------------
 
 * Updated to tzdata version 2010j
   (http://article.gmane.org/gmane.comp.time.tz/3225).
@@ -149,31 +168,36 @@
   require 'tzinfo' instead.
 
 
-== Version 0.3.20 (tzdata v2010i) - 19-Apr-2010
+Version 0.3.20 (tzdata v2010i) - 19-Apr-2010
+--------------------------------------------
 
 * Updated to tzdata version 2010i
   (http://article.gmane.org/gmane.comp.time.tz/3202).
 
 
-== Version 0.3.19 (tzdata v2010h) - 5-Apr-2010
+Version 0.3.19 (tzdata v2010h) - 5-Apr-2010
+-------------------------------------------
 
 * Updated to tzdata version 2010h
   (http://article.gmane.org/gmane.comp.time.tz/3188).
 
 
-== Version 0.3.18 (tzdata v2010g) - 29-Mar-2010
+Version 0.3.18 (tzdata v2010g) - 29-Mar-2010
+--------------------------------------------
 
 * Updated to tzdata version 2010g
   (http://article.gmane.org/gmane.comp.time.tz/3172).
 
 
-== Version 0.3.17 (tzdata v2010e) - 8-Mar-2010
+Version 0.3.17 (tzdata v2010e) - 8-Mar-2010
+-------------------------------------------
 
 * Updated to tzdata version 2010e
   (http://article.gmane.org/gmane.comp.time.tz/3128).
 
 
-== Version 0.3.16 (tzdata v2009u) - 5-Jan-2010
+Version 0.3.16 (tzdata v2009u) - 5-Jan-2010
+-------------------------------------------
 
 * Support the use of '-' to denote '0' as an offset in the tz data files.
   Used for the first time in the SAVE field in tzdata v2009u.
@@ -181,7 +205,8 @@
   (http://article.gmane.org/gmane.comp.time.tz/3053).
 
 
-== Version 0.3.15 (tzdata v2009p) - 26-Oct-2009
+Version 0.3.15 (tzdata v2009p) - 26-Oct-2009
+--------------------------------------------
 
 * Updated to tzdata version 2009p
   (http://article.gmane.org/gmane.comp.time.tz/2953).
@@ -189,7 +214,8 @@
 * List test files in test_files instead of files in the gem spec.
 
 
-== Version 0.3.14 (tzdata v2009l) - 19-Aug-2009
+Version 0.3.14 (tzdata v2009l) - 19-Aug-2009
+--------------------------------------------
 
 * Updated to tzdata version 2009l
   (http://article.gmane.org/gmane.comp.time.tz/2818).
@@ -197,7 +223,8 @@
   Ruby 1.9.2, which doesn't include it by default any more.
 
 
-== Version 0.3.13 (tzdata v2009f) - 15-Apr-2009
+Version 0.3.13 (tzdata v2009f) - 15-Apr-2009
+--------------------------------------------
 
 * Updated to tzdata version 2009f
   (http://article.gmane.org/gmane.comp.time.tz/2668).
@@ -206,13 +233,15 @@
   the suggestion. Closes #25349.
 
 
-== Version 0.3.12 (tzdata v2008i) - 12-Nov-2008
+Version 0.3.12 (tzdata v2008i) - 12-Nov-2008
+--------------------------------------------
 
 * Updated to tzdata version 2008i
   (http://article.gmane.org/gmane.comp.time.tz/2440).
 
 
-== Version 0.3.11 (tzdata v2008g) - 7-Oct-2008
+Version 0.3.11 (tzdata v2008g) - 7-Oct-2008
+-------------------------------------------
 
 * Updated to tzdata version 2008g
   (http://article.gmane.org/gmane.comp.time.tz/2335).
@@ -224,13 +253,15 @@
   deprecated in the Ruby svn trunk. Closes #22308.
 
 
-== Version 0.3.10 (tzdata v2008f) - 16-Sep-2008
+Version 0.3.10 (tzdata v2008f) - 16-Sep-2008
+--------------------------------------------
 
 * Updated to tzdata version 2008f
   (http://article.gmane.org/gmane.comp.time.tz/2293).
 
 
-== Version 0.3.9 (tzdata v2008c) - 27-May-2008
+Version 0.3.9 (tzdata v2008c) - 27-May-2008
+-------------------------------------------
 
 * Updated to tzdata version 2008c
   (http://article.gmane.org/gmane.comp.time.tz/2183).
@@ -241,7 +272,8 @@
   command line options. Thanks to Paul McMahon for the patch. Closes #19719.
 
 
-== Version 0.3.8 (tzdata v2008b) - 24-Mar-2008
+Version 0.3.8 (tzdata v2008b) - 24-Mar-2008
+-------------------------------------------
 
 * Updated to tzdata version 2008b
   (http://article.gmane.org/gmane.comp.time.tz/2149).
@@ -253,38 +285,44 @@
   between Ruby 1.8.6 and Ruby 1.9.0.
 
 
-== Version 0.3.7 (tzdata v2008a) - 10-Mar-2008
+Version 0.3.7 (tzdata v2008a) - 10-Mar-2008
+-------------------------------------------
 
 * Updated to tzdata version 2008a
   (http://article.gmane.org/gmane.comp.time.tz/2071).
 
 
-== Version 0.3.6 (tzdata v2007k) - 1-Jan-2008
+Version 0.3.6 (tzdata v2007k) - 1-Jan-2008
+------------------------------------------
 
 * Updated to tzdata version 2007k
   (http://article.gmane.org/gmane.comp.time.tz/2029).
 * Removed deprecated RubyGems autorequire option.
 
 
-== Version 0.3.5 (tzdata v2007h) - 1-Oct-2007
+Version 0.3.5 (tzdata v2007h) - 1-Oct-2007
+------------------------------------------
 
 * Updated to tzdata version 2007h
   (http://article.gmane.org/gmane.comp.time.tz/1878).
 
 
-== Version 0.3.4 (tzdata v2007g) - 21-Aug-2007
+Version 0.3.4 (tzdata v2007g) - 21-Aug-2007
+-------------------------------------------
 
 * Updated to tzdata version 2007g
   (http://article.gmane.org/gmane.comp.time.tz/1810).
 
 
-== Version 0.3.3 (tzdata v2006p) - 27-Nov-2006
+Version 0.3.3 (tzdata v2006p) - 27-Nov-2006
+-------------------------------------------
 
 * Updated to tzdata version 2006p
   (http://article.gmane.org/gmane.comp.time.tz/1358).
 
 
-== Version 0.3.2 (tzdata v2006n) - 11-Oct-2006
+Version 0.3.2 (tzdata v2006n) - 11-Oct-2006
+-------------------------------------------
 
 * Updated to tzdata version 2006n
   (http://article.gmane.org/gmane.comp.time.tz/1288). Note that this release of
@@ -292,7 +330,8 @@
   separate Serbia (RS) and Montenegro (ME) entries.
 
 
-== Version 0.3.1 (tzdata v2006j) - 21-Aug-2006
+Version 0.3.1 (tzdata v2006j) - 21-Aug-2006
+-------------------------------------------
 
 * Remove colon from case statements to avoid warning in Ruby 1.8.5. #5198.
 * Use temporary variable to avoid dynamic string warning from rdoc.
@@ -300,7 +339,8 @@
   (http://article.gmane.org/gmane.comp.time.tz/1175).
 
 
-== Version 0.3.0 (tzdata v2006g) - 17-Jul-2006
+Version 0.3.0 (tzdata v2006g) - 17-Jul-2006
+-------------------------------------------
 
 * New timezone data format. Timezone data now occupies less space on disk and
   takes less memory once loaded. #4142, #4144.
@@ -350,7 +390,8 @@
   descriptions of timezones within countries.
 
 
-== Version 0.2.2 (tzdata v2006g) - 17-May-2006
+Version 0.2.2 (tzdata v2006g) - 17-May-2006
+-------------------------------------------
 
 * Use class-scoped instance variables to store the Timezone identifier and 
   singleton instance. Loading a linked zone no longer causes the parent
@@ -364,7 +405,8 @@
   (http://article.gmane.org/gmane.comp.time.tz/1008).
 
 
-== Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
+Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
+-------------------------------------------
 
 * Fix a performance issue caused in 0.2.0 with Timezone.local_to_utc. 
   Conversions performed on TimeOrDateTime instances passed to <=> are now
@@ -388,7 +430,8 @@
     tz.utc_to_local(Time.local(2006, 4, 17, 15, 40, 0))
 
 
-== Version 0.2.0 (tzdata v2006c) - 3-Apr-2006
+Version 0.2.0 (tzdata v2006c) - 3-Apr-2006
+------------------------------------------
 
 * Use timestamps rather than DateTime objects in zone files for times between
   1970 and 2037 (the range of Time).
@@ -411,7 +454,8 @@
   (http://article.gmane.org/gmane.comp.time.tz/920).
 
 
-== Version 0.1.2 (tzdata v2006a) - 5-Feb-2006
+Version 0.1.2 (tzdata v2006a) - 5-Feb-2006
+------------------------------------------
 
 * Add lib directory to the load path when tzinfo is required. Makes it easier
   to use tzinfo gem when unpacked to vendor directory in rails. 
@@ -426,14 +470,16 @@
   than a NameError.
 
 
-== Version 0.1.1 (tzdata v2005q) - 18-Dec-2005
+Version 0.1.1 (tzdata v2005q) - 18-Dec-2005
+-------------------------------------------
 
 * Timezones that are defined by a single unbounded period (e.g. UTC) now 
   work again.
 * Updated to tzdata version 2005q.
 
 
-== Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
+Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
+-------------------------------------------
 
 * period_for_local and local_to_utc now allow resolution of ambiguous
   times (e.g. when switching from daylight savings to standard time). 
@@ -467,7 +513,8 @@
 * Updated to tzdata version 2005n.
 
 
-== Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
+Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
+-------------------------------------------
 
 * Removed debug output accidentally included in the previous release.
 * Fixed a bug in the generation of friendly zone identifiers (was inserting
@@ -478,7 +525,8 @@
   some selected timezones.
 
   
-== Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
+Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
+-------------------------------------------
 
 * Reduced visibility of some methods added in Timezone#setup and Country#setup.
 * Added name method to Timezone (returns the identifier).
@@ -501,7 +549,8 @@
   <%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %>
 
 
-== Version 0.0.2 (tzdata v2005m) - 13-Sep-2005 
+Version 0.0.2 (tzdata v2005m) - 13-Sep-2005 
+-------------------------------------------
 
 * Country and Timezone data is now loaded into class rather than instance 
   variables. This makes Timezone links more efficient and saves memory if
@@ -519,6 +568,7 @@ article about using TZInfo with Rails
 (http://lunchroom.lunchboxsoftware.com/pages/tzinfo_rails)
 
 
-== Version 0.0.1 (tzdata v2005m) - 29-Aug-2005 
+Version 0.0.1 (tzdata v2005m) - 29-Aug-2005
+-------------------------------------------
 
 * First release.
