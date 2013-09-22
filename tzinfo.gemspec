@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.email = 'phil.ross@gmail.com'
   s.homepage = 'http://tzinfo.github.io'
   s.license = 'MIT' 
-  s.files = ['CHANGES.md', 'LICENSE', 'Rakefile', 'README.md', '.yardopts', 'lib', 'test'] +
+  s.files = ['CHANGES.md', 'LICENSE', 'Rakefile', 'README.md', '.yardopts'] +
             Dir['lib/**/*.rb'].delete_if {|f| f.include?('.svn')} +
             Dir['test/**/*'].delete_if {|f| f.include?('.svn')}
   s.platform = Gem::Platform::RUBY
