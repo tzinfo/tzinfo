@@ -9,7 +9,8 @@ Gem::Specification.new do |s|
   s.license = 'MIT' 
   s.files = ['CHANGES.md', 'LICENSE', 'Rakefile', 'README.md', '.yardopts'] +
             Dir['lib/**/*.rb'].delete_if {|f| f.include?('.svn')} +
-            Dir['test/**/*'].delete_if {|f| f.include?('.svn')}
+            Dir['test/**/*.rb'].delete_if {|f| f.include?('.svn')} +
+            Dir['test/zoneinfo/**/*'].delete_if {|f| f.include?('.svn') || File.symlink?(f)}
   s.platform = Gem::Platform::RUBY
   s.require_path = 'lib'
   s.rdoc_options << '--title' << 'TZInfo' << 
