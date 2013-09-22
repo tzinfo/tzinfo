@@ -20,6 +20,10 @@
 # THE SOFTWARE.
 #++
 
+# Top level module for TZInfo.
+module TZInfo
+end
+
 require 'tzinfo/ruby_core_support'
 require 'tzinfo/offset_rationals'
 require 'tzinfo/time_or_datetime'
