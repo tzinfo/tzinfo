@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.email = 'phil.ross@gmail.com'
   s.homepage = 'http://tzinfo.github.io'
   s.license = 'MIT' 
-  s.files = ['CHANGES.md', 'LICENSE', 'Rakefile', 'README.md', '.yardopts'] +
+  s.files = %w(CHANGES.md LICENSE Rakefile README.md tzinfo.gemspec .yardopts) +
             Dir['lib/**/*.rb'].delete_if {|f| f.include?('.svn')} +
             Dir['test/**/*.rb'].delete_if {|f| f.include?('.svn')} +
             Dir['test/zoneinfo/**/*'].delete_if {|f| f.include?('.svn') || File.symlink?(f)}
