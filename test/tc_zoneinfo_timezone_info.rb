@@ -31,6 +31,14 @@ include TZInfo
 
 class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
 
+  begin
+    Time.at(-2147483649)
+    Time.at(2147483648)
+    SUPPORTS_64BIT = true
+  rescue RangeError
+    SUPPORTS_64BIT = false
+  end
+
   def assert_period(abbreviation, utc_offset, std_offset, dst, start_at, end_at, info)    
     if start_at
       period = info.period_for_utc(start_at)
@@ -328,28 +336,33 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
     end
   end
   
-  def test_load_invalid_section2_magic
-    ['TZif4', 'tzif2', '12345'].each do |section2_magic|    
-      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
-          
-      tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|        
-        assert_raises(InvalidZoneinfoFile) do
-          ZoneinfoTimezoneInfo.new('Zone4', path)
+  # These tests can only be run if the platform supports 64-bit Times. When
+  # 64-bit support is unavailable, the second section will not be read, so no 
+  # error will be raised.
+  if SUPPORTS_64BIT
+    def test_load_invalid_section2_magic
+      ['TZif4', 'tzif2', '12345'].each do |section2_magic|    
+        offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+            
+        tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|        
+          assert_raises(InvalidZoneinfoFile) do
+            ZoneinfoTimezoneInfo.new('Zone4', path)
+          end
         end
       end
     end
-  end
-  
-  def test_load_mismatched_section2_magic
-    minus_one = Proc.new {|f| f == 2 ? "TZif\0" : "TZif#{f - 1}" }
-    plus_one = Proc.new {|f| "TZif#{f + 1}" }
     
-    [minus_one, plus_one].each do |section2_magic|    
-      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
-          
-      tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|        
-        assert_raises(InvalidZoneinfoFile) do
-          ZoneinfoTimezoneInfo.new('Zone5', path)
+    def test_load_mismatched_section2_magic
+      minus_one = Proc.new {|f| f == 2 ? "TZif\0" : "TZif#{f - 1}" }
+      plus_one = Proc.new {|f| "TZif#{f + 1}" }
+      
+      [minus_one, plus_one].each do |section2_magic|    
+        offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+            
+        tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|        
+          assert_raises(InvalidZoneinfoFile) do
+            ZoneinfoTimezoneInfo.new('Zone5', path)
+          end
         end
       end
     end
@@ -436,7 +449,7 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
       assert_period(:XNST,    0,    0, false, Time.utc(2000, 12, 31),                    nil, info)
     end
   end
-  
+
   def test_load_64bit
     # Some platforms support 64-bit Times, others only 32-bit. The TZif version
     # 2 and later format contains both 32-bit and 64-bit times. 
@@ -444,14 +457,6 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
     # Where 64-bit is supported and a TZif 2 or later file is provided, the 
     # 64-bit times should be used, otherwise the 32-bit information should be 
     # used.
-      
-    begin
-      Time.at(-2147483649)
-      Time.at(2147483648)
-      supports_64bit = true
-    rescue RangeError
-      supports_64bit = false
-    end
   
     offsets = [
       {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
@@ -469,7 +474,7 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
       info = ZoneinfoTimezoneInfo.new('Zone/SixtyFour', path)
       assert_equal('Zone/SixtyFour', info.identifier)
   
-      if supports_64bit && format >= 2
+      if SUPPORTS_64BIT && format >= 2
         assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1850,  1,  2), info)
         assert_period(:XST,  3600,    0, false, Time.utc(1850,  1,  2), Time.utc(2003,  4, 22), info)
         assert_period(:XDT,  3600, 3600,  true, Time.utc(2003,  4, 22), Time.utc(2003, 10, 21), info)

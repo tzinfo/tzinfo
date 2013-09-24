@@ -442,9 +442,9 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
       zone = File.join(dir, 'Zone')      
       
       File.open(File.join(@data_source.zoneinfo_dir, 'EST')) do |src|
-        # Change format to 3 (which is not a valid format).
+        # Change header to TZif1 (which is not a valid header).
         File.open(zone, 'wb') do |dest|
-          dest.write('TZif3')
+          dest.write('TZif1')
           src.pos = 5
           FileUtils.copy_stream(src, dest)
         end
