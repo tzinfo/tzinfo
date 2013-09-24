@@ -108,7 +108,11 @@ module TZInfo
         magic, version, ttisgmtcnt, ttisstdcnt, leapcnt, timecnt, typecnt, charcnt =
           check_read(file, 44).unpack('a4 a x15 NNNNNN')
 
-        if magic == 'TZif' && (version == '2' || version == '3') && RubyCoreSupport.time_supports_64bit
+        if magic != 'TZif'
+          raise InvalidZoneinfoFile, "The file '#{file.path}' does not start with the expected header."
+        end
+
+        if (version == '2' || version == '3') && RubyCoreSupport.time_supports_64bit
           # Skip the first 32-bit section and read the header of the second 64-bit section
           check_read(file, timecnt * 5 + typecnt * 6 + charcnt + leapcnt * 8 + ttisgmtcnt + ttisstdcnt)
           
@@ -122,8 +126,6 @@ module TZInfo
           end
           
           using_64bit = true
-        elsif magic != 'TZif'
-          raise InvalidZoneinfoFile, "The file '#{file.path}' does not start with the expected header."
         elsif version != '3' && version != '2' && version != "\0"
           raise InvalidZoneinfoFile, "The file '#{file.path}' contains a version of the zoneinfo format that is not currently supported."
         else
