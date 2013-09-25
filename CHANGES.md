@@ -1,3 +1,24 @@
+Version 1.1.0 - 25-Sep-2013
+---------------------------
+
+* TZInfo is now thread safe. ThreadSafe::Cache is now used instead of Hash
+  to cache Timezone and Country instances returned by Timezone.get and
+  Country.get. The tzinfo gem now depends on thread_safe ~> 0.1.
+* Added a transitions_up_to method to Timezone that returns a list of the times
+  where the UTC offset of the timezone changes.
+* Added an offsets_up_to method to Timezone that returns the set of offsets
+  that have been observed in a defined timezone.
+* Fixed a "can't modify frozen String" error when loading a Timezone from a
+  zoneinfo file using an identifier String that is both tainted and frozen.
+  Resolves #3.
+* Support TZif3 format zoneinfo files (now produced by zic from tzcode version
+  2013e onwards).
+* Support using YARD to generate documentation (added a .yardopts file).
+* Ignore the +VERSION file included in the zoneinfo directory on Mac OS X.
+* Added a note to the documentation concerning 32-bit zoneinfo files (as 
+  included with Mac OS X).
+
+
 Version 1.0.1 - 22-Jun-2013
 ---------------------------
 
