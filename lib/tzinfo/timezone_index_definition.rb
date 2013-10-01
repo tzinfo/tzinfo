@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 module TZInfo
   # The timezone index file includes TimezoneIndexDefinition which provides
   # methods used to define timezones in the index.

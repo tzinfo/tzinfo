@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 module TZInfo
 
   # A proxy class representing a timezone with a given identifier. TimezoneProxy

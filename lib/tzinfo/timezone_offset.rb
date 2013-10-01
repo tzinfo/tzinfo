@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 module TZInfo
   # Represents an offset defined in a Timezone data file.
   class TimezoneOffset

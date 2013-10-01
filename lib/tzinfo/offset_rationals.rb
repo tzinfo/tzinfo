@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 require 'rational' unless defined?(Rational)
 
 module TZInfo

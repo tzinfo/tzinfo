@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 module TZInfo
   # Represents a timezone defined by a data source.
   class TimezoneInfo

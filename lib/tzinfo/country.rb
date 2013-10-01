@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 require 'thread_safe'
 
 module TZInfo

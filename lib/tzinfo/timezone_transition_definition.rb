@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 module TZInfo
   # A TimezoneTransition defined by as integer timestamp, as a rational to
   # create a DateTime or as both.

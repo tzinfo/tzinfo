@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 module TZInfo
   # Represents a timezone that is defined as a link or alias to another zone.
   class LinkedTimezoneInfo < TimezoneInfo

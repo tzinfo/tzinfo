@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 module TZInfo
   # Represents a defined timezone containing transition data.
   class DataTimezoneInfo < TimezoneInfo  

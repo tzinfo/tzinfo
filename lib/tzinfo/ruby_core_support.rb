@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 require 'date'
 require 'rational' unless defined?(Rational)
 

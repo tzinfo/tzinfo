@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 module TZInfo
   # The country index file includes CountryIndexDefinition which provides
   # a country method used to define each country in the index.

@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 module TZInfo
   # A Timezone within a Country. This contains extra information about the
   # Timezone that is specific to the Country (a Timezone could be used by

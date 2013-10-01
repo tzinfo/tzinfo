@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 #++
 
+
 module TZInfo
   # A period of time in a timezone where the same offset from UTC applies.
   #
