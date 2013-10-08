@@ -4,7 +4,7 @@ module TZInfo
       module St_Barthelemy
         include TimezoneDefinition
         
-        linked_timezone 'America/St_Barthelemy', 'America/Guadeloupe'
+        linked_timezone 'America/St_Barthelemy', 'America/Port_of_Spain'
       end
     end
   end

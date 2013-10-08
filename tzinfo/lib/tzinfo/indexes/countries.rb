@@ -28,8 +28,7 @@ module TZInfo
         c.timezone 'Africa/Luanda', -44, 5, 397, 30
       end
       country 'AQ', 'Antarctica' do |c|
-        c.timezone 'Antarctica/McMurdo', -467, 6, 833, 5, 'McMurdo Station, Ross Island'
-        c.timezone 'Antarctica/South_Pole', -90, 1, 0, 1, 'Amundsen-Scott Station, South Pole'
+        c.timezone 'Antarctica/McMurdo', -467, 6, 833, 5, 'McMurdo, South Pole, Scott (New Zealand time)'
         c.timezone 'Antarctica/Rothera', -2027, 30, -1022, 15, 'Rothera Station, Adelaide Island'
         c.timezone 'Antarctica/Palmer', -324, 5, -641, 10, 'Palmer Station, Anvers Island'
         c.timezone 'Antarctica/Mawson', -338, 5, 3773, 60, 'Mawson Station, Holme Bay'
@@ -122,7 +121,7 @@ module TZInfo
       country 'BO', 'Bolivia' do |c|
         c.timezone 'America/La_Paz', -33, 2, -1363, 20
       end
-      country 'BQ', 'Bonaire Sint Eustatius & Saba' do |c|
+      country 'BQ', 'Caribbean Netherlands' do |c|
         c.timezone 'America/Kralendijk', 14581, 1200, -20483, 300
       end
       country 'BR', 'Brazil' do |c|
@@ -166,8 +165,7 @@ module TZInfo
         c.timezone 'America/Moncton', 461, 10, -3887, 60, 'Atlantic Time - New Brunswick'
         c.timezone 'America/Goose_Bay', 160, 3, -725, 12, 'Atlantic Time - Labrador - most locations'
         c.timezone 'America/Blanc-Sablon', 617, 12, -3427, 60, 'Atlantic Standard Time - Quebec - Lower North Shore'
-        c.timezone 'America/Montreal', 2731, 60, -2207, 30, 'Eastern Time - Quebec - most locations'
-        c.timezone 'America/Toronto', 873, 20, -4763, 60, 'Eastern Time - Ontario - most locations'
+        c.timezone 'America/Toronto', 873, 20, -4763, 60, 'Eastern Time - Ontario & Quebec - most locations'
         c.timezone 'America/Nipigon', 2941, 60, -1324, 15, 'Eastern Time - Ontario & Quebec - places that did not observe DST 1967-1973'
         c.timezone 'America/Thunder_Bay', 2903, 60, -357, 4, 'Eastern Time - Thunder Bay, Ontario'
         c.timezone 'America/Iqaluit', 956, 15, -1027, 15, 'Eastern Time - east Nunavut - most locations'
@@ -398,7 +396,7 @@ module TZInfo
         c.timezone 'Europe/Dublin', 160, 3, -25, 4
       end
       country 'IL', 'Israel' do |c|
-        c.timezone 'Asia/Jerusalem', 953, 30, 1057, 30
+        c.timezone 'Asia/Jerusalem', 11441, 360, 63403, 1800
       end
       country 'IM', 'Isle of Man' do |c|
         c.timezone 'Europe/Isle_of_Man', 1083, 20, -67, 15
@@ -425,7 +423,7 @@ module TZInfo
         c.timezone 'Europe/Jersey', 246, 5, -127, 60
       end
       country 'JM', 'Jamaica' do |c|
-        c.timezone 'America/Jamaica', 18, 1, -384, 5
+        c.timezone 'America/Jamaica', 12937, 720, -11519, 150
       end
       country 'JO', 'Jordan' do |c|
         c.timezone 'Asia/Amman', 639, 20, 539, 15
@@ -765,7 +763,7 @@ module TZInfo
       country 'SV', 'El Salvador' do |c|
         c.timezone 'America/El_Salvador', 137, 10, -446, 5
       end
-      country 'SX', 'Sint Maarten' do |c|
+      country 'SX', 'St Maarten (Dutch part)' do |c|
         c.timezone 'America/Lower_Princes', 12997, 720, -22697, 360
       end
       country 'SY', 'Syria' do |c|
@@ -856,8 +854,7 @@ module TZInfo
         c.timezone 'America/North_Dakota/Beulah', 56717, 1200, -916, 9, 'Central Time - North Dakota - Mercer County'
         c.timezone 'America/Denver', 47687, 1200, -125981, 1200, 'Mountain Time'
         c.timezone 'America/Boise', 157009, 3600, -46481, 400, 'Mountain Time - south Idaho & east Oregon'
-        c.timezone 'America/Shiprock', 33107, 900, -391271, 3600, 'Mountain Time - Navajo'
-        c.timezone 'America/Phoenix', 20069, 600, -16811, 150, 'Mountain Standard Time - Arizona'
+        c.timezone 'America/Phoenix', 20069, 600, -16811, 150, 'Mountain Standard Time - Arizona (except Navajo)'
         c.timezone 'America/Los_Angeles', 30647, 900, -212837, 1800, 'Pacific Time'
         c.timezone 'America/Anchorage', 44077, 720, -539641, 3600, 'Alaska Time'
         c.timezone 'America/Juneau', 209887, 3600, -483911, 3600, 'Alaska Time - Alaska panhandle'

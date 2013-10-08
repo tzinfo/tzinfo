@@ -6,12 +6,12 @@ module TZInfo
         
         timezone 'America/Grand_Turk' do |tz|
           tz.offset :o0, -17072, 0, :LMT
-          tz.offset :o1, -18432, 0, :KMT
+          tz.offset :o1, -18431, 0, :KMT
           tz.offset :o2, -18000, 0, :EST
           tz.offset :o3, -18000, 3600, :EDT
           
           tz.transition 1890, 1, :o1, 13021390967, 5400
-          tz.transition 1912, 2, :o2, 362915057, 150
+          tz.transition 1912, 2, :o2, 209039072831, 86400
           tz.transition 1979, 4, :o3, 294217200
           tz.transition 1979, 10, :o2, 309938400
           tz.transition 1980, 4, :o3, 325666800
