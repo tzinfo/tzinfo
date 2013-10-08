@@ -7,7 +7,7 @@ module TZInfo
         timezone 'Asia/Makassar' do |tz|
           tz.offset :o0, 28656, 0, :LMT
           tz.offset :o1, 28656, 0, :MMT
-          tz.offset :o2, 28800, 0, :CIT
+          tz.offset :o2, 28800, 0, :WITA
           tz.offset :o3, 32400, 0, :JST
           
           tz.transition 1919, 12, :o1, 1453394501, 600

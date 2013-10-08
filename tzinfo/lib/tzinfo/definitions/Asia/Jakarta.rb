@@ -6,12 +6,12 @@ module TZInfo
         
         timezone 'Asia/Jakarta' do |tz|
           tz.offset :o0, 25632, 0, :LMT
-          tz.offset :o1, 25632, 0, :JMT
+          tz.offset :o1, 25632, 0, :BMT
           tz.offset :o2, 26400, 0, :JAVT
-          tz.offset :o3, 27000, 0, :WIT
+          tz.offset :o3, 27000, 0, :WIB
           tz.offset :o4, 32400, 0, :JST
-          tz.offset :o5, 28800, 0, :WIT
-          tz.offset :o6, 25200, 0, :WIT
+          tz.offset :o5, 28800, 0, :WIB
+          tz.offset :o6, 25200, 0, :WIB
           
           tz.transition 1867, 8, :o1, 720956461, 300
           tz.transition 1923, 12, :o2, 87256267, 36
