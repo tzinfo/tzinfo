@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2012 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,8 @@ require 'time'
 module TZInfo
   # Used by TZInfo internally to represent either a Time, DateTime or integer
   # timestamp (seconds since 1970-01-01 00:00:00).
+  #
+  # @private
   class TimeOrDateTime #:nodoc:
     include Comparable
     

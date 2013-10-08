@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,8 @@ module TZInfo
   
   # TimezoneDefinition is included into Timezone definition modules.
   # TimezoneDefinition provides the methods for defining timezones.
+  #
+  # @private
   module TimezoneDefinition #:nodoc:
     # Add class methods to the includee.
     def self.append_features(base)
@@ -32,6 +34,8 @@ module TZInfo
     end
     
     # Class methods for inclusion.
+    #
+    # @private
     module ClassMethods #:nodoc:
       # Returns and yields a DataTimezoneInfo object to define a timezone.
       def timezone(identifier)

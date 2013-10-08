@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2010 Philip Ross
+# Copyright (c) 2005-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -63,13 +63,19 @@ module TZInfo
     
     # Cache of loaded zones by identifier to avoid using require if a zone
     # has already been loaded.
+    #
+    # @!visibility private
     @@loaded_zones = {}
     
     # Whether the timezones index has been loaded yet.
+    #
+    # @!visibility private
     @@index_loaded = false
     
     # Default value of the dst parameter of the local_to_utc and 
     # period_for_local methods.
+    #
+    # @!visibility private
     @@default_dst = nil
     
     # Sets the default value of the optional dst parameter of the 

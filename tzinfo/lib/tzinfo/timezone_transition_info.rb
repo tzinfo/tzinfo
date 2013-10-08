@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2012 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,8 @@ require 'date'
 
 module TZInfo
   # Represents an offset defined in a Timezone data file.
+  #
+  # @private
   class TimezoneTransitionInfo #:nodoc:
     # The offset this transition changes to (a TimezoneOffsetInfo instance).
     attr_reader :offset

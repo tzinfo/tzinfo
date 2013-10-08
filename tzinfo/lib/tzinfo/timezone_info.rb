@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,8 @@
 
 module TZInfo
   # Represents a timezone defined in a data module.
+  #
+  # @private
   class TimezoneInfo #:nodoc:
     
     # The timezone identifier.

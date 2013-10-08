@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,8 @@
 
 module TZInfo
   # Represents a linked timezone defined in a data module.
+  #
+  # @private
   class LinkedTimezoneInfo < TimezoneInfo #:nodoc:
         
     # The zone that provides the data (that this zone is an alias for).

@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2010 Philip Ross
+# Copyright (c) 2005-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -36,9 +36,13 @@ module TZInfo
     include Comparable
     
     # Defined countries.
+    #
+    # @!visibility private
     @@countries = {}
     
     # Whether the countries index has been loaded yet.
+    #
+    # @!visibility private
     @@index_loaded = false
     
     # Gets a Country by its ISO 3166 code. Raises an InvalidCountryCode 

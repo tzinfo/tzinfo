@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2012 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,8 @@
 
 module TZInfo
   # Represents an offset defined in a Timezone data file.
+  #
+  # @private
   class TimezoneOffsetInfo #:nodoc:
     # The base offset of the timezone from UTC in seconds.
     attr_reader :utc_offset

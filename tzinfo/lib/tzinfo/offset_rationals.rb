@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,9 @@ module TZInfo
   
   # Provides a method for getting Rationals for a timezone offset in seconds.
   # Pre-reduced rationals are returned for all the half-hour intervals between
-  # -14 and +14 hours to avoid having to call gcd at runtime.  
+  # -14 and +14 hours to avoid having to call gcd at runtime.
+  #
+  # @private
   module OffsetRationals #:nodoc:
     @@rational_cache = {
       -50400 => RubyCoreSupport.rational_new!(-7,12), 

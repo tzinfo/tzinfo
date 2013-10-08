@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006-2010 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,8 @@
 module TZInfo  
   # Class to store the data loaded from the country index. Instances of this
   # class are passed to the blocks in the index that define timezones.
+  #
+  # @private
   class CountryInfo #:nodoc:
     attr_reader :code
     attr_reader :name

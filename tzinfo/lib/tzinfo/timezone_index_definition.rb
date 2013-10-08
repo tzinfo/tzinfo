@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006 Philip Ross
+# Copyright (c) 2006-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,8 @@
 module TZInfo
   # The timezone index file includes TimezoneIndexDefinition which provides
   # methods used to define timezones in the index.
+  #
+  # @private
   module TimezoneIndexDefinition #:nodoc:
     def self.append_features(base)
       super
@@ -34,6 +36,9 @@ module TZInfo
       end
     end
     
+    # Class methods for inclusion.
+    #
+    # @private
     module ClassMethods #:nodoc:
       # Defines a timezone based on data.
       def timezone(identifier)

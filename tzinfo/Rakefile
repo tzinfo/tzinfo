@@ -46,6 +46,7 @@ PKG_FILES = FileList[
   'LICENSE',
   'Rakefile',
   'README',
+  '.yardopts',
   'lib',
   'lib/**/*'
 ].delete_if {|f| f.include?('.svn')}
