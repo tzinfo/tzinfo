@@ -40,7 +40,7 @@ def sh(*cmd, &block)
 end
 
 
-PKG_VERSION = "0.3.37"
+PKG_VERSION = "0.3.38"
 PKG_FILES = FileList[
   'CHANGES',
   'LICENSE',
