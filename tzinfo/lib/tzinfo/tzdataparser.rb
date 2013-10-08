@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2010 Philip Ross
+# Copyright (c) 2005-2013 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -73,17 +73,15 @@ module TZInfo
     # Reads the tzdata source and generates the classes. Takes a long time
     # to run. Currently outputs debugging information to standard out.
     def execute
-      Dir.foreach(@input_dir) {|file|
-        load_rules(file) if file =~ /^[^\.]+$/        
-      }  
-      
-      Dir.foreach(@input_dir) {|file|
-        load_zones(file) if file =~ /^[^\.]+$/        
-      }
-      
-      Dir.foreach(@input_dir) {|file|
-        load_links(file) if file =~ /^[^\.]+$/        
-      }
+      files = Dir.entries(@input_dir).select do |file|
+        file =~ /\A[^\.]+\z/ &&            
+          !%w(leapseconds leapseconds.awk leap-seconds.list Makefile README SOURCE).include?(file) &&
+          File.file?(File.join(@input_dir, file))
+      end
+    
+      files.each {|file| load_rules(file) }
+      files.each {|file| load_zones(file) }
+      files.each {|file| load_links(file) }
       
       load_countries
       
