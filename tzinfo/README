@@ -1,12 +1,12 @@
 = TZInfo -- Daylight-savings aware timezone support for Ruby
 
-TZInfo[http://tzinfo.rubyforge.org] uses the tz database 
-(http://www.twinsun.com/tz/tz-link.htm) to provide
+TZInfo[http://tzinfo.github.io] uses the IANA Time Zone Database 
+(http://www.iana.org/time-zones) to provide
 daylight-savings aware transformations between times in different timezones.
 This is the same database as used for zoneinfo on Unix machines.
 
-The tz database has been imported (using TZDataParser) and turned into a set of
-Ruby modules (which are packaged with this release).
+The Time Zone database has been imported (using TZDataParser) and turned into a 
+set of Ruby modules (which are packaged with this release).
 
 
 == Example usage
@@ -66,15 +66,9 @@ The above covers the most common uses of Timezone and Country. For more detail,
 see the API documentation for the individual classes.
 
 
-== Download
+== Documentation
 
-The latest version of TZInfo can be found at
-
-* http://rubyforge.org/frs/?group_id=894
-
-API documentation can be found at 
-
-* http://tzinfo.rubyforge.org/doc/
+API documentation for TZInfo is available on RubyDoc.info[http://rubydoc.info/gems/tzinfo/frames].
 
 
 == Installation
@@ -93,9 +87,12 @@ or to automatically download and install:
 TZInfo is released under the MIT[http://opensource.org/licenses/mit-license.html] license.
 
 
-== Support
+== Source Code
 
-Please post to the TZInfo Users mailing list (http://rubyforge.org/mailman/listinfo/tzinfo-users)
-if you require assistance or have any suggestions.
+Source code for TZInfo is available on GitHub[https://github.com/tzinfo/tzinfo].
 
-Alternatively, you can contact the author Philip Ross directly at phil.ross@gmail.com.
+
+== Issue Tracker
+
+Please post any bugs, issues, feature requests or questions to the 
+{GitHub issue tracker}[https://github.com/tzinfo/tzinfo/issues].
