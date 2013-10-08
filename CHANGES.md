@@ -52,6 +52,13 @@ Version 1.0.0 - 2-Jun-2013
   use other TimezonePeriod instance methods instead (issue #7655).
 
 
+Version 0.3.38 (tzdata v2013g) - 8-Oct-2013
+-------------------------------------------
+
+* Updated to tzdata version 2013g
+  (http://mm.icann.org/pipermail/tz-announce/2013-October/000015.html).
+
+
 Version 0.3.37 (tzdata v2013b) - 11-Mar-2013
 --------------------------------------------
 
