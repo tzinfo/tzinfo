@@ -7,16 +7,9 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.summary = 'Daylight-savings aware timezone library'
   s.description = 'TZInfo is a Ruby library that uses the standard tz (Olson) database to provide daylight savings aware transformations between times in different time zones.'
-  s.files = FileList[
-    'CHANGES',
-    'LICENSE',
-    'Rakefile',
-    'README',
-    'tzinfo.gemspec',
-    '.yardopts',
-    'lib',
-    'lib/**/*'].delete_if {|f| f.include?('.svn')}
-  s.test_files = FileList['test', 'test/**/*'].delete_if {|f| f.include?('.svn')}
+  s.files = %w(CHANGES LICENSE Rakefile README tzinfo.gemspec .yardopts) +
+            Dir['lib/**/*'].delete_if {|f| f.include?('.svn')}
+  s.test_files = Dir['test/**/*'].delete_if {|f| f.include?('.svn')}
   s.require_path = "lib"
   s.has_rdoc = true
   s.extra_rdoc_files = %w[README CHANGES]
