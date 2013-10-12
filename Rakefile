@@ -146,10 +146,10 @@ task :build_tz_modules do
   
   FileUtils.mkdir_p(BUILD_TZ_CLASSES_DIR)
   begin  
-    p = TZInfo::TZDataParser.new('../data', BUILD_TZ_CLASSES_DIR)
+    p = TZInfo::TZDataParser.new('data', BUILD_TZ_CLASSES_DIR)
     p.execute
     
-    scm = Scm.create(File.join(File.dirname(__FILE__), '..'))
+    scm = Scm.create(File.dirname(__FILE__))
     
     ['indexes', 'definitions'].each do |dir|
       scm.sync("#{BUILD_TZ_CLASSES_DIR}/#{dir}", "lib/tzinfo/#{dir}")
@@ -298,7 +298,7 @@ end
 
 task :build_tz_module do
   require 'lib/tzinfo/tzdataparser'
-  p = TZInfo::TZDataParser.new('../data', 'lib/tzinfo')
+  p = TZInfo::TZDataParser.new('data', 'lib/tzinfo')
   p.generate_countries = false
   p.only_zones = [ENV['zone']]
   p.execute
@@ -306,7 +306,7 @@ end
 
 task :build_countries do
   require 'lib/tzinfo/tzdataparser'
-  p = TZInfo::TZDataParser.new('../data', 'lib/tzinfo')
+  p = TZInfo::TZDataParser.new('data', 'lib/tzinfo')
   p.generate_countries = true
   p.generate_zones = false
   p.execute

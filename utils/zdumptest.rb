@@ -4,7 +4,7 @@
 # to calculate the local time and zone identifier using TZInfo. If there is
 # a difference, a message is output to stdout.
 
-require '../tzinfo/lib/tzinfo'
+require '../lib/tzinfo'
 
 include TZInfo
 
