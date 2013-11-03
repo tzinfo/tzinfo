@@ -4,6 +4,7 @@ Gem::Specification.new do |s|
   s.author = 'Philip Ross'
   s.email = 'phil.ross@gmail.com'
   s.homepage = 'http://tzinfo.github.io'
+  s.license = 'MIT'
   s.platform = Gem::Platform::RUBY
   s.summary = 'Daylight-savings aware timezone library'
   s.description = 'TZInfo is a Ruby library that uses the standard tz (Olson) database to provide daylight savings aware transformations between times in different time zones.'
