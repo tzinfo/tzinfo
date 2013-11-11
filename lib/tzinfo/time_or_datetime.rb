@@ -22,7 +22,7 @@
 
 
 require 'date'
-require 'rational'
+require 'rational' unless defined?(Rational)
 require 'time'
 
 module TZInfo
