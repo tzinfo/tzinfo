@@ -60,7 +60,7 @@ module TZInfo
           m = m.const_get(part)
         }
         
-        info = m.get
+        m.get
       rescue LoadError, NameError => e
         raise InvalidTimezoneIdentifier, e.message
       end
