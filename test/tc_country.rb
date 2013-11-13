@@ -106,7 +106,7 @@ class TCCountry < Test::Unit::TestCase
     
   def test_new_nil
     assert_raises(InvalidCountryCode) {
-      c = Country.new(nil)
+      Country.new(nil)
     }        
   end
   

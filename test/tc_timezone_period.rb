@@ -559,13 +559,13 @@ class TCTimezonePeriod < Test::Unit::TestCase
     t4 = TestTimezoneTransition.new(o1, o2, 1149541200)
     
     p1 = TimezonePeriod.new(t1, t3)    
-    p2 = TimezonePeriod.new(t3, nil)
-    p3 = TimezonePeriod.new(nil, t3)
+    p2 = TimezonePeriod.new(t2, nil)
+    p3 = TimezonePeriod.new(nil, t4)
     p4 = TimezonePeriod.new(nil, nil, o1)
 
     assert_equal(t1.hash ^ t3.hash, p1.hash)
-    assert_equal(t3.hash ^ nil.hash, p2.hash)
-    assert_equal(nil.hash ^ t3.hash, p3.hash)
+    assert_equal(t2.hash ^ nil.hash, p2.hash)
+    assert_equal(nil.hash ^ t4.hash, p3.hash)
     assert_equal(nil.hash ^ nil.hash ^ o1.hash, p4.hash)    
   end
 end

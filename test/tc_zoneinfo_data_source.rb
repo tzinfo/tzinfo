@@ -127,7 +127,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
       
       ZoneinfoDataSource.search_path = ['.']
       data_source = ZoneinfoDataSource.new
-      assert_equal(Pathname.new(dir).realpath, Pathname.new(dir).realpath)
+      assert_equal(Pathname.new(dir).realpath.to_s, data_source.zoneinfo_dir)
       
       # Change out of the directory to allow it to be deleted on Windows.
       FileUtils.chdir(@orig_pwd)
@@ -171,7 +171,7 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
       FileUtils.chdir(dir)
       
       data_source = ZoneinfoDataSource.new('.')
-      assert_equal(Pathname.new(dir).realpath, Pathname.new(dir).realpath)
+      assert_equal(Pathname.new(dir).realpath.to_s, data_source.zoneinfo_dir)
       
       # Change out of the directory to allow it to be deleted on Windows.
       FileUtils.chdir(@orig_pwd)
@@ -493,8 +493,6 @@ class TCZoneinfoDataSource < Test::Unit::TestCase
   
   def get_timezone_filenames(directory)
     entries = Dir.glob(File.join(directory, '**', '*'))
-    
-    prefix = File.expand_path(directory) + File::SEPARATOR
     
     entries = entries.select do |file|
       file.untaint

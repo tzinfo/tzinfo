@@ -490,6 +490,7 @@ class TCTimezone < Test::Unit::TestCase
     
     assert_equal(period, dt_period)
     assert_equal(period, dt2_period)
+    assert_equal(period, dt3_period)
     assert_equal(period, t_period)
     assert_equal(period, t2_period)
     assert_equal(period, t3_period)
@@ -536,16 +537,6 @@ class TCTimezone < Test::Unit::TestCase
   end
   
   def test_period_for_local_not_found
-    o1 = TimezoneOffset.new(-18000, 0, :EST)
-    o2 = TimezoneOffset.new(-18000, 3600, :EDT)
-    
-    t1 = TestTimezoneTransition.new(o1, o2, 1067148000)
-    t2 = TestTimezoneTransition.new(o2, o1, 1081062000)
-    t3 = TestTimezoneTransition.new(o1, o2, 1099202400)
-    
-    p1 = TimezonePeriod.new(t1, t2)
-    p2 = TimezonePeriod.new(t2, t3)
-    
     dt = DateTime.new(2004,4,4,2,0,0)
     dt2 = DateTime.new(2004,4,4,2,0,Rational(987,1000))
     t = Time.utc(2004,4,4,2,30,0)
@@ -893,16 +884,6 @@ class TCTimezone < Test::Unit::TestCase
   end
   
   def test_local_to_utc_not_found
-    o1 = TimezoneOffset.new(-18000, 0, :EST)
-    o2 = TimezoneOffset.new(-18000, 3600, :EDT)
-    
-    t1 = TestTimezoneTransition.new(o1, o2, 1067148000)
-    t2 = TestTimezoneTransition.new(o2, o1, 1081062000)
-    t3 = TestTimezoneTransition.new(o1, o2, 1099202400)
-    
-    p1 = TimezonePeriod.new(t1, t2)
-    p2 = TimezonePeriod.new(t2, t3)
-    
     dt = DateTime.new(2004,4,4,2,0,0)
     t = Time.utc(2004,4,4,2,30,0)
     i = Time.utc(2004,4,4,2,59,59).to_i
@@ -1174,8 +1155,6 @@ class TCTimezone < Test::Unit::TestCase
   end
   
   def test_offsets_up_to_utc_to_not_greater_than_utc_from
-    o = TimezoneOffset.new(600, 0, :LMT)
-    
     assert_raises(ArgumentError) do
       OffsetsUpToTestTimezone.new('Test/Zone', Time.utc(2012,8,1,0,0,0), Time.utc(2012,8,1,0,0,0), []).
         offsets_up_to(Time.utc(2012,8,1,0,0,0), Time.utc(2012,8,1,0,0,0))
