@@ -282,9 +282,9 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500001)))
     assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)))
     assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 499999)))
-    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500001)))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000 + DATETIME_RESOLUTION)))
     assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)))
-    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 499999)))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000 - DATETIME_RESOLUTION)))
   end
   
   def test_compare_timeordatetime_datetime
@@ -306,12 +306,12 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 2)))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(DateTime.new(1960, 3, 24, 15, 32, 3)))
     
-    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500001, 1000000))))
+    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000 + DATETIME_RESOLUTION, 1000000))))
     assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))))
-    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(499999, 1000000))))
-    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500001, 1000000))))
+    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000 - DATETIME_RESOLUTION, 1000000))))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000 + DATETIME_RESOLUTION, 1000000))))
     assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))))
-    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(499999, 1000000))))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000 - DATETIME_RESOLUTION, 1000000))))
   end
   
   def test_compare_timeordatetime_timestamp
@@ -356,9 +356,9 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500001))
     assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500000))
     assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> Time.utc(2006, 3, 24, 15, 32, 3, 499999))
-    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500001))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500000 + DATETIME_RESOLUTION))
     assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500000))
-    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> Time.utc(2006, 3, 24, 15, 32, 3, 499999))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500000 - DATETIME_RESOLUTION))
   end
   
   def test_compare_datetime
@@ -380,12 +380,12 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> DateTime.new(2006, 3, 24, 15, 32, 2))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> DateTime.new(1960, 3, 24, 15, 32, 3))
     
-    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500001, 1000000)))
+    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000 + DATETIME_RESOLUTION, 1000000)))
     assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000)))
-    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(499999, 1000000)))
-    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500001, 1000000)))
+    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000 - DATETIME_RESOLUTION, 1000000)))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000 + DATETIME_RESOLUTION, 1000000)))
     assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000)))
-    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(499999, 1000000)))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000 - DATETIME_RESOLUTION, 1000000)))
   end
   
   def test_compare_timestamp

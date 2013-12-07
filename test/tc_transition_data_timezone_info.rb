@@ -379,10 +379,10 @@ class TCTransitionDataTimezoneInfo < Test::Unit::TestCase
     assert_equal([], dti.transitions_up_to(DateTime.new(2011,3,1,1,0,0), DateTime.new(2010,10,1,1,0,1)))
     assert_equal([t1,t2,t3,t4], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,0)))
     assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1)))
-    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,Rational(1,1000000))))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,Rational(DATETIME_RESOLUTION,1000000))))
     assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,0)))
     assert_equal([t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,1)))
-    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,Rational(1,1000000))))
+    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,Rational(DATETIME_RESOLUTION,1000000))))
     assert_equal([t5], dti.transitions_up_to(DateTime.new(2015,1,1,0,0,0), DateTime.new(2011,10,1,1,0,0)))
     assert_equal([], dti.transitions_up_to(DateTime.new(2015,1,1,0,0,0), DateTime.new(2011,10,1,1,0,1)))
   end

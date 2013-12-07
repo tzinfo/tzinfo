@@ -34,30 +34,30 @@ class TCRubyCoreSupport < Test::Unit::TestCase
   
   def test_datetime_new!
     assert_equal(DateTime.new(2008,10,5,12,0,0, 0, Date::ITALY), RubyCoreSupport.datetime_new!(2454745,0,2299161))
-    assert_equal(DateTime.new(2008,10,6,12,0,0, 1, Date::ITALY), RubyCoreSupport.datetime_new!(2454745,1,2299161))
+    assert_equal(DateTime.new(2008,10,5,13,0,0, Rational(1, 24), Date::ITALY), RubyCoreSupport.datetime_new!(2454745,Rational(1, 24),2299161))
     
     assert_equal(DateTime.new(2008,10,5,20,30,0, 0, Date::ITALY), RubyCoreSupport.datetime_new!(Rational(117827777, 48), 0, 2299161))
-    assert_equal(DateTime.new(2008,10,6,20,30,0, 1, Date::ITALY), RubyCoreSupport.datetime_new!(Rational(117827777, 48), 1, 2299161))
+    assert_equal(DateTime.new(2008,10,5,21,30,0, Rational(1, 24), Date::ITALY), RubyCoreSupport.datetime_new!(Rational(117827777, 48), Rational(1, 24), 2299161))
     
     assert_equal(DateTime.new(2008,10,6,6,26,21, 0, Date::ITALY), RubyCoreSupport.datetime_new!(Rational(70696678127,28800), 0, 2299161))
-    assert_equal(DateTime.new(2008,10,7,6,26,21, 1, Date::ITALY), RubyCoreSupport.datetime_new!(Rational(70696678127, 28800), 1, 2299161))
+    assert_equal(DateTime.new(2008,10,6,7,26,21, Rational(1, 24), Date::ITALY), RubyCoreSupport.datetime_new!(Rational(70696678127, 28800), Rational(1, 24), 2299161))
     
     assert_equal(DateTime.new(-4712,1,1,12,0,0, 0, Date::ITALY), RubyCoreSupport.datetime_new!(0, 0, 2299161))
-    assert_equal(DateTime.new(-4712,1,2,12,0,0, 1, Date::ITALY), RubyCoreSupport.datetime_new!(0, 1, 2299161))
+    assert_equal(DateTime.new(-4712,1,1,13,0,0, Rational(1, 24), Date::ITALY), RubyCoreSupport.datetime_new!(0, Rational(1, 24), 2299161))
     
-    assert_equal(DateTime.new(-4713,12,31,10,58,59, 0, Date::ITALY), RubyCoreSupport.datetime_new!(Rational(-90061, 86400), 0, 2299161))
-    assert_equal(DateTime.new(-4712,1,1,10,58,59, 1, Date::ITALY), RubyCoreSupport.datetime_new!(Rational(-90061, 86400), 1, 2299161))
+    assert_equal(DateTime.new(-4713,12,31,23,58,59, 0, Date::ITALY), RubyCoreSupport.datetime_new!(Rational(-43261, 86400), 0, 2299161))
+    assert_equal(DateTime.new(-4712,1,1,0,58,59, Rational(1, 24), Date::ITALY), RubyCoreSupport.datetime_new!(Rational(-43261, 86400), Rational(1, 24), 2299161))
     
-    assert_equal(DateTime.new(-4713,12,30,10,58,59, 0, Date::ITALY), RubyCoreSupport.datetime_new!(Rational(-176461, 86400), 0, 2299161))
-    assert_equal(DateTime.new(-4713,12,31,10,58,59, 1, Date::ITALY), RubyCoreSupport.datetime_new!(Rational(-176461, 86400), 1, 2299161))
+    assert_equal(DateTime.new(-4713,12,30,23,58,59, 0, Date::ITALY), RubyCoreSupport.datetime_new!(Rational(-129661, 86400), 0, 2299161))
+    assert_equal(DateTime.new(-4713,12,31,0,58,59, Rational(1, 24), Date::ITALY), RubyCoreSupport.datetime_new!(Rational(-129661, 86400), Rational(1, 24), 2299161))
   end
   
   def test_datetime_new
     assert_equal(DateTime.new(2012, 12, 31, 23, 59, 59, 0, Date::ITALY), RubyCoreSupport.datetime_new(2012, 12, 31, 23, 59, 59, 0, Date::ITALY))
-    assert_equal(DateTime.new(2013, 2, 6, 23, 2, 36, 1, Date::ITALY), RubyCoreSupport.datetime_new(2013, 2, 6, 23, 2, 36, 1, Date::ITALY))
+    assert_equal(DateTime.new(2013, 2, 6, 23, 2, 36, Rational(1, 24), Date::ITALY), RubyCoreSupport.datetime_new(2013, 2, 6, 23, 2, 36, Rational(1,24), Date::ITALY))
     
     assert_equal(DateTime.new(2012, 12, 31, 23, 59, 59, 0, Date::ITALY) + Rational(1, 86400000), RubyCoreSupport.datetime_new(2012, 12, 31, 23, 59, 59 + Rational(1, 1000), 0, Date::ITALY))
-    assert_equal(DateTime.new(2001, 10, 12, 12, 22, 59, 1, Date::ITALY) + Rational(501, 86400000), RubyCoreSupport.datetime_new(2001, 10, 12, 12, 22, 59 + Rational(501, 1000), 1, Date::ITALY))
+    assert_equal(DateTime.new(2001, 10, 12, 12, 22, 59, Rational(1, 24), Date::ITALY) + Rational(501, 86400000), RubyCoreSupport.datetime_new(2001, 10, 12, 12, 22, 59 + Rational(501, 1000), Rational(1, 24), Date::ITALY))
   end
   
   def test_time_supports_negative
