@@ -102,7 +102,7 @@ module TZInfo
           tz.transition 2002, 10, :o2, 1035694800
           tz.transition 2003, 4, :o3, 1049605200
           tz.transition 2003, 10, :o2, 1067144400
-          tz.transition 2004, 4, :o3, 1081054800
+          tz.transition 2004, 3, :o3, 1080450000
           tz.transition 2006, 10, :o2, 1162098000
           tz.transition 2007, 3, :o3, 1173589200
           tz.transition 2007, 10, :o2, 1193547600
