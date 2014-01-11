@@ -178,7 +178,15 @@ module TZInfo
     # receiver is less than, equal to, or greater than timeOrDateTime.
     #
     # Milliseconds and smaller units are ignored in the comparison.
+    #
+    # Returns nil if the passed in timeOrDateTime is not comparable with
+    # TimeOrDateTime instances.
     def <=>(timeOrDateTime)
+      return nil unless timeOrDateTime.is_a?(TimeOrDateTime) ||
+                        timeOrDateTime.is_a?(Time) ||
+                        timeOrDateTime.is_a?(DateTime) ||
+                        timeOrDateTime.respond_to?(:to_i)
+
       if timeOrDateTime.is_a?(TimeOrDateTime)            
         orig = timeOrDateTime.to_orig
         

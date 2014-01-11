@@ -276,6 +276,12 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> '1111678323')
   end
   
+  def test_compare_non_comparable
+    assert_nil(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> Object.new)
+    assert_nil(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> Object.new)
+    assert_nil(TimeOrDateTime.new(1143214323) <=> Object.new)
+  end
+  
   def test_eql
     assert_equal(true, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))))
     assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))

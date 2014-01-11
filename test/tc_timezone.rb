@@ -907,6 +907,10 @@ class TCTimezone < Test::Unit::TestCase
     assert_equal(1, TestTimezone.new('Europe/Paris') <=> TestTimezone.new('America/New_York'))    
   end
   
+  def test_compare_non_comparable
+    assert_nil(TestTimezone.new('Europe/London') <=> Object.new)
+  end
+  
   def test_equality
     assert_equal(true, TestTimezone.new('Europe/London') == TestTimezone.new('Europe/London'))
     assert_equal(false, TestTimezone.new('Europe/London') == TestTimezone.new('Europe/london'))
