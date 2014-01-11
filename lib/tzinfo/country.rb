@@ -155,7 +155,10 @@ module TZInfo
         
     # Compare two Countries based on their code. Returns -1 if c is less
     # than self, 0 if c is equal to self and +1 if c is greater than self.
+    #
+    # Returns nil if c is not comparable with Country instances.
     def <=>(c)
+      return nil unless c.is_a?(Country)
       code <=> c.code
     end
     

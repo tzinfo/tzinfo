@@ -231,11 +231,19 @@ module TZInfo
     # whether the receiver is less than, equal to, or greater than 
     # timeOrDateTime.
     #
+    # Returns nil if the passed in timeOrDateTime is not comparable with 
+    # TimeOrDateTime instances.
+    #
     # Comparisons involving a DateTime will be performed using DateTime#<=>.
     # Comparisons that don't involve a DateTime, but include a Time will be
     # performed with Time#<=>. Otherwise comparisons will be performed with
     # Integer#<=>.    
     def <=>(timeOrDateTime)
+      return nil unless timeOrDateTime.is_a?(TimeOrDateTime) || 
+                        timeOrDateTime.is_a?(Time) ||
+                        timeOrDateTime.is_a?(DateTime) ||
+                        timeOrDateTime.respond_to?(:to_i)
+    
       unless timeOrDateTime.is_a?(TimeOrDateTime)
         timeOrDateTime = TimeOrDateTime.wrap(timeOrDateTime)
       end

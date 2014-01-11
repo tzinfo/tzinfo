@@ -181,6 +181,10 @@ class TCCountry < Test::Unit::TestCase
     assert_equal(1, Country.get('US') <=> Country.get('FR'))
   end
   
+  def test_compare_non_comparable
+    assert_nil(Country.get('GB') <=> Object.new)
+  end
+  
   def test_equality
     assert_equal(true, Country.get('GB') == Country.get('GB'))
     assert_equal(false, Country.get('GB') == Country.get('US'))

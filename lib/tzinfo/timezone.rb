@@ -559,10 +559,13 @@ module TZInfo
     
     # Compares two Timezones based on their identifier. Returns -1 if tz is less
     # than self, 0 if tz is equal to self and +1 if tz is greater than self.
+    #
+    # Returns nil if tz is not comparable with Timezone instances.
     def <=>(tz)
+      return nil unless tz.is_a?(Timezone)
       identifier <=> tz.identifier
     end
-    
+
     # Returns true if and only if the identifier of tz is equal to the 
     # identifier of this Timezone.
     def eql?(tz)
