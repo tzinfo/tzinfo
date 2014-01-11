@@ -1069,9 +1069,6 @@ class TCTimezone < Test::Unit::TestCase
     dt = DateTime.new(2004,10,31,1,30,0)    
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
     
-    dt = DateTime.new(2004,10,31,1,30,0)
-    tz = Timezone.get('America/New_York')
-    
     assert_raises(AmbiguousTime) { tz.local_to_utc(dt) {|periods| nil} }    
     assert_raises(AmbiguousTime) { tz.local_to_utc(dt) {|periods| periods} }     
     assert_raises(AmbiguousTime) { tz.local_to_utc(dt) {|periods| []} }    
