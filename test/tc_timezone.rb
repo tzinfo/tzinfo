@@ -841,6 +841,28 @@ class TCTimezone < Test::Unit::TestCase
     assert(TestTimezone.new('Europe/London', nil, [period], tu2).local_to_utc(tu2).utc?)
   end
   
+  def test_local_to_utc_utc_local_returns_utc
+    # Check that UTC time instances are always returned even if the system
+    # is using UTC as the time zone.
+    
+    # Note that this will only test will only work correctly on platforms where
+    # setting the TZ environment variable has an effect. If setting TZ has no
+    # effect, then this test will still pass.
+    
+    old_tz = ENV['TZ']
+    begin
+      ENV['TZ'] = 'UTC'
+      
+      tz = Timezone.get('America/New_York')
+      
+      t = tz.local_to_utc(Time.local(2014, 1, 11, 17, 18, 41))
+      assert_equal(Time.utc(2014, 1, 11, 22, 18, 41), t)      
+      assert(t.utc?)
+    ensure
+      ENV['TZ'] = old_tz
+    end
+  end
+  
   def test_local_to_utc_invalid
     dt = DateTime.new(2004,4,4,2,30,0)
     tz = TestTimezone.new('America/New_York', nil, [], dt)        

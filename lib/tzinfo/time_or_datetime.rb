@@ -49,7 +49,7 @@ module TZInfo
         nsec = RubyCoreSupport.time_nsec(@time)
         usec = nsec % 1000 == 0 ? nsec / 1000 : Rational(nsec, 1000)
         
-        @time = Time.utc(@time.year, @time.mon, @time.mday, @time.hour, @time.min, @time.sec, usec) unless @time.zone == 'UTC'        
+        @time = Time.utc(@time.year, @time.mon, @time.mday, @time.hour, @time.min, @time.sec, usec) unless @time.utc?        
         @orig = @time
       elsif timeOrDateTime.is_a?(DateTime)
         @datetime = timeOrDateTime

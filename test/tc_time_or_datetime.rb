@@ -38,6 +38,7 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), tdt.to_time)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), tdt.to_orig)
     assert(tdt.to_time.utc?)
+    assert(tdt.to_orig.utc?)
   end
   
   def test_intialize_time_local_usec
@@ -45,6 +46,7 @@ class TCTimeOrDateTime < Test::Unit::TestCase
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123), tdt.to_time)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123), tdt.to_orig)
     assert(tdt.to_time.utc?)
+    assert(tdt.to_orig.utc?)
   end
   
   if Time.utc(2013, 1, 1).respond_to?(:nsec)
@@ -53,6 +55,28 @@ class TCTimeOrDateTime < Test::Unit::TestCase
       assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)), tdt.to_time)
       assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)), tdt.to_orig)
       assert(tdt.to_time.utc?)
+      assert(tdt.to_orig.utc?)
+    end
+  end
+  
+  def test_initialize_time_utc_local
+    # Check that local Time instances on systems using UTC as the system 
+    # time zone are still converted to UTC Time instances.
+    
+    # Note that this will only test will only work correctly on platforms where
+    # setting the TZ environment variable has an effect. If setting TZ has no
+    # effect, then this test will still pass.
+    
+    old_tz = ENV['TZ']
+    begin
+      ENV['TZ'] = 'UTC'
+      tdt = TimeOrDateTime.new(Time.local(2014, 1, 11, 17, 18, 41))
+      assert_equal(Time.utc(2014, 1, 11, 17, 18, 41), tdt.to_time)
+      assert_equal(Time.utc(2014, 1, 11, 17, 18, 41), tdt.to_orig)
+      assert(tdt.to_time.utc?)
+      assert(tdt.to_orig.utc?)
+    ensure
+      ENV['TZ'] = old_tz
     end
   end
   
