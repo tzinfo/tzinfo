@@ -47,7 +47,7 @@ module TestUtils
     ZONEINFO_SYMLINKS.each do |file, target|
       path = File.join(TZINFO_TEST_ZONEINFO_DIR, file)
       
-      File.delete(path) if File.exists?(path)
+      File.delete(path) if File.exist?(path)
     
       begin
         FileUtils.ln_s(target, path)
