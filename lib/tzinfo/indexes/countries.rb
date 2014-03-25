@@ -37,6 +37,7 @@ module TZInfo
         c.timezone 'Antarctica/Vostok', -392, 5, 1069, 10, 'Vostok Station, Lake Vostok'
         c.timezone 'Antarctica/DumontDUrville', -200, 3, 8401, 60, 'Dumont-d\'Urville Station, Terre Adelie'
         c.timezone 'Antarctica/Syowa', -124211, 1800, 3959, 100, 'Syowa Station, E Ongul I'
+        c.timezone 'Antarctica/Troll', -259241, 3600, 507, 200, 'Troll Station, Queen Maud Land'
       end
       country 'AR', 'Argentina' do |c|
         c.timezone 'America/Argentina/Buenos_Aires', -173, 5, -1169, 20, 'Buenos Aires (BA, CF)'
@@ -691,6 +692,7 @@ module TZInfo
         c.timezone 'Europe/Moscow', 223, 4, 451, 12, 'Moscow+00 - west Russia'
         c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'Moscow+00 - Caspian Sea'
         c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'Moscow+00 - Samara, Udmurtia'
+        c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'Moscow+00 - Crimea'
         c.timezone 'Asia/Yekaterinburg', 1137, 20, 303, 5, 'Moscow+02 - Urals'
         c.timezone 'Asia/Omsk', 55, 1, 367, 5, 'Moscow+03 - west Siberia'
         c.timezone 'Asia/Novosibirsk', 1651, 30, 995, 12, 'Moscow+03 - Novosibirsk'
@@ -824,7 +826,6 @@ module TZInfo
         c.timezone 'Europe/Kiev', 1513, 30, 1831, 60, 'most locations'
         c.timezone 'Europe/Uzhgorod', 2917, 60, 223, 10, 'Ruthenia'
         c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozh\'ye, E Lugansk / Zaporizhia, E Luhansk'
-        c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'central Crimea'
       end
       country 'UG', 'Uganda' do |c|
         c.timezone 'Africa/Kampala', 19, 60, 389, 12

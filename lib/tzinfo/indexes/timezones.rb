@@ -231,6 +231,7 @@ module TZInfo
       timezone 'Antarctica/Rothera'
       linked_timezone 'Antarctica/South_Pole'
       timezone 'Antarctica/Syowa'
+      timezone 'Antarctica/Troll'
       timezone 'Antarctica/Vostok'
       linked_timezone 'Arctic/Longyearbyen'
       timezone 'Asia/Aden'
