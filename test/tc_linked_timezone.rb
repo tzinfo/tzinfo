@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCLinkedTimezone < Test::Unit::TestCase
+class TCLinkedTimezone < Minitest::Test
   
   class TestTimezone < Timezone
     attr_reader :utc_period

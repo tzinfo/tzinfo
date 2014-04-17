@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCTimezoneOffset < Test::Unit::TestCase
+class TCTimezoneOffset < Minitest::Test
   
   def test_utc_offset
     o1 = TimezoneOffset.new(18000, 0, :TEST)

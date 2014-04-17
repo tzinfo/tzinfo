@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCTimezoneLondon < Test::Unit::TestCase
+class TCTimezoneLondon < Minitest::Test
   def test_2004
     #Europe/London  Sun Mar 28 00:59:59 2004 UTC = Sun Mar 28 00:59:59 2004 GMT isdst=0 gmtoff=0
     #Europe/London  Sun Mar 28 01:00:00 2004 UTC = Sun Mar 28 02:00:00 2004 BST isdst=1 gmtoff=3600

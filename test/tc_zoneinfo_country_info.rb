@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCZoneinfoCountryInfo < Test::Unit::TestCase
+class TCZoneinfoCountryInfo < Minitest::Test
   
   def test_code
     ci = ZoneinfoCountryInfo.new('ZZ', 'Zzz', []) {|c| }

@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCTimezone < Test::Unit::TestCase
+class TCTimezone < Minitest::Test
 
   class BlockCalled < StandardError
   end

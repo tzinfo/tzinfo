@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCInfoTimezone < Test::Unit::TestCase
+class TCInfoTimezone < Minitest::Test
   
   class TestInfoTimezone < InfoTimezone
     attr_reader :setup_info

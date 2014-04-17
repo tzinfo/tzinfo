@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCTimezoneIndexDefinition < Test::Unit::TestCase
+class TCTimezoneIndexDefinition < Minitest::Test
   
   module TimezonesTest1
     include TimezoneIndexDefinition

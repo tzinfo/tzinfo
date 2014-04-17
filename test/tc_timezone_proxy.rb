@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCTimezoneProxy < Test::Unit::TestCase
+class TCTimezoneProxy < Minitest::Test
   def test_not_exist
     proxy = TimezoneProxy.new('Nothing/Special')
     assert_equal('Nothing/Special', proxy.identifier)

@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCTransitionDataTimezoneInfo < Test::Unit::TestCase
+class TCTransitionDataTimezoneInfo < Minitest::Test
   
   def test_identifier
     dti = TransitionDataTimezoneInfo.new('Test/Zone')

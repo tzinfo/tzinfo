@@ -32,7 +32,7 @@ $:.unshift(TZINFO_LIB_DIR) unless $:.include?(TZINFO_LIB_DIR)
 # Add it to the load path.
 $:.unshift(TZINFO_TEST_DATA_DIR) unless $:.include?(TZINFO_TEST_DATA_DIR)
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'tzinfo'
 require 'fileutils'
 require 'rbconfig'
@@ -134,7 +134,30 @@ module Kernel
       assert_equal(expected_lines, actual_lines)
     end
   end
+
+  def build_message(user_message, template_message, *args)
+    user_message ||= ''
+    user_message += ' ' unless user_message.empty?
+    msg = template_message.split(/<\?>/).zip(args.map { |o| o.inspect })
+    user_message + msg.join
+  end
+
+  def assert_nothing_raised _ = :ignored
+    yield
+  rescue => e
+    raise Minitest::Assertion, exception_details(e, "Exception raised:")
+  end
+
+  def assert_not_same(expected, actual, message="")
+    msg = message(msg) { build_message(message, "<?>with id <?> expected to not be equal\\? to<?>with id <?>.", expected, expected.__id__, actual, actual.__id__) }
+    assert(!actual.equal?(expected), msg)
+  end
+
+  def assert_block(*msgs)
+    assert yield, *msgs
+  end
 end
+
 
 # JRuby 1.7.5 to 1.7.9 consider DateTime instances that differ by less than 
 # 1 millisecond to be equivalent (https://github.com/jruby/jruby/issues/1311).

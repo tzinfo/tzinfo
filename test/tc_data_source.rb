@@ -26,7 +26,7 @@ require 'tmpdir'
 
 include TZInfo
 
-class TCDataSource < Test::Unit::TestCase
+class TCDataSource < Minitest::Test
   class InitDataSource < DataSource
   end
   
