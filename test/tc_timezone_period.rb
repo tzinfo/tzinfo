@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCTimezonePeriod < Test::Unit::TestCase
+class TCTimezonePeriod < Minitest::Test
   
   class TestTimezoneTransition < TimezoneTransition
     def initialize(offset, previous_offset, at)

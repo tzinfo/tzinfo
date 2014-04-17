@@ -28,7 +28,7 @@ require 'tmpdir'
 
 include TZInfo
 
-class TCZoneinfoDataSource < Test::Unit::TestCase
+class TCZoneinfoDataSource < Minitest::Test
   ZONEINFO_DIR = File.join(File.expand_path(File.dirname(__FILE__)), 'zoneinfo').untaint
   
   def setup

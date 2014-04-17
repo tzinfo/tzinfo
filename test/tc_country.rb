@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCCountry < Test::Unit::TestCase
+class TCCountry < Minitest::Test
   def setup
     @orig_data_source = DataSource.get
     Country.send :init_countries

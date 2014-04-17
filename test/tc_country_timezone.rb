@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCCountryTimezone < Test::Unit::TestCase
+class TCCountryTimezone < Minitest::Test
   def test_identifier
     ct = CountryTimezone.new('Europe/London', 2059, 40, -5, 16)    
     assert_equal('Europe/London', ct.identifier)

@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCOffsetRationals < Test::Unit::TestCase
+class TCOffsetRationals < Minitest::Test
   def test_rational_for_offset
     [0,1,2,3,4,-1,-2,-3,-4,30*60,-30*60,61*60,-61*60,14*60*60,-14*60*60,20*60*60,-20*60*60].each {|seconds|
       assert_equal(Rational(seconds, 86400), OffsetRationals.rational_for_offset(seconds))      

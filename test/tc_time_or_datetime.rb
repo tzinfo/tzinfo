@@ -26,7 +26,7 @@ require 'rational' unless defined?(Rational)
 
 include TZInfo
 
-class TCTimeOrDateTime < Test::Unit::TestCase
+class TCTimeOrDateTime < Minitest::Test
   def test_initialize_time
     assert_nothing_raised do
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000))

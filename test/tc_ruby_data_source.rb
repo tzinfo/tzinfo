@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCRubyDataSource < Test::Unit::TestCase
+class TCRubyDataSource < Minitest::Test
   def setup
     @data_source = RubyDataSource.new
   end

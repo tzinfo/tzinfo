@@ -26,7 +26,7 @@ require 'date'
 
 include TZInfo
 
-class TCTimezoneTransition < Test::Unit::TestCase
+class TCTimezoneTransition < Minitest::Test
   
   class TestTimezoneTransition < TimezoneTransition
     def initialize(offset, previous_offset, at)
