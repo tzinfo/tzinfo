@@ -28,7 +28,7 @@ require 'tempfile'
 
 include TZInfo
 
-class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
+class TCZoneinfoTimezoneInfo < Minitest::Test
 
   begin
     Time.at(-2147483649)
@@ -54,14 +54,14 @@ class TCZoneinfoTimezoneInfo < Test::Unit::TestCase
     assert_equal(dst, period.dst?)
     
     if start_at
-      assert_not_nil(period.utc_start_time)
+      refute_nil(period.utc_start_time)
       assert_equal(start_at, period.utc_start_time)
     else
       assert_nil(period.utc_start_time)
     end
     
     if end_at
-      assert_not_nil(period.utc_end_time)
+      refute_nil(period.utc_end_time)
       assert_equal(end_at, period.utc_end_time)
     else
       assert_nil(period.utc_end_time)

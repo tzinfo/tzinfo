@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCTimezoneUTC < Test::Unit::TestCase
+class TCTimezoneUTC < Minitest::Test
   def test_2004        
     tz = Timezone.get('UTC')
     

@@ -26,7 +26,7 @@ require 'date'
 
 include TZInfo
 
-class TCTimezoneTransitionDefinition < Test::Unit::TestCase
+class TCTimezoneTransitionDefinition < Minitest::Test
   def test_initialize_timestamp_only
     assert_nothing_raised do
       TimezoneTransitionDefinition.new(TimezoneOffset.new(3600, 3600, :TDT),

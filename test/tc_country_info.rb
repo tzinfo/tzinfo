@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCCountryInfo < Test::Unit::TestCase
+class TCCountryInfo < Minitest::Test
   
   def test_code
     ci = CountryInfo.new('ZZ', 'Zzz') {|c| }

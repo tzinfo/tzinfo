@@ -27,7 +27,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCRubyCoreSupport < Test::Unit::TestCase
+class TCRubyCoreSupport < Minitest::Test
   def test_rational_new!
     assert_equal(Rational(3,4), RubyCoreSupport.rational_new!(3,4))
   end

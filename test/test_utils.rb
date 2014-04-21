@@ -32,7 +32,7 @@ $:.unshift(TZINFO_LIB_DIR) unless $:.include?(TZINFO_LIB_DIR)
 # Add it to the load path.
 $:.unshift(TZINFO_TEST_DATA_DIR) unless $:.include?(TZINFO_TEST_DATA_DIR)
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'tzinfo'
 require 'fileutils'
 require 'rbconfig'
@@ -89,12 +89,10 @@ module Kernel
     end
   end
   
-  def assert_array_same_items(expected, actual, message = nil)
-    full_message = build_message(message, "<?> expected but was <?>.", expected, actual)
-    
-    assert_block(full_message) do
-      (expected.size == actual.size) && (expected - actual == [])
-    end
+  def assert_array_same_items(expected, actual, msg = nil)
+    full_message = message(msg, '') { diff(expected, actual) }
+    condition = (expected.size == actual.size) && (expected - actual == [])
+    assert(condition, full_message)
   end
   
   def assert_sub_process_returns(expected_lines, code, extra_load_path = [], required = ['tzinfo'])
@@ -134,7 +132,17 @@ module Kernel
       assert_equal(expected_lines, actual_lines)
     end
   end
+
+  def assert_nothing_raised(msg = nil)
+    begin
+      yield
+    rescue => e
+      full_message = message(msg) { exception_details(e, 'Exception raised: ') }
+      assert(false, full_message)
+    end
+  end
 end
+
 
 # JRuby 1.7.5 to 1.7.9 consider DateTime instances that differ by less than 
 # 1 millisecond to be equivalent (https://github.com/jruby/jruby/issues/1311).

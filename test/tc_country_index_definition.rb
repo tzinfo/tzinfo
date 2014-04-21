@@ -25,7 +25,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-class TCCountryIndexDefinition < Test::Unit::TestCase
+class TCCountryIndexDefinition < Minitest::Test
 
   module CountriesTest1     
     include CountryIndexDefinition

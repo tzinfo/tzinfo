@@ -4,10 +4,7 @@ gemspec
 
 group :test do
   gem 'rake'
-  
-  platforms :rbx do
-    gem 'rubysl-test-unit', '~> 2.0'
-  end
+  gem 'minitest', '~> 5.0'
 end
 
 platforms :rbx do
