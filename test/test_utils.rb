@@ -89,12 +89,10 @@ module Kernel
     end
   end
   
-  def assert_array_same_items(expected, actual, message = nil)
-    full_message = build_message(message, "<?> expected but was <?>.", expected, actual)
-    
-    assert_block(full_message) do
-      (expected.size == actual.size) && (expected - actual == [])
-    end
+  def assert_array_same_items(expected, actual, msg = nil)
+    full_message = message(msg, '') { diff(expected, actual) }
+    condition = (expected.size == actual.size) && (expected - actual == [])
+    assert(condition, full_message)
   end
   
   def assert_sub_process_returns(expected_lines, code, extra_load_path = [], required = ['tzinfo'])
@@ -135,26 +133,13 @@ module Kernel
     end
   end
 
-  def build_message(user_message, template_message, *args)
-    user_message ||= ''
-    user_message += ' ' unless user_message.empty?
-    msg = template_message.split(/<\?>/).zip(args.map { |o| o.inspect })
-    user_message + msg.join
-  end
-
-  def assert_nothing_raised _ = :ignored
-    yield
-  rescue => e
-    raise Minitest::Assertion, exception_details(e, "Exception raised:")
-  end
-
-  def assert_not_same(expected, actual, message="")
-    msg = message(msg) { build_message(message, "<?>with id <?> expected to not be equal\\? to<?>with id <?>.", expected, expected.__id__, actual, actual.__id__) }
-    assert(!actual.equal?(expected), msg)
-  end
-
-  def assert_block(*msgs)
-    assert yield, *msgs
+  def assert_nothing_raised(msg = nil)
+    begin
+      yield
+    rescue => e
+      full_message = message(msg) { exception_details(e, 'Exception raised: ') }
+      assert(false, full_message)
+    end
   end
 end
 

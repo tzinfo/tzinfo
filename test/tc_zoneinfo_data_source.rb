@@ -63,7 +63,7 @@ class TCZoneinfoDataSource < Minitest::Test
     path = ['/tmp/zoneinfo1', '/tmp/zoneinfo2']
     ZoneinfoDataSource.search_path = path
     assert_equal(['/tmp/zoneinfo1', '/tmp/zoneinfo2'], ZoneinfoDataSource.search_path)
-    assert_not_same(path, ZoneinfoDataSource.search_path)
+    refute_same(path, ZoneinfoDataSource.search_path)
   end
   
   def test_set_search_path_array_to_s  
