@@ -4,7 +4,7 @@ gemspec
 
 group :test do
   gem 'rake'
-  gem 'minitest', '>= 5.0.0'
+  gem 'minitest', '~> 5.0'
 
   platforms :rbx do
     gem 'rubysl-test-unit', '~> 2.0'
