@@ -53,7 +53,22 @@ class TZInfoPackageTask < Gem::PackageTask
   end
 end
 
-package_task = TZInfoPackageTask.new(spec) do |pkg|
+def add_signing_key(spec)
+  # Attempt to find the private key and add options to sign the gem if found.
+  private_key_path = File.expand_path(File.join(BASE_DIR, '..', 'key', 'gem-private_key.pem'))
+  
+  if File.exist?(private_key_path)
+    spec = spec.clone
+    spec.signing_key = private_key_path
+    spec.cert_chain = [File.join(BASE_DIR, 'gem-public_cert.pem')]
+  else
+    puts 'WARNING: Private key not found. Not signing gem file.'
+  end
+  
+  spec
+end
+
+package_task = TZInfoPackageTask.new(add_signing_key(spec)) do |pkg|
   pkg.need_zip = true
   pkg.need_tar_gz = true
   pkg.tar_command = '__tar_with_owner__'
