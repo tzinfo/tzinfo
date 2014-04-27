@@ -334,7 +334,7 @@ module TZInfo
       countries
     end
     
-    # Converts degrees, miunutes and seconds to a Rational
+    # Converts degrees, minutes and seconds to a Rational.
     def dms_to_rational(sign, degrees, minutes, seconds = nil)
       result = degrees.to_i + Rational(minutes.to_i, 60)
       result += Rational(seconds.to_i, 3600) if seconds
