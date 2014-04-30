@@ -96,11 +96,18 @@ module TZInfo
   # zoneinfo support, then you may want to consider using TZInfo::RubyDataSource 
   # instead.
   class ZoneinfoDataSource < DataSource
-    # The default value of ZoneInfoDataSource.search_path.
+    # The default value of ZoneinfoDataSource.search_path.
     DEFAULT_SEARCH_PATH = ['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'].freeze
+    
+    # The default value of ZoneinfoDataSource.alternate_iso3166_tab_search_path.
+    DEFAULT_ALTERNATE_ISO3166_TAB_SEARCH_PATH = ['/usr/share/misc/iso3166.tab', '/usr/share/misc/iso3166'].freeze
     
     # Paths to be checked to find the system zoneinfo directory.
     @@search_path = DEFAULT_SEARCH_PATH.dup
+    
+    # Paths to possible alternate iso3166.tab files (used to locate the 
+    # system-wide iso3166.tab files on FreeBSD and OpenBSD).
+    @@alternate_iso3166_tab_search_path = DEFAULT_ALTERNATE_ISO3166_TAB_SEARCH_PATH.dup
     
     # An Array of directories that will be checked to find the system zoneinfo
     # directory.
@@ -122,15 +129,31 @@ module TZInfo
     #
     # Set to nil to revert to the default paths.
     def self.search_path=(search_path)
-      if search_path
-        if search_path.kind_of?(String)
-          @@search_path = search_path.split(File::PATH_SEPARATOR)
-        else
-          @@search_path = search_path.collect {|p| p.to_s}
-        end
-      else
-        @@search_path = DEFAULT_SEARCH_PATH.dup
-      end
+      @@search_path = process_search_path(search_path, DEFAULT_SEARCH_PATH)      
+    end
+    
+    # An Array of paths that will be checked to find an alternate iso3166.tab 
+    # file if one was not included in the zoneinfo directory (for example, on 
+    # FreeBSD and OpenBSD systems).
+    #
+    # Paths are checked in the order they appear in the array.
+    #
+    # The default value is ['/usr/share/misc/iso3166.tab', '/usr/share/misc/iso3166'].
+    def self.alternate_iso3166_tab_search_path
+      @@alternate_iso3166_tab_search_path
+    end
+    
+    # Sets the paths to check to locate an alternate iso3166.tab file if one was
+    # not included in the zoneinfo directory.
+    #
+    # Can be set to an Array of directories or a String containing directories
+    # separated with File::PATH_SEPARATOR.
+    #
+    # Paths are checked in the order they appear in the array.
+    #
+    # Set to nil to revert to the default paths.
+    def self.alternate_iso3166_tab_search_path=(alternate_iso3166_tab_search_path)
+      @@alternate_iso3166_tab_search_path = process_search_path(alternate_iso3166_tab_search_path, DEFAULT_ALTERNATE_ISO3166_TAB_SEARCH_PATH)
     end
     
     # The zoneinfo directory being used.
@@ -139,33 +162,50 @@ module TZInfo
     # Creates a new ZoneinfoDataSource.
     #
     # If zoneinfo_dir is specified, it will be checked and used as the source
-    # of zoneinfo files. If the directory does not contain zone.tab and 
-    # iso3166.tab files, InvalidZoneinfoDirectory will be raised.
+    # of zoneinfo files. 
+    #
+    # The directory must contain iso3166.tab and zone.tab files. These may 
+    # either be included in the root of the directory or in a 'tab' 
+    # sub-directory named 'country.tab' and 'zone_sun.tab' respectively (as is
+    # the case on Solaris.
+    #
+    # Additionally, the path to iso3166.tab can be overridden using the 
+    # alternate_iso3166_tab_path parameter.
+    #
+    # InvalidZoneinfoDirectory will be raised if the iso3166.tab and zone.tab
+    # files cannot be found using the zoneinfo_dir and alternate_iso3166_tab_path
+    # parameters.
     # 
     # If zoneinfo_dir is not specified or nil, the paths referenced in
     # search_path are searched in order to find a valid zoneinfo directory 
-    # (one that contains files named zone.tab and iso3166.tab). If no valid 
-    # zoneinfo directory is found ZoneinfoDirectoryNotFound will be raised.
-    def initialize(zoneinfo_dir = nil)
+    # (one that contains zone.tab and iso3166.tab files as above).
+    #
+    # The paths referenced in alternate_iso3166_tab_search_path are also
+    # searched to find an iso3166.tab file if one of the searched zoneinfo
+    # directories doesn't contain an iso3166.tab file.
+    # 
+    # If no valid directory can be found by searching, ZoneinfoDirectoryNotFound
+    # will be raised.
+    def initialize(zoneinfo_dir = nil, alternate_iso3166_tab_path = nil)
       if zoneinfo_dir
-        unless valid_zoneinfo_dir?(zoneinfo_dir)
+        iso3166_tab_path, zone_tab_path = validate_zoneinfo_dir(zoneinfo_dir, alternate_iso3166_tab_path)
+      
+        unless iso3166_tab_path && zone_tab_path
           raise InvalidZoneinfoDirectory, "#{zoneinfo_dir} is not a directory or doesn't contain iso3166.tab and zone.tab files." 
         end
+        
         @zoneinfo_dir = zoneinfo_dir
       else
-        @zoneinfo_dir = self.class.search_path.detect do |path|
-          valid_zoneinfo_dir?(path)
-        end
+        @zoneinfo_dir, iso3166_tab_path, zone_tab_path = find_zoneinfo_dir
         
-        unless @zoneinfo_dir
+        unless @zoneinfo_dir && iso3166_tab_path && zone_tab_path
           raise ZoneinfoDirectoryNotFound, "None of the paths included in TZInfo::ZoneinfoDataSource.search_path are valid zoneinfo directories."
         end
       end
       
       @zoneinfo_dir = File.expand_path(@zoneinfo_dir).freeze
-      @zoneinfo_prefix = (@zoneinfo_dir + File::SEPARATOR).freeze
       @timezone_index = load_timezone_index.freeze
-      @country_index = load_country_index.freeze
+      @country_index = load_country_index(iso3166_tab_path, zone_tab_path).freeze
     end
     
     # Returns a TimezoneInfo instance for a given identifier. 
@@ -245,10 +285,77 @@ module TZInfo
     
     private
     
-    # Tests whether a path represents a valid zoneinfo directory (i.e.
-    # is a directory and contains zone.tab and iso3166.tab files).
-    def valid_zoneinfo_dir?(path)
-      File.directory?(path) && File.file?(File.join(path, 'zone.tab')) && File.file?(File.join(path, 'iso3166.tab'))
+    # Processes a path for use as the search_path or
+    # alternate_iso3166_tab_search_path.
+    def self.process_search_path(path, default)
+      if path
+        if path.kind_of?(String)
+          path.split(File::PATH_SEPARATOR)
+        else
+          path.collect {|p| p.to_s}
+        end
+      else
+        default.dup
+      end
+    end
+    
+    # Validates a zoneinfo directory and returns the paths to the iso3166.tab 
+    # and zone.tab files if valid. If the directory is not valid, returns nil.
+    #
+    # The path to the iso3166.tab file may be overriden by passing in a path.
+    # This is treated as either absolute or relative to the current working
+    # directory.    
+    def validate_zoneinfo_dir(path, iso3166_tab_path = nil)
+      if File.directory?(path)
+        if iso3166_tab_path
+          return nil unless File.file?(iso3166_tab_path)
+        else
+          iso3166_tab_path = resolve_tab_path(path, 'iso3166.tab', 'country.tab')
+          return nil unless iso3166_tab_path          
+        end
+        
+        zone_tab_path = resolve_tab_path(path, 'zone.tab', 'zone_sun.tab')
+        return nil unless zone_tab_path
+      
+        [iso3166_tab_path, zone_tab_path]
+      else
+        nil
+      end
+    end
+    
+    # Attempts to resolve the path to a tab file given its standard name and
+    # tab sub-directory name (as used on Solaris).
+    def resolve_tab_path(zoneinfo_path, standard_name, tab_name)
+      path = File.join(zoneinfo_path, standard_name)      
+      return path if File.file?(path)
+      
+      path = File.join(zoneinfo_path, 'tab', tab_name)
+      return path if File.file?(path)
+      
+      nil
+    end
+    
+    # Finds a zoneinfo directory using search_path and 
+    # alternate_iso3166_tab_search_path. Returns the paths to the directory,
+    # the iso3166.tab file and the zone.tab file or nil if not found.
+    def find_zoneinfo_dir
+      alternate_iso3166_tab_path = self.class.alternate_iso3166_tab_search_path.detect do |path|
+        File.file?(path)
+      end
+      
+      self.class.search_path.each do |path|
+        # Try without the alternate_iso3166_tab_path first.
+        iso3166_tab_path, zone_tab_path = validate_zoneinfo_dir(path)        
+        return path, iso3166_tab_path, zone_tab_path if iso3166_tab_path && zone_tab_path
+        
+        if alternate_iso3166_tab_path
+          iso3166_tab_path, zone_tab_path = validate_zoneinfo_dir(path, alternate_iso3166_tab_path)        
+          return path, iso3166_tab_path, zone_tab_path if iso3166_tab_path && zone_tab_path
+        end
+      end
+      
+      # Not found.
+      nil
     end
        
     # Scans @zoneinfo_dir and returns an Array of available timezone 
@@ -257,12 +364,13 @@ module TZInfo
       index = []
       
       # Ignoring particular files:
-      # +VERSION is included in Mac OS X.
+      # +VERSION is included on Mac OS X.
       # localtime current local timezone (may be a link).
       # posix, posixrules and right are directories containing other versions of the zoneinfo files.
+      # src is a directory containing the tzdata source included on Solaris.
       # Factory is the compiled in default timezone.
       
-      enum_timezones(nil, ['+VERSION', 'localtime', 'posix', 'posixrules', 'right', 'Factory']) do |identifier|
+      enum_timezones(nil, ['+VERSION', 'localtime', 'posix', 'posixrules', 'right', 'src', 'Factory']) do |identifier|
         index << identifier
       end
       
@@ -289,14 +397,31 @@ module TZInfo
     
     # Uses the iso3166.tab and zone.tab files to build an index of the 
     # available countries and their timezones.
-    def load_country_index
-      zones = {}
+    def load_country_index(iso3166_tab_path, zone_tab_path)
       
-      File.open(File.join(@zoneinfo_dir, 'zone.tab')) do |file|
+      # Handle standard 3 to 4 column zone.tab files as well as the 4 to 5 
+      # column format used by Solaris.
+      #
+      # On Solaris, an extra column before the comment gives an optional 
+      # linked/alternate timezone identifier (or '-' if not set).
+      #
+      # Additionally, there is a section at the end of the file for timezones
+      # covering regions. These are given lower-case "country" codes. The timezone
+      # identifier column refers to a continent instead of an identifier. These
+      # lines will be ignored by TZInfo.
+      #
+      # Since the last column is optional in both formats, testing for the 
+      # Solaris format is done in two passes. The first pass identifies if there
+      # are any lines using 5 columns.
+      
+      file_is_5_column = false
+      zone_tab = []
+      
+      File.open(zone_tab_path) do |file|
         file.each_line do |line|
           line.chomp!
           
-          if line =~ /\A([A-Z]{2})\t(?:([+\-])(\d{2})(\d{2})([+\-])(\d{3})(\d{2})|([+\-])(\d{2})(\d{2})(\d{2})([+\-])(\d{3})(\d{2})(\d{2}))\t([^\t]+)(?:\t([^\t]+))?\z/
+          if line =~ /\A([A-Z]{2})\t(?:([+\-])(\d{2})(\d{2})([+\-])(\d{3})(\d{2})|([+\-])(\d{2})(\d{2})(\d{2})([+\-])(\d{3})(\d{2})(\d{2}))\t([^\t]+)(?:\t([^\t]+))?(?:\t([^\t]+))?\z/
             code = $1
             
             if $2
@@ -308,22 +433,37 @@ module TZInfo
             end
             
             zone_identifier = $16
-            description = $17
+            column4 = $17
+            column5 = $18
             
-            (zones[code] ||= []) << 
-              CountryTimezone.new(zone_identifier, latitude.numerator, latitude.denominator, 
-                                  longitude.numerator, longitude.denominator, description)
+            file_is_5_column = true if column5
+            
+            zone_tab << [code, zone_identifier, latitude, longitude, column4, column5]
           end
         end
       end
       
+      zones = {}
+      
+      zone_tab.each do |code, zone_identifier, latitude, longitude, column4, column5|
+        description = file_is_5_column ? column5 : column4
+           
+        (zones[code] ||= []) << 
+          CountryTimezone.new(zone_identifier, latitude.numerator, latitude.denominator, 
+                              longitude.numerator, longitude.denominator, description)
+      end
+      
       countries = {}
       
-      File.open(File.join(@zoneinfo_dir, 'iso3166.tab')) do |file|
+      File.open(iso3166_tab_path) do |file|
         file.each_line do |line|
           line.chomp!
           
-          if line =~ /\A([A-Z]{2})\t(.+)\z/
+          # Handle both the two column alpha-2 and name format used in the tz 
+          # database as well as the 4 column alpha-2, alpha-3, numeric-3 and 
+          # name format used by FreeBSD and OpenBSD.
+          
+          if line =~ /\A([A-Z]{2})(?:\t[A-Z]{3}\t[0-9]{3})?\t(.+)\z/
             code = $1
             name = $2
             countries[code] = ZoneinfoCountryInfo.new(code, name, zones[code] || [])

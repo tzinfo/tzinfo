@@ -163,6 +163,26 @@ class TCDataSource < Minitest::Test
     end
   end
   
+  def test_set_standard_zoneinfo_explicit_alternate_iso3166
+    Dir.mktmpdir('tzinfo_test_dir') do |dir|
+      zoneinfo_dir = File.join(dir, 'zoneinfo')
+      tab_dir = File.join(dir, 'tab')
+      
+      FileUtils.mkdir(zoneinfo_dir)
+      FileUtils.mkdir(tab_dir)
+    
+      FileUtils.touch(File.join(zoneinfo_dir, 'zone.tab'))
+      
+      iso3166_file = File.join(tab_dir, 'iso3166.tab')
+      FileUtils.touch(iso3166_file)
+      
+      DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_file)
+      data_source = DataSource.get
+      assert_kind_of(ZoneinfoDataSource, data_source)
+      assert_equal(zoneinfo_dir, data_source.zoneinfo_dir)
+    end
+  end
+  
   def test_set_standard_zoneinfo_search_not_found
     Dir.mktmpdir('tzinfo_test_dir') do |dir|
       ZoneinfoDataSource.search_path = [dir]
@@ -187,7 +207,7 @@ class TCDataSource < Minitest::Test
   
   def test_set_standard_zoneinfo_wrong_arg_count
     assert_raises(ArgumentError) do
-      DataSource.set(:zoneinfo, 1, 2)
+      DataSource.set(:zoneinfo, 1, 2, 3)
     end
     
     assert_kind_of(InitDataSource, DataSource.get)

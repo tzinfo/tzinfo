@@ -82,6 +82,7 @@ module TZInfo
     #   TZInfo::DataSource.set(:ruby)
     #   TZInfo::DataSource.set(:zoneinfo)
     #   TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir)
+    #   TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_tab_file)
     #
     # \DataSource.set(:zoneinfo) will automatically search for the zoneinfo
     # directory by checking the paths specified in 
@@ -90,6 +91,11 @@ module TZInfo
     #
     # \DataSource.set(:zoneinfo, zoneinfo_dir) uses the specified zoneinfo
     # directory as the data source. If the directory is not a valid zoneinfo
+    # directory, an InvalidZoneinfoDirectory exception will be raised.
+    #
+    # \DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_tab_file) uses the
+    # specified zoneinfo directory as the data source, but loads the iso3166.tab
+    # file from an alternate path. If the directory is not a valid zoneinfo
     # directory, an InvalidZoneinfoDirectory exception will be raised.
     #
     # Custom data sources can be created by subclassing TZInfo::DataSource and
@@ -121,7 +127,6 @@ module TZInfo
       elsif data_source_or_type == :ruby
         @@instance = RubyDataSource.new
       elsif data_source_or_type == :zoneinfo
-        raise ArgumentError, "wrong number of arguments #{args.length} for 1" if args.length > 1
         @@instance = ZoneinfoDataSource.new(*args)
       else
         raise ArgumentError, 'data_source_or_type must be a DataSource instance or a data source type (:ruby)'

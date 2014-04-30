@@ -33,6 +33,7 @@ class TCZoneinfoDataSource < Minitest::Test
   
   def setup
     @orig_search_path = ZoneinfoDataSource.search_path.clone
+    @orig_alternate_iso3166_tab_search_path = ZoneinfoDataSource.alternate_iso3166_tab_search_path.clone
     @orig_pwd = FileUtils.pwd
     
     # A zoneinfo directory containing files needed by the tests.
@@ -42,6 +43,7 @@ class TCZoneinfoDataSource < Minitest::Test
   
   def teardown
     ZoneinfoDataSource.search_path = @orig_search_path
+    ZoneinfoDataSource.alternate_iso3166_tab_search_path = @orig_alternate_iso3166_tab_search_path
     FileUtils.chdir(@orig_pwd)
   end
   
@@ -76,6 +78,37 @@ class TCZoneinfoDataSource < Minitest::Test
     assert_equal(['/tmp/zoneinfo4', '/tmp/zoneinfo5'], ZoneinfoDataSource.search_path)
   end
   
+  def test_default_alternate_iso3166_tab_search_path
+    assert_equal(['/usr/share/misc/iso3166.tab', '/usr/share/misc/iso3166'], ZoneinfoDataSource.alternate_iso3166_tab_search_path)
+    assert_equal(false, ZoneinfoDataSource.alternate_iso3166_tab_search_path.frozen?)
+  end
+  
+  def test_set_alternate_iso3166_tab_search_path_default
+    ZoneinfoDataSource.alternate_iso3166_tab_search_path = ['/tmp/iso3166.tab', '/tmp/iso3166']
+    assert_equal(['/tmp/iso3166.tab', '/tmp/iso3166'], ZoneinfoDataSource.alternate_iso3166_tab_search_path)
+    
+    ZoneinfoDataSource.alternate_iso3166_tab_search_path = nil
+    assert_equal(['/usr/share/misc/iso3166.tab', '/usr/share/misc/iso3166'], ZoneinfoDataSource.alternate_iso3166_tab_search_path)
+    assert_equal(false, ZoneinfoDataSource.alternate_iso3166_tab_search_path.frozen?)
+  end
+  
+  def test_set_alternate_iso3166_tab_search_path_array
+    path = ['/tmp/iso3166.tab', '/tmp/iso3166']
+    ZoneinfoDataSource.alternate_iso3166_tab_search_path = path
+    assert_equal(['/tmp/iso3166.tab', '/tmp/iso3166'], ZoneinfoDataSource.alternate_iso3166_tab_search_path)
+    refute_same(path, ZoneinfoDataSource.alternate_iso3166_tab_search_path)
+  end
+  
+  def test_set_alternate_iso3166_tab_search_path_array_to_s  
+    ZoneinfoDataSource.alternate_iso3166_tab_search_path = [Pathname.new('/tmp/iso3166.tab')]
+    assert_equal(['/tmp/iso3166.tab'], ZoneinfoDataSource.alternate_iso3166_tab_search_path)
+  end
+  
+  def test_set_alternate_iso3166_tab_search_path_string
+    ZoneinfoDataSource.alternate_iso3166_tab_search_path = ['/tmp/iso3166.tab', '/tmp/iso3166'].join(File::PATH_SEPARATOR)
+    assert_equal(['/tmp/iso3166.tab', '/tmp/iso3166'], ZoneinfoDataSource.alternate_iso3166_tab_search_path)
+  end
+  
   def test_new_search
     Dir.mktmpdir('tzinfo_test_dir1') do |dir1|
       Dir.mktmpdir('tzinfo_test_dir2') do |dir2|
@@ -88,11 +121,52 @@ class TCZoneinfoDataSource < Minitest::Test
             FileUtils.touch(File.join(dir4, 'iso3166.tab'))
             
             ZoneinfoDataSource.search_path = [file, dir2, dir3, dir4]
+            ZoneinfoDataSource.alternate_iso3166_tab_search_path = []
             
             data_source = ZoneinfoDataSource.new
             assert_equal(dir4, data_source.zoneinfo_dir)
           end
         end
+      end
+    end
+  end
+  
+  def test_new_search_solaris_tab_files
+    # Solaris names the tab files 'tab/country.tab' (iso3166.tab) and 
+    # 'tab/zone_sun.tab' (zone.tab).
+    
+    Dir.mktmpdir('tzinfo_test_dir') do |dir|
+      tab = File.join(dir, 'tab')
+      FileUtils.mkdir(tab)
+      FileUtils.touch(File.join(tab, 'country.tab'))
+      FileUtils.touch(File.join(tab, 'zone_sun.tab'))
+      
+      ZoneinfoDataSource.search_path = [dir]
+      ZoneinfoDataSource.alternate_iso3166_tab_search_path = []
+      
+      data_source = ZoneinfoDataSource.new
+      assert_equal(dir, data_source.zoneinfo_dir)
+    end
+  end
+  
+  def test_new_search_alternate_iso3166_path
+    Dir.mktmpdir('tzinfo_test_dir_zoneinfo') do |zoneinfo_dir|
+      Dir.mktmpdir('tzinfo_test_dir_tab') do |tab_dir|
+        FileUtils.touch(File.join(zoneinfo_dir, 'zone.tab'))
+        
+        tab_file = File.join(tab_dir, 'iso3166')
+        
+        ZoneinfoDataSource.search_path = [zoneinfo_dir]
+        ZoneinfoDataSource.alternate_iso3166_tab_search_path = [tab_file]
+        
+        assert_raises(ZoneinfoDirectoryNotFound) do
+          ZoneinfoDataSource.new
+        end
+        
+        FileUtils.touch(tab_file)
+      
+        data_source = ZoneinfoDataSource.new
+        assert_equal(zoneinfo_dir, data_source.zoneinfo_dir)
       end
     end
   end
@@ -108,6 +182,7 @@ class TCZoneinfoDataSource < Minitest::Test
             FileUtils.touch(File.join(dir3, 'iso3166.tab'))
             
             ZoneinfoDataSource.search_path = [file, dir2, dir3, dir4]
+            ZoneinfoDataSource.alternate_iso3166_tab_search_path = []
                       
             assert_raises(ZoneinfoDirectoryNotFound) do
               ZoneinfoDataSource.new
@@ -126,6 +201,7 @@ class TCZoneinfoDataSource < Minitest::Test
       FileUtils.chdir(dir)
       
       ZoneinfoDataSource.search_path = ['.']
+      ZoneinfoDataSource.alternate_iso3166_tab_search_path = []
       data_source = ZoneinfoDataSource.new
       assert_equal(Pathname.new(dir).realpath.to_s, data_source.zoneinfo_dir)
       
@@ -144,10 +220,72 @@ class TCZoneinfoDataSource < Minitest::Test
     end
   end
   
+  def test_new_dir_solaris_tab_files
+    # Solaris names the tab files 'tab/country.tab' (iso3166.tab) and 
+    # 'tab/zone_sun.tab' (zone.tab).
+    
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      tab = File.join(dir, 'tab')
+      FileUtils.mkdir(tab)
+      FileUtils.touch(File.join(tab, 'country.tab'))
+      FileUtils.touch(File.join(tab, 'zone_sun.tab'))
+            
+      data_source = ZoneinfoDataSource.new(dir)
+      assert_equal(dir, data_source.zoneinfo_dir)
+    end
+  end
+  
+  def test_new_dir_alternate_iso3166_path
+    Dir.mktmpdir('tzinfo_test_dir_zoneinfo') do |zoneinfo_dir|
+      Dir.mktmpdir('tzinfo_test_dir_tab') do |tab_dir|
+        FileUtils.touch(File.join(zoneinfo_dir, 'zone.tab'))
+        
+        tab_file = File.join(tab_dir, 'iso3166')
+        FileUtils.touch(tab_file)
+        
+        ZoneinfoDataSource.alternate_iso3166_tab_search_path = [tab_file]
+        
+        assert_raises(InvalidZoneinfoDirectory) do
+          # The alternate_iso3166_tab_search_path should not be used. This should raise 
+          # an exception.
+          ZoneinfoDataSource.new(zoneinfo_dir)
+        end
+        
+        data_source = ZoneinfoDataSource.new(zoneinfo_dir, tab_file)
+        assert_equal(zoneinfo_dir, data_source.zoneinfo_dir)
+      end
+    end
+  end
+  
   def test_new_dir_invalid
     Dir.mktmpdir('tzinfo_test') do |dir|
       assert_raises(InvalidZoneinfoDirectory) do
         ZoneinfoDataSource.new(dir)
+      end
+    end
+  end
+  
+  def test_new_dir_invalid_alternate_iso3166_path
+    Dir.mktmpdir('tzinfo_test_dir_zoneinfo') do |zoneinfo_dir|
+      Dir.mktmpdir('tzinfo_test_dir_tab') do |tab_dir|
+        FileUtils.touch(File.join(zoneinfo_dir, 'zone.tab'))
+        
+        assert_raises(InvalidZoneinfoDirectory) do
+          ZoneinfoDataSource.new(zoneinfo_dir, File.join(tab_dir, 'iso3166'))
+        end
+      end
+    end
+  end
+  
+  def test_new_dir_invalid_alternate_iso3166_path_overrides_valid
+    Dir.mktmpdir('tzinfo_test_dir_zoneinfo') do |zoneinfo_dir|
+      Dir.mktmpdir('tzinfo_test_dir_tab') do |tab_dir|
+        FileUtils.touch(File.join(zoneinfo_dir, 'iso3166.tab'))
+        FileUtils.touch(File.join(zoneinfo_dir, 'zone.tab'))
+        
+        assert_raises(InvalidZoneinfoDirectory) do
+          ZoneinfoDataSource.new(zoneinfo_dir, File.join(tab_dir, 'iso3166'))
+        end
       end
     end
   end
@@ -562,9 +700,32 @@ class TCZoneinfoDataSource < Minitest::Test
     end
   end
   
+  def test_timezone_identifiers_ignored_src_directory
+    # Solaris includes a src directory containing the source timezone data files
+    # from the tzdata distribution. These should be ignored.
+    
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      FileUtils.touch(File.join(dir, 'zone.tab'))
+      FileUtils.touch(File.join(dir, 'iso3166.tab'))
+      FileUtils.cp(File.join(@data_source.zoneinfo_dir, 'EST'), File.join(dir, 'EST'))
+      
+      src_dir = File.join(dir, 'src')
+      FileUtils.mkdir(src_dir)
+      
+      File.open(File.join(src_dir, 'europe'), 'w') do |f|
+        f.binmode
+        f.write("Zone\tEurope/London\t0:00\tEU\tGMT/BST\n")
+      end      
+      
+      data_source = ZoneinfoDataSource.new(dir)
+      assert_array_same_items(['EST'], data_source.timezone_identifiers)
+    end
+  end
+  
   def test_load_country_info
     info = @data_source.load_country_info('GB')
     assert_equal('GB', info.code)
+    assert_equal('Britain (UK)', info.name)
   end
     
   def test_load_country_info_not_exist
@@ -610,12 +771,16 @@ class TCZoneinfoDataSource < Minitest::Test
   
   def test_load_country_info_check_zones
     Dir.mktmpdir('tzinfo_test') do |dir|
-      File.open(File.join(dir, 'iso3166.tab'), 'w') do |iso3166|
+      File.open(File.join(dir, 'iso3166.tab'), 'w') do |iso3166|      
+        iso3166.puts('# iso3166.tab')
+        iso3166.puts('')
         iso3166.puts("FC\tFake Country")
         iso3166.puts("OC\tOther Country")
       end
       
       File.open(File.join(dir, 'zone.tab'), 'w') do |zone|
+        zone.puts('# zone.tab')
+        zone.puts('')
         zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
         zone.puts("FC\t+353916+1394441\tFake/Two\tAnother description")
         zone.puts("FC\t-2332-04637\tFake/Three\tThis is Three")
@@ -626,6 +791,7 @@ class TCZoneinfoDataSource < Minitest::Test
       
       info = data_source.load_country_info('FC')
       assert_equal('FC', info.code)
+      assert_equal('Fake Country', info.name)
       assert_equal(['Fake/One', 'Fake/Two', 'Fake/Three'], info.zone_identifiers)
       assert_equal(true, info.zone_identifiers.frozen?)
       assert_equal([
@@ -636,10 +802,144 @@ class TCZoneinfoDataSource < Minitest::Test
       
       info = data_source.load_country_info('OC')
       assert_equal('OC', info.code)
+      assert_equal('Other Country', info.name)
       assert_equal(['Other/One'], info.zone_identifiers)
       assert_equal(true, info.zone_identifiers.frozen?)
       assert_equal([CountryTimezone.new('Other/One', 601, 12, 433, 30)], info.zones)
       assert_equal(true, info.zones.frozen?)
+    end
+  end
+  
+  def test_load_country_info_check_zones_solaris_tab_files
+    # Solaris uses 5 columns instead of the usual 4 in zone_sun.tab.
+    # An extra column before the comment gives an optional linked/alternate
+    # timezone identifier (or '-' if not set).
+    #
+    # Additionally, there is a section at the end of the file for timezones
+    # covering regions. These are given lower-case "country" codes. The timezone
+    # identifier column refers to a continent instead of an identifier. These
+    # lines will be ignored by TZInfo.
+    
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      tab_dir = File.join(dir, 'tab')
+      FileUtils.mkdir(tab_dir)
+    
+      File.open(File.join(tab_dir, 'country.tab'), 'w') do |country|
+        country.puts('# country.tab')
+        country.puts('# Solaris')
+        country.puts("FC\tFake Country")
+        country.puts("OC\tOther Country")
+      end
+      
+      File.open(File.join(tab_dir, 'zone_sun.tab'), 'w') do |zone_sun|
+        zone_sun.puts('# zone_sun.tab')
+        zone_sun.puts('# Solaris')
+        zone_sun.puts('# Countries')
+        zone_sun.puts("FC\t+513030-0000731\tFake/One\t-\tDescription of one")
+        zone_sun.puts("FC\t+353916+1394441\tFake/Two\tFake/Alias/Two\tAnother description")
+        zone_sun.puts("FC\t-2332-04637\tFake/Three\tFake/Alias/Three\tThis is Three")
+        zone_sun.puts("OC\t+5005+01426\tOther/One\tOther/Linked/One")
+        zone_sun.puts("OC\t+5015+01436\tOther/Two\t-")
+        zone_sun.puts('# Regions')
+        zone_sun.puts("ee\t+0000+00000\tEurope/\tEET")
+        zone_sun.puts("me\t+0000+00000\tEurope/\tMET")
+        zone_sun.puts("we\t+0000+00000\tEurope/\tWET")
+      end
+      
+      data_source = ZoneinfoDataSource.new(dir)
+      
+      info = data_source.load_country_info('FC')
+      assert_equal('FC', info.code)
+      assert_equal('Fake Country', info.name)
+      assert_equal(['Fake/One', 'Fake/Two', 'Fake/Three'], info.zone_identifiers)
+      assert_equal(true, info.zone_identifiers.frozen?)
+      assert_equal([
+        CountryTimezone.new('Fake/One', 6181, 120, -451, 3600, 'Description of one'),
+        CountryTimezone.new('Fake/Two', 32089, 900, 503081, 3600, 'Another description'),
+        CountryTimezone.new('Fake/Three', -353, 15, -2797, 60, 'This is Three')], info.zones)
+      assert_equal(true, info.zones.frozen?)
+      
+      info = data_source.load_country_info('OC')
+      assert_equal('OC', info.code)
+      assert_equal('Other Country', info.name)
+      assert_equal(['Other/One', 'Other/Two'], info.zone_identifiers)
+      assert_equal(true, info.zone_identifiers.frozen?)
+      assert_equal([
+        CountryTimezone.new('Other/One', 601, 12, 433, 30),
+        CountryTimezone.new('Other/Two', 201, 4, 73, 5)], info.zones)
+      assert_equal(true, info.zones.frozen?)
+    end
+  end
+  
+  def test_load_country_info_check_zones_alternate_iso3166_file
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      zoneinfo_dir = File.join(dir, 'zoneinfo')
+      tab_dir = File.join(dir, 'tab')
+      FileUtils.mkdir(zoneinfo_dir)
+      FileUtils.mkdir(tab_dir)
+      
+      tab_file = File.join(tab_dir, 'iso3166')
+      File.open(tab_file, 'w') do |iso3166|
+        # Use the BSD 4 column format (alternate iso3166 is used on BSD).
+        iso3166.puts("FC\tFCC\t001\tFake Country")
+        iso3166.puts("OC\tOCC\t002\tOther Country")
+      end
+      
+      File.open(File.join(zoneinfo_dir, 'zone.tab'), 'w') do |zone|
+        zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
+        zone.puts("FC\t+353916+1394441\tFake/Two\tAnother description")
+        zone.puts("FC\t-2332-04637\tFake/Three\tThis is Three")
+        zone.puts("OC\t+5005+01426\tOther/One")
+      end
+      
+      data_source = ZoneinfoDataSource.new(zoneinfo_dir, tab_file)
+      
+      info = data_source.load_country_info('FC')
+      assert_equal('FC', info.code)
+      assert_equal('Fake Country', info.name)
+      assert_equal(['Fake/One', 'Fake/Two', 'Fake/Three'], info.zone_identifiers)
+      assert_equal(true, info.zone_identifiers.frozen?)
+      assert_equal([
+        CountryTimezone.new('Fake/One', 6181, 120, -451, 3600, 'Description of one'),
+        CountryTimezone.new('Fake/Two', 32089, 900, 503081, 3600, 'Another description'),
+        CountryTimezone.new('Fake/Three', -353, 15, -2797, 60, 'This is Three')], info.zones)
+      assert_equal(true, info.zones.frozen?)
+      
+      info = data_source.load_country_info('OC')
+      assert_equal('OC', info.code)
+      assert_equal('Other Country', info.name)
+      assert_equal(['Other/One'], info.zone_identifiers)
+      assert_equal(true, info.zone_identifiers.frozen?)
+      assert_equal([CountryTimezone.new('Other/One', 601, 12, 433, 30)], info.zones)
+      assert_equal(true, info.zones.frozen?)
+    end
+  end
+  
+  def test_load_country_info_four_column_iso31611
+    # OpenBSD and FreeBSD use a 4 column iso3166.tab file that includes
+    # alpha-3 and numeric-3 codes in addition to the alpha-2 and name in the
+    # tz database version.
+    
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      File.open(File.join(dir, 'iso3166.tab'), 'w') do |iso3166|
+        iso3166.puts("FC\tFCC\t001\tFake Country")
+        iso3166.puts("OC\tOCC\t002\tOther Country")
+      end
+      
+      File.open(File.join(dir, 'zone.tab'), 'w') do |zone|
+        zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
+        zone.puts("OC\t+5005+01426\tOther/One")
+      end
+      
+      data_source = ZoneinfoDataSource.new(dir)
+      
+      info = data_source.load_country_info('FC')
+      assert_equal('FC', info.code)
+      assert_equal('Fake Country', info.name)
+      
+      info = data_source.load_country_info('OC')
+      assert_equal('OC', info.code)
+      assert_equal('Other Country', info.name)
     end
   end
   
@@ -656,5 +956,28 @@ class TCZoneinfoDataSource < Minitest::Test
     codes = @data_source.country_codes
     assert_array_same_items(file_codes, codes)
     assert_equal(true, codes.frozen?)
+  end
+  
+  def test_country_codes_four_column_iso3166
+    # OpenBSD and FreeBSD use a 4 column iso3166.tab file that includes
+    # alpha-3 and numeric-3 codes in addition to the alpha-2 and name in the
+    # tz database version.
+    
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      File.open(File.join(dir, 'iso3166.tab'), 'w') do |iso3166|
+        iso3166.puts("FC\tFCC\t001\tFake Country")
+        iso3166.puts("OC\tOCC\t002\tOther Country")
+      end
+      
+      File.open(File.join(dir, 'zone.tab'), 'w') do |zone|
+        zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
+        zone.puts("OC\t+5005+01426\tOther/One")
+      end
+      
+      data_source = ZoneinfoDataSource.new(dir)
+      
+      codes = data_source.country_codes
+      assert_array_same_items(%w(FC OC), codes)
+    end
   end
 end
