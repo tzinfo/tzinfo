@@ -202,7 +202,7 @@ module TZInfo
       begin
         return ZoneinfoDataSource.new
       rescue ZoneinfoDirectoryNotFound
-        raise DataSourceNotFound, "No source of timezone data could be found. To resolve this, either install the tzinfo-data gem (e.g. by adding `gem \'tzinfo-data\'` to your Gemfile) or specify the path to a zoneinfo directory using `TZInfo::DataSource.set(:zoneinfo, zoneinfo_path)`."
+        raise DataSourceNotFound, "No source of timezone data could be found.\nPlease refer to http://tzinfo.github.io/datasourcenotfound for help resolving this error."
       end
     end
   end
