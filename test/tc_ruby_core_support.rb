@@ -103,9 +103,9 @@ class TCRubyCoreSupport < Minitest::Test
     if SUPPORTS_ENCODING
       File.open(test_file, 'r') do |file|
         file.binmode
-        data = file.read(3 + $/.bytesize)
+        data = file.read(2)
         refute_nil(data)
-        assert_equal(2 + $/.bytesize, data.length)
+        assert_equal(2, data.length)
         bytes = data.unpack('C2')
         assert_equal(0xC2, bytes[0])
         assert_equal(0xA9, bytes[1])
