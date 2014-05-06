@@ -66,7 +66,7 @@ module TZInfo
     # A TimeOrDateTime instance representing the UTC time when this transition
     # occurs.
     def at
-      # Thread-safey: It is possible that the value of @at may be calculated
+      # Thread-safety: It is possible that the value of @at may be calculated
       # multiple times in concurrently executing threads. It is not worth the
       # overhead of locking to ensure that @at is only calculated once.
       

@@ -55,7 +55,7 @@ module TZInfo
       end  
     
       def real_timezone
-        # Thread-safey: It is possible that the value of @real_timezone may be 
+        # Thread-safety: It is possible that the value of @real_timezone may be 
         # calculated multiple times in concurrently executing threads. It is not 
         # worth the overhead of locking to ensure that @real_timezone is only 
         # calculated once.

@@ -40,7 +40,7 @@ module TZInfo
     
     # The latitude of this timezone in degrees as a Rational.
     def latitude
-      # Thread-safey: It is possible that the value of @latitude may be 
+      # Thread-safety: It is possible that the value of @latitude may be 
       # calculated multiple times in concurrently executing threads. It is not 
       # worth the overhead of locking to ensure that @latitude is only 
       # calculated once.
@@ -49,7 +49,7 @@ module TZInfo
     
     # The longitude of this timezone in degrees as a Rational.
     def longitude
-      # Thread-safey: It is possible that the value of @longitude may be 
+      # Thread-safety: It is possible that the value of @longitude may be 
       # calculated multiple times in concurrently executing threads. It is not 
       # worth the overhead of locking to ensure that @longitude is only 
       # calculated once.

@@ -38,7 +38,7 @@ module TZInfo
     # causes the previous observance to end (calculated from at using 
     # previous_offset).
     def local_end_at
-      # Thread-safey: It is possible that the value of @local_end_at may be
+      # Thread-safety: It is possible that the value of @local_end_at may be
       # calculated multiple times in concurrently executing threads. It is not 
       # worth the overhead of locking to ensure that @local_end_at is only
       # calculated once.
@@ -62,7 +62,7 @@ module TZInfo
     # A TimeOrDateTime instance representing the local time when this transition
     # causes the next observance to start (calculated from at using offset).
     def local_start_at
-      # Thread-safey: It is possible that the value of @local_start_at may be
+      # Thread-safety: It is possible that the value of @local_start_at may be
       # calculated multiple times in concurrently executing threads. It is not 
       # worth the overhead of locking to ensure that @local_start_at is only
       # calculated once.
