@@ -774,9 +774,9 @@ class TCZoneinfoDataSource < Minitest::Test
       assert_equal(['Fake/One', 'Fake/Two', 'Fake/Three'], info.zone_identifiers)
       assert_equal(true, info.zone_identifiers.frozen?)
       assert_equal([
-        CountryTimezone.new('Fake/One', 6181, 120, -451, 3600, 'Description of one'),
-        CountryTimezone.new('Fake/Two', 32089, 900, 503081, 3600, 'Another description'),
-        CountryTimezone.new('Fake/Three', -353, 15, -2797, 60, 'This is Three')], info.zones)
+        CountryTimezone.new('Fake/One', Rational(6181, 120), Rational(-451, 3600), 'Description of one'),
+        CountryTimezone.new('Fake/Two', Rational(32089, 900), Rational(503081, 3600), 'Another description'),
+        CountryTimezone.new('Fake/Three', Rational(-353, 15), Rational(-2797, 60), 'This is Three')], info.zones)
       assert_equal(true, info.zones.frozen?)
       
       info = data_source.load_country_info('OC')
@@ -784,7 +784,7 @@ class TCZoneinfoDataSource < Minitest::Test
       assert_equal('Other Country', info.name)
       assert_equal(['Other/One'], info.zone_identifiers)
       assert_equal(true, info.zone_identifiers.frozen?)
-      assert_equal([CountryTimezone.new('Other/One', 601, 12, 433, 30)], info.zones)
+      assert_equal([CountryTimezone.new('Other/One', Rational(601, 12), Rational(433, 30))], info.zones)
       assert_equal(true, info.zones.frozen?)
     end
   end
@@ -833,9 +833,9 @@ class TCZoneinfoDataSource < Minitest::Test
       assert_equal(['Fake/One', 'Fake/Two', 'Fake/Three'], info.zone_identifiers)
       assert_equal(true, info.zone_identifiers.frozen?)
       assert_equal([
-        CountryTimezone.new('Fake/One', 6181, 120, -451, 3600, 'Description of one'),
-        CountryTimezone.new('Fake/Two', 32089, 900, 503081, 3600, 'Another description'),
-        CountryTimezone.new('Fake/Three', -353, 15, -2797, 60, 'This is Three')], info.zones)
+        CountryTimezone.new('Fake/One', Rational(6181, 120), Rational(-451, 3600), 'Description of one'),
+        CountryTimezone.new('Fake/Two', Rational(32089, 900), Rational(503081, 3600), 'Another description'),
+        CountryTimezone.new('Fake/Three', Rational(-353, 15), Rational(-2797, 60), 'This is Three')], info.zones)
       assert_equal(true, info.zones.frozen?)
       
       info = data_source.load_country_info('OC')
@@ -844,8 +844,8 @@ class TCZoneinfoDataSource < Minitest::Test
       assert_equal(['Other/One', 'Other/Two'], info.zone_identifiers)
       assert_equal(true, info.zone_identifiers.frozen?)
       assert_equal([
-        CountryTimezone.new('Other/One', 601, 12, 433, 30),
-        CountryTimezone.new('Other/Two', 201, 4, 73, 5)], info.zones)
+        CountryTimezone.new('Other/One', Rational(601, 12), Rational(433, 30)),
+        CountryTimezone.new('Other/Two', Rational(201, 4), Rational(73, 5))], info.zones)
       assert_equal(true, info.zones.frozen?)
     end
   end
@@ -879,9 +879,9 @@ class TCZoneinfoDataSource < Minitest::Test
       assert_equal(['Fake/One', 'Fake/Two', 'Fake/Three'], info.zone_identifiers)
       assert_equal(true, info.zone_identifiers.frozen?)
       assert_equal([
-        CountryTimezone.new('Fake/One', 6181, 120, -451, 3600, 'Description of one'),
-        CountryTimezone.new('Fake/Two', 32089, 900, 503081, 3600, 'Another description'),
-        CountryTimezone.new('Fake/Three', -353, 15, -2797, 60, 'This is Three')], info.zones)
+        CountryTimezone.new('Fake/One', Rational(6181, 120), Rational(-451, 3600), 'Description of one'),
+        CountryTimezone.new('Fake/Two', Rational(32089, 900), Rational(503081, 3600), 'Another description'),
+        CountryTimezone.new('Fake/Three', Rational(-353, 15), Rational(-2797, 60), 'This is Three')], info.zones)
       assert_equal(true, info.zones.frozen?)
       
       info = data_source.load_country_info('OC')
@@ -889,7 +889,7 @@ class TCZoneinfoDataSource < Minitest::Test
       assert_equal('Other Country', info.name)
       assert_equal(['Other/One'], info.zone_identifiers)
       assert_equal(true, info.zone_identifiers.frozen?)
-      assert_equal([CountryTimezone.new('Other/One', 601, 12, 433, 30)], info.zones)
+      assert_equal([CountryTimezone.new('Other/One', Rational(601, 12), Rational(433, 30))], info.zones)
       assert_equal(true, info.zones.frozen?)
     end
   end
@@ -941,7 +941,7 @@ class TCZoneinfoDataSource < Minitest::Test
       assert_equal('UT', info.code)
       assert_equal('Unicode Test ✓', info.name)
       assert_equal(['Unicode✓/One'], info.zone_identifiers)
-      assert_equal([CountryTimezone.new('Unicode✓/One', 6181, 120, -451, 3600, 'Unicode Description ✓')], info.zones)
+      assert_equal([CountryTimezone.new('Unicode✓/One', Rational(6181, 120), Rational(-451, 3600), 'Unicode Description ✓')], info.zones)
     end
   end
   

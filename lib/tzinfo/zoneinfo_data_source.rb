@@ -425,9 +425,7 @@ module TZInfo
       zone_tab.each do |code, zone_identifier, latitude, longitude, column4, column5|
         description = file_is_5_column ? column5 : column4
            
-        (zones[code] ||= []) << 
-          CountryTimezone.new(zone_identifier, latitude.numerator, latitude.denominator, 
-                              longitude.numerator, longitude.denominator, description)
+        (zones[code] ||= []) << CountryTimezone.new(zone_identifier, latitude, longitude, description)
       end
       
       countries = {}

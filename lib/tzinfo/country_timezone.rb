@@ -11,19 +11,52 @@ module TZInfo
     # Timezone.
     attr_reader :description
     
+    class << self
+      # Creates a new CountryTimezone with a timezone identifier, latitude,
+      # longitude and description. The latitude and longitude are specified as
+      # rationals - a numerator and denominator. For performance reasons, the 
+      # numerators and denominators must be specified in their lowest form.
+      #
+      # For use internally within TZInfo.
+      #
+      # @!visibility private
+      alias :new! :new
+      
+      # Creates a new CountryTimezone with a timezone identifier, latitude,
+      # longitude and description. The latitude and longitude must be specified
+      # as instances of Rational.
+      #
+      # CountryTimezone instances should normally only be constructed when
+      # creating new DataSource implementations.
+      def new(identifier, latitude, longitude, description = nil)
+        super(identifier, latitude, nil, longitude, nil, description)      
+      end
+    end
+    
     # Creates a new CountryTimezone with a timezone identifier, latitude,
     # longitude and description. The latitude and longitude are specified as
     # rationals - a numerator and denominator. For performance reasons, the 
     # numerators and denominators must be specified in their lowest form.
     #
-    # CountryTimezone instances should not normally be constructed manually.
+    # @!visibility private
     def initialize(identifier, latitude_numerator, latitude_denominator, 
                    longitude_numerator, longitude_denominator, description = nil) #:nodoc:
       @identifier = identifier
-      @latitude_numerator = latitude_numerator
-      @latitude_denominator = latitude_denominator
-      @longitude_numerator = longitude_numerator
-      @longitude_denominator = longitude_denominator      
+      
+      if latitude_numerator.kind_of?(Rational)
+        @latitude = latitude_numerator
+      else    
+        @latitude_numerator = latitude_numerator
+        @latitude_denominator = latitude_denominator
+      end
+      
+      if longitude_numerator.kind_of?(Rational)
+        @longitude = longitude_numerator
+      else    
+        @longitude_numerator = longitude_numerator
+        @longitude_denominator = longitude_denominator
+      end
+        
       @description = description
     end
     
@@ -74,8 +107,10 @@ module TZInfo
     
     # Returns a hash of this CountryTimezone. 
     def hash
-      @identifier.hash ^ @latitude_numerator.hash ^ @latitude_denominator.hash ^ 
-        @longitude_numerator.hash ^ @longitude_denominator.hash ^ @description.hash
+      @identifier.hash ^ 
+        (@latitude ? @latitude.numerator.hash ^ @latitude.denominator.hash : @latitude_numerator.hash ^ @latitude_denominator.hash) ^
+        (@longitude ? @longitude.numerator.hash ^ @longitude.denominator.hash : @longitude_numerator.hash ^ @longitude_denominator.hash) ^
+        @description.hash
     end
     
     # Returns internal object state as a programmer-readable string.
