@@ -22,11 +22,10 @@ class TCTimezoneProxy < Minitest::Test
     proxy = TimezoneProxy.new('Europe/London')
     assert_equal('Europe/London', proxy.identifier)
     
-    # Test nothing raised
-    proxy.now
-    proxy.current_period
-    proxy.current_period_and_time
-    proxy.current_time_and_period
+    assert_nothing_raised { proxy.now }
+    assert_nothing_raised { proxy.current_period }
+    assert_nothing_raised { proxy.current_period_and_time }
+    assert_nothing_raised { proxy.current_time_and_period }
     
     real = Timezone.get('Europe/London')
     
