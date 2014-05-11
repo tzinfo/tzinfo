@@ -38,6 +38,11 @@ module TZInfo
       real_timezone.periods_for_local(local)
     end
     
+    # Returns the canonical zone for this Timezone.
+    def canonical_zone
+      real_timezone.canonical_zone
+    end
+    
     # Dumps this TimezoneProxy for marshalling.
     def _dump(limit)
       identifier

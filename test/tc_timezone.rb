@@ -290,6 +290,8 @@ class TCTimezone < Minitest::Test
     assert_raises(UnknownTimezone) { tz.now }
     assert_raises(UnknownTimezone) { tz.current_period_and_time }
     assert_raises(UnknownTimezone) { tz.transitions_up_to(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.canonical_identifier }
+    assert_raises(UnknownTimezone) { tz.canonical_zone }
   end
   
   def test_new_nil
@@ -305,6 +307,8 @@ class TCTimezone < Minitest::Test
     assert_raises(UnknownTimezone) { tz.now }
     assert_raises(UnknownTimezone) { tz.current_period_and_time }
     assert_raises(UnknownTimezone) { tz.transitions_up_to(DateTime.new(2006,1,1,1,0,0)) }
+    assert_raises(UnknownTimezone) { tz.canonical_identifier }
+    assert_raises(UnknownTimezone) { tz.canonical_zone }
   end
   
   def test_new_arg

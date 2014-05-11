@@ -14,6 +14,8 @@ class TCTimezoneProxy < Minitest::Test
     assert_raises(InvalidTimezoneIdentifier) { proxy.local_to_utc(DateTime.new(2006,1,1,0,0,0)) }
     assert_raises(InvalidTimezoneIdentifier) { proxy.period_for_utc(DateTime.new(2006,1,1,0,0,0)) }
     assert_raises(InvalidTimezoneIdentifier) { proxy.period_for_local(DateTime.new(2006,1,1,0,0,0)) }
+    assert_raises(InvalidTimezoneIdentifier) { proxy.canonical_identifier }
+    assert_raises(InvalidTimezoneIdentifier) { proxy.canonical_zone }
   end
   
   def test_valid
@@ -38,6 +40,8 @@ class TCTimezoneProxy < Minitest::Test
     assert_equal(real.friendly_identifier(true), proxy.friendly_identifier(true))
     assert_equal(real.friendly_identifier(false), proxy.friendly_identifier(false))
     assert_equal(real.friendly_identifier, proxy.friendly_identifier)
+    assert_equal(real.canonical_identifier, proxy.canonical_identifier)
+    assert_same(real.canonical_zone, proxy.canonical_zone)
     
     assert_equal('Europe/London', proxy.identifier)
     
@@ -45,6 +49,31 @@ class TCTimezoneProxy < Minitest::Test
     assert(proxy == real)
     assert_equal(0, real <=> proxy)
     assert_equal(0, proxy <=> real)
+  end
+  
+  def test_canonical_linked
+    # Test that the implementation of canonical_zone and canonical_identifier
+    # are actually calling the real timezone and not just returning it and
+    # its identifier.
+    
+    real = Timezone.get('UTC')
+    proxy = TimezoneProxy.new('UTC')
+    
+    # ZoneinfoDataSource doesn't return LinkedTimezoneInfo instances for any 
+    # timezone.
+    if real.kind_of?(LinkedTimezone)
+      assert_equal('Etc/UTC', proxy.canonical_identifier)
+      assert_same(Timezone.get('Etc/UTC'), proxy.canonical_zone)
+    else    
+      if DataSource.get.kind_of?(RubyDataSource)
+        # Not got a LinkedTimezone despite using a DataSource that supports it.
+        # Raise an exception as this shouldn't happen.
+        raise 'Non-LinkedTimezone instance returned for UTC using RubyDataSource'
+      end
+      
+      assert_equal('UTC', proxy.canonical_identifier)
+      assert_same(Timezone.get('UTC'), proxy.canonical_zone)
+    end
   end
   
   def test_equals

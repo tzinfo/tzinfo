@@ -85,5 +85,15 @@ class TCDataTimezone < Minitest::Test
     assert_same(transitions, tz.transitions_up_to(utc_to, utc_from))
     assert_same(utc_to, tti.utc_to)
     assert_same(utc_from, tti.utc_from)
-  end    
+  end
+  
+  def test_canonical_identifier
+    tz = DataTimezone.new(TestTimezoneInfo.new('Test/Zone', nil, [], []))
+    assert_equal('Test/Zone', tz.canonical_identifier)    
+  end
+  
+  def test_canonical_zone
+    tz = DataTimezone.new(TestTimezoneInfo.new('Test/Zone', nil, [], []))
+    assert_same(tz, tz.canonical_zone)
+  end
 end

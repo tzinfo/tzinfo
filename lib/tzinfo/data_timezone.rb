@@ -47,5 +47,12 @@ module TZInfo
     def transitions_up_to(utc_to, utc_from = nil)
       info.transitions_up_to(utc_to, utc_from)
     end
+    
+    # Returns the canonical zone for this Timezone.
+    #
+    # For a DataTimezone, this is always self.
+    def canonical_zone
+      self
+    end
   end
 end

@@ -47,6 +47,13 @@ module TZInfo
       @linked_timezone.transitions_up_to(utc_to, utc_from)
     end
     
+    # Returns the canonical zone for this Timezone.
+    #
+    # For a LinkedTimezone, this is the canonical zone of the link target.
+    def canonical_zone
+      @linked_timezone.canonical_zone
+    end
+    
     protected
       def setup(info)
         super(info)

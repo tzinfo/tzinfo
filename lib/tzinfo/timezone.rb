@@ -305,6 +305,45 @@ module TZInfo
       raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
     end
     
+    # Returns the canonical Timezone instance for this Timezone.
+    #
+    # The IANA Time Zone database contains two types of definition: Zones and 
+    # Links. Zones are defined by rules that set out when transitions occur. 
+    # Links are just references to fully defined Zone, creating an alias for 
+    # that Zone.
+    #
+    # Links are commonly used where a time zone has been renamed in a 
+    # release of the Time Zone database. For example, the Zone US/Eastern was 
+    # renamed as America/New_York. A US/Eastern Link was added in its place,
+    # linking to (and creating an alias for) for America/New_York.
+    #
+    # Links are also used for time zones that are currently identical to a full 
+    # Zone, but that are administered seperately. For example, Europe/Vatican is
+    # a Link to (and alias for) Europe/Rome.
+    #
+    # For a full Zone, canonical_zone returns self.
+    #
+    # For a Link, canonical_zone returns a Timezone instance representing the 
+    # full Zone that the link targets.
+    #
+    # TZInfo can be used with different data sources (see the documentation for
+    # TZInfo::DataSource). Please note that some DataSource implementations may 
+    # not support distinguishing between full Zones and Links and will treat all
+    # time zones as full Zones. In this case, the canonical_zone will always 
+    # return self.
+    #
+    # There are two built-in DataSource implementations. RubyDataSource (which
+    # will be used if the tzinfo-data gem is available) supports Link zones.
+    # ZoneinfoDataSource returns Link zones as if they were full Zones. If the 
+    # canonical_zone or canonical_identifier methods are required, the 
+    # tzinfo-data gem should be installed.
+    #
+    # The TZInfo::DataSource.get method can be used to check which DataSource 
+    # implementation is being used.
+    def canonical_zone
+      raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
+    end
+    
     # Returns the TimezonePeriod for the given local time. local can either be
     # a DateTime, Time or integer timestamp (Time.to_i). Any timezone 
     # information in local is ignored (it is treated as a time in the current 
@@ -490,6 +529,14 @@ module TZInfo
         
         result.to_a
       end
+    end
+    
+    # Returns the canonical identifier for this Timezone.
+    #
+    # This is a shortcut for calling canonical_zone.identifier. Please refer
+    # to the canonical_zone documentation for further information.
+    def canonical_identifier
+      canonical_zone.identifier
     end
     
     # Returns the current time in the timezone as a Time.

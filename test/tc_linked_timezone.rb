@@ -40,6 +40,10 @@ class TCLinkedTimezone < Minitest::Test
       @up_to_transitions
     end
     
+    def canonical_zone
+      self
+    end
+    
     private
       def setup(identifier, no_local_periods)
         @identifier = identifier
@@ -62,7 +66,10 @@ class TCLinkedTimezone < Minitest::Test
         raise InvalidTimezoneIdentifier, 'Invalid identifier' if identifier == 'Invalid/Identifier'
        
         @timezones ||= {}
-        @timezones[identifier] ||= TestTimezone.new(identifier, identifier == 'Test/No/Local')        
+        @timezones[identifier] ||= 
+          identifier == 'Test/Recursive/Linked' ? 
+            LinkedTimezone.new(LinkedTimezoneInfo.new(identifier, 'Test/Recursive/Data')) :
+            TestTimezone.new(identifier, identifier == 'Test/No/Local')
       end
     end
   end
@@ -116,5 +123,33 @@ class TCLinkedTimezone < Minitest::Test
     assert_same(linked_tz.up_to_transitions, tz.transitions_up_to(utc_to, utc_from))
     assert_same(utc_to, linked_tz.utc_to)
     assert_same(utc_from, linked_tz.utc_from)
+  end
+  
+  def test_canonical_identifier
+    tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
+    assert_equal('Test/Linked', tz.canonical_identifier)
+  end
+  
+  def test_canonical_identifier_recursive
+    # Recursive links are not currently used in the Time Zone database, but 
+    # will be supported by TZInfo.
+  
+    tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Recursive/Linked'))
+    assert_equal('Test/Recursive/Data', tz.canonical_identifier)
+  end
+  
+  def test_canonical_zone
+    tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
+    linked_tz = Timezone.get('Test/Linked')
+    assert_same(linked_tz, tz.canonical_zone)
+  end
+  
+  def test_canonical_zone_recursive
+    # Recursive links are not currently used in the Time Zone database, but 
+    # will be supported by TZInfo.
+  
+    tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Recursive/Linked'))
+    linked_tz = Timezone.get('Test/Recursive/Data')
+    assert_same(linked_tz, tz.canonical_zone)
   end
 end
