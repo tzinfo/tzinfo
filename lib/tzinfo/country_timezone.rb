@@ -45,14 +45,16 @@ module TZInfo
       
       if latitude_numerator.kind_of?(Rational)
         @latitude = latitude_numerator
-      else    
+      else
+        @latitude = nil
         @latitude_numerator = latitude_numerator
         @latitude_denominator = latitude_denominator
       end
       
       if longitude_numerator.kind_of?(Rational)
         @longitude = longitude_numerator
-      else    
+      else
+        @longitude = nil
         @longitude_numerator = longitude_numerator
         @longitude_denominator = longitude_denominator
       end
