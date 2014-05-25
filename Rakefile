@@ -92,6 +92,7 @@ end
 def setup_tests(test_task, type)
   test_task.libs = [File.join(BASE_DIR, 'lib')]
   test_task.pattern = File.join(BASE_DIR, 'test', "ts_all_#{type}.rb")
+  test_task.warning = true
 end
 
 Rake::TestTask.new(:test_ruby) do |t|
