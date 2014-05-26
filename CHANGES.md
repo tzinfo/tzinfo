@@ -1,3 +1,22 @@
+Version 1.2.0 - 26-May-2014
+---------------------------
+
+* Raise the minimum supported Ruby version to 1.8.7.
+* Support loading system zoneinfo data on FreeBSD, OpenBSD and Solaris.
+  Resolves #15.
+* Add canonical_identifier and canonical_zone methods to Timezone. Resolves #16.
+* Add a link to a DataSourceNotFound help page in the TZInfo::DataSourceNotFound
+  exception message.
+* Load iso3166.tab and zone.tab files as UTF-8.
+* Fix Timezone#local_to_utc returning local Time instances on systems using UTC
+  as the local time zone. Resolves #13.
+* Fix == methods raising an exception when passed an instance of a different
+  class by making <=> return nil if passed a non-comparable argument.
+* Eliminate "require 'rational'" warnings. Resolves #10.
+* Eliminate "assigned but unused variable - info" warnings. Resolves #11.
+* Switch to minitest v5 for unit tests. Resolves #18.
+
+
 Version 1.1.0 - 25-Sep-2013
 ---------------------------
 
