@@ -15,6 +15,14 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     SUPPORTS_64BIT = false
   end
 
+  begin
+    Time.at(-1)
+    Time.at(-2147483648)
+    SUPPORTS_NEGATIVE = true
+  rescue ArgumentError
+    SUPPORTS_NEGATIVE = false
+  end
+
   def assert_period(abbreviation, utc_offset, std_offset, dst, start_at, end_at, info)    
     if start_at
       period = info.period_for_utc(start_at)
@@ -388,14 +396,6 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   def test_load_before_epoch
     # Some platforms don't support negative numbers for times before the epoch.
     # Check that they are returned when supported and skipped when not.
-      
-    begin
-      Time.at(-1)
-      Time.at(-2147483648)
-      supports_negative = true
-    rescue ArgumentError
-      supports_negative = false
-    end
   
     offsets = [
       {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
@@ -413,7 +413,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       info = ZoneinfoTimezoneInfo.new('Zone/Negative', path)
       assert_equal('Zone/Negative', info.identifier)
       
-      if supports_negative
+      if SUPPORTS_NEGATIVE
         assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1948,  1,  2), info)
         assert_period(:XST,  3600,    0, false, Time.utc(1948,  1,  2), Time.utc(1969,  4, 22), info)
         assert_period(:XDT,  3600, 3600,  true, Time.utc(1969,  4, 22), Time.utc(1970, 10, 21), info)
@@ -428,7 +428,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_64bit
     # Some platforms support 64-bit Times, others only 32-bit. The TZif version
-    # 2 and later format contains both 32-bit and 64-bit times. 
+    # 2 and later format contains both 32-bit and 64-bit times.
     
     # Where 64-bit is supported and a TZif 2 or later file is provided, the 
     # 64-bit times should be used, otherwise the 32-bit information should be 
@@ -464,6 +464,108 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     end
   end
   
+  def test_load_64bit_range
+    # The full range of 64 bit timestamps is not currently supported because of
+    # the way transitions are indexed. Transitions outside the supported range
+    # will be ignored.
+
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 7200, :isdst => false, :abbrev => 'XNST'}]
+
+    transitions = [
+      {:at => -2**63,                :offset_index => 1},
+      {:at => Time.utc(2014, 5, 27), :offset_index => 2},
+      {:at => 2**63 - 1,             :offset_index => 0}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/SixtyFourRange', path)
+      assert_equal('Zone/SixtyFourRange', info.identifier)
+
+      if SUPPORTS_64BIT && format >= 2
+        # When the full range is supported, the following periods will be defined:
+        #assert_period(:LMT,  3542, 0, false, nil,                    Time.at(-2**63).utc,    info)
+        #assert_period(:XST,  3600, 0, false, Time.at(-2**63).utc,    Time.utc(2014, 5, 27),  info)
+        #assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**63 - 1).utc, info)
+        #assert_period(:LMT,  3542, 0, false, Time.at(2**63 - 1).utc, nil,                    info)
+
+        # Without full range support, the following periods will be defined:
+        assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(2014, 5, 27), info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
+      else
+        assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(2014, 5, 27), info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
+      end
+    end
+  end
+
+  def test_load_supported_64bit_range
+    # The full range of 64 bit timestamps is not currently supported because of
+    # the way transitions are indexed. Transitions outside the supported range
+    # will be ignored.
+
+    min_timestamp = -8520336000 # Time.utc(1700, 1, 1).to_i
+    max_timestamp = 16725225600 # Time.utc(2500, 1, 1).to_i
+
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 7200, :isdst => false, :abbrev => 'XNST'}]
+
+    transitions = [
+      {:at => min_timestamp,         :offset_index => 1},
+      {:at => Time.utc(2014, 5, 27), :offset_index => 2},
+      {:at => max_timestamp - 1,     :offset_index => 0}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/SupportedSixtyFourRange', path)
+      assert_equal('Zone/SupportedSixtyFourRange', info.identifier)
+
+      if SUPPORTS_64BIT && format >= 2
+        assert_period(:LMT,  3542, 0, false, nil,                            Time.at(min_timestamp).utc,     info)
+        assert_period(:XST,  3600, 0, false, Time.at(min_timestamp).utc,     Time.utc(2014, 5, 27),          info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),          Time.at(max_timestamp - 1).utc, info)
+        assert_period(:LMT,  3542, 0, false, Time.at(max_timestamp - 1).utc, nil,                            info)
+      else
+        assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(2014, 5, 27), info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
+      end
+    end
+  end
+
+  def test_load_32bit_range
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 7200, :isdst => false, :abbrev => 'XNST'}]
+
+    transitions = [
+      {:at => -2**31,                :offset_index => 1},
+      {:at => Time.utc(2014, 5, 27), :offset_index => 2},
+      {:at => 2**31 - 1,             :offset_index => 0}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/ThirtyTwoRange', path)
+      assert_equal('Zone/ThirtyTwoRange', info.identifier)
+
+      if SUPPORTS_NEGATIVE
+        if SUPPORTS_64BIT
+          # 64-bit support required to find the period before the negative
+          # 32-bit range starts.
+          assert_period(:LMT,  3542, 0, false, nil,                    Time.at(-2**31).utc,    info)
+        end
+        assert_period(:XST,  3600, 0, false, Time.at(-2**31).utc,    Time.utc(2014, 5, 27),  info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**31 - 1).utc, info)
+        assert_period(:LMT,  3542, 0, false, Time.at(2**31 - 1).utc, nil,                    info)
+      else
+        assert_period(:LMT,  3542, 0, false, nil,                    Time.utc(2014, 5, 27),  info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**31 - 1).utc, info)
+        assert_period(:LMT,  3542, 0, false, Time.at(2**31 - 1).utc, nil,                    info)
+      end
+    end
+  end
+
   def test_load_std_offset_changes
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.

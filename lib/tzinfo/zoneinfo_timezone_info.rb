@@ -9,6 +9,16 @@ module TZInfo
   # @private
   class ZoneinfoTimezoneInfo < TransitionDataTimezoneInfo #:nodoc:
     
+    # Minimum supported timestamp (inclusive).
+    #
+    # Time.utc(1700, 1, 1).to_i
+    MIN_TIMESTAMP = -8520336000
+
+    # Maximum supported timestamp (exclusive).
+    #
+    # Time.utc(2500, 1, 1).to_i
+    MAX_TIMESTAMP = 16725225600
+
     # Constructs the new ZoneinfoTimezoneInfo with an identifier and path
     # to the file.
     def initialize(identifier, file_path)
@@ -30,7 +40,7 @@ module TZInfo
       # (most significant first). Translate to signed 64-bit
       def make_signed_int64(high, low)
         unsigned = (high << 32) | low
-        unsigned > 0x8000000000000000 ? unsigned - 0x10000000000000000 : unsigned
+        unsigned >= 0x8000000000000000 ? unsigned - 0x10000000000000000 : unsigned
       end
       
       # Read bytes from file and check that the correct number of bytes could
@@ -194,15 +204,19 @@ module TZInfo
           offset first, offsets[first][:utc_offset], offsets[first][:std_offset], offsets[first][:abbr].untaint.to_sym
         end
         
-        
-        
         offsets.each_with_index do |o, i|
           offset i, o[:utc_offset], o[:std_offset], o[:abbr].untaint.to_sym unless i == first
         end
         
+        # Ignore transitions that occur outside of a defined window. The
+        # transition index cannot handle a large range of transition times.
+        #
+        # This is primarily intended to ignore the far in the past transition
+        # added in zic 2014c (at timestamp -2**63 in zic 2014c and at the
+        # approximate time of the big bang from zic 2014d).
         transitions.each do |t|
           at = t[:at]
-          if using_64bit || at > 0 || RubyCoreSupport.time_supports_negative
+          if (using_64bit || at > 0 || RubyCoreSupport.time_supports_negative) && at >= MIN_TIMESTAMP && at < MAX_TIMESTAMP
             time = Time.at(at).utc
             transition time.year, time.mon, t[:offset], at
           end
