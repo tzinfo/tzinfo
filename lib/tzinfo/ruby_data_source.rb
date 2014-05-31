@@ -69,7 +69,7 @@ module TZInfo
     def load_country_info(code)
       load_country_index
       info = Data::Indexes::Countries.countries[code]
-      raise InvalidCountryCode.new, 'Invalid country code' unless info
+      raise InvalidCountryCode, 'Invalid country code' unless info
       info
     end
     

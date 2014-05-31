@@ -240,7 +240,7 @@ module TZInfo
     # or the code is invalid.
     def load_country_info(code)
       info = @country_index[code]
-      raise InvalidCountryCode.new, 'Invalid country code' unless info
+      raise InvalidCountryCode, 'Invalid country code' unless info
       info
     end
     
