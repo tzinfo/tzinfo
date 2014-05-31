@@ -102,7 +102,7 @@ module TZInfo
 
         if (version == '2' || version == '3') && RubyCoreSupport.time_supports_64bit
           # Skip the first 32-bit section and read the header of the second 64-bit section
-          check_read(file, timecnt * 5 + typecnt * 6 + charcnt + leapcnt * 8 + ttisgmtcnt + ttisstdcnt)
+          file.seek(timecnt * 5 + typecnt * 6 + charcnt + leapcnt * 8 + ttisgmtcnt + ttisstdcnt, IO::SEEK_CUR)
           
           prev_version = version
           
