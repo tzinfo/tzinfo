@@ -129,22 +129,15 @@ class TCTimezoneLondon < Minitest::Test
   end 
   
   def test_time_boundary
-    # This test cannot be run when using ZoneinfoDataSource on platforms
-    # that don't support Times before the epoch (i.e. Ruby < 1.9 on Windows) 
-    # because it relates to the period following the transition prior to the
-    # epoch.
+    #Europe/London  Sat Oct 26 23:00:00 1968 UTC = Sun Oct 27 00:00:00 1968 GMT isdst=0 gmtoff=3600
+    #Europe/London  Sun Oct 31 01:59:59 1971 UTC = Sun Oct 31 02:59:59 1971 GMT isdst=0 gmtoff=3600
     
-    if !DataSource.get.kind_of?(ZoneinfoDataSource) || RubyCoreSupport.time_supports_negative
-      #Europe/London  Sat Oct 26 23:00:00 1968 UTC = Sun Oct 27 00:00:00 1968 GMT isdst=0 gmtoff=3600
-      #Europe/London  Sun Oct 31 01:59:59 1971 UTC = Sun Oct 31 02:59:59 1971 GMT isdst=0 gmtoff=3600
-      
-      tz = Timezone.get('Europe/London')    
-      assert_equal(DateTime.new(1970,1,1,1,0,0), tz.utc_to_local(DateTime.new(1970,1,1,0,0,0)))
-      assert_equal(DateTime.new(1970,1,1,0,0,0), tz.local_to_utc(DateTime.new(1970,1,1,1,0,0)))
-      assert_equal(Time.utc(1970,1,1,1,0,0), tz.utc_to_local(Time.utc(1970,1,1,0,0,0)))
-      assert_equal(Time.utc(1970,1,1,0,0,0), tz.local_to_utc(Time.utc(1970,1,1,1,0,0)))
-      assert_equal(3600, tz.utc_to_local(0))
-      assert_equal(0, tz.local_to_utc(3600))
-    end
+    tz = Timezone.get('Europe/London')
+    assert_equal(DateTime.new(1970,1,1,1,0,0), tz.utc_to_local(DateTime.new(1970,1,1,0,0,0)))
+    assert_equal(DateTime.new(1970,1,1,0,0,0), tz.local_to_utc(DateTime.new(1970,1,1,1,0,0)))
+    assert_equal(Time.utc(1970,1,1,1,0,0), tz.utc_to_local(Time.utc(1970,1,1,0,0,0)))
+    assert_equal(Time.utc(1970,1,1,0,0,0), tz.local_to_utc(Time.utc(1970,1,1,1,0,0)))
+    assert_equal(3600, tz.utc_to_local(0))
+    assert_equal(0, tz.local_to_utc(3600))
   end
 end
