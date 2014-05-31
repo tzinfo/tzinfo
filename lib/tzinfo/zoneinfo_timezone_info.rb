@@ -207,6 +207,25 @@ module TZInfo
         offsets.each_with_index do |o, i|
           offset i, o[:utc_offset], o[:std_offset], o[:abbr].untaint.to_sym unless i == first
         end
+
+        if !using_64bit && !RubyCoreSupport.time_supports_negative
+          # Filter out transitions that are not supported by Time on this
+          # platform.
+
+          # Move the last transition before the epoch up to the epoch. This
+          # allows for accurate conversions for all supported timestamps on the
+          # platform.
+
+          before_epoch, after_epoch = transitions.partition {|t| t[:at] < 0}
+
+          if before_epoch.length > 0 && after_epoch.length > 0 && after_epoch.first[:at] != 0
+            last_before = before_epoch.last
+            last_before[:at] = 0
+            transitions = [last_before] + after_epoch
+          else
+            transitions = after_epoch
+          end
+        end
         
         # Ignore transitions that occur outside of a defined window. The
         # transition index cannot handle a large range of transition times.
@@ -216,7 +235,7 @@ module TZInfo
         # approximate time of the big bang from zic 2014d).
         transitions.each do |t|
           at = t[:at]
-          if (using_64bit || at > 0 || RubyCoreSupport.time_supports_negative) && at >= MIN_TIMESTAMP && at < MAX_TIMESTAMP
+          if at >= MIN_TIMESTAMP && at < MAX_TIMESTAMP
             time = Time.at(at).utc
             transition time.year, time.mon, t[:offset], at
           end

@@ -27,7 +27,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     if start_at
       period = info.period_for_utc(start_at)
     elsif end_at
-      period = info.period_for_utc(end_at - 1)
+      period = info.period_for_utc(TimeOrDateTime.wrap(end_at).add_with_convert(-1).to_orig)
     else
       # no transitions, pick the epoch
       period = info.period_for_utc(Time.utc(1970, 1, 1))
@@ -394,8 +394,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   end
   
   def test_load_before_epoch
-    # Some platforms don't support negative numbers for times before the epoch.
-    # Check that they are returned when supported and skipped when not.
+    # Some platforms don't support negative timestamps for times before the
+    # epoch. Check that they are returned when supported and skipped when not.
+
+    # Note the last transition before the epoch (and within the 32-bit range) is
+    # moved to the epoch on platforms that do not support negative timestamps.
   
     offsets = [
       {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
@@ -418,10 +421,41 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
         assert_period(:XST,  3600,    0, false, Time.utc(1948,  1,  2), Time.utc(1969,  4, 22), info)
         assert_period(:XDT,  3600, 3600,  true, Time.utc(1969,  4, 22), Time.utc(1970, 10, 21), info)
       else
-        assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1970, 10, 21), info)
+        assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1970,  1,  1), info)
+        assert_period(:XDT,  3600, 3600,  true, Time.utc(1970,  1,  1), Time.utc(1970, 10, 21), info)
       end
       
       assert_period(:XST,  3600,    0, false, Time.utc(1970, 10, 21), Time.utc(2000, 12, 31), info)
+      assert_period(:XNST,    0,    0, false, Time.utc(2000, 12, 31),                    nil, info)
+    end
+  end
+
+  def test_load_on_epoch
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'},
+      {:gmtoff =>    0, :isdst => false, :abbrev => 'XNST'}]
+
+    transitions = [
+      {:at =>             -694224000, :offset_index => 1}, # Time.utc(1948,  1,  2)
+      {:at =>              -21945600, :offset_index => 2}, # Time.utc(1969,  4, 22)
+      {:at => Time.utc(1970,  1,  1), :offset_index => 1},
+      {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/Negative', path)
+      assert_equal('Zone/Negative', info.identifier)
+
+      if SUPPORTS_NEGATIVE
+        assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1948,  1,  2), info)
+        assert_period(:XST,  3600,    0, false, Time.utc(1948,  1,  2), Time.utc(1969,  4, 22), info)
+        assert_period(:XDT,  3600, 3600,  true, Time.utc(1969,  4, 22), Time.utc(1970,  1,  1), info)
+      else
+        assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1970,  1,  1), info)
+      end
+
+      assert_period(:XST,  3600,    0, false, Time.utc(1970,  1,  1), Time.utc(2000, 12, 31), info)
       assert_period(:XNST,    0,    0, false, Time.utc(2000, 12, 31),                    nil, info)
     end
   end
@@ -550,16 +584,12 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       assert_equal('Zone/ThirtyTwoRange', info.identifier)
 
       if SUPPORTS_NEGATIVE
-        if SUPPORTS_64BIT
-          # 64-bit support required to find the period before the negative
-          # 32-bit range starts.
-          assert_period(:LMT,  3542, 0, false, nil,                    Time.at(-2**31).utc,    info)
-        end
+        assert_period(:LMT,  3542, 0, false, nil,                    Time.at(-2**31).utc,    info)
         assert_period(:XST,  3600, 0, false, Time.at(-2**31).utc,    Time.utc(2014, 5, 27),  info)
         assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**31 - 1).utc, info)
         assert_period(:LMT,  3542, 0, false, Time.at(2**31 - 1).utc, nil,                    info)
       else
-        assert_period(:LMT,  3542, 0, false, nil,                    Time.utc(2014, 5, 27),  info)
+        assert_period(:XST,  3600, 0, false, Time.utc(1970, 1, 1),   Time.utc(2014, 5, 27),  info)
         assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**31 - 1).utc, info)
         assert_period(:LMT,  3542, 0, false, Time.at(2**31 - 1).utc, nil,                    info)
       end
