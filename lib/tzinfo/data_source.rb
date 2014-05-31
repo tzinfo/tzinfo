@@ -118,37 +118,37 @@ module TZInfo
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the 
     # identifier is invalid.
     def load_timezone_info(identifier)
-      raise InvalidDataSource, 'load_timezone_info not defined'
+      raise_invalid_data_source('load_timezone_info')
     end
     
     # Returns an array of all the available timezone identifiers.
     def timezone_identifiers
-      raise InvalidDataSource, 'timezone_identifiers not defined'
+      raise_invalid_data_source('timezone_identifiers')
     end
     
     # Returns an array of all the available timezone identifiers for
     # data timezones (i.e. those that actually contain definitions).
     def data_timezone_identifiers
-      raise InvalidDataSource, 'data_timezone_identifiers not defined'
+      raise_invalid_data_source('data_timezone_identifiers')
     end
     
     # Returns an array of all the available timezone identifiers that
     # are links to other timezones.
     def linked_timezone_identifiers
-      raise InvalidDataSource, 'linked_timezone_identifiers not defined'
+      raise_invalid_data_source('linked_timezone_identifiers')
     end
     
     # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2
     # country code. Raises InvalidCountryCode if the country could not be found
     # or the code is invalid.
     def load_country_info(code)
-      raise InvalidDataSource, 'load_country_info not defined'
+      raise_invalid_data_source('load_country_info')
     end
     
     # Returns an array of all the available ISO 3166-1 alpha-2
     # country codes.
     def country_codes
-      raise InvalidDataSource, 'country_codes not defined'
+      raise_invalid_data_source('country_codes')
     end
     
     # Returns the name of this DataSource.
@@ -181,6 +181,10 @@ module TZInfo
       rescue ZoneinfoDirectoryNotFound
         raise DataSourceNotFound, "No source of timezone data could be found.\nPlease refer to http://tzinfo.github.io/datasourcenotfound for help resolving this error."
       end
+    end
+
+    def raise_invalid_data_source(method_name)
+      raise InvalidDataSource, "#{method_name} not defined"
     end
   end
 end

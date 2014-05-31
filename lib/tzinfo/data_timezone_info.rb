@@ -4,14 +4,14 @@ module TZInfo
   
     # Returns the TimezonePeriod for the given UTC time.
     def period_for_utc(utc)
-      raise NotImplementedError, 'Subclasses must override period_for_utc'
+      raise_not_implemented('period_for_utc')
     end
     
     # Returns the set of TimezonePeriods for the given local time as an array.    
     # Results returned are ordered by increasing UTC start date.
     # Returns an empty array if no periods are found for the given time.
     def periods_for_local(local)
-      raise NotImplementedError, 'Subclasses must override periods_for_local'
+      raise_not_implemented('periods_for_local')
     end
     
     # Returns an Array of TimezoneTransition instances representing the times
@@ -37,13 +37,19 @@ module TZInfo
     # If utc_from is specified and utc_to is not greater than utc_from, then
     # transitions_up_to raises an ArgumentError exception.
     def transitions_up_to(utc_to, utc_from = nil)
-      raise NotImplementedError, 'Subclasses must override transitions_up_to'
+      raise_not_implemented('transitions_up_to')
     end
     
     # Constructs a Timezone instance for the timezone represented by this
     # DataTimezoneInfo.
     def create_timezone
       DataTimezone.new(self)
+    end
+
+    private
+
+    def raise_not_implemented(method_name)
+      raise NotImplementedError, "Subclasses must override #{method_name}"
     end
   end
 end

@@ -18,7 +18,13 @@ module TZInfo
     # Constructs a Timezone instance for the timezone represented by this
     # TimezoneInfo.
     def create_timezone
-      raise NotImplementedError, 'Subclasses must override create_timezone'
+      raise_not_implemented('create_timezone')
+    end
+
+    private
+
+    def raise_not_implemented(method_name)
+      raise NotImplementedError, "Subclasses must override #{method_name}"
     end
   end
 end

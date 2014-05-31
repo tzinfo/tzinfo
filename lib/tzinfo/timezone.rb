@@ -199,7 +199,7 @@ module TZInfo
     
     # The identifier of the timezone, e.g. "Europe/Paris".
     def identifier
-      raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
+      raise_unknown_timezone
     end
     
     # An alias for identifier.
@@ -268,7 +268,7 @@ module TZInfo
     # a DateTime, Time or integer timestamp (Time.to_i). Any timezone 
     # information in utc is ignored (it is treated as a UTC time).        
     def period_for_utc(utc)            
-      raise UnknownTimezone, 'TZInfo::Timezone constructed directly'      
+      raise_unknown_timezone
     end
     
     # Returns the set of TimezonePeriod instances that are valid for the given
@@ -276,7 +276,7 @@ module TZInfo
     # period_for_local instead and specify how ambiguities should be resolved.
     # Returns an empty array if no periods are found for the given time.
     def periods_for_local(local)
-      raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
+      raise_unknown_timezone
     end
     
     # Returns an Array of TimezoneTransition instances representing the times
@@ -302,7 +302,7 @@ module TZInfo
     # If utc_from is specified and utc_to is not greater than utc_from, then
     # transitions_up_to raises an ArgumentError exception.
     def transitions_up_to(utc_to, utc_from = nil)
-      raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
+      raise_unknown_timezone
     end
     
     # Returns the canonical Timezone instance for this Timezone.
@@ -341,7 +341,7 @@ module TZInfo
     # The TZInfo::DataSource.get method can be used to check which DataSource 
     # implementation is being used.
     def canonical_zone
-      raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
+      raise_unknown_timezone
     end
     
     # Returns the TimezonePeriod for the given local time. local can either be
@@ -627,6 +627,10 @@ module TZInfo
       # Returns the current DataSource
       def self.data_source
         DataSource.get
+      end
+
+      def raise_unknown_timezone
+        raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
       end
   end        
 end

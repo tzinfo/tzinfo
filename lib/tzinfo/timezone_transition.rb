@@ -21,7 +21,7 @@ module TZInfo
     # A TimeOrDateTime instance representing the UTC time when this transition
     # occurs.
     def at
-      raise NotImplementedError, 'Subclasses must override at'
+      raise_not_implemented('at')
     end
     
     # The UTC time when this transition occurs, returned as a DateTime instance.
@@ -109,6 +109,12 @@ module TZInfo
     # Returns internal object state as a programmer-readable string.
     def inspect
       "#<#{self.class}: #{at.inspect},#{@offset.inspect}>"      
+    end
+
+    private
+
+    def raise_not_implemented(method_name)
+      raise NotImplementedError, "Subclasses must override #{method_name}"
     end
   end
 end

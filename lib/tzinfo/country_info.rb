@@ -22,7 +22,7 @@ module TZInfo
     # Returns a frozen array of all the zone identifiers for the country.
     # The identifiers are ordered by importance according to the DataSource.
     def zone_identifiers
-      raise NotImplementedError, 'Subclasses must override zone_identifiers'
+      raise_not_implemented('zone_identifiers')
     end
     
     # Returns a frozen array of all the timezones for the for the country as
@@ -30,7 +30,13 @@ module TZInfo
     #
     # The timezones are ordered by importance according to the DataSource.
     def zones
-      raise NotImplementedError, 'Subclasses must override zone_identifiers'
+      raise_not_implemented('zones')
+    end
+
+    private
+
+    def raise_not_implemented(method_name)
+      raise NotImplementedError, "Subclasses must override #{method_name}"
     end
   end
 end
