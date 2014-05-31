@@ -4,7 +4,7 @@ module TZInfo
   class InvalidZoneinfoFile < StandardError
   end
 
-  # Represents a timezone defined by a compiled zoneinfo TZif (\0 or 2) file.
+  # Represents a timezone defined by a compiled zoneinfo TZif (\0, 2 or 3) file.
   #
   # @private
   class ZoneinfoTimezoneInfo < TransitionDataTimezoneInfo #:nodoc:
