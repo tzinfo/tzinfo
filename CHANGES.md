@@ -1,3 +1,13 @@
+Version 1.2.1 - 1-Jun-2014
+--------------------------
+
+* Support zoneinfo files generated with zic version 2014c and later.
+* On platforms that only support positive 32-bit timestamps, ensure that
+  conversions are accurate from the epoch instead of just from the first
+  transition after the epoch.
+* Minor documentation improvements.
+
+
 Version 1.2.0 - 26-May-2014
 ---------------------------
 
