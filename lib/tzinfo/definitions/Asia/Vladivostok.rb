@@ -9,9 +9,8 @@ module TZInfo
           tz.offset :o1, 32400, 0, :VLAT
           tz.offset :o2, 36000, 0, :VLAT
           tz.offset :o3, 36000, 3600, :VLAST
-          tz.offset :o4, 32400, 3600, :VLASST
-          tz.offset :o5, 32400, 0, :VLAST
-          tz.offset :o6, 39600, 0, :VLAT
+          tz.offset :o4, 32400, 3600, :VLAST
+          tz.offset :o5, 39600, 0, :VLAT
           
           tz.transition 1922, 11, :o1, 13086214921, 5400
           tz.transition 1930, 6, :o2, 19409185, 8
@@ -36,7 +35,7 @@ module TZInfo
           tz.transition 1990, 3, :o3, 638294400
           tz.transition 1990, 9, :o2, 654624000
           tz.transition 1991, 3, :o4, 670348800
-          tz.transition 1991, 9, :o5, 686077200
+          tz.transition 1991, 9, :o1, 686077200
           tz.transition 1992, 1, :o2, 695754000
           tz.transition 1992, 3, :o3, 701787600
           tz.transition 1992, 9, :o2, 717508800
@@ -76,7 +75,7 @@ module TZInfo
           tz.transition 2009, 10, :o2, 1256400000
           tz.transition 2010, 3, :o3, 1269705600
           tz.transition 2010, 10, :o2, 1288454400
-          tz.transition 2011, 3, :o6, 1301155200
+          tz.transition 2011, 3, :o5, 1301155200
         end
       end
     end

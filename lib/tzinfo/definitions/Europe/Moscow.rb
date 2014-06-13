@@ -12,7 +12,7 @@ module TZInfo
           tz.offset :o4, 9048, 7200, :MDST
           tz.offset :o5, 10800, 3600, :MSD
           tz.offset :o6, 10800, 0, :MSK
-          tz.offset :o7, 10800, 7200, :MSD
+          tz.offset :o7, 10800, 7200, :MSM
           tz.offset :o8, 7200, 0, :EET
           tz.offset :o9, 7200, 3600, :EEST
           tz.offset :o10, 14400, 0, :MSK

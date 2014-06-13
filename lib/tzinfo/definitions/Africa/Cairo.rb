@@ -133,34 +133,34 @@ module TZInfo
           tz.transition 2010, 9, :o2, 1284069600
           tz.transition 2010, 9, :o1, 1285880400
           tz.transition 2014, 5, :o2, 1400191200
-          tz.transition 2014, 6, :o1, 1403992800
-          tz.transition 2014, 7, :o2, 1406584800
+          tz.transition 2014, 6, :o1, 1403816400
+          tz.transition 2014, 7, :o2, 1406844000
           tz.transition 2014, 9, :o1, 1411678800
           tz.transition 2015, 4, :o2, 1429826400
-          tz.transition 2015, 6, :o1, 1434578400
-          tz.transition 2015, 7, :o2, 1437170400
+          tz.transition 2015, 6, :o1, 1434056400
+          tz.transition 2015, 7, :o2, 1437688800
           tz.transition 2015, 9, :o1, 1443128400
           tz.transition 2016, 4, :o2, 1461880800
-          tz.transition 2016, 6, :o1, 1465250400
-          tz.transition 2016, 7, :o2, 1467842400
+          tz.transition 2016, 6, :o1, 1464901200
+          tz.transition 2016, 7, :o2, 1467928800
           tz.transition 2016, 9, :o1, 1475182800
           tz.transition 2017, 4, :o2, 1493330400
-          tz.transition 2017, 5, :o1, 1495836000
-          tz.transition 2017, 6, :o2, 1498428000
+          tz.transition 2017, 5, :o1, 1495746000
+          tz.transition 2017, 6, :o2, 1498773600
           tz.transition 2017, 9, :o1, 1506632400
           tz.transition 2018, 4, :o2, 1524780000
-          tz.transition 2018, 5, :o1, 1526421600
+          tz.transition 2018, 5, :o1, 1525986000
           tz.transition 2018, 6, :o2, 1529013600
           tz.transition 2018, 9, :o1, 1538082000
           tz.transition 2019, 4, :o2, 1556229600
-          tz.transition 2019, 5, :o1, 1557093600
-          tz.transition 2019, 6, :o2, 1559685600
+          tz.transition 2019, 5, :o1, 1556830800
+          tz.transition 2019, 6, :o2, 1559858400
           tz.transition 2019, 9, :o1, 1569531600
-          tz.transition 2020, 5, :o2, 1590271200
+          tz.transition 2020, 5, :o2, 1590703200
           tz.transition 2020, 9, :o1, 1600981200
-          tz.transition 2021, 5, :o2, 1620856800
+          tz.transition 2021, 5, :o2, 1620943200
           tz.transition 2021, 9, :o1, 1633035600
-          tz.transition 2022, 5, :o2, 1651528800
+          tz.transition 2022, 5, :o2, 1651788000
           tz.transition 2022, 9, :o1, 1664485200
           tz.transition 2023, 4, :o2, 1682632800
           tz.transition 2023, 9, :o1, 1695934800
