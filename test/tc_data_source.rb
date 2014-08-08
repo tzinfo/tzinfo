@@ -127,6 +127,20 @@ class TCDataSource < Minitest::Test
       assert_equal(dir, data_source.zoneinfo_dir)      
     end
   end
+
+  def test_set_standard_zoneinfo_search_zone1970
+    Dir.mktmpdir('tzinfo_test_dir') do |dir|
+      FileUtils.touch(File.join(dir, 'iso3166.tab'))
+      FileUtils.touch(File.join(dir, 'zone1970.tab'))
+
+      ZoneinfoDataSource.search_path = [dir]
+
+      DataSource.set(:zoneinfo)
+      data_source = DataSource.get
+      assert_kind_of(ZoneinfoDataSource, data_source)
+      assert_equal(dir, data_source.zoneinfo_dir)
+    end
+  end
   
   def test_set_standard_zoneinfo_explicit
     Dir.mktmpdir('tzinfo_test_dir') do |dir|
@@ -137,6 +151,18 @@ class TCDataSource < Minitest::Test
       data_source = DataSource.get
       assert_kind_of(ZoneinfoDataSource, data_source)
       assert_equal(dir, data_source.zoneinfo_dir)      
+    end
+  end
+
+  def test_set_standard_zoneinfo_explicit_zone1970
+    Dir.mktmpdir('tzinfo_test_dir') do |dir|
+      FileUtils.touch(File.join(dir, 'iso3166.tab'))
+      FileUtils.touch(File.join(dir, 'zone.tab'))
+
+      DataSource.set(:zoneinfo, dir)
+      data_source = DataSource.get
+      assert_kind_of(ZoneinfoDataSource, data_source)
+      assert_equal(dir, data_source.zoneinfo_dir)
     end
   end
   

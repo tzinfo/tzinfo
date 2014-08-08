@@ -9,14 +9,14 @@ module TZInfo
   # A ZoneinfoDirectoryNotFound exception is raised if no valid zoneinfo 
   # directory could be found when checking the paths listed in
   # ZoneinfoDataSource.search_path. A valid zoneinfo directory is one that
-  # contains index files named iso3166.tab and zone.tab as well as other 
-  # timezone files.
+  # contains timezone files, a country code index file named iso3166.tab and a
+  # timezone index file named zone1970.tab or zone.tab.
   class ZoneinfoDirectoryNotFound < StandardError
   end
   
   # A DataSource that loads data from a 'zoneinfo' directory containing
-  # compiled "TZif" version 2 (or earlier) files in addition to zones.tab 
-  # and iso3166.tab index files.
+  # compiled "TZif" version 3 (or earlier) files in addition to iso3166.tab and
+  # zone1970.tab or zone.tab index files.
   #
   # To have TZInfo load the system zoneinfo files, call TZInfo::DataSource.set 
   # as follows:
@@ -141,21 +141,22 @@ module TZInfo
     # If zoneinfo_dir is specified, it will be checked and used as the source
     # of zoneinfo files. 
     #
-    # The directory must contain iso3166.tab and zone.tab files. These may 
-    # either be included in the root of the directory or in a 'tab' 
-    # sub-directory named 'country.tab' and 'zone_sun.tab' respectively (as is
-    # the case on Solaris.
+    # The directory must contain a file named iso3166.tab and a file named
+    # either zone1970.tab or zone.tab. These may either be included in the root
+    # of the directory or in a 'tab' sub-directory and named 'country.tab' and
+    # 'zone_sun.tab' respectively (as is the case on Solaris.
     #
     # Additionally, the path to iso3166.tab can be overridden using the 
     # alternate_iso3166_tab_path parameter.
     #
-    # InvalidZoneinfoDirectory will be raised if the iso3166.tab and zone.tab
-    # files cannot be found using the zoneinfo_dir and alternate_iso3166_tab_path
-    # parameters.
+    # InvalidZoneinfoDirectory will be raised if the iso3166.tab and
+    # zone1970.tab or zone.tab files cannot be found using the zoneinfo_dir and
+    # alternate_iso3166_tab_path parameters.
     # 
     # If zoneinfo_dir is not specified or nil, the paths referenced in
     # search_path are searched in order to find a valid zoneinfo directory 
-    # (one that contains zone.tab and iso3166.tab files as above).
+    # (one that contains zone1970.tab or zone.tab and iso3166.tab files as
+    # above).
     #
     # The paths referenced in alternate_iso3166_tab_search_path are also
     # searched to find an iso3166.tab file if one of the searched zoneinfo
@@ -168,7 +169,7 @@ module TZInfo
         iso3166_tab_path, zone_tab_path = validate_zoneinfo_dir(zoneinfo_dir, alternate_iso3166_tab_path)
       
         unless iso3166_tab_path && zone_tab_path
-          raise InvalidZoneinfoDirectory, "#{zoneinfo_dir} is not a directory or doesn't contain iso3166.tab and zone.tab files." 
+          raise InvalidZoneinfoDirectory, "#{zoneinfo_dir} is not a directory or doesn't contain a iso3166.tab file and a zone1970.tab or zone.tab file." 
         end
         
         @zoneinfo_dir = zoneinfo_dir
@@ -277,7 +278,8 @@ module TZInfo
     end
     
     # Validates a zoneinfo directory and returns the paths to the iso3166.tab 
-    # and zone.tab files if valid. If the directory is not valid, returns nil.
+    # and zone1970.tab or zone.tab files if valid. If the directory is not
+    # valid, returns nil.
     #
     # The path to the iso3166.tab file may be overriden by passing in a path.
     # This is treated as either absolute or relative to the current working
@@ -287,11 +289,11 @@ module TZInfo
         if iso3166_tab_path
           return nil unless File.file?(iso3166_tab_path)
         else
-          iso3166_tab_path = resolve_tab_path(path, 'iso3166.tab', 'country.tab')
+          iso3166_tab_path = resolve_tab_path(path, ['iso3166.tab'], 'country.tab')
           return nil unless iso3166_tab_path          
         end
         
-        zone_tab_path = resolve_tab_path(path, 'zone.tab', 'zone_sun.tab')
+        zone_tab_path = resolve_tab_path(path, ['zone1970.tab', 'zone.tab'], 'zone_sun.tab')
         return nil unless zone_tab_path
       
         [iso3166_tab_path, zone_tab_path]
@@ -300,11 +302,13 @@ module TZInfo
       end
     end
     
-    # Attempts to resolve the path to a tab file given its standard name and
+    # Attempts to resolve the path to a tab file given its standard names and
     # tab sub-directory name (as used on Solaris).
-    def resolve_tab_path(zoneinfo_path, standard_name, tab_name)
-      path = File.join(zoneinfo_path, standard_name)      
-      return path if File.file?(path)
+    def resolve_tab_path(zoneinfo_path, standard_names, tab_name)
+      standard_names.each do |standard_name|
+        path = File.join(zoneinfo_path, standard_name)
+        return path if File.file?(path)
+      end
       
       path = File.join(zoneinfo_path, 'tab', tab_name)
       return path if File.file?(path)
@@ -372,8 +376,8 @@ module TZInfo
       end
     end
     
-    # Uses the iso3166.tab and zone.tab files to build an index of the 
-    # available countries and their timezones.
+    # Uses the iso3166.tab and zone1970.tab or zone.tab files to build an index
+    # of the available countries and their timezones.
     def load_country_index(iso3166_tab_path, zone_tab_path)
       
       # Handle standard 3 to 4 column zone.tab files as well as the 4 to 5 
@@ -390,6 +394,19 @@ module TZInfo
       # Since the last column is optional in both formats, testing for the 
       # Solaris format is done in two passes. The first pass identifies if there
       # are any lines using 5 columns.
+
+
+      # The first column is allowed to be a comma separated list of country
+      # codes, as used in zone1970.tab (introduced in tzdata 2014f).
+      #
+      # The first country code in the comma-separated list is the country that
+      # contains the city the zone identifer is based on. The first country
+      # code on each line is considered to be primary with the others
+      # secondary.
+      #
+      # The zones for each country are ordered primary first, then secondary.
+      # Within the primary and secondary groups, the zones are ordered by their
+      # order in the file.
       
       file_is_5_column = false
       zone_tab = []
@@ -398,8 +415,8 @@ module TZInfo
         file.each_line do |line|
           line.chomp!
           
-          if line =~ /\A([A-Z]{2})\t(?:([+\-])(\d{2})(\d{2})([+\-])(\d{3})(\d{2})|([+\-])(\d{2})(\d{2})(\d{2})([+\-])(\d{3})(\d{2})(\d{2}))\t([^\t]+)(?:\t([^\t]+))?(?:\t([^\t]+))?\z/
-            code = $1
+          if line =~ /\A([A-Z]{2}(?:,[A-Z]{2})*)\t(?:([+\-])(\d{2})(\d{2})([+\-])(\d{3})(\d{2})|([+\-])(\d{2})(\d{2})(\d{2})([+\-])(\d{3})(\d{2})(\d{2}))\t([^\t]+)(?:\t([^\t]+))?(?:\t([^\t]+))?\z/
+            codes = $1
             
             if $2
               latitude = dms_to_rational($2, $3, $4)
@@ -415,17 +432,25 @@ module TZInfo
             
             file_is_5_column = true if column5
             
-            zone_tab << [code, zone_identifier, latitude, longitude, column4, column5]
+            zone_tab << [codes.split(','), zone_identifier, latitude, longitude, column4, column5]
           end
         end
       end
       
-      zones = {}
+      primary_zones = {}
+      secondary_zones = {}
       
-      zone_tab.each do |code, zone_identifier, latitude, longitude, column4, column5|
+      zone_tab.each do |codes, zone_identifier, latitude, longitude, column4, column5|
         description = file_is_5_column ? column5 : column4
-           
-        (zones[code] ||= []) << CountryTimezone.new(zone_identifier, latitude, longitude, description)
+        country_timezone = CountryTimezone.new(zone_identifier, latitude, longitude, description)
+
+        # codes will always have at least one element
+
+        (primary_zones[codes.first] ||= []) << country_timezone
+
+        codes[1..-1].each do |code|
+          (secondary_zones[code] ||= []) << country_timezone
+        end
       end
       
       countries = {}
@@ -441,7 +466,9 @@ module TZInfo
           if line =~ /\A([A-Z]{2})(?:\t[A-Z]{3}\t[0-9]{3})?\t(.+)\z/
             code = $1
             name = $2
-            countries[code] = ZoneinfoCountryInfo.new(code, name, zones[code] || [])
+            zones = (primary_zones[code] || []) + (secondary_zones[code] || [])
+
+            countries[code] = ZoneinfoCountryInfo.new(code, name, zones)
           end
         end
       end

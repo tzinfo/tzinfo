@@ -109,6 +109,28 @@ class TCZoneinfoDataSource < Minitest::Test
       end
     end
   end
+
+  def test_new_search_zone1970
+    Dir.mktmpdir('tzinfo_test_dir1') do |dir1|
+      Dir.mktmpdir('tzinfo_test_dir2') do |dir2|
+        Dir.mktmpdir('tzinfo_test_dir3') do |dir3|
+          Dir.mktmpdir('tzinfo_test_dir4') do |dir4|
+            file = File.join(dir1, 'file')
+            FileUtils.touch(File.join(dir2, 'zone1970.tab'))
+            FileUtils.touch(File.join(dir3, 'iso3166.tab'))
+            FileUtils.touch(File.join(dir4, 'zone1970.tab'))
+            FileUtils.touch(File.join(dir4, 'iso3166.tab'))
+
+            ZoneinfoDataSource.search_path = [file, dir2, dir3, dir4]
+            ZoneinfoDataSource.alternate_iso3166_tab_search_path = []
+
+            data_source = ZoneinfoDataSource.new
+            assert_equal(dir4, data_source.zoneinfo_dir)
+          end
+        end
+      end
+    end
+  end
   
   def test_new_search_solaris_tab_files
     # Solaris names the tab files 'tab/country.tab' (iso3166.tab) and 
@@ -119,10 +141,10 @@ class TCZoneinfoDataSource < Minitest::Test
       FileUtils.mkdir(tab)
       FileUtils.touch(File.join(tab, 'country.tab'))
       FileUtils.touch(File.join(tab, 'zone_sun.tab'))
-      
+
       ZoneinfoDataSource.search_path = [dir]
       ZoneinfoDataSource.alternate_iso3166_tab_search_path = []
-      
+
       data_source = ZoneinfoDataSource.new
       assert_equal(dir, data_source.zoneinfo_dir)
     end
@@ -155,16 +177,19 @@ class TCZoneinfoDataSource < Minitest::Test
       Dir.mktmpdir('tzinfo_test_dir2') do |dir2|
         Dir.mktmpdir('tzinfo_test_dir3') do |dir3|
           Dir.mktmpdir('tzinfo_test_dir4') do |dir4|
-            file = File.join(dir1, 'file')
-            FileUtils.touch(file)
-            FileUtils.touch(File.join(dir2, 'zone.tab'))
-            FileUtils.touch(File.join(dir3, 'iso3166.tab'))
-            
-            ZoneinfoDataSource.search_path = [file, dir2, dir3, dir4]
-            ZoneinfoDataSource.alternate_iso3166_tab_search_path = []
-                      
-            assert_raises(ZoneinfoDirectoryNotFound) do
-              ZoneinfoDataSource.new
+            Dir.mktmpdir('tzinfo_test_dir5') do |dir5|
+              file = File.join(dir1, 'file')
+              FileUtils.touch(file)
+              FileUtils.touch(File.join(dir2, 'zone.tab'))
+              FileUtils.touch(File.join(dir3, 'zone1970.tab'))
+              FileUtils.touch(File.join(dir4, 'iso3166.tab'))
+
+              ZoneinfoDataSource.search_path = [file, dir2, dir3, dir4, dir5]
+              ZoneinfoDataSource.alternate_iso3166_tab_search_path = []
+
+              assert_raises(ZoneinfoDirectoryNotFound) do
+                ZoneinfoDataSource.new
+              end
             end
           end
         end
@@ -194,6 +219,16 @@ class TCZoneinfoDataSource < Minitest::Test
       FileUtils.touch(File.join(dir, 'zone.tab'))
       FileUtils.touch(File.join(dir, 'iso3166.tab'))
       
+      data_source = ZoneinfoDataSource.new(dir)
+      assert_equal(dir, data_source.zoneinfo_dir)
+    end
+  end
+
+  def test_new_dir_zone1970
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      FileUtils.touch(File.join(dir, 'zone1970.tab'))
+      FileUtils.touch(File.join(dir, 'iso3166.tab'))
+
       data_source = ZoneinfoDataSource.new(dir)
       assert_equal(dir, data_source.zoneinfo_dir)
     end
@@ -788,6 +823,80 @@ class TCZoneinfoDataSource < Minitest::Test
       assert_equal(true, info.zones.frozen?)
     end
   end
+
+  def test_load_country_info_check_zones_zone1970
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      RubyCoreSupport.open_file(File.join(dir, 'iso3166.tab'), 'w', :external_encoding => 'UTF-8') do |iso3166|
+        iso3166.puts('# iso3166.tab')
+        iso3166.puts('')
+        iso3166.puts("AC\tAnother Country")
+        iso3166.puts("FC\tFake Country")
+        iso3166.puts("OC\tOther Country")
+      end
+
+      # zone.tab will be ignored.
+      RubyCoreSupport.open_file(File.join(dir, 'zone.tab'), 'w', :external_encoding => 'UTF-8') do |zone|
+        zone.puts('# zone.tab')
+        zone.puts('')
+        zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
+        zone.puts("FC\t+353916+1394441\tFake/Two\tAnother description")
+        zone.puts("FC\t-2332-04637\tFake/Three\tThis is Three")
+        zone.puts("OC\t+5005+01426\tOther/One")
+      end
+
+      # zone1970.tab will be used.
+      RubyCoreSupport.open_file(File.join(dir, 'zone1970.tab'), 'w', :external_encoding => 'UTF-8') do |zone|
+        zone.puts('# zone1970.tab')
+        zone.puts('')
+        zone.puts("AC,OC\t+0000+00000\tMiddle/Another/One\tAnother's One")
+        zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
+        zone.puts("FC,OC\t+353916+1394441\tFake/Two\tAnother description")
+        zone.puts("FC,OC\t-2332-04637\tFake/Three\tThis is Three")
+        zone.puts("OC\t+5005+01426\tOther/One")
+        zone.puts("OC\t+5015+11426\tOther/Two")
+      end
+
+      data_source = ZoneinfoDataSource.new(dir)
+
+      info = data_source.load_country_info('AC')
+      assert_equal('AC', info.code)
+      assert_equal('Another Country', info.name)
+      assert_equal(['Middle/Another/One'], info.zone_identifiers)
+      assert_equal(true, info.zone_identifiers.frozen?)
+      assert_equal([CountryTimezone.new('Middle/Another/One', Rational(0, 1), Rational(0, 1), "Another's One")], info.zones)
+      assert_equal(true, info.zones.frozen?)
+
+      info = data_source.load_country_info('FC')
+      assert_equal('FC', info.code)
+      assert_equal('Fake Country', info.name)
+      assert_equal(['Fake/One', 'Fake/Two', 'Fake/Three'], info.zone_identifiers)
+      assert_equal(true, info.zone_identifiers.frozen?)
+      assert_equal([
+        CountryTimezone.new('Fake/One', Rational(6181, 120), Rational(-451, 3600), 'Description of one'),
+        CountryTimezone.new('Fake/Two', Rational(32089, 900), Rational(503081, 3600), 'Another description'),
+        CountryTimezone.new('Fake/Three', Rational(-353, 15), Rational(-2797, 60), 'This is Three')], info.zones)
+      assert_equal(true, info.zones.frozen?)
+
+      # Testing the ordering of zones. A zone can either be primary (country
+      # code is the first in the first column), or secondary (country code is
+      # not the first). Should return all the primaries first in the order they
+      # appeared in the file, followed by all the secondaries in the order they
+      # appeared in file.
+
+      info = data_source.load_country_info('OC')
+      assert_equal('OC', info.code)
+      assert_equal('Other Country', info.name)
+      assert_equal(['Other/One', 'Other/Two', 'Middle/Another/One', 'Fake/Two', 'Fake/Three'], info.zone_identifiers)
+      assert_equal(true, info.zone_identifiers.frozen?)
+      assert_equal([
+        CountryTimezone.new('Other/One', Rational(601, 12), Rational( 433, 30)),
+        CountryTimezone.new('Other/Two', Rational(201,  4), Rational(3433, 30)),
+        CountryTimezone.new('Middle/Another/One', Rational(0, 1), Rational(0, 1), "Another's One"),
+        CountryTimezone.new('Fake/Two', Rational(32089, 900), Rational(503081, 3600), 'Another description'),
+        CountryTimezone.new('Fake/Three', Rational(-353, 15), Rational(-2797, 60), 'This is Three')], info.zones)
+      assert_equal(true, info.zones.frozen?)
+    end
+  end
   
   def test_load_country_info_check_zones_solaris_tab_files
     # Solaris uses 5 columns instead of the usual 4 in zone_sun.tab.
@@ -923,8 +1032,11 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_load_country_info_utf8
-    # Files are in ASCII, but may change to UTF-8 (a superset of ASCII) in
-    # the future.
+    # iso3166.tab is currently in ASCII (as of tzdata 2014f), but will be
+    # changed to UTF-8 in the future.
+
+    # zone.tab is in ASCII, with no plans to change. Since ASCII is a subset of
+    # UTF-8, test that this is loaded in UTF-8 anyway.
     
     Dir.mktmpdir('tzinfo_test') do |dir|
       RubyCoreSupport.open_file(File.join(dir, 'iso3166.tab'), 'w', :external_encoding => 'UTF-8') do |iso3166|
@@ -937,6 +1049,31 @@ class TCZoneinfoDataSource < Minitest::Test
       
       data_source = ZoneinfoDataSource.new(dir)
       
+      info = data_source.load_country_info('UT')
+      assert_equal('UT', info.code)
+      assert_equal('Unicode Test ✓', info.name)
+      assert_equal(['Unicode✓/One'], info.zone_identifiers)
+      assert_equal([CountryTimezone.new('Unicode✓/One', Rational(6181, 120), Rational(-451, 3600), 'Unicode Description ✓')], info.zones)
+    end
+  end
+
+  def test_load_country_info_utf8_zone1970
+    # iso3166.tab is currently in ASCII (as of tzdata 2014f), but will be
+    # changed to UTF-8 in the future.
+
+    # zone1970.tab is in UTF-8.
+
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      RubyCoreSupport.open_file(File.join(dir, 'iso3166.tab'), 'w', :external_encoding => 'UTF-8') do |iso3166|
+        iso3166.puts("UT\tUnicode Test ✓")
+      end
+
+      RubyCoreSupport.open_file(File.join(dir, 'zone1970.tab'), 'w', :external_encoding => 'UTF-8') do |zone|
+        zone.puts("UT\t+513030-0000731\tUnicode✓/One\tUnicode Description ✓")
+      end
+
+      data_source = ZoneinfoDataSource.new(dir)
+
       info = data_source.load_country_info('UT')
       assert_equal('UT', info.code)
       assert_equal('Unicode Test ✓', info.name)
