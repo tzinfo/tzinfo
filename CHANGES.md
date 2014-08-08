@@ -1,3 +1,14 @@
+Version 1.2.2 - 8-Aug-2014
+--------------------------
+
+* Fix an error with duplicates being returned by Timezone#all_country_zones
+  and Timezone#all_country_zone_identifiers when used with tzinfo-data
+  v1.2014.6 or later.
+* Use the zone1970.tab file for country timezone data if it is found in the
+  zoneinfo directory (and fallback to zone.tab if not). zone1970.tab was added
+  in tzdata 2014f. zone.tab is now deprecated.
+
+
 Version 1.2.1 - 1-Jun-2014
 --------------------------
 
