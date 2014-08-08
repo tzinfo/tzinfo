@@ -6,10 +6,10 @@ module TZInfo
         
         timezone 'Australia/Broken_Hill' do |tz|
           tz.offset :o0, 33948, 0, :LMT
-          tz.offset :o1, 36000, 0, :EST
-          tz.offset :o2, 32400, 0, :CST
-          tz.offset :o3, 34200, 0, :CST
-          tz.offset :o4, 34200, 3600, :CST
+          tz.offset :o1, 36000, 0, :AEST
+          tz.offset :o2, 32400, 0, :ACST
+          tz.offset :o3, 34200, 0, :ACST
+          tz.offset :o4, 34200, 3600, :ACDT
           
           tz.transition 1895, 1, :o1, 5791740257, 2400
           tz.transition 1896, 8, :o2, 28965529, 12

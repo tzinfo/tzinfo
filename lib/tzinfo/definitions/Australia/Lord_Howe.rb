@@ -6,10 +6,10 @@ module TZInfo
         
         timezone 'Australia/Lord_Howe' do |tz|
           tz.offset :o0, 38180, 0, :LMT
-          tz.offset :o1, 36000, 0, :EST
+          tz.offset :o1, 36000, 0, :AEST
           tz.offset :o2, 37800, 0, :LHST
-          tz.offset :o3, 37800, 3600, :LHST
-          tz.offset :o4, 37800, 1800, :LHST
+          tz.offset :o3, 37800, 3600, :LHDT
+          tz.offset :o4, 37800, 1800, :LHDT
           
           tz.transition 1895, 1, :o1, 10425132251, 4320
           tz.transition 1981, 2, :o2, 352216800

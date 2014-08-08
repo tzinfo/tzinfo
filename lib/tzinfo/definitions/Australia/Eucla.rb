@@ -6,8 +6,8 @@ module TZInfo
         
         timezone 'Australia/Eucla' do |tz|
           tz.offset :o0, 30928, 0, :LMT
-          tz.offset :o1, 31500, 0, :CWST
-          tz.offset :o2, 31500, 3600, :CWST
+          tz.offset :o1, 31500, 0, :ACWST
+          tz.offset :o2, 31500, 3600, :ACWDT
           
           tz.transition 1895, 11, :o1, 13033051967, 5400
           tz.transition 1916, 12, :o2, 871642489, 360

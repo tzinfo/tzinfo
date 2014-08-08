@@ -171,7 +171,7 @@ module TZInfo
         c.timezone 'America/Thunder_Bay', 2903, 60, -357, 4, 'Eastern Time - Thunder Bay, Ontario'
         c.timezone 'America/Iqaluit', 956, 15, -1027, 15, 'Eastern Time - east Nunavut - most locations'
         c.timezone 'America/Pangnirtung', 992, 15, -986, 15, 'Eastern Time - Pangnirtung, Nunavut'
-        c.timezone 'America/Resolute', 33613, 450, -22759, 240, 'Central Standard Time - Resolute, Nunavut'
+        c.timezone 'America/Resolute', 33613, 450, -22759, 240, 'Central Time - Resolute, Nunavut'
         c.timezone 'America/Atikokan', 175531, 3600, -54973, 600, 'Eastern Standard Time - Atikokan, Ontario and Southampton I, Nunavut'
         c.timezone 'America/Rankin_Inlet', 3769, 60, -331499, 3600, 'Central Time - central Nunavut'
         c.timezone 'America/Winnipeg', 2993, 60, -1943, 20, 'Central Time - Manitoba & west Ontario'
@@ -212,17 +212,14 @@ module TZInfo
       end
       country 'CL', 'Chile' do |c|
         c.timezone 'America/Santiago', -669, 20, -212, 3, 'most locations'
-        c.timezone 'Pacific/Easter', -543, 20, -3283, 30, 'Easter Island & Sala y Gomez'
+        c.timezone 'Pacific/Easter', -543, 20, -3283, 30, 'Easter Island'
       end
       country 'CM', 'Cameroon' do |c|
         c.timezone 'Africa/Douala', 81, 20, 97, 10
       end
       country 'CN', 'China' do |c|
-        c.timezone 'Asia/Shanghai', 937, 30, 1822, 15, 'east China - Beijing, Guangdong, Shanghai, etc.'
-        c.timezone 'Asia/Harbin', 183, 4, 7601, 60, 'Heilongjiang (except Mohe), Jilin'
-        c.timezone 'Asia/Chongqing', 887, 30, 1279, 12, 'central China - Sichuan, Yunnan, Guangxi, Shaanxi, Guizhou, etc.'
-        c.timezone 'Asia/Urumqi', 219, 5, 1051, 12, 'most of Tibet & Xinjiang'
-        c.timezone 'Asia/Kashgar', 2369, 60, 4559, 60, 'west Tibet & Xinjiang'
+        c.timezone 'Asia/Shanghai', 937, 30, 1822, 15, 'Beijing Time'
+        c.timezone 'Asia/Urumqi', 219, 5, 1051, 12, 'Xinjiang Time'
       end
       country 'CO', 'Colombia' do |c|
         c.timezone 'America/Bogota', 23, 5, -889, 12
@@ -689,24 +686,26 @@ module TZInfo
       end
       country 'RU', 'Russia' do |c|
         c.timezone 'Europe/Kaliningrad', 3283, 60, 41, 2, 'Moscow-01 - Kaliningrad'
-        c.timezone 'Europe/Moscow', 223, 4, 451, 12, 'Moscow+00 - west Russia'
-        c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'Moscow+00 - Caspian Sea'
-        c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'Moscow+00 - Samara, Udmurtia'
+        c.timezone 'Europe/Moscow', 66907, 1200, 8464, 225, 'Moscow+00 - west Russia'
         c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'Moscow+00 - Crimea'
+        c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'Moscow+00 - Caspian Sea'
+        c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'Moscow+00 (Moscow+01 after 2014-10-26) - Samara, Udmurtia'
         c.timezone 'Asia/Yekaterinburg', 1137, 20, 303, 5, 'Moscow+02 - Urals'
         c.timezone 'Asia/Omsk', 55, 1, 367, 5, 'Moscow+03 - west Siberia'
         c.timezone 'Asia/Novosibirsk', 1651, 30, 995, 12, 'Moscow+03 - Novosibirsk'
-        c.timezone 'Asia/Novokuznetsk', 215, 4, 5227, 60, 'Moscow+03 - Novokuznetsk'
+        c.timezone 'Asia/Novokuznetsk', 215, 4, 5227, 60, 'Moscow+03 (Moscow+04 after 2014-10-26) - Kemerovo'
         c.timezone 'Asia/Krasnoyarsk', 3361, 60, 557, 6, 'Moscow+04 - Yenisei River'
         c.timezone 'Asia/Irkutsk', 784, 15, 313, 3, 'Moscow+05 - Lake Baikal'
+        c.timezone 'Asia/Chita', 1041, 20, 1702, 15, 'Moscow+06 (Moscow+05 after 2014-10-26) - Zabaykalsky'
         c.timezone 'Asia/Yakutsk', 62, 1, 389, 3, 'Moscow+06 - Lena River'
         c.timezone 'Asia/Khandyga', 225563, 3600, 243997, 1800, 'Moscow+06 - Tomponsky, Ust-Maysky'
         c.timezone 'Asia/Vladivostok', 259, 6, 1979, 15, 'Moscow+07 - Amur River'
         c.timezone 'Asia/Sakhalin', 1409, 30, 1427, 10, 'Moscow+07 - Sakhalin Island'
         c.timezone 'Asia/Ust-Nera', 232417, 3600, 10742, 75, 'Moscow+07 - Oymyakonsky'
-        c.timezone 'Asia/Magadan', 1787, 30, 754, 5, 'Moscow+08 - Magadan'
-        c.timezone 'Asia/Kamchatka', 3181, 60, 3173, 20, 'Moscow+08 - Kamchatka'
-        c.timezone 'Asia/Anadyr', 259, 4, 10649, 60, 'Moscow+08 - Bering Sea'
+        c.timezone 'Asia/Magadan', 1787, 30, 754, 5, 'Moscow+08 (Moscow+07 after 2014-10-26) - Magadan'
+        c.timezone 'Asia/Srednekolymsk', 1012, 15, 9223, 60, 'Moscow+08 - E Sakha, N Kuril Is'
+        c.timezone 'Asia/Kamchatka', 3181, 60, 3173, 20, 'Moscow+08 (Moscow+09 after 2014-10-26) - Kamchatka'
+        c.timezone 'Asia/Anadyr', 259, 4, 10649, 60, 'Moscow+08 (Moscow+09 after 2014-10-26) - Bering Sea'
       end
       country 'RW', 'Rwanda' do |c|
         c.timezone 'Africa/Kigali', -39, 20, 451, 15
@@ -857,13 +856,13 @@ module TZInfo
         c.timezone 'America/Boise', 157009, 3600, -46481, 400, 'Mountain Time - south Idaho & east Oregon'
         c.timezone 'America/Phoenix', 20069, 600, -16811, 150, 'Mountain Standard Time - Arizona (except Navajo)'
         c.timezone 'America/Los_Angeles', 30647, 900, -212837, 1800, 'Pacific Time'
+        c.timezone 'America/Metlakatla', 198457, 3600, -18947, 144, 'Pacific Standard Time - Annette Island, Alaska'
         c.timezone 'America/Anchorage', 44077, 720, -539641, 3600, 'Alaska Time'
         c.timezone 'America/Juneau', 209887, 3600, -483911, 3600, 'Alaska Time - Alaska panhandle'
         c.timezone 'America/Sitka', 41167, 720, -487087, 3600, 'Alaska Time - southeast Alaska panhandle'
         c.timezone 'America/Yakutat', 214369, 3600, -251509, 1800, 'Alaska Time - Alaska panhandle neck'
         c.timezone 'America/Nome', 58051, 900, -595463, 3600, 'Alaska Time - west Alaska'
         c.timezone 'America/Adak', 1297, 25, -635969, 3600, 'Aleutian Islands'
-        c.timezone 'America/Metlakatla', 198457, 3600, -18947, 144, 'Metlakatla Time - Annette Island'
         c.timezone 'Pacific/Honolulu', 15341, 720, -18943, 120, 'Hawaii'
       end
       country 'UY', 'Uruguay' do |c|

@@ -5,11 +5,11 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Europe/Moscow' do |tz|
-          tz.offset :o0, 9020, 0, :LMT
-          tz.offset :o1, 9000, 0, :MMT
-          tz.offset :o2, 9048, 0, :MMT
-          tz.offset :o3, 9048, 3600, :MST
-          tz.offset :o4, 9048, 7200, :MDST
+          tz.offset :o0, 9017, 0, :LMT
+          tz.offset :o1, 9017, 0, :MMT
+          tz.offset :o2, 9079, 0, :MMT
+          tz.offset :o3, 9079, 3600, :MST
+          tz.offset :o4, 9079, 7200, :MDST
           tz.offset :o5, 10800, 3600, :MSD
           tz.offset :o6, 10800, 0, :MSK
           tz.offset :o7, 10800, 7200, :MSM
@@ -17,14 +17,14 @@ module TZInfo
           tz.offset :o9, 7200, 3600, :EEST
           tz.offset :o10, 14400, 0, :MSK
           
-          tz.transition 1879, 12, :o1, 10401330509, 4320
-          tz.transition 1916, 7, :o2, 116210275, 48
-          tz.transition 1917, 7, :o3, 8717080873, 3600
-          tz.transition 1917, 12, :o2, 8717725273, 3600
-          tz.transition 1918, 5, :o4, 8718283123, 3600
-          tz.transition 1918, 9, :o3, 8718668473, 3600
-          tz.transition 1919, 5, :o4, 8719597123, 3600
-          tz.transition 1919, 6, :o5, 8719705423, 3600
+          tz.transition 1879, 12, :o1, 208026610183, 86400
+          tz.transition 1916, 7, :o2, 209178494983, 86400
+          tz.transition 1917, 7, :o3, 209209940921, 86400
+          tz.transition 1917, 12, :o2, 209225406521, 86400
+          tz.transition 1918, 5, :o4, 209238794921, 86400
+          tz.transition 1918, 9, :o3, 209248043321, 86400
+          tz.transition 1919, 5, :o4, 209270330921, 86400
+          tz.transition 1919, 6, :o5, 209272930121, 86400
           tz.transition 1919, 8, :o6, 7266559, 3
           tz.transition 1921, 2, :o5, 7268206, 3
           tz.transition 1921, 3, :o7, 58146463, 24
@@ -94,6 +94,7 @@ module TZInfo
           tz.transition 2010, 3, :o5, 1269730800
           tz.transition 2010, 10, :o6, 1288479600
           tz.transition 2011, 3, :o10, 1301180400
+          tz.transition 2014, 10, :o6, 1414274400
         end
       end
     end

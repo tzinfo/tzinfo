@@ -15,19 +15,17 @@ module TZInfo
           tz.transition 1917, 4, :o2, 58112029, 24
           tz.transition 1917, 9, :o1, 58115725, 24
           tz.transition 1918, 4, :o2, 29060215, 12
-          tz.transition 1918, 9, :o1, 58124773, 24
+          tz.transition 1918, 9, :o1, 58124461, 24
           tz.transition 1919, 4, :o2, 29064763, 12
-          tz.transition 1919, 9, :o1, 58133197, 24
-          tz.transition 1920, 4, :o2, 29069035, 12
-          tz.transition 1920, 9, :o1, 58142341, 24
-          tz.transition 1941, 4, :o2, 58322173, 24
+          tz.transition 1919, 11, :o1, 58134877, 24
+          tz.transition 1941, 4, :o2, 58322219, 24
           tz.transition 1942, 11, :o1, 58335973, 24
           tz.transition 1943, 3, :o2, 58339501, 24
           tz.transition 1943, 10, :o1, 58344037, 24
           tz.transition 1944, 4, :o2, 58348405, 24
           tz.transition 1944, 10, :o1, 58352773, 24
           tz.transition 1945, 5, :o2, 29178929, 12
-          tz.transition 1945, 11, :o1, 29181149, 12
+          tz.transition 1945, 10, :o1, 29181125, 12
           tz.transition 1946, 3, :o2, 58365853, 24
           tz.transition 1946, 10, :o1, 58370389, 24
           tz.transition 1947, 4, :o2, 58374757, 24

@@ -5,15 +5,15 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Europe/Helsinki' do |tz|
-          tz.offset :o0, 5992, 0, :LMT
-          tz.offset :o1, 5992, 0, :HMT
+          tz.offset :o0, 5989, 0, :LMT
+          tz.offset :o1, 5989, 0, :HMT
           tz.offset :o2, 7200, 0, :EET
           tz.offset :o3, 7200, 3600, :EEST
           
-          tz.transition 1878, 5, :o1, 25997062651, 10800
-          tz.transition 1921, 4, :o2, 26166352651, 10800
+          tz.transition 1878, 5, :o1, 207976501211, 86400
+          tz.transition 1921, 4, :o2, 209330821211, 86400
           tz.transition 1942, 4, :o3, 29165429, 12
-          tz.transition 1942, 10, :o2, 19445083, 8
+          tz.transition 1942, 10, :o2, 29167637, 12
           tz.transition 1981, 3, :o3, 354672000
           tz.transition 1981, 9, :o2, 370396800
           tz.transition 1982, 3, :o3, 386121600

@@ -6,8 +6,8 @@ module TZInfo
         
         timezone 'Australia/Hobart' do |tz|
           tz.offset :o0, 35356, 0, :LMT
-          tz.offset :o1, 36000, 0, :EST
-          tz.offset :o2, 36000, 3600, :EST
+          tz.offset :o1, 36000, 0, :AEST
+          tz.offset :o2, 36000, 3600, :AEDT
           
           tz.transition 1895, 8, :o1, 52130241161, 21600
           tz.transition 1916, 9, :o2, 14526823, 6

@@ -6,8 +6,8 @@ module TZInfo
         
         timezone 'Australia/Sydney' do |tz|
           tz.offset :o0, 36292, 0, :LMT
-          tz.offset :o1, 36000, 0, :EST
-          tz.offset :o2, 36000, 3600, :EST
+          tz.offset :o1, 36000, 0, :AEST
+          tz.offset :o2, 36000, 3600, :AEDT
           
           tz.transition 1895, 1, :o1, 52125661727, 21600
           tz.transition 1916, 12, :o2, 3486569881, 1440

@@ -6,7 +6,7 @@ module TZInfo
         
         timezone 'Asia/Sakhalin' do |tz|
           tz.offset :o0, 34248, 0, :LMT
-          tz.offset :o1, 32400, 0, :CJT
+          tz.offset :o1, 32400, 0, :JCST
           tz.offset :o2, 32400, 0, :JST
           tz.offset :o3, 39600, 0, :SAKT
           tz.offset :o4, 39600, 3600, :SAKST
@@ -14,7 +14,7 @@ module TZInfo
           tz.offset :o6, 36000, 0, :SAKT
           
           tz.transition 1905, 8, :o1, 8701488373, 3600
-          tz.transition 1937, 12, :o2, 19431193, 8
+          tz.transition 1937, 9, :o2, 19430457, 8
           tz.transition 1945, 8, :o3, 19453537, 8
           tz.transition 1981, 3, :o4, 354891600
           tz.transition 1981, 9, :o3, 370699200
@@ -78,6 +78,7 @@ module TZInfo
           tz.transition 2010, 3, :o5, 1269705600
           tz.transition 2010, 10, :o6, 1288454400
           tz.transition 2011, 3, :o3, 1301155200
+          tz.transition 2014, 10, :o6, 1414249200
         end
       end
     end

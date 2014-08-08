@@ -5,14 +5,14 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Asia/Vladivostok' do |tz|
-          tz.offset :o0, 31664, 0, :LMT
+          tz.offset :o0, 31654, 0, :LMT
           tz.offset :o1, 32400, 0, :VLAT
           tz.offset :o2, 36000, 0, :VLAT
           tz.offset :o3, 36000, 3600, :VLAST
           tz.offset :o4, 32400, 3600, :VLAST
           tz.offset :o5, 39600, 0, :VLAT
           
-          tz.transition 1922, 11, :o1, 13086214921, 5400
+          tz.transition 1922, 11, :o1, 104689719373, 43200
           tz.transition 1930, 6, :o2, 19409185, 8
           tz.transition 1981, 3, :o3, 354895200
           tz.transition 1981, 9, :o2, 370702800
@@ -76,6 +76,7 @@ module TZInfo
           tz.transition 2010, 3, :o3, 1269705600
           tz.transition 2010, 10, :o2, 1288454400
           tz.transition 2011, 3, :o5, 1301155200
+          tz.transition 2014, 10, :o2, 1414249200
         end
       end
     end

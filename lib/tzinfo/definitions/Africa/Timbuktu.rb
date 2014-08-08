@@ -4,7 +4,7 @@ module TZInfo
       module Timbuktu
         include TimezoneDefinition
         
-        linked_timezone 'Africa/Timbuktu', 'Africa/Bamako'
+        linked_timezone 'Africa/Timbuktu', 'Africa/Abidjan'
       end
     end
   end

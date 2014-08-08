@@ -1,18 +1,19 @@
 module TZInfo
   module Definitions
     module Asia
-      module Yakutsk
+      module Chita
         include TimezoneDefinition
         
-        timezone 'Asia/Yakutsk' do |tz|
-          tz.offset :o0, 31120, 0, :LMT
+        timezone 'Asia/Chita' do |tz|
+          tz.offset :o0, 27232, 0, :LMT
           tz.offset :o1, 28800, 0, :YAKT
           tz.offset :o2, 32400, 0, :YAKT
           tz.offset :o3, 32400, 3600, :YAKST
           tz.offset :o4, 28800, 3600, :YAKST
           tz.offset :o5, 36000, 0, :YAKT
+          tz.offset :o6, 28800, 0, :IRKT
           
-          tz.transition 1919, 12, :o1, 2616091711, 1080
+          tz.transition 1919, 12, :o1, 6540229399, 2700
           tz.transition 1930, 6, :o2, 14556889, 6
           tz.transition 1981, 3, :o3, 354898800
           tz.transition 1981, 9, :o2, 370706400
@@ -76,7 +77,7 @@ module TZInfo
           tz.transition 2010, 3, :o3, 1269709200
           tz.transition 2010, 10, :o2, 1288458000
           tz.transition 2011, 3, :o5, 1301158800
-          tz.transition 2014, 10, :o2, 1414252800
+          tz.transition 2014, 10, :o6, 1414252800
         end
       end
     end

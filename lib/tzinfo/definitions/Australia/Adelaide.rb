@@ -6,9 +6,9 @@ module TZInfo
         
         timezone 'Australia/Adelaide' do |tz|
           tz.offset :o0, 33260, 0, :LMT
-          tz.offset :o1, 32400, 0, :CST
-          tz.offset :o2, 34200, 0, :CST
-          tz.offset :o3, 34200, 3600, :CST
+          tz.offset :o1, 32400, 0, :ACST
+          tz.offset :o2, 34200, 0, :ACST
+          tz.offset :o3, 34200, 3600, :ACDT
           
           tz.transition 1895, 1, :o1, 10425132497, 4320
           tz.transition 1899, 4, :o2, 19318201, 8
