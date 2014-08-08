@@ -624,11 +624,12 @@ module TZInfo
         identifiers.collect {|identifier| get_proxy(identifier)}
       end
       
-      # Returns the current DataSource
+      # Returns the current DataSource.
       def self.data_source
         DataSource.get
       end
 
+      # Raises an UnknownTimezone exception.
       def raise_unknown_timezone
         raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
       end

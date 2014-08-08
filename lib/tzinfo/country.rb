@@ -102,6 +102,11 @@ module TZInfo
     #
     # 1. makes some geographical sense, and
     # 2. puts the most populous zones first, where that does not contradict 1.
+    #
+    # Returned zone identifiers may refer to cities and regions outside of the
+    # country. This will occur if the zone covers multiple countries. Any zones
+    # referring to a city or region in a different country will be listed after
+    # those relating to this country.
     def zone_identifiers
       @info.zone_identifiers
     end
@@ -114,6 +119,11 @@ module TZInfo
     #
     # 1. makes some geographical sense, and
     # 2. puts the most populous zones first, where that does not contradict 1.
+    #
+    # Identifiers of the zones returned may refer to cities and regions outside
+    # of the country. This will occur if the zone covers multiple countries. Any
+    # zones referring to a city or region in a different country will be listed
+    # after those relating to this country.
     def zones
       zone_identifiers.collect {|id|
         Timezone.get_proxy(id)        
@@ -126,6 +136,11 @@ module TZInfo
     #
     # 1. makes some geographical sense, and
     # 2. puts the most populous zones first, where that does not contradict 1.
+    #
+    # Identifiers and descriptions of the zones returned may refer to cities and
+    # regions outside of the country. This will occur if the zone covers
+    # multiple countries. Any zones referring to a city or region in a different
+    # country will be listed after those relating to this country.
     def zone_info
       @info.zones
     end
@@ -166,7 +181,8 @@ module TZInfo
       def setup(info)
         @info = info        
       end
-      
+
+      # Initializes @@countries.
       def self.init_countries
         @@countries = ThreadSafe::Cache.new
       end
