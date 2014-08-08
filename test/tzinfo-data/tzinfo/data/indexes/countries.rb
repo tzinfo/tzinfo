@@ -252,8 +252,8 @@ module TZInfo
           c.timezone 'Europe/Prague', 601, 12, 433, 30
         end
         country 'DE', 'Germany' do |c|
-          c.timezone 'Europe/Zurich', 2843, 60, 128, 15, 'Swiss time'
           c.timezone 'Europe/Berlin', 105, 2, 401, 30, 'Berlin time'
+          c.timezone 'Europe/Zurich', 2843, 60, 128, 15, 'Swiss time'
         end
         country 'DJ', 'Djibouti' do |c|
           c.timezone 'Africa/Nairobi', -77, 60, 2209, 60
@@ -786,8 +786,8 @@ module TZInfo
           c.timezone 'Africa/Ndjamena', 727, 60, 301, 20
         end
         country 'TF', 'French Southern & Antarctic Lands' do |c|
-          c.timezone 'Indian/Reunion', -313, 15, 832, 15, 'Réunion, Crozet Is, Scattered Is'
           c.timezone 'Indian/Kerguelen', -17767, 360, 28087, 400, 'Kerguelen, St Paul I, Amsterdam I'
+          c.timezone 'Indian/Reunion', -313, 15, 832, 15, 'Réunion, Crozet Is, Scattered Is'
         end
         country 'TG', 'Togo' do |c|
           c.timezone 'Africa/Abidjan', 319, 60, -121, 30
@@ -837,8 +837,8 @@ module TZInfo
           c.timezone 'Africa/Nairobi', -77, 60, 2209, 60
         end
         country 'UM', 'US minor outlying islands' do |c|
-          c.timezone 'Pacific/Pago_Pago', -214, 15, -1707, 10, 'Samoa, Midway'
           c.timezone 'Pacific/Wake', 1157, 60, 9997, 60, 'Wake Island'
+          c.timezone 'Pacific/Pago_Pago', -214, 15, -1707, 10, 'Samoa, Midway'
           c.timezone 'Pacific/Honolulu', 15341, 720, -18943, 120, 'Hawaii time'
         end
         country 'US', 'United States' do |c|
