@@ -167,9 +167,9 @@ module TZInfo
     # Returns TimezoneProxy objects to avoid the overhead of loading Timezone
     # definitions until a conversion is actually required.        
     def self.all_country_zones
-      Country.all_codes.inject([]) {|zones,country|
+      Country.all_codes.inject([]) do |zones,country|
         zones += Country.get(country).zones
-      }
+      end.uniq
     end
     
     # Returns all the zone identifiers defined for all Countries. This is not the
@@ -177,9 +177,9 @@ module TZInfo
     # 'Etc/GMT'). You can obtain a Timezone instance for a given identifier
     # with the get method.
     def self.all_country_zone_identifiers
-      Country.all_codes.inject([]) {|zones,country|
+      Country.all_codes.inject([]) do |zones,country|
         zones += Country.get(country).zone_identifiers
-      }
+      end.uniq
     end
     
     # Returns all US Timezone instances. A shortcut for 
