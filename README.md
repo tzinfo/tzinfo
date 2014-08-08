@@ -91,8 +91,8 @@ The current local time in a `Timezone` can be obtained with the
     now = tz.now
 
 All methods in TZInfo that operate on a time can be used with either `Time` or 
-`DateTime` instances or with nteger timestamps (i.e. as returned by 
-`Time#to_i`). The type of the values returned will match the the type passed in.
+`DateTime` instances or with Integer timestamps (i.e. as returned by 
+`Time#to_i`). The type of the values returned will match the type passed in.
 
 A list of all the available timezone identifiers can be obtained using the
 `TZInfo::Timezone.all_identifiers` method. `TZInfo::Timezone.all` can be called
