@@ -5,7 +5,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Asia/Samarkand' do |tz|
-          tz.offset :o0, 16032, 0, :LMT
+          tz.offset :o0, 16073, 0, :LMT
           tz.offset :o1, 14400, 0, :SAMT
           tz.offset :o2, 18000, 0, :SAMT
           tz.offset :o3, 18000, 3600, :SAMST
@@ -13,7 +13,7 @@ module TZInfo
           tz.offset :o5, 18000, 3600, :UZST
           tz.offset :o6, 18000, 0, :UZT
           
-          tz.transition 1924, 5, :o1, 2181516583, 900
+          tz.transition 1924, 5, :o1, 209425591927, 86400
           tz.transition 1930, 6, :o2, 7278445, 3
           tz.transition 1981, 3, :o3, 354913200
           tz.transition 1981, 9, :o4, 370720800

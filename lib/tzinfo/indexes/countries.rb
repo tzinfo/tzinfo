@@ -35,7 +35,7 @@ module TZInfo
         c.timezone 'Antarctica/Davis', -823, 12, 2339, 30, 'Davis Station, Vestfold Hills'
         c.timezone 'Antarctica/Casey', -3977, 60, 6631, 60, 'Casey Station, Bailey Peninsula'
         c.timezone 'Antarctica/Vostok', -392, 5, 1069, 10, 'Vostok Station, Lake Vostok'
-        c.timezone 'Antarctica/DumontDUrville', -200, 3, 8401, 60, 'Dumont-d\'Urville Station, Terre Adelie'
+        c.timezone 'Antarctica/DumontDUrville', -200, 3, 8401, 60, 'Dumont-d\'Urville Station, Adelie Land'
         c.timezone 'Antarctica/Syowa', -124211, 1800, 3959, 100, 'Syowa Station, E Ongul I'
         c.timezone 'Antarctica/Troll', -259241, 3600, 507, 200, 'Troll Station, Queen Maud Land'
       end

@@ -5,7 +5,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Europe/Samara' do |tz|
-          tz.offset :o0, 12036, 0, :LMT
+          tz.offset :o0, 12020, 0, :LMT
           tz.offset :o1, 10800, 0, :SAMT
           tz.offset :o2, 14400, 0, :SAMT
           tz.offset :o3, 14400, 0, :KUYT
@@ -17,7 +17,7 @@ module TZInfo
           tz.offset :o9, 14400, 3600, :SAMST
           tz.offset :o10, 10800, 3600, :SAMST
           
-          tz.transition 1919, 6, :o1, 17439411197, 7200
+          tz.transition 1919, 6, :o1, 10463646719, 4320
           tz.transition 1930, 6, :o2, 19409187, 8
           tz.transition 1935, 1, :o3, 7283488, 3
           tz.transition 1981, 3, :o4, 354916800
