@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2013 Philip Ross
+# Copyright (c) 2005-2014 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -73,9 +73,14 @@ module TZInfo
     # Reads the tzdata source and generates the classes. Takes a long time
     # to run. Currently outputs debugging information to standard out.
     def execute
+      # Note that the backzone file is ignored. backzone contains alternative
+      # definitions of certain zones, primarily for pre-1970 data. It is not
+      # recommended for ordinary use and the tzdata Makefile does not
+      # install its entries by default.
+
       files = Dir.entries(@input_dir).select do |file|
         file =~ /\A[^\.]+\z/ &&            
-          !%w(leapseconds leapseconds.awk leap-seconds.list Makefile README SOURCE).include?(file) &&
+          !%w(backzone checktab.awk leapseconds leapseconds.awk leap-seconds.list CONTRIBUTING Makefile NEWS README SOURCE Theory zoneinfo2tdf.pl).include?(file) &&
           File.file?(File.join(@input_dir, file))
       end
     
