@@ -4,12 +4,7 @@ module TZInfo
       module Lusaka
         include TimezoneDefinition
         
-        timezone 'Africa/Lusaka' do |tz|
-          tz.offset :o0, 6788, 0, :LMT
-          tz.offset :o1, 7200, 0, :CAT
-          
-          tz.transition 1903, 2, :o1, 52189367503, 21600
-        end
+        linked_timezone 'Africa/Lusaka', 'Africa/Maputo'
       end
     end
   end

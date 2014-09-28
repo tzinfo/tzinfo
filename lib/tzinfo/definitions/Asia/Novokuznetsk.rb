@@ -5,7 +5,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Asia/Novokuznetsk' do |tz|
-          tz.offset :o0, 20928, 0, :NMT
+          tz.offset :o0, 20928, 0, :LMT
           tz.offset :o1, 21600, 0, :KRAT
           tz.offset :o2, 25200, 0, :KRAT
           tz.offset :o3, 25200, 3600, :KRAST
@@ -14,7 +14,7 @@ module TZInfo
           tz.offset :o6, 21600, 0, :NOVT
           tz.offset :o7, 25200, 0, :NOVT
           
-          tz.transition 1920, 1, :o1, 545024083, 225
+          tz.transition 1924, 4, :o1, 545378908, 225
           tz.transition 1930, 6, :o2, 9704593, 4
           tz.transition 1981, 3, :o3, 354906000
           tz.transition 1981, 9, :o2, 370713600
