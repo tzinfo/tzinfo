@@ -1,4 +1,5 @@
-require './lib/tzinfo/version'
+require File.join(File.expand_path(File.dirname(__FILE__)), 'lib', 'tzinfo', 'version').untaint
+
 Gem::Specification.new do |s|
   s.name = 'tzinfo'
   s.version = TZInfo::VERSION
