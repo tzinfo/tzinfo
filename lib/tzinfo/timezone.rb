@@ -563,10 +563,10 @@ module TZInfo
       local = Time.at(local).utc unless local.kind_of?(Time) || local.kind_of?(DateTime)
       abbreviation = period.abbreviation.to_s.gsub(/%/, '%%')
       
-      format = format.gsub(/(.?)%Z/) do
-        if $1 == '%'
+      format = format.gsub(/%(%*)Z/) do
+        if $1.length.odd?
           # return %%Z so the real strftime treats it as a literal %Z too
-          '%%Z'
+          "#$1%Z"
         else
           "#$1#{abbreviation}"
         end

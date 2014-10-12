@@ -1273,6 +1273,7 @@ class TCTimezone < Minitest::Test
     assert_equal('BST', tz.strftime('%Z', Time.utc(2006, 7, 15, 22, 12, 2).to_i))
     assert_equal('%ZBST', tz.strftime('%%Z%Z', Time.utc(2006, 7, 15, 22, 12, 2).to_i))
     assert_equal('BST BST', tz.strftime('%Z %Z', Time.utc(2006, 7, 15, 22, 12, 2).to_i))
+    assert_equal('BST %Z %BST %%Z %%BST', tz.strftime('%Z %%Z %%%Z %%%%Z %%%%%Z', 0))
   end
   
   def test_get_missing_data_source
