@@ -555,20 +555,33 @@ module TZInfo
 
     # Converts a time in UTC to local time and returns it as a string 
     # according to the given format. The formatting is identical to 
-    # Time.strftime and DateTime.strftime, except %Z is replaced with the
-    # timezone abbreviation for the specified time (for example, EST or EDT).        
+    # Time.strftime and DateTime.strftime, except %Z and %z are replaced with the
+    # timezone abbreviation or offset for the specified time (for example, EST or EDT).
     def strftime(format, utc = Time.now.utc)      
       period = period_for_utc(utc)
       local = period.to_local(utc)      
       local = Time.at(local).utc unless local.kind_of?(Time) || local.kind_of?(DateTime)
       abbreviation = period.abbreviation.to_s.gsub(/%/, '%%')
       
-      format = format.gsub(/%(%*)Z/) do
+      format = format.gsub(/%(%*)(Z|:{0,3}z)/) do
         if $1.length.odd?
           # return %%Z so the real strftime treats it as a literal %Z too
-          "#$1%Z"
-        else
+          "#$1%#$2"
+        elsif $2 == "Z"
           "#$1#{abbreviation}"
+        else
+          m, s = period.utc_total_offset.divmod(60)
+          h, m = m.divmod(60)
+          case $2.length
+          when 1
+            "#$1#{'%+03d%02d' % [h,m]}"
+          when 2
+            "#$1#{'%+03d:%02d' % [h,m]}"
+          when 3
+            "#$1#{'%+03d:%02d:%02d' % [h,m,s]}"
+          else # 4
+            "#$1#{'%+03d' % [h]}"
+          end
         end
       end
       
