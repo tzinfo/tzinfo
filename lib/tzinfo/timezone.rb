@@ -560,9 +560,18 @@ module TZInfo
     alias :current_time_and_period :current_period_and_time
 
     # Converts a time in UTC to local time and returns it as a string 
-    # according to the given format. The formatting is identical to 
-    # Time.strftime and DateTime.strftime, except %Z and %z are replaced with the
-    # timezone abbreviation or offset for the specified time (for example, EST or EDT).
+    # according to the given format.
+    #
+    # The formatting is identical to Time.strftime and DateTime.strftime, except
+    # %Z and %z are replaced with the timezone abbreviation (for example, EST or
+    # EDT) and offset for the specified Timezone and time.
+    #
+    # The offset can be formatted as follows:
+    #
+    # - %z - hour and minute (e.g. +0500)
+    # - %:z - hour and minute separated with a colon (e.g. +05:00)
+    # - %::z - hour minute and second separated with colons (e.g. +05:00:00)
+    # - %:::z - hour only (e.g. +05)
     def strftime(format, utc = Time.now.utc)      
       period = period_for_utc(utc)
       local = period.to_local(utc)      
