@@ -637,7 +637,8 @@ module TZInfo
         c.timezone 'Pacific/Gambier', -347, 15, -2699, 20, 'Gambier Islands'
       end
       country 'PG', 'Papua New Guinea' do |c|
-        c.timezone 'Pacific/Port_Moresby', -19, 2, 883, 6
+        c.timezone 'Pacific/Port_Moresby', -19, 2, 883, 6, 'most locations'
+        c.timezone 'Pacific/Bougainville', -373, 60, 4667, 30, 'Bougainville'
       end
       country 'PH', 'Philippines' do |c|
         c.timezone 'Asia/Manila', 175, 12, 121, 1
