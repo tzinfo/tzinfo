@@ -15,3 +15,5 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head
+install:
+  - bundle install --retry=3
