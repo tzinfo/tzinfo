@@ -10,25 +10,31 @@ module TZInfo
           tz.offset :o2, 32400, 0, :JCST
           tz.offset :o3, 32400, 0, :JST
           tz.offset :o4, 32400, 0, :KST
-          tz.offset :o5, 28800, 0, :KST
-          tz.offset :o6, 28800, 3600, :KDT
-          tz.offset :o7, 32400, 3600, :KDT
+          tz.offset :o5, 30600, 3600, :KDT
+          tz.offset :o6, 32400, 3600, :KDT
           
-          tz.transition 1889, 12, :o1, 26042775991, 10800
-          tz.transition 1904, 11, :o2, 116007127, 48
-          tz.transition 1927, 12, :o1, 19401969, 8
-          tz.transition 1931, 12, :o2, 116481943, 48
+          tz.transition 1908, 3, :o1, 26114747191, 10800
+          tz.transition 1911, 12, :o2, 116131303, 48
           tz.transition 1937, 9, :o3, 19430457, 8
           tz.transition 1945, 9, :o4, 19453649, 8
-          tz.transition 1954, 3, :o5, 19478577, 8
-          tz.transition 1960, 5, :o6, 14622415, 6
-          tz.transition 1960, 9, :o5, 19497521, 8
-          tz.transition 1961, 8, :o1, 14625127, 6
-          tz.transition 1968, 9, :o4, 117126247, 48
-          tz.transition 1987, 5, :o7, 547570800
-          tz.transition 1987, 10, :o4, 560872800
-          tz.transition 1988, 5, :o7, 579020400
-          tz.transition 1988, 10, :o4, 592322400
+          tz.transition 1954, 3, :o1, 19478577, 8
+          tz.transition 1955, 5, :o5, 116891143, 48
+          tz.transition 1955, 9, :o1, 116897237, 48
+          tz.transition 1956, 5, :o5, 116909431, 48
+          tz.transition 1956, 9, :o1, 116915813, 48
+          tz.transition 1957, 5, :o5, 116926231, 48
+          tz.transition 1957, 9, :o1, 116932949, 48
+          tz.transition 1958, 5, :o5, 116943703, 48
+          tz.transition 1958, 9, :o1, 116950421, 48
+          tz.transition 1959, 5, :o5, 116961175, 48
+          tz.transition 1959, 9, :o1, 116967893, 48
+          tz.transition 1960, 4, :o5, 116978647, 48
+          tz.transition 1960, 9, :o1, 116985365, 48
+          tz.transition 1961, 8, :o4, 117001015, 48
+          tz.transition 1987, 5, :o6, 547578000
+          tz.transition 1987, 10, :o4, 560883600
+          tz.transition 1988, 5, :o6, 579027600
+          tz.transition 1988, 10, :o4, 592333200
         end
       end
     end
