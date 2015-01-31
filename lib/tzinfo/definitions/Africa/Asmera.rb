@@ -4,7 +4,7 @@ module TZInfo
       module Asmera
         include TimezoneDefinition
         
-        linked_timezone 'Africa/Asmera', 'Africa/Asmara'
+        linked_timezone 'Africa/Asmera', 'Africa/Nairobi'
       end
     end
   end

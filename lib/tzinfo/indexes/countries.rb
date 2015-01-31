@@ -566,7 +566,7 @@ module TZInfo
       end
       country 'MX', 'Mexico' do |c|
         c.timezone 'America/Mexico_City', 97, 5, -1983, 20, 'Central Time - most locations'
-        c.timezone 'America/Cancun', 253, 12, -2603, 30, 'Central Time - Quintana Roo'
+        c.timezone 'America/Cancun', 253, 12, -2603, 30, 'Eastern Standard Time - Quintana Roo'
         c.timezone 'America/Merida', 629, 30, -5377, 60, 'Central Time - Campeche, Yucatan'
         c.timezone 'America/Monterrey', 77, 3, -6019, 60, 'Mexican Central Time - Coahuila, Durango, Nuevo Leon, Tamaulipas away from US border'
         c.timezone 'America/Matamoros', 155, 6, -195, 2, 'US Central Time - Coahuila, Durango, Nuevo Leon, Tamaulipas near US border'
