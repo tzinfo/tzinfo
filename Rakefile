@@ -21,7 +21,10 @@ class TZInfoPackageTask < Gem::PackageTask
   private :orig_sh
 
   def sh(*cmd, &block)
-    if cmd.first =~ /\A__tar_with_owner__ -?([zjcvf]+)(.*)\z/
+    if cmd[0] == '__tar_with_owner__' && cmd[1] =~ /\A-?[zjcvf]+\z/
+      opts = cmd[1]
+      cmd = ['tar', 'c', '--owner', '0', '--group', '0', "#{opts.start_with?('-') ? '' : '-'}#{opts.gsub('c', '')}"] + cmd.drop(2)
+    elsif cmd.first =~ /\A__tar_with_owner__ -?([zjcvf]+)(.*)\z/
       opts = $1
       args = $2
       cmd[0] = "tar c --owner 0 --group 0 -#{opts.gsub('c', '')}#{args}"    
