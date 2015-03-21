@@ -13,7 +13,7 @@ module TZInfo
           tz.offset :o5, 14400, 3600, :VOLST
           tz.offset :o6, 10800, 3600, :VOLST
           tz.offset :o7, 10800, 0, :VOLT
-          tz.offset :o8, 10800, 3600, :MSK
+          tz.offset :o8, 10800, 3600, :MSD
           tz.offset :o9, 10800, 0, :MSK
           tz.offset :o10, 14400, 0, :MSK
           
