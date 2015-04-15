@@ -167,7 +167,7 @@ module TZInfo
       timezone 'America/Moncton'
       timezone 'America/Monterrey'
       timezone 'America/Montevideo'
-      timezone 'America/Montreal'
+      linked_timezone 'America/Montreal'
       linked_timezone 'America/Montserrat'
       timezone 'America/Nassau'
       timezone 'America/New_York'

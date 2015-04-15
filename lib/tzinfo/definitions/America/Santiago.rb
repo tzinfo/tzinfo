@@ -14,9 +14,9 @@ module TZInfo
           tz.offset :o6, -10800, 0, :CLT
           
           tz.transition 1890, 1, :o1, 104171127683, 43200
-          tz.transition 1910, 1, :o2, 104486660483, 43200
+          tz.transition 1910, 1, :o2, 104487049283, 43200
           tz.transition 1916, 7, :o1, 58105097, 24
-          tz.transition 1918, 9, :o3, 104623388483, 43200
+          tz.transition 1918, 9, :o3, 104623777283, 43200
           tz.transition 1919, 7, :o1, 7266422, 3
           tz.transition 1927, 9, :o4, 104765386883, 43200
           tz.transition 1928, 4, :o2, 7276013, 3
@@ -28,11 +28,13 @@ module TZInfo
           tz.transition 1931, 4, :o2, 7279298, 3
           tz.transition 1931, 9, :o4, 58238057, 24
           tz.transition 1932, 4, :o2, 7280396, 3
-          tz.transition 1932, 9, :o4, 58246841, 24
+          tz.transition 1932, 9, :o3, 58246841, 24
           tz.transition 1942, 6, :o2, 7291535, 3
-          tz.transition 1942, 8, :o4, 58333745, 24
-          tz.transition 1946, 9, :o2, 19456517, 8
-          tz.transition 1947, 5, :o3, 58375865, 24
+          tz.transition 1942, 8, :o3, 58333745, 24
+          tz.transition 1946, 7, :o5, 7296050, 3
+          tz.transition 1946, 9, :o3, 19456517, 8
+          tz.transition 1947, 4, :o2, 7296830, 3
+          tz.transition 1947, 5, :o3, 7296983, 3
           tz.transition 1968, 11, :o5, 7320491, 3
           tz.transition 1969, 3, :o3, 19522485, 8
           tz.transition 1969, 11, :o5, 7321646, 3
@@ -73,10 +75,10 @@ module TZInfo
           tz.transition 1987, 4, :o3, 545194800
           tz.transition 1987, 10, :o5, 560923200
           tz.transition 1988, 3, :o3, 574225200
-          tz.transition 1988, 10, :o5, 591768000
+          tz.transition 1988, 10, :o5, 592372800
           tz.transition 1989, 3, :o3, 605674800
           tz.transition 1989, 10, :o5, 624427200
-          tz.transition 1990, 3, :o3, 637729200
+          tz.transition 1990, 3, :o3, 637124400
           tz.transition 1990, 9, :o5, 653457600
           tz.transition 1991, 3, :o3, 668574000
           tz.transition 1991, 10, :o5, 687326400

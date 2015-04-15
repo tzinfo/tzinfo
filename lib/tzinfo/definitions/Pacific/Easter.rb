@@ -5,46 +5,43 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Pacific/Easter' do |tz|
-          tz.offset :o0, -26264, 0, :LMT
+          tz.offset :o0, -26248, 0, :LMT
           tz.offset :o1, -26248, 0, :EMT
-          tz.offset :o2, -25200, 3600, :EASST
-          tz.offset :o3, -25200, 0, :EAST
+          tz.offset :o2, -25200, 0, :EAST
+          tz.offset :o3, -25200, 3600, :EASST
           tz.offset :o4, -21600, 0, :EAST
           tz.offset :o5, -21600, 3600, :EASST
           tz.offset :o6, -18000, 0, :EAST
           
-          tz.transition 1890, 1, :o1, 26042783083, 10800
+          tz.transition 1890, 1, :o1, 26042783081, 10800
           tz.transition 1932, 9, :o2, 26211079481, 10800
-          tz.transition 1942, 6, :o3, 7291535, 3
-          tz.transition 1942, 8, :o2, 58333745, 24
-          tz.transition 1946, 9, :o3, 19456517, 8
-          tz.transition 1968, 11, :o2, 7320491, 3
-          tz.transition 1969, 3, :o3, 19522485, 8
-          tz.transition 1969, 11, :o2, 7321646, 3
-          tz.transition 1970, 3, :o3, 7527600
-          tz.transition 1970, 10, :o2, 24465600
-          tz.transition 1971, 3, :o3, 37767600
-          tz.transition 1971, 10, :o2, 55915200
-          tz.transition 1972, 3, :o3, 69217200
-          tz.transition 1972, 10, :o2, 87969600
-          tz.transition 1973, 3, :o3, 100666800
-          tz.transition 1973, 9, :o2, 118209600
-          tz.transition 1974, 3, :o3, 132116400
-          tz.transition 1974, 10, :o2, 150868800
-          tz.transition 1975, 3, :o3, 163566000
-          tz.transition 1975, 10, :o2, 182318400
-          tz.transition 1976, 3, :o3, 195620400
-          tz.transition 1976, 10, :o2, 213768000
-          tz.transition 1977, 3, :o3, 227070000
-          tz.transition 1977, 10, :o2, 245217600
-          tz.transition 1978, 3, :o3, 258519600
-          tz.transition 1978, 10, :o2, 277272000
-          tz.transition 1979, 3, :o3, 289969200
-          tz.transition 1979, 10, :o2, 308721600
-          tz.transition 1980, 3, :o3, 321418800
-          tz.transition 1980, 10, :o2, 340171200
-          tz.transition 1981, 3, :o3, 353473200
-          tz.transition 1981, 10, :o2, 371620800
+          tz.transition 1968, 11, :o3, 7320491, 3
+          tz.transition 1969, 3, :o2, 19522485, 8
+          tz.transition 1969, 11, :o3, 7321646, 3
+          tz.transition 1970, 3, :o2, 7527600
+          tz.transition 1970, 10, :o3, 24465600
+          tz.transition 1971, 3, :o2, 37767600
+          tz.transition 1971, 10, :o3, 55915200
+          tz.transition 1972, 3, :o2, 69217200
+          tz.transition 1972, 10, :o3, 87969600
+          tz.transition 1973, 3, :o2, 100666800
+          tz.transition 1973, 9, :o3, 118209600
+          tz.transition 1974, 3, :o2, 132116400
+          tz.transition 1974, 10, :o3, 150868800
+          tz.transition 1975, 3, :o2, 163566000
+          tz.transition 1975, 10, :o3, 182318400
+          tz.transition 1976, 3, :o2, 195620400
+          tz.transition 1976, 10, :o3, 213768000
+          tz.transition 1977, 3, :o2, 227070000
+          tz.transition 1977, 10, :o3, 245217600
+          tz.transition 1978, 3, :o2, 258519600
+          tz.transition 1978, 10, :o3, 277272000
+          tz.transition 1979, 3, :o2, 289969200
+          tz.transition 1979, 10, :o3, 308721600
+          tz.transition 1980, 3, :o2, 321418800
+          tz.transition 1980, 10, :o3, 340171200
+          tz.transition 1981, 3, :o2, 353473200
+          tz.transition 1981, 10, :o3, 371620800
           tz.transition 1982, 3, :o4, 384922800
           tz.transition 1982, 10, :o5, 403070400
           tz.transition 1983, 3, :o4, 416372400
@@ -58,10 +55,10 @@ module TZInfo
           tz.transition 1987, 4, :o4, 545194800
           tz.transition 1987, 10, :o5, 560923200
           tz.transition 1988, 3, :o4, 574225200
-          tz.transition 1988, 10, :o5, 591768000
+          tz.transition 1988, 10, :o5, 592372800
           tz.transition 1989, 3, :o4, 605674800
           tz.transition 1989, 10, :o5, 624427200
-          tz.transition 1990, 3, :o4, 637729200
+          tz.transition 1990, 3, :o4, 637124400
           tz.transition 1990, 9, :o5, 653457600
           tz.transition 1991, 3, :o4, 668574000
           tz.transition 1991, 10, :o5, 687326400
