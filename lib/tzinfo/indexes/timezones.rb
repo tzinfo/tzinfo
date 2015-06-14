@@ -95,7 +95,7 @@ module TZInfo
       timezone 'America/Caracas'
       linked_timezone 'America/Catamarca'
       timezone 'America/Cayenne'
-      linked_timezone 'America/Cayman'
+      timezone 'America/Cayman'
       timezone 'America/Chicago'
       timezone 'America/Chihuahua'
       linked_timezone 'America/Coral_Harbour'

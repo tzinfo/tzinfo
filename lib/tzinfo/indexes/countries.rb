@@ -77,7 +77,7 @@ module TZInfo
       country 'AW', 'Aruba' do |c|
         c.timezone 'America/Aruba', 25, 2, -2099, 30
       end
-      country 'AX', 'Aaland Islands' do |c|
+      country 'AX', 'Åland Islands' do |c|
         c.timezone 'Europe/Mariehamn', 601, 10, 399, 20
       end
       country 'AZ', 'Azerbaijan' do |c|
@@ -204,7 +204,7 @@ module TZInfo
       country 'CH', 'Switzerland' do |c|
         c.timezone 'Europe/Zurich', 2843, 60, 128, 15
       end
-      country 'CI', 'Cote d\'Ivoire' do |c|
+      country 'CI', 'Côte d\'Ivoire' do |c|
         c.timezone 'Africa/Abidjan', 319, 60, -121, 30
       end
       country 'CK', 'Cook Islands' do |c|
@@ -676,7 +676,7 @@ module TZInfo
       country 'QA', 'Qatar' do |c|
         c.timezone 'Asia/Qatar', 1517, 60, 773, 15
       end
-      country 'RE', 'Reunion' do |c|
+      country 'RE', 'Réunion' do |c|
         c.timezone 'Indian/Reunion', -313, 15, 832, 15
       end
       country 'RO', 'Romania' do |c|
