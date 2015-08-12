@@ -161,8 +161,8 @@ module TZInfo
       end
       country 'CA', 'Canada' do |c|
         c.timezone 'America/St_Johns', 1427, 30, -3163, 60, 'Newfoundland Time, including SE Labrador'
-        c.timezone 'America/Halifax', 893, 20, -318, 5, 'Atlantic Time - Nova Scotia (most places), PEI'
-        c.timezone 'America/Glace_Bay', 231, 5, -1199, 20, 'Atlantic Time - Nova Scotia - places that did not observe DST 1966-1971'
+        c.timezone 'America/Halifax', 893, 20, -318, 5, 'Atlantic Time - Nova Scotia (peninsula), PEI'
+        c.timezone 'America/Glace_Bay', 231, 5, -1199, 20, 'Atlantic Time - Nova Scotia (Cape Breton)'
         c.timezone 'America/Moncton', 461, 10, -3887, 60, 'Atlantic Time - New Brunswick'
         c.timezone 'America/Goose_Bay', 160, 3, -725, 12, 'Atlantic Time - Labrador - most locations'
         c.timezone 'America/Blanc-Sablon', 617, 12, -3427, 60, 'Atlantic Standard Time - Quebec - Lower North Shore'
