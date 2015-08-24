@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2014 Philip Ross
+# Copyright (c) 2005-2015 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -638,7 +638,7 @@ module TZInfo
           
           if observance.rule_set.count == 0
             std_offset = observance.std_offset
-            start_zone_id = observance.format.expand(std_offset, nil)
+            start_zone_id = observance.format.expand(utc_offset, std_offset, nil)
             
             if use_start
               transitions << TZDataTransition.new(start_time, utc_offset, std_offset, start_zone_id)
@@ -683,23 +683,23 @@ module TZInfo
                   if earliest.at < start_time
                     start_utc_offset = observance.utc_offset
                     start_std_offset = std_offset
-                    start_zone_id = observance.format.expand(earliest.rule.save, earliest.rule.letter)                    
+                    start_zone_id = observance.format.expand(start_utc_offset, earliest.rule.save, earliest.rule.letter)
                     next
                   end
                   
                   if start_zone_id.nil? && start_utc_offset + start_std_offset == observance.utc_offset + std_offset
-                    start_zone_id = observance.format.expand(earliest.rule.save, earliest.rule.letter)
+                    start_zone_id = observance.format.expand(start_utc_offset, earliest.rule.save, earliest.rule.letter)
                   end
                 end
                 
-                zone_id = observance.format.expand(earliest.rule.save, earliest.rule.letter)
+                zone_id = observance.format.expand(observance.utc_offset, earliest.rule.save, earliest.rule.letter)
                 transitions << TZDataTransition.new(earliest.at, observance.utc_offset, earliest.rule.save, zone_id)
               end              
             }
           end
         
           if use_start
-            start_zone_id = observance.format.expand(nil, nil) if start_zone_id.nil? && observance.format.fixed?            
+            start_zone_id = observance.format.expand(nil, nil, nil) if start_zone_id.nil? && observance.format.fixed?
             raise 'Could not determine time zone abbreviation to use just after until time' if start_zone_id.nil?            
             transitions << TZDataTransition.new(start_time, start_utc_offset, start_std_offset, start_zone_id)
           end
@@ -1109,7 +1109,7 @@ module TZInfo
         @type = :alternate
         @standard_abbrev = $1
         @daylight_abbrev = $2
-      elsif spec =~ /%s/
+      elsif spec =~ /%[sz]/
         @type = :subst
         @abbrev = spec
       else
@@ -1118,8 +1118,9 @@ module TZInfo
       end
     end
     
-    # Expands given the current daylight savings offset and Rule string.
-    def expand(std_offset, rule_string)
+    # Expands given the base offset to UTC, the current daylight savings
+    # offset and rule string.
+    def expand(utc_offset, std_offset, rule_string)
       if @type == :alternate
         if std_offset == 0
           @standard_abbrev
@@ -1127,14 +1128,16 @@ module TZInfo
           @daylight_abbrev
         end
       elsif @type == :subst
-        sprintf(@abbrev, rule_string)
+        @abbrev.gsub(/%([sz])/) do
+          $1 == 's' ? rule_string : format_offset(utc_offset + std_offset)
+        end
       else
         @abbrev
       end        
     end
     
-    # True if a string from the rule is required to expand this format.
-    def requires_rule_string?
+    # True if the format requires substitutions (%s or %z).
+    def subst?
       @type == :subst
     end
     
@@ -1142,6 +1145,38 @@ module TZInfo
     def fixed?
       @type == :fixed
     end
+
+    private
+
+      # Formats an offset according to the rules for %z.
+      def format_offset(offset)
+        if offset < 0
+          offset = -offset
+          sign = '-'
+        else
+          sign = '+'
+        end
+
+        offset, seconds = offset.divmod(60)
+        offset, minutes = offset.divmod(60)
+
+        if offset > 99
+          # unsupported
+          '%z'
+        else
+          result = "#{sign}#{offset.to_s.rjust(2, '0')}"
+
+          if minutes != 0 || seconds != 0
+            result << minutes.to_s.rjust(2, '0')
+
+            if seconds != 0
+              result << seconds.to_s.rjust(2, '0')
+            end
+          end
+
+          result
+        end
+      end
   end
   
   # A location (latitude + longitude)
