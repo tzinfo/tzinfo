@@ -114,6 +114,7 @@ module TZInfo
       timezone 'America/Eirunepe'
       timezone 'America/El_Salvador'
       linked_timezone 'America/Ensenada'
+      timezone 'America/Fort_Nelson'
       linked_timezone 'America/Fort_Wayne'
       timezone 'America/Fortaleza'
       timezone 'America/Glace_Bay'

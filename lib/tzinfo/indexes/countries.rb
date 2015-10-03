@@ -184,6 +184,7 @@ module TZInfo
         c.timezone 'America/Inuvik', 246059, 3600, -8023, 60, 'Mountain Time - west Northwest Territories'
         c.timezone 'America/Creston', 491, 10, -6991, 60, 'Mountain Standard Time - Creston, British Columbia'
         c.timezone 'America/Dawson_Creek', 1793, 30, -3607, 30, 'Mountain Standard Time - Dawson Creek & Fort Saint John, British Columbia'
+        c.timezone 'America/Fort_Nelson', 294, 5, -1227, 10, 'Mountain Standard Time - Fort Nelson, British Columbia'
         c.timezone 'America/Vancouver', 739, 15, -7387, 60, 'Pacific Time - west British Columbia'
         c.timezone 'America/Whitehorse', 3643, 60, -2701, 20, 'Pacific Time - south Yukon'
         c.timezone 'America/Dawson', 961, 15, -1673, 12, 'Pacific Time - north Yukon'
