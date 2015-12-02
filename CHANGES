@@ -1,4 +1,4 @@
-== Version ?????? (tzdata v2015g) - ???????????
+== Version 0.3.46 (tzdata v2015g) - 02-Dec-2015
 
 * From version 2015e, the IANA time zone database uses non-ASCII characters in
   country names. Backport the encoding handling from TZInfo::Data to allow
