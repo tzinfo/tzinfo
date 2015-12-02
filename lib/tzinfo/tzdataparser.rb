@@ -24,13 +24,40 @@ require 'date'
 require 'fileutils'
 
 module TZInfo
-  
+
+  # Utility methods used by TZDataParser and associated classes.
+  #
+  # @private
+  module TZDataParserUtils #:nodoc:
+
+    begin
+      Encoding
+      SUPPORTS_ENCODING = true
+    rescue NameError
+      SUPPORTS_ENCODING = false
+    end
+
+    if SUPPORTS_ENCODING
+      def open_file(file_name, mode, opts, &block)
+        File.open(file_name, mode, opts, &block)
+      end
+    else
+      def open_file(file_name, mode, opts, &block)
+        File.open(file_name, mode, &block)
+      end
+    end
+
+    private :open_file
+  end
+
   # Parses tzdata from ftp://elsie.nci.nih.gov/pub/ and transforms it into 
   # a set of Ruby modules that can be used through Timezone and Country.
   # 
   # Normally, this class wouldn't be used. It is only run to update the 
   # timezone data and index modules.
   class TZDataParser    
+    include TZDataParserUtils
+
     # Minimum year that will be considered.
     MIN_YEAR = 1800
     
@@ -176,21 +203,23 @@ module TZInfo
       def load_rules(file)
         puts 'load_rules: ' + file
         
-        IO.foreach(@input_dir + File::SEPARATOR + file) {|line|
-          line = line.gsub(/#.*$/, '')
-          line = line.gsub(/\s+$/, '')
-        
-          if line =~ /^Rule\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)/
-            
-            name = $1    
-            
-            if @rule_sets[name].nil? 
-              @rule_sets[name] = TZDataRuleSet.new(name) 
+        open_file(File.join(@input_dir, file), 'r', :external_encoding => 'UTF-8', :internal_encoding => 'UTF-8') do |file|
+          file.each_line do |line|
+            line = line.gsub(/#.*$/, '')
+            line = line.gsub(/\s+$/, '')
+
+            if line =~ /^Rule\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)/
+
+              name = $1
+
+              if @rule_sets[name].nil?
+                @rule_sets[name] = TZDataRuleSet.new(name)
+              end
+
+              @rule_sets[name].add_rule(TZDataRule.new($2, $3, $4, $5, $6, $7, $8, $9))
             end
-            
-            @rule_sets[name].add_rule(TZDataRule.new($2, $3, $4, $5, $6, $7, $8, $9))
-          end          
-        }                
+          end
+        end
       end
       
       # Gets a rules object for the given reference. Might be a named rule set,
@@ -213,49 +242,53 @@ module TZInfo
         
         in_zone = nil
         
-        IO.foreach(@input_dir + File::SEPARATOR + file) {|line|
-          line = line.gsub(/#.*$/, '')
-          line = line.gsub(/\s+$/, '')
-        
-          if in_zone
-            if line =~ /^\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)(\s+([0-9]+(\s+.*)?))?$/              
-              
-              in_zone.add_observance(TZDataObservance.new($1, get_rules($2), $3, $5))
-              
-              in_zone = nil if $4.nil? 
-            end
-          else
-            if line =~ /^Zone\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)(\s+([0-9]+(\s+.*)?))?$/              
-              name = $1
-              
-              if @zones[name].nil? 
-                @zones[name] = TZDataZone.new(name)
-              end                            
-              
-              @zones[name].add_observance(TZDataObservance.new($2, get_rules($3), $4, $6))
-              
-              in_zone = @zones[name] if !$5.nil?
+        open_file(File.join(@input_dir, file), 'r', :external_encoding => 'UTF-8', :internal_encoding => 'UTF-8') do |file|
+          file.each_line do |line|
+            line = line.gsub(/#.*$/, '')
+            line = line.gsub(/\s+$/, '')
+
+            if in_zone
+              if line =~ /^\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)(\s+([0-9]+(\s+.*)?))?$/
+
+                in_zone.add_observance(TZDataObservance.new($1, get_rules($2), $3, $5))
+
+                in_zone = nil if $4.nil?
+              end
+            else
+              if line =~ /^Zone\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)(\s+([0-9]+(\s+.*)?))?$/
+                name = $1
+
+                if @zones[name].nil?
+                  @zones[name] = TZDataZone.new(name)
+                end
+
+                @zones[name].add_observance(TZDataObservance.new($2, get_rules($3), $4, $6))
+
+                in_zone = @zones[name] if !$5.nil?
+              end
             end
           end
-        }
+        end
       end
       
       # Loads in the links and stores them in @zones.
       def load_links(file)
         puts 'load_links: ' + file
         
-        IO.foreach(@input_dir + File::SEPARATOR + file) {|line|
-          line = line.gsub(/#.*$/, '')
-          line = line.gsub(/\s+$/, '')
-        
-          if line =~ /^Link\s+([^\s]+)\s+([^\s]+)/            
-            name = $2           
-            link_to = @zones[$1]
-            raise "Link to zone not found (#{name}->#{link_to})" if link_to.nil?
-            raise "Zone already defined: #{name}" if !@zones[name].nil?
-            @zones[name] = TZDataLink.new(name, link_to)
-          end          
-        }
+        open_file(File.join(@input_dir, file), 'r', :external_encoding => 'UTF-8', :internal_encoding => 'UTF-8') do |file|
+          file.each_line do |line|
+            line = line.gsub(/#.*$/, '')
+            line = line.gsub(/\s+$/, '')
+
+            if line =~ /^Link\s+([^\s]+)\s+([^\s]+)/
+              name = $2
+              link_to = @zones[$1]
+              raise "Link to zone not found (#{name}->#{link_to})" if link_to.nil?
+              raise "Zone already defined: #{name}" if !@zones[name].nil?
+              @zones[name] = TZDataLink.new(name, link_to)
+            end
+          end
+        end
       end
       
       # Loads countries from iso3166.tab and zone.tab and stores the result in
@@ -263,36 +296,39 @@ module TZInfo
       def load_countries
         puts 'load_countries'
         
-        IO.foreach(@input_dir + File::SEPARATOR + 'iso3166.tab') {|line|          
-          if line =~ /^([A-Z]{2})\t(.*)$/
-            code = $1
-            name = $2
-            @countries[code] = TZDataCountry.new(code, name)
+        open_file(File.join(@input_dir, 'iso3166.tab'), 'r', :external_encoding => 'UTF-8', :internal_encoding => 'UTF-8') do |file|
+          file.each_line do |line|
+            if line =~ /^([A-Z]{2})\t(.*)$/
+              code = $1
+              name = $2
+              @countries[code] = TZDataCountry.new(code, name)
+            end
           end
-        }
-        
-        IO.foreach(@input_dir + File::SEPARATOR + 'zone.tab') {|line|          
-          line.chomp!          
+        end
 
-          if line =~ /^([A-Z]{2})\t([^\t]+)\t([^\t]+)(\t(.*))?$/
-            code = $1
-            location_str = $2
-            zone_name = $3
-            description = $5
+        open_file(File.join(@input_dir, 'zone.tab'), 'r', :external_encoding => 'UTF-8', :internal_encoding => 'UTF-8') do |file|
+          file.each_line do |line|
+            line.chomp!
+            if line =~ /^([A-Z]{2})\t([^\t]+)\t([^\t]+)(\t(.*))?$/
+              code = $1
+              location_str = $2
+              zone_name = $3
+              description = $5
 
-            country = @countries[code]
-            raise "Country not found: #{code}" if country.nil?
-            
-            location = TZDataLocation.new(location_str)
-            
-            zone = @zones[zone_name]
-            raise "Zone not found: #{zone_name}" if zone.nil?                        
-            
-            description = nil if description == ''
-            
-            country.add_zone(TZDataCountryTimezone.new(zone, description, location))
+              country = @countries[code]
+              raise "Country not found: #{code}" if country.nil?
+
+              location = TZDataLocation.new(location_str)
+
+              zone = @zones[zone_name]
+              raise "Zone not found: #{zone_name}" if zone.nil?
+
+              description = nil if description == ''
+
+              country.add_zone(TZDataCountryTimezone.new(zone, description, location))
+            end
           end
-        }
+        end
       end
       
       # Writes a country index file.
@@ -300,9 +336,10 @@ module TZInfo
         dir = @output_dir + File::SEPARATOR + 'indexes'      
         FileUtils.mkdir_p(dir)
         
-        File.open(dir + File::SEPARATOR + 'countries.rb', 'w') {|file|
-          file.binmode
-          
+        open_file(File.join(dir, 'countries.rb'), 'w', :external_encoding => 'UTF-8', :universal_newline => true) do |file|
+          file.puts('# encoding: UTF-8')
+          file.puts('')
+
           file.puts('module TZInfo')
           file.puts('  module Indexes')
           file.puts('    module Countries')
@@ -315,7 +352,7 @@ module TZInfo
           file.puts('    end') # end module Countries                    
           file.puts('  end') # end module Indexes
           file.puts('end') # end module TZInfo
-        }                      
+        end
       end
       
       # Writes a timezone index file.
@@ -323,9 +360,10 @@ module TZInfo
         dir = File.join(@output_dir, 'indexes')
         FileUtils.mkdir_p(dir)
         
-        File.open(File.join(dir, 'timezones.rb'), 'w') do |file|
-          file.binmode
-          
+        open_file(File.join(dir, 'timezones.rb'), 'w', :external_encoding => 'UTF-8', :universal_newline => true) do |file|
+          file.puts('# encoding: UTF-8')
+          file.puts('')
+
           file.puts('module TZInfo')
           file.puts('  module Indexes')
           file.puts('    module Timezones')
@@ -492,6 +530,8 @@ module TZInfo
   #
   # @private
   class TZDataDefinition #:nodoc:
+    include TZDataParserUtils
+
     attr_reader :name
     attr_reader :name_elements
     attr_reader :path_elements
@@ -511,7 +551,7 @@ module TZInfo
       dir = output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + @path_elements.join(File::SEPARATOR)      
       FileUtils.mkdir_p(dir)
       
-      File.open(output_dir + File::SEPARATOR + 'definitions' + File::SEPARATOR + @name_elements.join(File::SEPARATOR) + '.rb', 'w') {|file|
+      open_file(File.join(output_dir, 'definitions', @name_elements.join(File::SEPARATOR)) + '.rb', 'w', :external_encoding => 'UTF-8', :universal_newline => true) do |file|
         file.binmode
         
         def file.indent(by)
@@ -525,7 +565,9 @@ module TZInfo
         def file.puts(s)
           super("#{' ' * (@tz_indent || 0)}#{s}")
         end
-        
+
+        file.puts('# encoding: UTF-8')
+        file.puts('')
         file.puts('module TZInfo')
         file.indent(2)
         file.puts('module Definitions')
@@ -549,7 +591,7 @@ module TZInfo
         file.puts('end') # end module Definitions
         file.indent(-2)        
         file.puts('end') # end module TZInfo
-      }
+      end
     end    
   end
   

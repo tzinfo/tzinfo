@@ -1,3 +1,11 @@
+== Version ?????? (tzdata v2015g) - ???????????
+
+* From version 2015e, the IANA time zone database uses non-ASCII characters in
+  country names. Backport the encoding handling from TZInfo::Data to allow
+  TZInfo 0.3.x to support Ruby 1.9 (which would otherwise fail with an invalid
+  byte sequence error when loading the countries index). Resolves #41.
+
+
 == Version 0.3.45 (tzdata v2015g) - 03-Oct-2015
 
 * Updated to tzdata version 2015g
