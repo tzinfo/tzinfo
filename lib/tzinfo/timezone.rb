@@ -237,7 +237,7 @@ module TZInfo
         parts[0]
       else
         if skip_first_part
-          result = ''
+          result = String.new
         else
           result = parts[0] + ' - '
         end

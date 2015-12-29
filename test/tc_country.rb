@@ -47,7 +47,7 @@ class TCCountry < Minitest::Test
     Country.get('GB')
   
     safe_test do
-      code = 'GB'.taint
+      code = 'GB'.dup.taint
       assert(code.tainted?)
       country = Country.get(code)
       assert_equal('GB', country.code)
@@ -59,14 +59,14 @@ class TCCountry < Minitest::Test
     Country.get('GB')
   
     safe_test do
-      country = Country.get('GB'.taint.freeze)
+      country = Country.get('GB'.dup.taint.freeze)
       assert_equal('GB', country.code)
     end
   end
   
   def test_get_tainted_not_previously_loaded
     safe_test do
-      code = 'GB'.taint
+      code = 'GB'.dup.taint
       assert(code.tainted?)
       country = Country.get(code)
       assert_equal('GB', country.code)
@@ -76,7 +76,7 @@ class TCCountry < Minitest::Test
   
   def test_get_tainted_and_frozen_not_previously_loaded
     safe_test do
-      country = Country.get('GB'.taint.freeze)
+      country = Country.get('GB'.dup.taint.freeze)
       assert_equal('GB', country.code)
     end
   end

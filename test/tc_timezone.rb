@@ -243,7 +243,7 @@ class TCTimezone < Minitest::Test
     Timezone.get('Europe/Andorra')
   
     safe_test do
-      identifier = 'Europe/Andorra'.taint
+      identifier = 'Europe/Andorra'.dup.taint
       assert(identifier.tainted?)
       tz = Timezone.get(identifier)
       assert_equal('Europe/Andorra', tz.identifier)
@@ -255,14 +255,14 @@ class TCTimezone < Minitest::Test
     Timezone.get('Europe/Andorra')
   
     safe_test do
-      tz = Timezone.get('Europe/Andorra'.taint.freeze)
+      tz = Timezone.get('Europe/Andorra'.dup.taint.freeze)
       assert_equal('Europe/Andorra', tz.identifier)
     end
   end
   
   def test_get_tainted_not_previously_loaded
     safe_test do
-      identifier = 'Europe/Andorra'.taint
+      identifier = 'Europe/Andorra'.dup.taint
       assert(identifier.tainted?)
       tz = Timezone.get(identifier)
       assert_equal('Europe/Andorra', tz.identifier)
@@ -272,7 +272,7 @@ class TCTimezone < Minitest::Test
   
   def test_get_tainted_and_frozen_not_previously_loaded
     safe_test do
-      tz = Timezone.get('Europe/Amsterdam'.taint.freeze)
+      tz = Timezone.get('Europe/Amsterdam'.dup.taint.freeze)
       assert_equal('Europe/Amsterdam', tz.identifier)
     end
   end
