@@ -613,7 +613,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_timezone_info_tainted
     safe_test do
-      identifier = 'Europe/Amsterdam'.taint
+      identifier = 'Europe/Amsterdam'.dup.taint
       assert(identifier.tainted?)
       info = @data_source.load_timezone_info(identifier)
       assert_equal('Europe/Amsterdam', info.identifier)
@@ -623,7 +623,7 @@ class TCZoneinfoDataSource < Minitest::Test
   
   def test_load_timezone_info_tainted_and_frozen
     safe_test do
-      info = @data_source.load_timezone_info('Europe/Amsterdam'.taint.freeze)
+      info = @data_source.load_timezone_info('Europe/Amsterdam'.dup.taint.freeze)
       assert_equal('Europe/Amsterdam', info.identifier)
     end
   end
@@ -768,7 +768,7 @@ class TCZoneinfoDataSource < Minitest::Test
   
   def test_load_country_info_tainted
     safe_test do
-      code = 'NL'.taint
+      code = 'NL'.dup.taint
       assert(code.tainted?)
       info = @data_source.load_country_info(code)
       assert_equal('NL', info.code)
@@ -778,7 +778,7 @@ class TCZoneinfoDataSource < Minitest::Test
   
   def test_load_country_info_tainted_and_frozen
     safe_test do
-      info = @data_source.load_country_info('NL'.taint.freeze)
+      info = @data_source.load_country_info('NL'.dup.taint.freeze)
       assert_equal('NL', info.code)
     end
   end
