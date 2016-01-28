@@ -1,3 +1,9 @@
+== Version ?????? (tzdata v2016a) - ??????????
+
+* Updated to tzdata version 2016a
+  (https://mm.icann.org/pipermail/tz-announce/2016-January/000035.html).
+
+
 == Version 0.3.46 (tzdata v2015g) - 2-Dec-2015
 
 * From version 2015e, the IANA time zone database uses non-ASCII characters in
