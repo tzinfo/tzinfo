@@ -1,4 +1,4 @@
-== Version 0.3.46 (tzdata v2015g) - 02-Dec-2015
+== Version 0.3.46 (tzdata v2015g) - 2-Dec-2015
 
 * From version 2015e, the IANA time zone database uses non-ASCII characters in
   country names. Backport the encoding handling from TZInfo::Data to allow
@@ -6,7 +6,7 @@
   byte sequence error when loading the countries index). Resolves #41.
 
 
-== Version 0.3.45 (tzdata v2015g) - 03-Oct-2015
+== Version 0.3.45 (tzdata v2015g) - 3-Oct-2015
 
 * Updated to tzdata version 2015g
   (http://mm.icann.org/pipermail/tz-announce/2015-October/000034.html).
