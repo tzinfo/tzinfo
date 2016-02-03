@@ -1,7 +1,7 @@
 require 'rational' unless defined?(Rational)
 
 module TZInfo
-  
+
   # Provides a method for getting Rationals for a timezone offset in seconds.
   # Pre-reduced rationals are returned for all the half-hour intervals between
   # -14 and +14 hours to avoid having to call gcd at runtime.
@@ -9,7 +9,7 @@ module TZInfo
   # @private
   module OffsetRationals #:nodoc:
     @@rational_cache = {
-      -50400 => RubyCoreSupport.rational_new!(-7,12), 
+      -50400 => RubyCoreSupport.rational_new!(-7,12),
       -48600 => RubyCoreSupport.rational_new!(-9,16),
       -46800 => RubyCoreSupport.rational_new!(-13,24),
       -45000 => RubyCoreSupport.rational_new!(-25,48),
@@ -66,11 +66,11 @@ module TZInfo
        46800 => RubyCoreSupport.rational_new!(13,24),
        48600 => RubyCoreSupport.rational_new!(9,16),
        50400 => RubyCoreSupport.rational_new!(7,12)}.freeze
-    
-    # Returns a Rational expressing the fraction of a day that offset in 
-    # seconds represents (i.e. equivalent to Rational(offset, 86400)). 
+
+    # Returns a Rational expressing the fraction of a day that offset in
+    # seconds represents (i.e. equivalent to Rational(offset, 86400)).
     def rational_for_offset(offset)
-      @@rational_cache[offset] || Rational(offset, 86400)      
+      @@rational_cache[offset] || Rational(offset, 86400)
     end
     module_function :rational_for_offset
   end
