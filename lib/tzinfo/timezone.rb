@@ -1,6 +1,6 @@
 require 'date'
 require 'set'
-require 'thread_safe'
+require 'thread'
 
 module TZInfo
   # AmbiguousTime is raised to indicates that a specified time in a local
@@ -51,6 +51,7 @@ module TZInfo
     #
     # @!visibility private
     @@loaded_zones = nil
+    @@write_barrier = Mutex.new
 
     # Default value of the dst parameter of the local_to_utc and
     # period_for_local methods.
@@ -91,7 +92,9 @@ module TZInfo
         # allowing one Timezone to be loaded at a time.
         info = data_source.load_timezone_info(identifier)
         instance = info.create_timezone
-        @@loaded_zones[instance.identifier] = instance
+        @@write_barrier.synchronize do
+          @@loaded_zones[instance.identifier] = instance
+        end
       end
 
       instance
@@ -634,9 +637,8 @@ module TZInfo
     end
 
     private
-      # Initializes @@loaded_zones.
       def self.init_loaded_zones
-        @@loaded_zones = ThreadSafe::Cache.new
+        @@loaded_zones = Hash.new
       end
       init_loaded_zones
 

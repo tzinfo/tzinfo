@@ -1,4 +1,4 @@
-require 'thread_safe'
+require 'thread'
 
 module TZInfo
   # Raised by Country#get if the code given is not valid.
@@ -28,11 +28,7 @@ module TZInfo
     #
     # @!visibility private
     @@countries = nil
-
-    # Whether the countries index has been loaded yet.
-    #
-    # @!visibility private
-    @@index_loaded = false
+    @@write_barrier = Mutex.new
 
     # Gets a Country by its ISO 3166-1 alpha-2 code. Raises an
     # InvalidCountryCode exception if it couldn't be found.
@@ -49,7 +45,9 @@ module TZInfo
         # allowing one Country to be loaded at a time.
         info = data_source.load_country_info(identifier)
         instance = Country.new(info)
-        @@countries[identifier] = instance
+        @@write_barrier.synchronize do
+          @@countries[identifier] = instance
+        end
       end
 
       instance
@@ -184,7 +182,7 @@ module TZInfo
 
       # Initializes @@countries.
       def self.init_countries
-        @@countries = ThreadSafe::Cache.new
+        @@countries = Hash.new
       end
       init_countries
 
