@@ -14,7 +14,7 @@ module TZInfo
         @linked_timezones = []
       end
     end
-    
+
     # Class methods for inclusion.
     #
     # @private
@@ -24,31 +24,31 @@ module TZInfo
         @timezones << identifier
         @data_timezones << identifier
       end
-      
+
       # Defines a timezone which is a link to another timezone.
       def linked_timezone(identifier)
         @timezones << identifier
         @linked_timezones << identifier
       end
-      
+
       # Returns a frozen array containing the identifiers of all the timezones.
       # Identifiers appear in the order they were defined in the index.
       def timezones
         @timezones.freeze
       end
-      
+
       # Returns a frozen array containing the identifiers of all data timezones.
       # Identifiers appear in the order they were defined in the index.
       def data_timezones
         @data_timezones.freeze
       end
-      
+
       # Returns a frozen array containing the identifiers of all linked
-      # timezones. Identifiers appear in the order they were defined in 
+      # timezones. Identifiers appear in the order they were defined in
       # the index.
       def linked_timezones
         @linked_timezones.freeze
-      end      
+      end
     end
   end
 end
