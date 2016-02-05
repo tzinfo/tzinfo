@@ -2,14 +2,14 @@ require 'date'
 require 'rational' unless defined?(Rational)
 
 module TZInfo
-  
+
   # Methods to support different versions of Ruby.
   #
   # @private
   module RubyCoreSupport #:nodoc:
-  
+
     # Use Rational.new! for performance reasons in Ruby 1.8.
-    # This has been removed from 1.9, but Rational performs better.        
+    # This has been removed from 1.9, but Rational performs better.
     if Rational.respond_to? :new!
       def self.rational_new!(numerator, denominator = 1)
         Rational.new!(numerator, denominator)
@@ -19,7 +19,7 @@ module TZInfo
         Rational(numerator, denominator)
       end
     end
-    
+
     # Ruby 1.8.6 introduced new! and deprecated new0.
     # Ruby 1.9.0 removed new0.
     # Ruby trunk revision 31668 removed the new! method.
@@ -40,11 +40,11 @@ module TZInfo
       def self.datetime_new!(ajd = 0, of = 0, sg = Date::ITALY)
         # Convert from an Astronomical Julian Day number to a civil Julian Day number.
         jd = ajd + of + HALF_DAYS_IN_DAY
-        
+
         # Ruby trunk revision 31862 changed the behaviour of DateTime.jd so that it will no
         # longer accept a fractional civil Julian Day number if further arguments are specified.
         # Calculate the hours, minutes and seconds to pass to jd.
-        
+
         jd_i = jd.to_i
         jd_i -= 1 if jd < 0
         hours = (jd - jd_i) * 24
@@ -52,11 +52,11 @@ module TZInfo
         minutes = (hours - hours_i) * 60
         minutes_i = minutes.to_i
         seconds = (minutes - minutes_i) * 60
-        
+
         DateTime.jd(jd_i, hours_i, minutes_i, seconds, of, sg)
       end
     end
-    
+
     # DateTime in Ruby 1.8.6 doesn't consider times within the 60th second to be
     # valid. When attempting to specify such a DateTime, subtract the fractional
     # part and then add it back later
@@ -72,15 +72,15 @@ module TZInfo
     else
       def self.datetime_new(y=-4712, m=1, d=1, h=0, min=0, s=0, of=0, sg=Date::ITALY)
         DateTime.new(y, m, d, h, min, s, of, sg)
-      end    
-    end    
-    
+      end
+    end
+
     # Returns true if Time on the runtime platform supports Times defined
     # by negative 32-bit timestamps, otherwise false.
     begin
       Time.at(-1)
       Time.at(-2147483648)
-      
+
       def self.time_supports_negative
         true
       end
@@ -89,13 +89,13 @@ module TZInfo
         false
       end
     end
-    
+
     # Returns true if Time on the runtime platform supports Times defined by
     # 64-bit timestamps, otherwise false.
     begin
       Time.at(-2147483649)
       Time.at(2147483648)
-      
+
       def self.time_supports_64bit
         true
       end
@@ -104,7 +104,7 @@ module TZInfo
         false
       end
     end
-    
+
     # Return the result of Time#nsec if it exists, otherwise return the
     # result of Time#usec * 1000.
     if Time.method_defined?(:nsec)
@@ -116,7 +116,7 @@ module TZInfo
         time.usec * 1000
       end
     end
-    
+
     # Call String#force_encoding if this version of Ruby has encoding support
     # otherwise treat as a no-op.
     if String.method_defined?(:force_encoding)
@@ -128,8 +128,8 @@ module TZInfo
         str
       end
     end
-    
-    
+
+
     # Wrapper for File.open that supports passing hash options for specifying
     # encodings on Ruby 1.9+. The options are ignored on earlier versions of
     # Ruby.
