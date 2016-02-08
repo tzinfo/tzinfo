@@ -1,4 +1,4 @@
-require 'thread_safe'
+require 'concurrent/map'
 
 module TZInfo
   # Raised by Country#get if the code given is not valid.
@@ -184,7 +184,7 @@ module TZInfo
 
       # Initializes @@countries.
       def self.init_countries
-        @@countries = ThreadSafe::Cache.new
+        @@countries = Concurrent::Map.new
       end
       init_countries
 
