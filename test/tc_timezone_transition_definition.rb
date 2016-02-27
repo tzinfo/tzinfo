@@ -281,4 +281,17 @@ class TCTimezoneTransitionDefinition < Minitest::Test
         t6.hash)
     end
   end
+
+  def test_new_datetime
+    # Tests for the private new_datetime method. Copied here when
+    # RubyCoreSupport.datetime_new! was eliminated.
+    ttd = TimezoneTransitionDefinition.new(TimezoneOffset.new(3600, 3600, :TDT),
+      TimezoneOffset.new(3600, 0, :TST), 1148949080)
+    assert_equal(DateTime.new(2008,10,5,12,0,0, 0, Date::ITALY), ttd.send(:new_datetime, 2454745))
+    assert_equal(DateTime.new(2008,10,5,20,30,0, 0, Date::ITALY), ttd.send(:new_datetime, Rational(117827777, 48)))
+    assert_equal(DateTime.new(2008,10,6,6,26,21, 0, Date::ITALY), ttd.send(:new_datetime, Rational(70696678127,28800)))
+    assert_equal(DateTime.new(-4712,1,1,12,0,0, 0, Date::ITALY), ttd.send(:new_datetime, 0))
+    assert_equal(DateTime.new(-4713,12,31,23,58,59, 0, Date::ITALY), ttd.send(:new_datetime, Rational(-43261, 86400)))
+    assert_equal(DateTime.new(-4713,12,30,23,58,59, 0, Date::ITALY), ttd.send(:new_datetime, Rational(-129661, 86400)))
+  end
 end

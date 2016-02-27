@@ -17,16 +17,12 @@ module TZInfo
     # Creates a new TimezoneTransitionDefinition with the given offset,
     # previous_offset (both TimezoneOffset instances) and UTC time.
     #
-    # The time can be specified as a timestamp, as a rational to create a
-    # DateTime, or as both.
+    # The time can be specified as a timestamp (seconds since 1970-01-01), as a
+    # rational specifying the Astronomical Julian Day number, or as both.
     #
     # If both a timestamp and rational are given, then the rational will only
     # be used if the timestamp falls outside of the range of Time on the
     # platform being used at runtime.
-    #
-    # DateTimes are created from the rational as follows:
-    #
-    #  RubyCoreSupport.datetime_new!(Rational(numerator, denominator), 0, Date::ITALY)
     def initialize(offset, previous_offset, numerator_or_timestamp, denominator_or_numerator = nil, denominator = nil)
       super(offset, previous_offset)
 
@@ -72,7 +68,7 @@ module TZInfo
           @at = TimeOrDateTime.new(@numerator_or_time)
         else
           r = Rational(@numerator_or_time, @denominator)
-          dt = RubyCoreSupport.datetime_new!(r, 0, Date::ITALY)
+          dt = new_datetime(r)
           @at = TimeOrDateTime.new(dt)
         end
       end
@@ -93,6 +89,30 @@ module TZInfo
     # Returns a hash of this TimezoneTransitionDefinition instance.
     def hash
       @offset.hash ^ @previous_offset.hash ^ @numerator_or_time.hash ^ @denominator.hash
+    end
+
+    private
+
+    # Offset between the Astronomical Julian Day number and civil Julian Day
+    # number.
+    HALF_DAYS_IN_DAY = Rational(1, 2)
+    private_constant :HALF_DAYS_IN_DAY
+
+    # Create a new DateTime from an Astronomical Julian Day number.
+    def new_datetime(ajd)
+      # Convert from an Astronomical Julian Day number to a civil Julian Day
+      # number.
+      jd = ajd + HALF_DAYS_IN_DAY
+
+      jd_i = jd.to_i
+      jd_i -= 1 if jd < 0
+      hours = (jd - jd_i) * 24
+      hours_i = hours.to_i
+      minutes = (hours - hours_i) * 60
+      minutes_i = minutes.to_i
+      seconds = (minutes - minutes_i) * 60
+
+      DateTime.jd(jd_i, hours_i, minutes_i, seconds, 0, Date::ITALY)
     end
   end
 end
