@@ -26,10 +26,7 @@ module TZInfo
     #
     # DateTimes are created from the rational as follows:
     #
-    #  RubyCoreSupport.datetime_new!(RubyCoreSupport.rational_new!(numerator, denominator), 0, Date::ITALY)
-    #
-    # For performance reasons, the numerator and denominator must be specified
-    # in their lowest form.
+    #  RubyCoreSupport.datetime_new!(Rational(numerator, denominator), 0, Date::ITALY)
     def initialize(offset, previous_offset, numerator_or_timestamp, denominator_or_numerator = nil, denominator = nil)
       super(offset, previous_offset)
 
@@ -74,7 +71,7 @@ module TZInfo
         unless @denominator
           @at = TimeOrDateTime.new(@numerator_or_time)
         else
-          r = RubyCoreSupport.rational_new!(@numerator_or_time, @denominator)
+          r = Rational(@numerator_or_time, @denominator)
           dt = RubyCoreSupport.datetime_new!(r, 0, Date::ITALY)
           @at = TimeOrDateTime.new(dt)
         end

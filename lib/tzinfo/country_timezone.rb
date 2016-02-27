@@ -14,8 +14,7 @@ module TZInfo
     class << self
       # Creates a new CountryTimezone with a timezone identifier, latitude,
       # longitude and description. The latitude and longitude are specified as
-      # rationals - a numerator and denominator. For performance reasons, the
-      # numerators and denominators must be specified in their lowest form.
+      # rationals - a numerator and denominator.
       #
       # For use internally within TZInfo.
       #
@@ -35,8 +34,7 @@ module TZInfo
 
     # Creates a new CountryTimezone with a timezone identifier, latitude,
     # longitude and description. The latitude and longitude are specified as
-    # rationals - a numerator and denominator. For performance reasons, the
-    # numerators and denominators must be specified in their lowest form.
+    # rationals - a numerator and denominator.
     #
     # @!visibility private
     def initialize(identifier, latitude_numerator, latitude_denominator,
@@ -79,7 +77,7 @@ module TZInfo
       # calculated multiple times in concurrently executing threads. It is not
       # worth the overhead of locking to ensure that @latitude is only
       # calculated once.
-      @latitude ||= RubyCoreSupport.rational_new!(@latitude_numerator, @latitude_denominator)
+      @latitude ||= Rational(@latitude_numerator, @latitude_denominator)
     end
 
     # The longitude of this timezone in degrees as a Rational.
@@ -88,7 +86,7 @@ module TZInfo
       # calculated multiple times in concurrently executing threads. It is not
       # worth the overhead of locking to ensure that @longitude is only
       # calculated once.
-      @longitude ||= RubyCoreSupport.rational_new!(@longitude_numerator, @longitude_denominator)
+      @longitude ||= Rational(@longitude_numerator, @longitude_denominator)
     end
 
     # Returns true if and only if the given CountryTimezone is equal to the

@@ -8,18 +8,6 @@ module TZInfo
   # @private
   module RubyCoreSupport #:nodoc:
 
-    # Use Rational.new! for performance reasons in Ruby 1.8.
-    # This has been removed from 1.9, but Rational performs better.
-    if Rational.respond_to? :new!
-      def self.rational_new!(numerator, denominator = 1)
-        Rational.new!(numerator, denominator)
-      end
-    else
-      def self.rational_new!(numerator, denominator = 1)
-        Rational(numerator, denominator)
-      end
-    end
-
     # Ruby 1.8.6 introduced new! and deprecated new0.
     # Ruby 1.9.0 removed new0.
     # Ruby trunk revision 31668 removed the new! method.
@@ -35,7 +23,7 @@ module TZInfo
         DateTime.new0(ajd, of, sg)
       end
     else
-      HALF_DAYS_IN_DAY = rational_new!(1, 2)
+      HALF_DAYS_IN_DAY = Rational(1, 2)
 
       def self.datetime_new!(ajd = 0, of = 0, sg = Date::ITALY)
         # Convert from an Astronomical Julian Day number to a civil Julian Day number.
@@ -60,7 +48,7 @@ module TZInfo
     # DateTime in Ruby 1.8.6 doesn't consider times within the 60th second to be
     # valid. When attempting to specify such a DateTime, subtract the fractional
     # part and then add it back later
-    if Date.respond_to?(:valid_time?) && !Date.valid_time?(0, 0, rational_new!(59001, 1000)) # 0:0:59.001
+    if Date.respond_to?(:valid_time?) && !Date.valid_time?(0, 0, Rational(59001, 1000)) # 0:0:59.001
       def self.datetime_new(y=-4712, m=1, d=1, h=0, min=0, s=0, of=0, sg=Date::ITALY)
         if !s.kind_of?(Integer) && s > 59
           dt = DateTime.new(y, m, d, h, min, 59, of, sg)

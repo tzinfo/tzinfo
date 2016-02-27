@@ -5,10 +5,6 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 include TZInfo
 
 class TCRubyCoreSupport < Minitest::Test
-  def test_rational_new!
-    assert_equal(Rational(3,4), RubyCoreSupport.rational_new!(3,4))
-  end
-
   def test_datetime_new!
     assert_equal(DateTime.new(2008,10,5,12,0,0, 0, Date::ITALY), RubyCoreSupport.datetime_new!(2454745,0,2299161))
     assert_equal(DateTime.new(2008,10,5,13,0,0, Rational(1, 24), Date::ITALY), RubyCoreSupport.datetime_new!(2454745,Rational(1, 24),2299161))
