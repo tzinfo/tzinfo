@@ -78,7 +78,7 @@ module TZInfo
         # Avoid using Rational unless necessary.
         u = usec
         s = u == 0 ? sec : Rational(sec * 1000000 + u, 1000000)
-        @datetime = RubyCoreSupport.datetime_new(year, mon, mday, hour, min, s)
+        @datetime = DateTime.new(year, mon, mday, hour, min, s)
       end
 
       @datetime

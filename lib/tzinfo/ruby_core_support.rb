@@ -8,24 +8,6 @@ module TZInfo
   # @private
   module RubyCoreSupport #:nodoc:
 
-    # DateTime in Ruby 1.8.6 doesn't consider times within the 60th second to be
-    # valid. When attempting to specify such a DateTime, subtract the fractional
-    # part and then add it back later
-    if Date.respond_to?(:valid_time?) && !Date.valid_time?(0, 0, Rational(59001, 1000)) # 0:0:59.001
-      def self.datetime_new(y=-4712, m=1, d=1, h=0, min=0, s=0, of=0, sg=Date::ITALY)
-        if !s.kind_of?(Integer) && s > 59
-          dt = DateTime.new(y, m, d, h, min, 59, of, sg)
-          dt + (s - 59) / 86400
-        else
-          DateTime.new(y, m, d, h, min, s, of, sg)
-        end
-      end
-    else
-      def self.datetime_new(y=-4712, m=1, d=1, h=0, min=0, s=0, of=0, sg=Date::ITALY)
-        DateTime.new(y, m, d, h, min, s, of, sg)
-      end
-    end
-
     # Returns true if Time on the runtime platform supports Times defined
     # by negative 32-bit timestamps, otherwise false.
     begin

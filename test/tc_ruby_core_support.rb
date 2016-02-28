@@ -5,14 +5,6 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 include TZInfo
 
 class TCRubyCoreSupport < Minitest::Test
-  def test_datetime_new
-    assert_equal(DateTime.new(2012, 12, 31, 23, 59, 59, 0, Date::ITALY), RubyCoreSupport.datetime_new(2012, 12, 31, 23, 59, 59, 0, Date::ITALY))
-    assert_equal(DateTime.new(2013, 2, 6, 23, 2, 36, Rational(1, 24), Date::ITALY), RubyCoreSupport.datetime_new(2013, 2, 6, 23, 2, 36, Rational(1,24), Date::ITALY))
-
-    assert_equal(DateTime.new(2012, 12, 31, 23, 59, 59, 0, Date::ITALY) + Rational(1, 86400000), RubyCoreSupport.datetime_new(2012, 12, 31, 23, 59, 59 + Rational(1, 1000), 0, Date::ITALY))
-    assert_equal(DateTime.new(2001, 10, 12, 12, 22, 59, Rational(1, 24), Date::ITALY) + Rational(501, 86400000), RubyCoreSupport.datetime_new(2001, 10, 12, 12, 22, 59 + Rational(501, 1000), Rational(1, 24), Date::ITALY))
-  end
-
   def test_time_supports_negative
     if RubyCoreSupport.time_supports_negative
       assert_equal(Time.utc(1969, 12, 31, 23, 59, 59), Time.at(-1).utc)

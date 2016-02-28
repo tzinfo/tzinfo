@@ -546,7 +546,7 @@ class TCTimeOrDateTime < Minitest::Test
     else
       assert_equal(DateTime.new(1969, 12, 31, 23, 59, 59), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0)).add_with_convert(-1).to_orig)
       assert_equal(DateTime.new(1969, 12, 31, 23, 59, 59), TimeOrDateTime.new(0).add_with_convert(-1).to_orig)
-      assert_equal(RubyCoreSupport.datetime_new(1969, 12, 31, 23, 59, 59 + Rational(892,1000)), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0, 892000)).add_with_convert(-1).to_orig)
+      assert_equal(DateTime.new(1969, 12, 31, 23, 59, 59 + Rational(892,1000)), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0, 892000)).add_with_convert(-1).to_orig)
     end
 
     if RubyCoreSupport.time_supports_64bit
