@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2015 Philip Ross
+# Copyright (c) 2005-2016 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -1147,7 +1147,7 @@ module TZInfo
   # @private
   class TZDataFormat #:nodoc:        
     def initialize(spec)
-      if spec =~ /([A-z]+)\/([A-z]+)/
+      if spec =~ /\A([^\/]*)\/(.*)\z/
         @type = :alternate
         @standard_abbrev = $1
         @daylight_abbrev = $2
