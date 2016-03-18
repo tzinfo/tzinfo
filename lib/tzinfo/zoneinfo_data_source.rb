@@ -205,10 +205,10 @@ module TZInfo
             raise InvalidTimezoneIdentifier, e.message
           end
         else
-          raise InvalidTimezoneIdentifier, 'Invalid identifier'
+          raise InvalidTimezoneIdentifier, "Invalid identifier - #{identifier}"
         end
       rescue Errno::ENOENT, Errno::ENAMETOOLONG, Errno::ENOTDIR
-        raise InvalidTimezoneIdentifier, 'Invalid identifier'
+        raise InvalidTimezoneIdentifier, "Invalid identifier - #{identifier}"
       rescue Errno::EACCES => e
         raise InvalidTimezoneIdentifier, e.message
       end

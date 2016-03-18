@@ -358,9 +358,11 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_load_timezone_info_does_not_exist
-    assert_raises(InvalidTimezoneIdentifier) do
+    error = assert_raises(InvalidTimezoneIdentifier) do
       @data_source.load_timezone_info('Nowhere/Special')
     end
+
+    assert_match 'Nowhere/Special', error.message
   end
 
   def test_load_timezone_info_invalid
@@ -370,9 +372,11 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_load_timezone_info_ignored_file
-    assert_raises(InvalidTimezoneIdentifier) do
+    error = assert_raises(InvalidTimezoneIdentifier) do
       @data_source.load_timezone_info('localtime')
     end
+
+    assert_match 'localtime', error.message
   end
 
   def test_load_timezone_info_ignored_plus_version_file
@@ -402,9 +406,11 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_load_timezone_info_case
-    assert_raises(InvalidTimezoneIdentifier) do
+    error = assert_raises(InvalidTimezoneIdentifier) do
       @data_source.load_timezone_info('europe/london')
     end
+
+    assert_match 'europe/london', error.message
   end
 
   def test_load_timezone_info_permission_denied
@@ -581,9 +587,11 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      assert_raises(InvalidTimezoneIdentifier) do
+      error = assert_raises(InvalidTimezoneIdentifier) do
         data_source.load_timezone_info('Zone')
       end
+
+      assert_match 'Zone', error.message
     end
   end
 
@@ -605,9 +613,11 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      assert_raises(InvalidTimezoneIdentifier) do
+      error = assert_raises(InvalidTimezoneIdentifier) do
         data_source.load_timezone_info('Zone')
       end
+
+      assert_match 'Zone', error.message
     end
   end
 

@@ -21,9 +21,11 @@ class TCRubyDataSource < Minitest::Test
   end
 
   def test_load_timezone_info_does_not_exist
-    assert_raises(InvalidTimezoneIdentifier) do
+    error = assert_raises(InvalidTimezoneIdentifier) do
       @data_source.load_timezone_info('Nowhere/Special')
     end
+
+    assert_match 'Nowhere/Special', error.message
   end
 
   def test_load_timezone_info_invalid
@@ -39,9 +41,11 @@ class TCRubyDataSource < Minitest::Test
   end
 
   def test_load_timezone_info_case
-    assert_raises(InvalidTimezoneIdentifier) do
+    error = assert_raises(InvalidTimezoneIdentifier) do
       @data_source.load_timezone_info('europe/london')
     end
+
+    assert_match 'europe/london', error.message
   end
 
   def test_load_timezone_info_plus
@@ -95,9 +99,11 @@ class TCRubyDataSource < Minitest::Test
   end
 
   def test_load_country_info_not_exist
-    assert_raises(InvalidCountryCode) do
+    error = assert_raises(InvalidCountryCode) do
       @data_source.load_country_info('ZZ')
     end
+
+    assert_match 'ZZ', error.message
   end
 
   def test_load_country_info_invalid
