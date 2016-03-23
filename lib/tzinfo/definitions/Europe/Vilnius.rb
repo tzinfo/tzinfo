@@ -45,11 +45,11 @@ module TZInfo
           tz.transition 1987, 9, :o5, 559695600
           tz.transition 1988, 3, :o7, 575420400
           tz.transition 1988, 9, :o5, 591145200
-          tz.transition 1989, 3, :o7, 606870000
-          tz.transition 1989, 9, :o5, 622594800
-          tz.transition 1990, 3, :o7, 638319600
-          tz.transition 1990, 9, :o5, 654649200
-          tz.transition 1991, 3, :o8, 670374000
+          tz.transition 1989, 3, :o8, 606870000
+          tz.transition 1989, 9, :o4, 622598400
+          tz.transition 1990, 3, :o8, 638323200
+          tz.transition 1990, 9, :o4, 654652800
+          tz.transition 1991, 3, :o8, 670377600
           tz.transition 1991, 9, :o4, 686102400
           tz.transition 1992, 3, :o8, 701827200
           tz.transition 1992, 9, :o4, 717552000
