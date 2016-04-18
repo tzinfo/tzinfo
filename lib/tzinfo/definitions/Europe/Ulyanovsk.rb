@@ -40,8 +40,8 @@ module TZInfo
           tz.transition 1991, 3, :o5, 670374000
           tz.transition 1991, 9, :o6, 686102400
           tz.transition 1992, 1, :o1, 695779200
-          tz.transition 1992, 3, :o4, 701812800
-          tz.transition 1992, 9, :o1, 717534000
+          tz.transition 1992, 3, :o4, 701823600
+          tz.transition 1992, 9, :o1, 717548400
           tz.transition 1993, 3, :o4, 733273200
           tz.transition 1993, 9, :o1, 748998000
           tz.transition 1994, 3, :o4, 764722800

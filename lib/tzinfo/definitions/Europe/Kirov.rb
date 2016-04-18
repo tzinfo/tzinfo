@@ -3,17 +3,17 @@
 module TZInfo
   module Definitions
     module Europe
-      module Astrakhan
+      module Kirov
         include TimezoneDefinition
         
-        timezone 'Europe/Astrakhan' do |tz|
-          tz.offset :o0, 11532, 0, :LMT
+        timezone 'Europe/Kirov' do |tz|
+          tz.offset :o0, 11928, 0, :LMT
           tz.offset :o1, 10800, 0, :'+03'
           tz.offset :o2, 14400, 0, :'+04'
           tz.offset :o3, 14400, 3600, :'+05'
           tz.offset :o4, 10800, 3600, :'+04'
           
-          tz.transition 1924, 4, :o1, 17452125839, 7200
+          tz.transition 1919, 6, :o1, 8719705603, 3600
           tz.transition 1930, 6, :o2, 19409187, 8
           tz.transition 1981, 3, :o3, 354916800
           tz.transition 1981, 9, :o2, 370724400
@@ -76,7 +76,6 @@ module TZInfo
           tz.transition 2010, 10, :o1, 1288479600
           tz.transition 2011, 3, :o2, 1301180400
           tz.transition 2014, 10, :o1, 1414274400
-          tz.transition 2016, 3, :o2, 1459033200
         end
       end
     end

@@ -3,17 +3,17 @@
 module TZInfo
   module Definitions
     module Asia
-      module Barnaul
+      module Tomsk
         include TimezoneDefinition
         
-        timezone 'Asia/Barnaul' do |tz|
-          tz.offset :o0, 20100, 0, :LMT
+        timezone 'Asia/Tomsk' do |tz|
+          tz.offset :o0, 20391, 0, :LMT
           tz.offset :o1, 21600, 0, :'+06'
           tz.offset :o2, 25200, 0, :'+07'
           tz.offset :o3, 25200, 3600, :'+08'
           tz.offset :o4, 21600, 3600, :'+07'
           
-          tz.transition 1919, 12, :o1, 697623053, 288
+          tz.transition 1919, 12, :o1, 69762650803, 28800
           tz.transition 1930, 6, :o2, 9704593, 4
           tz.transition 1981, 3, :o3, 354906000
           tz.transition 1981, 9, :o2, 370713600
@@ -45,21 +45,21 @@ module TZInfo
           tz.transition 1994, 3, :o3, 764708400
           tz.transition 1994, 9, :o2, 780433200
           tz.transition 1995, 3, :o3, 796158000
-          tz.transition 1995, 5, :o4, 801590400
-          tz.transition 1995, 9, :o1, 811886400
-          tz.transition 1996, 3, :o4, 828216000
-          tz.transition 1996, 10, :o1, 846360000
-          tz.transition 1997, 3, :o4, 859665600
-          tz.transition 1997, 10, :o1, 877809600
-          tz.transition 1998, 3, :o4, 891115200
-          tz.transition 1998, 10, :o1, 909259200
-          tz.transition 1999, 3, :o4, 922564800
-          tz.transition 1999, 10, :o1, 941313600
-          tz.transition 2000, 3, :o4, 954014400
-          tz.transition 2000, 10, :o1, 972763200
-          tz.transition 2001, 3, :o4, 985464000
-          tz.transition 2001, 10, :o1, 1004212800
-          tz.transition 2002, 3, :o4, 1017518400
+          tz.transition 1995, 9, :o2, 811882800
+          tz.transition 1996, 3, :o3, 828212400
+          tz.transition 1996, 10, :o2, 846356400
+          tz.transition 1997, 3, :o3, 859662000
+          tz.transition 1997, 10, :o2, 877806000
+          tz.transition 1998, 3, :o3, 891111600
+          tz.transition 1998, 10, :o2, 909255600
+          tz.transition 1999, 3, :o3, 922561200
+          tz.transition 1999, 10, :o2, 941310000
+          tz.transition 2000, 3, :o3, 954010800
+          tz.transition 2000, 10, :o2, 972759600
+          tz.transition 2001, 3, :o3, 985460400
+          tz.transition 2001, 10, :o2, 1004209200
+          tz.transition 2002, 3, :o3, 1017514800
+          tz.transition 2002, 4, :o4, 1020193200
           tz.transition 2002, 10, :o1, 1035662400
           tz.transition 2003, 3, :o4, 1048968000
           tz.transition 2003, 10, :o1, 1067112000
@@ -79,7 +79,7 @@ module TZInfo
           tz.transition 2010, 10, :o1, 1288468800
           tz.transition 2011, 3, :o2, 1301169600
           tz.transition 2014, 10, :o1, 1414263600
-          tz.transition 2016, 3, :o2, 1459022400
+          tz.transition 2016, 5, :o2, 1464465600
         end
       end
     end

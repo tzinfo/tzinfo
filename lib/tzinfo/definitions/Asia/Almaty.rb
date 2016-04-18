@@ -8,9 +8,10 @@ module TZInfo
         
         timezone 'Asia/Almaty' do |tz|
           tz.offset :o0, 18468, 0, :LMT
-          tz.offset :o1, 18000, 0, :ALMT
-          tz.offset :o2, 21600, 0, :ALMT
-          tz.offset :o3, 21600, 3600, :ALMST
+          tz.offset :o1, 18000, 0, :'+05'
+          tz.offset :o2, 21600, 0, :'+06'
+          tz.offset :o3, 21600, 3600, :'+07'
+          tz.offset :o4, 18000, 3600, :'+06'
           
           tz.transition 1924, 5, :o1, 1939125829, 800
           tz.transition 1930, 6, :o2, 58227559, 24
@@ -34,8 +35,11 @@ module TZInfo
           tz.transition 1989, 9, :o2, 622584000
           tz.transition 1990, 3, :o3, 638308800
           tz.transition 1990, 9, :o2, 654638400
-          tz.transition 1992, 3, :o3, 701802000
-          tz.transition 1992, 9, :o2, 717523200
+          tz.transition 1991, 3, :o4, 670363200
+          tz.transition 1991, 9, :o1, 686091600
+          tz.transition 1992, 1, :o2, 695768400
+          tz.transition 1992, 3, :o3, 701812800
+          tz.transition 1992, 9, :o2, 717537600
           tz.transition 1993, 3, :o3, 733262400
           tz.transition 1993, 9, :o2, 748987200
           tz.transition 1994, 3, :o3, 764712000
