@@ -90,7 +90,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     abbrevs = offsets.collect {|o| o[:abbrev]}.uniq
 
     if abbrevs.length > 0
-      abbrevs = abbrevs.collect {|a| a.encode('UTF-8')} if abbrevs.first.respond_to?(:encode)
+      abbrevs = abbrevs.collect {|a| a.encode(Encoding::UTF_8)}
 
       if abbrevs.first.respond_to?(:bytesize)
         abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.bytesize + abbrev_separator.bytesize}

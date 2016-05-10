@@ -411,7 +411,7 @@ module TZInfo
       file_is_5_column = false
       zone_tab = []
 
-      RubyCoreSupport.open_file(zone_tab_path, 'r', :external_encoding => 'UTF-8', :internal_encoding => 'UTF-8') do |file|
+      File.open(zone_tab_path, 'r', :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8) do |file|
         file.each_line do |line|
           line.chomp!
 
@@ -455,7 +455,7 @@ module TZInfo
 
       countries = {}
 
-      RubyCoreSupport.open_file(iso3166_tab_path, 'r', :external_encoding => 'UTF-8', :internal_encoding => 'UTF-8') do |file|
+      File.open(iso3166_tab_path, 'r', :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8) do |file|
         file.each_line do |line|
           line.chomp!
 
