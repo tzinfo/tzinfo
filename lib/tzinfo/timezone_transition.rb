@@ -43,7 +43,7 @@ module TZInfo
       # worth the overhead of locking to ensure that @local_end_at is only
       # calculated once.
 
-      @local_end_at = at.add_with_convert(@previous_offset.utc_total_offset) unless @local_end_at
+      @local_end_at = at + @previous_offset.utc_total_offset unless @local_end_at
       @local_end_at
     end
 
@@ -67,7 +67,7 @@ module TZInfo
       # worth the overhead of locking to ensure that @local_start_at is only
       # calculated once.
 
-      @local_start_at = at.add_with_convert(@offset.utc_total_offset) unless @local_start_at
+      @local_start_at = at + @offset.utc_total_offset unless @local_start_at
       @local_start_at
     end
 

@@ -6,28 +6,11 @@ require 'tempfile'
 include TZInfo
 
 class TCZoneinfoTimezoneInfo < Minitest::Test
-
-  begin
-    Time.at(-2147483649)
-    Time.at(2147483648)
-    SUPPORTS_64BIT = true
-  rescue RangeError
-    SUPPORTS_64BIT = false
-  end
-
-  begin
-    Time.at(-1)
-    Time.at(-2147483648)
-    SUPPORTS_NEGATIVE = true
-  rescue ArgumentError
-    SUPPORTS_NEGATIVE = false
-  end
-
   def assert_period(abbreviation, utc_offset, std_offset, dst, start_at, end_at, info)
     if start_at
       period = info.period_for_utc(start_at)
     elsif end_at
-      period = info.period_for_utc(TimeOrDateTime.wrap(end_at).add_with_convert(-1).to_orig)
+      period = info.period_for_utc(end_at - 1)
     else
       # no transitions, pick the epoch
       period = info.period_for_utc(Time.utc(1970, 1, 1))
@@ -320,33 +303,28 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     end
   end
 
-  # These tests can only be run if the platform supports 64-bit Times. When
-  # 64-bit support is unavailable, the second section will not be read, so no
-  # error will be raised.
-  if SUPPORTS_64BIT
-    def test_load_invalid_section2_magic
-      ['TZif4', 'tzif2', '12345'].each do |section2_magic|
-        offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+  def test_load_invalid_section2_magic
+    ['TZif4', 'tzif2', '12345'].each do |section2_magic|
+      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
 
-        tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|
-          assert_raises(InvalidZoneinfoFile) do
-            ZoneinfoTimezoneInfo.new('Zone4', path)
-          end
+      tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|
+        assert_raises(InvalidZoneinfoFile) do
+          ZoneinfoTimezoneInfo.new('Zone4', path)
         end
       end
     end
+  end
 
-    def test_load_mismatched_section2_magic
-      minus_one = Proc.new {|f| f == 2 ? "TZif\0" : "TZif#{f - 1}" }
-      plus_one = Proc.new {|f| "TZif#{f + 1}" }
+  def test_load_mismatched_section2_magic
+    minus_one = Proc.new {|f| f == 2 ? "TZif\0" : "TZif#{f - 1}" }
+    plus_one = Proc.new {|f| "TZif#{f + 1}" }
 
-      [minus_one, plus_one].each do |section2_magic|
-        offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+    [minus_one, plus_one].each do |section2_magic|
+      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
 
-        tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|
-          assert_raises(InvalidZoneinfoFile) do
-            ZoneinfoTimezoneInfo.new('Zone5', path)
-          end
+      tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|
+        assert_raises(InvalidZoneinfoFile) do
+          ZoneinfoTimezoneInfo.new('Zone5', path)
         end
       end
     end
@@ -394,12 +372,6 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   end
 
   def test_load_before_epoch
-    # Some platforms don't support negative timestamps for times before the
-    # epoch. Check that they are returned when supported and skipped when not.
-
-    # Note the last transition before the epoch (and within the 32-bit range) is
-    # moved to the epoch on platforms that do not support negative timestamps.
-
     offsets = [
       {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
       {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
@@ -415,16 +387,9 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     tzif_test(offsets, transitions) do |path, format|
       info = ZoneinfoTimezoneInfo.new('Zone/Negative', path)
       assert_equal('Zone/Negative', info.identifier)
-
-      if SUPPORTS_NEGATIVE
-        assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1948,  1,  2), info)
-        assert_period(:XST,  3600,    0, false, Time.utc(1948,  1,  2), Time.utc(1969,  4, 22), info)
-        assert_period(:XDT,  3600, 3600,  true, Time.utc(1969,  4, 22), Time.utc(1970, 10, 21), info)
-      else
-        assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1970,  1,  1), info)
-        assert_period(:XDT,  3600, 3600,  true, Time.utc(1970,  1,  1), Time.utc(1970, 10, 21), info)
-      end
-
+      assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1948,  1,  2), info)
+      assert_period(:XST,  3600,    0, false, Time.utc(1948,  1,  2), Time.utc(1969,  4, 22), info)
+      assert_period(:XDT,  3600, 3600,  true, Time.utc(1969,  4, 22), Time.utc(1970, 10, 21), info)
       assert_period(:XST,  3600,    0, false, Time.utc(1970, 10, 21), Time.utc(2000, 12, 31), info)
       assert_period(:XNST,    0,    0, false, Time.utc(2000, 12, 31),                    nil, info)
     end
@@ -446,27 +411,17 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     tzif_test(offsets, transitions) do |path, format|
       info = ZoneinfoTimezoneInfo.new('Zone/Negative', path)
       assert_equal('Zone/Negative', info.identifier)
-
-      if SUPPORTS_NEGATIVE
-        assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1948,  1,  2), info)
-        assert_period(:XST,  3600,    0, false, Time.utc(1948,  1,  2), Time.utc(1969,  4, 22), info)
-        assert_period(:XDT,  3600, 3600,  true, Time.utc(1969,  4, 22), Time.utc(1970,  1,  1), info)
-      else
-        assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1970,  1,  1), info)
-      end
-
+      assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1948,  1,  2), info)
+      assert_period(:XST,  3600,    0, false, Time.utc(1948,  1,  2), Time.utc(1969,  4, 22), info)
+      assert_period(:XDT,  3600, 3600,  true, Time.utc(1969,  4, 22), Time.utc(1970,  1,  1), info)
       assert_period(:XST,  3600,    0, false, Time.utc(1970,  1,  1), Time.utc(2000, 12, 31), info)
       assert_period(:XNST,    0,    0, false, Time.utc(2000, 12, 31),                    nil, info)
     end
   end
 
   def test_load_64bit
-    # Some platforms support 64-bit Times, others only 32-bit. The TZif version
-    # 2 and later format contains both 32-bit and 64-bit times.
-
-    # Where 64-bit is supported and a TZif 2 or later file is provided, the
-    # 64-bit times should be used, otherwise the 32-bit information should be
-    # used.
+    # TZif format 2 and later contains both 32-bit and 64-bit times. Where a
+    # TZif 2 or later file is provided, the 64-bit times should be used.
 
     offsets = [
       {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
@@ -484,7 +439,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       info = ZoneinfoTimezoneInfo.new('Zone/SixtyFour', path)
       assert_equal('Zone/SixtyFour', info.identifier)
 
-      if SUPPORTS_64BIT && format >= 2
+      if format >= 2
         assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1850,  1,  2), info)
         assert_period(:XST,  3600,    0, false, Time.utc(1850,  1,  2), Time.utc(2003,  4, 22), info)
         assert_period(:XDT,  3600, 3600,  true, Time.utc(2003,  4, 22), Time.utc(2003, 10, 21), info)
@@ -517,7 +472,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       info = ZoneinfoTimezoneInfo.new('Zone/SixtyFourRange', path)
       assert_equal('Zone/SixtyFourRange', info.identifier)
 
-      if SUPPORTS_64BIT && format >= 2
+      if format >= 2
         # When the full range is supported, the following periods will be defined:
         #assert_period(:LMT,  3542, 0, false, nil,                    Time.at(-2**63).utc,    info)
         #assert_period(:XST,  3600, 0, false, Time.at(-2**63).utc,    Time.utc(2014, 5, 27),  info)
@@ -556,7 +511,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       info = ZoneinfoTimezoneInfo.new('Zone/SupportedSixtyFourRange', path)
       assert_equal('Zone/SupportedSixtyFourRange', info.identifier)
 
-      if SUPPORTS_64BIT && format >= 2
+      if format >= 2
         assert_period(:LMT,  3542, 0, false, nil,                            Time.at(min_timestamp).utc,     info)
         assert_period(:XST,  3600, 0, false, Time.at(min_timestamp).utc,     Time.utc(2014, 5, 27),          info)
         assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),          Time.at(max_timestamp - 1).utc, info)
@@ -582,17 +537,10 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     tzif_test(offsets, transitions) do |path, format|
       info = ZoneinfoTimezoneInfo.new('Zone/ThirtyTwoRange', path)
       assert_equal('Zone/ThirtyTwoRange', info.identifier)
-
-      if SUPPORTS_NEGATIVE
-        assert_period(:LMT,  3542, 0, false, nil,                    Time.at(-2**31).utc,    info)
-        assert_period(:XST,  3600, 0, false, Time.at(-2**31).utc,    Time.utc(2014, 5, 27),  info)
-        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**31 - 1).utc, info)
-        assert_period(:LMT,  3542, 0, false, Time.at(2**31 - 1).utc, nil,                    info)
-      else
-        assert_period(:XST,  3600, 0, false, Time.utc(1970, 1, 1),   Time.utc(2014, 5, 27),  info)
-        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**31 - 1).utc, info)
-        assert_period(:LMT,  3542, 0, false, Time.at(2**31 - 1).utc, nil,                    info)
-      end
+      assert_period(:LMT,  3542, 0, false, nil,                    Time.at(-2**31).utc,    info)
+      assert_period(:XST,  3600, 0, false, Time.at(-2**31).utc,    Time.utc(2014, 5, 27),  info)
+      assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**31 - 1).utc, info)
+      assert_period(:LMT,  3542, 0, false, Time.at(2**31 - 1).utc, nil,                    info)
     end
   end
 

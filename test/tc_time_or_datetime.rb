@@ -81,34 +81,6 @@ class TCTimeOrDateTime < Minitest::Test
     end
   end
 
-  unless RubyCoreSupport.time_supports_64bit
-    # Only define this test for non-64bit platforms. Some 64-bit Rubies support
-    # greater than 64-bit, others support less than the full range. In either
-    # case, times at the far ends of the range are so far in the future or past
-    # that they are not going to turn up in timezone data.
-    def test_initialize_timestamp_supported_range
-      assert_equal((2 ** 31) - 1, TimeOrDateTime.new((2 ** 31) - 1).to_orig)
-
-      assert_raises(RangeError) do
-        TimeOrDateTime.new(2 ** 31)
-      end
-
-      if RubyCoreSupport.time_supports_negative
-        assert_equal(-(2 ** 31), TimeOrDateTime.new(-(2 ** 31)).to_orig)
-
-        assert_raises(RangeError) do
-          TimeOrDateTime.new(-(2 ** 31) - 1)
-        end
-      else
-        assert_equal(0, TimeOrDateTime.new(0).to_orig)
-
-        assert_raises(RangeError) do
-          TimeOrDateTime.new(-1)
-        end
-      end
-    end
-  end
-
   def test_to_time
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).to_time)
@@ -510,56 +482,6 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - (-1)).to_orig)
     assert_equal(1143214324, (TimeOrDateTime.new(1143214323) - (-1)).to_orig)
-  end
-
-  def test_add_with_convert
-    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).add_with_convert(0).to_orig)
-    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721000), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).add_with_convert(0).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).add_with_convert(0).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).add_with_convert(0).to_orig)
-    assert_equal(1143214323, TimeOrDateTime.new(1143214323).add_with_convert(0).to_orig)
-    assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).add_with_convert(1).to_orig)
-    assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).add_with_convert(1).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).add_with_convert(1).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).add_with_convert(1).to_orig)
-    assert_equal(1143214324, TimeOrDateTime.new(1143214323).add_with_convert(1).to_orig)
-    assert_equal(Time.utc(2006, 3, 24, 15, 32, 2), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).add_with_convert(-1).to_orig)
-    assert_equal(Time.utc(2006, 3, 24, 15, 32, 2, 721000), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).add_with_convert(-1).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).add_with_convert(-1).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).add_with_convert(-1).to_orig)
-    assert_equal(1143214322, TimeOrDateTime.new(1143214323).add_with_convert(-1).to_orig)
-
-    if RubyCoreSupport.time_supports_negative
-      assert_equal(Time.utc(1969, 12, 31, 23, 59, 59), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0)).add_with_convert(-1).to_orig)
-      assert_equal(-1, TimeOrDateTime.new(0).add_with_convert(-1).to_orig)
-      assert_equal(Time.utc(1969, 12, 31, 23, 59, 59, 892000), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0, 892000)).add_with_convert(-1).to_orig)
-
-      if RubyCoreSupport.time_supports_64bit
-        assert_equal(Time.utc(1901, 12, 13, 20, 45, 51), TimeOrDateTime.new(Time.utc(1901, 12, 13, 20, 45, 52)).add_with_convert(-1).to_orig)
-        assert_equal(-2147483649, TimeOrDateTime.new(-2147483648).add_with_convert(-1).to_orig)
-        assert_equal(Time.utc(1901, 12, 13, 20, 45, 51, 892000), TimeOrDateTime.new(Time.utc(1901, 12, 13, 20, 45, 52, 892000)).add_with_convert(-1).to_orig)
-      else
-        assert_equal(DateTime.new(1901, 12, 13, 20, 45, 51), TimeOrDateTime.new(Time.utc(1901, 12, 13, 20, 45, 52)).add_with_convert(-1).to_orig)
-        assert_equal(DateTime.new(1901, 12, 13, 20, 45, 51), TimeOrDateTime.new(-2147483648).add_with_convert(-1).to_orig)
-        assert_equal(DateTime.new(1901, 12, 13, 20, 45, 51 + Rational(892,1000)), TimeOrDateTime.new(Time.utc(1901, 12, 13, 20, 45, 52, 892000)).add_with_convert(-1).to_orig)
-      end
-    else
-      assert_equal(DateTime.new(1969, 12, 31, 23, 59, 59), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0)).add_with_convert(-1).to_orig)
-      assert_equal(DateTime.new(1969, 12, 31, 23, 59, 59), TimeOrDateTime.new(0).add_with_convert(-1).to_orig)
-      assert_equal(DateTime.new(1969, 12, 31, 23, 59, 59 + Rational(892,1000)), TimeOrDateTime.new(Time.utc(1970, 1, 1, 0, 0, 0, 892000)).add_with_convert(-1).to_orig)
-    end
-
-    if RubyCoreSupport.time_supports_64bit
-      assert_equal(Time.utc(2038, 1, 19, 3, 14, 8), TimeOrDateTime.new(Time.utc(2038, 1, 19, 3, 14, 7)).add_with_convert(1).to_orig)
-      assert_equal(2147483648, TimeOrDateTime.new(2147483647).add_with_convert(1).to_orig)
-      assert_equal(Time.utc(2038, 1, 19, 3, 14, 8, 892000), TimeOrDateTime.new(Time.utc(2038, 1, 19, 3, 14, 7, 892000)).add_with_convert(1).to_orig)
-    else
-      assert_equal(DateTime.new(2038, 1, 19, 3, 14, 8), TimeOrDateTime.new(Time.utc(2038, 1, 19, 3, 14, 7)).add_with_convert(1).to_orig)
-      assert_equal(DateTime.new(2038, 1, 19, 3, 14, 8), TimeOrDateTime.new(2147483647).add_with_convert(1).to_orig)
-      assert_equal(DateTime.new(2038, 1, 19, 3, 14, 8 + Rational(892,1000)), TimeOrDateTime.new(Time.utc(2038, 1, 19, 3, 14, 7, 892000)).add_with_convert(1).to_orig)
-
-      assert_equal(Time.utc(2038, 1, 19, 3, 14, 7, 892000), TimeOrDateTime.new(Time.utc(2038, 1, 19, 3, 14, 6, 892000)).add_with_convert(1).to_orig)
-    end
   end
 
   def test_wrap_time

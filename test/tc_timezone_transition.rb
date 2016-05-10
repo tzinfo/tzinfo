@@ -134,72 +134,46 @@ class TCTimezoneTransition < Minitest::Test
     assert_equal(Time.utc(2006, 5, 30, 2, 31, 20), t3.local_start_time)
   end
 
-  if RubyCoreSupport.time_supports_negative
-    def test_local_end_at_before_negative_32bit
-      t = TestTimezoneTransition.new(TimezoneOffset.new(-7200, 3600, :TDT),
-        TimezoneOffset.new(-7200, 0, :TST), -2147482800)
+  def test_local_end_at_before_negative_32bit
+    t = TestTimezoneTransition.new(TimezoneOffset.new(-7200, 3600, :TDT),
+      TimezoneOffset.new(-7200, 0, :TST), -2147482800)
 
-      if RubyCoreSupport.time_supports_64bit
-        assert(TimeOrDateTime.new(-2147490000).eql?(t.local_end_at))
-      else
-        assert(TimeOrDateTime.new(DateTime.new(1901, 12, 13, 19, 0, 0)).eql?(t.local_end_at))
-      end
-    end
+    assert(TimeOrDateTime.new(-2147490000).eql?(t.local_end_at))
+  end
 
-    def test_local_start_at_before_negative_32bit
-      t = TestTimezoneTransition.new(TimezoneOffset.new(-7200, 3600, :TDT),
-        TimezoneOffset.new(-7200, 0, :TST), -2147482800)
+  def test_local_start_at_before_negative_32bit
+    t = TestTimezoneTransition.new(TimezoneOffset.new(-7200, 3600, :TDT),
+      TimezoneOffset.new(-7200, 0, :TST), -2147482800)
 
-      if RubyCoreSupport.time_supports_64bit
-        assert(TimeOrDateTime.new(-2147486400).eql?(t.local_start_at))
-      else
-        assert(TimeOrDateTime.new(DateTime.new(1901, 12, 13, 20, 0, 0)).eql?(t.local_start_at))
-      end
-    end
+    assert(TimeOrDateTime.new(-2147486400).eql?(t.local_start_at))
   end
 
   def test_local_end_at_before_epoch
     t = TestTimezoneTransition.new(TimezoneOffset.new(-7200, 3600, :TDT),
       TimezoneOffset.new(-7200, 0, :TST), 1800)
 
-    if RubyCoreSupport.time_supports_negative
-      assert(TimeOrDateTime.new(-5400).eql?(t.local_end_at))
-    else
-      assert(TimeOrDateTime.new(DateTime.new(1969, 12, 31, 22, 30, 0)).eql?(t.local_end_at))
-    end
+    assert(TimeOrDateTime.new(-5400).eql?(t.local_end_at))
   end
 
   def test_local_start_at_before_epoch
     t = TestTimezoneTransition.new(TimezoneOffset.new(-7200, 3600, :TDT),
       TimezoneOffset.new(-7200, 0, :TST), 1800)
 
-    if RubyCoreSupport.time_supports_negative
-      assert(TimeOrDateTime.new(-1800).eql?(t.local_start_at))
-    else
-      assert(TimeOrDateTime.new(DateTime.new(1969, 12, 31, 23, 30, 0)).eql?(t.local_start_at))
-    end
+    assert(TimeOrDateTime.new(-1800).eql?(t.local_start_at))
   end
 
   def test_local_end_at_after_32bit
     t = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 2147482800)
 
-    if RubyCoreSupport.time_supports_64bit
-      assert(TimeOrDateTime.new(2147486400).eql?(t.local_end_at))
-    else
-      assert(TimeOrDateTime.new(DateTime.new(2038, 1, 19, 4, 0, 0)).eql?(t.local_end_at))
-    end
+    assert(TimeOrDateTime.new(2147486400).eql?(t.local_end_at))
   end
 
   def test_local_start_at_after_32bit
     t = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 2147482800)
 
-    if RubyCoreSupport.time_supports_64bit
-      assert(TimeOrDateTime.new(2147490000).eql?(t.local_start_at))
-    else
-      assert(TimeOrDateTime.new(DateTime.new(2038, 1, 19, 5, 0, 0)).eql?(t.local_start_at))
-    end
+    assert(TimeOrDateTime.new(2147490000).eql?(t.local_start_at))
   end
 
   def test_equality_timestamp

@@ -100,7 +100,7 @@ module TZInfo
           raise InvalidZoneinfoFile, "The file '#{file.path}' does not start with the expected header."
         end
 
-        if (version == '2' || version == '3') && RubyCoreSupport.time_supports_64bit
+        if version == '2' || version == '3'
           # Skip the first 32-bit section and read the header of the second 64-bit section
           file.seek(timecnt * 5 + typecnt * 6 + charcnt + leapcnt * 8 + ttisgmtcnt + ttisstdcnt, IO::SEEK_CUR)
 
@@ -206,25 +206,6 @@ module TZInfo
 
         offsets.each_with_index do |o, i|
           offset i, o[:utc_offset], o[:std_offset], o[:abbr].untaint.to_sym unless i == first
-        end
-
-        if !using_64bit && !RubyCoreSupport.time_supports_negative
-          # Filter out transitions that are not supported by Time on this
-          # platform.
-
-          # Move the last transition before the epoch up to the epoch. This
-          # allows for accurate conversions for all supported timestamps on the
-          # platform.
-
-          before_epoch, after_epoch = transitions.partition {|t| t[:at] < 0}
-
-          if before_epoch.length > 0 && after_epoch.length > 0 && after_epoch.first[:at] != 0
-            last_before = before_epoch.last
-            last_before[:at] = 0
-            transitions = [last_before] + after_epoch
-          else
-            transitions = after_epoch
-          end
         end
 
         # Ignore transitions that occur outside of a defined window. The

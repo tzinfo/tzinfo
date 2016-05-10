@@ -11,9 +11,6 @@ module TZInfo
     # Constructs a new TimeOrDateTime. timeOrDateTime can be a Time, DateTime
     # or Integer. If using a Time or DateTime, any time zone information
     # is ignored.
-    #
-    # Integer timestamps must be within the range supported by Time on the
-    # platform being used.
     def initialize(timeOrDateTime)
       @time = nil
       @datetime = nil
@@ -34,11 +31,6 @@ module TZInfo
         @orig = @datetime
       else
         @timestamp = timeOrDateTime.to_i
-
-        if !RubyCoreSupport.time_supports_64bit && (@timestamp > 2147483647 || @timestamp < -2147483648 || (@timestamp < 0 && !RubyCoreSupport.time_supports_negative))
-          raise RangeError, 'Timestamp is outside the supported range of Time on this platform'
-        end
-
         @orig = @timestamp
       end
     end
@@ -261,30 +253,6 @@ module TZInfo
     # range for Times, then an exception will be raised by the Time class.
     def -(seconds)
       self + (-seconds)
-    end
-
-    # Similar to the + operator, but converts to a DateTime based TimeOrDateTime
-    # where the  Time or Integer timestamp to go out of the allowed range for a
-    # Time, converts to a DateTime based TimeOrDateTime.
-    #
-    # Note that the range of Time varies based on the platform.
-    def add_with_convert(seconds)
-      if seconds == 0
-        self
-      else
-        if @orig.is_a?(DateTime)
-          TimeOrDateTime.new(@orig + OffsetRationals.rational_for_offset(seconds))
-        else
-          # A Time or timestamp.
-          result = to_i + seconds
-
-          if ((result > 2147483647 || result < -2147483648) && !RubyCoreSupport.time_supports_64bit) || (result < 0 && !RubyCoreSupport.time_supports_negative)
-            result = TimeOrDateTime.new(to_datetime + OffsetRationals.rational_for_offset(seconds))
-          else
-            result = TimeOrDateTime.new(@orig + seconds)
-          end
-        end
-      end
     end
 
     # Returns true if todt represents the same time and was originally

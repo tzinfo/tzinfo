@@ -20,9 +20,9 @@ module TZInfo
     # The time can be specified as a timestamp (seconds since 1970-01-01), as a
     # rational specifying the Astronomical Julian Day number, or as both.
     #
-    # If both a timestamp and rational are given, then the rational will only
-    # be used if the timestamp falls outside of the range of Time on the
-    # platform being used at runtime.
+    # If both a timestamp and rational are given, then the timestamp will be
+    # used. Earlier versions would use the rational when the timestamp fell
+    # outside of the range of Time on the platform being used at runtime.
     def initialize(offset, previous_offset, numerator_or_timestamp, denominator_or_numerator = nil, denominator = nil)
       super(offset, previous_offset)
 
@@ -39,18 +39,12 @@ module TZInfo
         timestamp = numerator_or_timestamp
       end
 
-      # Determine whether to use the timestamp or the numerator and denominator.
-      if numerator && (
-        !timestamp ||
-        (timestamp < 0 && !RubyCoreSupport.time_supports_negative) ||
-        ((timestamp < -2147483648 || timestamp > 2147483647) && !RubyCoreSupport.time_supports_64bit)
-        )
-
-        @numerator_or_time = numerator
-        @denominator = denominator
-      else
+      if timestamp
         @numerator_or_time = timestamp
         @denominator = nil
+      else
+        @numerator_or_time = numerator
+        @denominator = denominator
       end
 
       @at = nil

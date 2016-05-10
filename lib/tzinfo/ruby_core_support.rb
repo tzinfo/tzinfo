@@ -8,36 +8,6 @@ module TZInfo
   # @private
   module RubyCoreSupport #:nodoc:
 
-    # Returns true if Time on the runtime platform supports Times defined
-    # by negative 32-bit timestamps, otherwise false.
-    begin
-      Time.at(-1)
-      Time.at(-2147483648)
-
-      def self.time_supports_negative
-        true
-      end
-    rescue ArgumentError
-      def self.time_supports_negative
-        false
-      end
-    end
-
-    # Returns true if Time on the runtime platform supports Times defined by
-    # 64-bit timestamps, otherwise false.
-    begin
-      Time.at(-2147483649)
-      Time.at(2147483648)
-
-      def self.time_supports_64bit
-        true
-      end
-    rescue RangeError
-      def self.time_supports_64bit
-        false
-      end
-    end
-
     # Return the result of Time#nsec if it exists, otherwise return the
     # result of Time#usec * 1000.
     if Time.method_defined?(:nsec)

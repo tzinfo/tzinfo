@@ -5,31 +5,6 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 include TZInfo
 
 class TCRubyCoreSupport < Minitest::Test
-  def test_time_supports_negative
-    if RubyCoreSupport.time_supports_negative
-      assert_equal(Time.utc(1969, 12, 31, 23, 59, 59), Time.at(-1).utc)
-    else
-      assert_raises(ArgumentError) do
-        Time.at(-1)
-      end
-    end
-  end
-
-  def test_time_supports_64_bit
-    if RubyCoreSupport.time_supports_64bit
-      assert_equal(Time.utc(1901, 12, 13, 20, 45, 51), Time.at(-2147483649).utc)
-      assert_equal(Time.utc(2038, 1, 19, 3, 14, 8), Time.at(2147483648).utc)
-    else
-      assert_raises(RangeError) do
-        Time.at(-2147483649)
-      end
-
-      assert_raises(RangeError) do
-        Time.at(2147483648)
-      end
-    end
-  end
-
   def test_time_nsec
     t = Time.utc(2013, 2, 6, 21, 56, 23, 567890 + Rational(123,1000))
 

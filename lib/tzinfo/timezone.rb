@@ -511,9 +511,7 @@ module TZInfo
           # However, any time earlier than utc_to can be used.
 
           # Subtract 1 hour (since this is one of the cached OffsetRationals).
-          # Use add_with_convert so that conversion to DateTime is performed if
-          # required.
-          period = period_for_utc(utc_to.add_with_convert(-3600))
+          period = period_for_utc(utc_to - 3600)
         end
 
         [period.offset]

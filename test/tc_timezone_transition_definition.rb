@@ -42,33 +42,21 @@ class TCTimezoneTransitionDefinition < Minitest::Test
     t = TimezoneTransitionDefinition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), -2147483649, 69573092117, 28800)
 
-    if RubyCoreSupport.time_supports_negative && RubyCoreSupport.time_supports_64bit
-      assert(TimeOrDateTime.new(-2147483649).eql?(t.at))
-    else
-      assert(TimeOrDateTime.new(DateTime.new(1901, 12, 13, 20, 45, 51)).eql?(t.at))
-    end
+    assert(TimeOrDateTime.new(-2147483649).eql?(t.at))
   end
 
   def test_at_before_epoch
     t = TimezoneTransitionDefinition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), -1, 210866759999, 86400)
 
-    if RubyCoreSupport.time_supports_negative
-      assert(TimeOrDateTime.new(-1).eql?(t.at))
-    else
-      assert(TimeOrDateTime.new(DateTime.new(1969, 12, 31, 23, 59, 59)).eql?(t.at))
-    end
+    assert(TimeOrDateTime.new(-1).eql?(t.at))
   end
 
   def test_at_after_32bit
     t = TimezoneTransitionDefinition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 2147483648, 3328347557, 1350)
 
-    if RubyCoreSupport.time_supports_64bit
-      assert(TimeOrDateTime.new(2147483648).eql?(t.at))
-    else
-      assert(TimeOrDateTime.new(DateTime.new(2038, 1, 19, 3, 14, 8)).eql?(t.at))
-    end
+    assert(TimeOrDateTime.new(2147483648).eql?(t.at))
   end
 
   def test_eql_timestamp
@@ -161,18 +149,10 @@ class TCTimezoneTransitionDefinition < Minitest::Test
 
     assert_equal(true, t1.eql?(t1))
     assert_equal(true, t1.eql?(t2))
-
-    if RubyCoreSupport.time_supports_negative && RubyCoreSupport.time_supports_64bit
-      assert_equal(true, t1.eql?(t3))
-      assert_equal(false, t1.eql?(t4))
-      assert_equal(true, t3.eql?(t1))
-      assert_equal(false, t4.eql?(t1))
-    else
-      assert_equal(false, t1.eql?(t3))
-      assert_equal(true, t1.eql?(t4))
-      assert_equal(false, t3.eql?(t1))
-      assert_equal(true, t4.eql?(t1))
-    end
+    assert_equal(true, t1.eql?(t3))
+    assert_equal(false, t1.eql?(t4))
+    assert_equal(true, t3.eql?(t1))
+    assert_equal(false, t4.eql?(t1))
   end
 
   def test_eql_timestamp_and_datetime_before_epoch
@@ -187,18 +167,10 @@ class TCTimezoneTransitionDefinition < Minitest::Test
 
     assert_equal(true, t1.eql?(t1))
     assert_equal(true, t1.eql?(t2))
-
-    if RubyCoreSupport.time_supports_negative
-      assert_equal(true, t1.eql?(t3))
-      assert_equal(false, t1.eql?(t4))
-      assert_equal(true, t3.eql?(t1))
-      assert_equal(false, t4.eql?(t1))
-    else
-      assert_equal(false, t1.eql?(t3))
-      assert_equal(true, t1.eql?(t4))
-      assert_equal(false, t3.eql?(t1))
-      assert_equal(true, t4.eql?(t1))
-    end
+    assert_equal(true, t1.eql?(t3))
+    assert_equal(false, t1.eql?(t4))
+    assert_equal(true, t3.eql?(t1))
+    assert_equal(false, t4.eql?(t1))
   end
 
   def test_eql_timestamp_and_datetime_after_32bit
@@ -213,18 +185,10 @@ class TCTimezoneTransitionDefinition < Minitest::Test
 
     assert_equal(true, t1.eql?(t1))
     assert_equal(true, t1.eql?(t2))
-
-    if RubyCoreSupport.time_supports_64bit
-      assert_equal(true, t1.eql?(t3))
-      assert_equal(false, t1.eql?(t4))
-      assert_equal(true, t3.eql?(t1))
-      assert_equal(false, t4.eql?(t1))
-    else
-      assert_equal(false, t1.eql?(t3))
-      assert_equal(true, t1.eql?(t4))
-      assert_equal(false, t3.eql?(t1))
-      assert_equal(true, t4.eql?(t1))
-    end
+    assert_equal(true, t1.eql?(t3))
+    assert_equal(false, t1.eql?(t4))
+    assert_equal(true, t3.eql?(t1))
+    assert_equal(false, t4.eql?(t1))
   end
 
   def test_hash
@@ -250,36 +214,15 @@ class TCTimezoneTransitionDefinition < Minitest::Test
     assert_equal(TimezoneOffset.new(3600, 3600, :TDT).hash ^
       TimezoneOffset.new(3600, 0, :TST).hash ^ 1148949080.hash ^ nil.hash,
       t3.hash)
-
-    if RubyCoreSupport.time_supports_negative && RubyCoreSupport.time_supports_64bit
-      assert_equal(TimezoneOffset.new(3600, 3600, :TDT).hash ^
-        TimezoneOffset.new(3600, 0, :TST).hash ^ -2147483649.hash ^ nil.hash,
-        t4.hash)
-    else
-      assert_equal(TimezoneOffset.new(3600, 3600, :TDT).hash ^
-        TimezoneOffset.new(3600, 0, :TST).hash ^ 69573092117.hash ^ 28800.hash,
-        t4.hash)
-    end
-
-    if RubyCoreSupport.time_supports_negative
-      assert_equal(TimezoneOffset.new(3600, 3600, :TDT).hash ^
-        TimezoneOffset.new(3600, 0, :TST).hash ^ -1.hash ^ nil.hash,
-        t5.hash)
-    else
-      assert_equal(TimezoneOffset.new(3600, 3600, :TDT).hash ^
-        TimezoneOffset.new(3600, 0, :TST).hash ^ 210866759999.hash ^ 86400.hash,
-        t5.hash)
-    end
-
-    if RubyCoreSupport.time_supports_64bit
-      assert_equal(TimezoneOffset.new(3600, 3600, :TDT).hash ^
-        TimezoneOffset.new(3600, 0, :TST).hash ^ 2147483648.hash ^ nil.hash,
-        t6.hash)
-    else
-      assert_equal(TimezoneOffset.new(3600, 3600, :TDT).hash ^
-        TimezoneOffset.new(3600, 0, :TST).hash ^ 3328347557.hash ^ 1350.hash,
-        t6.hash)
-    end
+    assert_equal(TimezoneOffset.new(3600, 3600, :TDT).hash ^
+      TimezoneOffset.new(3600, 0, :TST).hash ^ -2147483649.hash ^ nil.hash,
+      t4.hash)
+    assert_equal(TimezoneOffset.new(3600, 3600, :TDT).hash ^
+      TimezoneOffset.new(3600, 0, :TST).hash ^ -1.hash ^ nil.hash,
+      t5.hash)
+    assert_equal(TimezoneOffset.new(3600, 3600, :TDT).hash ^
+      TimezoneOffset.new(3600, 0, :TST).hash ^ 2147483648.hash ^ nil.hash,
+      t6.hash)
   end
 
   def test_new_datetime
