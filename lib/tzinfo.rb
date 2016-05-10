@@ -4,7 +4,6 @@ end
 
 require 'tzinfo/version'
 
-require 'tzinfo/ruby_core_support'
 require 'tzinfo/offset_rationals'
 require 'tzinfo/time_or_datetime'
 
