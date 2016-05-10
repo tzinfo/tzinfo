@@ -20,7 +20,7 @@ module TZInfo
         @time = timeOrDateTime
 
         # Avoid using the slower Rational class unless necessary.
-        nsec = RubyCoreSupport.time_nsec(@time)
+        nsec = @time.nsec
         usec = nsec % 1000 == 0 ? nsec / 1000 : Rational(nsec, 1000)
 
         @time = Time.utc(@time.year, @time.mon, @time.mday, @time.hour, @time.min, @time.sec, usec) unless @time.utc?

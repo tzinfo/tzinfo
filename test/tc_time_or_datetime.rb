@@ -26,14 +26,12 @@ class TCTimeOrDateTime < Minitest::Test
     assert(tdt.to_orig.utc?)
   end
 
-  if Time.utc(2013, 1, 1).respond_to?(:nsec)
-    def test_initialize_time_local_nsec
-      tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)))
-      assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)), tdt.to_time)
-      assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)), tdt.to_orig)
-      assert(tdt.to_time.utc?)
-      assert(tdt.to_orig.utc?)
-    end
+  def test_initialize_time_local_nsec
+    tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)))
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)), tdt.to_time)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(456,1000)), tdt.to_orig)
+    assert(tdt.to_time.utc?)
+    assert(tdt.to_orig.utc?)
   end
 
   def test_initialize_time_utc_local

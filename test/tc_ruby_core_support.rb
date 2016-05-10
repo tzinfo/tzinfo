@@ -5,16 +5,6 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 include TZInfo
 
 class TCRubyCoreSupport < Minitest::Test
-  def test_time_nsec
-    t = Time.utc(2013, 2, 6, 21, 56, 23, 567890 + Rational(123,1000))
-
-    if t.respond_to?(:nsec)
-      assert_equal(567890123, RubyCoreSupport.time_nsec(t))
-    else
-      assert_equal(567890000, RubyCoreSupport.time_nsec(t))
-    end
-  end
-
   def test_force_encoding
     s = [0xC2, 0xA9].pack('c2')
 

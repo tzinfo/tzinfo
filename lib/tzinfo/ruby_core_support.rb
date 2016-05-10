@@ -8,18 +8,6 @@ module TZInfo
   # @private
   module RubyCoreSupport #:nodoc:
 
-    # Return the result of Time#nsec if it exists, otherwise return the
-    # result of Time#usec * 1000.
-    if Time.method_defined?(:nsec)
-      def self.time_nsec(time)
-        time.nsec
-      end
-    else
-      def self.time_nsec(time)
-        time.usec * 1000
-      end
-    end
-
     # Call String#force_encoding if this version of Ruby has encoding support
     # otherwise treat as a no-op.
     if String.method_defined?(:force_encoding)
