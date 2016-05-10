@@ -8,19 +8,6 @@ module TZInfo
   # @private
   module RubyCoreSupport #:nodoc:
 
-    # Call String#force_encoding if this version of Ruby has encoding support
-    # otherwise treat as a no-op.
-    if String.method_defined?(:force_encoding)
-      def self.force_encoding(str, encoding)
-        str.force_encoding(encoding)
-      end
-    else
-      def self.force_encoding(str, encoding)
-        str
-      end
-    end
-
-
     # Wrapper for File.open that supports passing hash options for specifying
     # encodings on Ruby 1.9+. The options are ignored on earlier versions of
     # Ruby.

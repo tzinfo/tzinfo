@@ -169,7 +169,7 @@ module TZInfo
           abbrev_end = abbrev.index("\0", abbrev_start)
           raise InvalidZoneinfoFile, "Missing abbreviation null terminator in file '#{file.path}'" unless abbrev_end
 
-          o[:abbr] = RubyCoreSupport.force_encoding(abbrev[abbrev_start...abbrev_end], 'UTF-8')
+          o[:abbr] = abbrev[abbrev_start...abbrev_end].force_encoding(Encoding::UTF_8)
         end
 
         transitions.each do |t|

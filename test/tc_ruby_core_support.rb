@@ -5,27 +5,6 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 include TZInfo
 
 class TCRubyCoreSupport < Minitest::Test
-  def test_force_encoding
-    s = [0xC2, 0xA9].pack('c2')
-
-    if s.respond_to?(:force_encoding)
-      # Ruby 1.9+ - should call String#force_encoding
-      assert_equal('ASCII-8BIT', s.encoding.name)
-      assert_equal(2, s.bytesize)
-      result = RubyCoreSupport.force_encoding(s, 'UTF-8')
-      assert_same(s, result)
-      assert_equal('UTF-8', s.encoding.name)
-      assert_equal(2, s.bytesize)
-      assert_equal(1, s.length)
-      assert_equal('©', s)
-    else
-      # Ruby 1.8 - no-op
-      result = RubyCoreSupport.force_encoding(s, 'UTF-8')
-      assert_same(s, result)
-      assert_equal('©', s)
-    end
-  end
-
   begin
     SUPPORTS_ENCODING = !!Encoding
   rescue NameError
