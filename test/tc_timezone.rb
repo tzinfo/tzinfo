@@ -205,15 +205,13 @@ class TCTimezone < Minitest::Test
   end
 
   def test_get_not_exist
-    error = assert_raises(InvalidTimezoneIdentifier) do
-      Timezone.get('Nowhere/Special')
-    end
-
-    assert_match 'Nowhere/Special', error.message
+    error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get('Nowhere/Special') }
+    assert_match(/\bNowhere\/Special/, error.message)
   end
 
   def test_get_invalid
-    assert_raises(InvalidTimezoneIdentifier) { Timezone.get('../Definitions/UTC') }
+    error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get('../Definitions/UTC') }
+    assert_match(/\W\.\.\/Definitions\/UTC\b/, error.message)
   end
 
   def test_get_nil
@@ -223,8 +221,7 @@ class TCTimezone < Minitest::Test
   def test_get_case
     Timezone.get('Europe/Prague')
     error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get('Europe/prague') }
-
-    assert_match 'Europe/prague', error.message
+    assert_match(/\bEurope\/prague\b/, error.message)
   end
 
   def test_get_proxy_valid
@@ -323,7 +320,8 @@ class TCTimezone < Minitest::Test
   end
 
   def test_new_arg_not_exist
-    assert_raises(InvalidTimezoneIdentifier) { Timezone.new('Nowhere/Special') }
+    error = assert_raises(InvalidTimezoneIdentifier) { Timezone.new('Nowhere/Special') }
+    assert_match(/\bNowhere\/Special\b/, error.message)
   end
 
   def test_all

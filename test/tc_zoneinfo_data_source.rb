@@ -362,13 +362,15 @@ class TCZoneinfoDataSource < Minitest::Test
       @data_source.load_timezone_info('Nowhere/Special')
     end
 
-    assert_match 'Nowhere/Special', error.message
+    assert_match(/\bNowhere\/Special\b/, error.message)
   end
 
   def test_load_timezone_info_invalid
-    assert_raises(InvalidTimezoneIdentifier) do
+    error = assert_raises(InvalidTimezoneIdentifier) do
       @data_source.load_timezone_info('../Definitions/Europe/London')
     end
+
+    assert_match(/\W\.\.\/Definitions\/Europe\/London\b/, error.message)
   end
 
   def test_load_timezone_info_ignored_file
@@ -376,7 +378,7 @@ class TCZoneinfoDataSource < Minitest::Test
       @data_source.load_timezone_info('localtime')
     end
 
-    assert_match 'localtime', error.message
+    assert_match(/\blocaltime\b/, error.message)
   end
 
   def test_load_timezone_info_ignored_plus_version_file
@@ -393,9 +395,11 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      assert_raises(InvalidTimezoneIdentifier) do
+      error = assert_raises(InvalidTimezoneIdentifier) do
         data_source.load_timezone_info('+VERSION')
       end
+
+      assert_match(/\W\+VERSION/, error.message)
     end
   end
 
@@ -410,7 +414,7 @@ class TCZoneinfoDataSource < Minitest::Test
       @data_source.load_timezone_info('europe/london')
     end
 
-    assert_match 'europe/london', error.message
+    assert_match(/\beurope\/london/, error.message)
   end
 
   def test_load_timezone_info_permission_denied
@@ -424,9 +428,11 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      assert_raises(InvalidTimezoneIdentifier) do
+      error = assert_raises(InvalidTimezoneIdentifier) do
         data_source.load_timezone_info('UTC')
       end
+
+      assert_match(/\bUTC\b/, error.message)
     end
   end
 
@@ -440,9 +446,11 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      assert_raises(InvalidTimezoneIdentifier) do
+      error = assert_raises(InvalidTimezoneIdentifier) do
         data_source.load_timezone_info('Subdir')
       end
+
+      assert_match(/\bSubdir\b/, error.message)
     end
   end
 
@@ -591,7 +599,7 @@ class TCZoneinfoDataSource < Minitest::Test
         data_source.load_timezone_info('Zone')
       end
 
-      assert_match 'Zone', error.message
+      assert_match(/\bZone\b/, error.message)
     end
   end
 
@@ -617,7 +625,7 @@ class TCZoneinfoDataSource < Minitest::Test
         data_source.load_timezone_info('Zone')
       end
 
-      assert_match 'Zone', error.message
+      assert_match(/\bZone\b/, error.message)
     end
   end
 
@@ -753,15 +761,19 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_load_country_info_not_exist
-    assert_raises(InvalidCountryCode) do
+    error = assert_raises(InvalidCountryCode) do
       @data_source.load_country_info('ZZ')
     end
+
+    assert_match(/\bZZ\b/, error.message)
   end
 
   def test_load_country_info_invalid
-    assert_raises(InvalidCountryCode) do
+    error = assert_raises(InvalidCountryCode) do
       @data_source.load_country_info('../Countries/GB')
     end
+
+    assert_match(/\W\.\.\/Countries\/GB\b/, error.message)
   end
 
   def test_load_country_info_nil
@@ -771,9 +783,11 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_load_country_info_case
-    assert_raises(InvalidCountryCode) do
+    error = assert_raises(InvalidCountryCode) do
       @data_source.load_country_info('gb')
     end
+
+    assert_match(/\bgb\b/, error.message)
   end
 
   def test_load_country_info_tainted

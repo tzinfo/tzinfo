@@ -20,27 +20,22 @@ class TCCountry < Minitest::Test
   end
 
   def test_get_not_exist
-    assert_raises(InvalidCountryCode) {
-      Country.get('ZZ')
-    }
+    error = assert_raises(InvalidCountryCode) { Country.get('ZZ') }
+    assert_match(/\bZZ\b/, error.message)
   end
 
   def test_get_invalid
-    assert_raises(InvalidCountryCode) {
-      Country.get('../Countries/GB')
-    }
+    error = assert_raises(InvalidCountryCode) { Country.get('../Countries/GB') }
+    assert_match(/\W\.\.\/Countries\/GB\b/, error.message)
   end
 
   def test_get_nil
-    assert_raises(InvalidCountryCode) {
-      Country.get(nil)
-    }
+    assert_raises(InvalidCountryCode) { Country.get(nil) }
   end
 
   def test_get_case
-    assert_raises(InvalidCountryCode) {
-      Country.get('gb')
-    }
+    error = assert_raises(InvalidCountryCode) { Country.get('gb') }
+    assert_match(/\bgb\b/, error.message)
   end
 
   def test_get_tainted_loaded
@@ -82,9 +77,7 @@ class TCCountry < Minitest::Test
   end
 
   def test_new_nil
-    assert_raises(InvalidCountryCode) {
-      Country.new(nil)
-    }
+    assert_raises(InvalidCountryCode) { Country.new(nil) }
   end
 
   def test_new_arg
@@ -93,9 +86,8 @@ class TCCountry < Minitest::Test
   end
 
   def test_new_arg_not_exist
-    assert_raises(InvalidCountryCode) {
-      Country.new('ZZ')
-    }
+    error = assert_raises(InvalidCountryCode) { Country.new('ZZ') }
+    assert_match(/\bZZ\b/, error.message)
   end
 
   def test_all_codes

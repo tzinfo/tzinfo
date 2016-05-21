@@ -202,15 +202,15 @@ module TZInfo
           begin
             ZoneinfoTimezoneInfo.new(identifier, path)
           rescue InvalidZoneinfoFile => e
-            raise InvalidTimezoneIdentifier, e.message
+            raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
           end
         else
-          raise InvalidTimezoneIdentifier, "Invalid identifier - #{identifier}"
+          raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}"
         end
       rescue Errno::ENOENT, Errno::ENAMETOOLONG, Errno::ENOTDIR
-        raise InvalidTimezoneIdentifier, "Invalid identifier - #{identifier}"
+        raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}"
       rescue Errno::EACCES => e
-        raise InvalidTimezoneIdentifier, e.message
+        raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
       end
     end
 
@@ -241,7 +241,7 @@ module TZInfo
     # or the code is invalid.
     def load_country_info(code)
       info = @country_index[code]
-      raise InvalidCountryCode, 'Invalid country code' unless info
+      raise InvalidCountryCode, "Invalid country code: #{code}" unless info
       info
     end
 

@@ -3,19 +3,24 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 include TZInfo
 
 class TCTimezoneProxy < Minitest::Test
+  def assert_raises_invalid_timezone_identifier(identifier)
+    error = assert_raises(InvalidTimezoneIdentifier) { yield }
+    assert_match(Regexp.new('\b' + Regexp.escape(identifier) + '\b'), error.message)
+  end
+
   def test_not_exist
     proxy = TimezoneProxy.new('Nothing/Special')
     assert_equal('Nothing/Special', proxy.identifier)
-    assert_raises(InvalidTimezoneIdentifier) { proxy.now }
-    assert_raises(InvalidTimezoneIdentifier) { proxy.current_period }
-    assert_raises(InvalidTimezoneIdentifier) { proxy.current_period_and_time }
-    assert_raises(InvalidTimezoneIdentifier) { proxy.current_time_and_period }
-    assert_raises(InvalidTimezoneIdentifier) { proxy.utc_to_local(DateTime.new(2006,1,1,0,0,0)) }
-    assert_raises(InvalidTimezoneIdentifier) { proxy.local_to_utc(DateTime.new(2006,1,1,0,0,0)) }
-    assert_raises(InvalidTimezoneIdentifier) { proxy.period_for_utc(DateTime.new(2006,1,1,0,0,0)) }
-    assert_raises(InvalidTimezoneIdentifier) { proxy.period_for_local(DateTime.new(2006,1,1,0,0,0)) }
-    assert_raises(InvalidTimezoneIdentifier) { proxy.canonical_identifier }
-    assert_raises(InvalidTimezoneIdentifier) { proxy.canonical_zone }
+    assert_raises_invalid_timezone_identifier('Nothing/Special') { proxy.now }
+    assert_raises_invalid_timezone_identifier('Nothing/Special') { proxy.current_period }
+    assert_raises_invalid_timezone_identifier('Nothing/Special') { proxy.current_period_and_time }
+    assert_raises_invalid_timezone_identifier('Nothing/Special') { proxy.current_time_and_period }
+    assert_raises_invalid_timezone_identifier('Nothing/Special') { proxy.utc_to_local(DateTime.new(2006,1,1,0,0,0)) }
+    assert_raises_invalid_timezone_identifier('Nothing/Special') { proxy.local_to_utc(DateTime.new(2006,1,1,0,0,0)) }
+    assert_raises_invalid_timezone_identifier('Nothing/Special') { proxy.period_for_utc(DateTime.new(2006,1,1,0,0,0)) }
+    assert_raises_invalid_timezone_identifier('Nothing/Special') { proxy.period_for_local(DateTime.new(2006,1,1,0,0,0)) }
+    assert_raises_invalid_timezone_identifier('Nothing/Special') { proxy.canonical_identifier }
+    assert_raises_invalid_timezone_identifier('Nothing/Special') { proxy.canonical_zone }
   end
 
   def test_valid
