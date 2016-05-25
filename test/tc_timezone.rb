@@ -724,6 +724,7 @@ class TCTimezone < Minitest::Test
       TestTimezoneTransition.new(o2, o1, 1111885200),
       TestTimezoneTransition.new(o1, o2, 1130634000))
 
+    assert_nil(TestTimezone.new('Europe/London', period, [], dt).utc_to_local(nil))
     assert_equal(DateTime.new(2005,6,18,17,24,23), TestTimezone.new('Europe/London', period, [], dt).utc_to_local(dt))
     assert_equal(DateTime.new(2005,6,18,17,24,23), TestTimezone.new('Europe/London', period, [], dt2).utc_to_local(dt2))
     assert_equal(DateTime.new(2005,6,18,17,24,23 + Rational(567,1000)), TestTimezone.new('Europe/London', period, [], dtu).utc_to_local(dtu))

@@ -423,9 +423,11 @@ module TZInfo
     # type as utc. Any timezone information in utc is ignored (it is treated as
     # a UTC time).
     def utc_to_local(utc)
-      TimeOrDateTime.wrap(utc) {|wrapped|
-        period_for_utc(wrapped).to_local(wrapped)
-      }
+      unless utc.nil?
+        TimeOrDateTime.wrap(utc) {|wrapped|
+          period_for_utc(wrapped).to_local(wrapped)
+        }
+      end
     end
 
     # Converts a time in the local timezone to UTC. local can either be
