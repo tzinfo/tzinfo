@@ -11,7 +11,7 @@ module TZInfo
     # Constructs a new TimeOrDateTime. timeOrDateTime can be a Time, DateTime
     # or Integer. If using a Time or DateTime, any time zone information
     # is ignored.
-    def initialize(timeOrDateTime)
+    def initialize(timeOrDateTime, ignore_offset = true)
       @time = nil
       @datetime = nil
       @timestamp = nil
@@ -23,11 +23,11 @@ module TZInfo
         nsec = @time.nsec
         usec = nsec % 1000 == 0 ? nsec / 1000 : Rational(nsec, 1000)
 
-        @time = Time.utc(@time.year, @time.mon, @time.mday, @time.hour, @time.min, @time.sec, usec) unless @time.utc?
+        @time = Time.utc(@time.year, @time.mon, @time.mday, @time.hour, @time.min, @time.sec, usec) unless @time.utc? || !ignore_offset
         @orig = @time
       elsif timeOrDateTime.is_a?(DateTime)
         @datetime = timeOrDateTime
-        @datetime = @datetime.new_offset(0) unless @datetime.offset == 0
+        @datetime = @datetime.new_offset(0) unless @datetime.offset == 0 || !ignore_offset
         @orig = @datetime
       else
         @timestamp = timeOrDateTime.to_i
@@ -253,6 +253,29 @@ module TZInfo
     # range for Times, then an exception will be raised by the Time class.
     def -(seconds)
       self + (-seconds)
+    end
+
+    # Sets offset from UTC for the TimeOrDateTime. Returns a new TimeOrDateTime,
+    # preserving original class. Does NOT changes values of hour-min-second,
+    # so, (18:00 UTC).offset(3600) will became (18:00 +01:00).
+    # Considers original value's UTC offset wisely.
+    def offset(seconds)
+      return self if seconds == 0
+
+      if @orig.is_a?(DateTime)
+        off = OffsetRationals.rational_for_offset(seconds)
+        TimeOrDateTime.new(@orig.new_offset(off), false)
+      elsif @orig.is_a?(Time)
+        offset_str = '%+03i:%02i' % [seconds / 3600, seconds / 60 % 60]
+
+        time = @time + seconds
+        nsec_part = Rational(time.nsec, 1_000_000_000)
+        time = Time.new(time.year, time.mon, time.mday, time.hour, time.min, time.sec + nsec_part, offset_str)
+        TimeOrDateTime.new(time, false)
+      else
+        # Integer: fallback to "just shift timestamp"
+        TimeOrDateTime.new(@orig + seconds)
+      end
     end
 
     # Returns true if todt represents the same time and was originally

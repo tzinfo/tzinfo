@@ -428,6 +428,12 @@ module TZInfo
       }
     end
 
+    def to_local(date_or_time)
+      TimeOrDateTime.wrap(date_or_time, false) {|wrapped|
+        period_for(wrapped).to_local(wrapped)
+      }
+    end
+
     # Converts a time in the local timezone to UTC. local can either be
     # a DateTime, Time or timestamp (Time.to_i). The returned time has the same
     # type as local. Any timezone information in local is ignored (it is treated

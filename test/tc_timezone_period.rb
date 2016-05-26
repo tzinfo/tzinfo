@@ -376,10 +376,10 @@ class TCTimezonePeriod < Minitest::Test
     p2 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, 0, :TEST))
     p3 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(7200, 3600, :TEST))
 
-    assert_equal(DateTime.new(2005,1,19,22,0,0), p1.to_local(DateTime.new(2005,1,20,1,0,0)))
-    assert_equal(DateTime.new(2005,1,19,22,0,0 + Rational(512,1000)), p1.to_local(DateTime.new(2005,1,20,1,0,0 + Rational(512,1000))))
-    assert_equal(Time.utc(2005,1,19,21,0,0), p2.to_local(Time.utc(2005,1,20,1,0,0)))
-    assert_equal(Time.utc(2005,1,19,21,0,0,512000), p2.to_local(Time.utc(2005,1,20,1,0,0,512000)))
+    assert_equal(DateTime.new(2005,1,19,22,0,0, '-3'), p1.to_local(DateTime.new(2005,1,20,1,0,0)))
+    assert_equal(DateTime.new(2005,1,19,22,0,0 + Rational(512,1000), '-3'), p1.to_local(DateTime.new(2005,1,20,1,0,0 + Rational(512,1000))))
+    assert_equal(Time.new(2005,1,19,21,0,0, '-04:00'), p2.to_local(Time.utc(2005,1,20,1,0,0)))
+    assert_equal(Time.new(2005,1,19,21,0,0 + Rational(512,1000), '-04:00'), p2.to_local(Time.utc(2005,1,20,1,0,0,512000)))
     assert_equal(1106193600, p3.to_local(1106182800))
   end
 

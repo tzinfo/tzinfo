@@ -18,6 +18,15 @@ class TCTimeOrDateTime < Minitest::Test
     assert(tdt.to_orig.utc?)
   end
 
+  def test_initialize_time_local_preserve_offset
+    t = Time.new(2006, 3, 24, 15, 32, 3, '+03:00')
+    tdt = TimeOrDateTime.new(t, false)
+    assert_equal(t, tdt.to_time)
+    assert_equal(t, tdt.to_orig)
+    assert(!tdt.to_time.utc?)
+    assert(!tdt.to_orig.utc?)
+  end
+
   def test_intialize_time_local_usec
     tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3, 721123))
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123), tdt.to_time)
@@ -480,6 +489,27 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - (-1)).to_orig)
     assert_equal(1143214324, (TimeOrDateTime.new(1143214323) - (-1)).to_orig)
+  end
+
+  def test_offset
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).offset(0)).to_orig)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).offset(0)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).offset(0)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).offset(0)).to_orig)
+    assert_equal(1143214323, (TimeOrDateTime.new(1143214323).offset(0)).to_orig)
+
+    assert_equal(Time.new(2006, 3, 24, 18, 32, 3, '+03:00'), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).offset(3600*3)).to_orig)
+    assert_equal(Time.new(2006, 3, 24, 18, 32, 3 + Rational(721, 1000), '+03:00'), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).offset(3600*3)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 18, 32, 3, '+3'), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).offset(3600*3)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 18, 32, 3 + Rational(721, 1000), '+3'), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).offset(3600*3)).to_orig)
+    #assert_equal(1143214322, (TimeOrDateTime.new(1143214323).offset(3600*3)).to_orig)
+    #assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
+    #assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) - (-1)).to_orig)
+    #assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
+    #assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - (-1)).to_orig)
+    #assert_equal(1143214324, (TimeOrDateTime.new(1143214323) - (-1)).to_orig)
+
+    # TODO: check what to do if orig is not UTC
   end
 
   def test_wrap_time
