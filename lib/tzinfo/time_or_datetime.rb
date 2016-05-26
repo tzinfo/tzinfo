@@ -301,8 +301,8 @@ module TZInfo
     # TimeOrDateTime. If a TimeOrDateTime is passed in, no new TimeOrDateTime
     # will be constructed and the value passed to wrap will be used when
     # calling the block.
-    def self.wrap(timeOrDateTime)
-      t = timeOrDateTime.is_a?(TimeOrDateTime) ? timeOrDateTime : TimeOrDateTime.new(timeOrDateTime)
+    def self.wrap(timeOrDateTime, ignore_offset = true)
+      t = timeOrDateTime.is_a?(TimeOrDateTime) ? timeOrDateTime : TimeOrDateTime.new(timeOrDateTime, ignore_offset)
 
       if block_given?
         t = yield t

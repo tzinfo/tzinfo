@@ -766,6 +766,35 @@ class TCTimezone < Minitest::Test
     assert(!TestTimezone.new('Europe/London', period, [], tu2).utc_to_local(tu2).utc?)
   end
 
+  def test_to_local
+    dt = DateTime.new(2005,6,18,16,24,23)
+    dt2 = DateTime.new(2005,6,18,16,24,23, '+3')
+    dtu = DateTime.new(2005,6,18,16,24,23 + Rational(567,1000))
+    dtu2 = DateTime.new(2005,6,18,16,24,23 + Rational(567,1000), '+3')
+    t = Time.utc(2005,6,18,16,24,23)
+    t2 = Time.new(2005,6,18,16,24,23, '+03:00')
+    tu = Time.utc(2005,6,18,16,24,23,567000)
+    tu2 = Time.new(2005,6,18,16,24,23 + Rational(567, 1000), '+03:00')
+    ts = t.to_i
+
+    o1 = TimezoneOffset.new(0, 0, :GMT)
+    o2 = TimezoneOffset.new(0, 3600, :BST)
+
+    period = TimezonePeriod.new(
+      TestTimezoneTransition.new(o2, o1, 1111885200),
+      TestTimezoneTransition.new(o1, o2, 1130634000))
+
+    assert_equal(DateTime.new(2005,6,18,17,24,23,'+1'), TestTimezone.new('Europe/London', period, [], dt).to_local(dt))
+    assert_equal(DateTime.new(2005,6,18,14,24,23,'+1'), TestTimezone.new('Europe/London', period, [], dt2).to_local(dt2))
+    assert_equal(DateTime.new(2005,6,18,17,24,23 + Rational(567,1000),'+1'), TestTimezone.new('Europe/London', period, [], dtu).to_local(dtu))
+    assert_equal(DateTime.new(2005,6,18,14,24,23 + Rational(567,1000),'+1'), TestTimezone.new('Europe/London', period, [], dtu2).to_local(dtu2))
+    assert_equal(Time.new(2005,6,18,17,24,23,'+01:00'), TestTimezone.new('Europe/London', period, [], t).to_local(t))
+    assert_equal(Time.new(2005,6,18,14,24,23,'+01:00'), TestTimezone.new('Europe/London', period, [], t2.utc).to_local(t2))
+    assert_equal(Time.new(2005,6,18,17,24,23+Rational(567,1000), '+01:00'), TestTimezone.new('Europe/London', period, [], tu).to_local(tu))
+    assert_equal(Time.new(2005,6,18,14,24,23+Rational(567,1000), '+01:00'), TestTimezone.new('Europe/London', period, [], tu2.utc).to_local(tu2))
+    assert_equal(Time.utc(2005,6,18,17,24,23).to_i, TestTimezone.new('Europe/London', period, [], ts).utc_to_local(ts))
+  end
+
   def test_local_to_utc
     dt = DateTime.new(2005,6,18,16,24,23)
     dt2 = DateTime.new(2005,6,18,16,24,23).new_offset(Rational(5, 24))

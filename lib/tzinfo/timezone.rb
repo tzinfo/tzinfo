@@ -418,6 +418,21 @@ module TZInfo
       end
     end
 
+    def period_for(tm, dst = Timezone.default_dst)
+      tm = tm.to_orig if tm.is_a?(TimeOrDateTime)
+
+      utc = case tm
+      when Time
+        tm.utc
+      when DateTime
+        tm.new_offset(0)
+      else
+        tm
+      end
+
+      period_for_utc(utc)
+    end
+
     # Converts a time in UTC to the local timezone. utc can either be
     # a DateTime, Time or timestamp (Time.to_i). The returned time has the same
     # type as utc. Any timezone information in utc is ignored (it is treated as
