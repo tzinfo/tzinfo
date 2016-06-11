@@ -49,7 +49,10 @@ module TZInfo
         if @timestamp
           @time = Time.at(@timestamp).utc
         else
-          @time = Time.utc(year, mon, mday, hour, min, sec, usec)
+          # Avoid using Rational unless necessary.
+          u = usec
+          s = u == 0 ? sec : Rational(sec * 1000000 + u, 1000000)
+          @time = Time.new(year, mon, mday, hour, min, s, offset)
         end
       end
 
@@ -70,7 +73,7 @@ module TZInfo
         # Avoid using Rational unless necessary.
         u = usec
         s = u == 0 ? sec : Rational(sec * 1000000 + u, 1000000)
-        @datetime = DateTime.new(year, mon, mday, hour, min, s)
+        @datetime = DateTime.new(year, mon, mday, hour, min, s, OffsetRationals.rational_for_offset(offset))
       end
 
       @datetime
@@ -195,6 +198,16 @@ module TZInfo
       end
     end
 
+    def offset
+      if @time
+        @time.utc_offset
+      elsif @datetime
+        (3600*24*@datetime.offset).to_i
+      else
+        0
+      end
+    end
+
     # Compares this TimeOrDateTime with another Time, DateTime, timestamp
     # (Integer) or TimeOrDateTime. Returns -1, 0 or +1 depending
     # whether the receiver is less than, equal to, or greater than
@@ -257,7 +270,7 @@ module TZInfo
 
     # Converts TimeOrDateTime to new UTC offset.
     # Considers original value's UTC offset wisely.
-    def offset(seconds)
+    def to_offset(seconds)
       if @orig.is_a?(DateTime)
         off = OffsetRationals.rational_for_offset(seconds)
         TimeOrDateTime.new(@orig.new_offset(off), false)

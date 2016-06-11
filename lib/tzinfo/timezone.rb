@@ -419,8 +419,8 @@ module TZInfo
     end
 
     def period_for(tm)
-      # FIXME: maybe define TimeOrDateTime#utc as a synonym for #offset(0)?..
-      period_for_utc(TimeOrDateTime.wrap(tm, false).offset(0))
+      # FIXME: maybe define TimeOrDateTime#to_utc as a synonym for #to_offset(0)?..
+      period_for_utc(TimeOrDateTime.wrap(tm, false).to_offset(0))
     end
 
     # Converts a time in UTC to the local timezone. utc can either be
