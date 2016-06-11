@@ -789,9 +789,9 @@ class TCTimezone < Minitest::Test
     assert_equal(DateTime.new(2005,6,18,17,24,23 + Rational(567,1000),'+1'), TestTimezone.new('Europe/London', period, [], dtu).to_local(dtu))
     assert_equal(DateTime.new(2005,6,18,14,24,23 + Rational(567,1000),'+1'), TestTimezone.new('Europe/London', period, [], dtu2).to_local(dtu2))
     assert_equal(Time.new(2005,6,18,17,24,23,'+01:00'), TestTimezone.new('Europe/London', period, [], t).to_local(t))
-    assert_equal(Time.new(2005,6,18,14,24,23,'+01:00'), TestTimezone.new('Europe/London', period, [], t2.utc).to_local(t2))
+    assert_equal(Time.new(2005,6,18,14,24,23,'+01:00'), TestTimezone.new('Europe/London', period, [], t2.getutc).to_local(t2))
     assert_equal(Time.new(2005,6,18,17,24,23+Rational(567,1000), '+01:00'), TestTimezone.new('Europe/London', period, [], tu).to_local(tu))
-    assert_equal(Time.new(2005,6,18,14,24,23+Rational(567,1000), '+01:00'), TestTimezone.new('Europe/London', period, [], tu2.utc).to_local(tu2))
+    assert_equal(Time.new(2005,6,18,14,24,23+Rational(567,1000), '+01:00'), TestTimezone.new('Europe/London', period, [], tu2.getutc).to_local(tu2))
     assert_equal(Time.utc(2005,6,18,17,24,23).to_i, TestTimezone.new('Europe/London', period, [], ts).utc_to_local(ts))
   end
 

@@ -419,18 +419,8 @@ module TZInfo
     end
 
     def period_for(tm)
-      tm = tm.to_orig if tm.is_a?(TimeOrDateTime)
-
-      utc = case tm
-      when Time
-        tm.getutc
-      when DateTime
-        tm.new_offset(0)
-      else
-        tm
-      end
-
-      period_for_utc(utc)
+      # FIXME: maybe define TimeOrDateTime#utc as a synonym for #offset(0)?..
+      period_for_utc(TimeOrDateTime.wrap(tm, false).offset(0))
     end
 
     # Converts a time in UTC to the local timezone. utc can either be
