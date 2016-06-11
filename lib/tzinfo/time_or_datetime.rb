@@ -255,22 +255,16 @@ module TZInfo
       self + (-seconds)
     end
 
-    # Sets offset from UTC for the TimeOrDateTime. Returns a new TimeOrDateTime,
-    # preserving original class. Does NOT changes values of hour-min-second,
-    # so, (18:00 UTC).offset(3600) will became (18:00 +01:00).
+    # Converts TimeOrDateTime to new UTC offset.
     # Considers original value's UTC offset wisely.
     def offset(seconds)
-      return self if seconds == 0
-
       if @orig.is_a?(DateTime)
         off = OffsetRationals.rational_for_offset(seconds)
         TimeOrDateTime.new(@orig.new_offset(off), false)
       elsif @orig.is_a?(Time)
-        offset_str = '%+03i:%02i' % [seconds / 3600, seconds / 60 % 60]
-
-        time = @time + seconds
+        time = @time.getutc + seconds
         nsec_part = Rational(time.nsec, 1_000_000_000)
-        time = Time.new(time.year, time.mon, time.mday, time.hour, time.min, time.sec + nsec_part, offset_str)
+        time = Time.new(time.year, time.mon, time.mday, time.hour, time.min, time.sec + nsec_part, seconds)
         TimeOrDateTime.new(time, false)
       else
         # Integer: fallback to "just shift timestamp"

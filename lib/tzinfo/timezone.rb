@@ -418,12 +418,12 @@ module TZInfo
       end
     end
 
-    def period_for(tm, dst = Timezone.default_dst)
+    def period_for(tm)
       tm = tm.to_orig if tm.is_a?(TimeOrDateTime)
 
       utc = case tm
       when Time
-        tm.utc
+        tm.getutc
       when DateTime
         tm.new_offset(0)
       else

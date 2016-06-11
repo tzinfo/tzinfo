@@ -502,14 +502,13 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(Time.new(2006, 3, 24, 18, 32, 3 + Rational(721, 1000), '+03:00'), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).offset(3600*3)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 18, 32, 3, '+3'), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).offset(3600*3)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 18, 32, 3 + Rational(721, 1000), '+3'), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).offset(3600*3)).to_orig)
-    #assert_equal(1143214322, (TimeOrDateTime.new(1143214323).offset(3600*3)).to_orig)
-    #assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
-    #assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) - (-1)).to_orig)
-    #assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
-    #assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - (-1)).to_orig)
-    #assert_equal(1143214324, (TimeOrDateTime.new(1143214323) - (-1)).to_orig)
+    assert_equal(1143225123, (TimeOrDateTime.new(1143214323).offset(3600*3)).to_orig)
 
-    # TODO: check what to do if orig is not UTC
+    assert_equal(Time.new(2006, 3, 24, 16, 32, 3, '+03:00'), (TimeOrDateTime.new(Time.new(2006, 3, 24, 15, 32, 3, '+02:00'), false).offset(3600*3)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 16, 32, 3, '+3'), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3, '+2'), false).offset(3600*3)).to_orig)
+
+    assert_equal(Time.utc(2006, 3, 24, 13, 32, 3), (TimeOrDateTime.new(Time.new(2006, 3, 24, 15, 32, 3, '+02:00'), false).offset(3600*3)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 13, 32, 3), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3, '+2'), false).offset(3600*3)).to_orig)
   end
 
   def test_wrap_time
