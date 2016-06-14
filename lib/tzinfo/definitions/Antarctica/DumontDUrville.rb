@@ -7,7 +7,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Antarctica/DumontDUrville' do |tz|
-          tz.offset :o0, 0, 0, :zzz
+          tz.offset :o0, 0, 0, :'-00'
           tz.offset :o1, 36000, 0, :PMT
           tz.offset :o2, 36000, 0, :DDUT
           

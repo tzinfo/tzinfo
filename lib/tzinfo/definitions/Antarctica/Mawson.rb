@@ -7,7 +7,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Antarctica/Mawson' do |tz|
-          tz.offset :o0, 0, 0, :zzz
+          tz.offset :o0, 0, 0, :'-00'
           tz.offset :o1, 21600, 0, :MAWT
           tz.offset :o2, 18000, 0, :MAWT
           

@@ -7,7 +7,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Antarctica/Palmer' do |tz|
-          tz.offset :o0, 0, 0, :zzz
+          tz.offset :o0, 0, 0, :'-00'
           tz.offset :o1, -14400, 3600, :ARST
           tz.offset :o2, -14400, 0, :ART
           tz.offset :o3, -10800, 0, :ART

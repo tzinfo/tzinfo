@@ -7,7 +7,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'America/Inuvik' do |tz|
-          tz.offset :o0, 0, 0, :zzz
+          tz.offset :o0, 0, 0, :'-00'
           tz.offset :o1, -28800, 0, :PST
           tz.offset :o2, -28800, 7200, :PDDT
           tz.offset :o3, -25200, 0, :MST

@@ -7,7 +7,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'America/Pangnirtung' do |tz|
-          tz.offset :o0, 0, 0, :zzz
+          tz.offset :o0, 0, 0, :'-00'
           tz.offset :o1, -14400, 0, :AST
           tz.offset :o2, -14400, 3600, :AWT
           tz.offset :o3, -14400, 3600, :APT
