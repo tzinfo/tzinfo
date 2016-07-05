@@ -8,13 +8,10 @@ module TZInfo
         
         timezone 'Asia/Novokuznetsk' do |tz|
           tz.offset :o0, 20928, 0, :LMT
-          tz.offset :o1, 21600, 0, :KRAT
-          tz.offset :o2, 25200, 0, :KRAT
-          tz.offset :o3, 25200, 3600, :KRAST
-          tz.offset :o4, 21600, 3600, :KRAST
-          tz.offset :o5, 21600, 3600, :NOVST
-          tz.offset :o6, 21600, 0, :NOVT
-          tz.offset :o7, 25200, 0, :NOVT
+          tz.offset :o1, 21600, 0, :'+06'
+          tz.offset :o2, 25200, 0, :'+07'
+          tz.offset :o3, 25200, 3600, :'+08'
+          tz.offset :o4, 21600, 3600, :'+07'
           
           tz.transition 1924, 4, :o1, 545378908, 225
           tz.transition 1930, 6, :o2, 9704593, 4
@@ -77,10 +74,9 @@ module TZInfo
           tz.transition 2008, 10, :o2, 1224961200
           tz.transition 2009, 3, :o3, 1238266800
           tz.transition 2009, 10, :o2, 1256410800
-          tz.transition 2010, 3, :o5, 1269716400
-          tz.transition 2010, 10, :o6, 1288468800
-          tz.transition 2011, 3, :o7, 1301169600
-          tz.transition 2014, 10, :o2, 1414263600
+          tz.transition 2010, 3, :o4, 1269716400
+          tz.transition 2010, 10, :o1, 1288468800
+          tz.transition 2011, 3, :o2, 1301169600
         end
       end
     end
