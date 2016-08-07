@@ -198,6 +198,8 @@ module TZInfo
       end
     end
 
+    # Returns utc offset of original value _in seconds_ (or 0 if original
+    # value was integer timestamp).
     def offset
       if @time
         @time.utc_offset
@@ -308,6 +310,12 @@ module TZInfo
     # TimeOrDateTime. If a TimeOrDateTime is passed in, no new TimeOrDateTime
     # will be constructed and the value passed to wrap will be used when
     # calling the block.
+    #
+    # Optional ignore_offset second parameter (defaults to true) controls
+    # whether timezone/UTC offset of input value will be considered or
+    # ignored completely (in a latter case `2016-06-01 12:30:50 +03:00`
+    # and `2016-06-01 12:30:50 GMT` would be wrapped into exactly the
+    # same `TimeOrDateTime` object).
     def self.wrap(timeOrDateTime, ignore_offset = true)
       t = timeOrDateTime.is_a?(TimeOrDateTime) ? timeOrDateTime : TimeOrDateTime.new(timeOrDateTime, ignore_offset)
 
