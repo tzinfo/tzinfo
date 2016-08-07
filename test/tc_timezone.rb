@@ -706,6 +706,31 @@ class TCTimezone < Minitest::Test
     end
   end
 
+  def test_period_for
+    dt = DateTime.new(2005,2,18,16,24,23,'+03:00')
+    t = Time.new(2005,2,18,16,24,23,'+03:00')
+    ts = t.to_i
+
+    dt_utc = TimeOrDateTime.wrap(dt, false).to_offset(0)
+    t_utc = TimeOrDateTime.wrap(t, false).to_offset(0)
+    ts_utc = TimeOrDateTime.wrap(ts, false).to_offset(0)
+
+    o1 = TimezoneOffset.new(0, 0, :GMT)
+    o2 = TimezoneOffset.new(0, 3600, :BST)
+
+    period = TimezonePeriod.new(
+      TestTimezoneTransition.new(o1, o2, 1099184400),
+      TestTimezoneTransition.new(o2, o1, 1111885200))
+
+    dt_period = TestTimezone.new('Europe/London', period, nil, dt_utc).period_for(dt)
+    t_period = TestTimezone.new('Europe/London', period, nil, t_utc).period_for(t)
+    ts_period = TestTimezone.new('Europe/London', period, nil, ts_utc).period_for(ts)
+
+    assert_equal(period, dt_period)
+    assert_equal(period, t_period)
+    assert_equal(period, ts_period)
+  end
+
   def test_utc_to_local
     dt = DateTime.new(2005,6,18,16,24,23)
     dt2 = DateTime.new(2005,6,18,16,24,23).new_offset(Rational(5,24))
