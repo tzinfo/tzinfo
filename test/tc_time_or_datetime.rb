@@ -18,15 +18,6 @@ class TCTimeOrDateTime < Minitest::Test
     assert(tdt.to_orig.utc?)
   end
 
-  def test_initialize_time_local_preserve_offset
-    t = Time.new(2006, 3, 24, 15, 32, 3, '+03:00')
-    tdt = TimeOrDateTime.new(t, false)
-    assert_equal(t, tdt.to_time)
-    assert_equal(t, tdt.to_orig)
-    assert(!tdt.to_time.utc?)
-    assert(!tdt.to_orig.utc?)
-  end
-
   def test_intialize_time_local_usec
     tdt = TimeOrDateTime.new(Time.local(2006, 3, 24, 15, 32, 3, 721123))
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123), tdt.to_time)
@@ -64,10 +55,30 @@ class TCTimeOrDateTime < Minitest::Test
     end
   end
 
-  def test_initialize_datetime_offset
+  def test_initialize_time_ignore_offset
+    tdt = TimeOrDateTime.new(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'))
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), tdt.to_orig)
+    assert_equal(0, tdt.to_orig.utc_offset)
+  end
+
+  def test_initialize_time_preserve_offset
+    t = Time.new(2006, 3, 24, 15, 32, 3, '+03:00')
+    tdt = TimeOrDateTime.new(t, false)
+    assert_equal(t, tdt.to_orig)
+    assert_equal(10800, tdt.to_orig.utc_offset)
+  end
+
+  def test_initialize_datetime_ignore_offset
     tdt = TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3).new_offset(Rational(5, 24)))
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), tdt.to_datetime)
-    assert_equal(0, tdt.to_datetime.offset)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), tdt.to_orig)
+    assert_equal(0, tdt.to_orig.offset)
+  end
+
+  def test_initialize_datetime_preserve_offset
+    dt = DateTime.new(2006, 3, 24, 15, 32, 3).new_offset(Rational(5, 24))
+    tdt = TimeOrDateTime.new(dt, false)
+    assert_equal(dt, tdt.to_orig)
+    assert_equal(Rational(5, 24), tdt.to_orig.offset)
   end
 
   def test_initialize_datetime
@@ -575,6 +586,18 @@ class TCTimeOrDateTime < Minitest::Test
     assert_same(t, t2)
   end
 
+  def test_wrap_offset_ignored
+    t = TimeOrDateTime.wrap(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'))
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), t.to_orig)
+    assert_equal(0, t.to_orig.utc_offset)
+  end
+
+  def test_wrap_offset_preserved
+    t = TimeOrDateTime.wrap(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'), false)
+    assert_equal(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'), t.to_orig)
+    assert_equal(10800, t.to_orig.utc_offset)
+  end
+
   def test_wrap_block_time
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), TimeOrDateTime.wrap(Time.utc(2006, 3, 24, 15, 32, 3)) {|t|
       assert_instance_of(TimeOrDateTime, t)
@@ -618,5 +641,21 @@ class TCTimeOrDateTime < Minitest::Test
     assert t2
     assert_instance_of(TimeOrDateTime, t2)
     assert_equal(1143214324, t2.to_orig)
+  end
+
+  def test_wrap_block_offset_ignored
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), TimeOrDateTime.wrap(Time.new(2006, 3, 24, 15, 32, 3, '+03:00')) do |t|
+      assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), t.to_orig)
+      assert_equal(0, t.to_orig.utc_offset)
+      t + 1
+    end)
+  end
+
+  def test_wrap_block_offset_preserved
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), TimeOrDateTime.wrap(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'), false) do |t|
+      assert_equal(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'), t.to_orig)
+      assert_equal(10800, t.to_orig.utc_offset)
+      t + 1
+    end)
   end
 end
