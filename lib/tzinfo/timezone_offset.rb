@@ -36,7 +36,7 @@ module TZInfo
     # the offset of this period.
     def to_local(utc)
       TimeOrDateTime.wrap(utc) {|wrapped|
-        wrapped + @utc_total_offset
+        wrapped.to_offset(@utc_total_offset)
       }
     end
 

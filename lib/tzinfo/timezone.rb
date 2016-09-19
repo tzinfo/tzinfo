@@ -418,6 +418,16 @@ module TZInfo
       end
     end
 
+    # Returns the TimezonePeriod for the given local time. local can either be
+    # a DateTime, Time or integer timestamp (Time.to_i). Unlike `period_for_local`,
+    # actually considers timezone information of local, thus eliminating
+    # all complexities about AmbiguousTime.
+    #
+    def period_for(local)
+      # FIXME: maybe define TimeOrDateTime#to_utc as a synonym for #to_offset(0)?..
+      period_for_utc(TimeOrDateTime.wrap(local, false).to_offset(0))
+    end
+
     # Converts a time in UTC to the local timezone. utc can either be
     # a DateTime, Time or timestamp (Time.to_i). The returned time has the same
     # type as utc. Any timezone information in utc is ignored (it is treated as
@@ -425,6 +435,16 @@ module TZInfo
     def utc_to_local(utc)
       TimeOrDateTime.wrap(utc) {|wrapped|
         period_for_utc(wrapped).to_local(wrapped)
+      }
+    end
+
+    # Converts a time in some local timezone to another local timezone.
+    # another_local can either be a DateTime, Time or timestamp (Time.to_i).
+    #
+    # Considers timezone of another_local.
+    def to_local(another_local)
+      TimeOrDateTime.wrap(another_local, false) {|wrapped|
+        period_for(wrapped).to_local(wrapped)
       }
     end
 

@@ -11,7 +11,7 @@ module TZInfo
     # Constructs a new TimeOrDateTime. timeOrDateTime can be a Time, DateTime
     # or Integer. If using a Time or DateTime, any time zone information
     # is ignored.
-    def initialize(timeOrDateTime)
+    def initialize(timeOrDateTime, ignore_offset = true)
       @time = nil
       @datetime = nil
       @timestamp = nil
@@ -23,11 +23,11 @@ module TZInfo
         nsec = @time.nsec
         usec = nsec % 1000 == 0 ? nsec / 1000 : Rational(nsec, 1000)
 
-        @time = Time.utc(@time.year, @time.mon, @time.mday, @time.hour, @time.min, @time.sec, usec) unless @time.utc?
+        @time = Time.utc(@time.year, @time.mon, @time.mday, @time.hour, @time.min, @time.sec, usec) unless @time.utc? || !ignore_offset
         @orig = @time
       elsif timeOrDateTime.is_a?(DateTime)
         @datetime = timeOrDateTime
-        @datetime = @datetime.new_offset(0) unless @datetime.offset == 0
+        @datetime = @datetime.new_offset(0) unless @datetime.offset == 0 || !ignore_offset
         @orig = @datetime
       else
         @timestamp = timeOrDateTime.to_i
@@ -49,7 +49,10 @@ module TZInfo
         if @timestamp
           @time = Time.at(@timestamp).utc
         else
-          @time = Time.utc(year, mon, mday, hour, min, sec, usec)
+          # Avoid using Rational unless necessary.
+          u = usec
+          s = u == 0 ? sec : Rational(sec * 1000000 + u, 1000000)
+          @time = Time.new(year, mon, mday, hour, min, s, offset)
         end
       end
 
@@ -70,7 +73,7 @@ module TZInfo
         # Avoid using Rational unless necessary.
         u = usec
         s = u == 0 ? sec : Rational(sec * 1000000 + u, 1000000)
-        @datetime = DateTime.new(year, mon, mday, hour, min, s)
+        @datetime = DateTime.new(year, mon, mday, hour, min, s, OffsetRationals.rational_for_offset(offset))
       end
 
       @datetime
@@ -195,6 +198,18 @@ module TZInfo
       end
     end
 
+    # Returns utc offset of original value _in seconds_ (or 0 if original
+    # value was integer timestamp).
+    def offset
+      if @time
+        @time.utc_offset
+      elsif @datetime
+        (3600*24*@datetime.offset).to_i
+      else
+        0
+      end
+    end
+
     # Compares this TimeOrDateTime with another Time, DateTime, timestamp
     # (Integer) or TimeOrDateTime. Returns -1, 0 or +1 depending
     # whether the receiver is less than, equal to, or greater than
@@ -255,6 +270,23 @@ module TZInfo
       self + (-seconds)
     end
 
+    # Converts TimeOrDateTime to new UTC offset.
+    # Considers original value's UTC offset wisely.
+    def to_offset(seconds)
+      if @orig.is_a?(DateTime)
+        off = OffsetRationals.rational_for_offset(seconds)
+        TimeOrDateTime.new(@orig.new_offset(off), false)
+      elsif @orig.is_a?(Time)
+        time = @time.getutc + seconds
+        nsec_part = Rational(time.nsec, 1_000_000_000)
+        time = Time.new(time.year, time.mon, time.mday, time.hour, time.min, time.sec + nsec_part, seconds)
+        TimeOrDateTime.new(time, false)
+      else
+        # Integer: fallback to "just shift timestamp"
+        TimeOrDateTime.new(@orig + seconds)
+      end
+    end
+
     # Returns true if todt represents the same time and was originally
     # constructed with the same type (DateTime, Time or timestamp) as this
     # TimeOrDateTime.
@@ -278,8 +310,14 @@ module TZInfo
     # TimeOrDateTime. If a TimeOrDateTime is passed in, no new TimeOrDateTime
     # will be constructed and the value passed to wrap will be used when
     # calling the block.
-    def self.wrap(timeOrDateTime)
-      t = timeOrDateTime.is_a?(TimeOrDateTime) ? timeOrDateTime : TimeOrDateTime.new(timeOrDateTime)
+    #
+    # Optional ignore_offset second parameter (defaults to true) controls
+    # whether timezone/UTC offset of input value will be considered or
+    # ignored completely (in a latter case `2016-06-01 12:30:50 +03:00`
+    # and `2016-06-01 12:30:50 GMT` would be wrapped into exactly the
+    # same `TimeOrDateTime` object).
+    def self.wrap(timeOrDateTime, ignore_offset = true)
+      t = timeOrDateTime.is_a?(TimeOrDateTime) ? timeOrDateTime : TimeOrDateTime.new(timeOrDateTime, ignore_offset)
 
       if block_given?
         t = yield t

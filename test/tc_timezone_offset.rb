@@ -49,10 +49,10 @@ class TCTimezoneOffset < Minitest::Test
     o2 = TimezoneOffset.new(-3600, 3600, :TEST2)
 
     assert_equal(1148949080, o1.to_local(1148931080))
-    assert_equal(Time.utc(2006, 5, 30, 0, 31, 20), o1.to_local(Time.utc(2006, 5, 29, 19, 31, 20)))
-    assert_equal(Time.utc(2006, 5, 30, 0, 31, 20, 782000), o1.to_local(Time.utc(2006, 5, 29, 19, 31, 20, 782000)))
-    assert_equal(DateTime.new(2006, 5, 30, 0, 31, 20), o1.to_local(DateTime.new(2006, 5, 29, 19, 31, 20)))
-    assert_equal(DateTime.new(2006, 5, 30, 0, 31, 20 + Rational(782, 1000)), o1.to_local(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(782, 1000))))
+    assert_equal(Time.new(2006, 5, 30, 0, 31, 20, '+05:00'), o1.to_local(Time.utc(2006, 5, 29, 19, 31, 20)))
+    assert_equal(Time.new(2006, 5, 30, 0, 31, 20 + Rational(782, 1000), '+05:00'), o1.to_local(Time.utc(2006, 5, 29, 19, 31, 20, 782000)))
+    assert_equal(DateTime.new(2006, 5, 30, 0, 31, 20, '+5'), o1.to_local(DateTime.new(2006, 5, 29, 19, 31, 20)))
+    assert_equal(DateTime.new(2006, 5, 30, 0, 31, 20 + Rational(782, 1000), '+5'), o1.to_local(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(782, 1000))))
     assert_equal(1148949080, o1.to_local(1148931080))
     assert(TimeOrDateTime.new(1148949080).eql?(o1.to_local(TimeOrDateTime.new(1148931080))))
 

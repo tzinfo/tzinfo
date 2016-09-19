@@ -10,10 +10,10 @@ class TCTimezoneMelbourne < Minitest::Test
     #Australia/Melbourne  Sat Oct 30 16:00:00 2004 UTC = Sun Oct 31 03:00:00 2004 AEDT isdst=1 gmtoff=39600
 
     tz = Timezone.get('Australia/Melbourne')
-    assert_equal(DateTime.new(2004,3,28,2,59,59), tz.utc_to_local(DateTime.new(2004,3,27,15,59,59)))
-    assert_equal(DateTime.new(2004,3,28,2,0,0), tz.utc_to_local(DateTime.new(2004,3,27,16,0,0)))
-    assert_equal(DateTime.new(2004,10,31,1,59,59), tz.utc_to_local(DateTime.new(2004,10,30,15,59,59)))
-    assert_equal(DateTime.new(2004,10,31,3,0,0), tz.utc_to_local(DateTime.new(2004,10,30,16,0,0)))
+    assert_equal(DateTime.new(2004,3,28,2,59,59,'+11'), tz.utc_to_local(DateTime.new(2004,3,27,15,59,59)))
+    assert_equal(DateTime.new(2004,3,28,2,0,0,'+10'), tz.utc_to_local(DateTime.new(2004,3,27,16,0,0)))
+    assert_equal(DateTime.new(2004,10,31,1,59,59,'+10'), tz.utc_to_local(DateTime.new(2004,10,30,15,59,59)))
+    assert_equal(DateTime.new(2004,10,31,3,0,0,'+11'), tz.utc_to_local(DateTime.new(2004,10,30,16,0,0)))
 
     assert_equal(DateTime.new(2004,3,27,15,59,59), tz.local_to_utc(DateTime.new(2004,3,28,2,59,59), true))
     assert_equal(DateTime.new(2004,3,27,16,59,59), tz.local_to_utc(DateTime.new(2004,3,28,2,59,59), false))
@@ -69,10 +69,10 @@ class TCTimezoneMelbourne < Minitest::Test
     #Australia/Melbourne  Sat Sep 26 16:00:00 1942 UTC = Sun Sep 27 03:00:00 1942 AEDT isdst=1 gmtoff=39600
 
     tz = Timezone.get('Australia/Melbourne')
-    assert_equal(DateTime.new(1942,3,29,1,59,59), tz.utc_to_local(DateTime.new(1942,3,28,14,59,59)))
-    assert_equal(DateTime.new(1942,3,29,1,0,0), tz.utc_to_local(DateTime.new(1942,3,28,15,0,0)))
-    assert_equal(DateTime.new(1942,9,27,1,59,59), tz.utc_to_local(DateTime.new(1942,9,26,15,59,59)))
-    assert_equal(DateTime.new(1942,9,27,3,0,0), tz.utc_to_local(DateTime.new(1942,9,26,16,0,0)))
+    assert_equal(DateTime.new(1942,3,29,1,59,59,'+11'), tz.utc_to_local(DateTime.new(1942,3,28,14,59,59)))
+    assert_equal(DateTime.new(1942,3,29,1,0,0,'+10'), tz.utc_to_local(DateTime.new(1942,3,28,15,0,0)))
+    assert_equal(DateTime.new(1942,9,27,1,59,59,'+10'), tz.utc_to_local(DateTime.new(1942,9,26,15,59,59)))
+    assert_equal(DateTime.new(1942,9,27,3,0,0,'+11'), tz.utc_to_local(DateTime.new(1942,9,26,16,0,0)))
 
     assert_equal(DateTime.new(1942,3,28,14,59,59), tz.local_to_utc(DateTime.new(1942,3,29,1,59,59), true))
     assert_equal(DateTime.new(1942,3,28,15,59,59), tz.local_to_utc(DateTime.new(1942,3,29,1,59,59), false))
@@ -126,9 +126,9 @@ class TCTimezoneMelbourne < Minitest::Test
     #Australia/Melbourne  Sat Oct 30 15:59:59 1971 UTC = Sun Oct 31 01:59:59 1971 AEST isdst=0 gmtoff=36000
 
     tz = Timezone.get('Australia/Melbourne')
-    assert_equal(DateTime.new(1970,1,1,10,0,0), tz.utc_to_local(DateTime.new(1970,1,1,0,0,0)))
+    assert_equal(DateTime.new(1970,1,1,10,0,0,'+10'), tz.utc_to_local(DateTime.new(1970,1,1,0,0,0)))
     assert_equal(DateTime.new(1970,1,1,0,0,0), tz.local_to_utc(DateTime.new(1970,1,1,10,0,0)))
-    assert_equal(Time.utc(1970,1,1,10,0,0), tz.utc_to_local(Time.utc(1970,1,1,0,0,0)))
+    assert_equal(Time.new(1970,1,1,10,0,0,'+10:00'), tz.utc_to_local(Time.utc(1970,1,1,0,0,0)))
     assert_equal(Time.utc(1970,1,1,0,0,0), tz.local_to_utc(Time.utc(1970,1,1,10,0,0)))
     assert_equal(36000, tz.utc_to_local(0))
     assert_equal(0, tz.local_to_utc(36000))

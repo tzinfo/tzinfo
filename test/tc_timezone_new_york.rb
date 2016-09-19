@@ -10,10 +10,10 @@ class TCTimezoneNewYork < Minitest::Test
     #America/New_York  Sun Oct 31 06:00:00 2004 UTC = Sun Oct 31 01:00:00 2004 EST isdst=0 gmtoff=-18000
 
     tz = Timezone.get('America/New_York')
-    assert_equal(DateTime.new(2004,4,4,1,59,59), tz.utc_to_local(DateTime.new(2004,4,4,6,59,59)))
-    assert_equal(DateTime.new(2004,4,4,3,0,0), tz.utc_to_local(DateTime.new(2004,4,4,7,0,0)))
-    assert_equal(DateTime.new(2004,10,31,1,59,59), tz.utc_to_local(DateTime.new(2004,10,31,5,59,59)))
-    assert_equal(DateTime.new(2004,10,31,1,0,0), tz.utc_to_local(DateTime.new(2004,10,31,6,0,0)))
+    assert_equal(DateTime.new(2004,4,4,1,59,59,'-5'), tz.utc_to_local(DateTime.new(2004,4,4,6,59,59)))
+    assert_equal(DateTime.new(2004,4,4,3,0,0,'-4'), tz.utc_to_local(DateTime.new(2004,4,4,7,0,0)))
+    assert_equal(DateTime.new(2004,10,31,1,59,59,'-4'), tz.utc_to_local(DateTime.new(2004,10,31,5,59,59)))
+    assert_equal(DateTime.new(2004,10,31,1,0,0,'-5'), tz.utc_to_local(DateTime.new(2004,10,31,6,0,0)))
 
     assert_equal(DateTime.new(2004,4,4,6,59,59), tz.local_to_utc(DateTime.new(2004,4,4,1,59,59)))
     assert_equal(DateTime.new(2004,4,4,7,0,0), tz.local_to_utc(DateTime.new(2004,4,4,3,0,0)))
@@ -69,10 +69,10 @@ class TCTimezoneNewYork < Minitest::Test
     #America/New_York  Sun Oct 27 06:00:00 1957 UTC = Sun Oct 27 01:00:00 1957 EST isdst=0 gmtoff=-18000
 
     tz = Timezone.get('America/New_York')
-    assert_equal(DateTime.new(1957,4,28,1,59,59), tz.utc_to_local(DateTime.new(1957,4,28,6,59,59)))
-    assert_equal(DateTime.new(1957,4,28,3,0,0), tz.utc_to_local(DateTime.new(1957,4,28,7,0,0)))
-    assert_equal(DateTime.new(1957,10,27,1,59,59), tz.utc_to_local(DateTime.new(1957,10,27,5,59,59)))
-    assert_equal(DateTime.new(1957,10,27,1,0,0), tz.utc_to_local(DateTime.new(1957,10,27,6,0,0)))
+    assert_equal(DateTime.new(1957,4,28,1,59,59,'-5'), tz.utc_to_local(DateTime.new(1957,4,28,6,59,59)))
+    assert_equal(DateTime.new(1957,4,28,3,0,0,'-4'), tz.utc_to_local(DateTime.new(1957,4,28,7,0,0)))
+    assert_equal(DateTime.new(1957,10,27,1,59,59,'-4'), tz.utc_to_local(DateTime.new(1957,10,27,5,59,59)))
+    assert_equal(DateTime.new(1957,10,27,1,0,0,'-5'), tz.utc_to_local(DateTime.new(1957,10,27,6,0,0)))
 
     assert_equal(DateTime.new(1957,4,28,6,59,59), tz.local_to_utc(DateTime.new(1957,4,28,1,59,59)))
     assert_equal(DateTime.new(1957,4,28,7,0,0), tz.local_to_utc(DateTime.new(1957,4,28,3,0,0)))
@@ -126,9 +126,9 @@ class TCTimezoneNewYork < Minitest::Test
     #America/New_York  Sun Apr 26 06:59:59 1970 UTC = Sun Apr 26 01:59:59 1970 EST isdst=0 gmtoff=-18000
 
     tz = Timezone.get('America/New_York')
-    assert_equal(DateTime.new(1970,1,1,0,0,0), tz.utc_to_local(DateTime.new(1970,1,1,5,0,0)))
+    assert_equal(DateTime.new(1970,1,1,0,0,0,'-5'), tz.utc_to_local(DateTime.new(1970,1,1,5,0,0)))
     assert_equal(DateTime.new(1970,1,1,5,0,0), tz.local_to_utc(DateTime.new(1970,1,1,0,0,0)))
-    assert_equal(Time.utc(1970,1,1,0,0,0), tz.utc_to_local(Time.utc(1970,1,1,5,0,0)))
+    assert_equal(Time.new(1970,1,1,0,0,0,'-05:00'), tz.utc_to_local(Time.utc(1970,1,1,5,0,0)))
     assert_equal(Time.utc(1970,1,1,5,0,0), tz.local_to_utc(Time.utc(1970,1,1,0,0,0)))
     assert_equal(0, tz.utc_to_local(18000))
     assert_equal(18000, tz.local_to_utc(0))
