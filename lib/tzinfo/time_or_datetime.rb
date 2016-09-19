@@ -9,8 +9,8 @@ module TZInfo
     include Comparable
 
     # Constructs a new TimeOrDateTime. timeOrDateTime can be a Time, DateTime
-    # or Integer. If using a Time or DateTime, any time zone information
-    # is ignored.
+    # or Integer. The UTC offset from Time or DateTime instances is ignored
+    # unless ignore_offset is set to false.
     def initialize(timeOrDateTime, ignore_offset = true)
       @time = nil
       @datetime = nil
@@ -198,8 +198,7 @@ module TZInfo
       end
     end
 
-    # Returns utc offset of original value _in seconds_ (or 0 if original
-    # value was integer timestamp).
+    # Returns the UTC offset of this TimeOrDateTime in seconds.
     def offset
       if @time
         @time.utc_offset
@@ -270,20 +269,24 @@ module TZInfo
       self + (-seconds)
     end
 
-    # Converts TimeOrDateTime to new UTC offset.
-    # Considers original value's UTC offset wisely.
-    def to_offset(seconds)
+    # For TimeOrDateTime instances based on Time or DateTime values, returns a
+    # new TimeOrDateTime created by adjusting the UTC offset to the given
+    # offset in seconds.
+    #
+    # For TimeOrDateTime instances based on Integer timestamps, returns a new
+    # TimeOrDateTime created by adding the given offset to the timestamp.
+    def to_offset(offset)
       if @orig.is_a?(DateTime)
-        off = OffsetRationals.rational_for_offset(seconds)
+        off = OffsetRationals.rational_for_offset(offset)
         TimeOrDateTime.new(@orig.new_offset(off), false)
       elsif @orig.is_a?(Time)
-        time = @time.getutc + seconds
+        time = @time.getutc + offset
         nsec_part = Rational(time.nsec, 1_000_000_000)
-        time = Time.new(time.year, time.mon, time.mday, time.hour, time.min, time.sec + nsec_part, seconds)
+        time = Time.new(time.year, time.mon, time.mday, time.hour, time.min, time.sec + nsec_part, offset)
         TimeOrDateTime.new(time, false)
       else
         # Integer: fallback to "just shift timestamp"
-        TimeOrDateTime.new(@orig + seconds)
+        TimeOrDateTime.new(@orig + offset)
       end
     end
 
@@ -311,11 +314,10 @@ module TZInfo
     # will be constructed and the value passed to wrap will be used when
     # calling the block.
     #
-    # Optional ignore_offset second parameter (defaults to true) controls
-    # whether timezone/UTC offset of input value will be considered or
-    # ignored completely (in a latter case `2016-06-01 12:30:50 +03:00`
-    # and `2016-06-01 12:30:50 GMT` would be wrapped into exactly the
-    # same `TimeOrDateTime` object).
+    # The UTC offset from Time or DateTime instances is ignored unless
+    # ignore_offset is set to false (for example, 2016-06-01 12:30:50 +03:00
+    # and 2016-06-01 12:30:50 GMT would be wrapped into exactly the same
+    # TimeOrDateTime object when ignore_offset is true).
     def self.wrap(timeOrDateTime, ignore_offset = true)
       t = timeOrDateTime.is_a?(TimeOrDateTime) ? timeOrDateTime : TimeOrDateTime.new(timeOrDateTime, ignore_offset)
 

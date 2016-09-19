@@ -266,14 +266,20 @@ module TZInfo
 
     # Returns the TimezonePeriod for the given UTC time. utc can either be
     # a DateTime, Time or integer timestamp (Time.to_i). Any timezone
-    # information in utc is ignored (it is treated as a UTC time).
+    # information in utc is ignored (it is treated as a UTC time). Use the
+    # period_for method instead if the the UTC offset of the time needs to be
+    # considered.
     def period_for_utc(utc)
       raise_unknown_timezone
     end
 
     # Returns the set of TimezonePeriod instances that are valid for the given
-    # local time as an array. If you just want a single period, use
-    # period_for_local instead and specify how ambiguities should be resolved.
+    # local time as an array. Any timezone information in local is ignored
+    # (it is treated as a time in the current timezone).
+    #
+    # If you just want a single period, use period_for_local instead and specify
+    # how ambiguities should be resolved.
+    #
     # Returns an empty array if no periods are found for the given time.
     def periods_for_local(local)
       raise_unknown_timezone
@@ -347,7 +353,8 @@ module TZInfo
     # Returns the TimezonePeriod for the given local time. local can either be
     # a DateTime, Time or integer timestamp (Time.to_i). Any timezone
     # information in local is ignored (it is treated as a time in the current
-    # timezone).
+    # timezone). Use the period_for method instead if the the UTC offset of the
+    # time needs to be considered.
     #
     # Warning: There are local times that have no equivalent UTC times (e.g.
     # in the transition from standard time to daylight savings time). There are
@@ -418,32 +425,32 @@ module TZInfo
       end
     end
 
-    # Returns the TimezonePeriod for the given local time. local can either be
-    # a DateTime, Time or integer timestamp (Time.to_i). Unlike `period_for_local`,
-    # actually considers timezone information of local, thus eliminating
-    # all complexities about AmbiguousTime.
+    # Returns the TimezonePeriod for the given time. time can either be
+    # a DateTime, Time or integer timestamp (Time.to_i).
     #
-    def period_for(local)
-      # FIXME: maybe define TimeOrDateTime#to_utc as a synonym for #to_offset(0)?..
-      period_for_utc(TimeOrDateTime.wrap(local, false).to_offset(0))
+    # Unlike period_for_local and period_for_utc, period_for considers the UTC
+    # offset of the given time.
+    def period_for(time)
+      period_for_utc(TimeOrDateTime.wrap(time, false).to_offset(0))
     end
 
     # Converts a time in UTC to the local timezone. utc can either be
     # a DateTime, Time or timestamp (Time.to_i). The returned time has the same
     # type as utc. Any timezone information in utc is ignored (it is treated as
-    # a UTC time).
+    # a UTC time). Use the to_local method instead if the the UTC offset of the
+    # time needs to be considered.
     def utc_to_local(utc)
       TimeOrDateTime.wrap(utc) {|wrapped|
         period_for_utc(wrapped).to_local(wrapped)
       }
     end
 
-    # Converts a time in some local timezone to another local timezone.
-    # another_local can either be a DateTime, Time or timestamp (Time.to_i).
+    # Converts a time to the local timezone. time can either be a DateTime, Time
+    # or timestamp (Time.to_i).
     #
-    # Considers timezone of another_local.
-    def to_local(another_local)
-      TimeOrDateTime.wrap(another_local, false) {|wrapped|
+    # Unlike utc_to_local, to_local considers the UTC offset of the given time. 
+    def to_local(time)
+      TimeOrDateTime.wrap(time, false) {|wrapped|
         period_for(wrapped).to_local(wrapped)
       }
     end
