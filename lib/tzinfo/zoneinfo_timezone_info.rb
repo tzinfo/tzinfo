@@ -128,26 +128,26 @@ module TZInfo
         
         if using_64bit
           (0...timecnt).each do |i|
-            high, low = check_read(file, 8).unpack('NN')
+            high, low = check_read(file, 8).unpack('NN'.freeze)
             transition_time = make_signed_int64(high, low)
             transitions << {:at => transition_time}          
           end
         else
           (0...timecnt).each do |i|
-            transition_time = make_signed_int32(check_read(file, 4).unpack('N')[0])
+            transition_time = make_signed_int32(check_read(file, 4).unpack('N'.freeze)[0])
             transitions << {:at => transition_time}          
           end
         end
         
         (0...timecnt).each do |i|
-          localtime_type = check_read(file, 1).unpack('C')[0]
+          localtime_type = check_read(file, 1).unpack('C'.freeze)[0]
           transitions[i][:offset] = localtime_type
         end
         
         offsets = []
         
         (0...typecnt).each do |i|
-          gmtoff, isdst, abbrind = check_read(file, 6).unpack('NCC')
+          gmtoff, isdst, abbrind = check_read(file, 6).unpack('NCC'.freeze)
           gmtoff = make_signed_int32(gmtoff)
           isdst = isdst == 1
           offset = {:utc_total_offset => gmtoff, :is_dst => isdst, :abbr_index => abbrind}

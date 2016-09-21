@@ -432,7 +432,7 @@ module TZInfo
             
             file_is_5_column = true if column5
             
-            zone_tab << [codes.split(','), zone_identifier, latitude, longitude, column4, column5]
+            zone_tab << [codes.split(','.freeze), zone_identifier, latitude, longitude, column4, column5]
           end
         end
       end
@@ -480,7 +480,7 @@ module TZInfo
     def dms_to_rational(sign, degrees, minutes, seconds = nil)
       result = degrees.to_i + Rational(minutes.to_i, 60)
       result += Rational(seconds.to_i, 3600) if seconds
-      result = -result if sign == '-'
+      result = -result if sign == '-'.freeze
       result
     end
   end
