@@ -1,10 +1,5 @@
 language: ruby
-sudo: required
-dist: trusty
-before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y haveged
-  - sudo service haveged start
+sudo: false
 before_script:
   - bundle update
 cache: bundler
@@ -18,8 +13,11 @@ rvm:
   - jruby-1.7.26
   - jruby-9.1.5.0
   - jruby-head
-  - rbx-3.60
+  - rbx-2.71828182
+  - rbx-3.29
 matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head
+    - rvm: rbx-2.71828182
+    - rvm: rbx-3.29
