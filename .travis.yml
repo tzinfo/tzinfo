@@ -1,6 +1,10 @@
 language: ruby
 sudo: required
 dist: trusty
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y haveged
+  - sudo service haveged start
 before_script:
   - bundle update
 cache: bundler
