@@ -8,12 +8,10 @@ module TZInfo
         
         timezone 'Asia/Ashgabat' do |tz|
           tz.offset :o0, 14012, 0, :LMT
-          tz.offset :o1, 14400, 0, :ASHT
-          tz.offset :o2, 18000, 0, :ASHT
-          tz.offset :o3, 18000, 3600, :ASHST
-          tz.offset :o4, 14400, 3600, :ASHST
-          tz.offset :o5, 14400, 0, :TMT
-          tz.offset :o6, 18000, 0, :TMT
+          tz.offset :o1, 14400, 0, :'+04'
+          tz.offset :o2, 18000, 0, :'+05'
+          tz.offset :o3, 18000, 3600, :'+06'
+          tz.offset :o4, 14400, 3600, :'+05'
           
           tz.transition 1924, 5, :o1, 52356398497, 21600
           tz.transition 1930, 6, :o2, 7278445, 3
@@ -39,8 +37,7 @@ module TZInfo
           tz.transition 1990, 9, :o2, 654642000
           tz.transition 1991, 3, :o4, 670366800
           tz.transition 1991, 9, :o1, 686095200
-          tz.transition 1991, 10, :o5, 688507200
-          tz.transition 1992, 1, :o6, 695772000
+          tz.transition 1992, 1, :o2, 695772000
         end
       end
     end

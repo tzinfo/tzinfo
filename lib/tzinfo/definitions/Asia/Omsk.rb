@@ -8,11 +8,11 @@ module TZInfo
         
         timezone 'Asia/Omsk' do |tz|
           tz.offset :o0, 17610, 0, :LMT
-          tz.offset :o1, 18000, 0, :OMST
-          tz.offset :o2, 21600, 0, :OMST
-          tz.offset :o3, 21600, 3600, :OMSST
-          tz.offset :o4, 18000, 3600, :OMSST
-          tz.offset :o5, 25200, 0, :OMST
+          tz.offset :o1, 18000, 0, :'+05'
+          tz.offset :o2, 21600, 0, :'+06'
+          tz.offset :o3, 21600, 3600, :'+07'
+          tz.offset :o4, 18000, 3600, :'+06'
+          tz.offset :o5, 25200, 0, :'+07'
           
           tz.transition 1919, 11, :o1, 6976155733, 2880
           tz.transition 1930, 6, :o2, 58227559, 24

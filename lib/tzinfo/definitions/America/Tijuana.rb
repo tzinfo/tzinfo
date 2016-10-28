@@ -25,19 +25,19 @@ module TZInfo
           tz.transition 1945, 11, :o2, 58362523, 24
           tz.transition 1948, 4, :o3, 14595881, 6
           tz.transition 1949, 1, :o2, 58390339, 24
-          tz.transition 1954, 4, :o3, 29218295, 12
+          tz.transition 1954, 4, :o3, 19478863, 8
           tz.transition 1954, 9, :o2, 19480095, 8
-          tz.transition 1955, 4, :o3, 29222663, 12
+          tz.transition 1955, 4, :o3, 19481775, 8
           tz.transition 1955, 9, :o2, 19483007, 8
-          tz.transition 1956, 4, :o3, 29227115, 12
+          tz.transition 1956, 4, :o3, 19484743, 8
           tz.transition 1956, 9, :o2, 19485975, 8
-          tz.transition 1957, 4, :o3, 29231483, 12
+          tz.transition 1957, 4, :o3, 19487655, 8
           tz.transition 1957, 9, :o2, 19488887, 8
-          tz.transition 1958, 4, :o3, 29235851, 12
+          tz.transition 1958, 4, :o3, 19490567, 8
           tz.transition 1958, 9, :o2, 19491799, 8
-          tz.transition 1959, 4, :o3, 29240219, 12
+          tz.transition 1959, 4, :o3, 19493479, 8
           tz.transition 1959, 9, :o2, 19494711, 8
-          tz.transition 1960, 4, :o3, 29244587, 12
+          tz.transition 1960, 4, :o3, 19496391, 8
           tz.transition 1960, 9, :o2, 19497623, 8
           tz.transition 1976, 4, :o3, 199274400
           tz.transition 1976, 10, :o2, 215600400

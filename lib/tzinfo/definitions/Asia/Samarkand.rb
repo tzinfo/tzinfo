@@ -8,12 +8,10 @@ module TZInfo
         
         timezone 'Asia/Samarkand' do |tz|
           tz.offset :o0, 16073, 0, :LMT
-          tz.offset :o1, 14400, 0, :SAMT
-          tz.offset :o2, 18000, 0, :SAMT
-          tz.offset :o3, 18000, 3600, :SAMST
-          tz.offset :o4, 21600, 0, :TAST
-          tz.offset :o5, 18000, 3600, :UZST
-          tz.offset :o6, 18000, 0, :UZT
+          tz.offset :o1, 14400, 0, :'+04'
+          tz.offset :o2, 18000, 0, :'+05'
+          tz.offset :o3, 18000, 3600, :'+06'
+          tz.offset :o4, 21600, 0, :'+06'
           
           tz.transition 1924, 5, :o1, 209425591927, 86400
           tz.transition 1930, 6, :o2, 7278445, 3
@@ -38,8 +36,7 @@ module TZInfo
           tz.transition 1990, 3, :o3, 638312400
           tz.transition 1990, 9, :o2, 654642000
           tz.transition 1991, 3, :o3, 670366800
-          tz.transition 1991, 8, :o5, 683661600
-          tz.transition 1991, 9, :o6, 686091600
+          tz.transition 1991, 9, :o2, 686091600
         end
       end
     end

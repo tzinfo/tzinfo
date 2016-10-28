@@ -8,11 +8,11 @@ module TZInfo
         
         timezone 'Asia/Krasnoyarsk' do |tz|
           tz.offset :o0, 22286, 0, :LMT
-          tz.offset :o1, 21600, 0, :KRAT
-          tz.offset :o2, 25200, 0, :KRAT
-          tz.offset :o3, 25200, 3600, :KRAST
-          tz.offset :o4, 21600, 3600, :KRAST
-          tz.offset :o5, 28800, 0, :KRAT
+          tz.offset :o1, 21600, 0, :'+06'
+          tz.offset :o2, 25200, 0, :'+07'
+          tz.offset :o3, 25200, 3600, :'+08'
+          tz.offset :o4, 21600, 3600, :'+07'
+          tz.offset :o5, 28800, 0, :'+08'
           
           tz.transition 1920, 1, :o1, 104644623257, 43200
           tz.transition 1930, 6, :o2, 9704593, 4

@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'Antarctica/Davis' do |tz|
           tz.offset :o0, 0, 0, :'-00'
-          tz.offset :o1, 25200, 0, :DAVT
-          tz.offset :o2, 18000, 0, :DAVT
+          tz.offset :o1, 25200, 0, :'+07'
+          tz.offset :o2, 18000, 0, :'+05'
           
           tz.transition 1957, 1, :o1, 4871703, 2
           tz.transition 1964, 10, :o0, 58528805, 24

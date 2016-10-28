@@ -8,10 +8,10 @@ module TZInfo
         
         timezone 'Asia/Kamchatka' do |tz|
           tz.offset :o0, 38076, 0, :LMT
-          tz.offset :o1, 39600, 0, :PETT
-          tz.offset :o2, 43200, 0, :PETT
-          tz.offset :o3, 43200, 3600, :PETST
-          tz.offset :o4, 39600, 3600, :PETST
+          tz.offset :o1, 39600, 0, :'+11'
+          tz.offset :o2, 43200, 0, :'+12'
+          tz.offset :o3, 43200, 3600, :'+13'
+          tz.offset :o4, 39600, 3600, :'+12'
           
           tz.transition 1922, 11, :o1, 17448250027, 7200
           tz.transition 1930, 6, :o2, 58227553, 24

@@ -8,14 +8,13 @@ module TZInfo
         
         timezone 'Asia/Khandyga' do |tz|
           tz.offset :o0, 32533, 0, :LMT
-          tz.offset :o1, 28800, 0, :YAKT
-          tz.offset :o2, 32400, 0, :YAKT
-          tz.offset :o3, 32400, 3600, :YAKST
-          tz.offset :o4, 28800, 3600, :YAKST
-          tz.offset :o5, 36000, 0, :VLAT
-          tz.offset :o6, 36000, 3600, :VLAST
-          tz.offset :o7, 39600, 0, :VLAT
-          tz.offset :o8, 36000, 0, :YAKT
+          tz.offset :o1, 28800, 0, :'+08'
+          tz.offset :o2, 32400, 0, :'+09'
+          tz.offset :o3, 32400, 3600, :'+10'
+          tz.offset :o4, 28800, 3600, :'+09'
+          tz.offset :o5, 36000, 0, :'+10'
+          tz.offset :o6, 36000, 3600, :'+11'
+          tz.offset :o7, 39600, 0, :'+11'
           
           tz.transition 1919, 12, :o1, 209287335467, 86400
           tz.transition 1930, 6, :o2, 14556889, 6
@@ -82,7 +81,7 @@ module TZInfo
           tz.transition 2010, 3, :o6, 1269705600
           tz.transition 2010, 10, :o5, 1288454400
           tz.transition 2011, 3, :o7, 1301155200
-          tz.transition 2011, 9, :o8, 1315832400
+          tz.transition 2011, 9, :o5, 1315832400
           tz.transition 2014, 10, :o2, 1414252800
         end
       end

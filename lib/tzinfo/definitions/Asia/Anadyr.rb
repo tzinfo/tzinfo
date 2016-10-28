@@ -8,12 +8,12 @@ module TZInfo
         
         timezone 'Asia/Anadyr' do |tz|
           tz.offset :o0, 42596, 0, :LMT
-          tz.offset :o1, 43200, 0, :ANAT
-          tz.offset :o2, 46800, 0, :ANAT
-          tz.offset :o3, 46800, 3600, :ANAST
-          tz.offset :o4, 43200, 3600, :ANAST
-          tz.offset :o5, 39600, 3600, :ANAST
-          tz.offset :o6, 39600, 0, :ANAT
+          tz.offset :o1, 43200, 0, :'+12'
+          tz.offset :o2, 46800, 0, :'+13'
+          tz.offset :o3, 46800, 3600, :'+14'
+          tz.offset :o4, 43200, 3600, :'+13'
+          tz.offset :o5, 39600, 3600, :'+12'
+          tz.offset :o6, 39600, 0, :'+11'
           
           tz.transition 1924, 5, :o1, 52356391351, 21600
           tz.transition 1930, 6, :o2, 2426148, 1

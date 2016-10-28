@@ -15,7 +15,7 @@ module TZInfo
           tz.offset :o5, 3600, 0, :CET
           tz.offset :o6, 10800, 3600, :MSD
           tz.offset :o7, 7200, 3600, :EEST
-          tz.offset :o8, 10800, 0, :FET
+          tz.offset :o8, 10800, 0, :'+03'
           
           tz.transition 1879, 12, :o1, 26003326573, 10800
           tz.transition 1924, 5, :o2, 349042669, 144
@@ -85,7 +85,6 @@ module TZInfo
           tz.transition 2010, 3, :o7, 1269734400
           tz.transition 2010, 10, :o2, 1288483200
           tz.transition 2011, 3, :o8, 1301184000
-          tz.transition 2014, 10, :o3, 1414274400
         end
       end
     end

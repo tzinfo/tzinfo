@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'Antarctica/Troll' do |tz|
           tz.offset :o0, 0, 0, :'-00'
-          tz.offset :o1, 0, 0, :UTC
-          tz.offset :o2, 0, 7200, :CEST
+          tz.offset :o1, 0, 0, :'+00'
+          tz.offset :o2, 0, 7200, :'+02'
           
           tz.transition 2005, 2, :o1, 1108166400
           tz.transition 2005, 3, :o2, 1111885200

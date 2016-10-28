@@ -8,11 +8,10 @@ module TZInfo
         
         timezone 'Asia/Dushanbe' do |tz|
           tz.offset :o0, 16512, 0, :LMT
-          tz.offset :o1, 18000, 0, :DUST
-          tz.offset :o2, 21600, 0, :DUST
-          tz.offset :o3, 21600, 3600, :DUSST
-          tz.offset :o4, 18000, 3600, :DUSST
-          tz.offset :o5, 18000, 0, :TJT
+          tz.offset :o1, 18000, 0, :'+05'
+          tz.offset :o2, 21600, 0, :'+06'
+          tz.offset :o3, 21600, 3600, :'+07'
+          tz.offset :o4, 18000, 3600, :'+06'
           
           tz.transition 1924, 5, :o1, 1090758289, 450
           tz.transition 1930, 6, :o2, 58227559, 24
@@ -37,7 +36,7 @@ module TZInfo
           tz.transition 1990, 3, :o3, 638308800
           tz.transition 1990, 9, :o2, 654638400
           tz.transition 1991, 3, :o4, 670363200
-          tz.transition 1991, 9, :o5, 684363600
+          tz.transition 1991, 9, :o1, 684363600
         end
       end
     end

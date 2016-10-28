@@ -9,14 +9,10 @@ module TZInfo
         timezone 'Asia/Tbilisi' do |tz|
           tz.offset :o0, 10751, 0, :LMT
           tz.offset :o1, 10751, 0, :TBMT
-          tz.offset :o2, 10800, 0, :TBIT
-          tz.offset :o3, 14400, 0, :TBIT
-          tz.offset :o4, 14400, 3600, :TBIST
-          tz.offset :o5, 10800, 3600, :TBIST
-          tz.offset :o6, 10800, 3600, :GEST
-          tz.offset :o7, 10800, 0, :GET
-          tz.offset :o8, 14400, 0, :GET
-          tz.offset :o9, 14400, 3600, :GEST
+          tz.offset :o2, 10800, 0, :'+03'
+          tz.offset :o3, 14400, 0, :'+04'
+          tz.offset :o4, 14400, 3600, :'+05'
+          tz.offset :o5, 10800, 3600, :'+04'
           
           tz.transition 1879, 12, :o1, 208026608449, 86400
           tz.transition 1924, 5, :o2, 209425597249, 86400
@@ -42,35 +38,34 @@ module TZInfo
           tz.transition 1990, 3, :o4, 638316000
           tz.transition 1990, 9, :o3, 654645600
           tz.transition 1991, 3, :o5, 670370400
-          tz.transition 1991, 4, :o6, 671140800
-          tz.transition 1991, 9, :o7, 686098800
-          tz.transition 1992, 3, :o6, 701816400
-          tz.transition 1992, 9, :o7, 717537600
-          tz.transition 1993, 3, :o6, 733266000
-          tz.transition 1993, 9, :o7, 748987200
-          tz.transition 1994, 3, :o6, 764715600
-          tz.transition 1994, 9, :o8, 780436800
-          tz.transition 1995, 3, :o9, 796161600
-          tz.transition 1995, 9, :o8, 811882800
-          tz.transition 1996, 3, :o9, 828216000
-          tz.transition 1997, 3, :o9, 859662000
-          tz.transition 1997, 10, :o8, 877806000
-          tz.transition 1998, 3, :o9, 891115200
-          tz.transition 1998, 10, :o8, 909255600
-          tz.transition 1999, 3, :o9, 922564800
-          tz.transition 1999, 10, :o8, 941310000
-          tz.transition 2000, 3, :o9, 954014400
-          tz.transition 2000, 10, :o8, 972759600
-          tz.transition 2001, 3, :o9, 985464000
-          tz.transition 2001, 10, :o8, 1004209200
-          tz.transition 2002, 3, :o9, 1017518400
-          tz.transition 2002, 10, :o8, 1035658800
-          tz.transition 2003, 3, :o9, 1048968000
-          tz.transition 2003, 10, :o8, 1067108400
-          tz.transition 2004, 3, :o9, 1080417600
-          tz.transition 2004, 6, :o6, 1088276400
-          tz.transition 2004, 10, :o7, 1099177200
-          tz.transition 2005, 3, :o8, 1111878000
+          tz.transition 1991, 9, :o2, 686098800
+          tz.transition 1992, 3, :o5, 701816400
+          tz.transition 1992, 9, :o2, 717537600
+          tz.transition 1993, 3, :o5, 733266000
+          tz.transition 1993, 9, :o2, 748987200
+          tz.transition 1994, 3, :o5, 764715600
+          tz.transition 1994, 9, :o3, 780436800
+          tz.transition 1995, 3, :o4, 796161600
+          tz.transition 1995, 9, :o3, 811882800
+          tz.transition 1996, 3, :o4, 828216000
+          tz.transition 1997, 3, :o4, 859662000
+          tz.transition 1997, 10, :o3, 877806000
+          tz.transition 1998, 3, :o4, 891115200
+          tz.transition 1998, 10, :o3, 909255600
+          tz.transition 1999, 3, :o4, 922564800
+          tz.transition 1999, 10, :o3, 941310000
+          tz.transition 2000, 3, :o4, 954014400
+          tz.transition 2000, 10, :o3, 972759600
+          tz.transition 2001, 3, :o4, 985464000
+          tz.transition 2001, 10, :o3, 1004209200
+          tz.transition 2002, 3, :o4, 1017518400
+          tz.transition 2002, 10, :o3, 1035658800
+          tz.transition 2003, 3, :o4, 1048968000
+          tz.transition 2003, 10, :o3, 1067108400
+          tz.transition 2004, 3, :o4, 1080417600
+          tz.transition 2004, 6, :o5, 1088276400
+          tz.transition 2004, 10, :o2, 1099177200
+          tz.transition 2005, 3, :o3, 1111878000
         end
       end
     end

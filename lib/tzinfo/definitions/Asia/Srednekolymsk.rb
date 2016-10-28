@@ -8,12 +8,11 @@ module TZInfo
         
         timezone 'Asia/Srednekolymsk' do |tz|
           tz.offset :o0, 36892, 0, :LMT
-          tz.offset :o1, 36000, 0, :MAGT
-          tz.offset :o2, 39600, 0, :MAGT
-          tz.offset :o3, 39600, 3600, :MAGST
-          tz.offset :o4, 36000, 3600, :MAGST
-          tz.offset :o5, 43200, 0, :MAGT
-          tz.offset :o6, 39600, 0, :SRET
+          tz.offset :o1, 36000, 0, :'+10'
+          tz.offset :o2, 39600, 0, :'+11'
+          tz.offset :o3, 39600, 3600, :'+12'
+          tz.offset :o4, 36000, 3600, :'+11'
+          tz.offset :o5, 43200, 0, :'+12'
           
           tz.transition 1924, 5, :o1, 52356392777, 21600
           tz.transition 1930, 6, :o2, 29113777, 12
@@ -79,7 +78,7 @@ module TZInfo
           tz.transition 2010, 3, :o3, 1269702000
           tz.transition 2010, 10, :o2, 1288450800
           tz.transition 2011, 3, :o5, 1301151600
-          tz.transition 2014, 10, :o6, 1414245600
+          tz.transition 2014, 10, :o2, 1414245600
         end
       end
     end

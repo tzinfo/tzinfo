@@ -8,15 +8,13 @@ module TZInfo
         
         timezone 'Asia/Ust-Nera' do |tz|
           tz.offset :o0, 34374, 0, :LMT
-          tz.offset :o1, 28800, 0, :YAKT
-          tz.offset :o2, 32400, 0, :YAKT
-          tz.offset :o3, 39600, 3600, :MAGST
-          tz.offset :o4, 39600, 0, :MAGT
-          tz.offset :o5, 36000, 3600, :MAGST
-          tz.offset :o6, 36000, 0, :MAGT
-          tz.offset :o7, 43200, 0, :MAGT
-          tz.offset :o8, 39600, 0, :VLAT
-          tz.offset :o9, 36000, 0, :VLAT
+          tz.offset :o1, 28800, 0, :'+08'
+          tz.offset :o2, 32400, 0, :'+09'
+          tz.offset :o3, 39600, 3600, :'+12'
+          tz.offset :o4, 39600, 0, :'+11'
+          tz.offset :o5, 36000, 3600, :'+11'
+          tz.offset :o6, 36000, 0, :'+10'
+          tz.offset :o7, 43200, 0, :'+12'
           
           tz.transition 1919, 12, :o1, 34881222271, 14400
           tz.transition 1930, 6, :o2, 14556889, 6
@@ -82,8 +80,8 @@ module TZInfo
           tz.transition 2010, 3, :o3, 1269702000
           tz.transition 2010, 10, :o4, 1288450800
           tz.transition 2011, 3, :o7, 1301151600
-          tz.transition 2011, 9, :o8, 1315828800
-          tz.transition 2014, 10, :o9, 1414249200
+          tz.transition 2011, 9, :o4, 1315828800
+          tz.transition 2014, 10, :o6, 1414249200
         end
       end
     end

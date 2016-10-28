@@ -9,11 +9,11 @@ module TZInfo
         timezone 'Asia/Irkutsk' do |tz|
           tz.offset :o0, 25025, 0, :LMT
           tz.offset :o1, 25025, 0, :IMT
-          tz.offset :o2, 25200, 0, :IRKT
-          tz.offset :o3, 28800, 0, :IRKT
-          tz.offset :o4, 28800, 3600, :IRKST
-          tz.offset :o5, 25200, 3600, :IRKST
-          tz.offset :o6, 32400, 0, :IRKT
+          tz.offset :o2, 25200, 0, :'+07'
+          tz.offset :o3, 28800, 0, :'+08'
+          tz.offset :o4, 28800, 3600, :'+09'
+          tz.offset :o5, 25200, 3600, :'+08'
+          tz.offset :o6, 32400, 0, :'+09'
           
           tz.transition 1879, 12, :o1, 8321063767, 3456
           tz.transition 1920, 1, :o2, 8371635415, 3456

@@ -7,7 +7,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'Etc/GMT+9' do |tz|
-          tz.offset :o0, -32400, 0, :'GMT+9'
+          tz.offset :o0, -32400, 0, :'-09'
           
         end
       end
