@@ -81,23 +81,23 @@ module TZInfo
           tz.transition 1983, 10, :o5, 433886400
           tz.transition 1985, 4, :o3, 482792400
           tz.transition 1985, 9, :o2, 496702800
-          tz.transition 1986, 3, :o3, 512524800
-          tz.transition 1986, 9, :o2, 528249600
-          tz.transition 1987, 3, :o3, 543974400
-          tz.transition 1987, 9, :o2, 559699200
-          tz.transition 1988, 3, :o3, 575424000
-          tz.transition 1988, 9, :o2, 591148800
-          tz.transition 1989, 3, :o3, 606873600
-          tz.transition 1989, 9, :o2, 622598400
-          tz.transition 1990, 3, :o3, 638323200
-          tz.transition 1990, 9, :o2, 654652800
+          tz.transition 1986, 3, :o3, 512521200
+          tz.transition 1986, 9, :o2, 528246000
+          tz.transition 1987, 3, :o3, 543970800
+          tz.transition 1987, 9, :o2, 559695600
+          tz.transition 1988, 3, :o3, 575420400
+          tz.transition 1988, 9, :o2, 591145200
+          tz.transition 1989, 3, :o3, 606870000
+          tz.transition 1989, 9, :o2, 622594800
+          tz.transition 1990, 3, :o3, 638319600
+          tz.transition 1990, 9, :o2, 654649200
           tz.transition 1991, 3, :o3, 670374000
           tz.transition 1991, 9, :o2, 686098800
           tz.transition 1992, 3, :o3, 701823600
           tz.transition 1992, 9, :o2, 717548400
           tz.transition 1993, 3, :o3, 733273200
           tz.transition 1993, 9, :o2, 748998000
-          tz.transition 1994, 3, :o3, 764722800
+          tz.transition 1994, 3, :o3, 764118000
           tz.transition 1994, 9, :o2, 780447600
           tz.transition 1995, 3, :o3, 796172400
           tz.transition 1995, 9, :o2, 811897200

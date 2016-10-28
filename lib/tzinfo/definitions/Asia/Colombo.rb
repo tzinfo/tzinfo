@@ -9,11 +9,11 @@ module TZInfo
         timezone 'Asia/Colombo' do |tz|
           tz.offset :o0, 19164, 0, :LMT
           tz.offset :o1, 19172, 0, :MMT
-          tz.offset :o2, 19800, 0, :IST
-          tz.offset :o3, 19800, 1800, :IHST
-          tz.offset :o4, 19800, 3600, :IST
-          tz.offset :o5, 23400, 0, :LKT
-          tz.offset :o6, 21600, 0, :LKT
+          tz.offset :o2, 19800, 0, :'+0530'
+          tz.offset :o3, 19800, 1800, :'+06'
+          tz.offset :o4, 19800, 3600, :'+0630'
+          tz.offset :o5, 23400, 0, :'+0630'
+          tz.offset :o6, 21600, 0, :'+06'
           
           tz.transition 1879, 12, :o1, 17335550003, 7200
           tz.transition 1905, 12, :o2, 52211763607, 21600
