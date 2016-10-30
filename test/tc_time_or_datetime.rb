@@ -4,17 +4,6 @@ require 'rational' unless defined?(Rational)
 include TZInfo
 
 class TCTimeOrDateTime < Minitest::Test
-  def assert_equal_with_offset(expected, actual)
-    # Time and DateTime don't require identical offsets for equality.
-    assert_equal(expected, actual)
-
-    if expected.respond_to?(:utc_offset)
-      assert_equal(expected.utc_offset, actual.utc_offset)
-    elsif expected.respond_to?(:offset)
-      assert_equal(expected.offset, actual.offset)
-    end
-  end
-
   def test_initialize_time
     assert_nothing_raised do
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000))
@@ -106,6 +95,28 @@ class TCTimeOrDateTime < Minitest::Test
     end
   end
 
+  def test_initialize_timestamp_with_offset
+    assert_nothing_raised do
+      TimeOrDateTime.new(TimestampWithOffset.new(1143214323))
+    end
+  end
+
+  def test_initialize_timestamp_with_offset_ignore_offset
+    # The timestamp of the TimestampWithOffset instance is 2006-03-24 15:32:03 UTC.
+    # The 3 hour offset makes this equivalent to 2006-03-24 18:32:03 +03:00.
+    # For consistency with Time and DateTime, the offset is
+    # ignored by changing the timestamp to its local equivalent by adding the
+    # offset to the timestamp.
+    tdt = TimeOrDateTime.new(TimestampWithOffset.new(1143214323, 10800))
+    assert_equal(TimestampWithOffset.new(1143225123), tdt.to_orig)
+  end
+
+  def test_initialize_timestamp_with_offset_preserve_offset
+    two = TimestampWithOffset.new(1143214323, 10800)
+    tdt = TimeOrDateTime.new(two, false)
+    assert_equal_with_offset(two, tdt.to_orig)
+  end
+
   def test_to_time
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).to_time)
@@ -119,6 +130,8 @@ class TCTimeOrDateTime < Minitest::Test
       TimeOrDateTime.new(1143214323).to_time)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new('1143214323').to_time)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3),
+      TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).to_time)
   end
 
   def test_to_time_preserve_offset
@@ -130,6 +143,12 @@ class TCTimeOrDateTime < Minitest::Test
       TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3, '+3'), false).to_time)
     assert_equal_with_offset(Time.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000), '+03:00'),
       TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000), '+3'), false).to_time)
+    assert_equal_with_offset(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'),
+      TimeOrDateTime.new(TimestampWithOffset.new(1143203523, 10800), false).to_time)
+  end
+
+  def test_to_time_after_timestamp_change_of_offset
+    assert_equal_with_offset(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'), TimeOrDateTime.new(1143203523).to_offset(3*3600).to_time)
   end
 
   def test_to_time_trunc_to_usec
@@ -150,6 +169,8 @@ class TCTimeOrDateTime < Minitest::Test
       TimeOrDateTime.new(1143214323).to_datetime)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3),
       TimeOrDateTime.new('1143214323').to_datetime)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3),
+      TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).to_datetime)
   end
 
   def test_to_datetime_preserve_offset
@@ -161,6 +182,12 @@ class TCTimeOrDateTime < Minitest::Test
       TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000), '+3'), false).to_datetime)
     assert_equal_with_offset(DateTime.new(2006, 3, 24, 15, 32, 3, '+3'),
       TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3, '+3'), false).to_datetime)
+    assert_equal_with_offset(DateTime.new(2006, 3, 24, 15, 32, 3, '+3'),
+      TimeOrDateTime.new(TimestampWithOffset.new(1143203523, 10800), false).to_datetime)
+  end
+
+  def test_to_datetime_after_timestamp_change_of_offset
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3, '+3'), TimeOrDateTime.new(1143203523).to_offset(3*3600).to_datetime)
   end
 
   def test_to_datetime_ruby186_bug
@@ -190,6 +217,55 @@ class TCTimeOrDateTime < Minitest::Test
       TimeOrDateTime.new(1143214323).to_i)
     assert_equal(1143214323,
       TimeOrDateTime.new('1143214323').to_i)
+    assert_equal(1143214323,
+      TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).to_i)
+  end
+
+  def test_to_i_preserve_offset
+    assert_equal(1143214323,
+      TimeOrDateTime.new(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'), false).to_i)
+    assert_equal(1143214323,
+      TimeOrDateTime.new(Time.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000), '+03:00'), false).to_i)
+    assert_equal(1143214323,
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3, '+3'), false).to_i)
+    assert_equal(1143214323,
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000), '+3'), false).to_i)
+    assert_equal(1143214323,
+      TimeOrDateTime.new(TimestampWithOffset.new(1143203523, 10800), false).to_i)
+  end
+
+  def test_to_timestamp_with_offset
+    assert_equal(TimestampWithOffset.new(1143214323),
+      TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).to_timestamp_with_offset)
+    assert_equal(TimestampWithOffset.new(1143214323),
+      TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721123)).to_timestamp_with_offset)
+    assert_equal(TimestampWithOffset.new(1143214323),
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000))).to_timestamp_with_offset)
+    assert_equal(TimestampWithOffset.new(1143214323),
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).to_timestamp_with_offset)
+    assert_equal(TimestampWithOffset.new(1143214323),
+      TimeOrDateTime.new(1143214323).to_timestamp_with_offset)
+    assert_equal(TimestampWithOffset.new(1143214323),
+      TimeOrDateTime.new('1143214323').to_timestamp_with_offset)
+    assert_equal(TimestampWithOffset.new(1143214323),
+      TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).to_timestamp_with_offset)
+  end
+
+  def test_to_timestamp_with_offset_preserve_offset
+    assert_equal_with_offset(TimestampWithOffset.new(1143203523, 10800),
+      TimeOrDateTime.new(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'), false).to_timestamp_with_offset)
+    assert_equal_with_offset(TimestampWithOffset.new(1143203523, 10800),
+      TimeOrDateTime.new(Time.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000), '+03:00'), false).to_timestamp_with_offset)
+    assert_equal_with_offset(TimestampWithOffset.new(1143203523, 10800),
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000), '+3'), false).to_timestamp_with_offset)
+    assert_equal_with_offset(TimestampWithOffset.new(1143203523, 10800),
+      TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3, '+3'), false).to_timestamp_with_offset)
+    assert_equal_with_offset(TimestampWithOffset.new(1143203523, 10800),
+      TimeOrDateTime.new(TimestampWithOffset.new(1143203523, 10800), false).to_timestamp_with_offset)
+  end
+
+  def test_to_timestamp_with_offset_after_timestamp_change_of_offset
+    assert_equal(TimestampWithOffset.new(1143203523, 3*3600), TimeOrDateTime.new(1143203523).to_offset(3*3600).to_timestamp_with_offset)
   end
 
   def test_to_orig
@@ -205,6 +281,12 @@ class TCTimeOrDateTime < Minitest::Test
       TimeOrDateTime.new(1143214323).to_orig)
     assert_equal(1143214323,
       TimeOrDateTime.new('1143214323').to_orig)
+    assert_equal(TimestampWithOffset.new(1143214323),
+      TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).to_orig)
+  end
+
+  def test_to_orig_after_timestamp_change_of_offset
+    assert_equal_with_offset(TimestampWithOffset.new(1143214323, 3*3600), TimeOrDateTime.new(1143214323).to_offset(3*3600).to_orig)
   end
 
   def test_to_s
@@ -216,54 +298,64 @@ class TCTimeOrDateTime < Minitest::Test
       TimeOrDateTime.new(1143214323).to_s)
     assert_equal('Timestamp: 1143214323',
       TimeOrDateTime.new('1143214323').to_s)
+    assert_equal("TimestampWithOffset: #{TimestampWithOffset.new(1143214323)}",
+      TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).to_s)
   end
 
   def test_year
     assert_equal(2006, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).year)
     assert_equal(2006, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).year)
     assert_equal(2006, TimeOrDateTime.new(1143214323).year)
+    assert_equal(2006, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).year)
   end
 
   def test_mon
     assert_equal(3, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).mon)
     assert_equal(3, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).mon)
     assert_equal(3, TimeOrDateTime.new(1143214323).mon)
+    assert_equal(3, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).mon)
   end
 
   def test_month
     assert_equal(3, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).month)
     assert_equal(3, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).month)
     assert_equal(3, TimeOrDateTime.new(1143214323).month)
+    assert_equal(3, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).month)
   end
 
   def test_mday
     assert_equal(24, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).mday)
     assert_equal(24, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).mday)
     assert_equal(24, TimeOrDateTime.new(1143214323).mday)
+    assert_equal(24, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).mday)
   end
 
   def test_day
     assert_equal(24, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).day)
     assert_equal(24, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).day)
     assert_equal(24, TimeOrDateTime.new(1143214323).day)
+    assert_equal(24, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).day)
   end
 
   def test_hour
     assert_equal(15, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).hour)
     assert_equal(15, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).hour)
     assert_equal(15, TimeOrDateTime.new(1143214323).hour)
+    assert_equal(15, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).hour)
   end
 
   def test_min
     assert_equal(32, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).min)
     assert_equal(32, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).min)
     assert_equal(32, TimeOrDateTime.new(1143214323).min)
+    assert_equal(32, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).min)
   end
 
   def test_sec
     assert_equal(3, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).sec)
     assert_equal(3, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).sec)
     assert_equal(3, TimeOrDateTime.new(1143214323).sec)
+    assert_equal(3, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).sec)
   end
 
   def test_usec
@@ -272,18 +364,21 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).usec)
     assert_equal(721123, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123,1000000))).usec)
     assert_equal(0, TimeOrDateTime.new(1143214323).usec)
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).usec)
   end
 
   def test_offset_ignored
     assert_equal(0, TimeOrDateTime.new(Time.new(2006, 3, 24, 15, 32, 3, '+03:00')).offset)
     assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3, '+03:00')).offset)
     assert_equal(0, TimeOrDateTime.new(1143214323).offset)
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323, 10800)).offset)
   end
 
   def test_offset_preserved
     assert_equal(10800, TimeOrDateTime.new(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'), false).offset)
     assert_equal(10800, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3, '+03:00'), false).offset)
     assert_equal(0, TimeOrDateTime.new(1143214323, false).offset)
+    assert_equal(10800, TimeOrDateTime.new(TimestampWithOffset.new(1143214323, 10800), false).offset)
   end
 
   def test_usec_after_to_i
@@ -310,6 +405,11 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 2)))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(Time.utc(2005, 3, 24, 15, 32, 3)))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 4)))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(Time.utc(2007, 3, 24, 15, 32, 3)))
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 2)))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(Time.utc(2005, 3, 24, 15, 32, 3)))
 
     assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500001)))
     assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)))
@@ -337,6 +437,11 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 2)))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(DateTime.new(1960, 3, 24, 15, 32, 3)))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 4)))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(DateTime.new(2040, 3, 24, 15, 32, 3)))
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 2)))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(DateTime.new(1960, 3, 24, 15, 32, 3)))
 
     assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000 + DATETIME_RESOLUTION, 1000000))))
     assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000))))
@@ -364,6 +469,36 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(1143214323))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(1143214322))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(1111678323))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(1143214324))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(1174750323))
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(1143214323))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(1143214322))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(1111678323))
+  end
+
+  def test_compare_timeordatetime_timestamp_with_offset
+    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214324)))
+    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1174750323)))
+    assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214323)))
+    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214322)))
+    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1111678323)))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214324)))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1174750323)))
+    assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214323)))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214322)))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1111678323)))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(1960, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214323)))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2040, 3, 24, 15, 32, 3)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214323)))
+    assert_equal(-1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214324)))
+    assert_equal(-1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(TimestampWithOffset.new(1174750323)))
+    assert_equal(0, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214323)))
+    assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214322)))
+    assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimeOrDateTime.new(TimestampWithOffset.new(1111678323)))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214324)))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1174750323)))
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214323)))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1143214322)))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimeOrDateTime.new(TimestampWithOffset.new(1111678323)))
   end
 
   def test_compare_time
@@ -384,6 +519,11 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> Time.utc(2006, 3, 24, 15, 32, 3))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> Time.utc(2006, 3, 24, 15, 32, 2))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> Time.utc(2005, 3, 24, 15, 32, 3))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> Time.utc(2006, 3, 24, 15, 32, 4))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> Time.utc(2007, 3, 24, 15, 32, 3))
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> Time.utc(2006, 3, 24, 15, 32, 3))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> Time.utc(2006, 3, 24, 15, 32, 2))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> Time.utc(2005, 3, 24, 15, 32, 3))
 
     assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500001))
     assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> Time.utc(2006, 3, 24, 15, 32, 3, 500000))
@@ -411,6 +551,11 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> DateTime.new(2006, 3, 24, 15, 32, 3))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> DateTime.new(2006, 3, 24, 15, 32, 2))
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> DateTime.new(1960, 3, 24, 15, 32, 3))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> DateTime.new(2006, 3, 24, 15, 32, 4))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> DateTime.new(2040, 3, 24, 15, 32, 3))
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> DateTime.new(2006, 3, 24, 15, 32, 3))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> DateTime.new(2006, 3, 24, 15, 32, 2))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> DateTime.new(1960, 3, 24, 15, 32, 3))
 
     assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000 + DATETIME_RESOLUTION, 1000000)))
     assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 500000)) <=> DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(500000, 1000000)))
@@ -438,6 +583,11 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> 1143214323)
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> 1143214322)
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> 1111678323)
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> 1143214324)
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> 1174750323)
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> 1143214323)
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> 1143214322)
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> 1111678323)
   end
 
   def test_compare_timestamp_str
@@ -458,12 +608,43 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(0, TimeOrDateTime.new(1143214323) <=> '1143214323')
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> '1143214322')
     assert_equal(1, TimeOrDateTime.new(1143214323) <=> '1111678323')
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> '1143214324')
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> '1174750323')
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> '1143214323')
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> '1143214322')
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> '1111678323')
+  end
+
+  def test_compare_timestamp_with_offset
+    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1143214324))
+    assert_equal(-1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1174750323))
+    assert_equal(0, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1143214323))
+    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1143214322))
+    assert_equal(1, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1111678323))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1143214324))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1174750323))
+    assert_equal(0, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1143214323))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1143214322))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1111678323))
+    assert_equal(-1, TimeOrDateTime.new(DateTime.new(1960, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1143214323))
+    assert_equal(1, TimeOrDateTime.new(DateTime.new(2040, 3, 24, 15, 32, 3)) <=> TimestampWithOffset.new(1143214323))
+    assert_equal(-1, TimeOrDateTime.new(1143214323) <=> TimestampWithOffset.new(1143214324))
+    assert_equal(-1, TimeOrDateTime.new(1143214323) <=> TimestampWithOffset.new(1174750323))
+    assert_equal(0, TimeOrDateTime.new(1143214323) <=> TimestampWithOffset.new(1143214323))
+    assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimestampWithOffset.new(1143214322))
+    assert_equal(1, TimeOrDateTime.new(1143214323) <=> TimestampWithOffset.new(1111678323))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimestampWithOffset.new(1143214324))
+    assert_equal(-1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimestampWithOffset.new(1174750323))
+    assert_equal(0, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimestampWithOffset.new(1143214323))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimestampWithOffset.new(1143214322))
+    assert_equal(1, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> TimestampWithOffset.new(1111678323))
   end
 
   def test_compare_non_comparable
     assert_nil(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) <=> Object.new)
     assert_nil(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) <=> Object.new)
     assert_nil(TimeOrDateTime.new(1143214323) <=> Object.new)
+    assert_nil(TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) <=> Object.new)
   end
 
   def test_eql
@@ -471,6 +652,7 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
     assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(1143214323)))
     assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new('1143214323')))
+    assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(TimestampWithOffset.new(1143214323))))
     assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 4))))
     assert_equal(false, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).eql?(Object.new))
 
@@ -483,6 +665,7 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(true, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(1143214323)))
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new('1143214323')))
+    assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(TimestampWithOffset.new(1143214323))))
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 4))))
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).eql?(Object.new))
 
@@ -491,13 +674,21 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(722, 1000)))))
     assert_equal(false, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).eql?(Object.new))
 
-
     assert_equal(false, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))))
     assert_equal(false, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
     assert_equal(true, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(1143214323)))
     assert_equal(true, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new('1143214323')))
+    assert_equal(false, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(TimestampWithOffset.new(1143214323))))
     assert_equal(false, TimeOrDateTime.new(1143214323).eql?(TimeOrDateTime.new(1143214324)))
     assert_equal(false, TimeOrDateTime.new(1143214323).eql?(Object.new))
+
+    assert_equal(false, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).eql?(TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3))))
+    assert_equal(false, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).eql?(TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3))))
+    assert_equal(false, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).eql?(TimeOrDateTime.new(1143214323)))
+    assert_equal(false, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).eql?(TimeOrDateTime.new('1143214323')))
+    assert_equal(true, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).eql?(TimeOrDateTime.new(TimestampWithOffset.new(1143214323))))
+    assert_equal(false, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).eql?(TimeOrDateTime.new(1143214324)))
+    assert_equal(false, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).eql?(Object.new))
   end
 
   def test_hash
@@ -505,6 +696,7 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3).hash, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).hash)
     assert_equal(1143214323.hash, TimeOrDateTime.new(1143214323).hash)
     assert_equal(1143214323.hash, TimeOrDateTime.new('1143214323').hash)
+    assert_equal(TimestampWithOffset.new(1143214323).hash, TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).hash)
   end
 
   def test_add
@@ -513,16 +705,19 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) + 0).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) + 0).to_orig)
     assert_equal(1143214323, (TimeOrDateTime.new(1143214323) + 0).to_orig)
+    assert_equal(TimestampWithOffset.new(1143214323), (TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) + 0).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) + 1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) + 1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) + 1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) + 1).to_orig)
     assert_equal(1143214324, (TimeOrDateTime.new(1143214323) + 1).to_orig)
+    assert_equal(TimestampWithOffset.new(1143214324), (TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) + 1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) + (-1)).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) + (-1)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) + (-1)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) + (-1)).to_orig)
     assert_equal(1143214322, (TimeOrDateTime.new(1143214323) + (-1)).to_orig)
+    assert_equal(TimestampWithOffset.new(1143214322), (TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) + (-1)).to_orig)
   end
 
   def test_subtract
@@ -531,16 +726,19 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - 0).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - 0).to_orig)
     assert_equal(1143214323, (TimeOrDateTime.new(1143214323) - 0).to_orig)
+    assert_equal(TimestampWithOffset.new(1143214323), (TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) - 0).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) - 1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) - 1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - 1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - 1).to_orig)
     assert_equal(1143214322, (TimeOrDateTime.new(1143214323) - 1).to_orig)
+    assert_equal(TimestampWithOffset.new(1143214322), (TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) - 1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) - (-1)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - (-1)).to_orig)
     assert_equal(1143214324, (TimeOrDateTime.new(1143214323) - (-1)).to_orig)
+    assert_equal(TimestampWithOffset.new(1143214324), (TimeOrDateTime.new(TimestampWithOffset.new(1143214323)) - (-1)).to_orig)
   end
 
   def test_to_offset
@@ -549,15 +747,18 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal_with_offset(DateTime.new(2006, 3, 24, 15, 32, 3), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).to_offset(0).to_orig)
     assert_equal_with_offset(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).to_offset(0).to_orig)
     assert_equal(1143214323, (TimeOrDateTime.new(1143214323).to_offset(0)).to_orig)
+    assert_equal(TimestampWithOffset.new(1143214323), (TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).to_offset(0)).to_orig)
 
     assert_equal_with_offset(Time.new(2006, 3, 24, 18, 32, 3, '+03:00'), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).to_offset(3600*3).to_orig)
     assert_equal_with_offset(Time.new(2006, 3, 24, 18, 32, 3 + Rational(721, 1000), '+03:00'), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).to_offset(3600*3).to_orig)    
     assert_equal_with_offset(DateTime.new(2006, 3, 24, 18, 32, 3, '+3'), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).to_offset(3600*3).to_orig)
     assert_equal_with_offset(DateTime.new(2006, 3, 24, 18, 32, 3 + Rational(721, 1000), '+3'), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).to_offset(3600*3).to_orig)
-    assert_equal(1143225123, TimeOrDateTime.new(1143214323).to_offset(3600*3).to_orig)
+    assert_equal_with_offset(TimestampWithOffset.new(1143214323, 3600*3), TimeOrDateTime.new(1143214323).to_offset(3600*3).to_orig)
+    assert_equal_with_offset(TimestampWithOffset.new(1143214323, 3600*3), TimeOrDateTime.new(TimestampWithOffset.new(1143214323)).to_offset(3600*3).to_orig)
 
     assert_equal_with_offset(Time.new(2006, 3, 24, 16, 32, 3, '+03:00'), TimeOrDateTime.new(Time.new(2006, 3, 24, 15, 32, 3, '+02:00'), false).to_offset(3600*3).to_orig)
     assert_equal_with_offset(DateTime.new(2006, 3, 24, 16, 32, 3, '+3'), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3, '+2'), false).to_offset(3600*3).to_orig)
+    assert_equal_with_offset(TimestampWithOffset.new(1143207123, 3600*3), TimeOrDateTime.new(TimestampWithOffset.new(1143207123, 3600*2), false).to_offset(3600*3).to_orig)
   end
 
   def test_wrap_time
@@ -582,6 +783,12 @@ class TCTimeOrDateTime < Minitest::Test
     t = TimeOrDateTime.wrap('1143214323')
     assert_instance_of(TimeOrDateTime, t)
     assert_equal(1143214323, t.to_orig)
+  end
+
+  def test_wrap_timestamp_with_offset
+    t = TimeOrDateTime.wrap(TimestampWithOffset.new(1143214323))
+    assert_instance_of(TimeOrDateTime, t)
+    assert_equal(TimestampWithOffset.new(1143214323), t.to_orig)
   end
 
   def test_wrap_timeordatetime
@@ -632,6 +839,14 @@ class TCTimeOrDateTime < Minitest::Test
     })
   end
 
+  def test_wrap_block_timestamp_with_offset
+    assert_equal(TimestampWithOffset.new(1143214324), TimeOrDateTime.wrap(TimestampWithOffset.new(1143214323)) do |t|
+      assert_instance_of(TimeOrDateTime, t)
+      assert_equal(TimestampWithOffset.new(1143214323), t.to_orig)
+      t + 1
+    end)
+  end
+
   def test_wrap_block_timeordatetime
     t1 = TimeOrDateTime.new(1143214323)
 
@@ -656,6 +871,12 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), TimeOrDateTime.wrap(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'), false) do |t|
       assert_equal_with_offset(Time.new(2006, 3, 24, 15, 32, 3, '+03:00'), t.to_orig)
       t + 1
+    end)
+  end
+
+  def test_wrap_block_timestamp_with_offset_returned_as_timestamp
+    assert_equal(1143225123, TimeOrDateTime.wrap(1143214323) do |t|
+      t.to_offset(10800)
     end)
   end
 end

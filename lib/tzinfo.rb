@@ -5,6 +5,7 @@ end
 require 'tzinfo/version'
 
 require 'tzinfo/offset_rationals'
+require 'tzinfo/timestamp_with_offset'
 require 'tzinfo/time_or_datetime'
 
 require 'tzinfo/timezone_definition'

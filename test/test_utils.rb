@@ -118,6 +118,22 @@ module Kernel
       assert(false, full_message)
     end
   end
+
+  def assert_equal_with_offset(expected, actual)
+    # Time, DateTime and TimestampWithOffset don't require identical offsets for equality.
+    assert_equal(expected, actual)
+
+    if expected.respond_to?(:utc_offset)
+      assert_equal(expected.utc_offset, actual.utc_offset)
+    elsif expected.respond_to?(:offset)
+      assert_equal(expected.offset, actual.offset)
+    end
+  end
+
+  def assert_time_or_datetime_equal_with_offset(expected_orig, actual_tordt)
+    assert_kind_of(TimeOrDateTime, actual_tordt)
+    assert_equal_with_offset(expected_orig, actual_tordt.to_orig)
+  end
 end
 
 

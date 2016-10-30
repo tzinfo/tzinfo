@@ -4,17 +4,19 @@ require 'time'
 
 module TZInfo
   # Used by TZInfo internally to represent either a Time, DateTime or
-  # an Integer timestamp (seconds since 1970-01-01 00:00:00).
+  # a timestamp (seconds since 1970-01-01 00:00:00).
   class TimeOrDateTime
     include Comparable
 
-    # Constructs a new TimeOrDateTime. timeOrDateTime can be a Time, DateTime
-    # or Integer. The UTC offset from Time or DateTime instances is ignored
-    # unless ignore_offset is set to false.
+    # Constructs a new TimeOrDateTime. timeOrDateTime can be a Time, DateTime,
+    # Integer or TimestampWithOffset. The UTC offset from Time, DateTime or
+    # TimestampWithOffset instances is ignored unless ignore_offset is set to
+    # false.
     def initialize(timeOrDateTime, ignore_offset = true)
       @time = nil
       @datetime = nil
       @timestamp = nil
+      @timestamp_with_offset = nil
 
       if timeOrDateTime.is_a?(Time)
         @time = timeOrDateTime
@@ -29,6 +31,14 @@ module TZInfo
         @datetime = timeOrDateTime
         @datetime = @datetime.new_offset(0) unless @datetime.offset == 0 || !ignore_offset
         @orig = @datetime
+      elsif timeOrDateTime.is_a?(TimestampWithOffset)
+        @timestamp_with_offset = timeOrDateTime
+
+        # The timestamp is always in UTC. To ignore the offset, a local
+        # timestamp is created by adding the offset to the timestamp.
+        @timestamp_with_offset = TimestampWithOffset.new(@timestamp_with_offset.timestamp + @timestamp_with_offset.utc_offset, 0) unless @timestamp_with_offset.utc_offset == 0 || !ignore_offset
+
+        @orig = @timestamp_with_offset
       else
         @timestamp = timeOrDateTime.to_i
         @orig = @timestamp
@@ -48,6 +58,8 @@ module TZInfo
       unless @time
         if @timestamp
           @time = Time.at(@timestamp).utc
+        elsif @timestamp_with_offset
+          @time = time_with_offset(Time.at(@timestamp_with_offset.timestamp), @timestamp_with_offset.utc_offset)
         else
           # Avoid using Rational unless necessary.
           u = usec
@@ -79,7 +91,8 @@ module TZInfo
       @datetime
     end
 
-    # Returns the time as an integer timestamp.
+    # Returns the time as an integer timestamp. If the TimeOrDateTime has an
+    # offset, the result is the offset added to the UTC timestamp.
     def to_i
       # Thread-safety: It is possible that the value of @timestamp may be
       # calculated multiple times in concurrently executing threads. It is not
@@ -87,10 +100,30 @@ module TZInfo
       # calculated once.
 
       unless @timestamp
-        @timestamp = to_time.to_i
+        if @timestamp_with_offset
+          @timestamp = @timestamp_with_offset.timestamp + @timestamp_with_offset.utc_offset
+        else
+          time = to_time
+          @timestamp = time.to_i + time.utc_offset
+        end
       end
 
       @timestamp
+    end
+
+    # Returns the time as a TimestampWithOffset.
+    def to_timestamp_with_offset
+      # Thread-safety: It is possible that the value of @timestamp_with_offset
+      # may be calculated multiple times in concurrently executing threads. It
+      # is not worth the overhead of locking to ensure that
+      # @timestamp_with_offset is only calculated once.
+
+      unless @timestamp_with_offset
+        time = to_time
+        @timestamp_with_offset = TimestampWithOffset.new(time.to_i, time.utc_offset)
+      end
+
+      @timestamp_with_offset
     end
 
     # Returns the time as the original time passed to new.
@@ -104,6 +137,8 @@ module TZInfo
         "Time: #{@orig.to_s}"
       elsif @orig.is_a?(DateTime)
         "DateTime: #{@orig.to_s}"
+      elsif @orig.is_a?(TimestampWithOffset)
+        "TimestampWithOffset: #{@orig.to_s}"
       else
         "Timestamp: #{@orig.to_s}"
       end
@@ -204,14 +239,16 @@ module TZInfo
         @time.utc_offset
       elsif @datetime
         (3600*24*@datetime.offset).to_i
+      elsif @timestamp_with_offset
+        @timestamp_with_offset.utc_offset
       else
         0
       end
     end
 
     # Compares this TimeOrDateTime with another Time, DateTime, timestamp
-    # (Integer) or TimeOrDateTime. Returns -1, 0 or +1 depending
-    # whether the receiver is less than, equal to, or greater than
+    # (Integer or TimestampWithOffset) or TimeOrDateTime. Returns -1, 0 or +1
+    # depending whether the receiver is less than, equal to, or greater than
     # timeOrDateTime.
     #
     # Returns nil if the passed in timeOrDateTime is not comparable with
@@ -225,6 +262,7 @@ module TZInfo
       return nil unless timeOrDateTime.is_a?(TimeOrDateTime) ||
                         timeOrDateTime.is_a?(Time) ||
                         timeOrDateTime.is_a?(DateTime) ||
+                        timeOrDateTime.is_a?(TimestampWithOffset) ||
                         timeOrDateTime.respond_to?(:to_i)
 
       unless timeOrDateTime.is_a?(TimeOrDateTime)
@@ -239,6 +277,8 @@ module TZInfo
         to_datetime <=> timeOrDateTime.to_datetime
       elsif @orig.is_a?(Time) || orig.is_a?(Time)
         to_time <=> timeOrDateTime.to_time
+      elsif @orig.is_a?(TimestampWithOffset) || orig.is_a?(TimestampWithOffset)
+        to_timestamp_with_offset.timestamp <=> timeOrDateTime.to_timestamp_with_offset.timestamp
       else
         to_i <=> timeOrDateTime.to_i
       end
@@ -255,7 +295,7 @@ module TZInfo
         if @orig.is_a?(DateTime)
           TimeOrDateTime.new(@orig + OffsetRationals.rational_for_offset(seconds))
         else
-          # + defined for Time and Integer
+          # + is defined for Time, TimestampWithOffset and Integer.
           TimeOrDateTime.new(@orig + seconds)
         end
       end
@@ -269,24 +309,25 @@ module TZInfo
       self + (-seconds)
     end
 
-    # For TimeOrDateTime instances based on Time or DateTime values, returns a
-    # new TimeOrDateTime created by adjusting the UTC offset to the given
-    # offset in seconds.
-    #
-    # For TimeOrDateTime instances based on Integer timestamps, returns a new
-    # TimeOrDateTime created by adding the given offset to the timestamp.
+    # Returns a new TimeOrDateTime created by adjusting the UTC offset to the
+    # given offset in seconds. The returned instance will share the same
+    # original type unless it was an Integer and the new offset is non-zero. In
+    # this case, the original type will be converted to a TimestampWithOffset.
     def to_offset(offset)
       if @orig.is_a?(DateTime)
         off = OffsetRationals.rational_for_offset(offset)
         TimeOrDateTime.new(@orig.new_offset(off), false)
       elsif @orig.is_a?(Time)
-        time = @time.getutc + offset
-        nsec_part = Rational(time.nsec, 1_000_000_000)
-        time = Time.new(time.year, time.mon, time.mday, time.hour, time.min, time.sec + nsec_part, offset)
+        time = time_with_offset(@orig, offset)
         TimeOrDateTime.new(time, false)
-      else
-        # Integer: fallback to "just shift timestamp"
-        TimeOrDateTime.new(@orig + offset)
+      elsif @orig.is_a?(TimestampWithOffset)
+        TimeOrDateTime.new(TimestampWithOffset.new(@orig.timestamp, offset), false)
+      else # Integer
+        if offset == 0
+          TimeOrDateTime.new(@orig, false)
+        else
+          TimeOrDateTime.new(TimestampWithOffset.new(@orig, offset), false)
+        end
       end
     end
 
@@ -309,15 +350,15 @@ module TZInfo
     # The result of the block will be converted to the type of the originally
     # passed in timeOrDateTime and then returned as the result of wrap.
     #
-    # timeOrDateTime can be a Time, DateTime, timestamp (Integer) or
-    # TimeOrDateTime. If a TimeOrDateTime is passed in, no new TimeOrDateTime
-    # will be constructed and the value passed to wrap will be used when
-    # calling the block.
+    # timeOrDateTime can be a Time, DateTime, timestamp (Integer, or
+    # TimestampWithOffset) or TimeOrDateTime. If a TimeOrDateTime is passed in,
+    # no new TimeOrDateTime will be constructed and the value passed to wrap
+    # will be used when calling the block.
     #
-    # The UTC offset from Time or DateTime instances is ignored unless
-    # ignore_offset is set to false (for example, 2016-06-01 12:30:50 +03:00
-    # and 2016-06-01 12:30:50 GMT would be wrapped into exactly the same
-    # TimeOrDateTime object when ignore_offset is true).
+    # The UTC offset from Time, DateTime or TimestampWithOffset instances is
+    # ignored unless ignore_offset is set to false (for example,
+    # 2016-06-01 12:30:50 +03:00 and 2016-06-01 12:30:50 GMT would be wrapped
+    # into exactly the same TimeOrDateTime object when ignore_offset is true).
     def self.wrap(timeOrDateTime, ignore_offset = true)
       t = timeOrDateTime.is_a?(TimeOrDateTime) ? timeOrDateTime : TimeOrDateTime.new(timeOrDateTime, ignore_offset)
 
@@ -330,12 +371,24 @@ module TZInfo
           t.to_time
         elsif timeOrDateTime.is_a?(DateTime)
           t.to_datetime
+        elsif timeOrDateTime.is_a?(TimestampWithOffset)
+          t.to_timestamp_with_offset
         else
           t.to_i
         end
       else
         t
       end
+    end
+
+    private
+
+    # Returns a new Time that represents the same instant as time, with the
+    # UTC offset set to the supplied new_offset in seconds.
+    def time_with_offset(time, new_offset)
+      time = time.getutc + new_offset
+      nsec_part = Rational(time.nsec, 1_000_000_000)
+      Time.new(time.year, time.mon, time.mday, time.hour, time.min, time.sec + nsec_part, new_offset)
     end
   end
 end

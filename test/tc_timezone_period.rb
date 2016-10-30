@@ -26,20 +26,20 @@ class TCTimezonePeriod < Minitest::Test
     assert_same(start_t, p.start_transition)
     assert_same(end_t, p.end_transition)
     assert_same(dst, p.offset)
-    assert_equal(DateTime.new(2006,1,1,0,0,0), p.utc_start)
-    assert_equal(Time.utc(2006,1,1,0,0,0), p.utc_start_time)
-    assert_equal(DateTime.new(2006,1,2,0,0,0), p.utc_end)
-    assert_equal(Time.utc(2006,1,2,0,0,0), p.utc_end_time)
+    assert_equal_with_offset(DateTime.new(2006,1,1,0,0,0), p.utc_start)
+    assert_equal_with_offset(Time.utc(2006,1,1,0,0,0), p.utc_start_time)
+    assert_equal_with_offset(DateTime.new(2006,1,2,0,0,0), p.utc_end)
+    assert_equal_with_offset(Time.utc(2006,1,2,0,0,0), p.utc_end_time)
     assert_equal(-7200, p.utc_offset)
     assert_equal(3600, p.std_offset)
     assert_equal(-3600, p.utc_total_offset)
     assert_equal(Rational(-3600, 86400), p.utc_total_offset_rational)
     assert_equal(:TEST, p.zone_identifier)
     assert_equal(:TEST, p.abbreviation)
-    assert_equal(DateTime.new(2005,12,31,23,0,0), p.local_start)
-    assert_equal(Time.utc(2005,12,31,23,0,0), p.local_start_time)
-    assert_equal(DateTime.new(2006,1,1,23,0,0), p.local_end)
-    assert_equal(Time.utc(2006,1,1,23,0,0), p.local_end_time)
+    assert_equal_with_offset(DateTime.new(2005,12,31,23,0,0,'-01:00'), p.local_start)
+    assert_equal_with_offset(Time.new(2005,12,31,23,0,0,'-01:00'), p.local_start_time)
+    assert_equal_with_offset(DateTime.new(2006,1,1,23,0,0,'-01:00'), p.local_end)
+    assert_equal_with_offset(Time.new(2006,1,1,23,0,0,'-01:00'), p.local_end_time)
   end
 
   def test_initialize_start_end_offset
@@ -62,8 +62,8 @@ class TCTimezonePeriod < Minitest::Test
     assert_same(start_t, p.start_transition)
     assert_nil(p.end_transition)
     assert_same(dst, p.offset)
-    assert_equal(DateTime.new(2006,1,1,0,0,0), p.utc_start)
-    assert_equal(Time.utc(2006,1,1,0,0,0), p.utc_start_time)
+    assert_equal_with_offset(DateTime.new(2006,1,1,0,0,0), p.utc_start)
+    assert_equal_with_offset(Time.utc(2006,1,1,0,0,0), p.utc_start_time)
     assert_nil(p.utc_end)
     assert_nil(p.utc_end_time)
     assert_equal(-7200, p.utc_offset)
@@ -72,8 +72,8 @@ class TCTimezonePeriod < Minitest::Test
     assert_equal(Rational(-3600, 86400), p.utc_total_offset_rational)
     assert_equal(:TEST, p.zone_identifier)
     assert_equal(:TEST, p.abbreviation)
-    assert_equal(DateTime.new(2005,12,31,23,0,0), p.local_start)
-    assert_equal(Time.utc(2005,12,31,23,0,0), p.local_start_time)
+    assert_equal_with_offset(DateTime.new(2005,12,31,23,0,0,'-01:00'), p.local_start)
+    assert_equal_with_offset(Time.new(2005,12,31,23,0,0,'-01:00'), p.local_start_time)
     assert_nil(p.local_end)
     assert_nil(p.local_end_time)
   end
@@ -99,8 +99,8 @@ class TCTimezonePeriod < Minitest::Test
     assert_same(dst, p.offset)
     assert_nil(p.utc_start)
     assert_nil(p.utc_start_time)
-    assert_equal(DateTime.new(2006,1,2,0,0,0), p.utc_end)
-    assert_equal(Time.utc(2006,1,2,0,0,0), p.utc_end_time)
+    assert_equal_with_offset(DateTime.new(2006,1,2,0,0,0), p.utc_end)
+    assert_equal_with_offset(Time.utc(2006,1,2,0,0,0), p.utc_end_time)
     assert_equal(-7200, p.utc_offset)
     assert_equal(3600, p.std_offset)
     assert_equal(-3600, p.utc_total_offset)
@@ -109,8 +109,8 @@ class TCTimezonePeriod < Minitest::Test
     assert_equal(:TEST, p.abbreviation)
     assert_nil(p.local_start)
     assert_nil(p.local_start_time)
-    assert_equal(DateTime.new(2006,1,1,23,0,0), p.local_end)
-    assert_equal(Time.utc(2006,1,1,23,0,0), p.local_end_time)
+    assert_equal_with_offset(DateTime.new(2006,1,1,23,0,0,'-01:00'), p.local_end)
+    assert_equal_with_offset(Time.new(2006,1,1,23,0,0,'-01:00'), p.local_end_time)
   end
 
   def test_initialize_end_offset
@@ -376,9 +376,9 @@ class TCTimezonePeriod < Minitest::Test
     p2 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, 0, :TEST))
     p3 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(7200, 3600, :TEST))
 
-    assert_equal(DateTime.new(2005,1,19,22,0,0, '-3'), p1.to_local(DateTime.new(2005,1,20,1,0,0)))
-    assert_equal(DateTime.new(2005,1,19,22,0,0 + Rational(512,1000), '-3'), p1.to_local(DateTime.new(2005,1,20,1,0,0 + Rational(512,1000))))
-    assert_equal(Time.new(2005,1,19,21,0,0, '-04:00'), p2.to_local(Time.utc(2005,1,20,1,0,0)))
+    assert_equal(DateTime.new(2005,1,19,22,0,0,'-03:00'), p1.to_local(DateTime.new(2005,1,20,1,0,0)))
+    assert_equal(DateTime.new(2005,1,19,22,0,0 + Rational(512,1000), '-03:00'), p1.to_local(DateTime.new(2005,1,20,1,0,0 + Rational(512,1000))))
+    assert_equal(Time.new(2005,1,19,21,0,0,'-04:00'), p2.to_local(Time.utc(2005,1,20,1,0,0)))
     assert_equal(Time.new(2005,1,19,21,0,0 + Rational(512,1000), '-04:00'), p2.to_local(Time.utc(2005,1,20,1,0,0,512000)))
     assert_equal(1106193600, p3.to_local(1106182800))
   end
@@ -402,8 +402,8 @@ class TCTimezonePeriod < Minitest::Test
 
     p1 = TimezonePeriod.new(t1, nil)
 
-    assert_equal(DateTime.new(1969,12,31,23,0,0), p1.local_start)
-    assert_equal(Time.utc(1969,12,31,23,0,0), p1.local_start_time)
+    assert_equal_with_offset(DateTime.new(1969,12,31,23,0,0,'-01:00'), p1.local_start)
+    assert_equal_with_offset(Time.new(1969,12,31,23,0,0,'-01:00'), p1.local_start_time)
   end
 
   def test_time_boundary_end
@@ -413,8 +413,8 @@ class TCTimezonePeriod < Minitest::Test
 
     p1 = TimezonePeriod.new(nil, t1)
 
-    assert_equal(DateTime.new(2038,1,19,4,0,0), p1.local_end)
-    assert_equal(Time.utc(2038,1,19,4,0,0), p1.local_end_time)
+    assert_equal_with_offset(DateTime.new(2038,1,19,4,0,0,'+01:00'), p1.local_end)
+    assert_equal_with_offset(Time.new(2038,1,19,4,0,0,'+01:00'), p1.local_end_time)
   end
 
   def test_equality

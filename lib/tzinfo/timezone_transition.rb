@@ -16,6 +16,8 @@ module TZInfo
       @previous_offset = previous_offset
       @local_end_at = nil
       @local_start_at = nil
+      @absolute_local_end_at = nil
+      @absolute_local_start_at = nil
     end
 
     # A TimeOrDateTime instance representing the UTC time when this transition
@@ -36,6 +38,34 @@ module TZInfo
 
     # A TimeOrDateTime instance representing the local time when this transition
     # causes the previous observance to end (calculated from at using
+    # previous_offset). Unlike local_end_at, the offset of the returned
+    # TimeOrDateTime is always 0.
+    def absolute_local_end_at
+      # Thread-safety: It is possible that the value of @absolute_local_end_at
+      # may be calculated multiple times in concurrently executing threads. It
+      # is not worth the overhead of locking to ensure that
+      # @absolute_local_end_at is only calculated once.
+
+      @absolute_local_end_at = at + @previous_offset.utc_total_offset unless @absolute_local_end_at
+      @absolute_local_end_at
+    end
+
+    # A TimeOrDateTime instance representing the local time when this transition
+    # causes the next observance to start (calculated from at using offset).
+    # Unlike local_start_at, the offset of the returned TimeOrDateTime is always
+    # 0.
+    def absolute_local_start_at
+      # Thread-safety: It is possible that the value of @absolute_local_start_at
+      # may be calculated multiple times in concurrently executing threads. It
+      # is not worth the overhead of locking to ensure that
+      # @absolute_local_start_at is only calculated once.
+
+      @absolute_local_start_at = at + @offset.utc_total_offset unless @absolute_local_start_at
+      @absolute_local_start_at
+    end
+
+    # A TimeOrDateTime instance representing the local time when this transition
+    # causes the previous observance to end (calculated from at using
     # previous_offset).
     def local_end_at
       # Thread-safety: It is possible that the value of @local_end_at may be
@@ -43,7 +73,7 @@ module TZInfo
       # worth the overhead of locking to ensure that @local_end_at is only
       # calculated once.
 
-      @local_end_at = at + @previous_offset.utc_total_offset unless @local_end_at
+      @local_end_at = at.to_offset(@previous_offset.utc_total_offset) unless @local_end_at
       @local_end_at
     end
 
@@ -67,7 +97,7 @@ module TZInfo
       # worth the overhead of locking to ensure that @local_start_at is only
       # calculated once.
 
-      @local_start_at = at + @offset.utc_total_offset unless @local_start_at
+      @local_start_at = at.to_offset(@offset.utc_total_offset) unless @local_start_at
       @local_start_at
     end
 

@@ -150,13 +150,13 @@ module TZInfo
     # true if the given local DateTime is after the start of the period
     # (inclusive); otherwise false.
     def local_after_start?(local)
-      !@start_transition || @start_transition.local_start_at <= local
+      !@start_transition || @start_transition.absolute_local_start_at <= local
     end
 
     # true if the given local DateTime is before the end of the period
     # (exclusive); otherwise false.
     def local_before_end?(local)
-      !@end_transition || @end_transition.local_end_at > local
+      !@end_transition || @end_transition.absolute_local_end_at > local
     end
 
     # Converts a UTC DateTime to local time based on the offset of this period.
