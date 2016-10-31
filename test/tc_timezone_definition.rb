@@ -11,7 +11,7 @@ class TCTimezoneDefinition < Minitest::Test
       tz.offset :o0, -75, 0, :LMT
       tz.offset :o1,   0, 0, :GMT
 
-      tz.transition 1847, 12, :o1, 2760187969, 1152
+      tz.transition 1847, 12, :o1, -3852662325
     end
   end
 
@@ -28,14 +28,14 @@ class TCTimezoneDefinition < Minitest::Test
       tz.offset :o0, -75, 0, :LMT
       tz.offset :o1,   0, 0, :GMT
 
-      tz.transition 1847, 12, :o1, 2760187969, 1152
+      tz.transition 1847, 12, :o1, -3852662325
     end
 
     timezone 'Test/Data/Zone2' do |tz|
       tz.offset :o0, 75, 0, :LMT
       tz.offset :o1,  0, 0, :GMT
 
-      tz.transition 1847, 12, :o1, 2760187969, 1152
+      tz.transition 1847, 12, :o1, -3852662325
     end
   end
 
@@ -53,7 +53,7 @@ class TCTimezoneDefinition < Minitest::Test
       tz.offset :o0, -75, 0, :LMT
       tz.offset :o1,   0, 0, :GMT
 
-      tz.transition 1847, 12, :o1, 2760187969, 1152
+      tz.transition 1847, 12, :o1, -3852662325
     end
 
     linked_timezone 'Test/Linked/Zone2', 'Test/Linked_To/Zone2'
@@ -68,7 +68,7 @@ class TCTimezoneDefinition < Minitest::Test
       tz.offset :o0, -75, 0, :LMT
       tz.offset :o1,   0, 0, :GMT
 
-      tz.transition 1847, 12, :o1, 2760187969, 1152
+      tz.transition 1847, 12, :o1, -3852662325
     end
   end
 

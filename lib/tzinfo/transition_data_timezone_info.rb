@@ -37,15 +37,33 @@ module TZInfo
       @previous_offset = offset unless @previous_offset
     end
 
-    # Defines a transition. Transitions must be defined in chronological order.
-    # ArgumentError will be raised if a transition is added out of order.
-    # offset_id refers to an id defined with offset. ArgumentError will be
-    # raised if the offset_id cannot be found. numerator_or_time and
-    # denomiator specify the time the transition occurs as. See
-    # TimezoneTransition for more detail about specifying times.
-    def transition(year, month, offset_id, numerator_or_timestamp, denominator_or_numerator = nil, denominator = nil)
+    # Defines a transition occuring in a given year and month.
+    #
+    # offset_id refers to the id of a defined offset.
+    #
+    # timestamp gives the UTC time of the transition as an Integer number of
+    # seconds since 1970-01-01.
+    #
+    # The reserved1 and reserved2 parameters should be left unset parameters.
+    # They relate to earlier versions of TZInfo where transitions could be
+    # defined as DateTimes (because Time had a limited range on some platforms).
+    # They are retained because TZInfo::Data expects to be able to call a method
+    # with 6 parameters.
+    #
+    # Transitions must be defined in chronological order.
+    #
+    # ArgumentError will be raised if a transition is added out of order, the
+    # offset_id has not previously been defined or if reserved1 is non-nil and
+    # reserved2 is nil (this indicates a transition defined solely as a
+    # DateTime in code pre-dating the first TZInfo::Data release).
+    def transition(year, month, offset_id, timestamp, reserved1 = nil, reserved2 = nil)
       offset = @offsets[offset_id]
       raise ArgumentError, 'Offset not found' unless offset
+
+      # DateTime-only transitions used to be specified using the 4th and 5th
+      # parameters (numerator_or_timestamp and denominator_or_numerator) used
+      # as a numerator and denominator.
+      raise ArgumentError, 'DateTime-only transitions are not supported' if reserved1 && !reserved2
 
       if @transitions_index
         if year < @last_year || (year == @last_year && month < @last_month)
@@ -67,8 +85,7 @@ module TZInfo
         @start_month = month
       end
 
-      @transitions << TimezoneTransitionDefinition.new(offset, @previous_offset,
-        numerator_or_timestamp, denominator_or_numerator, denominator)
+      @transitions << TimezoneTransitionDefinition.new(offset, @previous_offset, timestamp)
       @last_year = year
       @last_month = month
       @previous_offset = offset

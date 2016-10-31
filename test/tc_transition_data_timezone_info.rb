@@ -35,12 +35,12 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
   end
 
   def test_transition_datetime
+    # The ability to specify a transition solely as a DateTime has not been used
+    # in any released version of TZInfo::Data. This is now not supported.
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
 
-    assert_nothing_raised do
-      dti.transition 2006, 6, :o1, 19631123, 8
-    end
+    assert_raises(ArgumentError) { dti.transition 2006, 6, :o1, 19631123, 8 }
   end
 
   def test_transition_timestamp_and_datetime
@@ -94,7 +94,7 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
 
     dti.transition 2000,  4, :o2, Time.utc(2000, 4,1,1,0,0).to_i
     dti.transition 2000, 10, :o3, Time.utc(2000,10,1,1,0,0).to_i
-    dti.transition 2001,  3, :o2, 58847269, 24                    # (2001, 3,1,1,0,0)
+    dti.transition 2001,  3, :o2, Time.utc(2001, 3,1,1,0,0).to_i
     dti.transition 2001,  4, :o4, Time.utc(2001, 4,1,1,0,0).to_i, 58848013, 24
     dti.transition 2001, 10, :o3, Time.utc(2001,10,1,1,0,0).to_i
     dti.transition 2002, 10, :o3, Time.utc(2002,10,1,1,0,0).to_i
@@ -165,12 +165,12 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o3, -18000,    0, :TESTS
     dti.offset :o4, -21600, 3600, :TESTD
 
-    dti.transition 2000,  4, :o2, 58839277, 24                   # 2000,4,2,1,0,0
+    dti.transition 2000,  4, :o2, Time.utc(2000, 4,2,1,0,0).to_i
     dti.transition 2000, 10, :o3, Time.utc(2000,10,2,1,0,0).to_i, 58843669, 24
     dti.transition 2001,  3, :o2, Time.utc(2001, 3,2,1,0,0).to_i
     dti.transition 2001,  4, :o4, Time.utc(2001, 4,2,1,0,0).to_i
     dti.transition 2001, 10, :o3, Time.utc(2001,10,2,1,0,0).to_i
-    dti.transition 2002, 10, :o3, 58861189, 24                   # 2002,10,2,1,0,0
+    dti.transition 2002, 10, :o3, Time.utc(2002,10,2,1,0,0).to_i
     dti.transition 2003,  2, :o2, Time.utc(2003, 2,2,1,0,0).to_i
 
     o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
@@ -231,18 +231,18 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o3, 3600,    0, :CET
     dti.offset :o4, 3600, 3600, :CEST
 
-    dti.transition 1879, 12, :o2, 288925853, 120  # 1879,12,31,22,36,0
-    dti.transition 1915,  8, :o3, 290485733, 120  # 1915, 8, 4,22,36,0
-    dti.transition 1916,  4, :o4,  29051813,  12  # 1916, 4,30,22, 0,0
+    dti.transition 1879, 12, :o2, Time.utc(1879,12,31,22,36,0).to_i
+    dti.transition 1915,  8, :o3, Time.utc(1915, 8, 4,22,36,0).to_i
+    dti.transition 1916,  4, :o4, Time.utc(1916, 4,30,22, 0,0).to_i
 
     o1 = TimezoneOffset.new(5040,    0, :LMT)
     o2 = TimezoneOffset.new(5040,    0, :WMT)
     o3 = TimezoneOffset.new(3600,    0, :CET)
     o4 = TimezoneOffset.new(3600, 3600, :CEST)
 
-    t1 = TimezoneTransitionDefinition.new(o2, o1, 288925853, 120)
-    t2 = TimezoneTransitionDefinition.new(o3, o2, 290485733, 120)
-    t3 = TimezoneTransitionDefinition.new(o4, o3,  29051813,  12)
+    t1 = TimezoneTransitionDefinition.new(o2, o1, Time.utc(1879,12,31,22,36,0).to_i)
+    t2 = TimezoneTransitionDefinition.new(o3, o2, Time.utc(1915, 8, 4,22,36,0).to_i)
+    t3 = TimezoneTransitionDefinition.new(o4, o3, Time.utc(1916, 4,30,22, 0,0).to_i)
 
     assert_equal([TimezonePeriod.new(t1, t2),
                   TimezonePeriod.new(t2, t3)], dti.periods_for_local(DateTime.new(1915,8,4,23,40,0)))
@@ -299,7 +299,7 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
 
     dti.transition 2010,  4, :o2, Time.utc(2010, 4,1,1,0,0).to_i
     dti.transition 2010, 10, :o3, Time.utc(2010,10,1,1,0,0).to_i
-    dti.transition 2011,  3, :o2, 58934917, 24                    # (2011, 3,1,1,0,0)
+    dti.transition 2011,  3, :o2, Time.utc(2011, 3,1,1,0,0).to_i
     dti.transition 2011,  4, :o4, Time.utc(2011, 4,1,1,0,0).to_i, 58935661, 24
     dti.transition 2011, 10, :o3, Time.utc(2011,10,1,1,0,0).to_i
 
@@ -391,6 +391,10 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
   end
 
   def test_datetime_and_timestamp_use
+    # This previously was a test to verify that DateTime was used when outside
+    # the range of Time (which was limited on some platforms on older versions
+    # of Ruby). The test now checks that the DateTime parameters are ignored.
+
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, 0,    0, :TESTS
     dti.offset :o2, 0, 3600, :TESTD
