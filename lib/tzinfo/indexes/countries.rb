@@ -243,7 +243,8 @@ module TZInfo
         c.timezone 'Indian/Christmas', -125, 12, 6343, 60
       end
       country 'CY', 'Cyprus' do |c|
-        c.timezone 'Asia/Nicosia', 211, 6, 1001, 30
+        c.timezone 'Asia/Nicosia', 211, 6, 1001, 30, 'Cyprus (most areas)'
+        c.timezone 'Asia/Famagusta', 2107, 60, 679, 20, 'Northern Cyprus'
       end
       country 'CZ', 'Czech Republic' do |c|
         c.timezone 'Europe/Prague', 601, 12, 433, 30
