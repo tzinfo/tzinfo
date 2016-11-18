@@ -32,22 +32,6 @@ module TZInfo
       @std_offset != 0
     end
 
-    # Converts a UTC Time, DateTime or integer timestamp to local time, based on
-    # the offset of this period.
-    def to_local(utc)
-      TimeOrDateTime.wrap(utc) {|wrapped|
-        wrapped.to_offset(@utc_total_offset)
-      }
-    end
-
-    # Converts a local Time, DateTime or integer timestamp to UTC, based on the
-    # offset of this period.
-    def to_utc(local)
-      TimeOrDateTime.wrap(local) {|wrapped|
-        wrapped - @utc_total_offset
-      }
-    end
-
     # Returns true if and only if toi has the same utc_offset, std_offset
     # and abbreviation as this TimezoneOffset.
     def ==(toi)

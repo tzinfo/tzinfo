@@ -125,16 +125,6 @@ module TZInfo
       @offset.dst?
     end
 
-    # Converts a UTC DateTime to local time based on the offset of this period.
-    def to_local(utc)
-      @offset.to_local(utc)
-    end
-
-    # Converts a local DateTime to UTC based on the offset of this period.
-    def to_utc(local)
-      @offset.to_utc(local)
-    end
-
     # Returns true if this TimezonePeriod is equal to p. This compares the
     # start_transition, end_transition and offset using ==.
     def ==(p)

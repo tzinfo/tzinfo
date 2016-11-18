@@ -441,7 +441,7 @@ module TZInfo
     # time needs to be considered.
     def utc_to_local(utc)
       TimeOrDateTime.wrap(utc) {|wrapped|
-        period_for_utc(wrapped).to_local(wrapped)
+        convert_to_local(wrapped, period_for_utc(wrapped))
       }
     end
 
@@ -451,7 +451,7 @@ module TZInfo
     # Unlike utc_to_local, to_local considers the UTC offset of the given time. 
     def to_local(time)
       TimeOrDateTime.wrap(time, false) {|wrapped|
-        period_for(wrapped).to_local(wrapped)
+        convert_to_local(wrapped, period_for(wrapped))
       }
     end
 
@@ -501,7 +501,7 @@ module TZInfo
           period = period_for_local(wrapped, dst)
         end
 
-        period.to_utc(wrapped)
+        convert_to_utc(wrapped, period)
       }
     end
 
@@ -577,9 +577,13 @@ module TZInfo
     # Returns the current Time and TimezonePeriod as an array. The first element
     # is the time, the second element is the period.
     def current_period_and_time
-      utc = Time.now.utc
-      period = period_for_utc(utc)
-      [period.to_local(utc), period]
+      period = nil
+      local = TimeOrDateTime.wrap(Time.now.utc) do |utc|
+        period = period_for_utc(utc)
+        convert_to_local(utc, period)
+      end
+
+      [local, period]
     end
 
     alias :current_time_and_period :current_period_and_time
@@ -598,8 +602,11 @@ module TZInfo
     # - %::z - hour minute and second separated with colons (e.g. +05:00:00)
     # - %:::z - hour only (e.g. +05)
     def strftime(format, utc = Time.now.utc)
-      period = period_for_utc(utc)
-      local = period.to_local(utc)
+      period = nil
+      local = TimeOrDateTime.wrap(utc) do |wrapped|
+        period = period_for_utc(wrapped)
+        convert_to_local(wrapped, period)
+      end
       local = Time.at(local).utc unless local.kind_of?(Time) || local.kind_of?(DateTime)
       abbreviation = period.abbreviation.to_s.gsub(/%/, '%%')
 
@@ -679,6 +686,18 @@ module TZInfo
       # Raises an UnknownTimezone exception.
       def raise_unknown_timezone
         raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
+      end
+
+      # Converts a UTC TimeOrDateTime to local by applying the utc_total_offset
+      # of the given period.
+      def convert_to_local(utc, period)
+        utc.to_offset(period.utc_total_offset)
+      end
+
+      # Converts a local TimeOrDateTime to UTC by subtracting the
+      # utc_total_offset of the given period.
+      def convert_to_utc(local, period)
+        local - period.utc_total_offset
       end
   end
 end

@@ -164,30 +164,6 @@ class TCTimezonePeriod < Minitest::Test
     assert_equal(true, p5.dst?)
   end
 
-  def test_to_local
-    p1 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, 3600, :TEST))
-    p2 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, 0, :TEST))
-    p3 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(7200, 3600, :TEST))
-
-    assert_equal(DateTime.new(2005,1,19,22,0,0,'-03:00'), p1.to_local(DateTime.new(2005,1,20,1,0,0)))
-    assert_equal(DateTime.new(2005,1,19,22,0,0 + Rational(512,1000), '-03:00'), p1.to_local(DateTime.new(2005,1,20,1,0,0 + Rational(512,1000))))
-    assert_equal(Time.new(2005,1,19,21,0,0,'-04:00'), p2.to_local(Time.utc(2005,1,20,1,0,0)))
-    assert_equal(Time.new(2005,1,19,21,0,0 + Rational(512,1000), '-04:00'), p2.to_local(Time.utc(2005,1,20,1,0,0,512000)))
-    assert_equal(1106193600, p3.to_local(1106182800))
-  end
-
-  def test_to_utc
-    p1 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, 3600, :TEST))
-    p2 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, 0, :TEST))
-    p3 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(7200, 3600, :TEST))
-
-    assert_equal(DateTime.new(2005,1,20,4,0,0), p1.to_utc(DateTime.new(2005,1,20,1,0,0)))
-    assert_equal(DateTime.new(2005,1,20,4,0,0 + Rational(571,1000)), p1.to_utc(DateTime.new(2005,1,20,1,0,0 + Rational(571,1000))))
-    assert_equal(Time.utc(2005,1,20,5,0,0), p2.to_utc(Time.utc(2005,1,20,1,0,0)))
-    assert_equal(Time.utc(2005,1,20,5,0,0,571000), p2.to_utc(Time.utc(2005,1,20,1,0,0,571000)))
-    assert_equal(1106172000, p3.to_utc(1106182800))
-  end
-
   def test_time_boundary_start
     o1 = TimezoneOffset.new(-3600, 0, :TEST)
     o2 = TimezoneOffset.new(-3600, 3600, :TEST)

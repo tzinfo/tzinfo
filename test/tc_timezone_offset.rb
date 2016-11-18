@@ -44,48 +44,6 @@ class TCTimezoneOffset < Minitest::Test
     assert_equal(true, o2.dst?)
   end
 
-  def test_to_local
-    o1 = TimezoneOffset.new(18000, 0, :TEST)
-    o2 = TimezoneOffset.new(-3600, 3600, :TEST2)
-
-    assert_equal(1148949080, o1.to_local(1148931080))
-    assert_equal_with_offset(Time.new(2006, 5, 30, 0, 31, 20, '+05:00'), o1.to_local(Time.utc(2006, 5, 29, 19, 31, 20)))
-    assert_equal_with_offset(Time.new(2006, 5, 30, 0, 31, 20 + Rational(782, 1000), '+05:00'), o1.to_local(Time.utc(2006, 5, 29, 19, 31, 20, 782000)))
-    assert_equal_with_offset(DateTime.new(2006, 5, 30, 0, 31, 20, '+5'), o1.to_local(DateTime.new(2006, 5, 29, 19, 31, 20)))
-    assert_equal_with_offset(DateTime.new(2006, 5, 30, 0, 31, 20 + Rational(782, 1000), '+5'), o1.to_local(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(782, 1000))))
-    assert_equal(1148949080, o1.to_local(1148931080))
-    assert_time_or_datetime_equal_with_offset(TimestampWithOffset.new(1148931080, 18000), o1.to_local(TimeOrDateTime.new(1148931080)))
-
-    assert_equal(1148931080, o2.to_local(1148931080))
-    assert_equal_with_offset(Time.utc(2006, 5, 29, 19, 31, 20), o2.to_local(Time.utc(2006, 5, 29, 19, 31, 20)))
-    assert_equal_with_offset(Time.utc(2006, 5, 29, 19, 31, 20, 123000), o2.to_local(Time.utc(2006, 5, 29, 19, 31, 20, 123000)))
-    assert_equal_with_offset(DateTime.new(2006, 5, 29, 19, 31, 20), o2.to_local(DateTime.new(2006, 5, 29, 19, 31, 20)))
-    assert_equal_with_offset(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(123, 1000)), o2.to_local(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(123, 1000))))
-    assert_equal(1148931080, o2.to_local(1148931080))
-    assert_time_or_datetime_equal_with_offset(1148931080, o2.to_local(TimeOrDateTime.new(1148931080)))
-  end
-
-  def test_to_utc
-    o1 = TimezoneOffset.new(18000, 0, :TEST)
-    o2 = TimezoneOffset.new(-3600, 3600, :TEST2)
-
-    assert_equal(1148913080, o1.to_utc(1148931080))
-    assert_equal_with_offset(Time.utc(2006, 5, 29, 14, 31, 20), o1.to_utc(Time.utc(2006, 5, 29, 19, 31, 20)))
-    assert_equal_with_offset(Time.utc(2006, 5, 29, 14, 31, 20, 913000), o1.to_utc(Time.utc(2006, 5, 29, 19, 31, 20, 913000)))
-    assert_equal_with_offset(DateTime.new(2006, 5, 29, 14, 31, 20), o1.to_utc(DateTime.new(2006, 5, 29, 19, 31, 20)))
-    assert_equal_with_offset(DateTime.new(2006, 5, 29, 14, 31, 20 + Rational(913,1000)), o1.to_utc(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(913,1000))))
-    assert_equal(1148913080, o1.to_utc(1148931080))
-    assert_time_or_datetime_equal_with_offset(1148913080, o1.to_utc(TimeOrDateTime.new(1148931080)))
-
-    assert_equal(1148931080, o2.to_local(1148931080))
-    assert_equal_with_offset(Time.utc(2006, 5, 29, 19, 31, 20), o2.to_local(Time.utc(2006, 5, 29, 19, 31, 20)))
-    assert_equal_with_offset(Time.utc(2006, 5, 29, 19, 31, 20, 323000), o2.to_local(Time.utc(2006, 5, 29, 19, 31, 20, 323000)))
-    assert_equal_with_offset(DateTime.new(2006, 5, 29, 19, 31, 20), o2.to_local(DateTime.new(2006, 5, 29, 19, 31, 20)))
-    assert_equal_with_offset(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(323, 1000)), o2.to_local(DateTime.new(2006, 5, 29, 19, 31, 20 + Rational(323, 1000))))
-    assert_equal(1148931080, o2.to_utc(1148931080))
-    assert_time_or_datetime_equal_with_offset(1148931080, o2.to_local(TimeOrDateTime.new(1148931080)))
-  end
-
   def test_equality
     o1 = TimezoneOffset.new(18000, 0, :TEST)
     o2 = TimezoneOffset.new(18000, 0, :TEST)
