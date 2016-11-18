@@ -125,40 +125,6 @@ module TZInfo
       @offset.dst?
     end
 
-    # true if this period is valid for the given UTC DateTime; otherwise false.
-    def valid_for_utc?(utc)
-      utc_after_start?(utc) && utc_before_end?(utc)
-    end
-
-    # true if the given UTC DateTime is after the start of the period
-    # (inclusive); otherwise false.
-    def utc_after_start?(utc)
-      !@start_transition || @start_transition.at <= utc
-    end
-
-    # true if the given UTC DateTime is before the end of the period
-    # (exclusive); otherwise false.
-    def utc_before_end?(utc)
-      !@end_transition || @end_transition.at > utc
-    end
-
-    # true if this period is valid for the given local DateTime; otherwise false.
-    def valid_for_local?(local)
-      local_after_start?(local) && local_before_end?(local)
-    end
-
-    # true if the given local DateTime is after the start of the period
-    # (inclusive); otherwise false.
-    def local_after_start?(local)
-      !@start_transition || @start_transition.absolute_local_start_at <= local
-    end
-
-    # true if the given local DateTime is before the end of the period
-    # (exclusive); otherwise false.
-    def local_before_end?(local)
-      !@end_transition || @end_transition.absolute_local_end_at > local
-    end
-
     # Converts a UTC DateTime to local time based on the offset of this period.
     def to_local(utc)
       @offset.to_local(utc)
