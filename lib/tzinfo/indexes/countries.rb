@@ -236,7 +236,7 @@ module TZInfo
       country 'CV', 'Cape Verde' do |c|
         c.timezone 'Atlantic/Cape_Verde', 179, 12, -1411, 60
       end
-      country 'CW', 'Curacao' do |c|
+      country 'CW', 'Curaçao' do |c|
         c.timezone 'America/Curacao', 731, 60, -69, 1
       end
       country 'CX', 'Christmas Island' do |c|
@@ -469,7 +469,8 @@ module TZInfo
         c.timezone 'Asia/Almaty', 173, 4, 1539, 20, 'Kazakhstan (most areas)'
         c.timezone 'Asia/Qyzylorda', 224, 5, 982, 15, 'Qyzylorda/Kyzylorda/Kzyl-Orda'
         c.timezone 'Asia/Aqtobe', 3017, 60, 343, 6, 'Aqtobe/Aktobe'
-        c.timezone 'Asia/Aqtau', 2671, 60, 754, 15, 'Atyrau/Atirau/Gur\'yev, Mangghystau/Mankistau'
+        c.timezone 'Asia/Aqtau', 2671, 60, 754, 15, 'Mangghystau/Mankistau'
+        c.timezone 'Asia/Atyrau', 2827, 60, 779, 15, 'Atyrau/Atirau/Gur\'yev'
         c.timezone 'Asia/Oral', 3073, 60, 1027, 20, 'West Kazakhstan'
       end
       country 'LA', 'Laos' do |c|
@@ -692,14 +693,15 @@ module TZInfo
         c.timezone 'Europe/Kaliningrad', 3283, 60, 41, 2, 'MSK-01 - Kaliningrad'
         c.timezone 'Europe/Moscow', 66907, 1200, 8464, 225, 'MSK+00 - Moscow area'
         c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'MSK+00 - Crimea'
-        c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'MSK+00 - Volgograd, Saratov'
+        c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'MSK+00 - Volgograd'
         c.timezone 'Europe/Kirov', 293, 5, 993, 20, 'MSK+00 - Kirov'
         c.timezone 'Europe/Astrakhan', 927, 20, 961, 20, 'MSK+01 - Astrakhan'
-        c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'MSK+01 - Samara, Udmurtia'
+        c.timezone 'Europe/Saratov', 1547, 30, 1381, 30, 'MSK+01 - Saratov'
         c.timezone 'Europe/Ulyanovsk', 163, 3, 242, 5, 'MSK+01 - Ulyanovsk'
+        c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'MSK+01 - Samara, Udmurtia'
         c.timezone 'Asia/Yekaterinburg', 1137, 20, 303, 5, 'MSK+02 - Urals'
         c.timezone 'Asia/Omsk', 55, 1, 367, 5, 'MSK+03 - Omsk'
-        c.timezone 'Asia/Novosibirsk', 1651, 30, 995, 12, 'MSK+03 - Novosibirsk'
+        c.timezone 'Asia/Novosibirsk', 1651, 30, 995, 12, 'MSK+04 - Novosibirsk'
         c.timezone 'Asia/Barnaul', 1601, 30, 335, 4, 'MSK+04 - Altai'
         c.timezone 'Asia/Tomsk', 113, 2, 2549, 30, 'MSK+04 - Tomsk'
         c.timezone 'Asia/Novokuznetsk', 215, 4, 5227, 60, 'MSK+04 - Kemerovo'
