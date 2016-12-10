@@ -30,7 +30,6 @@ class TCLinkedTimezone < Minitest::Test
 
     def periods_for_local(local)
       @local = local
-      raise PeriodNotFound if @no_local_periods
       @local_periods
     end
 
@@ -47,12 +46,11 @@ class TCLinkedTimezone < Minitest::Test
     private
       def setup(identifier, no_local_periods)
         @identifier = identifier
-        @no_local_periods = no_local_periods
 
         # Don't have to be real TimezonePeriod or TimezoneTransition objects
         # (nothing will use them).
         @utc_period = Object.new
-        @local_periods = [Object.new, Object.new]
+        @local_periods = no_local_periods ? [] : [Object.new, Object.new]
         @up_to_transitions = [Object.new, Object.new]
       end
   end
@@ -111,7 +109,8 @@ class TCLinkedTimezone < Minitest::Test
     tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/No/Local'))
     linked_tz = Timezone.get('Test/No/Local')
     t = Time.utc(2006, 6, 27, 23, 12, 28)
-    assert_raises(PeriodNotFound) { tz.periods_for_local(t) }
+    assert_equal([], linked_tz.local_periods)
+    assert_same(linked_tz.local_periods, tz.periods_for_local(t))
     assert_same(t, linked_tz.local)
   end
 
