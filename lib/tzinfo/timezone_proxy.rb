@@ -23,19 +23,27 @@ module TZInfo
       @real_timezone ? @real_timezone.identifier : @identifier
     end
 
-    # Returns the TimezonePeriod for the given UTC time. utc can either be
-    # a DateTime, Time or integer timestamp (Time.to_i). Any timezone
-    # information in utc is ignored (it is treated as a UTC time).
-    def period_for_utc(utc)
-      real_timezone.period_for_utc(utc)
+    # Returns the TimezonePeriod for the given time. time can either be
+    # a Time, DateTime or Timestamp.
+    #
+    # The UTC offset of time is taken into account.
+    #
+    # Raises ArgumentError if time is nil or a Timestamp with an unspecified
+    # offset.
+    def period_for(time)
+      real_timezone.period_for_utc(time)
     end
 
     # Returns the set of TimezonePeriod instances that are valid for the given
-    # local time as an array. If you just want a single period, use
-    # period_for_local instead and specify how abiguities should be resolved.
-    # Returns an empty array if no periods are found for the given time.
-    def periods_for_local(local)
-      real_timezone.periods_for_local(local)
+    # local time as an array. local_time can be specified using either a Time,
+    # DateTime or Timestamp. The UTC offset of local_time is ignored (it is
+    # treated as a time in the current timezone).
+    #
+    # An empty array is returned if no periods are found for the given time.
+    #
+    # Raises ArgumentError if local_time is nil.
+    def periods_for_local(local_time)
+      real_timezone.periods_for_local(local_time)
     end
 
     # Returns the canonical zone for this Timezone.

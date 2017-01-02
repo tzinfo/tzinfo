@@ -8,12 +8,12 @@ include TZInfo
 class TCZoneinfoTimezoneInfo < Minitest::Test
   def assert_period(abbreviation, utc_offset, std_offset, dst, start_at, end_at, info)
     if start_at
-      period = info.period_for_utc(start_at)
+      period = info.period_for(Timestamp.for(start_at))
     elsif end_at
-      period = info.period_for_utc(end_at - 1)
+      period = info.period_for(Timestamp.for(end_at - 1))
     else
       # no transitions, pick the epoch
-      period = info.period_for_utc(Time.utc(1970, 1, 1))
+      period = info.period_for(Timestamp.for(Time.utc(1970, 1, 1)))
     end
 
     assert_equal(abbreviation, period.abbreviation)

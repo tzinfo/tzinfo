@@ -85,7 +85,7 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     assert_raises(ArgumentError) { dti.transition 2005, 7, :o2, 1120424400 }
   end
 
-  def test_period_for_utc
+  def test_period_for
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -17900,    0, :TESTLMT
     dti.offset :o2, -18000, 3600, :TESTD
@@ -95,7 +95,7 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.transition 2000,  4, :o2, Time.utc(2000, 4,1,1,0,0).to_i
     dti.transition 2000, 10, :o3, Time.utc(2000,10,1,1,0,0).to_i
     dti.transition 2001,  3, :o2, Time.utc(2001, 3,1,1,0,0).to_i
-    dti.transition 2001,  4, :o4, Time.utc(2001, 4,1,1,0,0).to_i, 58848013, 24
+    dti.transition 2001,  4, :o4, Time.utc(2001, 4,1,1,0,0).to_i
     dti.transition 2001, 10, :o3, Time.utc(2001,10,1,1,0,0).to_i
     dti.transition 2002, 10, :o3, Time.utc(2002,10,1,1,0,0).to_i
     dti.transition 2003,  2, :o2, Time.utc(2003, 2,1,1,0,0).to_i
@@ -115,47 +115,92 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     t7 = TimezoneTransitionDefinition.new(o2, o3, Time.utc(2003, 2,1,1,0,0).to_i)
     t8 = TimezoneTransitionDefinition.new(o3, o2, Time.utc(2003, 3,1,1,0,0).to_i)
 
-    assert_equal(TimezonePeriod.new(nil, t1), dti.period_for_utc(DateTime.new(1960, 1,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(nil, t1), dti.period_for_utc(DateTime.new(1999,12,1,0, 0, 0)))
-    assert_equal(TimezonePeriod.new(nil, t1), dti.period_for_utc(Time.utc(    2000, 4,1,0,59,59)))
-    assert_equal(TimezonePeriod.new(t1, t2),  dti.period_for_utc(DateTime.new(2000, 4,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t1, t2),  dti.period_for_utc(Time.utc(    2000,10,1,0,59,59).to_i))
-    assert_equal(TimezonePeriod.new(t2, t3),  dti.period_for_utc(Time.utc(    2000,10,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t2, t3),  dti.period_for_utc(Time.utc(    2001, 3,1,0,59,59)))
-    assert_equal(TimezonePeriod.new(t3, t4),  dti.period_for_utc(Time.utc(    2001, 3,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t3, t4),  dti.period_for_utc(Time.utc(    2001, 4,1,0,59,59)))
-    assert_equal(TimezonePeriod.new(t4, t5),  dti.period_for_utc(Time.utc(    2001, 4,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t4, t5),  dti.period_for_utc(Time.utc(    2001,10,1,0,59,59)))
-    assert_equal(TimezonePeriod.new(t5, t6),  dti.period_for_utc(Time.utc(    2001,10,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t5, t6),  dti.period_for_utc(Time.utc(    2002, 2,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t5, t6),  dti.period_for_utc(Time.utc(    2002,10,1,0,59,59)))
-    assert_equal(TimezonePeriod.new(t6, t7),  dti.period_for_utc(Time.utc(    2002,10,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t6, t7),  dti.period_for_utc(Time.utc(    2003, 2,1,0,59,59)))
-    assert_equal(TimezonePeriod.new(t7, t8),  dti.period_for_utc(Time.utc(    2003, 2,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t7, t8),  dti.period_for_utc(Time.utc(    2003, 3,1,0,59,59)))
-    assert_equal(TimezonePeriod.new(t8, nil), dti.period_for_utc(Time.utc(    2003, 3,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t8, nil), dti.period_for_utc(Time.utc(    2004, 1,1,1, 0, 0)))
-    assert_equal(TimezonePeriod.new(t8, nil), dti.period_for_utc(DateTime.new(2050, 1,1,1, 0, 0)))
+    assert_equal(TimezonePeriod.new(nil, t1), dti.period_for(Timestamp.for(Time.utc(1960, 1,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(nil, t1), dti.period_for(Timestamp.for(Time.utc(1999,12,1,0, 0, 0))))
+    assert_equal(TimezonePeriod.new(nil, t1), dti.period_for(Timestamp.for(Time.utc(2000, 4,1,0,59,59))))
+    assert_equal(TimezonePeriod.new(t1, t2),  dti.period_for(Timestamp.for(Time.utc(2000, 4,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(t1, t2),  dti.period_for(Timestamp.for(Time.utc(2000,10,1,0,59,59))))
+    assert_equal(TimezonePeriod.new(t2, t3),  dti.period_for(Timestamp.for(Time.utc(2000,10,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(t2, t3),  dti.period_for(Timestamp.for(Time.utc(2001, 3,1,0,59,59))))
+    assert_equal(TimezonePeriod.new(t3, t4),  dti.period_for(Timestamp.for(Time.utc(2001, 3,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(t3, t4),  dti.period_for(Timestamp.for(Time.utc(2001, 4,1,0,59,59))))
+    assert_equal(TimezonePeriod.new(t4, t5),  dti.period_for(Timestamp.for(Time.utc(2001, 4,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(t4, t5),  dti.period_for(Timestamp.for(Time.utc(2001,10,1,0,59,59))))
+    assert_equal(TimezonePeriod.new(t5, t6),  dti.period_for(Timestamp.for(Time.utc(2001,10,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(t5, t6),  dti.period_for(Timestamp.for(Time.utc(2002, 2,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(t5, t6),  dti.period_for(Timestamp.for(Time.utc(2002,10,1,0,59,59))))
+    assert_equal(TimezonePeriod.new(t6, t7),  dti.period_for(Timestamp.for(Time.utc(2002,10,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(t6, t7),  dti.period_for(Timestamp.for(Time.utc(2003, 2,1,0,59,59))))
+    assert_equal(TimezonePeriod.new(t7, t8),  dti.period_for(Timestamp.for(Time.utc(2003, 2,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(t7, t8),  dti.period_for(Timestamp.for(Time.utc(2003, 3,1,0,59,59))))
+    assert_equal(TimezonePeriod.new(t8, nil), dti.period_for(Timestamp.for(Time.utc(2003, 3,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(t8, nil), dti.period_for(Timestamp.for(Time.utc(2004, 1,1,1, 0, 0))))
+    assert_equal(TimezonePeriod.new(t8, nil), dti.period_for(Timestamp.for(Time.utc(2050, 1,1,1, 0, 0))))
   end
 
-  def test_period_for_utc_no_transitions
+  def test_period_for_timestamp_with_zero_utc_offset
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+    dti.offset :o2, -18000, 0, :TEST
+
+    dti.transition 2000, 7, :o2, Time.utc(2000,7,1,0,0,0).to_i
+
+    o1 = TimezoneOffset.new(-17900, 0, :TESTLMT)
+    o2 = TimezoneOffset.new(-18000, 0, :TEST)
+
+    t1 = TimezoneTransitionDefinition.new(o2, o1, Time.utc(2000,7,1,0,0,0).to_i)
+
+    assert_equal(TimezonePeriod.new(t1, nil), dti.period_for(Timestamp.for(Time.new(2000,7,1,0,0,0,0))))
+  end
+
+  def test_period_for_timestamp_with_non_zero_utc_offset
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+    dti.offset :o2, -18000, 0, :TEST
+
+    dti.transition 2000, 7, :o2, Time.utc(2000,7,1,0,0,0).to_i
+
+    o1 = TimezoneOffset.new(-17900, 0, :TESTLMT)
+    o2 = TimezoneOffset.new(-18000, 0, :TEST)
+
+    t1 = TimezoneTransitionDefinition.new(o2, o1, Time.utc(2000,7,1,0,0,0).to_i)
+
+    assert_equal(TimezonePeriod.new(t1, nil), dti.period_for(Timestamp.for(Time.new(2000,6,30,23, 0, 0,-3600))))
+    assert_equal(TimezonePeriod.new(nil, t1), dti.period_for(Timestamp.for(Time.new(2000,7, 1, 0,59,59, 3600))))
+  end
+
+  def test_period_for_no_transitions
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -17900, 0, :TESTLMT
     dti.offset :o2, -18000, 0, :TEST
 
     o1 = TimezoneOffset.new(-17900, 0, :TESTLMT)
 
-    assert_equal(TimezonePeriod.new(nil, nil, o1), dti.period_for_utc(DateTime.new(2005,1,1,0,0,0)))
-    assert_equal(TimezonePeriod.new(nil, nil, o1), dti.period_for_utc(Time.utc(2005,1,1,0,0,0)))
-    assert_equal(TimezonePeriod.new(nil, nil, o1), dti.period_for_utc(Time.utc(2005,1,1,0,0,0).to_i))
+    assert_equal(TimezonePeriod.new(nil, nil, o1), dti.period_for(Timestamp.for(Time.utc(2005,1,1,0,0,0))))
+    assert_equal(TimezonePeriod.new(nil, nil, o1), dti.period_for(Timestamp.for(Time.utc(2005,1,1,0,0,0))))
+    assert_equal(TimezonePeriod.new(nil, nil, o1), dti.period_for(Timestamp.for(Time.utc(2005,1,1,0,0,0))))
   end
 
   def test_period_for_utc_no_offsets
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
 
-    assert_raises(NoOffsetsDefined) { dti.period_for_utc(DateTime.new(2005,1,1,0,0,0)) }
-    assert_raises(NoOffsetsDefined) { dti.period_for_utc(Time.utc(2005,1,1,0,0,0)) }
-    assert_raises(NoOffsetsDefined) { dti.period_for_utc(Time.utc(2005,1,1,0,0,0).to_i) }
+    assert_raises(NoOffsetsDefined) { dti.period_for(Timestamp.for(Time.utc(2005,1,1,0,0,0))) }
+    assert_raises(NoOffsetsDefined) { dti.period_for(Timestamp.for(Time.utc(2005,1,1,0,0,0))) }
+    assert_raises(NoOffsetsDefined) { dti.period_for(Timestamp.for(Time.utc(2005,1,1,0,0,0))) }
+  end
+
+  def test_period_for_timestamp_with_unspecified_offset
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+
+    assert_raises(ArgumentError) { dti.period_for(Timestamp.for(Time.utc(2005,1,1,0,0,0), offset: :ignore)) }
+  end
+
+  def test_period_for_nil
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+
+    assert_raises(ArgumentError) { dti.period_for(nil) }
   end
 
   def test_periods_for_local
@@ -166,7 +211,7 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o4, -21600, 3600, :TESTD
 
     dti.transition 2000,  4, :o2, Time.utc(2000, 4,2,1,0,0).to_i
-    dti.transition 2000, 10, :o3, Time.utc(2000,10,2,1,0,0).to_i, 58843669, 24
+    dti.transition 2000, 10, :o3, Time.utc(2000,10,2,1,0,0).to_i
     dti.transition 2001,  3, :o2, Time.utc(2001, 3,2,1,0,0).to_i
     dti.transition 2001,  4, :o4, Time.utc(2001, 4,2,1,0,0).to_i
     dti.transition 2001, 10, :o3, Time.utc(2001,10,2,1,0,0).to_i
@@ -187,41 +232,41 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     t7 = TimezoneTransitionDefinition.new(o2, o3, Time.utc(2003, 2,2,1,0,0).to_i)
 
 
-    assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(DateTime.new(1960, 1, 1, 1, 0, 0)))
-    assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(DateTime.new(1999,12, 1, 0, 0, 0)))
-    assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Time.utc(    2000, 1, 1,10, 0, 0)))
-    assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Time.utc(    2000, 4, 1,20, 1,39)))
-    assert_equal([],                            dti.periods_for_local(Time.utc(    2000, 4, 1,20, 1,40)))
-    assert_equal([],                            dti.periods_for_local(Time.utc(    2000, 4, 1,20,59,59)))
-    assert_equal([TimezonePeriod.new(t1,  t2)], dti.periods_for_local(Time.utc(    2000, 4, 1,21, 0, 0)))
-    assert_equal([TimezonePeriod.new(t1,  t2)], dti.periods_for_local(DateTime.new(2000,10, 1,19,59,59)))
+    assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Timestamp.for(Time.utc(1960, 1, 1, 1, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Timestamp.for(Time.utc(1999,12, 1, 0, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Timestamp.for(Time.utc(2000, 1, 1,10, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Timestamp.for(Time.utc(2000, 4, 1,20, 1,39), offset: :ignore)))
+    assert_equal([],                            dti.periods_for_local(Timestamp.for(Time.utc(2000, 4, 1,20, 1,40), offset: :ignore)))
+    assert_equal([],                            dti.periods_for_local(Timestamp.for(Time.utc(2000, 4, 1,20,59,59), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t1,  t2)], dti.periods_for_local(Timestamp.for(Time.utc(2000, 4, 1,21, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t1,  t2)], dti.periods_for_local(Timestamp.for(Time.utc(2000,10, 1,19,59,59), offset: :ignore)))
     assert_equal([TimezonePeriod.new(t1,  t2),
-                  TimezonePeriod.new(t2,  t3)], dti.periods_for_local(Time.utc(    2000,10, 1,20, 0, 0).to_i))
+                  TimezonePeriod.new(t2,  t3)], dti.periods_for_local(Timestamp.for(Time.utc(2000,10, 1,20, 0, 0), offset: :ignore)))
     assert_equal([TimezonePeriod.new(t1,  t2),
-                  TimezonePeriod.new(t2,  t3)], dti.periods_for_local(DateTime.new(2000,10, 1,20,59,59)))
-    assert_equal([TimezonePeriod.new(t2,  t3)], dti.periods_for_local(Time.utc(    2000,10, 1,21, 0, 0)))
-    assert_equal([TimezonePeriod.new(t2,  t3)], dti.periods_for_local(Time.utc(    2001, 3, 1,19,59,59)))
-    assert_equal([],                            dti.periods_for_local(Time.utc(    2001, 3, 1,20, 0, 0)))
-    assert_equal([],                            dti.periods_for_local(DateTime.new(2001, 3, 1,20, 30, 0)))
-    assert_equal([],                            dti.periods_for_local(Time.utc(    2001, 3, 1,20,59,59).to_i))
-    assert_equal([TimezonePeriod.new(t3,  t4)], dti.periods_for_local(Time.utc(    2001, 3, 1,21, 0, 0)))
-    assert_equal([TimezonePeriod.new(t3,  t4)], dti.periods_for_local(Time.utc(    2001, 4, 1,19,59,59)))
+                  TimezonePeriod.new(t2,  t3)], dti.periods_for_local(Timestamp.for(Time.utc(2000,10, 1,20,59,59), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t2,  t3)], dti.periods_for_local(Timestamp.for(Time.utc(2000,10, 1,21, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t2,  t3)], dti.periods_for_local(Timestamp.for(Time.utc(2001, 3, 1,19,59,59), offset: :ignore)))
+    assert_equal([],                            dti.periods_for_local(Timestamp.for(Time.utc(2001, 3, 1,20, 0, 0), offset: :ignore)))
+    assert_equal([],                            dti.periods_for_local(Timestamp.for(Time.utc(2001, 3, 1,20,30, 0), offset: :ignore)))
+    assert_equal([],                            dti.periods_for_local(Timestamp.for(Time.utc(2001, 3, 1,20,59,59), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t3,  t4)], dti.periods_for_local(Timestamp.for(Time.utc(2001, 3, 1,21, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t3,  t4)], dti.periods_for_local(Timestamp.for(Time.utc(2001, 4, 1,19,59,59), offset: :ignore)))
     assert_equal([TimezonePeriod.new(t3,  t4),
-                  TimezonePeriod.new(t4,  t5)], dti.periods_for_local(DateTime.new(2001, 4, 1,20, 0, 0)))
+                  TimezonePeriod.new(t4,  t5)], dti.periods_for_local(Timestamp.for(Time.utc(2001, 4, 1,20, 0, 0), offset: :ignore)))
     assert_equal([TimezonePeriod.new(t3,  t4),
-                  TimezonePeriod.new(t4,  t5)], dti.periods_for_local(Time.utc(    2001, 4, 1,20,59,59)))
-    assert_equal([TimezonePeriod.new(t4,  t5)], dti.periods_for_local(Time.utc(    2001, 4, 1,21, 0, 0)))
-    assert_equal([TimezonePeriod.new(t4,  t5)], dti.periods_for_local(Time.utc(    2001,10, 1,19,59,59)))
-    assert_equal([TimezonePeriod.new(t5,  t6)], dti.periods_for_local(Time.utc(    2001,10, 1,20, 0, 0)))
-    assert_equal([TimezonePeriod.new(t5,  t6)], dti.periods_for_local(Time.utc(    2002, 2, 1,20, 0, 0)))
-    assert_equal([TimezonePeriod.new(t5,  t6)], dti.periods_for_local(Time.utc(    2002,10, 1,19,59,59)))
-    assert_equal([TimezonePeriod.new(t6,  t7)], dti.periods_for_local(Time.utc(    2002,10, 1,20, 0, 0)))
-    assert_equal([TimezonePeriod.new(t6,  t7)], dti.periods_for_local(Time.utc(    2003, 2, 1,19,59,59)))
-    assert_equal([],                            dti.periods_for_local(Time.utc(    2003, 2, 1,20, 0, 0)))
-    assert_equal([],                            dti.periods_for_local(Time.utc(    2003, 2, 1,20,59,59)))
-    assert_equal([TimezonePeriod.new(t7, nil)], dti.periods_for_local(Time.utc(    2003, 2, 1,21, 0, 0)))
-    assert_equal([TimezonePeriod.new(t7, nil)], dti.periods_for_local(Time.utc(    2004, 2, 1,20, 0, 0)))
-    assert_equal([TimezonePeriod.new(t7, nil)], dti.periods_for_local(DateTime.new(2040, 2, 1,20, 0, 0)))
+                  TimezonePeriod.new(t4,  t5)], dti.periods_for_local(Timestamp.for(Time.utc(2001, 4, 1,20,59,59), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t4,  t5)], dti.periods_for_local(Timestamp.for(Time.utc(2001, 4, 1,21, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t4,  t5)], dti.periods_for_local(Timestamp.for(Time.utc(2001,10, 1,19,59,59), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t5,  t6)], dti.periods_for_local(Timestamp.for(Time.utc(2001,10, 1,20, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t5,  t6)], dti.periods_for_local(Timestamp.for(Time.utc(2002, 2, 1,20, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t5,  t6)], dti.periods_for_local(Timestamp.for(Time.utc(2002,10, 1,19,59,59), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t6,  t7)], dti.periods_for_local(Timestamp.for(Time.utc(2002,10, 1,20, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t6,  t7)], dti.periods_for_local(Timestamp.for(Time.utc(2003, 2, 1,19,59,59), offset: :ignore)))
+    assert_equal([],                            dti.periods_for_local(Timestamp.for(Time.utc(2003, 2, 1,20, 0, 0), offset: :ignore)))
+    assert_equal([],                            dti.periods_for_local(Timestamp.for(Time.utc(2003, 2, 1,20,59,59), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t7, nil)], dti.periods_for_local(Timestamp.for(Time.utc(2003, 2, 1,21, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t7, nil)], dti.periods_for_local(Timestamp.for(Time.utc(2004, 2, 1,20, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t7, nil)], dti.periods_for_local(Timestamp.for(Time.utc(2040, 2, 1,20, 0, 0), offset: :ignore)))
   end
 
   def test_periods_for_local_warsaw
@@ -245,7 +290,7 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     t3 = TimezoneTransitionDefinition.new(o4, o3, Time.utc(1916, 4,30,22, 0,0).to_i)
 
     assert_equal([TimezonePeriod.new(t1, t2),
-                  TimezonePeriod.new(t2, t3)], dti.periods_for_local(DateTime.new(1915,8,4,23,40,0)))
+                  TimezonePeriod.new(t2, t3)], dti.periods_for_local(Timestamp.for(Time.utc(1915,8,4,23,40,0), offset: :ignore)))
   end
 
   def test_periods_for_local_boundary
@@ -265,9 +310,9 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     # and 2000-07-01 00:00:00 a search has to be carried out in the next half
     # year to the one containing the date we are looking for
 
-    assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Time.utc(2000,6,30,22,59,59)))
-    assert_equal([TimezonePeriod.new(t1, nil)], dti.periods_for_local(Time.utc(2000,6,30,23, 0, 0)))
-    assert_equal([TimezonePeriod.new(t1, nil)], dti.periods_for_local(Time.utc(2000,7, 1, 0, 0, 0)))
+    assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Timestamp.for(Time.utc(2000,6,30,22,59,59), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t1, nil)], dti.periods_for_local(Timestamp.for(Time.utc(2000,6,30,23, 0, 0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(t1, nil)], dti.periods_for_local(Timestamp.for(Time.utc(2000,7, 1, 0, 0, 0), offset: :ignore)))
   end
 
   def test_periods_for_local_no_transitions
@@ -277,17 +322,33 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
 
     o1 = TimezoneOffset.new(-17900, 0, :TESTLMT)
 
-    assert_equal([TimezonePeriod.new(nil, nil, o1)], dti.periods_for_local(DateTime.new(2005,1,1,0,0,0)))
-    assert_equal([TimezonePeriod.new(nil, nil, o1)], dti.periods_for_local(Time.utc(2005,1,1,0,0,0)))
-    assert_equal([TimezonePeriod.new(nil, nil, o1)], dti.periods_for_local(Time.utc(2005,1,1,0,0,0).to_i))
+    assert_equal([TimezonePeriod.new(nil, nil, o1)], dti.periods_for_local(Timestamp.for(Time.utc(2005,1,1,0,0,0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(nil, nil, o1)], dti.periods_for_local(Timestamp.for(Time.utc(2005,1,1,0,0,0), offset: :ignore)))
+    assert_equal([TimezonePeriod.new(nil, nil, o1)], dti.periods_for_local(Timestamp.for(Time.utc(2005,1,1,0,0,0), offset: :ignore)))
   end
 
   def test_periods_for_local_no_offsets
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
 
-    assert_raises(NoOffsetsDefined) { dti.periods_for_local(DateTime.new(2005,1,1,0,0,0)) }
-    assert_raises(NoOffsetsDefined) { dti.periods_for_local(Time.utc(2005,1,1,0,0,0)) }
-    assert_raises(NoOffsetsDefined) { dti.periods_for_local(Time.utc(2005,1,1,0,0,0).to_i) }
+    assert_raises(NoOffsetsDefined) { dti.periods_for_local(Timestamp.for(Time.utc(2005,1,1,0,0,0), offset: :ignore)) }
+    assert_raises(NoOffsetsDefined) { dti.periods_for_local(Timestamp.for(Time.utc(2005,1,1,0,0,0), offset: :ignore)) }
+    assert_raises(NoOffsetsDefined) { dti.periods_for_local(Timestamp.for(Time.utc(2005,1,1,0,0,0), offset: :ignore)) }
+  end
+
+  def test_periods_for_local_timestamp_with_specified_offset
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+
+    t = Timestamp.for(Time.utc(2005,1,1,0,0,0))
+
+    assert_raises(ArgumentError) { dti.periods_for_local(t) }
+  end
+
+  def test_periods_for_local_nil
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+
+    assert_raises(ArgumentError) { dti.periods_for_local(nil) }
   end
 
   def test_transitions_up_to
@@ -300,12 +361,12 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.transition 2010,  4, :o2, Time.utc(2010, 4,1,1,0,0).to_i
     dti.transition 2010, 10, :o3, Time.utc(2010,10,1,1,0,0).to_i
     dti.transition 2011,  3, :o2, Time.utc(2011, 3,1,1,0,0).to_i
-    dti.transition 2011,  4, :o4, Time.utc(2011, 4,1,1,0,0).to_i, 58935661, 24
+    dti.transition 2011,  4, :o4, Time.utc(2011, 4,1,1,0,0).to_i
     dti.transition 2011, 10, :o3, Time.utc(2011,10,1,1,0,0).to_i
 
-    o1 = TimezoneOffset.new(-17900, 0,    :TESTLMT)
+    o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
     o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
-    o3 = TimezoneOffset.new(-18000, 0,    :TESTS)
+    o3 = TimezoneOffset.new(-18000,    0, :TESTS)
     o4 = TimezoneOffset.new(-21600, 3600, :TESTD)
 
     t1 = TimezoneTransitionDefinition.new(o2, o1, Time.utc(2010, 4,1,1,0,0).to_i)
@@ -314,99 +375,116 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     t4 = TimezoneTransitionDefinition.new(o4, o2, Time.utc(2011, 4,1,1,0,0).to_i)
     t5 = TimezoneTransitionDefinition.new(o3, o4, Time.utc(2011,10,1,1,0,0).to_i)
 
-    assert_equal([], dti.transitions_up_to(Time.utc(2010,4,1,1,0,0)))
-    assert_equal([], dti.transitions_up_to(Time.utc(2010,4,1,1,0,0), Time.utc(2000,1,1,0,0,0)))
-    assert_equal([t1], dti.transitions_up_to(Time.utc(2010,4,1,1,0,1)))
-    assert_equal([t1], dti.transitions_up_to(Time.utc(2010,4,1,1,0,1), Time.utc(2000,1,1,0,0,0)))
-    assert_equal([t2,t3,t4], dti.transitions_up_to(Time.utc(2011,4,1,1,0,1), Time.utc(2010,10,1,1,0,0)))
-    assert_equal([t2,t3,t4], dti.transitions_up_to(Time.utc(2011,10,1,1,0,0), Time.utc(2010,4,1,1,0,1)))
-    assert_equal([t3], dti.transitions_up_to(Time.utc(2011,4,1,1,0,0), Time.utc(2010,10,1,1,0,1)))
-    assert_equal([], dti.transitions_up_to(Time.utc(2011,3,1,1,0,0), Time.utc(2010,10,1,1,0,1)))
-    assert_equal([t1,t2,t3,t4], dti.transitions_up_to(Time.utc(2011,10,1,1,0,0)))
-    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1)))
-    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,0,1)))
-    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1), Time.utc(2010,4,1,1,0,0)))
-    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1), Time.utc(2010,4,1,1,0,1)))
-    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1), Time.utc(2010,4,1,1,0,0,1)))
-    assert_equal([t5], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0), Time.utc(2011,10,1,1,0,0)))
-    assert_equal([], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0), Time.utc(2011,10,1,1,0,1)))
+    assert_equal([],               dti.transitions_up_to(Timestamp.for(Time.utc(2010, 4,1,1,0,0))))
+    assert_equal([],               dti.transitions_up_to(Timestamp.for(Time.utc(2010, 4,1,1,0,0)), Timestamp.for(Time.utc(2000, 1,1,0,0,0))))
+    assert_equal([t1],             dti.transitions_up_to(Timestamp.for(Time.utc(2010, 4,1,1,0,1))))
+    assert_equal([t1],             dti.transitions_up_to(Timestamp.for(Time.utc(2010, 4,1,1,0,1)), Timestamp.for(Time.utc(2000, 1,1,0,0,0))))
+    assert_equal([t2,t3,t4],       dti.transitions_up_to(Timestamp.for(Time.utc(2011, 4,1,1,0,1)), Timestamp.for(Time.utc(2010,10,1,1,0,0))))
+    assert_equal([t2,t3,t4],       dti.transitions_up_to(Timestamp.for(Time.utc(2011,10,1,1,0,0)), Timestamp.for(Time.utc(2010, 4,1,1,0,1))))
+    assert_equal([t3],             dti.transitions_up_to(Timestamp.for(Time.utc(2011, 4,1,1,0,0)), Timestamp.for(Time.utc(2010,10,1,1,0,1))))
+    assert_equal([],               dti.transitions_up_to(Timestamp.for(Time.utc(2011, 3,1,1,0,0)), Timestamp.for(Time.utc(2010,10,1,1,0,1))))
+    assert_equal([t1,t2,t3,t4],    dti.transitions_up_to(Timestamp.for(Time.utc(2011,10,1,1,0,0))))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Timestamp.for(Time.utc(2011,10,1,1,0,1))))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Timestamp.for(Time.utc(2011,10,1,1,0,0,1))))
+    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Timestamp.for(Time.utc(2011,10,1,1,0,1)), Timestamp.for(Time.utc(2010, 4,1,1,0,0))))
+    assert_equal([t2,t3,t4,t5],    dti.transitions_up_to(Timestamp.for(Time.utc(2011,10,1,1,0,1)), Timestamp.for(Time.utc(2010, 4,1,1,0,1))))
+    assert_equal([t2,t3,t4,t5],    dti.transitions_up_to(Timestamp.for(Time.utc(2011,10,1,1,0,1)), Timestamp.for(Time.utc(2010, 4,1,1,0,0,1))))
+    assert_equal([t5],             dti.transitions_up_to(Timestamp.for(Time.utc(2015, 1,1,0,0,0)), Timestamp.for(Time.utc(2011,10,1,1,0,0))))
+    assert_equal([],               dti.transitions_up_to(Timestamp.for(Time.utc(2015, 1,1,0,0,0)), Timestamp.for(Time.utc(2011,10,1,1,0,1))))
+  end
 
-    assert_equal([], dti.transitions_up_to(Time.utc(2010,4,1,1,0,0).to_i))
-    assert_equal([], dti.transitions_up_to(Time.utc(2010,4,1,1,0,0).to_i, Time.utc(2000,1,1,0,0,0).to_i))
-    assert_equal([t1], dti.transitions_up_to(Time.utc(2010,4,1,1,0,1).to_i))
-    assert_equal([t1], dti.transitions_up_to(Time.utc(2010,4,1,1,0,1).to_i, Time.utc(2000,1,1,0,0,0).to_i))
-    assert_equal([t2,t3,t4], dti.transitions_up_to(Time.utc(2011,4,1,1,0,1).to_i, Time.utc(2010,10,1,1,0,0).to_i))
-    assert_equal([t2,t3,t4], dti.transitions_up_to(Time.utc(2011,10,1,1,0,0).to_i, Time.utc(2010,4,1,1,0,1).to_i))
-    assert_equal([t3], dti.transitions_up_to(Time.utc(2011,4,1,1,0,0).to_i, Time.utc(2010,10,1,1,0,1).to_i))
-    assert_equal([], dti.transitions_up_to(Time.utc(2011,3,1,1,0,0).to_i, Time.utc(2010,10,1,1,0,1).to_i))
-    assert_equal([t1,t2,t3,t4], dti.transitions_up_to(Time.utc(2011,10,1,1,0,0).to_i))
-    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1).to_i))
-    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1).to_i, Time.utc(2010,4,1,1,0,0).to_i))
-    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(Time.utc(2011,10,1,1,0,1).to_i, Time.utc(2010,4,1,1,0,1).to_i))
-    assert_equal([t5], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0).to_i, Time.utc(2011,10,1,1,0,0).to_i))
-    assert_equal([], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0).to_i, Time.utc(2011,10,1,1,0,1).to_i))
+  def test_transitions_up_to_timestamp_with_zero_utc_offset
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900,    0, :TESTLMT
+    dti.offset :o2, -18000,    0, :TESTS
+    dti.offset :o3, -18000, 3600, :TESTD
 
-    assert_equal([], dti.transitions_up_to(DateTime.new(2010,4,1,1,0,0)))
-    assert_equal([], dti.transitions_up_to(DateTime.new(2010,4,1,1,0,0), DateTime.new(2000,1,1,0,0,0)))
-    assert_equal([t1], dti.transitions_up_to(DateTime.new(2010,4,1,1,0,1)))
-    assert_equal([t1], dti.transitions_up_to(DateTime.new(2010,4,1,1,0,1), DateTime.new(2000,1,1,0,0,0)))
-    assert_equal([t2,t3,t4], dti.transitions_up_to(DateTime.new(2011,4,1,1,0,1), DateTime.new(2010,10,1,1,0,0)))
-    assert_equal([t2,t3,t4], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,0), DateTime.new(2010,4,1,1,0,1)))
-    assert_equal([t3], dti.transitions_up_to(DateTime.new(2011,4,1,1,0,0), DateTime.new(2010,10,1,1,0,1)))
-    assert_equal([], dti.transitions_up_to(DateTime.new(2011,3,1,1,0,0), DateTime.new(2010,10,1,1,0,1)))
-    assert_equal([t1,t2,t3,t4], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,0)))
-    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1)))
-    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,Rational(DATETIME_RESOLUTION,1000000))))
-    assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,0)))
-    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,1)))
-    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,Rational(DATETIME_RESOLUTION,1000000))))
-    assert_equal([t5], dti.transitions_up_to(DateTime.new(2015,1,1,0,0,0), DateTime.new(2011,10,1,1,0,0)))
-    assert_equal([], dti.transitions_up_to(DateTime.new(2015,1,1,0,0,0), DateTime.new(2011,10,1,1,0,1)))
+    dti.transition 2009, 12, :o2, Time.utc(2009,12,31,23,59,59).to_i
+    dti.transition 2010,  7, :o3, Time.utc(2010,7,  1, 0, 0, 0).to_i
+
+    o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
+    o2 = TimezoneOffset.new(-18000,    0, :TESTS)
+    o3 = TimezoneOffset.new(-18000, 3600, :TESTD)
+
+    t1 = TimezoneTransitionDefinition.new(o2, o1, Time.utc(2009,12,31,23,59,59).to_i)
+    t2 = TimezoneTransitionDefinition.new(o3, o2, Time.utc(2010, 7, 1, 0, 0, 0).to_i)
+
+    assert_equal([t1,t2], dti.transitions_up_to(Timestamp.for(Time.new(2010,7,1,0,0,1,0))))
+    assert_equal([t1,t2], dti.transitions_up_to(Timestamp.for(Time.new(2011,1,1,0,0,0,0)), Timestamp.for(Time.new(2009,12,31,23,59,59,0))))
+  end
+
+  def test_transitions_up_to_timestamp_with_non_zero_utc_offset
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900,    0, :TESTLMT
+    dti.offset :o2, -18000,    0, :TESTS
+    dti.offset :o3, -18000, 3600, :TESTD
+
+    dti.transition 2009, 12, :o2, Time.utc(2009,12,31,23,59,59).to_i
+    dti.transition 2010,  7, :o3, Time.utc(2010, 7, 1, 0, 0, 0).to_i
+
+    o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
+    o2 = TimezoneOffset.new(-18000,    0, :TESTS)
+    o3 = TimezoneOffset.new(-18000, 3600, :TESTD)
+
+    t1 = TimezoneTransitionDefinition.new(o2, o1, Time.utc(2009,12,31,23,59,59).to_i)
+    t2 = TimezoneTransitionDefinition.new(o3, o2, Time.utc(2010, 7, 1, 0, 0, 0).to_i)
+
+    assert_equal([t1,t2], dti.transitions_up_to(Timestamp.for(Time.new(2010,6,30,23,0,1,-3600))))
+    assert_equal([t1],    dti.transitions_up_to(Timestamp.for(Time.new(2010,7, 1, 1,0,0, 3600))))
+    assert_equal([t1,t2], dti.transitions_up_to(Timestamp.for(Time.new(2011,1,1,0,0,0,0)), Timestamp.for(Time.new(2010, 1, 1, 0,59,59, 3600))))
+    assert_equal([t2],    dti.transitions_up_to(Timestamp.for(Time.new(2011,1,1,0,0,0,0)), Timestamp.for(Time.new(2009,12,31,23, 0, 0,-3600))))
   end
 
   def test_transitions_up_to_no_transitions
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -17900, 0, :TESTLMT
 
-    assert_equal([], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0)))
-    assert_equal([], dti.transitions_up_to(Time.utc(2015,1,1,0,0,0).to_i))
-    assert_equal([], dti.transitions_up_to(DateTime.new(2015,1,1,0,0,0)))
+    assert_equal([], dti.transitions_up_to(Timestamp.for(Time.utc(2015,1,1,0,0,0))))
   end
 
-  def test_transitions_up_to_utc_to_not_greater_than_utc_from
+  def test_transitions_up_to_to_not_greater_than_from
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -17900, 0, :TESTLMT
 
-    assert_raises(ArgumentError) do
-      dti.transitions_up_to(Time.utc(2012,8,1,0,0,0), Time.utc(2013,8,1,0,0,0))
-    end
+    to = Timestamp.for(Time.utc(2012,8,1,0,0,0))
+    from = Timestamp.for(Time.utc(2013,8,1,0,0,0))
 
-    assert_raises(ArgumentError) do
-      dti.transitions_up_to(Time.utc(2012,8,1,0,0,0).to_i, Time.utc(2012,8,1,0,0,0).to_i)
-    end
-
-    assert_raises(ArgumentError) do
-      dti.transitions_up_to(DateTime.new(2012,8,1,0,0,0), DateTime.new(2012,8,1,0,0,0))
-    end
+    assert_raises(ArgumentError) { dti.transitions_up_to(to, from) }
   end
 
-  def test_datetime_and_timestamp_use
-    # This previously was a test to verify that DateTime was used when outside
-    # the range of Time (which was limited on some platforms on older versions
-    # of Ruby). The test now checks that the DateTime parameters are ignored.
-
+  def test_transitions_up_to_to_not_greater_than_from_subsecond
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
-    dti.offset :o1, 0,    0, :TESTS
-    dti.offset :o2, 0, 3600, :TESTD
+    dti.offset :o1, -17900, 0, :TESTLMT
 
-    dti.transition 1901, 12, :o2, -2147483649, 69573092117, 28800
-    dti.transition 1969, 12, :o1, -1, 210866759999, 86400
-    dti.transition 2001,  9, :o2, 1000000000, 529666909, 216
-    dti.transition 2038,  1, :o1, 2147483648, 3328347557, 1350
+    to = Timestamp.for(Time.utc(2012,8,1,0,0,0))
+    from = Timestamp.for(Time.utc(2012,8,1,0,0,0,1))
 
-    assert(dti.period_for_utc(DateTime.new(1901,12,13,20,45,51)).start_transition.at.eql?(TimeOrDateTime.new(-2147483649)))
-    assert(dti.period_for_utc(DateTime.new(1969,12,31,23,59,59)).start_transition.at.eql?(TimeOrDateTime.new(-1)))
-    assert(dti.period_for_utc(DateTime.new(2001,9,9,2,46,40)).start_transition.at.eql?(TimeOrDateTime.new(1000000000)))
-    assert(dti.period_for_utc(DateTime.new(2038,1,19,3,14,8)).start_transition.at.eql?(TimeOrDateTime.new(2147483648)))
+    assert_raises(ArgumentError) { dti.transitions_up_to(to, from) }
+  end
+
+  def test_transitions_up_to_to_timestamp_with_unspecified_offset
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+
+    to = Timestamp.for(Time.utc(2015,1,1,0,0,0), offset: :ignore)
+
+    assert_raises(ArgumentError) { dti.transitions_up_to(to) }
+  end
+
+  def test_transitions_up_to_from_timestamp_with_unspecified_offset
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+
+    to = Timestamp.for(Time.utc(2015,1,1,0,0,0))
+    from = Timestamp.for(Time.utc(2014,1,1,0,0,0), offset: :ignore)
+
+    assert_raises(ArgumentError) { dti.transitions_up_to(to, from) }
+  end
+
+  def test_transitions_up_to_to_timestamp_nil
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900, 0, :TESTLMT
+
+    assert_raises(ArgumentError) { dti.transitions_up_to(nil) }
   end
 end

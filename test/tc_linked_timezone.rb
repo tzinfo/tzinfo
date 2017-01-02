@@ -5,13 +5,13 @@ include TZInfo
 class TCLinkedTimezone < Minitest::Test
 
   class TestTimezone < Timezone
-    attr_reader :utc_period
-    attr_reader :local_periods
-    attr_reader :up_to_transitions
-    attr_reader :utc
-    attr_reader :local
-    attr_reader :utc_to
-    attr_reader :utc_from
+    attr_reader :period_for_result
+    attr_reader :periods_for_local_result
+    attr_reader :transitions_up_to_result
+    attr_reader :time
+    attr_reader :local_time
+    attr_reader :to
+    attr_reader :from
 
     def self.new(identifier, no_local_periods = false)
       tz = super()
@@ -23,20 +23,22 @@ class TCLinkedTimezone < Minitest::Test
       @identifier
     end
 
-    def period_for_utc(utc)
-      @utc = utc
-      @utc_period
+    def period_for(time)
+      raise ArgumentError, 'linked zone exception: nil' unless time
+      @time = time
+      @period_for_result
     end
 
-    def periods_for_local(local)
-      @local = local
-      @local_periods
+    def periods_for_local(local_time)
+      raise ArgumentError, 'linked zone exception: nil' unless local_time
+      @local_time = local_time
+      @periods_for_local_result
     end
 
-    def transitions_up_to(utc_to, utc_from = nil)
-      @utc_to = utc_to
-      @utc_from = utc_from
-      @up_to_transitions
+    def transitions_up_to(to, from = nil)
+      @to = to
+      @from = from
+      @transitions_up_to_result
     end
 
     def canonical_zone
@@ -49,9 +51,9 @@ class TCLinkedTimezone < Minitest::Test
 
         # Don't have to be real TimezonePeriod or TimezoneTransition objects
         # (nothing will use them).
-        @utc_period = Object.new
-        @local_periods = no_local_periods ? [] : [Object.new, Object.new]
-        @up_to_transitions = [Object.new, Object.new]
+        @period_for_result = Object.new
+        @periods_for_local_result = no_local_periods ? [] : [Object.new, Object.new]
+        @transitions_up_to_result = [Object.new, Object.new]
       end
   end
 
@@ -89,39 +91,70 @@ class TCLinkedTimezone < Minitest::Test
     assert_raises(InvalidTimezoneIdentifier) { LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Invalid/Identifier')) }
   end
 
-  def test_period_for_utc
+  def test_period_for
+    time_types_test do |h|
+      tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
+      linked_tz = Timezone.get('Test/Linked')
+      t = h.time(2006, 6, 27, 23, 12, 28, Rational(1, 10), 0)
+      assert_same(linked_tz.period_for_result, tz.period_for(t))
+      assert_same(t, linked_tz.time)
+    end
+  end
+
+  def test_period_for_nil
     tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
-    linked_tz = Timezone.get('Test/Linked')
-    t = Time.utc(2006, 6, 27, 23, 12, 28)
-    assert_same(linked_tz.utc_period, tz.period_for_utc(t))
-    assert_same(t, linked_tz.utc)
+
+    error = assert_raises(ArgumentError) { tz.period_for(nil) }
+    assert_equal('linked zone exception: nil', error.message)
   end
 
   def test_periods_for_local
-    tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
-    linked_tz = Timezone.get('Test/Linked')
-    t = Time.utc(2006, 6, 27, 23, 12, 28)
-    assert_same(linked_tz.local_periods, tz.periods_for_local(t))
-    assert_same(t, linked_tz.local)
+    time_types_test do |h|
+      tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
+      linked_tz = Timezone.get('Test/Linked')
+      t = h.time(2006, 6, 27, 23, 12, 28, Rational(1, 10), 0)
+      assert_same(linked_tz.periods_for_local_result, tz.periods_for_local(t))
+      assert_same(t, linked_tz.local_time)
+    end
   end
 
   def test_periods_for_local_not_found
     tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/No/Local'))
     linked_tz = Timezone.get('Test/No/Local')
     t = Time.utc(2006, 6, 27, 23, 12, 28)
-    assert_equal([], linked_tz.local_periods)
-    assert_same(linked_tz.local_periods, tz.periods_for_local(t))
-    assert_same(t, linked_tz.local)
+    assert_equal([], linked_tz.periods_for_local_result)
+    assert_same(linked_tz.periods_for_local_result, tz.periods_for_local(t))
+    assert_same(t, linked_tz.local_time)
+  end
+
+  def test_periods_for_local_nil
+    tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
+
+    error = assert_raises(ArgumentError) { tz.periods_for_local(nil) }
+    assert_equal('linked zone exception: nil', error.message)
   end
 
   def test_transitions_up_to
-    tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
-    linked_tz = Timezone.get('Test/Linked')
-    utc_to = Time.utc(2013, 1, 1, 0, 0, 0)
-    utc_from = Time.utc(2012, 1, 1, 0, 0, 0)
-    assert_same(linked_tz.up_to_transitions, tz.transitions_up_to(utc_to, utc_from))
-    assert_same(utc_to, linked_tz.utc_to)
-    assert_same(utc_from, linked_tz.utc_from)
+    time_types_test do |h|
+      tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
+      linked_tz = Timezone.get('Test/Linked')
+      to = h.time(2013, 1, 1, 0, 0, 0, Rational(1, 10), 0)
+      from = h.time(2012, 1, 1, 0, 0, 0, Rational(1, 10), 0)
+      assert_same(linked_tz.transitions_up_to_result, tz.transitions_up_to(to, from))
+      assert_same(to, linked_tz.to)
+      assert_same(from, linked_tz.from)
+    end
+  end
+
+  def test_transitions_up_to_nil_from
+    time_types_test do |h|
+      tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
+      linked_tz = Timezone.get('Test/Linked')
+      to = h.time(2013, 1, 1, 0, 0, 0, Rational(1, 10), 0)
+      assert_same(linked_tz.transitions_up_to_result, tz.transitions_up_to(to))
+      assert_same(to, linked_tz.to)
+      assert_nil(linked_tz.from)
+    end
   end
 
   def test_canonical_identifier

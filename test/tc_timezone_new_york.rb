@@ -51,10 +51,10 @@ class TCTimezoneNewYork < Minitest::Test
 
     transitions = tz.transitions_up_to(DateTime.new(2005,1,1,0,0,0), DateTime.new(2004,1,1,0,0,0))
     assert_equal(2, transitions.length)
-    assert_equal(TimeOrDateTime.new(DateTime.new(2004,4,4,7,0,0)), transitions[0].at)
+    assert_equal(Timestamp.for(Time.utc(2004,4,4,7,0,0)), transitions[0].at)
     assert_equal(TimezoneOffset.new(-18000, 0, :EST), transitions[0].previous_offset)
     assert_equal(TimezoneOffset.new(-18000, 3600, :EDT), transitions[0].offset)
-    assert_equal(TimeOrDateTime.new(DateTime.new(2004,10,31,6,0,0)), transitions[1].at)
+    assert_equal(Timestamp.for(Time.utc(2004,10,31,6,0,0)), transitions[1].at)
     assert_equal(TimezoneOffset.new(-18000, 3600, :EDT), transitions[1].previous_offset)
     assert_equal(TimezoneOffset.new(-18000, 0, :EST), transitions[1].offset)
 
@@ -110,10 +110,10 @@ class TCTimezoneNewYork < Minitest::Test
 
     transitions = tz.transitions_up_to(DateTime.new(1958,1,1,0,0,0), DateTime.new(1957,1,1,0,0,0))
     assert_equal(2, transitions.length)
-    assert_equal(TimeOrDateTime.new(DateTime.new(1957,4,28,7,0,0)), transitions[0].at)
+    assert_equal(Timestamp.for(Time.utc(1957,4,28,7,0,0)), transitions[0].at)
     assert_equal(TimezoneOffset.new(-18000, 0, :EST), transitions[0].previous_offset)
     assert_equal(TimezoneOffset.new(-18000, 3600, :EDT), transitions[0].offset)
-    assert_equal(TimeOrDateTime.new(DateTime.new(1957,10,27,6,0,0)), transitions[1].at)
+    assert_equal(Timestamp.for(Time.utc(1957,10,27,6,0,0)), transitions[1].at)
     assert_equal(TimezoneOffset.new(-18000, 3600, :EDT), transitions[1].previous_offset)
     assert_equal(TimezoneOffset.new(-18000, 0, :EST), transitions[1].offset)
 
@@ -130,7 +130,5 @@ class TCTimezoneNewYork < Minitest::Test
     assert_equal(DateTime.new(1970,1,1,5,0,0), tz.local_to_utc(DateTime.new(1970,1,1,0,0,0)))
     assert_equal(Time.new(1970,1,1,0,0,0,'-05:00'), tz.utc_to_local(Time.utc(1970,1,1,5,0,0)))
     assert_equal(Time.utc(1970,1,1,5,0,0), tz.local_to_utc(Time.utc(1970,1,1,0,0,0)))
-    assert_equal(0, tz.utc_to_local(18000))
-    assert_equal(18000, tz.local_to_utc(0))
   end
 end

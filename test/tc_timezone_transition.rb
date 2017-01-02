@@ -8,7 +8,7 @@ class TCTimezoneTransition < Minitest::Test
   class TestTimezoneTransition < TimezoneTransition
     def initialize(offset, previous_offset, at)
       super(offset, previous_offset)
-      @at = TimeOrDateTime.wrap(at)
+      @at = Timestamp.utc(at)
     end
 
     def at
@@ -33,10 +33,10 @@ class TCTimezoneTransition < Minitest::Test
   def test_datetime
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
+    t2 = TestTimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
+      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
+    t3 = TestTimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
+      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
 
     assert_equal_with_offset(DateTime.new(2006, 5, 30, 0, 31, 20), t1.datetime)
     assert_equal_with_offset(DateTime.new(2006, 5, 30, 0, 31, 20), t2.datetime)
@@ -46,10 +46,10 @@ class TCTimezoneTransition < Minitest::Test
   def test_time
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
+    t2 = TestTimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
+      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
+    t3 = TestTimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
+      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
 
     assert_equal_with_offset(Time.utc(2006, 5, 30, 0, 31, 20), t1.time)
     assert_equal_with_offset(Time.utc(2006, 5, 30, 0, 31, 20), t2.time)
@@ -59,178 +59,124 @@ class TCTimezoneTransition < Minitest::Test
   def test_local_end_at
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
+    t2 = TestTimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
+      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
+    t3 = TestTimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
+      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
 
-    assert_time_or_datetime_equal_with_offset(TimestampWithOffset.new(1148949080, 3600), t1.local_end_at)
-    assert_time_or_datetime_equal_with_offset(DateTime.new(2006, 5, 30, 1, 31, 20, '+01:00'), t2.local_end_at)
-    assert_time_or_datetime_equal_with_offset(Time.new(2006, 5, 30, 1, 31, 20, '+01:00'), t3.local_end_at)
+    assert_equal_with_offset(Timestamp.new(1148949080, 0, 3600), t1.local_end_at)
+    assert_equal_with_offset(Timestamp.new(1148949080, 0, 10800), t2.local_end_at)
+    assert_equal_with_offset(Timestamp.new(1148949080, 0, -3600), t3.local_end_at)
   end
 
   def test_local_end
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
+    t2 = TestTimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
+      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
+    t3 = TestTimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
+      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
 
     assert_equal_with_offset(DateTime.new(2006, 5, 30, 1, 31, 20, '+01:00'), t1.local_end)
-    assert_equal_with_offset(DateTime.new(2006, 5, 30, 1, 31, 20, '+01:00'), t2.local_end)
-    assert_equal_with_offset(DateTime.new(2006, 5, 30, 1, 31, 20, '+01:00'), t3.local_end)
+    assert_equal_with_offset(DateTime.new(2006, 5, 30, 3, 31, 20, '+03:00'), t2.local_end)
+    assert_equal_with_offset(DateTime.new(2006, 5, 29, 23, 31, 20, '-01:00'), t3.local_end)
   end
 
   def test_local_end_time
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
+    t2 = TestTimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
+      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
+    t3 = TestTimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
+      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
 
     assert_equal_with_offset(Time.new(2006, 5, 30, 1, 31, 20, '+01:00'), t1.local_end_time)
-    assert_equal_with_offset(Time.new(2006, 5, 30, 1, 31, 20, '+01:00'), t2.local_end_time)
-    assert_equal_with_offset(Time.new(2006, 5, 30, 1, 31, 20, '+01:00'), t3.local_end_time)
+    assert_equal_with_offset(Time.new(2006, 5, 30, 3, 31, 20, '+03:00'), t2.local_end_time)
+    assert_equal_with_offset(Time.new(2006, 5, 29, 23, 31, 20, '-01:00'), t3.local_end_time)
   end
 
   def test_local_start_at
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
+    t2 = TestTimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
+      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
+    t3 = TestTimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
+      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
 
-    assert_time_or_datetime_equal_with_offset(TimestampWithOffset.new(1148949080, 7200), t1.local_start_at)
-    assert_time_or_datetime_equal_with_offset(DateTime.new(2006, 5, 30, 2, 31, 20, '+02:00'), t2.local_start_at)
-    assert_time_or_datetime_equal_with_offset(Time.new(2006, 5, 30, 2, 31, 20, '+02:00'), t3.local_start_at)
+    assert_equal_with_offset(Timestamp.new(1148949080, 0, 7200), t1.local_start_at)
+    assert_equal_with_offset(Timestamp.new(1148949080, 0, 7200), t2.local_start_at)
+    assert_equal_with_offset(Timestamp.new(1148949080, 0, 0), t3.local_start_at)
   end
 
   def test_local_start
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
+    t2 = TestTimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
+      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
+    t3 = TestTimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
+      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
 
     assert_equal_with_offset(DateTime.new(2006, 5, 30, 2, 31, 20, '+02:00'), t1.local_start)
     assert_equal_with_offset(DateTime.new(2006, 5, 30, 2, 31, 20, '+02:00'), t2.local_start)
-    assert_equal_with_offset(DateTime.new(2006, 5, 30, 2, 31, 20, '+02:00'), t3.local_start)
+    assert_equal_with_offset(DateTime.new(2006, 5, 30, 0, 31, 20, '+00:00'), t3.local_start)
   end
 
   def test_local_start_time
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
+    t2 = TestTimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
+      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
+    t3 = TestTimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
+      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
 
     assert_equal_with_offset(Time.new(2006, 5, 30, 2, 31, 20, '+02:00'), t1.local_start_time)
     assert_equal_with_offset(Time.new(2006, 5, 30, 2, 31, 20, '+02:00'), t2.local_start_time)
-    assert_equal_with_offset(Time.new(2006, 5, 30, 2, 31, 20, '+02:00'), t3.local_start_time)
+    assert_equal_with_offset(Time.new(2006, 5, 30, 0, 31, 20, '+00:00'), t3.local_start_time)
   end
 
   def test_absolute_local_end_at
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
+    t2 = TestTimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
+      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
+    t3 = TestTimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
+      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
 
-    assert_time_or_datetime_equal_with_offset(1148952680, t1.absolute_local_end_at)
-    assert_time_or_datetime_equal_with_offset(DateTime.new(2006, 5, 30, 1, 31, 20), t2.absolute_local_end_at)
-    assert_time_or_datetime_equal_with_offset(Time.utc(2006, 5, 30, 1, 31, 20), t3.absolute_local_end_at)
+    assert_equal_with_offset(Timestamp.new(1148952680), t1.absolute_local_end_at)
+    assert_equal_with_offset(Timestamp.new(1148959880), t2.absolute_local_end_at)
+    assert_equal_with_offset(Timestamp.new(1148945480), t3.absolute_local_end_at)
   end
 
   def test_absolute_local_start_at
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
+    t2 = TestTimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
+      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
+    t3 = TestTimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
+      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
 
-    assert_time_or_datetime_equal_with_offset(1148956280, t1.absolute_local_start_at)
-    assert_time_or_datetime_equal_with_offset(DateTime.new(2006, 5, 30, 2, 31, 20), t2.absolute_local_start_at)
-    assert_time_or_datetime_equal_with_offset(Time.utc(2006, 5, 30, 2, 31, 20), t3.absolute_local_start_at)
+    assert_equal_with_offset(Timestamp.new(1148956280), t1.absolute_local_start_at)
+    assert_equal_with_offset(Timestamp.new(1148956280), t2.absolute_local_start_at)
+    assert_equal_with_offset(Timestamp.new(1148949080), t3.absolute_local_start_at)
   end
 
-  def test_absolute_local_end_at_before_negative_32bit
-    t = TestTimezoneTransition.new(TimezoneOffset.new(-7200, 3600, :TDT),
-      TimezoneOffset.new(-7200, 0, :TST), -2147482800)
-
-    assert_equal(-2147490000, t.absolute_local_end_at.to_orig)
-  end
-
-  def test_absolute_local_start_at_before_negative_32bit
-    t = TestTimezoneTransition.new(TimezoneOffset.new(-7200, 3600, :TDT),
-      TimezoneOffset.new(-7200, 0, :TST), -2147482800)
-
-    assert_equal(-2147486400, t.absolute_local_start_at.to_orig)
-  end
-
-  def test_absolute_local_end_at_before_epoch
-    t = TestTimezoneTransition.new(TimezoneOffset.new(-7200, 3600, :TDT),
-      TimezoneOffset.new(-7200, 0, :TST), 1800)
-
-    assert_equal(-5400, t.absolute_local_end_at.to_orig)
-  end
-
-  def test_absolute_local_start_at_before_epoch
-    t = TestTimezoneTransition.new(TimezoneOffset.new(-7200, 3600, :TDT),
-      TimezoneOffset.new(-7200, 0, :TST), 1800)
-
-    assert_equal(-1800, t.absolute_local_start_at.to_orig)
-  end
-
-  def test_absolute_local_end_at_after_32bit
-    t = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), 2147482800)
-
-    assert_equal(2147486400, t.absolute_local_end_at.to_orig)
-  end
-
-  def test_absolute_local_start_at_after_32bit
-    t = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), 2147482800)
-
-    assert_equal(2147490000, t.absolute_local_start_at)
-  end
-
-  def test_equality_timestamp
+  def test_equality
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
     t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
     t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t4 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
-    t5 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949081)
-    t6 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 1, 31, 21))
-    t7 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 1, 31, 21))
-    t8 = TestTimezoneTransition.new(TimezoneOffset.new(3601, 3600, :TDT),
+    t4 = TestTimezoneTransition.new(TimezoneOffset.new(3601, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t9 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
+    t5 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3601, 0, :TST), 1148949080)
 
     assert_equal(true, t1 == t1)
     assert_equal(true, t1 == t2)
-    assert_equal(true, t1 == t3)
-    assert_equal(true, t1 == t4)
+    assert_equal(false, t1 == t3)
+    assert_equal(false, t1 == t4)
     assert_equal(false, t1 == t5)
-    assert_equal(false, t1 == t6)
-    assert_equal(false, t1 == t7)
-    assert_equal(false, t1 == t8)
-    assert_equal(false, t1 == t9)
     assert_equal(false, t1 == Object.new)
 
     assert_equal(true, t1.eql?(t1))
@@ -238,115 +184,15 @@ class TCTimezoneTransition < Minitest::Test
     assert_equal(false, t1.eql?(t3))
     assert_equal(false, t1.eql?(t4))
     assert_equal(false, t1.eql?(t5))
-    assert_equal(false, t1.eql?(t6))
-    assert_equal(false, t1.eql?(t7))
-    assert_equal(false, t1.eql?(t8))
-    assert_equal(false, t1.eql?(t9))
-    assert_equal(false, t1.eql?(Object.new))
-  end
-
-  def test_equality_datetime
-    t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t4 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
-    t5 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 1, 31, 21))
-    t6 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), 1148949081)
-    t7 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 1, 31, 21))
-    t8 = TestTimezoneTransition.new(TimezoneOffset.new(3601, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t9 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3601, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-
-    assert_equal(true, t1 == t1)
-    assert_equal(true, t1 == t2)
-    assert_equal(true, t1 == t3)
-    assert_equal(true, t1 == t4)
-    assert_equal(false, t1 == t5)
-    assert_equal(false, t1 == t6)
-    assert_equal(false, t1 == t7)
-    assert_equal(false, t1 == t8)
-    assert_equal(false, t1 == t9)
-    assert_equal(false, t1 == Object.new)
-
-    assert_equal(true, t1.eql?(t1))
-    assert_equal(true, t1.eql?(t2))
-    assert_equal(false, t1.eql?(t3))
-    assert_equal(false, t1.eql?(t4))
-    assert_equal(false, t1.eql?(t5))
-    assert_equal(false, t1.eql?(t6))
-    assert_equal(false, t1.eql?(t7))
-    assert_equal(false, t1.eql?(t8))
-    assert_equal(false, t1.eql?(t9))
-    assert_equal(false, t1.eql?(Object.new))
-  end
-
-  def test_equality_time
-    t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 0, 31, 20))
-    t4 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t5 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), Time.utc(2006, 5, 30, 0, 31, 21))
-    t6 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), DateTime.new(2006, 5, 30, 1, 31, 21))
-    t7 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), 1148949081)
-    t8 = TestTimezoneTransition.new(TimezoneOffset.new(3601, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t9 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3601, 0, :TST), 1148949080)
-
-    assert_equal(true, t1 == t1)
-    assert_equal(true, t1 == t2)
-    assert_equal(true, t1 == t3)
-    assert_equal(true, t1 == t4)
-    assert_equal(false, t1 == t5)
-    assert_equal(false, t1 == t6)
-    assert_equal(false, t1 == t7)
-    assert_equal(false, t1 == t8)
-    assert_equal(false, t1 == t9)
-    assert_equal(false, t1 == Object.new)
-
-    assert_equal(true, t1.eql?(t1))
-    assert_equal(true, t1.eql?(t2))
-    assert_equal(false, t1.eql?(t3))
-    assert_equal(false, t1.eql?(t4))
-    assert_equal(false, t1.eql?(t5))
-    assert_equal(false, t1.eql?(t6))
-    assert_equal(false, t1.eql?(t7))
-    assert_equal(false, t1.eql?(t8))
-    assert_equal(false, t1.eql?(t9))
     assert_equal(false, t1.eql?(Object.new))
   end
 
   def test_hash
-    t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDTA),
+    t = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDTA),
       TimezoneOffset.new(3600, 0, :TSTA), 1148949080)
-    t2 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDTB),
-      TimezoneOffset.new(3600, 0, :TSTB), DateTime.new(2006, 5, 30, 1, 31, 20))
-    t3 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDTC),
-      TimezoneOffset.new(3600, 0, :TSTC), Time.utc(2006, 5, 30, 1, 31, 20))
 
     assert_equal(TimezoneOffset.new(3600, 3600, :TDTA).hash ^
-      TimezoneOffset.new(3600, 0, :TSTA).hash ^ TimeOrDateTime.new(1148949080).hash,
-      t1.hash)
-    assert_equal(TimezoneOffset.new(3600, 3600, :TDTB).hash ^
-      TimezoneOffset.new(3600, 0, :TSTB).hash ^ TimeOrDateTime.new(DateTime.new(2006, 5, 30, 1, 31, 20)).hash,
-      t2.hash)
-    assert_equal(TimezoneOffset.new(3600, 3600, :TDTC).hash ^
-      TimezoneOffset.new(3600, 0, :TSTC).hash ^ TimeOrDateTime.new(Time.utc(2006, 5, 30, 1, 31, 20)).hash,
-      t3.hash)
+      TimezoneOffset.new(3600, 0, :TSTA).hash ^ Timestamp.utc(1148949080).hash,
+      t.hash)
   end
 end

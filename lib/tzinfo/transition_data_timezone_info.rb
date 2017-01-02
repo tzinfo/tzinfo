@@ -91,18 +91,26 @@ module TZInfo
       @previous_offset = offset
     end
 
-    # Returns the TimezonePeriod for the given UTC time.
+    # Returns the TimezonePeriod for the given Timestamp. The Timestamp must
+    # have a specified utc_offset.
+    #
+    # Raises ArgumentError if timestamp is nil or does not have a specified
+    # utc_offset.
+    #
     # Raises NoOffsetsDefined if no offsets have been defined.
-    def period_for_utc(utc)
+    def period_for(timestamp)
+      raise ArgumentError, 'timestamp must not be nil' unless timestamp
+      raise ArgumentError, 'timestamp must have a specified utc_offset' unless timestamp.utc_offset
+
       unless @transitions.empty?
-        utc = TimeOrDateTime.wrap(utc)
-        index = transition_index(utc.year, utc.mon)
+        time = timestamp.to_time.utc
+        index = transition_index(time.year, time.mon)
 
         start_transition = nil
         start = transition_before_end(index)
         if start
           start.downto(0) do |i|
-            if @transitions[i].at <= utc
+            if @transitions[i].at <= timestamp
               start_transition = @transitions[i]
               break
             end
@@ -113,7 +121,7 @@ module TZInfo
         start = transition_after_start(index)
         if start
           start.upto(@transitions.length - 1) do |i|
-            if @transitions[i].at > utc
+            if @transitions[i].at > timestamp
               end_transition = @transitions[i]
               break
             end
@@ -133,21 +141,29 @@ module TZInfo
       end
     end
 
-    # Returns the set of TimezonePeriods for the given local time as an array.
-    # Results returned are ordered by increasing UTC start date.
-    # Returns an empty array if no periods are found for the given time.
+    # Returns an array containing the valid TimezonePeriods for the given local
+    # Timestamp. The Timestamp must have an unspecified utc_offset. The results
+    # returned are ordered by increasing UTC start date. An empty array is
+    # returned if no periods are found for the given time.
+    #
+    # Raises ArgumentError if local_timestamp is nil, or has a specified
+    # utc_offset.
+    #
     # Raises NoOffsetsDefined if no offsets have been defined.
-    def periods_for_local(local)
+    def periods_for_local(local_timestamp)
+      raise ArgumentError, 'local_timestamp must not be nil' unless local_timestamp
+      raise ArgumentError, 'local_timestamp must have an unspecified utc_offset' if local_timestamp.utc_offset
+
       unless @transitions.empty?
-        local = TimeOrDateTime.wrap(local)
-        index = transition_index(local.year, local.mon)
+        local_time = local_timestamp.to_time
+        index = transition_index(local_time.year, local_time.mon)
 
         result = []
 
         start_index = transition_after_start(index - 1)
-        if start_index && @transitions[start_index].absolute_local_end_at > local
+        if start_index && @transitions[start_index].absolute_local_end_at > local_timestamp
           if start_index > 0
-            if @transitions[start_index - 1].absolute_local_start_at <= local
+            if @transitions[start_index - 1].absolute_local_start_at <= local_timestamp
               result << TimezonePeriod.new(@transitions[start_index - 1], @transitions[start_index])
             end
           else
@@ -161,9 +177,9 @@ module TZInfo
           start_index = end_index unless start_index
 
           start_index.upto(transition_before_end(index + 1)) do |i|
-            if @transitions[i].absolute_local_start_at <= local
+            if @transitions[i].absolute_local_start_at <= local_timestamp
               if i + 1 < @transitions.length
-                if @transitions[i + 1].absolute_local_end_at > local
+                if @transitions[i + 1].absolute_local_end_at > local_timestamp
                   result << TimezonePeriod.new(@transitions[i], @transitions[i + 1])
                 end
               else
@@ -183,69 +199,68 @@ module TZInfo
     # Returns an Array of TimezoneTransition instances representing the times
     # where the UTC offset of the timezone changes.
     #
-    # Transitions are returned up to a given date and time up to a given date
-    # and time, specified in UTC (utc_to).
+    # Transitions are returned up to a given Timestamp (to_timestamp).
     #
-    # A from date and time may also be supplied using the utc_from parameter
-    # (also specified in UTC). If utc_from is not nil, only transitions from
-    # that date and time onwards will be returned.
+    # A from Timestamp may also be supplied using the from_timestamp parameter.
+    # If from_timestamp is not nil, only transitions from that time will be
+    # returned.
     #
-    # Comparisons with utc_to are exclusive. Comparisons with utc_from are
-    # inclusive. If a transition falls precisely on utc_to, it will be excluded.
-    # If a transition falls on utc_from, it will be included.
+    # Comparisons with to_timestamp are exclusive. Comparisons with from are
+    # inclusive. If a transition falls precisely on to_timestamp, it will be
+    # excluded. If a transition falls on from_timestamp, it will be included.
     #
     # Transitions returned are ordered by when they occur, from earliest to
     # latest.
     #
-    # utc_to and utc_from can be specified using either DateTime, Time or
-    # integer timestamps (Time.to_i).
-    #
-    # If utc_from is specified and utc_to is not greater than utc_from, then
-    # transitions_up_to raises an ArgumentError exception.
-    def transitions_up_to(utc_to, utc_from = nil)
-      utc_to = TimeOrDateTime.wrap(utc_to)
-      utc_from = utc_from ? TimeOrDateTime.wrap(utc_from) : nil
+    # If from_timestamp is specified and to_timestamp is not greater than
+    # from_timestamp, then transitions_up_to raises an ArgumentError exception.
+    def transitions_up_to(to_timestamp, from_timestamp = nil)
+      raise ArgumentError, 'to_timestamp must not be nil' unless to_timestamp
+      raise ArgumentError, 'to_timestamp must have a specified utc_offset' unless to_timestamp.utc_offset
 
-      if utc_from && utc_to <= utc_from
-        raise ArgumentError, 'utc_to must be greater than utc_from'
+      if from_timestamp
+        raise ArgumentError, 'from_timestamp must have a specified utc_offset' unless from_timestamp.utc_offset
+        raise ArgumentError, 'to_timestamp must be greater than from_timestamp' if to_timestamp <= from_timestamp
       end
 
       unless @transitions.empty?
-        if utc_from
-          from = transition_after_start(transition_index(utc_from.year, utc_from.mon))
+        if from_timestamp
+          from_time = from_timestamp.to_time.utc
+          from_index = transition_after_start(transition_index(from_time.year, from_time.mon))
 
-          if from
-            while from < @transitions.length && @transitions[from].at < utc_from
-              from += 1
+          if from_index
+            while from_index < @transitions.length && @transitions[from_index].at < from_timestamp
+              from_index += 1
             end
 
-            if from >= @transitions.length
+            if from_index >= @transitions.length
               return []
             end
           else
-            # utc_from is later than last transition.
+            # from is later than last transition.
             return []
           end
         else
-          from = 0
+          from_index = 0
         end
 
-        to = transition_before_end(transition_index(utc_to.year, utc_to.mon))
+        to_time = to_timestamp.to_time.utc
+        to_index = transition_before_end(transition_index(to_time.year, to_time.mon))
 
-        if to
-          while to >= 0 && @transitions[to].at >= utc_to
-            to -= 1
+        if to_index
+          while to_index >= 0 && @transitions[to_index].at >= to_timestamp
+            to_index -= 1
           end
 
-          if to < 0
+          if to_index < 0
             return []
           end
         else
-          # utc_to is earlier than first transition.
+          # to is earlier than first transition.
           return []
         end
 
-        @transitions[from..to]
+        @transitions[from_index..to_index]
       else
         []
       end

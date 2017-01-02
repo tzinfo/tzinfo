@@ -14,7 +14,7 @@ class TCTimezoneTransitionDefinition < Minitest::Test
     t = TimezoneTransitionDefinition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
     at = t.at
-    assert(TimeOrDateTime.new(1148949080).eql?(at))
+    assert_equal_with_offset(Timestamp.utc(1148949080), at)
     assert_same(at, t.at)
   end
 

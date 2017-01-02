@@ -17,14 +17,14 @@ module TZInfo
       @at = nil
     end
 
-    # A TimeOrDateTime instance representing the UTC time when this transition
+    # A Timestamp instance representing the UTC time when this transition
     # occurs.
     def at
       # Thread-safety: It is possible that the value of @at may be calculated
       # multiple times in concurrently executing threads. It is not worth the
       # overhead of locking to ensure that @at is only calculated once.
 
-      @at ||= TimeOrDateTime.new(@timestamp)
+      @at ||= Timestamp.utc(@timestamp)
     end
 
     # Returns true if this TimezoneTransitionDefinition is equal to the given

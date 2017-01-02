@@ -264,50 +264,58 @@ module TZInfo
       end
     end
 
-    # Returns the TimezonePeriod for the given UTC time. utc can either be
-    # a DateTime, Time or integer timestamp (Time.to_i). Any timezone
-    # information in utc is ignored (it is treated as a UTC time). Use the
-    # period_for method instead if the the UTC offset of the time needs to be
-    # considered.
-    def period_for_utc(utc)
+    # Returns the TimezonePeriod for the given time. time can either be
+    # a Time, DateTime or Timestamp.
+    #
+    # Unlike period_for_local and period_for_utc, period_for considers the UTC
+    # offset of the given time.
+    #
+    # Raises ArgumentError if time is nil or a Timestamp with an unspecified
+    # offset.
+    def period_for(time)
       raise_unknown_timezone
     end
 
     # Returns the set of TimezonePeriod instances that are valid for the given
-    # local time as an array. Any timezone information in local is ignored
-    # (it is treated as a time in the current timezone).
+    # local time as an array. local_time can be specified using either a Time,
+    # DateTime or Timestamp. The UTC offset of local_time is ignored (it is
+    # treated as a time in the current timezone).
     #
     # If you just want a single period, use period_for_local instead and specify
     # how ambiguities should be resolved.
     #
     # Returns an empty array if no periods are found for the given time.
-    def periods_for_local(local)
+    #
+    # Raises ArgumentError if local_time is nil.
+    def periods_for_local(local_time)
       raise_unknown_timezone
     end
 
     # Returns an Array of TimezoneTransition instances representing the times
     # where the UTC offset of the timezone changes.
     #
-    # Transitions are returned up to a given date and time up to a given date
-    # and time, specified in UTC (utc_to).
+    # Transitions are returned up to a given time (to).
     #
-    # A from date and time may also be supplied using the utc_from parameter
-    # (also specified in UTC). If utc_from is not nil, only transitions from
-    # that date and time onwards will be returned.
+    # A from date and time may also be supplied using the from parameter. If
+    # from is not nil, only transitions from that date and time onwards will be
+    # returned.
     #
-    # Comparisons with utc_to are exclusive. Comparisons with utc_from are
-    # inclusive. If a transition falls precisely on utc_to, it will be excluded.
-    # If a transition falls on utc_from, it will be included.
+    # Comparisons with to are exclusive. Comparisons with from are inclusive.
+    # If a transition falls precisely on to, it will be excluded. If a
+    # transition falls on from, it will be included.
     #
     # Transitions returned are ordered by when they occur, from earliest to
     # latest.
     #
-    # utc_to and utc_from can be specified using either DateTime, Time or
-    # integer timestamps (Time.to_i).
+    # to and from can be specified using either a Time, DateTime, Time or
+    # Timestamp.
     #
-    # If utc_from is specified and utc_to is not greater than utc_from, then
-    # transitions_up_to raises an ArgumentError exception.
-    def transitions_up_to(utc_to, utc_from = nil)
+    # If from is specified and to is not greater than from, then an
+    # ArgumentError exception is raised.
+    #
+    # ArgumentError is raised if to is nil or of either to or from are
+    # Timestamps with unspecified offsets.
+    def transitions_up_to(to, from = nil)
       raise_unknown_timezone
     end
 
@@ -350,11 +358,21 @@ module TZInfo
       raise_unknown_timezone
     end
 
+    # Returns the TimezonePeriod for the given UTC time. utc_time can either be
+    # a Time, DateTime or Timestamp. The UTC offset of utc_time is ignored (it
+    # is it is treated as a UTC time). Use the period_for method instead if the
+    # UTC offset of the time needs to be considered.
+    #
+    # Raises ArgumentError if utc_time is nil.
+    def period_for_utc(utc_time)
+      raise ArgumentError, 'utc_time must not be nil' unless utc_time
+      period_for(Timestamp.for(utc_time, offset: :ignore).utc)
+    end
+
     # Returns the TimezonePeriod for the given local time. local can either be
-    # a DateTime, Time or integer timestamp (Time.to_i). Any timezone
-    # information in local is ignored (it is treated as a time in the current
-    # timezone). Use the period_for method instead if the the UTC offset of the
-    # time needs to be considered.
+    # a Time, DateTime or Timestamp. The UTC offset of local_time is ignored (it
+    # is treated as a time in the current timezone). Use the period_for method
+    # instead if the the UTC offset of the time needs to be considered.
     #
     # Warning: There are local times that have no equivalent UTC times (e.g.
     # in the transition from standard time to daylight savings time). There are
@@ -390,8 +408,11 @@ module TZInfo
     # Timezone.default_dst. If default_dst is not set, or is set to nil, then
     # an AmbiguousTime exception will be raised in ambiguous situations unless
     # a block is given to resolve the ambiguity.
-    def period_for_local(local, dst = Timezone.default_dst)
-      results = periods_for_local(local)
+    #
+    # Raises ArgumentError if local_time is nil.
+    def period_for_local(local_time, dst = Timezone.default_dst)
+      raise ArgumentError, 'local_time must not be nil' unless local_time
+      results = periods_for_local(local_time)
 
       if results.empty?
         raise PeriodNotFound
@@ -419,46 +440,46 @@ module TZInfo
           elsif results && results.size == 1
             results.first
           else
-            raise AmbiguousTime, "#{local} is an ambiguous local time."
+            raise AmbiguousTime, "#{local_time} is an ambiguous local time."
           end
         end
       end
     end
 
-    # Returns the TimezonePeriod for the given time. time can either be
-    # a DateTime, Time or integer timestamp (Time.to_i).
+    # Converts a time to the local timezone. time can either be a Time, DateTime
+    # or Timestamp. The result has the same type as time.
     #
-    # Unlike period_for_local and period_for_utc, period_for considers the UTC
-    # offset of the given time.
-    def period_for(time)
-      period_for_utc(TimeOrDateTime.wrap(time, false).to_offset(0))
-    end
-
-    # Converts a time in UTC to the local timezone. utc can either be
-    # a DateTime, Time or timestamp (Time.to_i). The returned time has the same
-    # type as utc. Any timezone information in utc is ignored (it is treated as
-    # a UTC time). Use the to_local method instead if the the UTC offset of the
-    # time needs to be considered.
-    def utc_to_local(utc)
-      TimeOrDateTime.wrap(utc) {|wrapped|
-        convert_to_local(wrapped, period_for_utc(wrapped))
-      }
-    end
-
-    # Converts a time to the local timezone. time can either be a DateTime, Time
-    # or timestamp (Time.to_i).
+    # Unlike utc_to_local, to_local considers the UTC offset of the given time.
     #
-    # Unlike utc_to_local, to_local considers the UTC offset of the given time. 
+    # raises ArgumentError if time is nil or does not have a specified UTC
+    # offset.
     def to_local(time)
-      TimeOrDateTime.wrap(time, false) {|wrapped|
-        convert_to_local(wrapped, period_for(wrapped))
-      }
+      raise ArgumentError, 'time must not be nil' unless time
+
+      Timestamp.for(time) do |ts|
+        convert_to_local(ts, period_for(ts))
+      end
     end
 
-    # Converts a time in the local timezone to UTC. local can either be
-    # a DateTime, Time or timestamp (Time.to_i). The returned time has the same
-    # type as local. Any timezone information in local is ignored (it is treated
-    # as a local time).
+    # Converts a time in UTC to the local timezone. utc_time can either be
+    # a Time, DateTime or Timestamp. The result has the same type as utc_time.
+    # The UTC offset of utc_time is ignored (it is treated as a UTC time). Use
+    # the to_local method instead if the the UTC offset of the time needs to be
+    # considered.
+    #
+    # Raises ArgumentErrror if utc_time is nil.
+    def utc_to_local(utc_time)
+      raise ArgumentError, 'utc_time must not be nil' unless utc_time
+
+      Timestamp.for(utc_time, offset: :ignore) do |ts|
+        to_local(ts.utc)
+      end
+    end
+
+    # Converts a time in the local timezone to UTC. local_time can either be
+    # a Time, DateTime or Timestamp. The result has the same type as local_time.
+    # Any timezone information in local_time is ignored (it is treated as a time
+    # in the current timezone).
     #
     # Warning: There are local times that have no equivalent UTC times (e.g.
     # in the transition from standard time to daylight savings time). There are
@@ -493,52 +514,57 @@ module TZInfo
     # Timezone.default_dst. If default_dst is not set, or is set to nil, then
     # an AmbiguousTime exception will be raised in ambiguous situations unless
     # a block is given to resolve the ambiguity.
-    def local_to_utc(local, dst = Timezone.default_dst)
-      TimeOrDateTime.wrap(local) {|wrapped|
-        if block_given?
-          period = period_for_local(wrapped, dst) {|periods| yield periods }
+    #
+    # Raises ArgumentError if local_time is nil.
+    def local_to_utc(local_time, dst = Timezone.default_dst)
+      raise ArgumentError, 'local_time must not be nil' unless local_time
+
+      Timestamp.for(local_time, offset: :ignore) do |ts|
+        period = if block_given?
+          period_for_local(ts, dst) {|periods| yield periods }
         else
-          period = period_for_local(wrapped, dst)
+          period_for_local(ts, dst)
         end
 
-        convert_to_utc(wrapped, period)
-      }
+        (ts - period.utc_total_offset).utc
+      end
     end
 
     # Returns information about offsets used by the Timezone up to a given
-    # date and time, specified using UTC (utc_to). The information is returned
-    # as an Array of TimezoneOffset instances.
+    # time (to). The information is returned as an Array of TimezoneOffset
+    # instances.
     #
-    # A from date and time may also be supplied using the utc_from parameter
-    # (also specified in UTC). If utc_from is not nil, only offsets used from
-    # that date and time forward will be returned.
+    # A from time may also be supplied using the from parameter. If from is not
+    # nil, only offsets used from that time forward will be returned.
     #
-    # Comparisons with utc_to are exclusive. Comparisons with utc_from are
-    # inclusive.
+    # Comparisons with to are exclusive. Comparisons with from are inclusive.
     #
     # Offsets may be returned in any order.
     #
-    # utc_to and utc_from can be specified using either DateTime, Time or
-    # integer timestamps (Time.to_i).
+    # to and from can be specified as Time, DateTime or Timestamp instances.
     #
-    # If utc_from is specified and utc_to is not greater than utc_from, then
+    # If from is specified and to is not greater than from, then
     # offsets_up_to raises an ArgumentError exception.
-    def offsets_up_to(utc_to, utc_from = nil)
-      utc_to = TimeOrDateTime.wrap(utc_to)
-      transitions = transitions_up_to(utc_to, utc_from)
+    #
+    # ArgumentError is raised if to is nil or of either to or from are
+    # Timestamps with unspecified offsets.
+    def offsets_up_to(to, from = nil)
+      raise ArgumentError, 'to must not be nil' unless to
+
+      to_timestamp = Timestamp.for(to)
+      from_timestamp = from && Timestamp.for(from)
+      transitions = transitions_up_to(to_timestamp, from_timestamp)
 
       if transitions.empty?
         # No transitions in the range, find the period that covers it.
 
-        if utc_from
+        if from_timestamp
           # Use the from date as it is inclusive.
-          period = period_for_utc(utc_from)
+          period = period_for(from_timestamp)
         else
-          # utc_to is exclusive, so this can't be used with period_for_utc.
-          # However, any time earlier than utc_to can be used.
-
-          # Subtract 1 hour (since this is one of the cached OffsetRationals).
-          period = period_for_utc(utc_to - 3600)
+          # to is exclusive, so this can't be used with period_for. However, any
+          # time earlier than to can be used. Subtract 1 hour.
+          period = period_for(to_timestamp - 3600)
         end
 
         [period.offset]
@@ -546,7 +572,7 @@ module TZInfo
         result = Set.new
 
         first = transitions.first
-        result << first.previous_offset unless utc_from && first.at == utc_from
+        result << first.previous_offset unless from_timestamp && first.at == from_timestamp
 
         transitions.each do |t|
           result << t.offset
@@ -566,48 +592,56 @@ module TZInfo
 
     # Returns the current time in the timezone as a Time.
     def now
-      utc_to_local(Time.now.utc)
+      to_local(Time.now)
     end
 
     # Returns the TimezonePeriod for the current time.
     def current_period
-      period_for_utc(Time.now.utc)
+      period_for(Time.now)
     end
 
     # Returns the current Time and TimezonePeriod as an array. The first element
     # is the time, the second element is the period.
     def current_period_and_time
-      period = nil
-      local = TimeOrDateTime.wrap(Time.now.utc) do |utc|
-        period = period_for_utc(utc)
-        convert_to_local(utc, period)
-      end
-
-      [local, period]
+      ts = Timestamp.for(Time.now)
+      period = period_for(ts)
+      local_time = convert_to_local(ts, period).to_time
+      [local_time, period]
     end
 
     alias :current_time_and_period :current_period_and_time
 
-    # Converts a time in UTC to local time and returns it as a string
-    # according to the given format.
+    # Converts a time to local and returns a string representation of the local
+    # time according to the given format.
     #
-    # The formatting is identical to Time.strftime and DateTime.strftime, except
-    # %Z and %z are replaced with the timezone abbreviation (for example, EST or
-    # EDT) and offset for the specified Timezone and time.
+    # Calls either Time.strftime or DateTime.strftime after expanding %Z and %z
+    # to the timezone abbreviation (for example, EST or EDT) and offset for the
+    # specified time in the current Timezone.
     #
     # The offset can be formatted as follows:
     #
-    # - %z - hour and minute (e.g. +0500)
-    # - %:z - hour and minute separated with a colon (e.g. +05:00)
-    # - %::z - hour minute and second separated with colons (e.g. +05:00:00)
-    # - %:::z - hour only (e.g. +05)
-    def strftime(format, utc = Time.now.utc)
+    # - %z - hour and minute (e.g. +0500) - %:z - hour and minute separated with
+    # a colon (e.g. +05:00) - %::z - hour minute and second separated with
+    # colons (e.g. +05:00:00) - %:::z - hour only (e.g. +05)
+    #
+    # time can be specified as either a Time, DateTime or Timestamp. If time is
+    # either a Time or Timestamp, then the Time#strftime method is called. If
+    # time is a DateTime, then DateTime#strftime is used.
+    #
+    # Raises ArgumentError if format or time are nil or if time is a Timestamp
+    # with an unspecified UTC offset.
+    def strftime(format, time = Time.now.utc)
+      raise ArgumentError, 'format must not be nil' unless format
+      raise ArgumentError, 'time must not be nil' unless time
+
       period = nil
-      local = TimeOrDateTime.wrap(utc) do |wrapped|
-        period = period_for_utc(wrapped)
-        convert_to_local(wrapped, period)
+      local_time = Timestamp.for(time) do |ts|
+        period = period_for(ts)
+        convert_to_local(ts, period)
       end
-      local = Time.at(local).utc unless local.kind_of?(Time) || local.kind_of?(DateTime)
+
+      local_time = local_time.to_time if local_time.kind_of?(Timestamp)
+
       abbreviation = period.abbreviation.to_s.gsub(/%/, '%%')
 
       format = format.gsub(/%(%*)(Z|:{0,3}z)/) do
@@ -632,7 +666,7 @@ module TZInfo
         end
       end
 
-      local.strftime(format)
+      local_time.strftime(format)
     end
 
     # Compares two Timezones based on their identifier. Returns -1 if tz is less
@@ -688,16 +722,11 @@ module TZInfo
         raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
       end
 
-      # Converts a UTC TimeOrDateTime to local by applying the utc_total_offset
-      # of the given period.
-      def convert_to_local(utc, period)
-        utc.to_offset(period.utc_total_offset)
+      # Converts a Timestamp to local by applying the utc_total_offset of the
+      # given period.
+      def convert_to_local(timestamp, period)
+        timestamp.apply_offset(period.utc_total_offset)
       end
 
-      # Converts a local TimeOrDateTime to UTC by subtracting the
-      # utc_total_offset of the given period.
-      def convert_to_utc(local, period)
-        local - period.utc_total_offset
-      end
   end
 end
