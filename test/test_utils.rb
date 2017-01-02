@@ -172,6 +172,14 @@ module Kernel
     end
   end
 
+  def assert_nil_or_equal(expected, actual, msg = nil)
+    if expected.nil?
+      assert_nil(actual, msg)
+    else
+      assert_equal(expected, actual, msg)
+    end
+  end
+
   def assert_equal_with_offset(expected, actual)
     assert_kind_of(expected.class, actual)
     assert_equal(expected, actual)
@@ -179,15 +187,15 @@ module Kernel
     # Time, DateTime and Timestamp don't require identical offsets for equality.
     # Test the offsets explicitly.
     if expected.respond_to?(:utc_offset)
-      assert_equal(expected.utc_offset, actual.utc_offset, 'utc_offset')
+      assert_nil_or_equal(expected.utc_offset, actual.utc_offset, 'utc_offset')
     elsif expected.respond_to?(:offset)
-      assert_equal(expected.offset, actual.offset, 'offset')
+      assert_nil_or_equal(expected.offset, actual.offset, 'offset')
     end
 
     # Time (on MRI and Rubinus, but not JRuby) and Timestamp distinguish between
     # UTC and a local time with 0 offset from UTC.
     if expected.respond_to?(:utc?)
-      assert_equal(expected.utc?, actual.utc?, 'utc?')
+      assert_nil_or_equal(expected.utc?, actual.utc?, 'utc?')
     end
   end
 

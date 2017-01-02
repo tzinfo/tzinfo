@@ -479,14 +479,14 @@ class TCTimestamp < Minitest::Test
     assert_equal(0, Timestamp.new(1476316800, Rational(100_000_001, 1_000_000_000), 3600) <=> Timestamp.new(1476316800, Rational(100_000_001, 1_000_000_000), :utc))
     assert_equal(1, Timestamp.new(1476316800, Rational(100_000_001, 1_000_000_000), :utc) <=> Timestamp.new(1476316800, Rational(100_000_000, 1_000_000_000), 3600))
 
-    assert_equal(nil, Timestamp.new(1476316800) <=> Timestamp.new(1476316800, 0, 0))
-    assert_equal(nil, Timestamp.new(1476316800, 0, 0) <=> Timestamp.new(1476316800))
+    assert_nil(Timestamp.new(1476316800) <=> Timestamp.new(1476316800, 0, 0))
+    assert_nil(Timestamp.new(1476316800, 0, 0) <=> Timestamp.new(1476316800))
 
-    assert_equal(nil, Timestamp.new(1476316800) <=> Timestamp.new(1476316800, 0, :utc))
-    assert_equal(nil, Timestamp.new(1476316800, 0, :utc) <=> Timestamp.new(1476316800))
+    assert_nil(Timestamp.new(1476316800) <=> Timestamp.new(1476316800, 0, :utc))
+    assert_nil(Timestamp.new(1476316800, 0, :utc) <=> Timestamp.new(1476316800))
 
-    assert_equal(nil, Timestamp.new(1476316800) <=> Object.new)
-    assert_equal(nil, Timestamp.new(1476316800) <=> 1476316800)
+    assert_nil(Timestamp.new(1476316800) <=> Object.new)
+    assert_nil(Timestamp.new(1476316800) <=> 1476316800)
   end
 
   def test_eql
