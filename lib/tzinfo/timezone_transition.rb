@@ -121,22 +121,13 @@ module TZInfo
     end
 
     # Returns true if this TimezoneTransition is equal to the given
-    # TimezoneTransition. Two TimezoneTransition instances are
-    # considered to be equal by == if offset, previous_offset and at are all
-    # equal.
+    # TimezoneTransition. Two TimezoneTransition instances are considered to be
+    # equal if offset, previous_offset and at are all equal.
     def ==(tti)
       tti.kind_of?(TimezoneTransition) &&
         offset == tti.offset && previous_offset == tti.previous_offset && at == tti.at
     end
-
-    # Returns true if this TimezoneTransition is equal to the given
-    # TimezoneTransition. Two TimezoneTransition instances are
-    # considered to be equal by eql? if offset, previous_offset and at are all
-    # equal and the type used to define at in both instances is the same.
-    def eql?(tti)
-      tti.kind_of?(TimezoneTransition) &&
-        offset == tti.offset && previous_offset == tti.previous_offset && at.eql?(tti.at)
-    end
+    alias_method :eql?, :==
 
     # Returns a hash of this TimezoneTransition instance.
     def hash
