@@ -1,7 +1,7 @@
 tzinfo_version_file = File.join(File.expand_path(File.dirname(__FILE__)), 'lib', 'tzinfo', 'version.rb').untaint
 
 tzinfo_version = File.open(tzinfo_version_file, RUBY_VERSION =~ /\A1\.[0-8]\./ ? 'r' : 'r:utf-8') do |file|
-  file.readlines.grep(/\s*VERSION\s*=\s*['"](\d+(\.\d+){2})['"]/) { $1 }.first
+  file.readlines.grep(/\s*VERSION\s*=\s*['"](\d+(\.\d+){2}(\.[a-z]+\d*)?)['"]/) { $1 }.first
 end
 
 Gem::Specification.new do |s|
