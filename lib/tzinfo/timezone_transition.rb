@@ -8,12 +8,15 @@ module TZInfo
     # The offset this transition changes from (a TimezoneOffset instance).
     attr_reader :previous_offset
 
-    # Initializes a new TimezoneTransition.
+    # Initializes a new TimezoneTransition with the given offset,
+    # previous_offset (both TimezoneOffset instances) and UTC time specified as
+    # an Integer number of seconds since 1970-01-01.
     #
     # TimezoneTransition instances should not normally be constructed manually.
-    def initialize(offset, previous_offset)
+    def initialize(offset, previous_offset, timestamp)
       @offset = offset
       @previous_offset = previous_offset
+      @timestamp = timestamp
       @local_end_at = nil
       @local_start_at = nil
       @absolute_local_end_at = nil
@@ -23,7 +26,11 @@ module TZInfo
     # A Timestamp instance representing the UTC time when this transition
     # occurs.
     def at
-      raise_not_implemented('at')
+      # Thread-safety: It is possible that the value of @at may be calculated
+      # multiple times in concurrently executing threads. It is not worth the
+      # overhead of locking to ensure that @at is only calculated once.
+
+      @at ||= Timestamp.utc(@timestamp)
     end
 
     # The UTC time when this transition occurs, returned as a DateTime instance.

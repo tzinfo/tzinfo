@@ -4,22 +4,11 @@ include TZInfo
 
 class TCTimezonePeriod < Minitest::Test
 
-  class TestTimezoneTransition < TimezoneTransition
-    def initialize(offset, previous_offset, at)
-      super(offset, previous_offset)
-      @at = Timestamp.utc(at)
-    end
-
-    def at
-      @at
-    end
-  end
-
   def test_initialize_start_end
     std = TimezoneOffset.new(-7200, 0, :TEST)
     dst = TimezoneOffset.new(-7200, 3600, :TEST)
-    start_t = TestTimezoneTransition.new(dst, std, 1136073600)
-    end_t = TestTimezoneTransition.new(std, dst, 1136160000)
+    start_t = TimezoneTransition.new(dst, std, 1136073600)
+    end_t = TimezoneTransition.new(std, dst, 1136160000)
 
     p = TimezonePeriod.new(start_t, end_t)
 
@@ -46,8 +35,8 @@ class TCTimezonePeriod < Minitest::Test
     std = TimezoneOffset.new(-7200, 0, :TEST)
     dst = TimezoneOffset.new(-7200, 3600, :TEST)
     special = TimezoneOffset.new(0, 0, :SPECIAL)
-    start_t = TestTimezoneTransition.new(dst, std, 1136073600)
-    end_t = TestTimezoneTransition.new(std, dst, 1136160000)
+    start_t = TimezoneTransition.new(dst, std, 1136073600)
+    end_t = TimezoneTransition.new(std, dst, 1136160000)
 
     assert_raises(ArgumentError) { TimezonePeriod.new(start_t, end_t, special) }
   end
@@ -55,7 +44,7 @@ class TCTimezonePeriod < Minitest::Test
   def test_initialize_start
     std = TimezoneOffset.new(-7200, 0, :TEST)
     dst = TimezoneOffset.new(-7200, 3600, :TEST)
-    start_t = TestTimezoneTransition.new(dst, std, 1136073600)
+    start_t = TimezoneTransition.new(dst, std, 1136073600)
 
     p = TimezonePeriod.new(start_t, nil)
 
@@ -82,7 +71,7 @@ class TCTimezonePeriod < Minitest::Test
     std = TimezoneOffset.new(-7200, 0, :TEST)
     dst = TimezoneOffset.new(-7200, 3600, :TEST)
     special = TimezoneOffset.new(0, 0, :SPECIAL)
-    start_t = TestTimezoneTransition.new(dst, std, 1136073600)
+    start_t = TimezoneTransition.new(dst, std, 1136073600)
 
     assert_raises(ArgumentError) { TimezonePeriod.new(start_t, nil, special) }
   end
@@ -90,7 +79,7 @@ class TCTimezonePeriod < Minitest::Test
   def test_initialize_end
     std = TimezoneOffset.new(-7200, 0, :TEST)
     dst = TimezoneOffset.new(-7200, 3600, :TEST)
-    end_t = TestTimezoneTransition.new(std, dst, 1136160000)
+    end_t = TimezoneTransition.new(std, dst, 1136160000)
 
     p = TimezonePeriod.new(nil, end_t)
 
@@ -117,7 +106,7 @@ class TCTimezonePeriod < Minitest::Test
     std = TimezoneOffset.new(-7200, 0, :TEST)
     dst = TimezoneOffset.new(-7200, 3600, :TEST)
     special = TimezoneOffset.new(0, 0, :SPECIAL)
-    end_t = TestTimezoneTransition.new(std, dst, 1136160000)
+    end_t = TimezoneTransition.new(std, dst, 1136160000)
 
     assert_raises(ArgumentError) { TimezonePeriod.new(nil, end_t, special) }
   end
@@ -167,7 +156,7 @@ class TCTimezonePeriod < Minitest::Test
   def test_time_boundary_start
     o1 = TimezoneOffset.new(-3600, 0, :TEST)
     o2 = TimezoneOffset.new(-3600, 3600, :TEST)
-    t1 = TestTimezoneTransition.new(o1, o2, 0)
+    t1 = TimezoneTransition.new(o1, o2, 0)
 
     p1 = TimezonePeriod.new(t1, nil)
 
@@ -178,7 +167,7 @@ class TCTimezonePeriod < Minitest::Test
   def test_time_boundary_end
     o1 = TimezoneOffset.new(0, 3600, :TEST)
     o2 = TimezoneOffset.new(0, 0, :TEST)
-    t1 = TestTimezoneTransition.new(o2, o1, 2147482800)
+    t1 = TimezoneTransition.new(o2, o1, 2147482800)
 
     p1 = TimezonePeriod.new(nil, t1)
 
@@ -189,9 +178,9 @@ class TCTimezonePeriod < Minitest::Test
   def test_equality
     o1 = TimezoneOffset.new(0, 3600, :TEST)
     o2 = TimezoneOffset.new(0, 0, :TEST)
-    t1 = TestTimezoneTransition.new(o1, o2, 1149368400)
-    t2 = TestTimezoneTransition.new(o1, o2, 1149454800)
-    t3 = TestTimezoneTransition.new(o1, o2, 1149541200)
+    t1 = TimezoneTransition.new(o1, o2, 1149368400)
+    t2 = TimezoneTransition.new(o1, o2, 1149454800)
+    t3 = TimezoneTransition.new(o1, o2, 1149541200)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t1, t2)
@@ -237,9 +226,9 @@ class TCTimezonePeriod < Minitest::Test
   def test_eql
     o1 = TimezoneOffset.new(0, 3600, :TEST)
     o2 = TimezoneOffset.new(0, 0, :TEST)
-    t1 = TestTimezoneTransition.new(o1, o2, 1149368400)
-    t2 = TestTimezoneTransition.new(o1, o2, 1149454800)
-    t3 = TestTimezoneTransition.new(o1, o2, 1149541200)
+    t1 = TimezoneTransition.new(o1, o2, 1149368400)
+    t2 = TimezoneTransition.new(o1, o2, 1149454800)
+    t3 = TimezoneTransition.new(o1, o2, 1149541200)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t1, t2)
@@ -285,8 +274,8 @@ class TCTimezonePeriod < Minitest::Test
   def test_hash
     o1 = TimezoneOffset.new(0, 3600, :TEST)
     o2 = TimezoneOffset.new(0, 0, :TEST)
-    t1 = TestTimezoneTransition.new(o1, o2, 1149368400)
-    t2 = TestTimezoneTransition.new(o1, o2, 1149454800)
+    t1 = TimezoneTransition.new(o1, o2, 1149368400)
+    t2 = TimezoneTransition.new(o1, o2, 1149454800)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t1, nil)

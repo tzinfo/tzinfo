@@ -151,17 +151,6 @@ class TCTimezone < Minitest::Test
     end
   end
 
-  class TestTimezoneTransition < TimezoneTransition
-    def initialize(offset, previous_offset, at)
-      super(offset, previous_offset)
-      @at = Timestamp.utc(at)
-    end
-
-    def at
-      @at
-    end
-  end
-
   def setup
     @orig_default_dst = Timezone.default_dst
     @orig_data_source = DataSource.get
@@ -477,8 +466,8 @@ class TCTimezone < Minitest::Test
     o2 = TimezoneOffset.new(0, 3600, :BST)
 
     period = TimezonePeriod.new(
-      TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,1,0,0).to_i),
-      TestTimezoneTransition.new(o2, o1, Time.utc(2005,03,27,1,0,0).to_i))
+      TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,1,0,0).to_i),
+      TimezoneTransition.new(o2, o1, Time.utc(2005,03,27,1,0,0).to_i))
 
     time_types_test(:unspecified_offset) do |h|
       t = h.time(2005,2,18,16,24,23)
@@ -512,9 +501,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -532,9 +521,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -555,9 +544,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -576,9 +565,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -597,9 +586,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -633,9 +622,9 @@ class TCTimezone < Minitest::Test
     o2 = TimezoneOffset.new(3600, 0, :CET)
     o3 = TimezoneOffset.new(3600, 3600, :CEST)
 
-    t1 = TestTimezoneTransition.new(o1, o0, Time.utc(1879, 12, 31, 22, 36, 0).to_i)
-    t2 = TestTimezoneTransition.new(o2, o1, Time.utc(1915,  8,  4, 22, 36, 0).to_i)
-    t3 = TestTimezoneTransition.new(o3, o2, Time.utc(1916,  4, 30, 22,  0, 0).to_i)
+    t1 = TimezoneTransition.new(o1, o0, Time.utc(1879, 12, 31, 22, 36, 0).to_i)
+    t2 = TimezoneTransition.new(o2, o1, Time.utc(1915,  8,  4, 22, 36, 0).to_i)
+    t3 = TimezoneTransition.new(o3, o2, Time.utc(1916,  4, 30, 22,  0, 0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -663,9 +652,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -711,8 +700,8 @@ class TCTimezone < Minitest::Test
     o2 = TimezoneOffset.new(0, 3600, :BST)
 
     period = TimezonePeriod.new(
-      TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,1,0,0).to_i),
-      TestTimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i))
+      TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,1,0,0).to_i),
+      TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i))
 
     tz = TestTimezone.new('Europe/London', period, nil, Timestamp.new(Time.utc(2005,2,18,16,24,23).to_i, Rational(1,10), :utc))
 
@@ -750,8 +739,8 @@ class TCTimezone < Minitest::Test
     o2 = TimezoneOffset.new(0, 3600, :BST)
 
     period = TimezonePeriod.new(
-      TestTimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
-      TestTimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+      TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+      TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
     time_types_test(:unspecified_offset) do |h|
       assert_equal_with_offset(h.time(2005,6,18,17,24,23,0,3600),
@@ -778,8 +767,8 @@ class TCTimezone < Minitest::Test
     o2 = TimezoneOffset.new(0, 3600, :BST)
 
     period = TimezonePeriod.new(
-      TestTimezoneTransition.new(o1, o2, Time.utc(2016,10,30,1,0,0).to_i),
-      TestTimezoneTransition.new(o2, o1, Time.utc(2017, 3,26,1,0,0).to_i))
+      TimezoneTransition.new(o1, o2, Time.utc(2016,10,30,1,0,0).to_i),
+      TimezoneTransition.new(o2, o1, Time.utc(2017, 3,26,1,0,0).to_i))
 
     time_types_test(:utc) do |h|
       # test that the result doesn't have utc? set to true
@@ -807,8 +796,8 @@ class TCTimezone < Minitest::Test
     o2 = TimezoneOffset.new(0, 3600, :BST)
 
     period = TimezonePeriod.new(
-      TestTimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
-      TestTimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+      TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+      TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
     time_types_test(:utc) do |h|
       assert_equal_with_offset(h.time(2005,6,18,17,24,23,0,3600),
@@ -830,8 +819,8 @@ class TCTimezone < Minitest::Test
     o2 = TimezoneOffset.new(0, 3600, :BST)
 
     period = TimezonePeriod.new(
-      TestTimezoneTransition.new(o1, o2, Time.utc(2016,10,30,1,0,0).to_i),
-      TestTimezoneTransition.new(o2, o1, Time.utc(2017, 3,26,1,0,0).to_i))
+      TimezoneTransition.new(o1, o2, Time.utc(2016,10,30,1,0,0).to_i),
+      TimezoneTransition.new(o2, o1, Time.utc(2017, 3,26,1,0,0).to_i))
 
     time_types_test(:utc) do |h|
       # test that the result doesn't have utc? set to true
@@ -868,8 +857,8 @@ class TCTimezone < Minitest::Test
     o2 = TimezoneOffset.new(0, 3600, :BST)
 
     period = TimezonePeriod.new(
-      TestTimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
-      TestTimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+      TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+      TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
     time_types_test(:unspecified_offset) do |h|
       assert_equal_with_offset(h.time(2005,6,18,15,24,23,0,:utc),
@@ -925,9 +914,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -958,9 +947,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -983,9 +972,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -1006,9 +995,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -1028,9 +1017,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -1065,9 +1054,9 @@ class TCTimezone < Minitest::Test
     o2 = TimezoneOffset.new(3600, 0, :CET)
     o3 = TimezoneOffset.new(3600, 3600, :CEST)
 
-    t1 = TestTimezoneTransition.new(o1, o0, Time.utc(1879, 12, 31, 22, 36, 0).to_i)
-    t2 = TestTimezoneTransition.new(o2, o1, Time.utc(1915,  8,  4, 22, 36, 0).to_i)
-    t3 = TestTimezoneTransition.new(o3, o2, Time.utc(1916,  4, 30, 22,  0, 0).to_i)
+    t1 = TimezoneTransition.new(o1, o0, Time.utc(1879, 12, 31, 22, 36, 0).to_i)
+    t2 = TimezoneTransition.new(o2, o1, Time.utc(1915,  8,  4, 22, 36, 0).to_i)
+    t3 = TimezoneTransition.new(o3, o2, Time.utc(1916,  4, 30, 22,  0, 0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -1101,9 +1090,9 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
     p1 = TimezonePeriod.new(t1, t2)
     p2 = TimezonePeriod.new(t2, t3)
@@ -1140,12 +1129,12 @@ class TCTimezone < Minitest::Test
     o4 = TimezoneOffset.new(-21600, 3600, :TESTD)
     o5 = TimezoneOffset.new(-21600, 0,    :TESTS)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2010, 4,1,1,0,0).to_i)
-    t2 = TestTimezoneTransition.new(o3, o2, Time.utc(2010,10,1,1,0,0).to_i)
-    t3 = TestTimezoneTransition.new(o2, o3, Time.utc(2011, 3,1,1,0,0).to_i)
-    t4 = TestTimezoneTransition.new(o4, o2, Time.utc(2011, 4,1,1,0,0).to_i)
-    t5 = TestTimezoneTransition.new(o3, o4, Time.utc(2011,10,1,1,0,0).to_i)
-    t6 = TestTimezoneTransition.new(o5, o3, Time.utc(2012, 3,1,1,0,0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2010, 4,1,1,0,0).to_i)
+    t2 = TimezoneTransition.new(o3, o2, Time.utc(2010,10,1,1,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o3, Time.utc(2011, 3,1,1,0,0).to_i)
+    t4 = TimezoneTransition.new(o4, o2, Time.utc(2011, 4,1,1,0,0).to_i)
+    t5 = TimezoneTransition.new(o3, o4, Time.utc(2011,10,1,1,0,0).to_i)
+    t6 = TimezoneTransition.new(o5, o3, Time.utc(2012, 3,1,1,0,0).to_i)
 
     time_types_test(:utc) do |h|
       assert_array_same_items([o1, o2, o3, o4, o5],
@@ -1195,8 +1184,8 @@ class TCTimezone < Minitest::Test
     o2 = TimezoneOffset.new(-18000,    0, :TESTS)
     o3 = TimezoneOffset.new(-18000, 3600, :TESTD)
 
-    t1 = TestTimezoneTransition.new(o2, o1, Time.utc(2009,12,31,23,59,59).to_i)
-    t2 = TestTimezoneTransition.new(o3, o2, Time.utc(2010, 7, 1, 0, 0, 0).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2009,12,31,23,59,59).to_i)
+    t2 = TimezoneTransition.new(o3, o2, Time.utc(2010, 7, 1, 0, 0, 0).to_i)
 
     time_types_test do |h|
       assert_array_same_items([o1, o2, o3],
