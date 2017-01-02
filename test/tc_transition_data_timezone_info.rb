@@ -47,9 +47,11 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
 
-    assert_nothing_raised do
-      dti.transition 2006, 6, :o1, 1149368400, 19631123, 8
-    end
+    # The timestamp parameter is 1 second after the DateTime parameters.
+    dti.transition 1900, 1, :o1, -2208988799, 4830041, 2
+
+    # Confirm that the timestamp parameter was used.
+    assert_equal(-2208988799, dti.transitions_up_to(Timestamp.utc(-2208988798)).first.at.value)
   end
 
   def test_transition_invalid_offset
