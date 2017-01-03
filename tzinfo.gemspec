@@ -23,5 +23,4 @@ Gem::Specification.new do |s|
                     '--main' << 'README.md'
   s.extra_rdoc_files = ['README.md', 'CHANGES.md', 'LICENSE']
   s.required_ruby_version = '>= 1.9.3'
-  s.add_dependency 'concurrent-ruby', '~> 1.0'
 end
