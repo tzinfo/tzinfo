@@ -8,7 +8,7 @@ class TZInfo::ConcurrentMap
     @mutex = Mutex.new
     @h = {}
   end
-  def [](k); @mutex.synchronize { @h[k] }; end
+  def [](k); @h[k]; end
   def []=(k, v); @mutex.synchronize { @h[k] = v } ; end
 end
 
