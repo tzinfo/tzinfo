@@ -38,6 +38,35 @@ module TZInfo
       real_timezone.periods_for_local(local)
     end
     
+    # Returns an Array of TimezoneTransition instances representing the times
+    # where the UTC offset of the timezone changes.
+    #
+    # Transitions are returned up to a given date and time up to a given date
+    # and time (to).
+    #
+    # A from date and time may also be supplied using the from parameter. If
+    # from is not nil, only transitions from that date and time onwards will be
+    # returned.
+    #
+    # Comparisons with to are exclusive. Comparisons with from are inclusive.
+    # If a transition falls precisely on to, it will be excluded. If a
+    # transition falls on from, it will be included.
+    #
+    # Transitions returned are ordered by when they occur, from earliest to
+    # latest.
+    #
+    # to and from can be specified using either a Time, DateTime, Time or
+    # Timestamp.
+    #
+    # If from is specified and to is not greater than from, then an
+    # ArgumentError exception is raised.
+    #
+    # ArgumentError is raised if to is nil or of either to or from are
+    # Timestamps with unspecified offsets.
+    def transitions_up_to(to, from = nil)
+      real_timezone.transitions_up_to(to, from)
+    end
+
     # Returns the canonical zone for this Timezone.
     def canonical_zone
       real_timezone.canonical_zone
