@@ -1,5 +1,3 @@
-require 'rational' unless defined?(Rational)
-
 module TZInfo
 
   # Provides a method for getting Rationals for a timezone offset in seconds.
