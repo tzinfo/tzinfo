@@ -106,7 +106,7 @@ module Kernel
   end
 
   def safe_test(options = {})
-    # JRuby and Rubinus don't support SAFE levels.
+    # JRuby and Rubinius us don't support SAFE levels.
     available = !(defined?(RUBY_ENGINE) && %w(jruby rbx).include?(RUBY_ENGINE))
 
     if available || options[:unavailable] != :skip
@@ -138,7 +138,7 @@ module Kernel
     end
 
     if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
-      # Stop Rubinus from operating as irb.
+      # Stop Rubinius from operating as irb.
       args = ' -'
     else
       args = ''
@@ -192,7 +192,7 @@ module Kernel
       assert_nil_or_equal(expected.offset, actual.offset, 'offset')
     end
 
-    # Time (on MRI and Rubinus, but not JRuby) and Timestamp distinguish between
+    # Time (on MRI and Rubinius, but not JRuby) and Timestamp distinguish between
     # UTC and a local time with 0 offset from UTC.
     if expected.respond_to?(:utc?)
       assert_nil_or_equal(expected.utc?, actual.utc?, 'utc?')
