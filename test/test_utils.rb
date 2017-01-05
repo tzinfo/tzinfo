@@ -207,14 +207,3 @@ module Kernel
     end
   end
 end
-
-
-# JRuby 1.7.5 to 1.7.9 consider DateTime instances that differ by less than
-# 1 millisecond to be equivalent (https://github.com/jruby/jruby/issues/1311).
-#
-# A few test cases compare at a resolution of 1 microsecond, so this causes
-# failures on JRuby 1.7.5 to 1.7.9.
-#
-# Determine what the platform supports and adjust the tests accordingly.
-DATETIME_RESOLUTION = (0..5).collect {|i| 10**i}.find {|i| (DateTime.new(2013,1,1,0,0,0) <=> DateTime.new(2013,1,1,0,0,Rational(i,1000000))) < 0}
-raise 'Unable to compare DateTimes at a resolution less than one second on this platform' unless DATETIME_RESOLUTION
