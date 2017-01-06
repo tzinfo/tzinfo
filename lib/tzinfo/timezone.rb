@@ -236,13 +236,9 @@ module TZInfo
       elsif parts.length == 1
         parts[0]
       else
-        if skip_first_part
-          result = String.new
-        else
-          result = parts[0] + ' - '
-        end
+        prefix = skip_first_part ? nil : "#{parts[0]} - "
 
-        parts[1, parts.length - 1].reverse_each {|part|
+        parts = parts.drop(1).map do |part|
           part.gsub!(/_/, ' ')
 
           if part.index(/[a-z]/)
@@ -255,12 +251,10 @@ module TZInfo
             part.gsub!(/([A-Z])([A-Z])/, '\1\'\2')
           end
 
-          result << part
-          result << ', '
-        }
+          part
+        end
 
-        result.slice!(result.length - 2, 2)
-        result
+        "#{prefix}#{parts.reverse.join(', ')}"
       end
     end
 
