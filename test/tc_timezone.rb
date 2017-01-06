@@ -436,6 +436,11 @@ class TCTimezone < Minitest::Test
     assert_equal('UTC', TestTimezone.new('UTC').friendly_identifier)
   end
   
+  def test_friendly_identifier_non_binary_encoding
+    refute_equal(Encoding::ASCII_8BIT, TestTimezone.new('Europe/Paris').friendly_identifier(true).encoding)
+    refute_equal(Encoding::ASCII_8BIT, TestTimezone.new('Europe/Paris').friendly_identifier(false).encoding)
+  end
+
   def test_to_s
     assert_equal('Europe - Paris', TestTimezone.new('Europe/Paris').to_s)
     assert_equal('America - Knox, Indiana', TestTimezone.new('America/Indiana/Knox').to_s)

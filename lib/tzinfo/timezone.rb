@@ -236,13 +236,9 @@ module TZInfo
       elsif parts.length == 1        
         parts[0]
       else
-        if skip_first_part
-          result = String.new
-        else
-          result = parts[0] + ' - '
-        end
-        
-        parts[1, parts.length - 1].reverse_each {|part|
+        prefix = skip_first_part ? nil : "#{parts[0]} - "
+
+        parts = parts.drop(1).map do |part|
           part.gsub!(/_/, ' ')
           
           if part.index(/[a-z]/)
@@ -254,13 +250,11 @@ module TZInfo
             # Missing an apostrophe if two consecutive upper case characters.
             part.gsub!(/([A-Z])([A-Z])/, '\1\'\2')
           end
-          
-          result << part
-          result << ', '
-        }
-        
-        result.slice!(result.length - 2, 2)
-        result
+
+          part
+        end
+
+        "#{prefix}#{parts.reverse.join(', ')}"
       end
     end
     
