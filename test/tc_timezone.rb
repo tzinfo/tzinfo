@@ -1366,7 +1366,6 @@ class TCTimezone < Minitest::Test
     assert_equal('%ZBST', tz.strftime('%%Z%Z', time))
     assert_equal('BST BST', tz.strftime('%Z %Z', time))
     assert_equal('BST %Z %BST %%Z %%BST', tz.strftime('%Z %%Z %%%Z %%%%Z %%%%%Z', time))
-    assert_equal('+0100 +01:00 +01:00:00 +01 %::::z', tz.strftime('%z %:z %::z %:::z %::::z', time))
   end
 
   def test_strftime

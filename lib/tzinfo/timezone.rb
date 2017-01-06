@@ -614,15 +614,8 @@ module TZInfo
     # Converts a time to local and returns a string representation of the local
     # time according to the given format.
     #
-    # Calls either Time.strftime or DateTime.strftime after expanding %Z and %z
-    # to the timezone abbreviation (for example, EST or EDT) and offset for the
-    # specified time in the current Timezone.
-    #
-    # The offset can be formatted as follows:
-    #
-    # - %z - hour and minute (e.g. +0500) - %:z - hour and minute separated with
-    # a colon (e.g. +05:00) - %::z - hour minute and second separated with
-    # colons (e.g. +05:00:00) - %:::z - hour only (e.g. +05)
+    # Calls either Time.strftime or DateTime.strftime after expanding %Z to the
+    # timezone abbreviation (for example, EST or EDT).
     #
     # time can be specified as either a Time, DateTime or Timestamp. If time is
     # either a Time or Timestamp, then the Time#strftime method is called. If
@@ -644,25 +637,12 @@ module TZInfo
 
       abbreviation = period.abbreviation.to_s.gsub(/%/, '%%')
 
-      format = format.gsub(/%(%*)(Z|:{0,3}z)/) do
+      format = format.gsub(/%(%*)Z/) do
         if $1.length.odd?
           # return %%Z so the real strftime treats it as a literal %Z too
-          "#$1%#$2"
-        elsif $2 == "Z"
-          "#$1#{abbreviation}"
+          "#$1%Z"
         else
-          m, s = period.utc_total_offset.divmod(60)
-          h, m = m.divmod(60)
-          case $2.length
-          when 1
-            "#$1#{'%+03d%02d' % [h,m]}"
-          when 2
-            "#$1#{'%+03d:%02d' % [h,m]}"
-          when 3
-            "#$1#{'%+03d:%02d:%02d' % [h,m,s]}"
-          else # 4
-            "#$1#{'%+03d' % [h]}"
-          end
+          "#$1#{abbreviation}"
         end
       end
 
