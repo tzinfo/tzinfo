@@ -111,8 +111,21 @@ module Kernel
 
     if available || options[:unavailable] != :skip
       thread = Thread.new do
+        orig_diff = Minitest::Assertions.diff
+
         $SAFE = options[:level] || 1 if available
-        yield
+
+        # Disable the use of external diff tools during safe mode tests (since
+        # safe mode will prevent their use). The initial value is retrieved
+        # before activating safe mode because the first time
+        # Minitest::Assertions.diff is called, it will attempt to find a diff
+        # tool. Finding the diff tool will also fail in safe mode.
+        Minitest::Assertions.diff = nil
+        begin
+          yield
+        ensure
+          Minitest::Assertions.diff = orig_diff
+        end
       end
 
       thread.join
