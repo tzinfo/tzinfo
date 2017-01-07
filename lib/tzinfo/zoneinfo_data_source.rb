@@ -349,9 +349,8 @@ module TZInfo
       # localtime current local timezone (may be a link).
       # posix, posixrules and right are directories containing other versions of the zoneinfo files.
       # src is a directory containing the tzdata source included on Solaris.
-      # Factory is the compiled in default timezone.
       
-      enum_timezones(nil, ['+VERSION', 'localtime', 'posix', 'posixrules', 'right', 'src', 'Factory']) do |identifier|
+      enum_timezones(nil, ['+VERSION', 'localtime', 'posix', 'posixrules', 'right', 'src']) do |identifier|
         index << identifier
       end
       

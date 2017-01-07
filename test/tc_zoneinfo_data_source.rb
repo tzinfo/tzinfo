@@ -653,11 +653,11 @@ class TCZoneinfoDataSource < Minitest::Test
        
     entries = entries.collect {|file| file[directory.length + File::SEPARATOR.length, file.length - directory.length - File::SEPARATOR.length]}
 
-    # Exclude right (with leapseconds) and posix (copy) directories; .tab files; localtime, posixrules and Factory zones
+    # Exclude right (with leapseconds) and posix (copy) directories; .tab files; localtime and posixrules files.
     entries = entries.select do |file| 
       file !~ /\A(posix|right)\// &&
         file !~ /\.tab\z/ &&
-        !%w(localtime posixrules Factory).include?(file)
+        !%w(localtime posixrules).include?(file)
     end
     
     entries.sort
