@@ -399,7 +399,7 @@ class TCZoneinfoDataSource < Minitest::Test
         data_source.load_timezone_info('+VERSION')
       end
 
-      assert_match(/\W\+VERSION/, error.message)
+      assert_equal('Invalid identifier: +VERSION', error.message)
     end
   end
 
