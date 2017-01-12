@@ -395,6 +395,39 @@ class TCZoneinfoDataSource < Minitest::Test
     end
   end
   
+  def test_load_timezone_info_ignored_timeconfig_symlink
+    # Slackware includes a symlink named timeconfig that points at /usr/sbin/timeconfig.
+
+    Dir.mktmpdir('tzinfo_test_target') do |target_dir|
+      target_path = File.join(target_dir, 'timeconfig')
+
+      File.open(target_path, 'w') do |f|
+        f.write("#!/bin/sh\n")
+        f.write("#\n")
+        f.write('# timeconfig         Slackware Linux timezone configuration utility.\n')
+      end
+
+      Dir.mktmpdir('tzinfo_test') do |dir|
+        FileUtils.touch(File.join(dir, 'zone.tab'))
+        FileUtils.touch(File.join(dir, 'iso3166.tab'))
+        FileUtils.cp(File.join(@data_source.zoneinfo_dir, 'EST'), File.join(dir, 'EST'))
+
+        symlink_path = File.join(dir, 'timeconfig')
+        begin
+          FileUtils.ln_s(target_path, symlink_path)
+        rescue NotImplementedError
+          FileUtils.cp(target_path, symlink_path)
+        end
+
+        data_source = ZoneinfoDataSource.new(dir)
+
+        assert_raises(InvalidTimezoneIdentifier) do
+          data_source.load_timezone_info('timeconfig')
+        end
+      end
+    end
+  end
+
   def test_load_timezone_info_nil
     assert_raises(InvalidTimezoneIdentifier) do
       @data_source.load_timezone_info(nil)
@@ -714,6 +747,36 @@ class TCZoneinfoDataSource < Minitest::Test
     end
   end
   
+  def test_timezone_identifiers_ignored_timeconfig_symlink
+    # Slackware includes a symlink named timeconfig that points at /usr/sbin/timeconfig.
+
+    Dir.mktmpdir('tzinfo_test_target') do |target_dir|
+      target_path = File.join(target_dir, 'timeconfig')
+
+      File.open(target_path, 'w') do |f|
+        f.write("#!/bin/sh\n")
+        f.write("#\n")
+        f.write('# timeconfig         Slackware Linux timezone configuration utility.\n')
+      end
+
+      Dir.mktmpdir('tzinfo_test') do |dir|
+        FileUtils.touch(File.join(dir, 'zone.tab'))
+        FileUtils.touch(File.join(dir, 'iso3166.tab'))
+        FileUtils.cp(File.join(@data_source.zoneinfo_dir, 'EST'), File.join(dir, 'EST'))
+
+        symlink_path = File.join(dir, 'timeconfig')
+        begin
+          FileUtils.ln_s(target_path, symlink_path)
+        rescue NotImplementedError
+          FileUtils.cp(target_path, symlink_path)
+        end
+
+        data_source = ZoneinfoDataSource.new(dir)
+        assert_array_same_items(['EST'], data_source.timezone_identifiers)
+      end
+    end
+  end
+
   def test_timezone_identifiers_ignored_src_directory
     # Solaris includes a src directory containing the source timezone data files
     # from the tzdata distribution. These should be ignored.
