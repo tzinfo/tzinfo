@@ -1387,6 +1387,16 @@ class TCTimezone < Minitest::Test
     end
   end
 
+  def test_strftime_handles_percent_in_abbreviation
+    o1 = TimezoneOffset.new(0, 0, :GMT)
+    o2 = TimezoneOffset.new(0, 0, :'%H:%M:%S')
+    tz = TestTimezone.new('Test/Zone',
+      TimezonePeriod.new(TimezoneTransition.new(o2, o1, Time.utc(2017,1,1,0,0,0).to_i), nil),
+      nil, Timestamp.new(Time.utc(2017,1,15,15,50,0).to_i, 0, :utc))
+
+    assert_equal('%H:%M:%S', tz.strftime('%Z', Time.utc(2017,1,15,15,50,0)))
+  end
+
   def test_strftime_unspecified_offset
     tz = Timezone.get('Europe/London')
 
