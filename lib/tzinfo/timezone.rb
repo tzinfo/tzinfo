@@ -608,12 +608,11 @@ module TZInfo
     # Converts a time to local and returns a string representation of the local
     # time according to the given format.
     #
-    # Calls either Time.strftime or DateTime.strftime after expanding %Z to the
-    # timezone abbreviation (for example, EST or EDT).
-    #
-    # time can be specified as either a Time, DateTime or Timestamp. If time is
-    # either a Time or Timestamp, then the Time#strftime method is called. If
-    # time is a DateTime, then DateTime#strftime is used.
+    # Timezone#strftime first expands any occurrences of %Z in the format string
+    # to the timezone abbreviation (for example, EST or EDT). Depending on the
+    # type of the passed in time, the result of the expansion is then passed to
+    # either Time#strftime, DateTime#strftime or Timestamp#strftime to handle
+    # any other format directives.
     #
     # Raises ArgumentError if format or time are nil or if time is a Timestamp
     # with an unspecified UTC offset.
@@ -626,8 +625,6 @@ module TZInfo
         period = period_for(ts)
         convert_to_local(ts, period)
       end
-
-      local_time = local_time.to_time if local_time.kind_of?(Timestamp)
 
       abbreviation = period.abbreviation.to_s.gsub(/%/, '%%')
 

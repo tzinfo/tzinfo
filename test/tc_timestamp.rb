@@ -421,6 +421,20 @@ class TCTimestamp < Minitest::Test
     assert_equal(1476316801, Timestamp.new(1476316801, Rational(1,10), 3600).to_i)
   end
 
+  def test_strftime
+    # Timestamp#strftime calls Time#strftime. No need to test formats exhaustively.
+    assert_equal('2016-10-13 00:00:00.100 +0000 %', Timestamp.new(1476316800, Rational(1,10)       ).strftime('%Y-%m-%d %H:%M:%S.%L %z %%'))
+    assert_equal('2016-10-13 00:00:00.100 +0000 %', Timestamp.new(1476316800, Rational(1,10),  :utc).strftime('%Y-%m-%d %H:%M:%S.%L %z %%'))
+    assert_equal('2016-10-13 00:00:00.100 +0000 %', Timestamp.new(1476316800, Rational(1,10),     0).strftime('%Y-%m-%d %H:%M:%S.%L %z %%'))
+    assert_equal('2016-10-13 01:00:00.100 +0100 %', Timestamp.new(1476316800, Rational(1,10),  3600).strftime('%Y-%m-%d %H:%M:%S.%L %z %%'))
+    assert_equal('2016-10-12 23:00:00.100 -0100 %', Timestamp.new(1476316800, Rational(1,10), -3600).strftime('%Y-%m-%d %H:%M:%S.%L %z %%'))
+  end
+
+  def test_strftime_nil_format
+    t = Timestamp.new(1476316800, Rational(1,10))
+    assert_raises(ArgumentError) { t.strftime(nil) }
+  end
+
   def test_to_s_without_offset
     assert_equal('1476316800', Timestamp.new(1476316800).to_s)
   end

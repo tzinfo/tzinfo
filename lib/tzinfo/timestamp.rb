@@ -106,6 +106,16 @@ module TZInfo
       value
     end
 
+    # Formats the Timestamp according to the directives in the given format
+    # string. Please refer to Time#strftime for a list of supported
+    # format directives.
+    #
+    # Raises ArgumentError if format is nil.
+    def strftime(format)
+      raise ArgumentError, 'format must not be nil' unless format
+      to_time.strftime(format)
+    end
+
     # Returns a String representation of this Timestamp.
     def to_s
       return value_and_sub_second_to_s unless @utc_offset
