@@ -154,13 +154,19 @@ module TZInfo
     # Time, DateTime or Timestamp.
     #
     # When called with a block, the Timestamp representation of the value is
-    # passed to the block. The block must then return a Timestamp, which will
-    # be converted back to the type of the initial value. If the initial value
-    # was a Timestamp, the block result will just be returned.
+    # passed to the block. The block must then return either a Timestamp or an Array.
+    #
+    # If the block result is a Timestamp, it will
+    # be converted back to the type of the initial value (or just returned if the initial value was a Timestamp).
+
+    # If the block result is an Array, Timestamp.for will return an Array
+    # containing the same elements as the block result. If the initial value was
+    # not a Timestamp, any Timestamps in the block result Array will be
+    # converted to the type of the initial value.
     #
     # The UTC offset can either be preserved or ignored by setting the :offset
-    # option to :preserve, or :ignore. If :offset isn't specified, the offset
-    # of the value is preserved.
+    # option to :preserve, or :ignore. If :offset isn't specified, the offset of
+    # the value is preserved.
     def self.for(value, options = {})
       offset = options[:offset] || :preserve
       raise ArgumentError, ':offset must be :ignore or :preserve' unless offset == :preserve || offset == :ignore
@@ -181,15 +187,12 @@ module TZInfo
 
       if block_given?
         result = yield timestamp
-        raise ArgumentError, 'block must return a Timestamp' unless result.kind_of?(Timestamp)
 
-        case value
-          when Time
-            result.to_time
-          when DateTime
-            result.to_datetime
-          else # Timestamp
-            result
+        if result.kind_of?(Array)
+          result.map {|r| r.kind_of?(Timestamp) ? to_type_of(r, value) : r }
+        else
+          raise ArgumentError, 'block must return a Timestamp or an Array' unless result.kind_of?(Timestamp)
+          to_type_of(result, value)
         end
       else
         timestamp
@@ -262,6 +265,19 @@ module TZInfo
         new(timestamp.value + timestamp.utc_offset, timestamp.sub_second)
       else
         timestamp
+      end
+    end
+
+    # Converts timestamp to the type of value (or just returns it if value is
+    # not a Time or DateTime).
+    def self.to_type_of(timestamp, value)
+      case value
+        when Time
+          timestamp.to_time
+        when DateTime
+          timestamp.to_datetime
+        else
+          timestamp
       end
     end
   end

@@ -620,10 +620,9 @@ module TZInfo
       raise ArgumentError, 'format must not be nil' unless format
       raise ArgumentError, 'time must not be nil' unless time
 
-      period = nil
-      local_time = Timestamp.for(time) do |ts|
+      local_time, period = Timestamp.for(time) do |ts|
         period = period_for(ts)
-        convert_to_local(ts, period)
+        [convert_to_local(ts, period), period]
       end
 
       abbreviation = period.abbreviation.to_s.gsub(/%/, '%%')

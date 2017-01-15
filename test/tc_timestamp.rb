@@ -808,6 +808,74 @@ class TCTimestamp < Minitest::Test
     assert_equal_with_offset(DateTime.new(2016,10,13,1,0,Rational(11,10),Rational(1,24)), Timestamp.for(DateTime.new(2016,10,13,0,0,0)) { Timestamp.new(1476316801, Rational(1,10), 3600) })
   end
 
+  def test_for_block_array_result_timestamp
+    block_result = [Timestamp.new(1476316801), Time.utc(2016,10,13,0,0,0), DateTime.new(2016,10,13,0,0,0),
+      Timestamp.new(1476316802, Rational(1,10)), Object.new, nil, Timestamp.new(1476316803, Rational(1,10), :utc),
+      Timestamp.new(1476316803, Rational(1,10), 0), Timestamp.new(1476316803, Rational(1,10), 3600)]
+
+    result = Timestamp.for(Timestamp.new(1476316800)) {|t| block_result }
+
+    assert_kind_of(Array, result)
+    assert_equal(block_result.length, result.length)
+
+    block_result.zip(result).each do |expected, actual|
+      assert_same(expected, actual)
+    end
+  end
+
+  def test_for_block_array_result_time
+    block_result = [Timestamp.new(1476316801), Time.utc(2016,10,13,0,0,0), DateTime.new(2016,10,13,0,0,0),
+      Timestamp.new(1476316802, Rational(1,10)), Object.new, nil, Timestamp.new(1476316803, Rational(1,10), :utc),
+      Timestamp.new(1476316803, Rational(1,10), 0), Timestamp.new(1476316803, Rational(1,10), 3600)]
+
+    result = Timestamp.for(Time.utc(2016,10,13,0,0,0)) {|t| block_result }
+
+    assert_kind_of(Array, result)
+    assert_equal(block_result.length, result.length)
+
+    block_result.zip(result).each do |expected, actual|
+      if expected.kind_of?(Timestamp)
+        expected = expected.to_time
+        assert_equal_with_offset(expected, actual)
+      else
+        assert_same(expected, actual)
+      end
+    end
+  end
+
+  def test_for_block_array_result_datetime
+    block_result = [Timestamp.new(1476316801), Time.utc(2016,10,13,0,0,0), DateTime.new(2016,10,13,0,0,0),
+      Timestamp.new(1476316802, Rational(1,10)), Object.new, nil, Timestamp.new(1476316803, Rational(1,10), :utc),
+      Timestamp.new(1476316803, Rational(1,10), 0), Timestamp.new(1476316803, Rational(1,10), 3600)]
+
+    result = Timestamp.for(DateTime.new(2016,10,13,0,0,0)) {|t| block_result }
+
+    assert_kind_of(Array, result)
+    assert_equal(block_result.length, result.length)
+
+    block_result.zip(result).each do |expected, actual|
+      if expected.kind_of?(Timestamp)
+        expected = expected.to_datetime
+        assert_equal_with_offset(expected, actual)
+      else
+        assert_same(expected, actual)
+      end
+    end
+  end
+
+  def test_for_block_array_result_no_timestamps
+    block_result = [Time.utc(2016,10,13,0,0,0), DateTime.new(2016,10,13,0,0,0), Object.new, nil]
+
+    result = Timestamp.for(Timestamp.new(1476316800)) {|t| block_result }
+
+    assert_kind_of(Array, result)
+    assert_equal(block_result.length, result.length)
+
+    block_result.zip(result).each do |expected, actual|
+      assert_same(expected, actual)
+    end
+  end
+
   def for_block_invalid_result_test(block_result)
     block_called = false
     assert_raises(ArgumentError) do
