@@ -65,6 +65,10 @@ module TestUtils
         Time.new(year, month, day, hour, minute, second + sub_second, utc_offset)
       end
     end
+
+    def local_time(period, year, month, day, hour, minute, second, sub_second = 0)
+      TZInfo::LocalTime.new(year, month, day, hour, minute, second + sub_second, period.utc_total_offset).localize(period)
+    end
   end
 
   class TimeTypesDateTimeHelper < TimeTypesHelper
@@ -76,6 +80,10 @@ module TestUtils
       utc_offset = 0 if utc_offset == :utc
       DateTime.new(year, month, day, hour, minute, second + sub_second, utc_offset.to_r / 86400)
     end
+
+    def local_time(period, year, month, day, hour, minute, second, sub_second = 0)
+      TZInfo::LocalDateTime.new(year, month, day, hour, minute, second + sub_second, period.utc_total_offset_rational).localize(period)
+    end
   end
 
   class TimeTypesTimestampHelper < TimeTypesHelper
@@ -85,6 +93,10 @@ module TestUtils
 
     def time(year, month, day, hour, minute, second, sub_second = 0, utc_offset = nil)
       Timestamp.new(Time.new(year, month, day, hour, minute, second, !utc_offset || utc_offset == :utc ? 0 : utc_offset).to_i, sub_second, utc_offset)
+    end
+
+    def local_time(period, year, month, day, hour, minute, second, sub_second = 0)
+      LocalTimestamp.new(Time.new(year, month, day, hour, minute, second, period.utc_total_offset).to_i, sub_second, period.utc_total_offset).localize(period)
     end
   end
 end
@@ -210,6 +222,16 @@ module Kernel
     if expected.respond_to?(:utc?)
       assert_nil_or_equal(expected.utc?, actual.utc?, 'utc?')
     end
+  end
+
+  def assert_equal_with_offset_and_period(expected, actual)
+    assert_equal_with_offset(expected, actual)
+    assert_equal(expected.period, actual.period)
+  end
+
+  def assert_equal_with_offset_and_class(expected, actual)
+    assert_equal_with_offset(expected, actual)
+    assert_equal(expected.class, actual.class)
   end
 
   def time_types_test(*required_features)

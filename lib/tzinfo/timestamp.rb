@@ -84,7 +84,7 @@ module TZInfo
     # Returns a Time representation of this Timestamp. If utc_offset is not
     # specified (nil), a UTC Time will be returned.
     def to_time
-      time = Time.at(@value, @sub_second * 1_000_000)
+      time = new_time
 
       if @utc_offset && @utc_offset != :utc
         time.localtime(@utc_offset)
@@ -96,8 +96,7 @@ module TZInfo
     # Returns a DateTime representation of this Timestamp. If utc_offset is not
     # specified (nil), a UTC DateTime will be returned.
     def to_datetime
-      date_time = DateTime.jd(JD_EPOCH + ((@value.to_r + @sub_second) / 86400))
-      @utc_offset && @utc_offset != 0 && @utc_offset != :utc ? date_time.new_offset(OffsetRationals.rational_for_offset(@utc_offset)) : date_time
+      new_datetime
     end
 
     # Returns an Integer representation of this Timestamp (the number of
@@ -154,15 +153,9 @@ module TZInfo
     # Time, DateTime or Timestamp.
     #
     # When called with a block, the Timestamp representation of the value is
-    # passed to the block. The block must then return either a Timestamp or an Array.
-    #
-    # If the block result is a Timestamp, it will
-    # be converted back to the type of the initial value (or just returned if the initial value was a Timestamp).
-
-    # If the block result is an Array, Timestamp.for will return an Array
-    # containing the same elements as the block result. If the initial value was
-    # not a Timestamp, any Timestamps in the block result Array will be
-    # converted to the type of the initial value.
+    # passed to the block. The block must then return a Timestamp, which will
+    # be converted back to the type of the initial value. If the initial value
+    # was a Timestamp, the block result will just be returned.
     #
     # The UTC offset can either be preserved or ignored by setting the :offset
     # option to :preserve, or :ignore. If :offset isn't specified, the offset of
@@ -187,12 +180,15 @@ module TZInfo
 
       if block_given?
         result = yield timestamp
+        raise ArgumentError, 'block must return a Timestamp' unless result.kind_of?(Timestamp)
 
-        if result.kind_of?(Array)
-          result.map {|r| r.kind_of?(Timestamp) ? to_type_of(r, value) : r }
-        else
-          raise ArgumentError, 'block must return a Timestamp or an Array' unless result.kind_of?(Timestamp)
-          to_type_of(result, value)
+        case value
+          when Time
+            result.to_time
+          when DateTime
+            result.to_datetime
+          else # Timestamp
+            result
         end
       else
         timestamp
@@ -203,7 +199,22 @@ module TZInfo
     # since 1970-01-01 00:00:00 UTC) and sub_second (a Rational >= 0 and < 1, or
     # the Integer 0).
     def self.utc(value, sub_second = 0)
-      Timestamp.new(value, sub_second, :utc)
+      new(value, sub_second, :utc)
+    end
+
+    protected
+
+    # Constructs a new instance of a Time or Time-like class matching the value
+    # and sub_second of this Timestamp, but not setting the offset.
+    def new_time(klass = Time)
+      klass.at(@value, @sub_second * 1_000_000)
+    end
+
+    # Constructs a new instance of a DateTime or DateTime-like class with the
+    # same value, sub_second and utc_offset as this Timestamp.
+    def new_datetime(klass = DateTime)
+      date_time = klass.jd(JD_EPOCH + ((@value.to_r + @sub_second) / 86400))
+      @utc_offset && @utc_offset != 0 && @utc_offset != :utc ? date_time.new_offset(OffsetRationals.rational_for_offset(@utc_offset)) : date_time
     end
 
     private
@@ -259,25 +270,15 @@ module TZInfo
 
     # Returns a Timestamp for another Timestamp, optionally ignoring the
     # offset. If the result would have the same value, the same instance is
-    # returned.
+    # returned. If the passed in value is an instance of a subclass of
+    # Timestamp, then a new Timestamp will always be returned.
     def self.for_timestamp(timestamp, ignore_offset)
       if ignore_offset && timestamp.utc_offset
         new(timestamp.value + timestamp.utc_offset, timestamp.sub_second)
+      elsif timestamp.class != Timestamp
+        new(timestamp.value, timestamp.sub_second, timestamp.utc? ? :utc : timestamp.utc_offset)
       else
         timestamp
-      end
-    end
-
-    # Converts timestamp to the type of value (or just returns it if value is
-    # not a Time or DateTime).
-    def self.to_type_of(timestamp, value)
-      case value
-        when Time
-          timestamp.to_time
-        when DateTime
-          timestamp.to_datetime
-        else
-          timestamp
       end
     end
   end

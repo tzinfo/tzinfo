@@ -96,28 +96,28 @@ module TZInfo
       @end_transition ? @end_transition.at.to_time : nil
     end
 
-    # The start time of the period in local time as a DateTime. May be nil if
-    # unbounded.
+    # The start time of the period in local time as a LocalDateTime. May be nil
+    # if unbounded.
     def local_start
-      @start_transition ? @start_transition.local_start_at.to_datetime : nil
+      @start_transition ? LocalTimestamp.localize(@start_transition.at, self).to_datetime : nil
     end
 
-    # The start time of the period in local time as a Time. May be nil if
+    # The start time of the period in local time as a LocalTime. May be nil if
     # unbounded.
     def local_start_time
-      @start_transition ? @start_transition.local_start_at.to_time : nil
+      @start_transition ? LocalTimestamp.localize(@start_transition.at, self).to_time : nil
     end
 
-    # The end time of the period in local time as a DateTime. May be nil if
+    # The end time of the period in local time as a LocalDateTime. May be nil if
     # unbounded.
     def local_end
-      @end_transition ? @end_transition.local_end_at.to_datetime : nil
+      @end_transition ? LocalTimestamp.localize(@end_transition.at, self).to_datetime : nil
     end
 
-    # The end time of the period in local time as a Time. May be nil if
+    # The end time of the period in local time as a LocalTime. May be nil if
     # unbounded.
     def local_end_time
-      @end_transition ? @end_transition.local_end_at.to_time : nil
+      @end_transition ? LocalTimestamp.localize(@end_transition.at, self).to_time : nil
     end
 
     # true if daylight savings is in effect for this period; otherwise false.

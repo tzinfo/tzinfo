@@ -441,7 +441,13 @@ module TZInfo
     end
 
     # Converts a time to the local timezone. time can either be a Time, DateTime
-    # or Timestamp. The result has the same type as time.
+    # or Timestamp.
+    #
+    # The result will be of type LocalTime (if passed a Time),
+    # LocalDateTime (if passed a DateTime) or LocalTimestamp (if passed a
+    # Timestamp). LocalTime, LocalDateTime and LocalTimestamp are subclasses of
+    # Time, DateTime and Timestamp that provide additional information about the
+    # local result.
     #
     # Unlike utc_to_local, to_local considers the UTC offset of the given time.
     #
@@ -451,12 +457,18 @@ module TZInfo
       raise ArgumentError, 'time must not be nil' unless time
 
       Timestamp.for(time) do |ts|
-        convert_to_local(ts, period_for(ts))
+        LocalTimestamp.localize(ts, period_for(ts))
       end
     end
 
-    # Converts a time in UTC to the local timezone. utc_time can either be
-    # a Time, DateTime or Timestamp. The result has the same type as utc_time.
+    # Converts a time in UTC to the local timezone. utc_time can either be a
+    # Time, DateTime or Timestamp.
+    #
+    # The result will be of type LocalTime (if passed a Time), LocalDateTime (if
+    # passed a DateTime) or LocalTimestamp (if passed a Timestamp). LocalTime,
+    # LocalDateTime and LocalTimestamp are subclasses of Time, DateTime and
+    # Timestamp that provide additional information about the local result.
+    #
     # The UTC offset of utc_time is ignored (it is treated as a UTC time). Use
     # the to_local method instead if the the UTC offset of the time needs to be
     # considered.
@@ -471,9 +483,9 @@ module TZInfo
     end
 
     # Converts a time in the local timezone to UTC. local_time can either be
-    # a Time, DateTime or Timestamp. The result has the same type as local_time.
-    # Any timezone information in local_time is ignored (it is treated as a time
-    # in the current timezone).
+    # a Time, DateTime or Timestamp. The result will either be a Time, DateTime
+    # or Timestamp according to the type of local_time. Any timezone information
+    # in local_time is ignored (it is treated as a time in the current timezone).
     #
     # Warning: There are local times that have no equivalent UTC times (e.g.
     # in the transition from standard time to daylight savings time). There are
@@ -584,7 +596,7 @@ module TZInfo
       canonical_zone.identifier
     end
 
-    # Returns the current time in the timezone as a Time.
+    # Returns the current time in the timezone as a LocalTime.
     def now
       to_local(Time.now)
     end
@@ -594,13 +606,17 @@ module TZInfo
       period_for(Time.now)
     end
 
-    # Returns the current Time and TimezonePeriod as an array. The first element
-    # is the time, the second element is the period.
+    # Returns the current time and TimezonePeriod as an array. The first element
+    # is the time (as a LocalTime), the second element is the period.
+    #
+    # Note that the current time and TimezonePeriod can also be obtained as
+    # follows:
+    #
+    #   current_time = timezone.now
+    #   period = now.period
     def current_period_and_time
-      ts = Timestamp.for(Time.now)
-      period = period_for(ts)
-      local_time = convert_to_local(ts, period).to_time
-      [local_time, period]
+      local_time = now
+      [local_time, local_time.period]
     end
 
     alias :current_time_and_period :current_period_and_time
@@ -616,27 +632,12 @@ module TZInfo
     #
     # Raises ArgumentError if format or time are nil or if time is a Timestamp
     # with an unspecified UTC offset.
+    #
+    # This method is just a shortcut for:
+    #
+    #   timezone.to_local(time).strftime(format).
     def strftime(format, time = Time.now.utc)
-      raise ArgumentError, 'format must not be nil' unless format
-      raise ArgumentError, 'time must not be nil' unless time
-
-      local_time, period = Timestamp.for(time) do |ts|
-        period = period_for(ts)
-        [convert_to_local(ts, period), period]
-      end
-
-      abbreviation = period.abbreviation.to_s.gsub(/%/, '%%')
-
-      format = format.gsub(/%(%*)Z/) do
-        if $1.length.odd?
-          # return %%Z so the real strftime treats it as a literal %Z too
-          "#$1%Z"
-        else
-          "#$1#{abbreviation}"
-        end
-      end
-
-      local_time.strftime(format)
+      to_local(time).strftime(format)
     end
 
     # Compares two Timezones based on their identifier. Returns -1 if tz is less
@@ -691,12 +692,5 @@ module TZInfo
       def raise_unknown_timezone
         raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
       end
-
-      # Converts a Timestamp to local by applying the utc_total_offset of the
-      # given period.
-      def convert_to_local(timestamp, period)
-        timestamp.apply_offset(period.utc_total_offset)
-      end
-
   end
 end

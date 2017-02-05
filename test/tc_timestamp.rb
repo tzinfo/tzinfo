@@ -4,6 +4,9 @@ require 'date'
 include TZInfo
 
 class TCTimestamp < Minitest::Test
+  class TestTimestampSubclass < Timestamp
+  end
+
   def test_initialize_timestamp_only
     t = Timestamp.new(1476316800)
     assert_equal(1476316800, t.value)
@@ -561,7 +564,10 @@ class TCTimestamp < Minitest::Test
     end
 
     assert(block_called, 'block was not called')
-    assert_kind_of(args[0].class, block_result)
+
+    expected_class = args[0].class
+    expected_class = Timestamp if expected_class == TestTimestampSubclass
+    assert_kind_of(expected_class, block_result)
   end
 
   def test_for_timestamp_ignore_offset_utc
@@ -605,6 +611,16 @@ class TCTimestamp < Minitest::Test
     for_test(orig, offset: :ignore) {|t| assert_same(orig, t) }
   end
 
+  def test_for_timestamp_ignore_offset_subclass_no_offset
+    for_test(TestTimestampSubclass.new(1476316800, Rational(1, 10)), offset: :ignore) do |t|
+      assert_equal(Timestamp, t.class)
+      assert_equal(1476316800, t.value)
+      assert_equal(Rational(1, 10), t.sub_second)
+      assert_nil(t.utc_offset)
+      assert_nil(t.utc?)
+    end
+  end
+
   def test_for_timestamp_preserve_offset_utc
     orig = Timestamp.new(1476316800, 0, :utc)
     for_test(orig, offset: :preserve) {|t| assert_same(orig, t) }
@@ -633,6 +649,46 @@ class TCTimestamp < Minitest::Test
   def test_for_timestamp_preserve_offset_sub_second
     orig = Timestamp.new(1476316800, Rational(1, 10), 0)
     for_test(orig, offset: :preserve) {|t| assert_same(orig, t) }
+  end
+
+  def test_for_timestamp_preserve_offset_subclass_utc
+    for_test(TestTimestampSubclass.new(1476316800, Rational(1, 10), :utc)) do |t|
+      assert_equal(Timestamp, t.class)
+      assert_equal(1476316800, t.value)
+      assert_equal(Rational(1, 10), t.sub_second)
+      assert_equal(0, t.utc_offset)
+      assert_equal(true, t.utc?)
+    end
+  end
+
+  def test_for_timestamp_preserve_offset_subclass_with_zero_offset
+    for_test(TestTimestampSubclass.new(1476316800, Rational(1, 10), 0)) do |t|
+      assert_equal(Timestamp, t.class)
+      assert_equal(1476316800, t.value)
+      assert_equal(Rational(1, 10), t.sub_second)
+      assert_equal(0, t.utc_offset)
+      assert_equal(false, t.utc?)
+    end
+  end
+
+  def test_for_timestamp_preserve_offset_subclass_with_offset
+    for_test(TestTimestampSubclass.new(1476316800, Rational(1, 10), 3600)) do |t|
+      assert_equal(Timestamp, t.class)
+      assert_equal(1476316800, t.value)
+      assert_equal(Rational(1, 10), t.sub_second)
+      assert_equal(3600, t.utc_offset)
+      assert_equal(false, t.utc?)
+    end
+  end
+
+  def test_for_timestamp_preserve_offset_subclass_no_offset
+    for_test(TestTimestampSubclass.new(1476316800, Rational(1, 10))) do |t|
+      assert_equal(Timestamp, t.class)
+      assert_equal(1476316800, t.value)
+      assert_equal(Rational(1, 10), t.sub_second)
+      assert_nil(t.utc_offset)
+      assert_nil(t.utc?)
+    end
   end
 
   def test_for_time_ignore_offset_utc
@@ -808,72 +864,17 @@ class TCTimestamp < Minitest::Test
     assert_equal_with_offset(DateTime.new(2016,10,13,1,0,Rational(11,10),Rational(1,24)), Timestamp.for(DateTime.new(2016,10,13,0,0,0)) { Timestamp.new(1476316801, Rational(1,10), 3600) })
   end
 
-  def test_for_block_array_result_timestamp
-    block_result = [Timestamp.new(1476316801), Time.utc(2016,10,13,0,0,0), DateTime.new(2016,10,13,0,0,0),
-      Timestamp.new(1476316802, Rational(1,10)), Object.new, nil, Timestamp.new(1476316803, Rational(1,10), :utc),
-      Timestamp.new(1476316803, Rational(1,10), 0), Timestamp.new(1476316803, Rational(1,10), 3600)]
-
-    result = Timestamp.for(Timestamp.new(1476316800)) {|t| block_result }
-
-    assert_kind_of(Array, result)
-    assert_equal(block_result.length, result.length)
-
-    block_result.zip(result).each do |expected, actual|
-      assert_same(expected, actual)
-    end
+  def test_for_block_result_timestamp_subclass
+    block_result = TestTimestampSubclass.new(1476316801)
+    assert_same(block_result, Timestamp.for(Timestamp.new(1476316800)) {|t| block_result })
   end
 
-  def test_for_block_array_result_time
-    block_result = [Timestamp.new(1476316801), Time.utc(2016,10,13,0,0,0), DateTime.new(2016,10,13,0,0,0),
-      Timestamp.new(1476316802, Rational(1,10)), Object.new, nil, Timestamp.new(1476316803, Rational(1,10), :utc),
-      Timestamp.new(1476316803, Rational(1,10), 0), Timestamp.new(1476316803, Rational(1,10), 3600)]
-
-    result = Timestamp.for(Time.utc(2016,10,13,0,0,0)) {|t| block_result }
-
-    assert_kind_of(Array, result)
-    assert_equal(block_result.length, result.length)
-
-    block_result.zip(result).each do |expected, actual|
-      if expected.kind_of?(Timestamp)
-        expected = expected.to_time
-        assert_equal_with_offset(expected, actual)
-      else
-        assert_same(expected, actual)
-      end
-    end
+  def test_for_block_result_to_time_subclass
+    assert_equal_with_offset(Time.new(2016,10,13,1,0,Rational(11,10),3600), Timestamp.for(Time.utc(2016,10,13,0,0,0)) { TestTimestampSubclass.new(1476316801, Rational(1,10), 3600) })
   end
 
-  def test_for_block_array_result_datetime
-    block_result = [Timestamp.new(1476316801), Time.utc(2016,10,13,0,0,0), DateTime.new(2016,10,13,0,0,0),
-      Timestamp.new(1476316802, Rational(1,10)), Object.new, nil, Timestamp.new(1476316803, Rational(1,10), :utc),
-      Timestamp.new(1476316803, Rational(1,10), 0), Timestamp.new(1476316803, Rational(1,10), 3600)]
-
-    result = Timestamp.for(DateTime.new(2016,10,13,0,0,0)) {|t| block_result }
-
-    assert_kind_of(Array, result)
-    assert_equal(block_result.length, result.length)
-
-    block_result.zip(result).each do |expected, actual|
-      if expected.kind_of?(Timestamp)
-        expected = expected.to_datetime
-        assert_equal_with_offset(expected, actual)
-      else
-        assert_same(expected, actual)
-      end
-    end
-  end
-
-  def test_for_block_array_result_no_timestamps
-    block_result = [Time.utc(2016,10,13,0,0,0), DateTime.new(2016,10,13,0,0,0), Object.new, nil]
-
-    result = Timestamp.for(Timestamp.new(1476316800)) {|t| block_result }
-
-    assert_kind_of(Array, result)
-    assert_equal(block_result.length, result.length)
-
-    block_result.zip(result).each do |expected, actual|
-      assert_same(expected, actual)
-    end
+  def test_for_block_result_to_datetime_subclass
+    assert_equal_with_offset(DateTime.new(2016,10,13,1,0,Rational(11,10),Rational(1,24)), Timestamp.for(DateTime.new(2016,10,13,0,0,0)) { TestTimestampSubclass.new(1476316801, Rational(1,10), 3600) })
   end
 
   def for_block_invalid_result_test(block_result)

@@ -7,6 +7,11 @@ require 'tzinfo/version'
 require 'tzinfo/offset_rationals'
 require 'tzinfo/timestamp'
 
+require 'tzinfo/localized'
+require 'tzinfo/local_date_time'
+require 'tzinfo/local_time'
+require 'tzinfo/local_timestamp'
+
 require 'tzinfo/timezone_definition'
 
 require 'tzinfo/timezone_offset'

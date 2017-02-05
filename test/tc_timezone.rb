@@ -748,21 +748,21 @@ class TCTimezone < Minitest::Test
       TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
     time_types_test(:unspecified_offset) do |h|
-      assert_equal_with_offset(h.time(2005,6,18,17,24,23,0,3600),
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0, :utc)).utc_to_local(h.time(2005,6,18,16,24,23,0)))
     end
 
     time_types_test(:utc) do |h|
-      assert_equal_with_offset(h.time(2005,6,18,17,24,23,0,3600),
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0, :utc)).utc_to_local(h.time(2005,6,18,16,24,23,0,:utc)))
     end
 
     time_types_test do |h|
-      assert_equal_with_offset(h.time(2005,6,18,17,24,23,0,3600),
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0, :utc)).utc_to_local(h.time(2005,6,18,16,24,23,0,0)))
-      assert_equal_with_offset(h.time(2005,6,18,17,24,23,0,3600),
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0, :utc)).utc_to_local(h.time(2005,6,18,16,24,23,0,10800)))
-      assert_equal_with_offset(h.time(2005,6,18,17,24,23,Rational(567,1000),3600),
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,Rational(567,1000)),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, Rational(567,1000), :utc)).utc_to_local(h.time(2005,6,18,16,24,23,Rational(567,1000),0)))
     end
   end
@@ -777,8 +777,23 @@ class TCTimezone < Minitest::Test
 
     time_types_test(:utc) do |h|
       # test that the result doesn't have utc? set to true
-      assert_equal_with_offset(h.time(2016,12,31,0,0,0,0,0),
+      assert_equal_with_offset_and_period(h.local_time(period,2016,12,31,0,0,0,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2016,12,31,0,0,0).to_i, 0, :utc)).utc_to_local(h.time(2016,12,31,0,0,0,0,:utc)))
+    end
+  end
+
+  def test_utc_to_local_local_time_input
+    o1 = TimezoneOffset.new(0, 0, :GMT)
+    o2 = TimezoneOffset.new(0, 3600, :BST)
+
+    period = TimezonePeriod.new(
+      TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+      TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+
+    time_types_test do |h|
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
+        TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0, :utc)).utc_to_local(
+          h.local_time(TimezonePeriod.new(nil, nil, TimezoneOffset.new(10800, 0, :TEST)),2005,6,18,16,24,23,0)))
     end
   end
 
@@ -805,16 +820,16 @@ class TCTimezone < Minitest::Test
       TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
     time_types_test(:utc) do |h|
-      assert_equal_with_offset(h.time(2005,6,18,17,24,23,0,3600),
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0, :utc)).to_local(h.time(2005,6,18,16,24,23,0,:utc)))
     end
 
     time_types_test do |h|
-      assert_equal_with_offset(h.time(2005,6,18,17,24,23,0,3600),
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0, h.expected_zero_offset)).to_local(h.time(2005,6,18,16,24,23,0,0)))
-      assert_equal_with_offset(h.time(2005,6,18,14,24,23,0,3600),
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,14,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.new(2005,6,18,16,24,23,10800).to_i, 0, 10800)).to_local(h.time(2005,6,18,16,24,23,0,10800)))
-      assert_equal_with_offset(h.time(2005,6,18,17,24,23,Rational(567,1000),3600),
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,Rational(567,1000)),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, Rational(567,1000), h.expected_zero_offset)).to_local(h.time(2005,6,18,16,24,23,Rational(567,1000),0)))
     end
   end
@@ -829,8 +844,23 @@ class TCTimezone < Minitest::Test
 
     time_types_test(:utc) do |h|
       # test that the result doesn't have utc? set to true
-      assert_equal_with_offset(h.time(2016,12,31,0,0,0,0,0),
+      assert_equal_with_offset_and_period(h.local_time(period,2016,12,31,0,0,0,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.utc(2016,12,31,0,0,0).to_i, 0, :utc)).to_local(h.time(2016,12,31,0,0,0,0,:utc)))
+    end
+  end
+
+  def test_to_local_local_time_input
+    o1 = TimezoneOffset.new(0, 0, :GMT)
+    o2 = TimezoneOffset.new(0, 3600, :BST)
+
+    period = TimezonePeriod.new(
+      TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+      TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+
+    time_types_test do |h|
+      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,14,24,23,0),
+        TestTimezone.new('Europe/London', period, [], Timestamp.new(Time.new(2005,6,18,16,24,23,10800).to_i, 0, 10800)).to_local(
+          h.local_time(TimezonePeriod.new(nil, nil, TimezoneOffset.new(10800, 0, :TEST)),2005,6,18,16,24,23,0)))
     end
   end
 
@@ -866,21 +896,21 @@ class TCTimezone < Minitest::Test
       TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
     time_types_test(:unspecified_offset) do |h|
-      assert_equal_with_offset(h.time(2005,6,18,15,24,23,0,:utc),
+      assert_equal_with_offset_and_class(h.time(2005,6,18,15,24,23,0,:utc),
         TestTimezone.new('Europe/London', nil, [period], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0)).local_to_utc(h.time(2005,6,18,16,24,23,0)))
     end
 
     time_types_test(:utc) do |h|
-      assert_equal_with_offset(h.time(2005,6,18,15,24,23,0,:utc),
+      assert_equal_with_offset_and_class(h.time(2005,6,18,15,24,23,0,:utc),
         TestTimezone.new('Europe/London', nil, [period], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0)).local_to_utc(h.time(2005,6,18,16,24,23,0,:utc)))
     end
 
     time_types_test do |h|
-      assert_equal_with_offset(h.time(2005,6,18,15,24,23,0,:utc),
+      assert_equal_with_offset_and_class(h.time(2005,6,18,15,24,23,0,:utc),
         TestTimezone.new('Europe/London', nil, [period], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0)).local_to_utc(h.time(2005,6,18,16,24,23,0,0)))
-      assert_equal_with_offset(h.time(2005,6,18,15,24,23,0,:utc),
+      assert_equal_with_offset_and_class(h.time(2005,6,18,15,24,23,0,:utc),
         TestTimezone.new('Europe/London', nil, [period], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0)).local_to_utc(h.time(2005,6,18,16,24,23,0,10800)))
-      assert_equal_with_offset(h.time(2005,6,18,15,24,23,Rational(567,1000),:utc),
+      assert_equal_with_offset_and_class(h.time(2005,6,18,15,24,23,Rational(567,1000),:utc),
         TestTimezone.new('Europe/London', nil, [period], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, Rational(567,1000))).local_to_utc(h.time(2005,6,18,16,24,23,Rational(567,1000))))
     end
   end
@@ -905,6 +935,34 @@ class TCTimezone < Minitest::Test
     ensure
       ENV['TZ'] = old_tz
     end
+  end
+
+  def test_local_to_utc_local_time_input
+    o1 = TimezoneOffset.new(0, 0, :GMT)
+    o2 = TimezoneOffset.new(0, 3600, :BST)
+
+    period = TimezonePeriod.new(
+      TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+      TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+
+    time_types_test do |h|
+      assert_equal_with_offset_and_class(h.time(2005,6,18,15,24,23,0,:utc),
+        TestTimezone.new('Europe/London', nil, [period], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0)).local_to_utc(
+          h.local_time(TimezonePeriod.new(nil, nil, TimezoneOffset.new(10800,0,:TEST)),2005,6,18,16,24,23,0)))
+    end
+  end
+
+  def test_local_to_utc_local_timestamp_without_offset_input
+    o1 = TimezoneOffset.new(0, 0, :GMT)
+    o2 = TimezoneOffset.new(0, 3600, :BST)
+
+    period = TimezonePeriod.new(
+      TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+      TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+
+    assert_equal_with_offset_and_class(Timestamp.utc(Time.utc(2005,6,18,15,24,23).to_i),
+      TestTimezone.new('Europe/London', nil, [period], Timestamp.new(Time.utc(2005,6,18,16,24,23).to_i, 0)).local_to_utc(
+        LocalTimestamp.new(Time.utc(2005,6,18,16,24,23).to_i)))
   end
 
   def test_local_to_utc_invalid
@@ -963,11 +1021,11 @@ class TCTimezone < Minitest::Test
       t = h.time(2004,10,31,1,30,0)
       tz = TestTimezone.new('America/New_York', nil, [p1, p2], Timestamp.new(Time.utc(2004,10,31,1,30,0).to_i))
 
-      assert_equal_with_offset(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t))
-      assert_equal_with_offset(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t, true))
-      assert_equal_with_offset(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t, false))
+      assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t))
+      assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t, true))
+      assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t, false))
       assert_raises(AmbiguousTime) { tz.local_to_utc(t, nil) }
-      assert_equal_with_offset(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t) {|periods| raise BlockCalled, 'should not be called' })
+      assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t) {|periods| raise BlockCalled, 'should not be called' })
     end
   end
 
@@ -988,11 +1046,11 @@ class TCTimezone < Minitest::Test
       t = h.time(2004,10,31,1,30,0)
       tz = TestTimezone.new('America/New_York', nil, [p1, p2], Timestamp.new(Time.utc(2004,10,31,1,30,0).to_i))
 
-      assert_equal(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t))
-      assert_equal(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t, false))
-      assert_equal(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t, true))
+      assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t))
+      assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t, false))
+      assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t, true))
       assert_raises(AmbiguousTime) { tz.local_to_utc(t, nil) }
-      assert_equal(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t) {|periods| raise BlockCalled, 'should not be called' })
+      assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t) {|periods| raise BlockCalled, 'should not be called' })
     end
   end
 
@@ -1011,10 +1069,10 @@ class TCTimezone < Minitest::Test
       t = h.time(2004,10,31,1,30,0)
       tz = TestTimezone.new('America/New_York', nil, [p1, p2], Timestamp.new(Time.utc(2004,10,31,1,30,0).to_i))
 
-      assert_equal(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t, true))
-      assert_equal(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t, false))
-      assert_equal(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t, true) {|periods| raise BlockCalled, 'should not be called' })
-      assert_equal(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t, false) {|periods| raise BlockCalled, 'should not be called' })
+      assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t, true))
+      assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t, false))
+      assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t, true) {|periods| raise BlockCalled, 'should not be called' })
+      assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t, false) {|periods| raise BlockCalled, 'should not be called' })
     end
   end
 
@@ -1042,10 +1100,10 @@ class TCTimezone < Minitest::Test
         end
       end
 
-      assert_equal(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t) {|periods| periods.first})
-      assert_equal(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t) {|periods| periods.last})
-      assert_equal(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t) {|periods| [periods.first]})
-      assert_equal(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t) {|periods| [periods.last]})
+      assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t) {|periods| periods.first})
+      assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t) {|periods| periods.last})
+      assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t) {|periods| [periods.first]})
+      assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t) {|periods| [periods.last]})
     end
   end
 
@@ -1084,10 +1142,10 @@ class TCTimezone < Minitest::Test
         end
       end
 
-      assert_equal(h.time(1915,8,4,22,16,0,0,:utc), tz.local_to_utc(t) {|periods| periods.first})
-      assert_equal(h.time(1915,8,4,22,40,0,0,:utc), tz.local_to_utc(t) {|periods| periods.last})
-      assert_equal(h.time(1915,8,4,22,16,0,0,:utc), tz.local_to_utc(t) {|periods| [periods.first]})
-      assert_equal(h.time(1915,8,4,22,40,0,0,:utc), tz.local_to_utc(t) {|periods| [periods.last]})
+      assert_equal_with_offset_and_class(h.time(1915,8,4,22,16,0,0,:utc), tz.local_to_utc(t) {|periods| periods.first})
+      assert_equal_with_offset_and_class(h.time(1915,8,4,22,40,0,0,:utc), tz.local_to_utc(t) {|periods| periods.last})
+      assert_equal_with_offset_and_class(h.time(1915,8,4,22,16,0,0,:utc), tz.local_to_utc(t) {|periods| [periods.first]})
+      assert_equal_with_offset_and_class(h.time(1915,8,4,22,40,0,0,:utc), tz.local_to_utc(t) {|periods| [periods.last]})
     end
   end
 
@@ -1293,7 +1351,9 @@ class TCTimezone < Minitest::Test
   end
 
   def test_now
-    assert_kind_of(Time, Timezone.get('Europe/London').now)
+    result = Timezone.get('Europe/London').now
+    assert_kind_of(LocalTime, result)
+    assert_kind_of(TimezonePeriod, result.period)
   end
 
   def test_current_period
@@ -1303,14 +1363,16 @@ class TCTimezone < Minitest::Test
   def test_current_period_and_time
     current = Timezone.get('Europe/London').current_period_and_time
     assert_equal(2, current.length)
-    assert_kind_of(Time, current[0])
+    assert_kind_of(LocalTime, current[0])
+    assert_kind_of(TimezonePeriod, current[0].period)
     assert_kind_of(TimezonePeriod, current[1])
   end
 
   def test_current_time_and_period
     current = Timezone.get('Europe/London').current_time_and_period
     assert_equal(2, current.length)
-    assert_kind_of(Time, current[0])
+    assert_kind_of(LocalTime, current[0])
+    assert_kind_of(TimezonePeriod, current[0].period)
     assert_kind_of(TimezonePeriod, current[1])
   end
 
