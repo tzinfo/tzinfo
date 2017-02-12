@@ -7,10 +7,13 @@ include TZInfo
 
 class TCZoneinfoTimezoneInfo < Minitest::Test
   def assert_period(abbreviation, utc_offset, std_offset, dst, start_at, end_at, info)
+    start_at = start_at && Timestamp.for(start_at)
+    end_at = end_at && Timestamp.for(end_at)
+
     if start_at
-      period = info.period_for(Timestamp.for(start_at))
+      period = info.period_for(start_at)
     elsif end_at
-      period = info.period_for(Timestamp.for(end_at - 1))
+      period = info.period_for(end_at - 1)
     else
       # no transitions, pick the epoch
       period = info.period_for(Timestamp.for(Time.utc(1970, 1, 1)))
@@ -22,17 +25,17 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     assert_equal(dst, period.dst?)
 
     if start_at
-      refute_nil(period.utc_start_time)
-      assert_equal(start_at, period.utc_start_time)
+      refute_nil(period.start_transition)
+      assert_equal_with_offset(start_at, period.start_transition.at)
     else
-      assert_nil(period.utc_start_time)
+      assert_nil(period.start_transition)
     end
 
     if end_at
-      refute_nil(period.utc_end_time)
-      assert_equal(end_at, period.utc_end_time)
+      refute_nil(period.end_transition)
+      assert_equal_with_offset(end_at, period.end_transition.at)
     else
-      assert_nil(period.utc_end_time)
+      assert_nil(period.end_transition)
     end
   end
 
@@ -454,10 +457,6 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   end
 
   def test_load_64bit_range
-    # The full range of 64 bit timestamps is not currently supported because of
-    # the way transitions are indexed. Transitions outside the supported range
-    # will be ignored.
-
     offsets = [
       {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
       {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
@@ -473,52 +472,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       assert_equal('Zone/SixtyFourRange', info.identifier)
 
       if format >= 2
-        # When the full range is supported, the following periods will be defined:
-        #assert_period(:LMT,  3542, 0, false, nil,                    Time.at(-2**63).utc,    info)
-        #assert_period(:XST,  3600, 0, false, Time.at(-2**63).utc,    Time.utc(2014, 5, 27),  info)
-        #assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**63 - 1).utc, info)
-        #assert_period(:LMT,  3542, 0, false, Time.at(2**63 - 1).utc, nil,                    info)
-
-        # Without full range support, the following periods will be defined:
-        assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(2014, 5, 27), info)
-        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
+        # Note that Time class on JRuby can't handle very large negative or
+        # positive values (as tested on v9.1.7.0).
+        assert_period(:LMT,  3542, 0, false, nil,                      Timestamp.utc(-2**63),    info)
+        assert_period(:XST,  3600, 0, false, Timestamp.utc(-2**63),    Time.utc(2014, 5, 27),    info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),    Timestamp.utc(2**63 - 1), info)
+        assert_period(:LMT,  3542, 0, false, Timestamp.utc(2**63 - 1), nil,                      info)
       else
-        assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(2014, 5, 27), info)
-        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
-      end
-    end
-  end
-
-  def test_load_supported_64bit_range
-    # The full range of 64 bit timestamps is not currently supported because of
-    # the way transitions are indexed. Transitions outside the supported range
-    # will be ignored.
-
-    min_timestamp = -8520336000 # Time.utc(1700, 1, 1).to_i
-    max_timestamp = 16725225600 # Time.utc(2500, 1, 1).to_i
-
-    offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff => 7200, :isdst => false, :abbrev => 'XNST'}]
-
-    transitions = [
-      {:at => min_timestamp,         :offset_index => 1},
-      {:at => Time.utc(2014, 5, 27), :offset_index => 2},
-      {:at => max_timestamp - 1,     :offset_index => 0}]
-
-    tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/SupportedSixtyFourRange', path)
-      assert_equal('Zone/SupportedSixtyFourRange', info.identifier)
-
-      if format >= 2
-        assert_period(:LMT,  3542, 0, false, nil,                            Time.at(min_timestamp).utc,     info)
-        assert_period(:XST,  3600, 0, false, Time.at(min_timestamp).utc,     Time.utc(2014, 5, 27),          info)
-        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),          Time.at(max_timestamp - 1).utc, info)
-        assert_period(:LMT,  3542, 0, false, Time.at(max_timestamp - 1).utc, nil,                            info)
-      else
-        assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(2014, 5, 27), info)
-        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
+        assert_period(:LMT,  3542, 0, false, nil,                      Time.utc(2014, 5, 27),    info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),    nil,                      info)
       end
     end
   end
