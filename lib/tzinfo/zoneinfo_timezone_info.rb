@@ -199,9 +199,7 @@ module TZInfo
         end
 
         transitions.each do |t|
-          at = t[:at]
-          time = Time.at(at).utc
-          transition time.year, time.mon, t[:offset], at
+          transition nil, nil, t[:offset], t[:at]
         end
       end
   end
