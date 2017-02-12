@@ -8,6 +8,10 @@ module TZInfo
     # The offset this transition changes from (a TimezoneOffset instance).
     attr_reader :previous_offset
 
+    # When this transition occurs as an Integer number of seconds since
+    # 1970-01-01 UTC.
+    attr_reader :timestamp
+
     # Initializes a new TimezoneTransition with the given offset,
     # previous_offset (both TimezoneOffset instances) and UTC time specified as
     # an Integer number of seconds since 1970-01-01.
@@ -41,34 +45,6 @@ module TZInfo
     # The UTC time when this transition occurs, returned as a Time instance.
     def time
       at.to_time
-    end
-
-    # A Timestamp instance representing the local time when this transition
-    # causes the previous observance to end (calculated from at using
-    # previous_offset). Unlike local_end_at, the utc_offset of the returned
-    # Timestamp is always 0.
-    def absolute_local_end_at
-      # Thread-safety: It is possible that the value of @absolute_local_end_at
-      # may be calculated multiple times in concurrently executing threads. It
-      # is not worth the overhead of locking to ensure that
-      # @absolute_local_end_at is only calculated once.
-
-      @absolute_local_end_at = Timestamp.new(at.value + @previous_offset.utc_total_offset) unless @absolute_local_end_at
-      @absolute_local_end_at
-    end
-
-    # A Timestamp instance representing the local time when this transition
-    # causes the next observance to start (calculated from at using offset).
-    # Unlike local_start_at, the utc_offset of the returned Timestamp is always
-    # 0.
-    def absolute_local_start_at
-      # Thread-safety: It is possible that the value of @absolute_local_start_at
-      # may be calculated multiple times in concurrently executing threads. It
-      # is not worth the overhead of locking to ensure that
-      # @absolute_local_start_at is only calculated once.
-
-      @absolute_local_start_at = Timestamp.new(at.value + @offset.utc_total_offset) unless @absolute_local_start_at
-      @absolute_local_start_at
     end
 
     # A Timestamp instance representing the local time when this transition

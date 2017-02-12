@@ -16,7 +16,6 @@ module TZInfo
       @offsets = {}
       @transitions = []
       @previous_offset = nil
-      @transitions_index = nil
     end
 
     # Defines a offset. The id uniquely identifies this offset within the
@@ -37,7 +36,12 @@ module TZInfo
       @previous_offset = offset unless @previous_offset
     end
 
-    # Defines a transition occuring in a given year and month.
+    # Defines a transition from to a defined offset.
+    #
+    # The unused1 and unused2 parameters are not used and should be set to nil.
+    # Old versions of TZInfo required these parameters to be set to the year and
+    # month of the transition. The parameters are retained for compatibility
+    # with released versions of TZInfo::Data.
     #
     # offset_id refers to the id of a defined offset.
     #
@@ -50,13 +54,14 @@ module TZInfo
     # retained because TZInfo::Data expects to be able to call a method with 6
     # parameters.
     #
-    # Transitions must be defined in chronological order.
+    # Transitions must be defined in chronological order. The timestamp
+    # parameter must be greater than the last transition to be defined.
     #
     # ArgumentError will be raised if a transition is added out of order, the
     # offset_id has not previously been defined or if reserved1 is non-nil and
     # reserved2 is nil (this indicates a transition defined solely as a DateTime
     # in code pre-dating the first TZInfo::Data release).
-    def transition(year, month, offset_id, timestamp, reserved1 = nil, reserved2 = nil)
+    def transition(unused1, unused2, offset_id, timestamp, reserved1 = nil, reserved2 = nil)
       offset = @offsets[offset_id]
       raise ArgumentError, 'Offset not found' unless offset
 
@@ -65,29 +70,9 @@ module TZInfo
       # as a numerator and denominator.
       raise ArgumentError, 'DateTime-only transitions are not supported' if reserved1 && !reserved2
 
-      if @transitions_index
-        if year < @last_year || (year == @last_year && month < @last_month)
-          raise ArgumentError, 'Transitions must be increasing date order'
-        end
-
-        # Record the position of the first transition with this index.
-        index = transition_index(year, month)
-        @transitions_index[index] ||= @transitions.length
-
-        # Fill in any gaps
-        (index - 1).downto(0) do |i|
-          break if @transitions_index[i]
-          @transitions_index[i] = @transitions.length
-        end
-      else
-        @transitions_index = [@transitions.length]
-        @start_year = year
-        @start_month = month
-      end
+      raise ArgumentError, 'Transitions must be increasing date order' if !@transitions.empty? && @transitions.last.timestamp >= timestamp
 
       @transitions << TimezoneTransition.new(offset, @previous_offset, timestamp)
-      @last_year = year
-      @last_month = month
       @previous_offset = offset
     end
 
@@ -102,42 +87,34 @@ module TZInfo
       raise ArgumentError, 'timestamp must not be nil' unless timestamp
       raise ArgumentError, 'timestamp must have a specified utc_offset' unless timestamp.utc_offset
 
-      unless @transitions.empty?
-        time = timestamp.to_time.utc
-        index = transition_index(time.year, time.mon)
-
-        start_transition = nil
-        start = transition_before_end(index)
-        if start
-          start.downto(0) do |i|
-            if @transitions[i].at <= timestamp
-              start_transition = @transitions[i]
-              break
-            end
-          end
-        end
-
-        end_transition = nil
-        start = transition_after_start(index)
-        if start
-          start.upto(@transitions.length - 1) do |i|
-            if @transitions[i].at > timestamp
-              end_transition = @transitions[i]
-              break
-            end
-          end
-        end
-
-        if start_transition || end_transition
-          TimezonePeriod.new(start_transition, end_transition)
-        else
-          # Won't happen since there are transitions. Must always find one
-          # transition that is either >= or < the specified time.
-          raise 'No transitions found in search'
-        end
-      else
+      if @transitions.empty?
         raise NoOffsetsDefined, 'No offsets have been defined' unless @previous_offset
         TimezonePeriod.new(nil, nil, @previous_offset)
+      else
+        timestamp = timestamp.value
+
+        index = find_minimum_transition {|t| t.timestamp >= timestamp }
+
+        if index
+          transition = @transitions[index]
+
+          if transition.timestamp == timestamp
+            # timestamp occurs within the second of the found transition, so is
+            # the transition that starts the period.
+            start_transition = transition
+            end_transition = @transitions[index + 1]
+          else
+            # timestamp occurs before the second of the found transition, so is
+            # the transition that ends the period.
+            start_transition = index == 0 ? nil : @transitions[index - 1]
+            end_transition = transition
+          end
+        else
+          start_transition = @transitions.last
+          end_transition = nil
+        end
+
+        TimezonePeriod.new(start_transition, end_transition)
       end
     end
 
@@ -154,45 +131,44 @@ module TZInfo
       raise ArgumentError, 'local_timestamp must not be nil' unless local_timestamp
       raise ArgumentError, 'local_timestamp must have an unspecified utc_offset' if local_timestamp.utc_offset
 
-      unless @transitions.empty?
-        local_time = local_timestamp.to_time
-        index = transition_index(local_time.year, local_time.mon)
+      if @transitions.empty?
+        raise NoOffsetsDefined, 'No offsets have been defined' unless @previous_offset
+        [TimezonePeriod.new(nil, nil, @previous_offset)]
+      else
+        local_timestamp = local_timestamp.value
+        latest_possible_utc = local_timestamp + 86400
+        earliest_possible_utc = local_timestamp - 86400
+
+        # Find the index of the first transition that occurs after a latest
+        # possible UTC representation of the local timestamp and then search
+        # backwards until an earliest possible UTC representation.
+
+        index = find_minimum_transition {|t| t.timestamp >= latest_possible_utc }
+
+        # No transitions after latest_possible_utc, set to max index + 1 to
+        # search backwards including the period after the last transition
+        index = @transitions.length unless index
 
         result = []
 
-        start_index = transition_after_start(index - 1)
-        if start_index && @transitions[start_index].absolute_local_end_at > local_timestamp
-          if start_index > 0
-            if @transitions[start_index - 1].absolute_local_start_at <= local_timestamp
-              result << TimezonePeriod.new(@transitions[start_index - 1], @transitions[start_index])
-            end
-          else
-            result << TimezonePeriod.new(nil, @transitions[start_index])
+        index.downto(0) do |i|
+          start_transition = i > 0 ? @transitions[i - 1] : nil
+          end_transition = @transitions[i]
+          offset = start_transition ? start_transition.offset : end_transition.previous_offset
+          utc_timestamp = local_timestamp - offset.utc_total_offset
+
+          # It is not necessary to compare the sub-seconds because a timestamp
+          # is in the period if is >= the start transition (sub-seconds would
+          # make == become >) and if it is < the end transition (which
+          # sub-seconds cannot affect).
+          if (!start_transition || utc_timestamp >= start_transition.timestamp) && (!end_transition || utc_timestamp < end_transition.timestamp)
+            result << TimezonePeriod.new(start_transition, end_transition)
+          elsif end_transition && end_transition.timestamp < earliest_possible_utc
+            break
           end
         end
 
-        end_index = transition_before_end(index + 1)
-
-        if end_index
-          start_index = end_index unless start_index
-
-          start_index.upto(transition_before_end(index + 1)) do |i|
-            if @transitions[i].absolute_local_start_at <= local_timestamp
-              if i + 1 < @transitions.length
-                if @transitions[i + 1].absolute_local_end_at > local_timestamp
-                  result << TimezonePeriod.new(@transitions[i], @transitions[i + 1])
-                end
-              else
-                result << TimezonePeriod.new(@transitions[i], nil)
-              end
-            end
-          end
-        end
-
-        result
-      else
-        raise NoOffsetsDefined, 'No offsets have been defined' unless @previous_offset
-        [TimezonePeriod.new(nil, nil, @previous_offset)]
+        result.reverse!
       end
     end
 
@@ -223,84 +199,65 @@ module TZInfo
         raise ArgumentError, 'to_timestamp must be greater than from_timestamp' if to_timestamp <= from_timestamp
       end
 
-      unless @transitions.empty?
+      if @transitions.empty?
+        []
+      else
         if from_timestamp
-          from_time = from_timestamp.to_time.utc
-          from_index = transition_after_start(transition_index(from_time.year, from_time.mon))
-
-          if from_index
-            while from_index < @transitions.length && @transitions[from_index].at < from_timestamp
-              from_index += 1
-            end
-
-            if from_index >= @transitions.length
-              return []
-            end
-          else
-            # from is later than last transition.
-            return []
-          end
+          from_index = find_minimum_transition {|t| transition_on_or_after_to_timestamp?(t, from_timestamp) }
+          return [] unless from_index
         else
           from_index = 0
         end
 
-        to_time = to_timestamp.to_time.utc
-        to_index = transition_before_end(transition_index(to_time.year, to_time.mon))
+        to_index = find_minimum_transition {|t| transition_on_or_after_to_timestamp?(t, to_timestamp) }
 
         if to_index
-          while to_index >= 0 && @transitions[to_index].at >= to_timestamp
-            to_index -= 1
-          end
-
-          if to_index < 0
-            return []
-          end
+          return [] if to_index < 1
+          to_index -= 1
         else
-          # to is earlier than first transition.
-          return []
+          to_index = -1
         end
 
         @transitions[from_index..to_index]
-      else
-        []
       end
     end
 
     private
-      # Returns the index into the @transitions_index array for a given year
-      # and month.
-      def transition_index(year, month)
-        index = (year - @start_year) * 2
-        index += 1 if month > 6
-        index -= 1 if @start_month > 6
-        index
-      end
 
-      # Returns the index into @transitions of the first transition that occurs
-      # on or after the start of the given index into @transitions_index.
-      # Returns nil if there are no such transitions.
-      def transition_after_start(index)
-        if index >= @transitions_index.length
-          nil
-        else
-          index = 0 if index < 0
-          @transitions_index[index]
+    # Array#bsearch_index was added in Ruby 2.3.0. Use bsearch_index to find
+    # transitions if it is available, otherwise use a Ruby implementation.
+    if [].respond_to?(:bsearch_index)
+      # Calls bsearch_index on @transitions.
+      def find_minimum_transition(&block)
+        @transitions.bsearch_index(&block)
+      end
+    else
+      # A Ruby implementation of the find-minimum mode of Array#bsearch_index.
+      def find_minimum_transition
+        low = 0
+        high = @transitions.length
+        satisfied = false
+
+        while low < high do
+          mid = (low + high).div(2)
+          if yield @transitions[mid]
+            satisfied = true
+            high = mid
+          else
+            low = mid + 1
+          end
         end
-      end
 
-      # Returns the index into @transitions of the first transition that occurs
-      # before the end of the given index into @transitions_index.
-      # Returns nil if there are no such transitions.
-      def transition_before_end(index)
-        index = index + 1
-
-        if index <= 0
-          nil
-        elsif index >= @transitions_index.length
-          @transitions.length - 1
-        else
-          @transitions_index[index] - 1
-        end
+        satisfied ? low : nil
       end
+    end
+
+    # Determines if a transition occurs at or after a given Timestamp,
+    # considering the Timestamp sub_second.
+    def transition_on_or_after_to_timestamp?(transition, timestamp)
+      transition_timestamp = transition.timestamp
+      timestamp_value = timestamp.value
+      transition_timestamp > timestamp_value || transition_timestamp == timestamp_value && timestamp.sub_second == 0
+    end
   end
 end

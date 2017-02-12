@@ -25,12 +25,36 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     assert_raises(ArgumentError) { dti.offset :o1, 3600, 3600, :TESTD }
   end
 
+  def test_transition_accepts_year_and_month
+    dti = TransitionDataTimezoneInfo.new('Test/Zone')
+    dti.offset :o1, -17900,    0, :TESTLMT
+    dti.offset :o2, -18000, 3600, :TESTD
+    dti.offset :o3, -18000,    0, :TESTS
+
+    # The first two parameters were previously used to indicate the year and
+    # month of the transition. They are no longer used. Test that arbitrary
+    # values are now just accepted and ignored.
+    dti.transition 2017,  2, :o2, Time.utc(2000, 4,1,1,0,0).to_i
+    dti.transition 2010, 10, :o3, Time.utc(2000,10,1,1,0,0).to_i
+    dti.transition 4031, 13, :o2, Time.utc(2001, 3,1,1,0,0).to_i
+
+    o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
+    o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
+    o3 = TimezoneOffset.new(-18000,    0, :TESTS)
+
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 4,1,1,0,0).to_i)
+    t2 = TimezoneTransition.new(o3, o2, Time.utc(2000,10,1,1,0,0).to_i)
+    t3 = TimezoneTransition.new(o2, o3, Time.utc(2001, 3,1,1,0,0).to_i)
+
+    assert_equal([t1,t2,t3], dti.transitions_up_to(Timestamp.for(Time.utc(2001,3,1,1,0,0,1))))
+  end
+
   def test_transition_timestamp
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
 
     assert_nothing_raised do
-      dti.transition 2006, 6, :o1, 1149368400
+      dti.transition nil, nil, :o1, 1149368400
     end
   end
 
@@ -40,7 +64,7 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
 
-    assert_raises(ArgumentError) { dti.transition 2006, 6, :o1, 19631123, 8 }
+    assert_raises(ArgumentError) { dti.transition nil, nil, :o1, 19631123, 8 }
   end
 
   def test_transition_timestamp_and_datetime
@@ -48,7 +72,7 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o1, -18000, 3600, :TEST
 
     # The timestamp parameter is 1 second after the DateTime parameters.
-    dti.transition 1900, 1, :o1, -2208988799, 4830041, 2
+    dti.transition nil, nil, :o1, -2208988799, 4830041, 2
 
     # Confirm that the timestamp parameter was used.
     assert_equal(-2208988799, dti.transitions_up_to(Timestamp.utc(-2208988798)).first.at.value)
@@ -58,33 +82,35 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
 
-    dti.transition 2006, 6, :o1, 1149368400
+    dti.transition nil, nil, :o1, 1149368400
 
-    assert_raises(ArgumentError) { dti.transition 2006, 6, :o2, 1149454800 }
+    assert_raises(ArgumentError) { dti.transition nil, nil, :o2, 1149454800 }
   end
 
   def test_transition_no_offsets
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
 
-    assert_raises(ArgumentError) { dti.transition 2006, 6, :o1, 1149368400 }
+    assert_raises(ArgumentError) { dti.transition nil, nil, :o1, 1149368400 }
   end
 
-  def test_transition_invalid_order_month
+  def test_transition_not_increased
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
 
-    dti.transition 2006, 6, :o1, 1149368400
+    dti.transition nil, nil, :o1, 1149368400
 
-    assert_raises(ArgumentError) { dti.transition 2006, 5, :o2, 1146690000 }
+    error = assert_raises(ArgumentError) { dti.transition nil, nil, :o1, 1149368400 }
+    assert_match(/\bincreasing\b/, error.message)
   end
 
-  def test_transition_invalid_order_year
+  def test_transition_decreased
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -18000, 3600, :TEST
 
-    dti.transition 2006, 6, :o1, 1149368400
+    dti.transition nil, nil, :o1, 1149368400
 
-    assert_raises(ArgumentError) { dti.transition 2005, 7, :o2, 1120424400 }
+    error = assert_raises(ArgumentError) { dti.transition nil, nil, :o1, 1149368399 }
+    assert_match(/\bincreasing\b/, error.message)
   end
 
   def test_period_for
@@ -94,14 +120,14 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o3, -18000,    0, :TESTS
     dti.offset :o4, -21600, 3600, :TESTD
 
-    dti.transition 2000,  4, :o2, Time.utc(2000, 4,1,1,0,0).to_i
-    dti.transition 2000, 10, :o3, Time.utc(2000,10,1,1,0,0).to_i
-    dti.transition 2001,  3, :o2, Time.utc(2001, 3,1,1,0,0).to_i
-    dti.transition 2001,  4, :o4, Time.utc(2001, 4,1,1,0,0).to_i
-    dti.transition 2001, 10, :o3, Time.utc(2001,10,1,1,0,0).to_i
-    dti.transition 2002, 10, :o3, Time.utc(2002,10,1,1,0,0).to_i
-    dti.transition 2003,  2, :o2, Time.utc(2003, 2,1,1,0,0).to_i
-    dti.transition 2003,  3, :o3, Time.utc(2003, 3,1,1,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2000, 4,1,1,0,0).to_i
+    dti.transition nil, nil, :o3, Time.utc(2000,10,1,1,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2001, 3,1,1,0,0).to_i
+    dti.transition nil, nil, :o4, Time.utc(2001, 4,1,1,0,0).to_i
+    dti.transition nil, nil, :o3, Time.utc(2001,10,1,1,0,0).to_i
+    dti.transition nil, nil, :o3, Time.utc(2002,10,1,1,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2003, 2,1,1,0,0).to_i
+    dti.transition nil, nil, :o3, Time.utc(2003, 3,1,1,0,0).to_i
 
     o1 = TimezoneOffset.new(-17900, 0,    :TESTLMT)
     o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
@@ -145,7 +171,7 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o1, -17900, 0, :TESTLMT
     dti.offset :o2, -18000, 0, :TEST
 
-    dti.transition 2000, 7, :o2, Time.utc(2000,7,1,0,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2000,7,1,0,0,0).to_i
 
     o1 = TimezoneOffset.new(-17900, 0, :TESTLMT)
     o2 = TimezoneOffset.new(-18000, 0, :TEST)
@@ -160,7 +186,7 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o1, -17900, 0, :TESTLMT
     dti.offset :o2, -18000, 0, :TEST
 
-    dti.transition 2000, 7, :o2, Time.utc(2000,7,1,0,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2000,7,1,0,0,0).to_i
 
     o1 = TimezoneOffset.new(-17900, 0, :TESTLMT)
     o2 = TimezoneOffset.new(-18000, 0, :TEST)
@@ -212,13 +238,13 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o3, -18000,    0, :TESTS
     dti.offset :o4, -21600, 3600, :TESTD
 
-    dti.transition 2000,  4, :o2, Time.utc(2000, 4,2,1,0,0).to_i
-    dti.transition 2000, 10, :o3, Time.utc(2000,10,2,1,0,0).to_i
-    dti.transition 2001,  3, :o2, Time.utc(2001, 3,2,1,0,0).to_i
-    dti.transition 2001,  4, :o4, Time.utc(2001, 4,2,1,0,0).to_i
-    dti.transition 2001, 10, :o3, Time.utc(2001,10,2,1,0,0).to_i
-    dti.transition 2002, 10, :o3, Time.utc(2002,10,2,1,0,0).to_i
-    dti.transition 2003,  2, :o2, Time.utc(2003, 2,2,1,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2000, 4,2,1,0,0).to_i
+    dti.transition nil, nil, :o3, Time.utc(2000,10,2,1,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2001, 3,2,1,0,0).to_i
+    dti.transition nil, nil, :o4, Time.utc(2001, 4,2,1,0,0).to_i
+    dti.transition nil, nil, :o3, Time.utc(2001,10,2,1,0,0).to_i
+    dti.transition nil, nil, :o3, Time.utc(2002,10,2,1,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2003, 2,2,1,0,0).to_i
 
     o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
     o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
@@ -278,9 +304,9 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o3, 3600,    0, :CET
     dti.offset :o4, 3600, 3600, :CEST
 
-    dti.transition 1879, 12, :o2, Time.utc(1879,12,31,22,36,0).to_i
-    dti.transition 1915,  8, :o3, Time.utc(1915, 8, 4,22,36,0).to_i
-    dti.transition 1916,  4, :o4, Time.utc(1916, 4,30,22, 0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(1879,12,31,22,36,0).to_i
+    dti.transition nil, nil, :o3, Time.utc(1915, 8, 4,22,36,0).to_i
+    dti.transition nil, nil, :o4, Time.utc(1916, 4,30,22, 0,0).to_i
 
     o1 = TimezoneOffset.new(5040,    0, :LMT)
     o2 = TimezoneOffset.new(5040,    0, :WMT)
@@ -295,22 +321,17 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
                   TimezonePeriod.new(t2, t3)], dti.periods_for_local(Timestamp.for(Time.utc(1915,8,4,23,40,0), offset: :ignore)))
   end
 
-  def test_periods_for_local_boundary
+  def test_periods_for_local_single_transition
     dti = TransitionDataTimezoneInfo.new('Test/Zone')
     dti.offset :o1, -3600, 0, :TESTD
     dti.offset :o2, -3600, 0, :TESTS
 
-    dti.transition 2000, 7, :o2, Time.utc(2000,7,1,0,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2000,7,1,0,0,0).to_i
 
     o1 = TimezoneOffset.new(-3600, 0, :TESTD)
     o2 = TimezoneOffset.new(-3600, 0, :TESTS)
 
     t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,7,1,0,0,0).to_i)
-
-    # 2000-07-01 00:00:00 UTC is 2000-06-30 23:00:00 UTC-1
-    # hence to find periods for local times between 2000-06-30 23:00:00
-    # and 2000-07-01 00:00:00 a search has to be carried out in the next half
-    # year to the one containing the date we are looking for
 
     assert_equal([TimezonePeriod.new(nil, t1)], dti.periods_for_local(Timestamp.for(Time.utc(2000,6,30,22,59,59), offset: :ignore)))
     assert_equal([TimezonePeriod.new(t1, nil)], dti.periods_for_local(Timestamp.for(Time.utc(2000,6,30,23, 0, 0), offset: :ignore)))
@@ -360,11 +381,11 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o3, -18000,    0, :TESTS
     dti.offset :o4, -21600, 3600, :TESTD
 
-    dti.transition 2010,  4, :o2, Time.utc(2010, 4,1,1,0,0).to_i
-    dti.transition 2010, 10, :o3, Time.utc(2010,10,1,1,0,0).to_i
-    dti.transition 2011,  3, :o2, Time.utc(2011, 3,1,1,0,0).to_i
-    dti.transition 2011,  4, :o4, Time.utc(2011, 4,1,1,0,0).to_i
-    dti.transition 2011, 10, :o3, Time.utc(2011,10,1,1,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2010, 4,1,1,0,0).to_i
+    dti.transition nil, nil, :o3, Time.utc(2010,10,1,1,0,0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2011, 3,1,1,0,0).to_i
+    dti.transition nil, nil, :o4, Time.utc(2011, 4,1,1,0,0).to_i
+    dti.transition nil, nil, :o3, Time.utc(2011,10,1,1,0,0).to_i
 
     o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
     o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
@@ -401,8 +422,8 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o2, -18000,    0, :TESTS
     dti.offset :o3, -18000, 3600, :TESTD
 
-    dti.transition 2009, 12, :o2, Time.utc(2009,12,31,23,59,59).to_i
-    dti.transition 2010,  7, :o3, Time.utc(2010,7,  1, 0, 0, 0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2009,12,31,23,59,59).to_i
+    dti.transition nil, nil, :o3, Time.utc(2010,7,  1, 0, 0, 0).to_i
 
     o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
     o2 = TimezoneOffset.new(-18000,    0, :TESTS)
@@ -421,8 +442,8 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     dti.offset :o2, -18000,    0, :TESTS
     dti.offset :o3, -18000, 3600, :TESTD
 
-    dti.transition 2009, 12, :o2, Time.utc(2009,12,31,23,59,59).to_i
-    dti.transition 2010,  7, :o3, Time.utc(2010, 7, 1, 0, 0, 0).to_i
+    dti.transition nil, nil, :o2, Time.utc(2009,12,31,23,59,59).to_i
+    dti.transition nil, nil, :o3, Time.utc(2010, 7, 1, 0, 0, 0).to_i
 
     o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
     o2 = TimezoneOffset.new(-18000,    0, :TESTS)

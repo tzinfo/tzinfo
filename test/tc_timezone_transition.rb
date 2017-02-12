@@ -19,6 +19,13 @@ class TCTimezoneTransition < Minitest::Test
     assert_equal(TimezoneOffset.new(3600, 0, :TST), t.previous_offset)
   end
 
+  def test_timestamp
+    t = TimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
+      TimezoneOffset.new(3600, 0, :TST), 1148949080)
+
+    assert_equal(1148949080, t.timestamp)
+  end
+
   def test_at
     t = TimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
@@ -130,32 +137,6 @@ class TCTimezoneTransition < Minitest::Test
     assert_equal_with_offset(Time.new(2006, 5, 30, 2, 31, 20, '+02:00'), t1.local_start_time)
     assert_equal_with_offset(Time.new(2006, 5, 30, 2, 31, 20, '+02:00'), t2.local_start_time)
     assert_equal_with_offset(Time.new(2006, 5, 30, 0, 31, 20, '+00:00'), t3.local_start_time)
-  end
-
-  def test_absolute_local_end_at
-    t1 = TimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
-      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
-    t3 = TimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
-      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
-
-    assert_equal_with_offset(Timestamp.new(1148952680), t1.absolute_local_end_at)
-    assert_equal_with_offset(Timestamp.new(1148959880), t2.absolute_local_end_at)
-    assert_equal_with_offset(Timestamp.new(1148945480), t3.absolute_local_end_at)
-  end
-
-  def test_absolute_local_start_at
-    t1 = TimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
-      TimezoneOffset.new(3600, 0, :TST), 1148949080)
-    t2 = TimezoneTransition.new(TimezoneOffset.new(7200, 0, :TST),
-      TimezoneOffset.new(7200, 3600, :TDT), 1148949080)
-    t3 = TimezoneTransition.new(TimezoneOffset.new(-3600, 3600, :TDT),
-      TimezoneOffset.new(-3600, 0, :TST), 1148949080)
-
-    assert_equal_with_offset(Timestamp.new(1148956280), t1.absolute_local_start_at)
-    assert_equal_with_offset(Timestamp.new(1148956280), t2.absolute_local_start_at)
-    assert_equal_with_offset(Timestamp.new(1148949080), t3.absolute_local_start_at)
   end
 
   def test_equality
