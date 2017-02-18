@@ -15,21 +15,26 @@ module TZInfo
     #
     # @private
     module ClassMethods #:nodoc:
+      # Returns the last TimezoneInfo to be defined with timezone or
+      # linked_timezone.
+      def get
+        @timezone
+      end
+
+      private
+
       # Returns and yields a TransitionDataTimezoneInfo object to define a
       # timezone.
       def timezone(identifier)
-        yield @timezone = TransitionDataTimezoneInfo.new(identifier)
+        definer = TimezoneDefinerFormat1.new
+        yield definer
+        transitions = definer.transitions
+        @timezone = TransitionDataTimezoneInfo.new(identifier, transitions.empty? ? definer.first_offset : transitions)
       end
 
       # Defines a linked timezone.
       def linked_timezone(identifier, link_to_identifier)
         @timezone = LinkedTimezoneInfo.new(identifier, link_to_identifier)
-      end
-
-      # Returns the last TimezoneInfo to be defined with timezone or
-      # linked_timezone.
-      def get
-        @timezone
       end
     end
   end

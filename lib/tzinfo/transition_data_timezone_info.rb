@@ -1,79 +1,42 @@
 module TZInfo
-  # Raised if no offsets have been defined when calling period_for_utc or
-  # periods_for_local. Indicates an error in the timezone data.
-  class NoOffsetsDefined < StandardError
-  end
-
-  # Represents a data timezone defined by a set of offsets and a set
-  # of transitions.
+  # Represents a data timezone defined by a list of transitions or a constantly
+  # applied offset.
   #
   # @private
   class TransitionDataTimezoneInfo < DataTimezoneInfo #:nodoc:
 
-    # Constructs a new TransitionDataTimezoneInfo with its identifier.
-    def initialize(identifier)
+    # The list of transitions as a frozen Array of TimezoneTransition instances
+    # (nil if there are no transitions and the timezone observes a constant
+    # offset).
+    attr_reader :transitions
+
+    # The offset constantly observed as a TimezoneOffset (nil if there are
+    # transitions).
+    attr_reader :constant_offset
+
+    # Constructs a new TransitionDataTimezoneInfo with its identifier and either
+    # an Array of TimezoneTransitions or a TimezoneOffset that is constantly
+    # observed.
+    #
+    # A reference to the passed in Array or TimezoneOffset will be retained.
+    #
+    # Transitions in the array must be in ascending timestamp order.
+    #
+    # Raises ArgumentError if transitions_or_constant_offset is an empty Array
+    # or not an Array or TimezoneOffset.
+    def initialize(identifier, transitions_or_constant_offset)
       super(identifier)
-      @offsets = {}
-      @transitions = []
-      @previous_offset = nil
-    end
 
-    # Defines a offset. The id uniquely identifies this offset within the
-    # timezone. utc_offset and std_offset define the offset in seconds of
-    # standard time from UTC and daylight savings from standard time
-    # respectively. abbreviation describes the timezone offset (e.g. GMT, BST,
-    # EST or EDT).
-    #
-    # The first offset to be defined is treated as the offset that applies
-    # until the first transition. This will usually be in Local Mean Time (LMT).
-    #
-    # ArgumentError will be raised if the id is already defined.
-    def offset(id, utc_offset, std_offset, abbreviation)
-      raise ArgumentError, 'Offset already defined' if @offsets.has_key?(id)
-
-      offset = TimezoneOffset.new(utc_offset, std_offset, abbreviation)
-      @offsets[id] = offset
-      @previous_offset = offset unless @previous_offset
-    end
-
-    # Defines a transition from to a defined offset.
-    #
-    # The unused1 and unused2 parameters are not used and should be set to nil.
-    # Old versions of TZInfo required these parameters to be set to the year and
-    # month of the transition. The parameters are retained for compatibility
-    # with released versions of TZInfo::Data.
-    #
-    # offset_id refers to the id of a defined offset.
-    #
-    # timestamp gives the UTC time of the transition as an Integer number of
-    # seconds since 1970-01-01.
-    #
-    # The reserved1 and reserved2 parameters should be left unset. They relate
-    # to earlier versions of TZInfo where transitions could be defined as
-    # DateTimes (because Time had a limited range on some platforms). They are
-    # retained because TZInfo::Data expects to be able to call a method with 6
-    # parameters.
-    #
-    # Transitions must be defined in chronological order. The timestamp
-    # parameter must be greater than the last transition to be defined.
-    #
-    # ArgumentError will be raised if a transition is added out of order, the
-    # offset_id has not previously been defined or if reserved1 is non-nil and
-    # reserved2 is nil (this indicates a transition defined solely as a DateTime
-    # in code pre-dating the first TZInfo::Data release).
-    def transition(unused1, unused2, offset_id, timestamp, reserved1 = nil, reserved2 = nil)
-      offset = @offsets[offset_id]
-      raise ArgumentError, 'Offset not found' unless offset
-
-      # DateTime-only transitions used to be specified using the 4th and 5th
-      # parameters (numerator_or_timestamp and denominator_or_numerator) used
-      # as a numerator and denominator.
-      raise ArgumentError, 'DateTime-only transitions are not supported' if reserved1 && !reserved2
-
-      raise ArgumentError, 'Transitions must be increasing date order' if !@transitions.empty? && @transitions.last.timestamp >= timestamp
-
-      @transitions << TimezoneTransition.new(offset, @previous_offset, timestamp)
-      @previous_offset = offset
+      if transitions_or_constant_offset.kind_of?(Array)
+        raise ArgumentError, 'transitions_or_constant_offset must not be an empty Array' if transitions_or_constant_offset.empty?
+        @transitions = transitions_or_constant_offset.freeze
+        @constant_offset = nil
+      elsif transitions_or_constant_offset.kind_of?(TimezoneOffset)
+        @transitions = nil
+        @constant_offset = transitions_or_constant_offset
+      else
+        raise ArgumentError, 'transitions_or_constant_offset must be a non-empty Array or a TimezoneOffset'
+      end
     end
 
     # Returns the TimezonePeriod for the given Timestamp. The Timestamp must
@@ -81,15 +44,12 @@ module TZInfo
     #
     # Raises ArgumentError if timestamp is nil or does not have a specified
     # utc_offset.
-    #
-    # Raises NoOffsetsDefined if no offsets have been defined.
     def period_for(timestamp)
       raise ArgumentError, 'timestamp must not be nil' unless timestamp
       raise ArgumentError, 'timestamp must have a specified utc_offset' unless timestamp.utc_offset
 
-      if @transitions.empty?
-        raise NoOffsetsDefined, 'No offsets have been defined' unless @previous_offset
-        TimezonePeriod.new(nil, nil, @previous_offset)
+      if @constant_offset
+        TimezonePeriod.new(nil, nil, @constant_offset)
       else
         timestamp = timestamp.value
 
@@ -131,9 +91,8 @@ module TZInfo
       raise ArgumentError, 'local_timestamp must not be nil' unless local_timestamp
       raise ArgumentError, 'local_timestamp must have an unspecified utc_offset' if local_timestamp.utc_offset
 
-      if @transitions.empty?
-        raise NoOffsetsDefined, 'No offsets have been defined' unless @previous_offset
-        [TimezonePeriod.new(nil, nil, @previous_offset)]
+      if @constant_offset
+        [TimezonePeriod.new(nil, nil, @constant_offset)]
       else
         local_timestamp = local_timestamp.value
         latest_possible_utc = local_timestamp + 86400
@@ -199,7 +158,7 @@ module TZInfo
         raise ArgumentError, 'to_timestamp must be greater than from_timestamp' if to_timestamp <= from_timestamp
       end
 
-      if @transitions.empty?
+      if @constant_offset
         []
       else
         if from_timestamp

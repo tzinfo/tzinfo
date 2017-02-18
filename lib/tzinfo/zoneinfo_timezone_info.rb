@@ -12,11 +12,11 @@ module TZInfo
     # Constructs the new ZoneinfoTimezoneInfo with an identifier and path
     # to the file.
     def initialize(identifier, file_path)
-      super(identifier)
-
-      File.open(file_path, 'rb') do |file|
+      transitions_or_constant_offset = File.open(file_path, 'rb') do |file|
         parse(file)
       end
+
+      super(identifier, transitions_or_constant_offset)
     end
 
     private
@@ -180,26 +180,33 @@ module TZInfo
           end
         end
 
-        # Find the first non-dst offset. This is used as the offset for the time
-        # before the first transition.
-        first = nil
-        offsets.each_with_index do |o, i|
-          if !o[:is_dst]
-            first = i
-            break
+
+        first_offset = nil
+
+        offsets = offsets.map do |o|
+          to = TimezoneOffset.new(o[:utc_offset], o[:std_offset], o[:abbr].untaint.to_sym)
+
+          # The first non-dst offset (if there is one) is the offset observed
+          # before the first transition.
+          first_offset = to if !first_offset && !o[:is_dst]
+
+          to
+        end
+
+        first_offset = offsets.first unless first_offset
+
+
+        if transitions.empty?
+          first_offset
+        else
+          previous_offset = first_offset
+
+          transitions.map do |t|
+            offset = offsets[t[:offset]]
+            tt = TimezoneTransition.new(offset, previous_offset, t[:at])
+            previous_offset = offset
+            tt
           end
-        end
-
-        if first
-          offset first, offsets[first][:utc_offset], offsets[first][:std_offset], offsets[first][:abbr].untaint.to_sym
-        end
-
-        offsets.each_with_index do |o, i|
-          offset i, o[:utc_offset], o[:std_offset], o[:abbr].untaint.to_sym unless i == first
-        end
-
-        transitions.each do |t|
-          transition nil, nil, t[:offset], t[:at]
         end
       end
   end

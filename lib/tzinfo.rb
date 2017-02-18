@@ -12,6 +12,8 @@ require 'tzinfo/local_date_time'
 require 'tzinfo/local_time'
 require 'tzinfo/local_timestamp'
 
+require 'tzinfo/timezone_definer'
+require 'tzinfo/timezone_definer_format_1'
 require 'tzinfo/timezone_definition'
 
 require 'tzinfo/timezone_offset'
