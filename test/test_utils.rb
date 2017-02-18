@@ -99,146 +99,171 @@ module TestUtils
       LocalTimestamp.new(Time.new(year, month, day, hour, minute, second, period.utc_total_offset).to_i, sub_second, period.utc_total_offset).localize(period)
     end
   end
+
+  module Helpers
+    # Runs tests with each of the supported time representation types (DateTime,
+    # Time or Timestamp). Types can be restricted by requring features
+    # (:distinct_utc, :unspecified_offset or :utc).
+    def time_types_test(*required_features)
+      [TestUtils::TimeTypesTimeHelper, TestUtils::TimeTypesDateTimeHelper, TestUtils::TimeTypesTimestampHelper].each do |helper_class|
+        if required_features.all? {|f| helper_class.supports?(f) }
+          yield helper_class.new
+        end
+      end
+    end
+
+    # Suppresses any warnings raised in a specified block.
+    def without_warnings
+      old_verbose = $VERBOSE
+      begin
+        $VERBOSE = nil
+        yield
+      ensure
+        $-v = old_verbose
+      end
+    end
+
+    # Runs a test with safe mode enabled ($SAFE = 1).
+    def safe_test(options = {})
+      # JRuby and Rubinius us don't support SAFE levels.
+      available = !(defined?(RUBY_ENGINE) && %w(jruby rbx).include?(RUBY_ENGINE))
+
+      if available || options[:unavailable] != :skip
+        thread = Thread.new do
+          orig_diff = Minitest::Assertions.diff
+
+          $SAFE = options[:level] || 1 if available
+
+          # Disable the use of external diff tools during safe mode tests (since
+          # safe mode will prevent their use). The initial value is retrieved
+          # before activating safe mode because the first time
+          # Minitest::Assertions.diff is called, it will attempt to find a diff
+          # tool. Finding the diff tool will also fail in safe mode.
+          Minitest::Assertions.diff = nil
+          begin
+            yield
+          ensure
+            Minitest::Assertions.diff = orig_diff
+          end
+        end
+
+        thread.join
+      end
+    end
+  end
+
+  module Assertions
+    # Assert that an array contains the same items independent of ordering.
+    def assert_array_same_items(expected, actual, msg = nil)
+      full_message = message(msg, '') { diff(expected, actual) }
+      condition = (expected.size == actual.size) && (expected - actual == [])
+      assert(condition, full_message)
+    end
+
+    # Assert that starting a Ruby sub process to run code returns the output
+    # contained in the expected_lines array. The load path includes the
+    # tzinfo lib directory by default. Additional directories can be added
+    # using extra_load_path. Requires each item in required before running the
+    # specified code.
+    def assert_sub_process_returns(expected_lines, code, extra_load_path = [], required = ['tzinfo'])
+      ruby = File.join(RbConfig::CONFIG['bindir'],
+        RbConfig::CONFIG['ruby_install_name'] + RbConfig::CONFIG['EXEEXT'])
+
+      load_path = [TZINFO_LIB_DIR] + extra_load_path
+
+      # If RubyGems is loaded in the current process, then require it in the
+      # sub-process, as it may be needed in order to require dependencies.
+      if defined?(Gem) && Gem.instance_of?(Module)
+        required = ['rubygems'] + required
+      end
+
+      if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
+        # Stop Rubinius from operating as irb.
+        args = ' -'
+      else
+        args = ''
+      end
+
+      IO.popen("\"#{ruby}\"#{args}", 'r+') do |process|
+        load_path.each do |p|
+          process.puts("$:.unshift('#{p.gsub("'", "\\\\'")}')")
+        end
+
+        required.each do |r|
+          process.puts("require '#{r.gsub("'", "\\\\'")}'")
+        end
+
+        process.puts(code)
+        process.flush
+        process.close_write
+
+        actual_lines = process.readlines
+        actual_lines = actual_lines.collect {|l| l.chomp}
+        assert_equal(expected_lines, actual_lines)
+      end
+    end
+
+    # Asserts that a block does not raise an exception.
+    def assert_nothing_raised(msg = nil)
+      begin
+        yield
+      rescue => e
+        full_message = message(msg) { exception_details(e, 'Exception raised: ') }
+        assert(false, full_message)
+      end
+    end
+
+    # If expected is nil, asserts that actual is nil, otherwise asserts that
+    # expected equals actual.
+    def assert_nil_or_equal(expected, actual, msg = nil)
+      if expected.nil?
+        assert_nil(actual, msg)
+      else
+        assert_equal(expected, actual, msg)
+      end
+    end
+
+    # Asserts that Time, DateTime or Timestamp instances are equal and that
+    # their offsets are equal. The actual instance is allowed to be a subclass
+    # of the expected class.
+    def assert_equal_with_offset(expected, actual)
+      assert_kind_of(expected.class, actual)
+      assert_equal(expected, actual)
+
+      # Time, DateTime and Timestamp don't require identical offsets for equality.
+      # Test the offsets explicitly.
+      if expected.respond_to?(:utc_offset)
+        assert_nil_or_equal(expected.utc_offset, actual.utc_offset, 'utc_offset')
+      elsif expected.respond_to?(:offset)
+        assert_nil_or_equal(expected.offset, actual.offset, 'offset')
+      end
+
+      # Time (on MRI and Rubinius, but not JRuby) and Timestamp distinguish between
+      # UTC and a local time with 0 offset from UTC.
+      if expected.respond_to?(:utc?)
+        assert_nil_or_equal(expected.utc?, actual.utc?, 'utc?')
+      end
+    end
+
+    # Asserts that LocalTime, LocalDateTime or LocalTimestamp instances are
+    # equal and that their periods are also equal.
+    def assert_equal_with_offset_and_period(expected, actual)
+      assert_equal_with_offset(expected, actual)
+      assert_equal(expected.period, actual.period)
+    end
+
+    # Asserts that Time, DateTime or Timestamp instances are equal and that
+    # their classes are identical.
+    def assert_equal_with_offset_and_class(expected, actual)
+      assert_equal_with_offset(expected, actual)
+      assert_equal(expected.class, actual.class)
+    end
+  end
 end
 
 TestUtils.prepare_test_zoneinfo_dir
 
-
-
-module Kernel
-  # Suppresses any warnings raised in a specified block.
-  def without_warnings
-    old_verbose = $VERBOSE
-    begin
-      $VERBOSE = nil
-      yield
-    ensure
-      $-v = old_verbose
-    end
-  end
-
-  def safe_test(options = {})
-    # JRuby and Rubinius us don't support SAFE levels.
-    available = !(defined?(RUBY_ENGINE) && %w(jruby rbx).include?(RUBY_ENGINE))
-
-    if available || options[:unavailable] != :skip
-      thread = Thread.new do
-        orig_diff = Minitest::Assertions.diff
-
-        $SAFE = options[:level] || 1 if available
-
-        # Disable the use of external diff tools during safe mode tests (since
-        # safe mode will prevent their use). The initial value is retrieved
-        # before activating safe mode because the first time
-        # Minitest::Assertions.diff is called, it will attempt to find a diff
-        # tool. Finding the diff tool will also fail in safe mode.
-        Minitest::Assertions.diff = nil
-        begin
-          yield
-        ensure
-          Minitest::Assertions.diff = orig_diff
-        end
-      end
-
-      thread.join
-    end
-  end
-
-  def assert_array_same_items(expected, actual, msg = nil)
-    full_message = message(msg, '') { diff(expected, actual) }
-    condition = (expected.size == actual.size) && (expected - actual == [])
-    assert(condition, full_message)
-  end
-
-  def assert_sub_process_returns(expected_lines, code, extra_load_path = [], required = ['tzinfo'])
-    ruby = File.join(RbConfig::CONFIG['bindir'],
-      RbConfig::CONFIG['ruby_install_name'] + RbConfig::CONFIG['EXEEXT'])
-
-    load_path = [TZINFO_LIB_DIR] + extra_load_path
-
-    # If RubyGems is loaded in the current process, then require it in the
-    # sub-process, as it may be needed in order to require dependencies.
-    if defined?(Gem) && Gem.instance_of?(Module)
-      required = ['rubygems'] + required
-    end
-
-    if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
-      # Stop Rubinius from operating as irb.
-      args = ' -'
-    else
-      args = ''
-    end
-
-    IO.popen("\"#{ruby}\"#{args}", 'r+') do |process|
-      load_path.each do |p|
-        process.puts("$:.unshift('#{p.gsub("'", "\\\\'")}')")
-      end
-
-      required.each do |r|
-        process.puts("require '#{r.gsub("'", "\\\\'")}'")
-      end
-
-      process.puts(code)
-      process.flush
-      process.close_write
-
-      actual_lines = process.readlines
-      actual_lines = actual_lines.collect {|l| l.chomp}
-      assert_equal(expected_lines, actual_lines)
-    end
-  end
-
-  def assert_nothing_raised(msg = nil)
-    begin
-      yield
-    rescue => e
-      full_message = message(msg) { exception_details(e, 'Exception raised: ') }
-      assert(false, full_message)
-    end
-  end
-
-  def assert_nil_or_equal(expected, actual, msg = nil)
-    if expected.nil?
-      assert_nil(actual, msg)
-    else
-      assert_equal(expected, actual, msg)
-    end
-  end
-
-  def assert_equal_with_offset(expected, actual)
-    assert_kind_of(expected.class, actual)
-    assert_equal(expected, actual)
-
-    # Time, DateTime and Timestamp don't require identical offsets for equality.
-    # Test the offsets explicitly.
-    if expected.respond_to?(:utc_offset)
-      assert_nil_or_equal(expected.utc_offset, actual.utc_offset, 'utc_offset')
-    elsif expected.respond_to?(:offset)
-      assert_nil_or_equal(expected.offset, actual.offset, 'offset')
-    end
-
-    # Time (on MRI and Rubinius, but not JRuby) and Timestamp distinguish between
-    # UTC and a local time with 0 offset from UTC.
-    if expected.respond_to?(:utc?)
-      assert_nil_or_equal(expected.utc?, actual.utc?, 'utc?')
-    end
-  end
-
-  def assert_equal_with_offset_and_period(expected, actual)
-    assert_equal_with_offset(expected, actual)
-    assert_equal(expected.period, actual.period)
-  end
-
-  def assert_equal_with_offset_and_class(expected, actual)
-    assert_equal_with_offset(expected, actual)
-    assert_equal(expected.class, actual.class)
-  end
-
-  def time_types_test(*required_features)
-    [TestUtils::TimeTypesTimeHelper, TestUtils::TimeTypesDateTimeHelper, TestUtils::TimeTypesTimestampHelper].each do |helper_class|
-      if required_features.all? {|f| helper_class.supports?(f) }
-        yield helper_class.new
-      end
-    end
-  end
+class Minitest::Test
+  include TestUtils::Helpers
+  include TestUtils::Assertions
 end
