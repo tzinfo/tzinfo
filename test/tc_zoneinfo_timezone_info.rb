@@ -414,8 +414,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:gmtoff =>    0, :isdst => false, :abbrev => 'XNST'}]
 
     transitions = [
-      {:at =>             -694224000, :offset_index => 1}, # Time.utc(1948,  1,  2)
-      {:at =>              -21945600, :offset_index => 2}, # Time.utc(1969,  4, 22)
+      {:at => Time.utc(1948,  1,  2), :offset_index => 1},
+      {:at => Time.utc(1969,  4, 22), :offset_index => 2},
       {:at => Time.utc(1970, 10, 21), :offset_index => 1},
       {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
 
@@ -424,8 +424,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     o2 = TimezoneOffset.new(3600, 3600, :XDT)
     o3 = TimezoneOffset.new(   0,    0, :XNST)
 
-    t0 = TimezoneTransition.new(o1, o0,                  -694224000)
-    t1 = TimezoneTransition.new(o2, o1,                   -21945600)
+    t0 = TimezoneTransition.new(o1, o0, Time.utc(1948,  1,  2).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(1969,  4, 22).to_i)
     t2 = TimezoneTransition.new(o1, o2, Time.utc(1970, 10, 21).to_i)
     t3 = TimezoneTransition.new(o3, o1, Time.utc(2000, 12, 31).to_i)
 
@@ -445,8 +445,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:gmtoff =>    0, :isdst => false, :abbrev => 'XNST'}]
 
     transitions = [
-      {:at =>             -694224000, :offset_index => 1}, # Time.utc(1948,  1,  2)
-      {:at =>              -21945600, :offset_index => 2}, # Time.utc(1969,  4, 22)
+      {:at => Time.utc(1948,  1,  2), :offset_index => 1},
+      {:at => Time.utc(1969,  4, 22), :offset_index => 2},
       {:at => Time.utc(1970,  1,  1), :offset_index => 1},
       {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
 
@@ -455,8 +455,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     o2 = TimezoneOffset.new(3600, 3600, :XDT)
     o3 = TimezoneOffset.new(   0,    0, :XNST)
 
-    t0 = TimezoneTransition.new(o1, o0,                  -694224000)
-    t1 = TimezoneTransition.new(o2, o1,                   -21945600)
+    t0 = TimezoneTransition.new(o1, o0, Time.utc(1948,  1,  2).to_i)
+    t1 = TimezoneTransition.new(o2, o1, Time.utc(1969,  4, 22).to_i)
     t2 = TimezoneTransition.new(o1, o2, Time.utc(1970,  1,  1).to_i)
     t3 = TimezoneTransition.new(o3, o1, Time.utc(2000, 12, 31).to_i)
 
@@ -479,21 +479,21 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:gmtoff =>    0, :isdst => false, :abbrev => 'XNST'}]
 
     transitions = [
-      {:at =>            -3786739200, :offset_index => 1}, # Time.utc(1850,  1,  2)
+      {:at => Time.utc(1850,  1,  2), :offset_index => 1},
       {:at => Time.utc(2003,  4, 22), :offset_index => 2},
       {:at => Time.utc(2003, 10, 21), :offset_index => 1},
-      {:at =>             2240524800, :offset_index => 3}] # Time.utc(2040, 12, 31)
+      {:at => Time.utc(2040, 12, 31), :offset_index => 3}]
 
     o0 = TimezoneOffset.new(3542,    0, :LMT)
     o1 = TimezoneOffset.new(3600,    0, :XST)
     o2 = TimezoneOffset.new(3600, 3600, :XDT)
     o3 = TimezoneOffset.new(   0,    0, :XNST)
 
-    t0    = TimezoneTransition.new(o1, o0,                 -3786739200)
+    t0    = TimezoneTransition.new(o1, o0, Time.utc(1850,  1,  2).to_i)
     t1_f1 = TimezoneTransition.new(o2, o0, Time.utc(2003,  4, 22).to_i)
     t1_f2 = TimezoneTransition.new(o2, o1, Time.utc(2003,  4, 22).to_i)
     t2    = TimezoneTransition.new(o1, o2, Time.utc(2003, 10, 21).to_i)
-    t3    = TimezoneTransition.new(o3, o1,                  2240524800)
+    t3    = TimezoneTransition.new(o3, o1, Time.utc(2040, 12, 31).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
       info = ZoneinfoTimezoneInfo.new('Zone/SixtyFour', path)
