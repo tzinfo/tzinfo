@@ -6,57 +6,27 @@ module TZInfo
     # The zone identifier.
     attr_reader :identifier
 
+    # The latitude of this timezone in degrees as a Rational.
+    attr_reader :latitude
+
+    # The longitude of this timezone in degrees as a Rational.
+    attr_reader :longitude
+
     # A description of this timezone in relation to the country, e.g.
     # "Eastern Time". This is usually nil for countries having only a single
     # Timezone.
     attr_reader :description
 
-    class << self
-      # Creates a new CountryTimezone with a timezone identifier, latitude,
-      # longitude and description. The latitude and longitude are specified as
-      # rationals - a numerator and denominator.
-      #
-      # For use internally within TZInfo.
-      #
-      # @!visibility private
-      alias :new! :new
-
-      # Creates a new CountryTimezone with a timezone identifier, latitude,
-      # longitude and description. The latitude and longitude must be specified
-      # as instances of Rational.
-      #
-      # CountryTimezone instances should normally only be constructed when
-      # creating new DataSource implementations.
-      def new(identifier, latitude, longitude, description = nil)
-        super(identifier, latitude, nil, longitude, nil, description)
-      end
-    end
-
     # Creates a new CountryTimezone with a timezone identifier, latitude,
-    # longitude and description. The latitude and longitude are specified as
-    # rationals - a numerator and denominator.
+    # longitude and description. The latitude and longitude must be specified
+    # as instances of Rational.
     #
-    # @!visibility private
-    def initialize(identifier, latitude_numerator, latitude_denominator,
-                   longitude_numerator, longitude_denominator, description = nil) #:nodoc:
+    # CountryTimezone instances should normally only be constructed when
+    # by implementations of DataSource.
+    def initialize(identifier, latitude, longitude, description = nil)
       @identifier = identifier
-
-      if latitude_numerator.kind_of?(Rational)
-        @latitude = latitude_numerator
-      else
-        @latitude = nil
-        @latitude_numerator = latitude_numerator
-        @latitude_denominator = latitude_denominator
-      end
-
-      if longitude_numerator.kind_of?(Rational)
-        @longitude = longitude_numerator
-      else
-        @longitude = nil
-        @longitude_numerator = longitude_numerator
-        @longitude_denominator = longitude_denominator
-      end
-
+      @latitude = latitude
+      @longitude = longitude
       @description = description
     end
 
@@ -69,24 +39,6 @@ module TZInfo
     # returns timezone.friendly_identifier(true).
     def description_or_friendly_identifier
       description || timezone.friendly_identifier(true)
-    end
-
-    # The latitude of this timezone in degrees as a Rational.
-    def latitude
-      # Thread-safety: It is possible that the value of @latitude may be
-      # calculated multiple times in concurrently executing threads. It is not
-      # worth the overhead of locking to ensure that @latitude is only
-      # calculated once.
-      @latitude ||= Rational(@latitude_numerator, @latitude_denominator)
-    end
-
-    # The longitude of this timezone in degrees as a Rational.
-    def longitude
-      # Thread-safety: It is possible that the value of @longitude may be
-      # calculated multiple times in concurrently executing threads. It is not
-      # worth the overhead of locking to ensure that @longitude is only
-      # calculated once.
-      @longitude ||= Rational(@longitude_numerator, @longitude_denominator)
     end
 
     # Returns true if and only if the given CountryTimezone is equal to the
@@ -107,10 +59,7 @@ module TZInfo
 
     # Returns a hash of this CountryTimezone.
     def hash
-      @identifier.hash ^
-        (@latitude ? @latitude.numerator.hash ^ @latitude.denominator.hash : @latitude_numerator.hash ^ @latitude_denominator.hash) ^
-        (@longitude ? @longitude.numerator.hash ^ @longitude.denominator.hash : @longitude_numerator.hash ^ @longitude_denominator.hash) ^
-        @description.hash
+      [@identifier, @latitude, @longitude, @description].hash
     end
 
     # Returns internal object state as a programmer-readable string.
