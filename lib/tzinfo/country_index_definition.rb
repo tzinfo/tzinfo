@@ -14,17 +14,26 @@ module TZInfo
     #
     # @private
     module ClassMethods #:nodoc:
-      # Defines a country with an ISO 3166 country code, name and block. The
-      # block will be evaluated to obtain all the timezones for the country.
-      # Calls Country.country_defined with the definition of each country.
-      def country(code, name, &block)
-        @countries[code] = RubyCountryInfo.new(code, name, &block)
-      end
-
       # Returns a frozen hash of all the countries that have been defined in
       # the index.
       def countries
         @countries.freeze
+      end
+
+      private
+
+      # Defines a country with an ISO 3166 country code, name and block. The
+      # block will be evaluated to obtain all the timezones for the country.
+      def country(code, name)
+        zones = if block_given?
+          definer = CountryDefinerFormat1.new
+          yield definer
+          definer.timezones
+        else
+          []
+        end
+
+        @countries[code] = CountryInfo.new(code, name, zones)
       end
     end
   end

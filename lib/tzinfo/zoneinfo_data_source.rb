@@ -468,7 +468,7 @@ module TZInfo
             name = $2
             zones = (primary_zones[code] || []) + (secondary_zones[code] || [])
 
-            countries[code] = ZoneinfoCountryInfo.new(code, name, zones)
+            countries[code] = CountryInfo.new(code, name, zones)
           end
         end
       end

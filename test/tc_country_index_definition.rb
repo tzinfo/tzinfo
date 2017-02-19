@@ -4,66 +4,84 @@ include TZInfo
 
 class TCCountryIndexDefinition < Minitest::Test
 
-  module CountriesTest1
-    include CountryIndexDefinition
+  def test_none
+    m = Module.new
+    m.send(:include, CountryIndexDefinition)
 
-    country 'ZZ', 'Country One' do |c|
-      c.timezone 'Test/Zone/1', 3, 2, 41,20
+    countries = m.countries
+    assert_equal({}, countries)
+    assert(countries.frozen?)
+  end
+
+  def test_multiple
+    m = Module.new
+    m.send(:include, CountryIndexDefinition)
+
+    m.send(:country, 'ZZ', 'Country One') do |c|
+      c.timezone 'Test/Zone/1', 3, 2, 41, 20
     end
 
-    country 'AA', 'Aland' do |c|
-      c.timezone 'Test/Zone/3', 71,30, 358, 15
+    m.send(:country, 'AA', 'Aland') do |c|
+      c.timezone 'Test/Zone/3', 71, 30, 358, 15, 'Zone 3'
       c.timezone 'Test/Zone/2', 41, 20, 211, 30
     end
 
-    country 'TE', 'Three'
-  end
+    m.send(:country, 'TE', 'Three')
 
-  module CountriesTest2
-    include CountryIndexDefinition
-
-    country 'CO', 'First Country' do |c|
+    m.send(:country, 'FR', 'Four') do |c|
     end
+
+    countries = m.countries
+    assert_equal(%w(ZZ AA TE FR), countries.keys)
+    assert(countries.frozen?)
+
+    country = countries['ZZ']
+    assert_kind_of(CountryInfo, country)
+    assert_equal('ZZ', country.code)
+    assert_equal('Country One', country.name)
+    assert_equal([CountryTimezone.new('Test/Zone/1', Rational(3, 2), Rational(41, 20))], country.zones)
+
+    country = countries['AA']
+    assert_kind_of(CountryInfo, country)
+    assert_equal('AA', country.code)
+    assert_equal('Aland', country.name)
+    assert_equal([
+      CountryTimezone.new('Test/Zone/3', Rational(71, 30), Rational(358, 15), 'Zone 3'),
+      CountryTimezone.new('Test/Zone/2', Rational(41, 20), Rational(211, 30))], country.zones)
+
+    country = countries['TE']
+    assert_kind_of(CountryInfo, country)
+    assert_equal('TE', country.code)
+    assert_equal('Three', country.name)
+    assert_equal([], country.zones)
+
+    country = countries['FR']
+    assert_kind_of(CountryInfo, country)
+    assert_equal('FR', country.code)
+    assert_equal('Four', country.name)
+    assert_equal([], country.zones)
   end
 
-  def test_module_1
-    hash = CountriesTest1.countries
-    assert_equal(3, hash.length)
-    assert_equal(true, hash.frozen?)
+  def test_redefined
+    m = Module.new
+    m.send(:include, CountryIndexDefinition)
 
-    zz = hash['ZZ']
-    aa = hash['AA']
-    te = hash['TE']
+    m.send(:country, 'TT', 'Test1') do |c|
+      c.timezone 'Test/Zone/1', 1, 2, 3, 4, 'Zone 1'
+    end
 
-    assert_kind_of(RubyCountryInfo, zz)
-    assert_equal('ZZ', zz.code)
-    assert_equal('Country One', zz.name)
-    assert_equal(1, zz.zones.length)
-    assert_equal('Test/Zone/1', zz.zones[0].identifier)
+    m.send(:country, 'TT', 'Test2') do |c|
+      c.timezone 'Test/Zone/2', 5, 6, 7, 8, 'Zone 2'
+    end
 
-    assert_kind_of(RubyCountryInfo, aa)
-    assert_equal('AA', aa.code)
-    assert_equal('Aland', aa.name)
-    assert_equal(2, aa.zones.length)
-    assert_equal('Test/Zone/3', aa.zones[0].identifier)
-    assert_equal('Test/Zone/2', aa.zones[1].identifier)
+    countries = m.countries
+    assert_equal(%w(TT), countries.keys)
+    assert(countries.frozen?)
 
-    assert_kind_of(RubyCountryInfo, te)
-    assert_equal('TE', te.code)
-    assert_equal('Three', te.name)
-    assert_equal(0, te.zones.length)
-  end
-
-  def test_module_2
-    hash = CountriesTest2.countries
-    assert_equal(1, hash.length)
-    assert_equal(true, hash.frozen?)
-
-    co = hash['CO']
-
-    assert_kind_of(RubyCountryInfo, co)
-    assert_equal('CO', co.code)
-    assert_equal('First Country', co.name)
-    assert_equal(0, co.zones.length)
+    country = countries['TT']
+    assert_kind_of(CountryInfo, country)
+    assert_equal('TT', country.code)
+    assert_equal('Test2', country.name)
+    assert_equal([CountryTimezone.new('Test/Zone/2', Rational(5, 6), Rational(7, 8), 'Zone 2')], country.zones)
   end
 end

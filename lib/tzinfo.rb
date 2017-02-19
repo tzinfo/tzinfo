@@ -38,10 +38,9 @@ require 'tzinfo/data_timezone'
 require 'tzinfo/linked_timezone'
 require 'tzinfo/timezone_proxy'
 
+require 'tzinfo/country_definer_format_1'
 require 'tzinfo/country_index_definition'
 require 'tzinfo/country_info'
-require 'tzinfo/ruby_country_info'
-require 'tzinfo/zoneinfo_country_info'
 
 require 'tzinfo/country'
 require 'tzinfo/country_timezone'
