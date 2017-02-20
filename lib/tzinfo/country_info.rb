@@ -25,11 +25,5 @@ module TZInfo
     def inspect
       "#<#{self.class}: #@code>"
     end
-
-    # Returns a frozen array of all the zone identifiers for the country.
-    # The identifiers are ordered by importance according to the DataSource.
-    def zone_identifiers
-      @zones.map {|zone| zone.identifier }.freeze
-    end
   end
 end
