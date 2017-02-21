@@ -1,3 +1,5 @@
+require 'set'
+
 module TZInfo
   # An InvalidZoneinfoDirectory exception is raised if the DataSource is
   # set to a specific zoneinfo path, which is not a valid zoneinfo directory
@@ -216,7 +218,7 @@ module TZInfo
 
     # Returns an array of all the available timezone identifiers.
     def timezone_identifiers
-      @timezone_index
+      @timezone_index.to_a.freeze
     end
 
     # Returns an array of all the available timezone identifiers for
@@ -225,7 +227,7 @@ module TZInfo
     # For ZoneinfoDataSource, this will always be identical to
     # timezone_identifers.
     def data_timezone_identifiers
-      @timezone_index
+      @timezone_index.to_a.freeze
     end
 
     # Returns an array of all the available timezone identifiers that
@@ -352,10 +354,11 @@ module TZInfo
       # timeconfig is a symlink included on Slackware.
 
       enum_timezones(nil, ['+VERSION', 'localtime', 'posix', 'posixrules', 'right', 'src', 'timeconfig']) do |identifier|
-        index << identifier
+        index << identifier.freeze
       end
 
-      index.sort
+      index.sort!
+      Set.new(index)
     end
 
     # Recursively scans a directory of timezones, calling the passed in block
