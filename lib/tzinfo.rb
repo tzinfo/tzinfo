@@ -2,6 +2,17 @@
 module TZInfo
 end
 
+
+class TZInfo::ConcurrentMap
+  def initialize
+    @mutex = Mutex.new
+    @h = {}
+  end
+  def [](k); @h[k]; end
+  def []=(k, v); @mutex.synchronize { @h[k] = v } ; end
+end
+
+
 require 'tzinfo/version'
 
 require 'tzinfo/offset_rationals'
@@ -44,3 +55,5 @@ require 'tzinfo/country_info'
 
 require 'tzinfo/country'
 require 'tzinfo/country_timezone'
+
+

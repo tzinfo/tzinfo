@@ -1,6 +1,6 @@
 require 'date'
 require 'set'
-require 'concurrent/map'
+#require 'concurrent/map'
 
 module TZInfo
   # AmbiguousTime is raised to indicates that a specified time in a local
@@ -673,7 +673,7 @@ module TZInfo
     private
       # Initializes @@loaded_zones.
       def self.init_loaded_zones
-        @@loaded_zones = Concurrent::Map.new
+        @@loaded_zones = TZInfo::ConcurrentMap.new
       end
       init_loaded_zones
 
