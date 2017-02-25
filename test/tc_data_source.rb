@@ -215,4 +215,38 @@ class TCDataSource < Minitest::Test
 
     assert_kind_of(InitDataSource, DataSource.get)
   end
+
+  def abstract_test(method, *args)
+    ds = DataSource.new
+    error = assert_raises(InvalidDataSource) { ds.send(*([method] + args)) }
+    assert_equal("#{method} not defined", error.message)
+  end
+
+  def test_load_timezone_info
+    abstract_test(:load_timezone_info, 'Test/Identifier')
+  end
+
+  def test_timezone_identifiers
+    abstract_test(:timezone_identifiers)
+  end
+
+  def test_data_timezone_identifiers
+    abstract_test(:data_timezone_identifiers)
+  end
+
+  def test_linked_timezone_identifiers
+    abstract_test(:linked_timezone_identifiers)
+  end
+
+  def test_load_country_info
+    abstract_test(:load_country_info, 'CC')
+  end
+
+  def test_country_codes
+    abstract_test(:country_codes)
+  end
+
+  def test_to_s
+    assert_equal('Default DataSource', DataSource.new.to_s)
+  end
 end
