@@ -29,11 +29,6 @@ module TZInfo
     # @!visibility private
     @@countries = nil
 
-    # Whether the countries index has been loaded yet.
-    #
-    # @!visibility private
-    @@index_loaded = false
-
     # Gets a Country by its ISO 3166-1 alpha-2 code. Raises an
     # InvalidCountryCode exception if it couldn't be found.
     def self.get(identifier)
