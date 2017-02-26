@@ -9,24 +9,53 @@ module TZInfo
     # Base path for require.
     REQUIRE_PATH = File.join('tzinfo', 'data', 'definitions')
 
+    # Returns an array of all the available ISO 3166-1 alpha-2 country codes.
+    attr_reader :country_codes
+
     # Creates a new RubyDataSource instance.
     def initialize
-      @timezone_index_loaded = false
-      @country_index_loaded = false
+      super
+      require_index('timezones')
+      require_index('countries')
+      @country_codes = Data::Indexes::Countries.countries.keys.sort!.freeze
     end
+
+    # Returns an array of all the available timezone identifiers.
+    def timezone_identifiers
+      Data::Indexes::Timezones.timezones
+    end
+
+    # Returns an array of all the available timezone identifiers for
+    # data timezones (i.e. those that actually contain definitions).
+    def data_timezone_identifiers
+      Data::Indexes::Timezones.data_timezones
+    end
+
+    # Returns an array of all the available timezone identifiers that
+    # are links to other timezones.
+    def linked_timezone_identifiers
+      Data::Indexes::Timezones.linked_timezones
+    end
+
+    # Returns the name of this DataSource.
+    def to_s
+      "Ruby DataSource"
+    end
+
+    protected
 
     # Returns a TimezoneInfo instance for a given identifier.
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the
     # identifier is invalid.
     def load_timezone_info(identifier)
-      original_identifier = identifier
-      raise InvalidTimezoneIdentifier, "Invalid identifier: #{original_identifier}" if identifier !~ /^[A-Za-z0-9\+\-_]+(\/[A-Za-z0-9\+\-_]+)*$/
+      raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}" unless valid_timezone_identifier?(identifier)
 
+      original_identifier = identifier
       identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
 
-      # Untaint identifier after it has been reassigned to a new string. We
-      # don't want to modify the original identifier. identifier may also be
-      # frozen and therefore cannot be untainted.
+      # Untaint identifier after it has been copied to a new string. We don't
+      # want to modify the original identifier. identifier may also be frozen
+      # and therefore cannot be untainted.
       identifier.untaint
 
       identifier = identifier.split('/')
@@ -44,46 +73,13 @@ module TZInfo
       end
     end
 
-    # Returns an array of all the available timezone identifiers.
-    def timezone_identifiers
-      load_timezone_index
-      Data::Indexes::Timezones.timezones
-    end
-
-    # Returns an array of all the available timezone identifiers for
-    # data timezones (i.e. those that actually contain definitions).
-    def data_timezone_identifiers
-      load_timezone_index
-      Data::Indexes::Timezones.data_timezones
-    end
-
-    # Returns an array of all the available timezone identifiers that
-    # are links to other timezones.
-    def linked_timezone_identifiers
-      load_timezone_index
-      Data::Indexes::Timezones.linked_timezones
-    end
-
     # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2
     # country code. Raises InvalidCountryCode if the country could not be found
     # or the code is invalid.
     def load_country_info(code)
-      load_country_index
       info = Data::Indexes::Countries.countries[code]
       raise InvalidCountryCode, "Invalid country code: #{code}" unless info
       info
-    end
-
-    # Returns an array of all the available ISO 3166-1 alpha-2
-    # country codes.
-    def country_codes
-      load_country_index
-      Data::Indexes::Countries.countries.keys.freeze
-    end
-
-    # Returns the name of this DataSource.
-    def to_s
-      "Ruby DataSource"
     end
 
     private
@@ -101,22 +97,6 @@ module TZInfo
     # Requires a file from tzinfo/data.
     def require_data(*file)
       require File.join('tzinfo', 'data', *file)
-    end
-
-    # Loads in the index of timezones if it hasn't already been loaded.
-    def load_timezone_index
-      unless @timezone_index_loaded
-        require_index('timezones')
-        @timezone_index_loaded = true
-      end
-    end
-
-    # Loads in the index of countries if it hasn't already been loaded.
-    def load_country_index
-      unless @country_index_loaded
-        require_index('countries')
-        @country_index_loaded = true
-      end
     end
   end
 end

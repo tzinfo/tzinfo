@@ -32,22 +32,30 @@ module TZInfo
       end
 
       # Returns a frozen array containing the identifiers of all the timezones.
-      # Identifiers appear in the order they were defined in the index.
+      # Identifiers are sorted according to String#<=>.
       def timezones
-        @timezones.freeze
+        unless @timezones.frozen?
+          @timezones = @timezones.sort.freeze
+        end
+        @timezones
       end
 
       # Returns a frozen array containing the identifiers of all data timezones.
-      # Identifiers appear in the order they were defined in the index.
+      # Identifiers are sorted according to String#<=>.
       def data_timezones
-        @data_timezones.freeze
+        unless @data_timezones.frozen?
+          @data_timezones = @data_timezones.sort.freeze
+        end
+        @data_timezones
       end
 
       # Returns a frozen array containing the identifiers of all linked
-      # timezones. Identifiers appear in the order they were defined in
-      # the index.
+      # timezones. Identifiers are sorted according to String#<=>.
       def linked_timezones
-        @linked_timezones.freeze
+        unless @linked_timezones.frozen?
+          @linked_timezones = @linked_timezones.sort.freeze
+        end
+        @linked_timezones
       end
     end
   end

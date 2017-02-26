@@ -47,7 +47,7 @@ module TZInfo
         # be discarded. The performance benefit of ensuring that only a single
         # instance is created is unlikely to be worth the overhead of only
         # allowing one Country to be loaded at a time.
-        info = data_source.load_country_info(identifier)
+        info = data_source.get_country_info(identifier)
         instance = Country.new(info)
         @@countries[identifier] = instance
       end

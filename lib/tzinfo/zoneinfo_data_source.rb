@@ -1,5 +1,3 @@
-require 'set'
-
 module TZInfo
   # An InvalidZoneinfoDirectory exception is raised if the DataSource is
   # set to a specific zoneinfo path, which is not a valid zoneinfo directory
@@ -138,6 +136,12 @@ module TZInfo
     # The zoneinfo directory being used.
     attr_reader :zoneinfo_dir
 
+    # Returns an array of all the available timezone identifiers.
+    attr_reader :timezone_identifiers
+
+    # Returns an array of all the available ISO 3166-1 alpha-2 country codes.
+    attr_reader :country_codes
+
     # Creates a new ZoneinfoDataSource.
     #
     # If zoneinfo_dir is specified, it will be checked and used as the source
@@ -167,6 +171,8 @@ module TZInfo
     # If no valid directory can be found by searching, ZoneinfoDirectoryNotFound
     # will be raised.
     def initialize(zoneinfo_dir = nil, alternate_iso3166_tab_path = nil)
+      super()
+
       if zoneinfo_dir
         iso3166_tab_path, zone_tab_path = validate_zoneinfo_dir(zoneinfo_dir, alternate_iso3166_tab_path)
 
@@ -184,16 +190,46 @@ module TZInfo
       end
 
       @zoneinfo_dir = File.expand_path(@zoneinfo_dir).freeze
-      @timezone_index = load_timezone_index.freeze
-      @country_index = load_country_index(iso3166_tab_path, zone_tab_path).freeze
+      @timezone_identifiers = load_timezone_identifiers.freeze
+      @countries = load_countries(iso3166_tab_path, zone_tab_path).freeze
+      @country_codes = @countries.keys.sort!.freeze
     end
+
+    # Returns an array of all the available timezone identifiers for
+    # data timezones (i.e. those that actually contain definitions).
+    #
+    # For ZoneinfoDataSource, this will always be identical to
+    # timezone_identifers.
+    def data_timezone_identifiers
+      @timezone_identifiers
+    end
+
+    # Returns an array of all the available timezone identifiers that
+    # are links to other timezones.
+    #
+    # For ZoneinfoDataSource, this will always be an empty array.
+    def linked_timezone_identifiers
+      [].freeze
+    end
+
+    # Returns the name and information about this DataSource.
+    def to_s
+      "Zoneinfo DataSource: #{@zoneinfo_dir}"
+    end
+
+    # Returns internal object state as a programmer-readable string.
+    def inspect
+      "#<#{self.class}: #{@zoneinfo_dir}>"
+    end
+
+    protected
 
     # Returns a TimezoneInfo instance for a given identifier.
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the
     # identifier is invalid.
     def load_timezone_info(identifier)
       begin
-        if @timezone_index.include?(identifier)
+        if valid_timezone_identifier?(identifier)
           path = File.join(@zoneinfo_dir, identifier)
 
           # Untaint path rather than identifier. We don't want to modify
@@ -216,51 +252,13 @@ module TZInfo
       end
     end
 
-    # Returns an array of all the available timezone identifiers.
-    def timezone_identifiers
-      @timezone_index.to_a.freeze
-    end
-
-    # Returns an array of all the available timezone identifiers for
-    # data timezones (i.e. those that actually contain definitions).
-    #
-    # For ZoneinfoDataSource, this will always be identical to
-    # timezone_identifers.
-    def data_timezone_identifiers
-      @timezone_index.to_a.freeze
-    end
-
-    # Returns an array of all the available timezone identifiers that
-    # are links to other timezones.
-    #
-    # For ZoneinfoDataSource, this will always be an empty array.
-    def linked_timezone_identifiers
-      [].freeze
-    end
-
     # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2
     # country code. Raises InvalidCountryCode if the country could not be found
     # or the code is invalid.
     def load_country_info(code)
-      info = @country_index[code]
+      info = @countries[code]
       raise InvalidCountryCode, "Invalid country code: #{code}" unless info
       info
-    end
-
-    # Returns an array of all the available ISO 3166-1 alpha-2
-    # country codes.
-    def country_codes
-      @country_index.keys.freeze
-    end
-
-    # Returns the name and information about this DataSource.
-    def to_s
-      "Zoneinfo DataSource: #{@zoneinfo_dir}"
-    end
-
-    # Returns internal object state as a programmer-readable string.
-    def inspect
-      "#<#{self.class}: #{@zoneinfo_dir}>"
     end
 
     private
@@ -343,7 +341,7 @@ module TZInfo
 
     # Scans @zoneinfo_dir and returns an Array of available timezone
     # identifiers.
-    def load_timezone_index
+    def load_timezone_identifiers
       index = []
 
       # Ignoring particular files:
@@ -358,7 +356,6 @@ module TZInfo
       end
 
       index.sort!
-      Set.new(index)
     end
 
     # Recursively scans a directory of timezones, calling the passed in block
@@ -379,9 +376,9 @@ module TZInfo
       end
     end
 
-    # Uses the iso3166.tab and zone1970.tab or zone.tab files to build an index
-    # of the available countries and their timezones.
-    def load_country_index(iso3166_tab_path, zone_tab_path)
+    # Uses the iso3166.tab and zone1970.tab or zone.tab files to return a Hash
+    # mapping country codes to CountryInfo instances.
+    def load_countries(iso3166_tab_path, zone_tab_path)
 
       # Handle standard 3 to 4 column zone.tab files as well as the 4 to 5
       # column format used by Solaris.

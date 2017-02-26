@@ -113,7 +113,7 @@ class TCCountry < Minitest::Test
 
   def test_zone_identifiers
     zone_identifiers = Country.get('US').zone_identifiers
-    assert_equal(DataSource.get.load_country_info('US').zones.map {|z| z.identifier }, zone_identifiers)
+    assert_equal(DataSource.get.get_country_info('US').zones.map {|z| z.identifier }, zone_identifiers)
     assert_equal(true, zone_identifiers.frozen?)
   end
 
@@ -131,7 +131,7 @@ class TCCountry < Minitest::Test
 
   def test_zone_info
     zone_info = Country.get('US').zone_info
-    assert_equal(DataSource.get.load_country_info('US').zones, zone_info)
+    assert_equal(DataSource.get.get_country_info('US').zones, zone_info)
     assert_equal(true, zone_info.frozen?)
   end
 

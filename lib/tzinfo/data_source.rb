@@ -1,3 +1,4 @@
+require 'concurrent/map'
 require 'thread'
 
 module TZInfo
@@ -110,43 +111,73 @@ module TZInfo
       end
     end
 
+    # Creates a new DataSource instance. Typically only called via DataSource
+    # subclasses.
+    def initialize
+      @timezones = Concurrent::Map.new
+    end
+
     # Returns a TimezoneInfo instance for a given identifier. The TimezoneInfo
     # instance should derive from either DataTimzoneInfo for timezones that
     # define their own data or LinkedTimezoneInfo for links or aliases to
     # other timezones.
     #
+    # get_timezone_info calls load_timezone_info to obtain a TimezoneInfo
+    # instance. The returned instance is cached and returned in subsequent
+    # calls to get_timezone_info for the identifier.
+    #
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the
     # identifier is invalid.
-    def load_timezone_info(identifier)
-      raise_invalid_data_source('load_timezone_info')
+    def get_timezone_info(identifier)
+      result = @timezones[identifier]
+
+      unless result
+        # Thread-safety: It is possible that multiple equivalent TimezoneInfo
+        # instances could be created here in concurrently executing threads.
+        # The consequences of this are that the data may be loaded more than
+        # once (depending on the data source) and memoized calculations could
+        # be discarded. The performance benefit of ensuring that only a single
+        # instance is created is unlikely to be worth the overhead of only
+        # allowing one TimezoneInfo to be loaded at a time.
+
+        result = load_timezone_info(identifier)
+        @timezones[identifier] = result
+      end
+
+      result
     end
 
-    # Returns an array of all the available timezone identifiers.
+    # Returns a frozen array of all the available timezone identifiers. The
+    # identifiers are sorted according to String#<=>.
     def timezone_identifiers
       raise_invalid_data_source('timezone_identifiers')
     end
 
-    # Returns an array of all the available timezone identifiers for
-    # data timezones (i.e. those that actually contain definitions).
+    # Returns a frozen array of all the available timezone identifiers for data
+    # timezones (i.e. those that actually contain definitions). The identifiers
+    # are sorted according to String#<=>.
     def data_timezone_identifiers
       raise_invalid_data_source('data_timezone_identifiers')
     end
 
-    # Returns an array of all the available timezone identifiers that
-    # are links to other timezones.
+    # Returns a frozen array of all the available timezone identifiers that are
+    # links to other timezones. The identifiers are sorted according to
+    # String#<=>.
     def linked_timezone_identifiers
       raise_invalid_data_source('linked_timezone_identifiers')
     end
 
-    # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2
-    # country code. Raises InvalidCountryCode if the country could not be found
-    # or the code is invalid.
-    def load_country_info(code)
-      raise_invalid_data_source('load_country_info')
+    # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2 country
+    # code. Raises InvalidCountryCode if the country could not be found or the
+    # code is invalid.
+    #
+    # get_country_info calls load_country_info to obtain a CountryInfo instance.
+    def get_country_info(code)
+      load_country_info(code)
     end
 
-    # Returns an array of all the available ISO 3166-1 alpha-2
-    # country codes.
+    # Returns a frozen array of all the available ISO 3166-1 alpha-2 country
+    # codes. The identifiers are sorted according to String#<=>.
     def country_codes
       raise_invalid_data_source('country_codes')
     end
@@ -159,6 +190,53 @@ module TZInfo
     # Returns internal object state as a programmer-readable string.
     def inspect
       "#<#{self.class}>"
+    end
+
+    protected
+
+    # Returns a TimezoneInfo instance for a given identifier. The TimezoneInfo
+    # instance should derive from either DataTimzoneInfo for timezones that
+    # define their own data or LinkedTimezoneInfo for links or aliases to
+    # other timezones.
+    #
+    # Raises InvalidTimezoneIdentifier if the timezone is not found or the
+    # identifier is invalid.
+    def load_timezone_info(identifier)
+      raise_invalid_data_source('load_timezone_info')
+    end
+
+    # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2
+    # country code. Raises InvalidCountryCode if the country could not be found
+    # or the code is invalid.
+    def load_country_info(code)
+      raise_invalid_data_source('load_country_info')
+    end
+
+    # Returns true if the given identifier is contained within the Array
+    # returned by timezone_identifiers or false if the identifier is not found.
+    # A binary search is performed to locate the identifier within the Array.
+    # The identifiers in the Array must be sorted according to String#<=>.
+    def valid_timezone_identifier?(identifier)
+      return false unless identifier.kind_of?(String)
+
+      identifiers = timezone_identifiers
+      low = 0
+      high = identifiers.length
+
+      while low < high do
+        mid = (low + high).div(2)
+        cmp = identifiers[mid] <=> identifier
+
+        return true if cmp == 0
+
+        if cmp > 0
+          high = mid
+        else
+          low = mid + 1
+        end
+      end
+
+      false
     end
 
     private

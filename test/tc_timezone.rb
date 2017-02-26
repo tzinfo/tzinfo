@@ -188,7 +188,7 @@ class TCTimezone < Minitest::Test
     tz = Timezone.get('UTC')
 
     # ZoneinfoDataSource doesn't return LinkedTimezoneInfo for any timezone.
-    if DataSource.get.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
+    if DataSource.get.get_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
       assert_kind_of(LinkedTimezone, tz)
     else
       assert_kind_of(DataTimezone, tz)
@@ -1418,7 +1418,7 @@ class TCTimezone < Minitest::Test
     tz = Timezone.get('UTC')
 
     # ZoneinfoDataSource doesn't return LinkedTimezoneInfo for any timezone.
-    if DataSource.get.load_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
+    if DataSource.get.get_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
       assert_kind_of(LinkedTimezone, tz)
     else
       assert_kind_of(DataTimezone, tz)

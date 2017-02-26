@@ -36,38 +36,68 @@ class TCTimezoneIndexDefinition < Minitest::Test
   end
 
   def test_timezones
-    assert_equal(['Test/One', 'Test/Two', 'Test/Three', 'Another/Zone', 'And/Yet/Another'], TimezonesTest1.timezones)
-    assert_equal(['Test/A/One', 'Test/A/Two', 'Test/A/Three'], TimezonesTest2.timezones)
-    assert_equal(['Test/B/One', 'Test/B/Two', 'Test/B/Three'], TimezonesTest3.timezones)
-    assert_equal([], TimezonesTest4.timezones)
+    timezones1 = TimezonesTest1.timezones
+    timezones2 = TimezonesTest2.timezones
+    timezones3 = TimezonesTest3.timezones
+    timezones4 = TimezonesTest4.timezones
 
-    assert_equal(true, TimezonesTest1.timezones.frozen?)
-    assert_equal(true, TimezonesTest2.timezones.frozen?)
-    assert_equal(true, TimezonesTest3.timezones.frozen?)
-    assert_equal(true, TimezonesTest4.timezones.frozen?)
+    assert_equal(['And/Yet/Another', 'Another/Zone', 'Test/One', 'Test/Three', 'Test/Two'], timezones1)
+    assert_equal(['Test/A/One', 'Test/A/Three', 'Test/A/Two'], timezones2)
+    assert_equal(['Test/B/One', 'Test/B/Three', 'Test/B/Two'], timezones3)
+    assert_equal([], timezones4)
+
+    assert_equal(true, timezones1.frozen?)
+    assert_equal(true, timezones2.frozen?)
+    assert_equal(true, timezones3.frozen?)
+    assert_equal(true, timezones4.frozen?)
+
+    assert_same(timezones1, TimezonesTest1.timezones)
+    assert_same(timezones2, TimezonesTest2.timezones)
+    assert_same(timezones3, TimezonesTest3.timezones)
+    assert_same(timezones4, TimezonesTest4.timezones)
   end
 
   def test_data_timezones
-    assert_equal(['Test/One', 'Test/Two', 'Another/Zone'], TimezonesTest1.data_timezones)
-    assert_equal(['Test/A/One', 'Test/A/Two', 'Test/A/Three'], TimezonesTest2.data_timezones)
-    assert_equal([], TimezonesTest3.data_timezones)
-    assert_equal([], TimezonesTest4.data_timezones)
+    data_timezones1 = TimezonesTest1.data_timezones
+    data_timezones2 = TimezonesTest2.data_timezones
+    data_timezones3 = TimezonesTest3.data_timezones
+    data_timezones4 = TimezonesTest4.data_timezones
 
-    assert_equal(true, TimezonesTest1.data_timezones.frozen?)
-    assert_equal(true, TimezonesTest2.data_timezones.frozen?)
-    assert_equal(true, TimezonesTest3.data_timezones.frozen?)
-    assert_equal(true, TimezonesTest4.data_timezones.frozen?)
+    assert_equal(['Another/Zone', 'Test/One', 'Test/Two'], data_timezones1)
+    assert_equal(['Test/A/One', 'Test/A/Three', 'Test/A/Two'], data_timezones2)
+    assert_equal([], data_timezones3)
+    assert_equal([], data_timezones4)
+
+    assert_equal(true, data_timezones1.frozen?)
+    assert_equal(true, data_timezones2.frozen?)
+    assert_equal(true, data_timezones3.frozen?)
+    assert_equal(true, data_timezones4.frozen?)
+
+    assert_same(data_timezones1, TimezonesTest1.data_timezones)
+    assert_same(data_timezones2, TimezonesTest2.data_timezones)
+    assert_same(data_timezones3, TimezonesTest3.data_timezones)
+    assert_same(data_timezones4, TimezonesTest4.data_timezones)
   end
 
   def test_linked_timezones
-    assert_equal(['Test/Three', 'And/Yet/Another'], TimezonesTest1.linked_timezones)
-    assert_equal([], TimezonesTest2.linked_timezones)
-    assert_equal(['Test/B/One', 'Test/B/Two', 'Test/B/Three'], TimezonesTest3.linked_timezones)
-    assert_equal([], TimezonesTest4.linked_timezones)
+    linked_timezones1 = TimezonesTest1.linked_timezones
+    linked_timezones2 = TimezonesTest2.linked_timezones
+    linked_timezones3 = TimezonesTest3.linked_timezones
+    linked_timezones4 = TimezonesTest4.linked_timezones
 
-    assert_equal(true, TimezonesTest1.linked_timezones.frozen?)
-    assert_equal(true, TimezonesTest2.linked_timezones.frozen?)
-    assert_equal(true, TimezonesTest3.linked_timezones.frozen?)
-    assert_equal(true, TimezonesTest4.linked_timezones.frozen?)
+    assert_equal(['And/Yet/Another', 'Test/Three'], linked_timezones1)
+    assert_equal([], linked_timezones2)
+    assert_equal(['Test/B/One', 'Test/B/Three', 'Test/B/Two'], linked_timezones3)
+    assert_equal([], linked_timezones4)
+
+    assert_equal(true, linked_timezones1.frozen?)
+    assert_equal(true, linked_timezones2.frozen?)
+    assert_equal(true, linked_timezones3.frozen?)
+    assert_equal(true, linked_timezones4.frozen?)
+
+    assert_same(linked_timezones1, TimezonesTest1.linked_timezones)
+    assert_same(linked_timezones2, TimezonesTest2.linked_timezones)
+    assert_same(linked_timezones3, TimezonesTest3.linked_timezones)
+    assert_same(linked_timezones4, TimezonesTest4.linked_timezones)
   end
 end

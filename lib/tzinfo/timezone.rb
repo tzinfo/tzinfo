@@ -89,7 +89,7 @@ module TZInfo
         # be discarded. The performance benefit of ensuring that only a single
         # instance is created is unlikely to be worth the overhead of only
         # allowing one Timezone to be loaded at a time.
-        info = data_source.load_timezone_info(identifier)
+        info = data_source.get_timezone_info(identifier)
         instance = info.create_timezone
         @@loaded_zones[instance.identifier] = instance
       end

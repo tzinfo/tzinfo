@@ -10,6 +10,48 @@ class TCDataSource < Minitest::Test
   class DummyDataSource < DataSource
   end
 
+  class TestDataSource < DataSource
+    attr_reader :called
+
+    def initialize
+      super
+      @called = 0
+    end
+  end
+
+  class GetTimezoneInfoTestDataSource < TestDataSource
+    protected
+
+    def load_timezone_info(identifier)
+      @called += 1
+      raise InvalidTimezoneIdentifier, identifier if identifier == 'Test/Invalid'
+      TimezoneInfo.new(identifier)
+    end
+  end
+
+  class GetCountryInfoTestDataSource < TestDataSource
+    protected
+
+    def load_country_info(code)
+      @called += 1
+      raise InvalidCountryCode, code if code == 'XX'
+      CountryInfo.new(code, "Country #{code}", [])
+    end
+  end
+
+  class ValidTimezoneIdentifierTestDataSource < DataSource
+    attr_reader :timezone_identifiers
+
+    def initialize(timezone_identifiers)
+      super()
+      @timezone_identifiers = timezone_identifiers.freeze
+    end
+
+    def call_valid_timezone_identifier?(identifier)
+      valid_timezone_identifier?(identifier)
+    end
+  end
+
   def setup
     @orig_data_source = DataSource.get
     DataSource.set(InitDataSource.new)
@@ -216,14 +258,32 @@ class TCDataSource < Minitest::Test
     assert_kind_of(InitDataSource, DataSource.get)
   end
 
+  def test_get_timezone_info
+    ds = GetTimezoneInfoTestDataSource.new
+    info = ds.get_timezone_info('Test/Simple')
+    assert_equal('Test/Simple', info.identifier)
+    assert_equal(1, ds.called)
+  end
+
+  def test_get_timezone_info_caches_result
+    ds = GetTimezoneInfoTestDataSource.new
+    info = ds.get_timezone_info('Test/Cache')
+    assert_equal('Test/Cache', info.identifier)
+    assert_same(info, ds.get_timezone_info('Test/Cache'))
+    assert_equal(1, ds.called)
+  end
+
+  def test_get_timezone_info_invalid_identifier
+    ds = GetTimezoneInfoTestDataSource.new
+    error = assert_raises(InvalidTimezoneIdentifier) { ds.get_timezone_info('Test/Invalid') }
+    assert_equal('Test/Invalid', error.message)
+    assert(1, ds.called)
+  end
+
   def abstract_test(method, *args)
     ds = DataSource.new
     error = assert_raises(InvalidDataSource) { ds.send(*([method] + args)) }
     assert_equal("#{method} not defined", error.message)
-  end
-
-  def test_load_timezone_info
-    abstract_test(:load_timezone_info, 'Test/Identifier')
   end
 
   def test_timezone_identifiers
@@ -238,8 +298,18 @@ class TCDataSource < Minitest::Test
     abstract_test(:linked_timezone_identifiers)
   end
 
-  def test_load_country_info
-    abstract_test(:load_country_info, 'CC')
+  def test_get_country_info
+    ds = GetCountryInfoTestDataSource.new
+    info = ds.get_country_info('CC')
+    assert_equal('CC', info.code)
+    assert_equal(1, ds.called)
+  end
+
+  def test_get_country_info_invalid_identifier
+    ds = GetCountryInfoTestDataSource.new
+    error = assert_raises(InvalidCountryCode) { ds.get_country_info('XX') }
+    assert_equal('XX', error.message)
+    assert_equal(1, ds.called)
   end
 
   def test_country_codes
@@ -248,5 +318,33 @@ class TCDataSource < Minitest::Test
 
   def test_to_s
     assert_equal('Default DataSource', DataSource.new.to_s)
+  end
+
+  def test_load_timezone_info
+    abstract_test(:load_timezone_info, 'Test/Identifier')
+  end
+
+  def test_load_country_info
+    abstract_test(:load_country_info, 'CC')
+  end
+
+  def test_valid_timezone_identifier
+    ds = ValidTimezoneIdentifierTestDataSource.new(['America/Argentina/Buenos_Aires', 'America/New_York', 'Australia/Melbourne', 'EST', 'Etc/UTC', 'Europe/Paris', 'Europe/Prague', 'UTC'].sort!)
+    assert_equal(true,  ds.call_valid_timezone_identifier?('America/Argentina/Buenos_Aires'))
+    assert_equal(true,  ds.call_valid_timezone_identifier?('America/New_York'))
+    assert_equal(true,  ds.call_valid_timezone_identifier?('Australia/Melbourne'))
+    assert_equal(true,  ds.call_valid_timezone_identifier?('EST'))
+    assert_equal(true,  ds.call_valid_timezone_identifier?('Etc/UTC'))
+    assert_equal(true,  ds.call_valid_timezone_identifier?('Europe/Paris'))
+    assert_equal(true,  ds.call_valid_timezone_identifier?('Europe/Prague'))
+    assert_equal(true,  ds.call_valid_timezone_identifier?('UTC'))
+    assert_equal(false, ds.call_valid_timezone_identifier?('Aaa/Test'))
+    assert_equal(false, ds.call_valid_timezone_identifier?('Americax/New_York'))
+    assert_equal(false, ds.call_valid_timezone_identifier?('Europe/London'))
+    assert_equal(false, ds.call_valid_timezone_identifier?('Europe/Parisx'))
+    assert_equal(false, ds.call_valid_timezone_identifier?('PST'))
+    assert_equal(false, ds.call_valid_timezone_identifier?('Zzz/Test'))
+    assert_equal(false, ds.call_valid_timezone_identifier?(nil))
+    assert_equal(false, ds.call_valid_timezone_identifier?(Object.new))
   end
 end

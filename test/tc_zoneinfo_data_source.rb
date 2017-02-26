@@ -342,13 +342,13 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_load_timezone_info_data
-    info = @data_source.load_timezone_info('Europe/London')
+    info = @data_source.send(:load_timezone_info, 'Europe/London')
     assert_kind_of(ZoneinfoTimezoneInfo, info)
     assert_equal('Europe/London', info.identifier)
   end
 
   def test_load_timezone_info_linked
-    info = @data_source.load_timezone_info('UTC')
+    info = @data_source.send(:load_timezone_info, 'UTC')
 
     # On platforms that don't support symlinks, 'UTC' will be created as a copy.
     # Either way, a ZoneinfoTimezoneInfo should be returned.
@@ -359,7 +359,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_timezone_info_does_not_exist
     error = assert_raises(InvalidTimezoneIdentifier) do
-      @data_source.load_timezone_info('Nowhere/Special')
+      @data_source.send(:load_timezone_info, 'Nowhere/Special')
     end
 
     assert_match(/\bNowhere\/Special\b/, error.message)
@@ -367,7 +367,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_timezone_info_invalid
     error = assert_raises(InvalidTimezoneIdentifier) do
-      @data_source.load_timezone_info('../Definitions/Europe/London')
+      @data_source.send(:load_timezone_info, '../Definitions/Europe/London')
     end
 
     assert_match(/\W\.\.\/Definitions\/Europe\/London\b/, error.message)
@@ -375,7 +375,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_timezone_info_ignored_file
     error = assert_raises(InvalidTimezoneIdentifier) do
-      @data_source.load_timezone_info('localtime')
+      @data_source.send(:load_timezone_info, 'localtime')
     end
 
     assert_match(/\blocaltime\b/, error.message)
@@ -396,7 +396,7 @@ class TCZoneinfoDataSource < Minitest::Test
       data_source = ZoneinfoDataSource.new(dir)
 
       error = assert_raises(InvalidTimezoneIdentifier) do
-        data_source.load_timezone_info('+VERSION')
+        data_source.send(:load_timezone_info, '+VERSION')
       end
 
       assert_equal('Invalid identifier: +VERSION', error.message)
@@ -430,7 +430,7 @@ class TCZoneinfoDataSource < Minitest::Test
         data_source = ZoneinfoDataSource.new(dir)
 
         error = assert_raises(InvalidTimezoneIdentifier) do
-          data_source.load_timezone_info('timeconfig')
+          data_source.send(:load_timezone_info, 'timeconfig')
         end
 
         assert_equal('Invalid identifier: timeconfig', error.message)
@@ -440,13 +440,13 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_timezone_info_nil
     assert_raises(InvalidTimezoneIdentifier) do
-      @data_source.load_timezone_info(nil)
+      @data_source.send(:load_timezone_info, nil)
     end
   end
 
   def test_load_timezone_info_case
     error = assert_raises(InvalidTimezoneIdentifier) do
-      @data_source.load_timezone_info('europe/london')
+      @data_source.send(:load_timezone_info, 'europe/london')
     end
 
     assert_match(/\beurope\/london/, error.message)
@@ -464,7 +464,7 @@ class TCZoneinfoDataSource < Minitest::Test
       data_source = ZoneinfoDataSource.new(dir)
 
       error = assert_raises(InvalidTimezoneIdentifier) do
-        data_source.load_timezone_info('UTC')
+        data_source.send(:load_timezone_info, 'UTC')
       end
 
       assert_match(/\bUTC\b/, error.message)
@@ -482,7 +482,7 @@ class TCZoneinfoDataSource < Minitest::Test
       data_source = ZoneinfoDataSource.new(dir)
 
       error = assert_raises(InvalidTimezoneIdentifier) do
-        data_source.load_timezone_info('Subdir')
+        data_source.send(:load_timezone_info, 'Subdir')
       end
 
       assert_match(/\bSubdir\b/, error.message)
@@ -509,7 +509,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
         data_source = ZoneinfoDataSource.new(dir)
 
-        info = data_source.load_timezone_info('EST')
+        info = data_source.send(:load_timezone_info, 'EST')
         assert_kind_of(ZoneinfoTimezoneInfo, info)
         assert_equal('EST', info.identifier)
       end
@@ -534,7 +534,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      info = data_source.load_timezone_info('Link')
+      info = data_source.send(:load_timezone_info, 'Link')
       assert_kind_of(ZoneinfoTimezoneInfo, info)
       assert_equal('Link', info.identifier)
     end
@@ -566,11 +566,11 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      info = data_source.load_timezone_info('Link')
+      info = data_source.send(:load_timezone_info, 'Link')
       assert_kind_of(ZoneinfoTimezoneInfo, info)
       assert_equal('Link', info.identifier)
 
-      info = data_source.load_timezone_info('Subdir/Link')
+      info = data_source.send(:load_timezone_info, 'Subdir/Link')
       assert_kind_of(ZoneinfoTimezoneInfo, info)
       assert_equal('Subdir/Link', info.identifier)
     end
@@ -605,15 +605,15 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      info = data_source.load_timezone_info('Subdir/Link')
+      info = data_source.send(:load_timezone_info, 'Subdir/Link')
       assert_kind_of(ZoneinfoTimezoneInfo, info)
       assert_equal('Subdir/Link', info.identifier)
 
-      info = data_source.load_timezone_info('Subdir/Link2')
+      info = data_source.send(:load_timezone_info, 'Subdir/Link2')
       assert_kind_of(ZoneinfoTimezoneInfo, info)
       assert_equal('Subdir/Link2', info.identifier)
 
-      info = data_source.load_timezone_info('Subdir2/Link')
+      info = data_source.send(:load_timezone_info, 'Subdir2/Link')
       assert_kind_of(ZoneinfoTimezoneInfo, info)
       assert_equal('Subdir2/Link', info.identifier)
     end
@@ -631,7 +631,7 @@ class TCZoneinfoDataSource < Minitest::Test
       data_source = ZoneinfoDataSource.new(dir)
 
       error = assert_raises(InvalidTimezoneIdentifier) do
-        data_source.load_timezone_info('Zone')
+        data_source.send(:load_timezone_info, 'Zone')
       end
 
       assert_match(/\bZone\b/, error.message)
@@ -657,7 +657,7 @@ class TCZoneinfoDataSource < Minitest::Test
       data_source = ZoneinfoDataSource.new(dir)
 
       error = assert_raises(InvalidTimezoneIdentifier) do
-        data_source.load_timezone_info('Zone')
+        data_source.send(:load_timezone_info, 'Zone')
       end
 
       assert_match(/\bZone\b/, error.message)
@@ -668,7 +668,7 @@ class TCZoneinfoDataSource < Minitest::Test
     safe_test do
       identifier = 'Europe/Amsterdam'.dup.taint
       assert(identifier.tainted?)
-      info = @data_source.load_timezone_info(identifier)
+      info = @data_source.send(:load_timezone_info, identifier)
       assert_equal('Europe/Amsterdam', info.identifier)
       assert(identifier.tainted?)
     end
@@ -676,7 +676,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_timezone_info_tainted_and_frozen
     safe_test do
-      info = @data_source.load_timezone_info('Europe/Amsterdam'.dup.taint.freeze)
+      info = @data_source.send(:load_timezone_info, 'Europe/Amsterdam'.dup.taint.freeze)
       assert_equal('Europe/Amsterdam', info.identifier)
     end
   end
@@ -691,8 +691,13 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_timezone_info_tainted_zoneinfo_dir
     data_source = ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
-    info = data_source.load_timezone_info('Europe/London')
+    info = data_source.send(:load_timezone_info, 'Europe/London')
     assert_kind_of(ZoneinfoTimezoneInfo, info)
+    assert_equal('Europe/London', info.identifier)
+  end
+
+  def test_get_timezone_info_data
+    info = @data_source.get_timezone_info('Europe/London')
     assert_equal('Europe/London', info.identifier)
   end
 
@@ -717,36 +722,28 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_timezone_identifiers
-    expected = get_timezone_filenames(@data_source.zoneinfo_dir)
+    expected = get_timezone_filenames(@data_source.zoneinfo_dir).sort!
     all = @data_source.timezone_identifiers
     assert_kind_of(Array, all)
-    assert_array_same_items(expected, all)
+    assert_equal(expected, all)
     assert_equal(true, all.frozen?)
+    assert_same(all, @data_source.timezone_identifiers)
   end
 
   def test_data_timezone_identifiers
-    expected = get_timezone_filenames(@data_source.zoneinfo_dir)
+    expected = get_timezone_filenames(@data_source.zoneinfo_dir).sort!
     all_data = @data_source.data_timezone_identifiers
     assert_kind_of(Array, all_data)
-    assert_array_same_items(expected, all_data)
+    assert_equal(expected, all_data)
     assert_equal(true, all_data.frozen?)
+    assert_same(all_data, @data_source.data_timezone_identifiers)
   end
 
   def test_linked_timezone_identifiers
     all_linked = @data_source.linked_timezone_identifiers
     assert_kind_of(Array, all_linked)
-    assert_equal(true, all_linked.empty?)
+    assert_equal([], all_linked)
     assert_equal(true, all_linked.frozen?)
-  end
-
-  def test_timezone_identifiers_safe_mode
-    safe_test do
-      expected = get_timezone_filenames(@data_source.zoneinfo_dir)
-      all = @data_source.timezone_identifiers
-      assert_kind_of(Array, all)
-      assert_array_same_items(expected, all)
-      assert_equal(true, all.frozen?)
-    end
   end
 
   def test_timezone_identifiers_ignored_plus_version_file
@@ -763,7 +760,7 @@ class TCZoneinfoDataSource < Minitest::Test
       end
 
       data_source = ZoneinfoDataSource.new(dir)
-      assert_array_same_items(['EST'], data_source.timezone_identifiers)
+      assert_equal(['EST'], data_source.timezone_identifiers)
     end
   end
 
@@ -792,7 +789,7 @@ class TCZoneinfoDataSource < Minitest::Test
         end
 
         data_source = ZoneinfoDataSource.new(dir)
-        assert_array_same_items(['EST'], data_source.timezone_identifiers)
+        assert_equal(['EST'], data_source.timezone_identifiers)
       end
     end
   end
@@ -815,19 +812,19 @@ class TCZoneinfoDataSource < Minitest::Test
       end
 
       data_source = ZoneinfoDataSource.new(dir)
-      assert_array_same_items(['EST'], data_source.timezone_identifiers)
+      assert_equal(['EST'], data_source.timezone_identifiers)
     end
   end
 
   def test_load_country_info
-    info = @data_source.load_country_info('GB')
+    info = @data_source.send(:load_country_info, 'GB')
     assert_equal('GB', info.code)
     assert_equal('Britain (UK)', info.name)
   end
 
   def test_load_country_info_not_exist
     error = assert_raises(InvalidCountryCode) do
-      @data_source.load_country_info('ZZ')
+      @data_source.send(:load_country_info, 'ZZ')
     end
 
     assert_match(/\bZZ\b/, error.message)
@@ -835,7 +832,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_country_info_invalid
     error = assert_raises(InvalidCountryCode) do
-      @data_source.load_country_info('../Countries/GB')
+      @data_source.send(:load_country_info, '../Countries/GB')
     end
 
     assert_match(/\W\.\.\/Countries\/GB\b/, error.message)
@@ -843,13 +840,13 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_country_info_nil
     assert_raises(InvalidCountryCode) do
-      @data_source.load_country_info(nil)
+      @data_source.send(:load_country_info, nil)
     end
   end
 
   def test_load_country_info_case
     error = assert_raises(InvalidCountryCode) do
-      @data_source.load_country_info('gb')
+      @data_source.send(:load_country_info, 'gb')
     end
 
     assert_match(/\bgb\b/, error.message)
@@ -859,7 +856,7 @@ class TCZoneinfoDataSource < Minitest::Test
     safe_test do
       code = 'NL'.dup.taint
       assert(code.tainted?)
-      info = @data_source.load_country_info(code)
+      info = @data_source.send(:load_country_info, code)
       assert_equal('NL', info.code)
       assert(code.tainted?)
     end
@@ -867,7 +864,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_country_info_tainted_and_frozen
     safe_test do
-      info = @data_source.load_country_info('NL'.dup.taint.freeze)
+      info = @data_source.send(:load_country_info, 'NL'.dup.taint.freeze)
       assert_equal('NL', info.code)
     end
   end
@@ -892,7 +889,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      info = data_source.load_country_info('FC')
+      info = data_source.send(:load_country_info, 'FC')
       assert_equal('FC', info.code)
       assert_equal('Fake Country', info.name)
       assert_equal([
@@ -901,7 +898,7 @@ class TCZoneinfoDataSource < Minitest::Test
         CountryTimezone.new('Fake/Three', Rational(-353, 15), Rational(-2797, 60), 'This is Three')], info.zones)
       assert_equal(true, info.zones.frozen?)
 
-      info = data_source.load_country_info('OC')
+      info = data_source.send(:load_country_info, 'OC')
       assert_equal('OC', info.code)
       assert_equal('Other Country', info.name)
       assert_equal([CountryTimezone.new('Other/One', Rational(601, 12), Rational(433, 30))], info.zones)
@@ -943,13 +940,13 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      info = data_source.load_country_info('AC')
+      info = data_source.send(:load_country_info, 'AC')
       assert_equal('AC', info.code)
       assert_equal('Another Country', info.name)
       assert_equal([CountryTimezone.new('Middle/Another/One', Rational(0, 1), Rational(0, 1), "Another's One")], info.zones)
       assert_equal(true, info.zones.frozen?)
 
-      info = data_source.load_country_info('FC')
+      info = data_source.send(:load_country_info, 'FC')
       assert_equal('FC', info.code)
       assert_equal('Fake Country', info.name)
       assert_equal([
@@ -964,7 +961,7 @@ class TCZoneinfoDataSource < Minitest::Test
       # appeared in the file, followed by all the secondaries in the order they
       # appeared in file.
 
-      info = data_source.load_country_info('OC')
+      info = data_source.send(:load_country_info, 'OC')
       assert_equal('OC', info.code)
       assert_equal('Other Country', info.name)
       assert_equal([
@@ -1015,7 +1012,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      info = data_source.load_country_info('FC')
+      info = data_source.send(:load_country_info, 'FC')
       assert_equal('FC', info.code)
       assert_equal('Fake Country', info.name)
       assert_equal([
@@ -1024,7 +1021,7 @@ class TCZoneinfoDataSource < Minitest::Test
         CountryTimezone.new('Fake/Three', Rational(-353, 15), Rational(-2797, 60), 'This is Three')], info.zones)
       assert_equal(true, info.zones.frozen?)
 
-      info = data_source.load_country_info('OC')
+      info = data_source.send(:load_country_info, 'OC')
       assert_equal('OC', info.code)
       assert_equal('Other Country', info.name)
       assert_equal([
@@ -1057,7 +1054,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(zoneinfo_dir, tab_file)
 
-      info = data_source.load_country_info('FC')
+      info = data_source.send(:load_country_info, 'FC')
       assert_equal('FC', info.code)
       assert_equal('Fake Country', info.name)
       assert_equal([
@@ -1066,7 +1063,7 @@ class TCZoneinfoDataSource < Minitest::Test
         CountryTimezone.new('Fake/Three', Rational(-353, 15), Rational(-2797, 60), 'This is Three')], info.zones)
       assert_equal(true, info.zones.frozen?)
 
-      info = data_source.load_country_info('OC')
+      info = data_source.send(:load_country_info, 'OC')
       assert_equal('OC', info.code)
       assert_equal('Other Country', info.name)
       assert_equal([CountryTimezone.new('Other/One', Rational(601, 12), Rational(433, 30))], info.zones)
@@ -1092,11 +1089,11 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      info = data_source.load_country_info('FC')
+      info = data_source.send(:load_country_info, 'FC')
       assert_equal('FC', info.code)
       assert_equal('Fake Country', info.name)
 
-      info = data_source.load_country_info('OC')
+      info = data_source.send(:load_country_info, 'OC')
       assert_equal('OC', info.code)
       assert_equal('Other Country', info.name)
     end
@@ -1120,7 +1117,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      info = data_source.load_country_info('UT')
+      info = data_source.send(:load_country_info, 'UT')
       assert_equal('UT', info.code)
       assert_equal('Unicode Test ✓', info.name)
       assert_equal([CountryTimezone.new('Unicode✓/One', Rational(6181, 120), Rational(-451, 3600), 'Unicode Description ✓')], info.zones)
@@ -1144,11 +1141,16 @@ class TCZoneinfoDataSource < Minitest::Test
 
       data_source = ZoneinfoDataSource.new(dir)
 
-      info = data_source.load_country_info('UT')
+      info = data_source.send(:load_country_info, 'UT')
       assert_equal('UT', info.code)
       assert_equal('Unicode Test ✓', info.name)
       assert_equal([CountryTimezone.new('Unicode✓/One', Rational(6181, 120), Rational(-451, 3600), 'Unicode Description ✓')], info.zones)
     end
+  end
+
+  def test_get_country_info
+    info = @data_source.get_country_info('GB')
+    assert_equal('GB', info.code)
   end
 
   def test_country_codes
@@ -1161,9 +1163,13 @@ class TCZoneinfoDataSource < Minitest::Test
       end
     end
 
+    file_codes.sort!
+
     codes = @data_source.country_codes
-    assert_array_same_items(file_codes, codes)
+    assert_kind_of(Array, codes)
+    assert_equal(file_codes, codes)
     assert_equal(true, codes.frozen?)
+    assert_same(codes, @data_source.country_codes)
   end
 
   def test_country_codes_four_column_iso3166
@@ -1185,7 +1191,7 @@ class TCZoneinfoDataSource < Minitest::Test
       data_source = ZoneinfoDataSource.new(dir)
 
       codes = data_source.country_codes
-      assert_array_same_items(%w(FC OC), codes)
+      assert_equal(%w(FC OC), codes)
     end
   end
 end
