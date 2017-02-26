@@ -154,7 +154,6 @@ class TCTimezone < Minitest::Test
   def setup
     @orig_default_dst = Timezone.default_dst
     @orig_data_source = DataSource.get
-    Timezone.send :init_loaded_zones
   end
 
   def teardown

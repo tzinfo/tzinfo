@@ -5,7 +5,6 @@ include TZInfo
 class TCCountry < Minitest::Test
   def setup
     @orig_data_source = DataSource.get
-    Country.send :init_countries
   end
 
   def teardown

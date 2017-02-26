@@ -650,12 +650,6 @@ module TZInfo
     end
 
     private
-      # Initializes @@loaded_zones.
-      def self.init_loaded_zones
-        @@loaded_zones = Concurrent::Map.new
-      end
-      init_loaded_zones
-
       # Returns an array of proxies corresponding to the given array of
       # identifiers.
       def self.get_proxies(identifiers)

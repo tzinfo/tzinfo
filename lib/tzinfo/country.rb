@@ -155,12 +155,6 @@ module TZInfo
         @info = info
       end
 
-      # Initializes @@countries.
-      def self.init_countries
-        @@countries = Concurrent::Map.new
-      end
-      init_countries
-
       # Returns the current DataSource
       def self.data_source
         DataSource.get
