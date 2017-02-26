@@ -204,12 +204,6 @@ class TCTimezone < Minitest::Test
     assert_equal('America/Argentina/Buenos_Aires', tz.identifier)
   end
 
-  def test_get_same_instance
-    tz1 = Timezone.get('Europe/London')
-    tz2 = Timezone.get('Europe/London')
-    assert_same(tz1, tz2)
-  end
-
   def test_get_not_exist
     error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get('Nowhere/Special') }
     assert_match(/\bNowhere\/Special/, error.message)
@@ -328,7 +322,8 @@ class TCTimezone < Minitest::Test
 
   def test_new_arg
     tz = Timezone.new('Europe/London')
-    assert_same(Timezone.get('Europe/London'), tz)
+    assert_kind_of(Timezone.get('Europe/London').class, tz)
+    assert_equal('Europe/London', tz.identifier)
   end
 
   def test_new_arg_not_exist
@@ -1410,21 +1405,23 @@ class TCTimezone < Minitest::Test
 
   def test_marshal_data
     tz = Timezone.get('Europe/London')
-    assert_kind_of(DataTimezone, tz)
-    assert_same(tz, Marshal.load(Marshal.dump(tz)))
+    marshalled_tz = Marshal.load(Marshal.dump(tz))
+    assert_kind_of(DataTimezone, marshalled_tz)
+    assert_equal('Europe/London', marshalled_tz.identifier)
   end
 
   def test_marshal_linked
     tz = Timezone.get('UTC')
+    marshalled_tz = Marshal.load(Marshal.dump(tz))
 
     # ZoneinfoDataSource doesn't return LinkedTimezoneInfo for any timezone.
     if DataSource.get.get_timezone_info('UTC').kind_of?(LinkedTimezoneInfo)
-      assert_kind_of(LinkedTimezone, tz)
+      assert_kind_of(LinkedTimezone, marshalled_tz)
     else
-      assert_kind_of(DataTimezone, tz)
+      assert_kind_of(DataTimezone, marshalled_tz)
     end
 
-    assert_same(tz, Marshal.load(Marshal.dump(tz)))
+    assert_equal('UTC', marshalled_tz.identifier)
   end
 
   def strftime_assertions(tz, time)

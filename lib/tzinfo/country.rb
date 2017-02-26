@@ -24,30 +24,10 @@ module TZInfo
   class Country
     include Comparable
 
-    # Defined countries.
-    #
-    # @!visibility private
-    @@countries = nil
-
     # Gets a Country by its ISO 3166-1 alpha-2 code. Raises an
     # InvalidCountryCode exception if it couldn't be found.
     def self.get(identifier)
-      instance = @@countries[identifier]
-
-      unless instance
-        # Thread-safety: It is possible that multiple equivalent Country
-        # instances could be created here in concurrently executing threads.
-        # The consequences of this are that the data may be loaded more than
-        # once (depending on the data source) and memoized calculations could
-        # be discarded. The performance benefit of ensuring that only a single
-        # instance is created is unlikely to be worth the overhead of only
-        # allowing one Country to be loaded at a time.
-        info = data_source.get_country_info(identifier)
-        instance = Country.new(info)
-        @@countries[identifier] = instance
-      end
-
-      instance
+      Country.new(data_source.get_country_info(identifier))
     end
 
     # If identifier is a CountryInfo object, initializes the Country instance,

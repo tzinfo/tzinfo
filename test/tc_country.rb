@@ -82,7 +82,8 @@ class TCCountry < Minitest::Test
 
   def test_new_arg
     c = Country.new('GB')
-    assert_same(Country.get('GB'), c)
+    assert_kind_of(Country, c)
+    assert_equal('GB', c.code)
   end
 
   def test_new_arg_not_exist
@@ -166,9 +167,9 @@ class TCCountry < Minitest::Test
 
   def test_marshal
     c = Country.get('US')
-
-    # Should get back the same instance because load calls Country.get.
-    assert_same(c, Marshal.load(Marshal.dump(c)))
+    marshalled_c = Marshal.load(Marshal.dump(c))
+    assert_kind_of(Country, marshalled_c)
+    assert_equal('US', marshalled_c.code)
   end
 
   def test_reload

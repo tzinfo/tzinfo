@@ -46,12 +46,6 @@ module TZInfo
   class Timezone
     include Comparable
 
-    # Cache of loaded zones by identifier to avoid using require if a zone
-    # has already been loaded.
-    #
-    # @!visibility private
-    @@loaded_zones = nil
-
     # Default value of the dst parameter of the local_to_utc and
     # period_for_local methods.
     #
@@ -79,22 +73,7 @@ module TZInfo
     #
     # Raises InvalidTimezoneIdentifier if the timezone couldn't be found.
     def self.get(identifier)
-      instance = @@loaded_zones[identifier]
-
-      unless instance
-        # Thread-safety: It is possible that multiple equivalent Timezone
-        # instances could be created here in concurrently executing threads.
-        # The consequences of this are that the data may be loaded more than
-        # once (depending on the data source) and memoized calculations could
-        # be discarded. The performance benefit of ensuring that only a single
-        # instance is created is unlikely to be worth the overhead of only
-        # allowing one Timezone to be loaded at a time.
-        info = data_source.get_timezone_info(identifier)
-        instance = info.create_timezone
-        @@loaded_zones[instance.identifier] = instance
-      end
-
-      instance
+      data_source.get_timezone_info(identifier).create_timezone
     end
 
     # Returns a proxy for the Timezone with the given identifier. The proxy

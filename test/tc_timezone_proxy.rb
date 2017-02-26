@@ -42,7 +42,7 @@ class TCTimezoneProxy < Minitest::Test
     t2 = Time.utc(2004,8,1,0,0,0)
 
     assert_equal(real.canonical_identifier, proxy.canonical_identifier)
-    assert_same(real.canonical_zone, proxy.canonical_zone)
+    assert_equal(real.canonical_zone, proxy.canonical_zone)
     assert_nothing_raised { proxy.current_period }
     assert_nothing_raised { proxy.current_period_and_time }
     assert_nothing_raised { proxy.current_time_and_period }
@@ -81,11 +81,13 @@ class TCTimezoneProxy < Minitest::Test
     real = Timezone.get('UTC')
     proxy = TimezoneProxy.new('UTC')
 
+    assert_kind_of(DataTimezone, proxy.canonical_zone)
+
     # ZoneinfoDataSource doesn't return LinkedTimezoneInfo instances for any
     # timezone.
     if real.kind_of?(LinkedTimezone)
       assert_equal('Etc/UTC', proxy.canonical_identifier)
-      assert_same(Timezone.get('Etc/UTC'), proxy.canonical_zone)
+      assert_equal('Etc/UTC', proxy.canonical_zone.identifier)
     else
       if DataSource.get.kind_of?(RubyDataSource)
         # Not got a LinkedTimezone despite using a DataSource that supports it.
@@ -94,7 +96,7 @@ class TCTimezoneProxy < Minitest::Test
       end
 
       assert_equal('UTC', proxy.canonical_identifier)
-      assert_same(Timezone.get('UTC'), proxy.canonical_zone)
+      assert_equal('UTC', proxy.canonical_zone.identifier)
     end
   end
 
