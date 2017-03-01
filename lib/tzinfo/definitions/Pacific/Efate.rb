@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'Pacific/Efate' do |tz|
           tz.offset :o0, 40396, 0, :LMT
-          tz.offset :o1, 39600, 0, :VUT
-          tz.offset :o2, 39600, 3600, :VUST
+          tz.offset :o1, 39600, 0, :'+11'
+          tz.offset :o2, 39600, 3600, :'+12'
           
           tz.transition 1912, 1, :o1, 52259343101, 21600
           tz.transition 1983, 9, :o2, 433256400

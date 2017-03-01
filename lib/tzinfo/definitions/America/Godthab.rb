@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'America/Godthab' do |tz|
           tz.offset :o0, -12416, 0, :LMT
-          tz.offset :o1, -10800, 0, :WGT
-          tz.offset :o2, -10800, 3600, :WGST
+          tz.offset :o1, -10800, 0, :'-03'
+          tz.offset :o2, -10800, 3600, :'-02'
           
           tz.transition 1916, 7, :o1, 3268448069, 1350
           tz.transition 1980, 4, :o2, 323845200

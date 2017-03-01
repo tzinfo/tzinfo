@@ -8,7 +8,7 @@ module TZInfo
         
         timezone 'Africa/Bissau' do |tz|
           tz.offset :o0, -3740, 0, :LMT
-          tz.offset :o1, -3600, 0, :WAT
+          tz.offset :o1, -3600, 0, :'-01'
           tz.offset :o2, 0, 0, :GMT
           
           tz.transition 1912, 1, :o1, 10451818987, 4320

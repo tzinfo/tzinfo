@@ -9,10 +9,10 @@ module TZInfo
         timezone 'Asia/Jakarta' do |tz|
           tz.offset :o0, 25632, 0, :LMT
           tz.offset :o1, 25632, 0, :BMT
-          tz.offset :o2, 26400, 0, :JAVT
-          tz.offset :o3, 27000, 0, :WIB
-          tz.offset :o4, 32400, 0, :JST
-          tz.offset :o5, 28800, 0, :WIB
+          tz.offset :o2, 26400, 0, :'+0720'
+          tz.offset :o3, 27000, 0, :'+0730'
+          tz.offset :o4, 32400, 0, :'+09'
+          tz.offset :o5, 28800, 0, :'+08'
           tz.offset :o6, 25200, 0, :WIB
           
           tz.transition 1867, 8, :o1, 720956461, 300

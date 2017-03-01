@@ -8,7 +8,7 @@ module TZInfo
         
         timezone 'Asia/Urumqi' do |tz|
           tz.offset :o0, 21020, 0, :LMT
-          tz.offset :o1, 21600, 0, :XJT
+          tz.offset :o1, 21600, 0, :'+06'
           
           tz.transition 1927, 12, :o1, 10477063829, 4320
         end

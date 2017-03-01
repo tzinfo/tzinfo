@@ -13,17 +13,17 @@ module TZInfo
           tz.offset :o3, 3600, 0, :CET
           tz.offset :o4, 3600, 3600, :CEST
           
-          tz.transition 1901, 1, :o1, 52172327119, 21600
+          tz.transition 1901, 1, :o1, 4830771, 2
           tz.transition 1918, 5, :o2, 58121291, 24
           tz.transition 1918, 10, :o1, 29062493, 12
           tz.transition 1924, 4, :o2, 58173419, 24
-          tz.transition 1924, 10, :o1, 58177523, 24
+          tz.transition 1924, 10, :o1, 4848127, 2
           tz.transition 1926, 4, :o2, 58190963, 24
-          tz.transition 1926, 10, :o1, 58194995, 24
+          tz.transition 1926, 10, :o1, 4849583, 2
           tz.transition 1927, 4, :o2, 58199531, 24
-          tz.transition 1927, 10, :o1, 58203731, 24
-          tz.transition 1928, 4, :o2, 58208435, 24
-          tz.transition 1928, 10, :o1, 58212635, 24
+          tz.transition 1927, 10, :o1, 4850311, 2
+          tz.transition 1928, 4, :o2, 4850703, 2
+          tz.transition 1928, 10, :o1, 4851053, 2
           tz.transition 1967, 6, :o2, 2439645, 1
           tz.transition 1967, 9, :o1, 58554347, 24
           tz.transition 1974, 6, :o2, 141264000

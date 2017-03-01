@@ -8,10 +8,10 @@ module TZInfo
         
         timezone 'Pacific/Norfolk' do |tz|
           tz.offset :o0, 40312, 0, :LMT
-          tz.offset :o1, 40320, 0, :NMT
-          tz.offset :o2, 41400, 0, :NFT
-          tz.offset :o3, 41400, 3600, :NFST
-          tz.offset :o4, 39600, 0, :NFT
+          tz.offset :o1, 40320, 0, :'+1112'
+          tz.offset :o2, 41400, 0, :'+1130'
+          tz.offset :o3, 41400, 3600, :'+1230'
+          tz.offset :o4, 39600, 0, :'+11'
           
           tz.transition 1900, 12, :o1, 26086158361, 10800
           tz.transition 1950, 12, :o2, 73009411, 30

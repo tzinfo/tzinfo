@@ -8,7 +8,7 @@ module TZInfo
         
         timezone 'Africa/El_Aaiun' do |tz|
           tz.offset :o0, -3168, 0, :LMT
-          tz.offset :o1, -3600, 0, :WAT
+          tz.offset :o1, -3600, 0, :'-01'
           tz.offset :o2, 0, 0, :WET
           tz.offset :o3, 0, 3600, :WEST
           

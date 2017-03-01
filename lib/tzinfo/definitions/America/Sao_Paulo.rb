@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'America/Sao_Paulo' do |tz|
           tz.offset :o0, -11188, 0, :LMT
-          tz.offset :o1, -10800, 0, :BRT
-          tz.offset :o2, -10800, 3600, :BRST
+          tz.offset :o1, -10800, 0, :'-03'
+          tz.offset :o2, -10800, 3600, :'-02'
           
           tz.transition 1914, 1, :o1, 52274886397, 21600
           tz.transition 1931, 10, :o2, 29119417, 12

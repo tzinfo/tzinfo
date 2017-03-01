@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'Pacific/Fiji' do |tz|
           tz.offset :o0, 42944, 0, :LMT
-          tz.offset :o1, 43200, 0, :FJT
-          tz.offset :o2, 43200, 3600, :FJST
+          tz.offset :o1, 43200, 0, :'+12'
+          tz.offset :o2, 43200, 3600, :'+13'
           
           tz.transition 1915, 10, :o1, 1634037302, 675
           tz.transition 1998, 10, :o2, 909842400

@@ -8,11 +8,14 @@ module TZInfo
         
         timezone 'Pacific/Galapagos' do |tz|
           tz.offset :o0, -21504, 0, :LMT
-          tz.offset :o1, -18000, 0, :ECT
-          tz.offset :o2, -21600, 0, :GALT
+          tz.offset :o1, -18000, 0, :'-05'
+          tz.offset :o2, -21600, 0, :'-06'
+          tz.offset :o3, -21600, 3600, :'-05'
           
           tz.transition 1931, 1, :o1, 1091854237, 450
           tz.transition 1986, 1, :o2, 504939600
+          tz.transition 1992, 11, :o3, 722930400
+          tz.transition 1993, 2, :o2, 728888400
         end
       end
     end

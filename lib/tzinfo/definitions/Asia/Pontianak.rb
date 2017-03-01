@@ -9,9 +9,9 @@ module TZInfo
         timezone 'Asia/Pontianak' do |tz|
           tz.offset :o0, 26240, 0, :LMT
           tz.offset :o1, 26240, 0, :PMT
-          tz.offset :o2, 27000, 0, :WIB
-          tz.offset :o3, 32400, 0, :JST
-          tz.offset :o4, 28800, 0, :WIB
+          tz.offset :o2, 27000, 0, :'+0730'
+          tz.offset :o3, 32400, 0, :'+09'
+          tz.offset :o4, 28800, 0, :'+08'
           tz.offset :o5, 28800, 0, :WITA
           tz.offset :o6, 25200, 0, :WIB
           

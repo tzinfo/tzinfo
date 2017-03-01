@@ -8,7 +8,7 @@ module TZInfo
         
         timezone 'Africa/Windhoek' do |tz|
           tz.offset :o0, 4104, 0, :LMT
-          tz.offset :o1, 5400, 0, :SWAT
+          tz.offset :o1, 5400, 0, :'+0130'
           tz.offset :o2, 7200, 0, :SAST
           tz.offset :o3, 7200, 3600, :SAST
           tz.offset :o4, 7200, 0, :CAT

@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'America/Danmarkshavn' do |tz|
           tz.offset :o0, -4480, 0, :LMT
-          tz.offset :o1, -10800, 0, :WGT
-          tz.offset :o2, -10800, 3600, :WGST
+          tz.offset :o1, -10800, 0, :'-03'
+          tz.offset :o2, -10800, 3600, :'-02'
           tz.offset :o3, 0, 0, :GMT
           
           tz.transition 1916, 7, :o1, 653689589, 270

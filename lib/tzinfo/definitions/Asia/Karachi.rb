@@ -8,9 +8,9 @@ module TZInfo
         
         timezone 'Asia/Karachi' do |tz|
           tz.offset :o0, 16092, 0, :LMT
-          tz.offset :o1, 19800, 0, :IST
-          tz.offset :o2, 19800, 3600, :IST
-          tz.offset :o3, 18000, 0, :KART
+          tz.offset :o1, 19800, 0, :'+0530'
+          tz.offset :o2, 19800, 3600, :'+0630'
+          tz.offset :o3, 18000, 0, :'+05'
           tz.offset :o4, 18000, 0, :PKT
           tz.offset :o5, 18000, 3600, :PKST
           

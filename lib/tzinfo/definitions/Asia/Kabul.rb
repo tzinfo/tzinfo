@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'Asia/Kabul' do |tz|
           tz.offset :o0, 16608, 0, :LMT
-          tz.offset :o1, 14400, 0, :AFT
-          tz.offset :o2, 16200, 0, :AFT
+          tz.offset :o1, 14400, 0, :'+04'
+          tz.offset :o2, 16200, 0, :'+0430'
           
           tz.transition 1889, 12, :o1, 2170231477, 900
           tz.transition 1944, 12, :o2, 7294369, 3

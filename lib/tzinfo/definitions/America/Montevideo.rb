@@ -9,11 +9,11 @@ module TZInfo
         timezone 'America/Montevideo' do |tz|
           tz.offset :o0, -13484, 0, :LMT
           tz.offset :o1, -13484, 0, :MMT
-          tz.offset :o2, -12600, 0, :UYT
-          tz.offset :o3, -12600, 1800, :UYHST
-          tz.offset :o4, -10800, 3600, :UYST
-          tz.offset :o5, -10800, 0, :UYT
-          tz.offset :o6, -10800, 1800, :UYHST
+          tz.offset :o2, -12600, 0, :'-0330'
+          tz.offset :o3, -12600, 1800, :'-03'
+          tz.offset :o4, -10800, 3600, :'-02'
+          tz.offset :o5, -10800, 0, :'-03'
+          tz.offset :o6, -10800, 1800, :'-0230'
           
           tz.transition 1898, 6, :o1, 52152522971, 21600
           tz.transition 1920, 5, :o2, 52324826171, 21600

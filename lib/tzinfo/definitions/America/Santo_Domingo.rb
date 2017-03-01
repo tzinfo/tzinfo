@@ -11,7 +11,7 @@ module TZInfo
           tz.offset :o1, -16800, 0, :SDMT
           tz.offset :o2, -18000, 0, :EST
           tz.offset :o3, -18000, 3600, :EDT
-          tz.offset :o4, -18000, 1800, :EHDT
+          tz.offset :o4, -18000, 1800, :'-0430'
           tz.offset :o5, -14400, 0, :AST
           
           tz.transition 1890, 1, :o1, 2893642433, 1200

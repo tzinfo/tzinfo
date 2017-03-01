@@ -9,8 +9,8 @@ module TZInfo
         timezone 'America/Lima' do |tz|
           tz.offset :o0, -18492, 0, :LMT
           tz.offset :o1, -18516, 0, :LMT
-          tz.offset :o2, -18000, 0, :PET
-          tz.offset :o3, -18000, 3600, :PEST
+          tz.offset :o2, -18000, 0, :'-05'
+          tz.offset :o3, -18000, 3600, :'-04'
           
           tz.transition 1890, 1, :o1, 17361854741, 7200
           tz.transition 1908, 7, :o2, 17410685143, 7200

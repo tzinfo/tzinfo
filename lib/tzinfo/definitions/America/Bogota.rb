@@ -9,8 +9,8 @@ module TZInfo
         timezone 'America/Bogota' do |tz|
           tz.offset :o0, -17776, 0, :LMT
           tz.offset :o1, -17776, 0, :BMT
-          tz.offset :o2, -18000, 0, :COT
-          tz.offset :o3, -18000, 3600, :COST
+          tz.offset :o2, -18000, 0, :'-05'
+          tz.offset :o3, -18000, 3600, :'-04'
           
           tz.transition 1884, 3, :o1, 13009943011, 5400
           tz.transition 1914, 11, :o2, 13070482411, 5400

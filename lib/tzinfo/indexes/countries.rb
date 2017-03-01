@@ -215,6 +215,7 @@ module TZInfo
       end
       country 'CL', 'Chile' do |c|
         c.timezone 'America/Santiago', -669, 20, -212, 3, 'Chile (most areas)'
+        c.timezone 'America/Punta_Arenas', -1063, 20, -851, 12, 'Region of Magallanes'
         c.timezone 'Pacific/Easter', -543, 20, -3283, 30, 'Easter Island'
       end
       country 'CM', 'Cameroon' do |c|
@@ -841,7 +842,6 @@ module TZInfo
         c.timezone 'Africa/Kampala', 19, 60, 389, 12
       end
       country 'UM', 'US minor outlying islands' do |c|
-        c.timezone 'Pacific/Johnston', 67, 4, -10171, 60, 'Johnston Atoll'
         c.timezone 'Pacific/Midway', 1693, 60, -5321, 30, 'Midway Islands'
         c.timezone 'Pacific/Wake', 1157, 60, 9997, 60, 'Wake Island'
       end

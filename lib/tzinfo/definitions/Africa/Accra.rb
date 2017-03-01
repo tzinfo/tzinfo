@@ -9,7 +9,7 @@ module TZInfo
         timezone 'Africa/Accra' do |tz|
           tz.offset :o0, -52, 0, :LMT
           tz.offset :o1, 0, 0, :GMT
-          tz.offset :o2, 0, 1200, :GHST
+          tz.offset :o2, 0, 1200, :'+0020'
           
           tz.transition 1918, 1, :o1, 52306441213, 21600
           tz.transition 1920, 9, :o2, 4845137, 2

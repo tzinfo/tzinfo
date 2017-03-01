@@ -10,12 +10,10 @@ module TZInfo
           timezone 'America/Argentina/San_Luis' do |tz|
             tz.offset :o0, -15924, 0, :LMT
             tz.offset :o1, -15408, 0, :CMT
-            tz.offset :o2, -14400, 0, :ART
-            tz.offset :o3, -14400, 3600, :ARST
-            tz.offset :o4, -10800, 0, :ART
-            tz.offset :o5, -10800, 3600, :ARST
-            tz.offset :o6, -14400, 0, :WART
-            tz.offset :o7, -14400, 3600, :WARST
+            tz.offset :o2, -14400, 0, :'-04'
+            tz.offset :o3, -14400, 3600, :'-03'
+            tz.offset :o4, -10800, 0, :'-03'
+            tz.offset :o5, -10800, 3600, :'-02'
             
             tz.transition 1894, 10, :o1, 17374555327, 7200
             tz.transition 1920, 5, :o2, 1453467407, 600
@@ -65,19 +63,19 @@ module TZInfo
             tz.transition 1988, 12, :o5, 596948400
             tz.transition 1989, 3, :o4, 605066400
             tz.transition 1989, 10, :o5, 624423600
-            tz.transition 1990, 3, :o6, 637380000
-            tz.transition 1990, 10, :o7, 655963200
-            tz.transition 1991, 3, :o6, 667796400
+            tz.transition 1990, 3, :o2, 637380000
+            tz.transition 1990, 10, :o3, 655963200
+            tz.transition 1991, 3, :o2, 667796400
             tz.transition 1991, 6, :o4, 675748800
-            tz.transition 1999, 10, :o7, 938919600
+            tz.transition 1999, 10, :o3, 938919600
             tz.transition 2000, 3, :o4, 952052400
-            tz.transition 2004, 5, :o6, 1085972400
+            tz.transition 2004, 5, :o2, 1085972400
             tz.transition 2004, 7, :o4, 1090728000
             tz.transition 2007, 12, :o5, 1198983600
-            tz.transition 2008, 1, :o7, 1200880800
-            tz.transition 2008, 3, :o6, 1205031600
-            tz.transition 2008, 10, :o7, 1223784000
-            tz.transition 2009, 3, :o6, 1236481200
+            tz.transition 2008, 1, :o3, 1200880800
+            tz.transition 2008, 3, :o2, 1205031600
+            tz.transition 2008, 10, :o3, 1223784000
+            tz.transition 2009, 3, :o2, 1236481200
             tz.transition 2009, 10, :o4, 1255233600
           end
         end

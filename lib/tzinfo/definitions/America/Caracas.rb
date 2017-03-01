@@ -9,8 +9,8 @@ module TZInfo
         timezone 'America/Caracas' do |tz|
           tz.offset :o0, -16064, 0, :LMT
           tz.offset :o1, -16060, 0, :CMT
-          tz.offset :o2, -16200, 0, :VET
-          tz.offset :o3, -14400, 0, :VET
+          tz.offset :o2, -16200, 0, :'-0430'
+          tz.offset :o3, -14400, 0, :'-04'
           
           tz.transition 1890, 1, :o1, 1627673863, 675
           tz.transition 1912, 2, :o2, 10452001043, 4320

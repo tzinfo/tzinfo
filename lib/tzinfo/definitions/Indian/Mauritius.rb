@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'Indian/Mauritius' do |tz|
           tz.offset :o0, 13800, 0, :LMT
-          tz.offset :o1, 14400, 0, :MUT
-          tz.offset :o2, 14400, 3600, :MUST
+          tz.offset :o1, 14400, 0, :'+04'
+          tz.offset :o2, 14400, 3600, :'+05'
           
           tz.transition 1906, 12, :o1, 348130993, 144
           tz.transition 1982, 10, :o2, 403041600

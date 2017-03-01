@@ -8,9 +8,9 @@ module TZInfo
         
         timezone 'Pacific/Rarotonga' do |tz|
           tz.offset :o0, -38344, 0, :LMT
-          tz.offset :o1, -37800, 0, :CKT
-          tz.offset :o2, -36000, 1800, :CKHST
-          tz.offset :o3, -36000, 0, :CKT
+          tz.offset :o1, -37800, 0, :'-1030'
+          tz.offset :o2, -36000, 1800, :'-0930'
+          tz.offset :o3, -36000, 0, :'-10'
           
           tz.transition 1901, 1, :o1, 26086168193, 10800
           tz.transition 1978, 11, :o2, 279714600

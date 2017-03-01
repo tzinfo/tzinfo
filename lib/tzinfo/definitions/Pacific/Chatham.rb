@@ -8,9 +8,9 @@ module TZInfo
         
         timezone 'Pacific/Chatham' do |tz|
           tz.offset :o0, 44028, 0, :LMT
-          tz.offset :o1, 44100, 0, :CHAST
-          tz.offset :o2, 45900, 0, :CHAST
-          tz.offset :o3, 45900, 3600, :CHADT
+          tz.offset :o1, 44100, 0, :'+1215'
+          tz.offset :o2, 45900, 0, :'+1245'
+          tz.offset :o3, 45900, 3600, :'+1345'
           
           tz.transition 1868, 11, :o1, 5768731177, 2400
           tz.transition 1945, 12, :o2, 233454815, 96

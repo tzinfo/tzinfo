@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'America/Noronha' do |tz|
           tz.offset :o0, -7780, 0, :LMT
-          tz.offset :o1, -7200, 0, :FNT
-          tz.offset :o2, -7200, 3600, :FNST
+          tz.offset :o1, -7200, 0, :'-02'
+          tz.offset :o2, -7200, 3600, :'-01'
           
           tz.transition 1914, 1, :o1, 10454977109, 4320
           tz.transition 1931, 10, :o2, 58238833, 24

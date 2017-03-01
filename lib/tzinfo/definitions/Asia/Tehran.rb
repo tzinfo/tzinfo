@@ -9,10 +9,10 @@ module TZInfo
         timezone 'Asia/Tehran' do |tz|
           tz.offset :o0, 12344, 0, :LMT
           tz.offset :o1, 12344, 0, :TMT
-          tz.offset :o2, 12600, 0, :IRST
-          tz.offset :o3, 14400, 0, :IRST
-          tz.offset :o4, 14400, 3600, :IRDT
-          tz.offset :o5, 12600, 3600, :IRDT
+          tz.offset :o2, 12600, 0, :'+0330'
+          tz.offset :o3, 14400, 0, :'+04'
+          tz.offset :o4, 14400, 3600, :'+05'
+          tz.offset :o5, 12600, 3600, :'+0430'
           
           tz.transition 1915, 12, :o1, 26145324257, 10800
           tz.transition 1945, 12, :o2, 26263670657, 10800

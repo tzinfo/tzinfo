@@ -8,7 +8,7 @@ module TZInfo
         
         timezone 'Europe/Zaporozhye' do |tz|
           tz.offset :o0, 8440, 0, :LMT
-          tz.offset :o1, 8400, 0, :CUT
+          tz.offset :o1, 8400, 0, :'+0220'
           tz.offset :o2, 7200, 0, :EET
           tz.offset :o3, 10800, 0, :MSK
           tz.offset :o4, 3600, 3600, :CEST

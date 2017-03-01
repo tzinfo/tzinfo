@@ -8,9 +8,9 @@ module TZInfo
         
         timezone 'America/Eirunepe' do |tz|
           tz.offset :o0, -16768, 0, :LMT
-          tz.offset :o1, -18000, 0, :ACT
-          tz.offset :o2, -18000, 3600, :ACST
-          tz.offset :o3, -14400, 0, :AMT
+          tz.offset :o1, -18000, 0, :'-05'
+          tz.offset :o2, -18000, 3600, :'-04'
+          tz.offset :o3, -14400, 0, :'-04'
           
           tz.transition 1914, 1, :o1, 3267180487, 1350
           tz.transition 1931, 10, :o2, 14559709, 6

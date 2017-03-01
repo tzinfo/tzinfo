@@ -8,9 +8,9 @@ module TZInfo
         
         timezone 'America/Santarem' do |tz|
           tz.offset :o0, -13128, 0, :LMT
-          tz.offset :o1, -14400, 0, :AMT
-          tz.offset :o2, -14400, 3600, :AMST
-          tz.offset :o3, -10800, 0, :BRT
+          tz.offset :o1, -14400, 0, :'-04'
+          tz.offset :o2, -14400, 3600, :'-03'
+          tz.offset :o3, -10800, 0, :'-03'
           
           tz.transition 1914, 1, :o1, 8712481147, 3600
           tz.transition 1931, 10, :o2, 19412945, 8

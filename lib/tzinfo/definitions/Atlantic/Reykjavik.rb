@@ -8,8 +8,8 @@ module TZInfo
         
         timezone 'Atlantic/Reykjavik' do |tz|
           tz.offset :o0, -5280, 0, :LMT
-          tz.offset :o1, -3600, 0, :IST
-          tz.offset :o2, -3600, 3600, :ISST
+          tz.offset :o1, -3600, 0, :'-01'
+          tz.offset :o2, -3600, 3600, :'+00'
           tz.offset :o3, 0, 0, :GMT
           
           tz.transition 1908, 1, :o1, 435229481, 180

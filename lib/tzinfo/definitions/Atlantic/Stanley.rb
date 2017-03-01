@@ -9,11 +9,10 @@ module TZInfo
         timezone 'Atlantic/Stanley' do |tz|
           tz.offset :o0, -13884, 0, :LMT
           tz.offset :o1, -13884, 0, :SMT
-          tz.offset :o2, -14400, 0, :FKT
-          tz.offset :o3, -14400, 3600, :FKST
-          tz.offset :o4, -10800, 0, :FKT
-          tz.offset :o5, -10800, 3600, :FKST
-          tz.offset :o6, -10800, 0, :FKST
+          tz.offset :o2, -14400, 0, :'-04'
+          tz.offset :o3, -14400, 3600, :'-03'
+          tz.offset :o4, -10800, 0, :'-03'
+          tz.offset :o5, -10800, 3600, :'-02'
           
           tz.transition 1890, 1, :o1, 17361854357, 7200
           tz.transition 1912, 3, :o2, 17420210357, 7200
@@ -84,7 +83,7 @@ module TZInfo
           tz.transition 2009, 4, :o2, 1240117200
           tz.transition 2009, 9, :o3, 1252216800
           tz.transition 2010, 4, :o2, 1271566800
-          tz.transition 2010, 9, :o6, 1283666400
+          tz.transition 2010, 9, :o4, 1283666400
         end
       end
     end

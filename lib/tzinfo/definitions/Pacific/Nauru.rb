@@ -8,9 +8,9 @@ module TZInfo
         
         timezone 'Pacific/Nauru' do |tz|
           tz.offset :o0, 40060, 0, :LMT
-          tz.offset :o1, 41400, 0, :NRT
-          tz.offset :o2, 32400, 0, :JST
-          tz.offset :o3, 43200, 0, :NRT
+          tz.offset :o1, 41400, 0, :'+1130'
+          tz.offset :o2, 32400, 0, :'+09'
+          tz.offset :o3, 43200, 0, :'+12'
           
           tz.transition 1921, 1, :o1, 10466081437, 4320
           tz.transition 1942, 3, :o2, 116660785, 48

@@ -9,7 +9,7 @@ module TZInfo
         timezone 'America/Belize' do |tz|
           tz.offset :o0, -21168, 0, :LMT
           tz.offset :o1, -21600, 0, :CST
-          tz.offset :o2, -21600, 1800, :CHDT
+          tz.offset :o2, -21600, 1800, :'-0530'
           tz.offset :o3, -21600, 3600, :CDT
           
           tz.transition 1912, 4, :o1, 483898749, 200

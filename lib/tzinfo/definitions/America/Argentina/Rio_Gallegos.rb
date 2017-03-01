@@ -10,11 +10,10 @@ module TZInfo
           timezone 'America/Argentina/Rio_Gallegos' do |tz|
             tz.offset :o0, -16612, 0, :LMT
             tz.offset :o1, -15408, 0, :CMT
-            tz.offset :o2, -14400, 0, :ART
-            tz.offset :o3, -14400, 3600, :ARST
-            tz.offset :o4, -10800, 0, :ART
-            tz.offset :o5, -10800, 3600, :ARST
-            tz.offset :o6, -14400, 0, :WART
+            tz.offset :o2, -14400, 0, :'-04'
+            tz.offset :o3, -14400, 3600, :'-03'
+            tz.offset :o4, -10800, 0, :'-03'
+            tz.offset :o5, -10800, 3600, :'-02'
             
             tz.transition 1894, 10, :o1, 52123666153, 21600
             tz.transition 1920, 5, :o2, 1453467407, 600
@@ -73,7 +72,7 @@ module TZInfo
             tz.transition 1993, 3, :o4, 731469600
             tz.transition 1999, 10, :o3, 938919600
             tz.transition 2000, 3, :o4, 952052400
-            tz.transition 2004, 6, :o6, 1086058800
+            tz.transition 2004, 6, :o2, 1086058800
             tz.transition 2004, 6, :o4, 1087704000
             tz.transition 2007, 12, :o5, 1198983600
             tz.transition 2008, 3, :o4, 1205632800

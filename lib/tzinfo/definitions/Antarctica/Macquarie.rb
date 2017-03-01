@@ -10,7 +10,7 @@ module TZInfo
           tz.offset :o0, 0, 0, :'-00'
           tz.offset :o1, 36000, 0, :AEST
           tz.offset :o2, 36000, 3600, :AEDT
-          tz.offset :o3, 39600, 0, :MIST
+          tz.offset :o3, 39600, 0, :'+11'
           
           tz.transition 1899, 11, :o1, 4829919, 2
           tz.transition 1916, 9, :o2, 14526823, 6

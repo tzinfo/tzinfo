@@ -10,12 +10,10 @@ module TZInfo
           timezone 'America/Argentina/Jujuy' do |tz|
             tz.offset :o0, -15672, 0, :LMT
             tz.offset :o1, -15408, 0, :CMT
-            tz.offset :o2, -14400, 0, :ART
-            tz.offset :o3, -14400, 3600, :ARST
-            tz.offset :o4, -10800, 0, :ART
-            tz.offset :o5, -10800, 3600, :ARST
-            tz.offset :o6, -14400, 0, :WART
-            tz.offset :o7, -14400, 3600, :WARST
+            tz.offset :o2, -14400, 0, :'-04'
+            tz.offset :o3, -14400, 3600, :'-03'
+            tz.offset :o4, -10800, 0, :'-03'
+            tz.offset :o5, -10800, 3600, :'-02'
             
             tz.transition 1894, 10, :o1, 8687277653, 3600
             tz.transition 1920, 5, :o2, 1453467407, 600
@@ -65,9 +63,9 @@ module TZInfo
             tz.transition 1988, 12, :o5, 596948400
             tz.transition 1989, 3, :o4, 605066400
             tz.transition 1989, 10, :o5, 624423600
-            tz.transition 1990, 3, :o6, 636516000
-            tz.transition 1990, 10, :o7, 657086400
-            tz.transition 1991, 3, :o6, 669178800
+            tz.transition 1990, 3, :o2, 636516000
+            tz.transition 1990, 10, :o3, 657086400
+            tz.transition 1991, 3, :o2, 669178800
             tz.transition 1991, 10, :o5, 686721600
             tz.transition 1992, 3, :o4, 699415200
             tz.transition 1992, 10, :o5, 719377200

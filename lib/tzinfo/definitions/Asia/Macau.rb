@@ -8,9 +8,8 @@ module TZInfo
         
         timezone 'Asia/Macau' do |tz|
           tz.offset :o0, 27260, 0, :LMT
-          tz.offset :o1, 28800, 0, :MOT
-          tz.offset :o2, 28800, 3600, :MOST
-          tz.offset :o3, 28800, 0, :CST
+          tz.offset :o1, 28800, 0, :CST
+          tz.offset :o2, 28800, 3600, :CDT
           
           tz.transition 1911, 12, :o1, 10451817437, 4320
           tz.transition 1961, 3, :o2, 38998037, 16
@@ -53,7 +52,6 @@ module TZInfo
           tz.transition 1979, 10, :o1, 309279600
           tz.transition 1980, 4, :o2, 325008000
           tz.transition 1980, 10, :o1, 340729200
-          tz.transition 1999, 12, :o3, 945619200
         end
       end
     end

@@ -10,7 +10,7 @@ module TZInfo
           tz.offset :o0, -16356, 0, :LMT
           tz.offset :o1, -16356, 0, :CMT
           tz.offset :o2, -16356, 3600, :BOST
-          tz.offset :o3, -14400, 0, :BOT
+          tz.offset :o3, -14400, 0, :'-04'
           
           tz.transition 1890, 1, :o1, 17361854563, 7200
           tz.transition 1931, 10, :o2, 17471733763, 7200

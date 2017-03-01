@@ -8,11 +8,10 @@ module TZInfo
         
         timezone 'Asia/Kuching' do |tz|
           tz.offset :o0, 26480, 0, :LMT
-          tz.offset :o1, 27000, 0, :BORT
-          tz.offset :o2, 28800, 0, :BORT
-          tz.offset :o3, 28800, 1200, :BORTST
-          tz.offset :o4, 32400, 0, :JST
-          tz.offset :o5, 28800, 0, :MYT
+          tz.offset :o1, 27000, 0, :'+0730'
+          tz.offset :o2, 28800, 0, :'+08'
+          tz.offset :o3, 28800, 1200, :'+0820'
+          tz.offset :o4, 32400, 0, :'+09'
           
           tz.transition 1926, 2, :o1, 2618541209, 1080
           tz.transition 1932, 12, :o2, 38833171, 16
@@ -32,7 +31,6 @@ module TZInfo
           tz.transition 1941, 12, :o2, 174984635, 72
           tz.transition 1942, 2, :o4, 14582437, 6
           tz.transition 1945, 9, :o2, 19453681, 8
-          tz.transition 1981, 12, :o5, 378662400
         end
       end
     end

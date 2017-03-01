@@ -190,6 +190,7 @@ module TZInfo
       linked_timezone 'America/Porto_Acre'
       timezone 'America/Porto_Velho'
       timezone 'America/Puerto_Rico'
+      timezone 'America/Punta_Arenas'
       timezone 'America/Rainy_River'
       timezone 'America/Rankin_Inlet'
       timezone 'America/Recife'

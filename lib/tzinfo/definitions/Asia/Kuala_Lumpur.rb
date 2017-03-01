@@ -9,12 +9,12 @@ module TZInfo
         timezone 'Asia/Kuala_Lumpur' do |tz|
           tz.offset :o0, 24406, 0, :LMT
           tz.offset :o1, 24925, 0, :SMT
-          tz.offset :o2, 25200, 0, :MALT
-          tz.offset :o3, 25200, 1200, :MALST
-          tz.offset :o4, 26400, 0, :MALT
-          tz.offset :o5, 27000, 0, :MALT
-          tz.offset :o6, 32400, 0, :JST
-          tz.offset :o7, 28800, 0, :MYT
+          tz.offset :o2, 25200, 0, :'+07'
+          tz.offset :o3, 25200, 1200, :'+0720'
+          tz.offset :o4, 26400, 0, :'+0720'
+          tz.offset :o5, 27000, 0, :'+0730'
+          tz.offset :o6, 32400, 0, :'+09'
+          tz.offset :o7, 28800, 0, :'+08'
           
           tz.transition 1900, 12, :o1, 104344641397, 43200
           tz.transition 1905, 5, :o2, 8353142363, 3456

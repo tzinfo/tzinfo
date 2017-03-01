@@ -9,9 +9,9 @@ module TZInfo
         timezone 'Pacific/Bougainville' do |tz|
           tz.offset :o0, 37336, 0, :LMT
           tz.offset :o1, 35312, 0, :PMMT
-          tz.offset :o2, 36000, 0, :PGT
-          tz.offset :o3, 32400, 0, :JST
-          tz.offset :o4, 39600, 0, :BST
+          tz.offset :o2, 36000, 0, :'+10'
+          tz.offset :o3, 32400, 0, :'+09'
+          tz.offset :o4, 39600, 0, :'+11'
           
           tz.transition 1879, 12, :o1, 26003322733, 10800
           tz.transition 1894, 12, :o2, 13031248093, 5400

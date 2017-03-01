@@ -8,7 +8,7 @@ module TZInfo
         
         timezone 'Asia/Riyadh' do |tz|
           tz.offset :o0, 11212, 0, :LMT
-          tz.offset :o1, 10800, 0, :AST
+          tz.offset :o1, 10800, 0, :'+03'
           
           tz.transition 1947, 3, :o1, 52536780797, 21600
         end

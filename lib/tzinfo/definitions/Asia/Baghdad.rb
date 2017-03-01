@@ -9,8 +9,8 @@ module TZInfo
         timezone 'Asia/Baghdad' do |tz|
           tz.offset :o0, 10660, 0, :LMT
           tz.offset :o1, 10656, 0, :BMT
-          tz.offset :o2, 10800, 0, :AST
-          tz.offset :o3, 10800, 3600, :ADT
+          tz.offset :o2, 10800, 0, :'+03'
+          tz.offset :o3, 10800, 3600, :'+04'
           
           tz.transition 1889, 12, :o1, 10417111387, 4320
           tz.transition 1917, 12, :o2, 726478313, 300
