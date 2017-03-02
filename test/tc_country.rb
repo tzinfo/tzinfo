@@ -75,27 +75,20 @@ class TCCountry < Minitest::Test
     end
   end
 
-  def test_new_nil
-    assert_raises(InvalidCountryCode) { Country.new(nil) }
-  end
-
-  def test_new_arg
-    c = Country.new('GB')
-    assert_kind_of(Country, c)
-    assert_equal('GB', c.code)
-  end
-
-  def test_new_arg_not_exist
-    error = assert_raises(InvalidCountryCode) { Country.new('ZZ') }
-    assert_match(/\bZZ\b/, error.message)
-  end
-
   def test_all_codes
     assert_equal(DataSource.get.country_codes, Country.all_codes)
   end
 
   def test_all
     assert_equal(Country.all_codes, Country.all.collect {|c| c.code })
+  end
+
+  def test_initialize
+    info = CountryInfo.new('TT', 'Test', [])
+    c = Country.new(info)
+    assert_equal('TT', c.code)
+    assert_equal('Test', c.name)
+    assert_equal([], c.zones)
   end
 
   def test_code
@@ -192,14 +185,6 @@ class TCCountry < Minitest::Test
 
     assert_raises(InvalidDataSource) do
       Country.get('GB')
-    end
-  end
-
-  def test_new_missing_data_source
-    DataSource.set(DataSource.new)
-
-    assert_raises(InvalidDataSource) do
-      Country.new('GB')
     end
   end
 

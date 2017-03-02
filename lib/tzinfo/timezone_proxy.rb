@@ -11,11 +11,10 @@ module TZInfo
     # Construct a new TimezoneProxy for the given identifier. The identifier
     # is not checked when constructing the proxy. It will be validated on the
     # when the real Timezone is loaded.
-    def self.new(identifier)
-      # Need to override new to undo the behaviour introduced in Timezone#new.
-      tzp = super()
-      tzp.send(:setup, identifier)
-      tzp
+    def initialize(identifier)
+      super()
+      @identifier = identifier
+      @real_timezone = nil
     end
 
     # The identifier of the timezone, e.g. "Europe/Paris".
@@ -91,11 +90,6 @@ module TZInfo
     end
 
     private
-      def setup(identifier)
-        @identifier = identifier
-        @real_timezone = nil
-      end
-
       def real_timezone
         # Thread-safety: It is possible that the value of @real_timezone may be
         # calculated multiple times in concurrently executing threads. It is not

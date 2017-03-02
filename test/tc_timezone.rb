@@ -30,10 +30,12 @@ class TCTimezone < Minitest::Test
   end
 
   class TestTimezone < BaseTestTimezone
-    def self.new(identifier, period_for_result = nil, periods_for_local_result = nil, expected = nil)
-      t = super()
-      t.send(:setup, identifier, period_for_result, periods_for_local_result, expected)
-      t
+    def initialize(identifier, period_for_result = nil, periods_for_local_result = nil, expected = nil)
+      super()
+      @identifier = identifier
+      @period_for_result = period_for_result
+      @periods_for_local_result = periods_for_local_result || []
+      @expected = expected
     end
 
     def identifier
@@ -53,21 +55,15 @@ class TCTimezone < Minitest::Test
     def transitions_up_to(utc_to, utc_from = nil)
       raise 'transitions_up_to called'
     end
-
-    private
-      def setup(identifier, period_for_result, periods_for_local_result, expected)
-        @identifier = identifier
-        @period_for_result = period_for_result
-        @periods_for_local_result = periods_for_local_result || []
-        @expected = expected
-      end
   end
 
   class OffsetsUpToTestTimezone < BaseTestTimezone
-    def self.new(identifier, expected_to, expected_from, transitions_up_to_result)
-      t = super()
-      t.send(:setup, identifier, expected_to, expected_from, transitions_up_to_result)
-      t
+    def initialize(identifier, expected_to, expected_from, transitions_up_to_result)
+      super()
+      @identifier = identifier
+      @expected_to = expected_to
+      @expected_from = expected_from
+      @transitions_up_to_result = transitions_up_to_result
     end
 
     def identifier
@@ -97,22 +93,15 @@ class TCTimezone < Minitest::Test
 
       @transitions_up_to_result
     end
-
-    private
-
-    def setup(identifier, expected_to, expected_from, transitions_up_to_result)
-      @identifier = identifier
-      @expected_to = expected_to
-      @expected_from = expected_from
-      @transitions_up_to_result = transitions_up_to_result
-    end
   end
 
   class OffsetsUpToNoTransitionsTestTimezone < BaseTestTimezone
-    def self.new(identifier, expected_to, expected_from, period_for_result)
-      t = super()
-      t.send(:setup, identifier, expected_to, expected_from, period_for_result)
-      t
+    def initialize(identifier, expected_to, expected_from, period_for_result)
+      super()
+      @identifier = identifier
+      @expected_to = expected_to
+      @expected_from = expected_from
+      @period_for_result = period_for_result
     end
 
     def identifier
@@ -139,15 +128,6 @@ class TCTimezone < Minitest::Test
       end
 
       []
-    end
-
-    private
-
-    def setup(identifier, expected_to, expected_from, period_for_result)
-      @identifier = identifier
-      @expected_to = expected_to
-      @expected_from = expected_from
-      @period_for_result = period_for_result
     end
   end
 
@@ -297,37 +277,6 @@ class TCTimezone < Minitest::Test
     assert_raises(UnknownTimezone) { tz.offsets_up_to(DateTime.new(2006,1,1,1,0,0)) }
     assert_raises(UnknownTimezone) { tz.canonical_identifier }
     assert_raises(UnknownTimezone) { tz.canonical_zone }
-  end
-
-  def test_new_nil
-    tz = Timezone.new(nil)
-
-    assert_raises(UnknownTimezone) { tz.identifier }
-    assert_raises(UnknownTimezone) { tz.friendly_identifier }
-    assert_raises(UnknownTimezone) { tz.utc_to_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.to_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.local_to_utc(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.period_for(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.period_for_utc(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.periods_for_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.period_for_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.now }
-    assert_raises(UnknownTimezone) { tz.current_period_and_time }
-    assert_raises(UnknownTimezone) { tz.transitions_up_to(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.offsets_up_to(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.canonical_identifier }
-    assert_raises(UnknownTimezone) { tz.canonical_zone }
-  end
-
-  def test_new_arg
-    tz = Timezone.new('Europe/London')
-    assert_kind_of(Timezone.get('Europe/London').class, tz)
-    assert_equal('Europe/London', tz.identifier)
-  end
-
-  def test_new_arg_not_exist
-    error = assert_raises(InvalidTimezoneIdentifier) { Timezone.new('Nowhere/Special') }
-    assert_match(/\bNowhere\/Special\b/, error.message)
   end
 
   def test_all
@@ -1483,14 +1432,6 @@ class TCTimezone < Minitest::Test
 
     assert_raises(InvalidDataSource) do
       Timezone.get('Europe/London')
-    end
-  end
-
-  def test_new_missing_data_source
-    DataSource.set(DataSource.new)
-
-    assert_raises(InvalidDataSource) do
-      Timezone.new('Europe/London')
     end
   end
 

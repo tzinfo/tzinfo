@@ -4,6 +4,12 @@ module TZInfo
   #
   # @private
   class LinkedTimezone < InfoTimezone #:nodoc:
+    # Constructs a new LinkedTimezone with a LinkedTimezoneInfo instance.
+    def initialize(info)
+      super
+      @linked_timezone = Timezone.get(info.link_to_identifier)
+    end
+
     # Returns the TimezonePeriod for the given time. time can either be
     # a Time, DateTime or Timestamp.
     #
@@ -63,11 +69,5 @@ module TZInfo
     def canonical_zone
       @linked_timezone.canonical_zone
     end
-
-    protected
-      def setup(info)
-        super(info)
-        @linked_timezone = Timezone.get(info.link_to_identifier)
-      end
   end
 end

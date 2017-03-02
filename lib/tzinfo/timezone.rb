@@ -85,16 +85,6 @@ module TZInfo
       TimezoneProxy.new(identifier)
     end
 
-    # If identifier is nil calls super(), otherwise calls get. An identfier
-    # should always be passed in when called externally.
-    def self.new(identifier = nil)
-      if identifier
-        get(identifier)
-      else
-        super()
-      end
-    end
-
     # Returns an array containing all the available Timezones.
     #
     # Returns TimezoneProxy objects to avoid the overhead of loading Timezone

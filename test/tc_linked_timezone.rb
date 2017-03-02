@@ -13,10 +13,15 @@ class TCLinkedTimezone < Minitest::Test
     attr_reader :to
     attr_reader :from
 
-    def self.new(identifier, no_local_periods = false)
-      tz = super()
-      tz.send(:setup, identifier, no_local_periods)
-      tz
+    def initialize(identifier, no_local_periods = false)
+      super()
+      @identifier = identifier
+
+      # Don't have to be real TimezonePeriod or TimezoneTransition objects
+      # (nothing will use them).
+      @period_for_result = Object.new
+      @periods_for_local_result = no_local_periods ? [] : [Object.new, Object.new]
+      @transitions_up_to_result = [Object.new, Object.new]
     end
 
     def identifier
@@ -44,17 +49,6 @@ class TCLinkedTimezone < Minitest::Test
     def canonical_zone
       self
     end
-
-    private
-      def setup(identifier, no_local_periods)
-        @identifier = identifier
-
-        # Don't have to be real TimezonePeriod or TimezoneTransition objects
-        # (nothing will use them).
-        @period_for_result = Object.new
-        @periods_for_local_result = no_local_periods ? [] : [Object.new, Object.new]
-        @transitions_up_to_result = [Object.new, Object.new]
-      end
   end
 
 

@@ -6,10 +6,9 @@ module TZInfo
   class InfoTimezone < Timezone #:nodoc:
 
     # Constructs a new InfoTimezone with a TimezoneInfo instance.
-    def self.new(info)
-      tz = super()
-      tz.send(:setup, info)
-      tz
+    def initialize(info)
+      super()
+      @info = info
     end
 
     # The identifier of the timezone, e.g. "Europe/Paris".
@@ -21,10 +20,6 @@ module TZInfo
       # The TimezoneInfo for this Timezone.
       def info
         @info
-      end
-
-      def setup(info)
-        @info = info
       end
   end
 end

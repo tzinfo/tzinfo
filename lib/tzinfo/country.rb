@@ -30,18 +30,6 @@ module TZInfo
       Country.new(data_source.get_country_info(identifier))
     end
 
-    # If identifier is a CountryInfo object, initializes the Country instance,
-    # otherwise calls get(identifier).
-    def self.new(identifier)
-      if identifier.kind_of?(CountryInfo)
-        instance = super()
-        instance.send :setup, identifier
-        instance
-      else
-        get(identifier)
-      end
-    end
-
     # Returns an Array of all the valid country codes.
     def self.all_codes
       data_source.country_codes
@@ -50,6 +38,11 @@ module TZInfo
     # Returns an Array of all the defined Countries.
     def self.all
       data_source.country_codes.collect {|code| get(code)}
+    end
+
+    # Initializes a new Country with a CountryInfo instance.
+    def initialize(info)
+      @info = info
     end
 
     # The ISO 3166-1 alpha-2 country code.
@@ -149,12 +142,6 @@ module TZInfo
     end
 
     private
-      # Called by Country.new to initialize a new Country instance. The info
-      # parameter is a CountryInfo that defines the country.
-      def setup(info)
-        @info = info
-      end
-
       # Returns the current DataSource
       def self.data_source
         DataSource.get
