@@ -6,9 +6,6 @@ module TZInfo
   #
   #   TZInfo::DataSource.set(:ruby)
   class RubyDataSource < DataSource
-    # Base path for require.
-    REQUIRE_PATH = File.join('tzinfo', 'data', 'definitions')
-
     # Returns an array of all the available ISO 3166-1 alpha-2 country codes.
     attr_reader :country_codes
 
