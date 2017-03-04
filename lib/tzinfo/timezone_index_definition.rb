@@ -19,20 +19,6 @@ module TZInfo
     #
     # @private
     module ClassMethods #:nodoc:
-      # Defines a timezone based on data.
-      def timezone(identifier)
-        identifier.freeze
-        @timezones << identifier
-        @data_timezones << identifier
-      end
-
-      # Defines a timezone which is a link to another timezone.
-      def linked_timezone(identifier)
-        identifier.freeze
-        @timezones << identifier
-        @linked_timezones << identifier
-      end
-
       # Returns a frozen array containing the identifiers of all the timezones.
       # Identifiers are sorted according to String#<=>.
       def timezones
@@ -58,6 +44,22 @@ module TZInfo
           @linked_timezones = @linked_timezones.sort.freeze
         end
         @linked_timezones
+      end
+
+      private
+
+      # Defines a timezone based on data.
+      def timezone(identifier)
+        identifier.freeze
+        @timezones << identifier
+        @data_timezones << identifier
+      end
+
+      # Defines a timezone which is a link to another timezone.
+      def linked_timezone(identifier)
+        identifier.freeze
+        @timezones << identifier
+        @linked_timezones << identifier
       end
     end
   end
