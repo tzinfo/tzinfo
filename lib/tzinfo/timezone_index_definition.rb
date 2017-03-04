@@ -21,12 +21,14 @@ module TZInfo
     module ClassMethods #:nodoc:
       # Defines a timezone based on data.
       def timezone(identifier)
+        identifier.freeze
         @timezones << identifier
         @data_timezones << identifier
       end
 
       # Defines a timezone which is a link to another timezone.
       def linked_timezone(identifier)
+        identifier.freeze
         @timezones << identifier
         @linked_timezones << identifier
       end

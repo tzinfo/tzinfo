@@ -77,6 +77,11 @@ class TCRubyDataSource < Minitest::Test
     end
   end
 
+  def test_load_timezone_info_returned_identifier_frozen
+    info = @data_source.send(:load_timezone_info, 'Europe/London')
+    assert(info.identifier.frozen?)
+  end
+
   def test_get_timezone_info
     info = @data_source.get_timezone_info('Europe/London')
     assert_equal('Europe/London', info.identifier)
@@ -85,19 +90,22 @@ class TCRubyDataSource < Minitest::Test
   def test_timezone_identifiers
     all = @data_source.timezone_identifiers
     assert_same(TZInfo::Data::Indexes::Timezones.timezones, all)
-    assert_equal(true, all.frozen?)
+    assert(all.frozen?)
+    assert(all.all?(&:frozen?))
   end
 
   def test_data_timezone_identifiers
     all_data = @data_source.data_timezone_identifiers
     assert_same(TZInfo::Data::Indexes::Timezones.data_timezones, all_data)
-    assert_equal(true, all_data.frozen?)
+    assert(all_data.frozen?)
+    assert(all_data.all?(&:frozen?))
   end
 
   def test_linked_timezone_identifiers
     all_linked = @data_source.linked_timezone_identifiers
     assert_same(TZInfo::Data::Indexes::Timezones.linked_timezones, all_linked)
-    assert_equal(true, all_linked.frozen?)
+    assert(all_linked.frozen?)
+    assert(all_linked.all?(&:frozen?))
   end
 
   def test_load_country_info
@@ -152,6 +160,14 @@ class TCRubyDataSource < Minitest::Test
     end
   end
 
+  def test_load_country_info_returned_strings_frozen
+    info = @data_source.send(:load_country_info, 'US')
+    assert(info.code.frozen?)
+    assert(info.name.frozen?)
+    assert(info.zones.map(&:identifier).all?(&:frozen?))
+    assert(info.zones.map(&:description).all?(&:frozen?))
+  end
+
   def test_get_country_info
     info = @data_source.get_country_info('GB')
     assert_equal('GB', info.code)
@@ -160,7 +176,8 @@ class TCRubyDataSource < Minitest::Test
   def test_country_codes
     codes = @data_source.country_codes
     assert_equal(TZInfo::Data::Indexes::Countries.countries.keys.sort, codes)
-    assert_equal(true, codes.frozen?)
+    assert(codes.frozen?)
+    assert(codes.all?(&:frozen?))
     assert_same(codes, @data_source.country_codes)
   end
 end

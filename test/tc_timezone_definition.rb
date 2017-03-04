@@ -53,6 +53,16 @@ class TCTimezoneDefinition < Minitest::Test
     assert_equal(TimezoneOffset.new(-75, 0, :LMT), ti.constant_offset)
   end
 
+  def test_data_frozen_identifier
+    m = Module.new
+    m.send(:include, TimezoneDefinition)
+
+    m.send(:timezone, 'Test/Data/Zone') {|tz| tz.offset :o0, 0, 0, :UTC }
+
+    ti = m.get
+    assert(ti.identifier.frozen?)
+  end
+
   def test_linked
     m = Module.new
     m.send(:include, TimezoneDefinition)
@@ -62,6 +72,16 @@ class TCTimezoneDefinition < Minitest::Test
     assert_kind_of(LinkedTimezoneInfo, ti)
     assert_equal('Test/Linked/Zone', ti.identifier)
     assert_equal('Test/Linked_To/Zone', ti.link_to_identifier)
+  end
+
+  def test_linked_frozen_identifiers
+    m = Module.new
+    m.send(:include, TimezoneDefinition)
+    m.send(:linked_timezone, 'Test/Linked/Zone', 'Test/Linked_To/Zone')
+
+    ti = m.get
+    assert(ti.identifier.frozen?)
+    assert(ti.link_to_identifier.frozen?)
   end
 
   def test_double_data

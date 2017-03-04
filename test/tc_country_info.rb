@@ -7,11 +7,13 @@ class TCCountryInfo < Minitest::Test
   def test_code
     ci = CountryInfo.new('ZZ', 'Zzz', [])
     assert_equal('ZZ', ci.code)
+    assert(ci.code.frozen?)
   end
 
   def test_name
     ci = CountryInfo.new('ZZ', 'Zzz', [])
     assert_equal('Zzz', ci.name)
+    assert(ci.name.frozen?)
   end
 
   def test_zones_empty

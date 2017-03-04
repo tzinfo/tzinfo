@@ -84,4 +84,22 @@ class TCCountryIndexDefinition < Minitest::Test
     assert_equal('Test2', country.name)
     assert_equal([CountryTimezone.new('Test/Zone/2', Rational(5, 6), Rational(7, 8), 'Zone 2')], country.zones)
   end
+
+  def test_strings_frozen
+    m = Module.new
+    m.send(:include, CountryIndexDefinition)
+
+    m.send(:country, 'TT', 'Test') do |c|
+      c.timezone 'Test/Zone/1', 1, 2, 3, 4, 'Zone One'
+    end
+
+    countries = m.countries
+    assert(countries.keys.all?(&:frozen?))
+    country = countries['TT']
+    assert(country.code.frozen?)
+    assert(country.name.frozen?)
+    zone = country.zones.first
+    assert(zone.identifier.frozen?)
+    assert(zone.description.frozen?)
+  end
 end

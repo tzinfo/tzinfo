@@ -7,5 +7,6 @@ class TCTimezoneInfo < Minitest::Test
   def test_identifier
     ti = TimezoneInfo.new('Test/Zone')
     assert_equal('Test/Zone', ti.identifier)
+    assert(ti.identifier.frozen?)
   end
 end

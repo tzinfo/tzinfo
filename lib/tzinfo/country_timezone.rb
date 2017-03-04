@@ -21,13 +21,15 @@ module TZInfo
     # longitude and description. The latitude and longitude must be specified
     # as instances of Rational.
     #
+    # The passed in identifier and description instances will be frozen.
+    #
     # CountryTimezone instances should normally only be constructed when
     # by implementations of DataSource.
     def initialize(identifier, latitude, longitude, description = nil)
-      @identifier = identifier
+      @identifier = identifier.freeze
       @latitude = latitude
       @longitude = longitude
-      @description = description
+      @description = description.freeze
     end
 
     # The Timezone (actually a TimezoneProxy for performance reasons).

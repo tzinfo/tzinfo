@@ -6,6 +6,7 @@ class TCCountryTimezone < Minitest::Test
   def test_identifier
     ct = CountryTimezone.new('Europe/London', Rational(2059, 40), Rational(-5, 16))
     assert_equal('Europe/London', ct.identifier)
+    assert(ct.identifier.frozen?)
   end
 
   def test_latitude
@@ -31,6 +32,7 @@ class TCCountryTimezone < Minitest::Test
   def test_description
     ct = CountryTimezone.new('America/New_York', Rational(48857, 1200), Rational(-266423, 3600), 'Eastern Time')
     assert_equal('Eastern Time', ct.description)
+    assert(ct.description.frozen?)
   end
 
   def test_timezone

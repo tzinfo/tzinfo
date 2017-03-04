@@ -18,4 +18,12 @@ class TCCountryDefinerFormat1 < Minitest::Test
       CountryTimezone.new('Test/Two',   Rational(-1, 2), Rational(-3, 4), nil),
       CountryTimezone.new('Test/Three', Rational( 5, 6), Rational(-7, 8), 'Test Three')], cd.timezones)
   end
+
+  def test_strings_frozen
+    cd = CountryDefinerFormat1.new
+    cd.timezone('Test/One', 1, 2, 3, 4, 'Test 1')
+    timezone = cd.timezones.first
+    assert(timezone.identifier.frozen?)
+    assert(timezone.description.frozen?)
+  end
 end

@@ -7,9 +7,11 @@ module TZInfo
 
     # Constructs a new LinkedTimezoneInfo with an identifier and the identifier
     # of the zone linked to.
+    #
+    # The passed in identifier and link_to_identifier instances will be frozen.
     def initialize(identifier, link_to_identifier)
       super(identifier)
-      @link_to_identifier = link_to_identifier
+      @link_to_identifier = link_to_identifier.freeze
     end
 
     # Returns internal object state as a programmer-readable string.

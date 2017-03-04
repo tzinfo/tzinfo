@@ -6,8 +6,10 @@ module TZInfo
     attr_reader :identifier
 
     # Constructs a new TimezoneInfo with an identifier.
+    #
+    # The passed in identifer instance will be frozen.
     def initialize(identifier)
-      @identifier = identifier
+      @identifier = identifier.freeze
     end
 
     # Returns internal object state as a programmer-readable string.

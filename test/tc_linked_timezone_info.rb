@@ -7,11 +7,13 @@ class TCLinkedTimezoneInfo < Minitest::Test
   def test_identifier
     lti = LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked')
     assert_equal('Test/Zone', lti.identifier)
+    assert(lti.identifier.frozen?)
   end
 
   def test_link_to_identifier
     lti = LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked')
     assert_equal('Test/Linked', lti.link_to_identifier)
+    assert(lti.link_to_identifier.frozen?)
   end
 
   def test_construct_timezone

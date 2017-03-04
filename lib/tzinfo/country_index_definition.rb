@@ -33,7 +33,7 @@ module TZInfo
           []
         end
 
-        @countries[code] = CountryInfo.new(code, name, zones)
+        @countries[code.freeze] = CountryInfo.new(code, name, zones)
       end
     end
   end

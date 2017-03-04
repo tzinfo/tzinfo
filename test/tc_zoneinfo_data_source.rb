@@ -696,6 +696,11 @@ class TCZoneinfoDataSource < Minitest::Test
     assert_equal('Europe/London', info.identifier)
   end
 
+  def test_load_timezone_info_returned_identifier_frozen
+    info = @data_source.send(:load_timezone_info, 'Europe/London')
+    assert(info.identifier.frozen?)
+  end
+
   def test_get_timezone_info_data
     info = @data_source.get_timezone_info('Europe/London')
     assert_equal('Europe/London', info.identifier)
@@ -726,7 +731,8 @@ class TCZoneinfoDataSource < Minitest::Test
     all = @data_source.timezone_identifiers
     assert_kind_of(Array, all)
     assert_equal(expected, all)
-    assert_equal(true, all.frozen?)
+    assert(all.frozen?)
+    assert(all.all?(&:frozen?))
     assert_same(all, @data_source.timezone_identifiers)
   end
 
@@ -735,7 +741,8 @@ class TCZoneinfoDataSource < Minitest::Test
     all_data = @data_source.data_timezone_identifiers
     assert_kind_of(Array, all_data)
     assert_equal(expected, all_data)
-    assert_equal(true, all_data.frozen?)
+    assert(all_data.frozen?)
+    assert(all_data.all?(&:frozen?))
     assert_same(all_data, @data_source.data_timezone_identifiers)
   end
 
@@ -743,7 +750,7 @@ class TCZoneinfoDataSource < Minitest::Test
     all_linked = @data_source.linked_timezone_identifiers
     assert_kind_of(Array, all_linked)
     assert_equal([], all_linked)
-    assert_equal(true, all_linked.frozen?)
+    assert(all_linked.frozen?)
   end
 
   def test_timezone_identifiers_ignored_plus_version_file
@@ -862,11 +869,12 @@ class TCZoneinfoDataSource < Minitest::Test
     end
   end
 
-  def test_load_country_info_tainted_and_frozen
-    safe_test do
-      info = @data_source.send(:load_country_info, 'NL'.dup.taint.freeze)
-      assert_equal('NL', info.code)
-    end
+  def test_load_country_info_returned_strings_frozen
+    info = @data_source.send(:load_country_info, 'US')
+    assert(info.code.frozen?)
+    assert(info.name.frozen?)
+    assert(info.zones.map(&:identifier).all?(&:frozen?))
+    assert(info.zones.map(&:description).all?(&:frozen?))
   end
 
   def test_load_country_info_check_zones
@@ -1168,7 +1176,8 @@ class TCZoneinfoDataSource < Minitest::Test
     codes = @data_source.country_codes
     assert_kind_of(Array, codes)
     assert_equal(file_codes, codes)
-    assert_equal(true, codes.frozen?)
+    assert(codes.frozen?)
+    assert(codes.all?(&:frozen?))
     assert_same(codes, @data_source.country_codes)
   end
 

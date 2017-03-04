@@ -14,10 +14,10 @@ module TZInfo
     # Constructs a new CountryInfo with an ISO 3166 country code, name and Array
     # of CountryTimezone instances.
     #
-    # The passed in zones Array will be frozen and a reference retained.
+    # The passed in code, name and zones instances will be frozen.
     def initialize(code, name, zones)
-      @code = code
-      @name = name
+      @code = code.freeze
+      @name = name.freeze
       @zones = zones.freeze
     end
 

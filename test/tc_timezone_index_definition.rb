@@ -46,10 +46,15 @@ class TCTimezoneIndexDefinition < Minitest::Test
     assert_equal(['Test/B/One', 'Test/B/Three', 'Test/B/Two'], timezones3)
     assert_equal([], timezones4)
 
-    assert_equal(true, timezones1.frozen?)
-    assert_equal(true, timezones2.frozen?)
-    assert_equal(true, timezones3.frozen?)
-    assert_equal(true, timezones4.frozen?)
+    assert(timezones1.frozen?)
+    assert(timezones2.frozen?)
+    assert(timezones3.frozen?)
+    assert(timezones4.frozen?)
+
+    assert(timezones1.all?(&:frozen?))
+    assert(timezones2.all?(&:frozen?))
+    assert(timezones3.all?(&:frozen?))
+    assert(timezones4.all?(&:frozen?))
 
     assert_same(timezones1, TimezonesTest1.timezones)
     assert_same(timezones2, TimezonesTest2.timezones)
@@ -68,10 +73,15 @@ class TCTimezoneIndexDefinition < Minitest::Test
     assert_equal([], data_timezones3)
     assert_equal([], data_timezones4)
 
-    assert_equal(true, data_timezones1.frozen?)
-    assert_equal(true, data_timezones2.frozen?)
-    assert_equal(true, data_timezones3.frozen?)
-    assert_equal(true, data_timezones4.frozen?)
+    assert(data_timezones1.frozen?)
+    assert(data_timezones2.frozen?)
+    assert(data_timezones3.frozen?)
+    assert(data_timezones4.frozen?)
+
+    assert(data_timezones1.all?(&:frozen?))
+    assert(data_timezones2.all?(&:frozen?))
+    assert(data_timezones3.all?(&:frozen?))
+    assert(data_timezones4.all?(&:frozen?))
 
     assert_same(data_timezones1, TimezonesTest1.data_timezones)
     assert_same(data_timezones2, TimezonesTest2.data_timezones)
@@ -90,10 +100,15 @@ class TCTimezoneIndexDefinition < Minitest::Test
     assert_equal(['Test/B/One', 'Test/B/Three', 'Test/B/Two'], linked_timezones3)
     assert_equal([], linked_timezones4)
 
-    assert_equal(true, linked_timezones1.frozen?)
-    assert_equal(true, linked_timezones2.frozen?)
-    assert_equal(true, linked_timezones3.frozen?)
-    assert_equal(true, linked_timezones4.frozen?)
+    assert(linked_timezones1.frozen?)
+    assert(linked_timezones2.frozen?)
+    assert(linked_timezones3.frozen?)
+    assert(linked_timezones4.frozen?)
+
+    assert(linked_timezones1.all?(&:frozen?))
+    assert(linked_timezones2.all?(&:frozen?))
+    assert(linked_timezones3.all?(&:frozen?))
+    assert(linked_timezones4.all?(&:frozen?))
 
     assert_same(linked_timezones1, TimezonesTest1.linked_timezones)
     assert_same(linked_timezones2, TimezonesTest2.linked_timezones)
