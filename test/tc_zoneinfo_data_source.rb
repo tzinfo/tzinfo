@@ -701,7 +701,7 @@ class TCZoneinfoDataSource < Minitest::Test
     assert(info.identifier.frozen?)
   end
 
-  def test_get_timezone_info_data
+  def test_get_timezone_info
     info = @data_source.get_timezone_info('Europe/London')
     assert_equal('Europe/London', info.identifier)
   end
