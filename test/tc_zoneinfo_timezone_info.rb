@@ -304,6 +304,17 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     end
   end
 
+  def test_load_no_offsets
+    offsets = []
+    transitions = [{:at => Time.utc(2000, 12, 31), :offset_index => 0}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      assert_raises(InvalidZoneinfoFile) do
+        ZoneinfoTimezoneInfo.new('Zone', path)
+      end
+    end
+  end
+
   def test_load_invalid_offset_index
     offsets = [{:gmtoff => -0, :isdst => false, :abbrev => 'LMT'}]
     transitions = [{:at => Time.utc(2000, 12, 31), :offset_index => 2}]
