@@ -56,39 +56,109 @@ module TZInfo
         result
       end
       
-      # Zoneinfo doesn't include the offset from standard time (std_offset).
-      # Derive the missing offsets by looking at changes in the total UTC
-      # offset.
+      # Zoneinfo files don't include the offset from standard time (std_offset)
+      # for DST periods. Derive the base offset (utc_offset) where DST is
+      # observed from either the previous or next non-DST period.
       #
-      # This will be run through forwards and then backwards by the parse 
-      # method.
-      def derive_offsets(transitions, offsets)      
-        previous_offset = nil
+      # Returns the index of the offset to be used prior to the first
+      # transition.
+      def derive_offsets(transitions, offsets)
+        # The first non-DST offset (if there is one) is the offset observed
+        # before the first transition. Fallback to the first DST offset if there
+        # are no non-DST offsets.
+        first_non_dst_offset_index = offsets.index {|o| !o[:is_dst] }
+        first_offset = first_non_dst_offset_index || 0
+        return first_offset if transitions.empty?
 
-        transitions.each do |t|
-          offset = offsets[t[:offset]]
+        # Determine the utc_offset of the next non-dst offset at each transition.
+        utc_offset_from_next = nil
 
-          if !offset[:std_offset] && offset[:is_dst] && previous_offset
-            difference = offset[:utc_total_offset] - previous_offset[:utc_total_offset]
-            
-            if previous_offset[:is_dst]
-              if previous_offset[:std_offset]
-                std_offset = previous_offset[:std_offset] + difference
-              else
-                std_offset = nil
-              end
-            else
-              std_offset = difference
-            end
-            
-            if std_offset && std_offset > 0
-              offset[:std_offset] = std_offset
-              offset[:utc_offset] = offset[:utc_total_offset] - std_offset
-            end
+        transitions.reverse_each do |transition|
+          offset = offsets[transition[:offset]]
+          if offset[:is_dst]
+            transition[:utc_offset_from_next] = utc_offset_from_next if utc_offset_from_next
+          else
+            utc_offset_from_next = offset[:utc_total_offset]
           end
-          
-          previous_offset = offset
         end
+
+        utc_offset_from_previous = first_non_dst_offset_index ? offsets[first_non_dst_offset_index][:utc_total_offset] : nil
+        defined_offsets = {}
+
+        transitions.each do |transition|
+          offset_index = transition[:offset]
+          offset = offsets[offset_index]
+          utc_total_offset = offset[:utc_total_offset]
+
+          if offset[:is_dst]
+            utc_offset_from_next = transition[:utc_offset_from_next]
+
+            difference_to_previous = utc_total_offset - (utc_offset_from_previous || utc_total_offset)
+            difference_to_next = utc_total_offset - (utc_offset_from_next || utc_total_offset)
+
+            utc_offset = if difference_to_previous > 0 && difference_to_next > 0
+              difference_to_previous < difference_to_next ? utc_offset_from_previous : utc_offset_from_next
+            elsif difference_to_previous > 0
+              utc_offset_from_previous
+            elsif difference_to_next > 0
+              utc_offset_from_next
+            else # difference_to_previous <= 0 && difference_to_next <= 0
+              # DST, but the either the offset has stayed the same or decreased
+              # relative to both the previous and next used base utc offset, or
+              # there are no non-DST offsets. Assume a 1 hour offset from base.
+              utc_total_offset - 3600
+            end
+
+            if !offset[:utc_offset]
+              offset[:utc_offset] = utc_offset
+              defined_offsets[offset] = offset_index
+            elsif offset[:utc_offset] != utc_offset
+              # An earlier transition has already derived a different
+              # utc_offset. Define a new offset or reuse an existing identically
+              # defined offset.
+              new_offset = offset.dup
+              new_offset[:utc_offset] = utc_offset
+
+              offset_index = defined_offsets[new_offset]
+
+              unless offset_index
+                offsets << new_offset
+                offset_index = offsets.length - 1
+                defined_offsets[new_offset] = offset_index
+              end
+
+              transition[:offset] = offset_index
+            end
+          else
+            utc_offset_from_previous = utc_total_offset
+          end
+        end
+
+        first_offset
+      end
+
+      # Defines an offset for the timezone based on the given index and offset
+      # Hash.
+      def define_offset(index, offset)
+        utc_total_offset = offset[:utc_total_offset]
+        utc_offset = offset[:utc_offset]
+
+        if utc_offset
+          # DST offset with base utc_offset derived by derive_offsets.
+          std_offset = utc_total_offset - utc_offset
+        elsif offset[:is_dst]
+          # DST offset unreferenced by a transition (offset in use before the
+          # first transition). No derived base UTC offset, so assume 1 hour
+          # DST.
+          utc_offset = utc_total_offset - 3600
+          std_offset = 3600
+        else
+          # Non-DST offset.
+          utc_offset = utc_total_offset
+          std_offset = 0
+        end
+
+        offset index, utc_offset, std_offset, offset[:abbr].untaint.to_sym
       end
       
       # Parses a zoneinfo file and intializes the DataTimezoneInfo structures.
@@ -179,33 +249,12 @@ module TZInfo
         end
         
         # Derive the offsets from standard time (std_offset).
-        derive_offsets(transitions, offsets)
-        derive_offsets(transitions.reverse, offsets)
+        first_offset_index = derive_offsets(transitions, offsets)
         
-        # Assign anything left a standard offset of one hour
-        offsets.each do |o|
-          if !o[:std_offset] && o[:is_dst]
-            o[:std_offset] = 3600
-            o[:utc_offset] = o[:utc_total_offset] - 3600
-          end
-        end
-        
-        # Find the first non-dst offset. This is used as the offset for the time
-        # before the first transition.
-        first = nil
-        offsets.each_with_index do |o, i|
-          if !o[:is_dst]
-            first = i
-            break
-          end
-        end
-        
-        if first
-          offset first, offsets[first][:utc_offset], offsets[first][:std_offset], offsets[first][:abbr].untaint.to_sym
-        end
+        define_offset(first_offset_index, offsets[first_offset_index])
         
         offsets.each_with_index do |o, i|
-          offset i, o[:utc_offset], o[:std_offset], o[:abbr].untaint.to_sym unless i == first
+          define_offset(i, o) unless i == first_offset_index
         end
 
         if !using_64bit && !RubyCoreSupport.time_supports_negative

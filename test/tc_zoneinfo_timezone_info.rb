@@ -707,27 +707,39 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     end
   end
     
-  def test_load_starts_all_same_dst_offset
+  def test_load_starts_only_dst_transition_with_lmt
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
-    #
-    # If there are no changes in the UTC offset (ignoring the first offset, 
-    # which is usually local mean time), then a value of 1 hour is used as the
-    # standard time offset.
-  
+
     offsets = [
       {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDDT'}]
-      
-    transitions = [
-      {:at => Time.utc(2000, 1, 1), :offset_index => 1}]
-  
-    tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
-      assert_equal('Zone/DoubleDaylight', info.identifier)
-  
-      assert_period(:LMT,  3542,    0, false,                  nil, Time.utc(2000, 1, 1), info)
-      assert_period(:XDDT, 3600, 3600,  true, Time.utc(2000, 1, 1),                  nil, info)
+      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+
+    transitions = [{:at => Time.utc(2000, 1, 1), :offset_index => 1}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/OnlyDST', path)
+      assert_equal('Zone/OnlyDST', info.identifier)
+
+      assert_period(:LMT, 3542,    0, false,                  nil, Time.utc(2000, 1, 1), info)
+      assert_period(:XDT, 3542, 3658,  true, Time.utc(2000, 1, 1),                  nil, info)
+    end
+  end
+
+  def test_load_starts_only_dst_transition_without_lmt
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [{:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+
+    transitions = [{:at => Time.utc(2000, 1, 1), :offset_index => 0}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/OnlyDST', path)
+      assert_equal('Zone/OnlyDST', info.identifier)
+
+      assert_period(:XDT, 3600, 3600, true,                  nil, Time.utc(2000, 1, 1), info)
+      assert_period(:XDT, 3600, 3600, true, Time.utc(2000, 1, 1),                  nil, info)
     end
   end
   
@@ -754,6 +766,297 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       assert_period(:LMT,  3542,    0, false,                  nil, Time.utc(2000, 1, 1), info)
       assert_period(:YST,  3600,    0, false, Time.utc(2000, 1, 1), Time.utc(2000, 2, 1), info)
       assert_period(:XDT,     0, 3600,  true, Time.utc(2000, 2, 1), nil, info)
+    end
+  end
+
+  def test_load_apia_international_dateline_change
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    # Pacific/Apia moved across the International Date Line whilst observing
+    # daylight savings time.
+
+    offsets = [
+      {:gmtoff =>  45184, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => -39600, :isdst => false, :abbrev => '-11'},
+      {:gmtoff => -36000, :isdst => true,  :abbrev => '-10'},
+      {:gmtoff =>  50400, :isdst => true,  :abbrev => '+14'},
+      {:gmtoff =>  46800, :isdst => false, :abbrev => '+13'}]
+
+    transitions = [
+      {:at => Time.utc(2011,  4,  2, 14, 0, 0), :offset_index => 1},
+      {:at => Time.utc(2011,  9, 24, 14, 0, 0), :offset_index => 2},
+      {:at => Time.utc(2011, 12, 30, 10, 0, 0), :offset_index => 3},
+      {:at => Time.utc(2012,  3, 31, 14, 0, 0), :offset_index => 4}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Test/Pacific/Apia', path)
+      assert_equal('Test/Pacific/Apia', info.identifier)
+
+      assert_period(  :LMT,  45184,    0, false,                              nil, Time.utc(2011,  4,  2, 14, 0, 0), info)
+      assert_period(:'-11', -39600,    0, false, Time.utc(2011,  4,  2, 14, 0, 0), Time.utc(2011,  9, 24, 14, 0, 0), info)
+      assert_period(:'-10', -39600, 3600,  true, Time.utc(2011,  9, 24, 14, 0, 0), Time.utc(2011, 12, 30, 10, 0, 0), info)
+      assert_period(:'+14',  46800, 3600,  true, Time.utc(2011, 12, 30, 10, 0, 0), Time.utc(2012,  3, 31, 14, 0, 0), info)
+      assert_period(:'+13',  46800,    0, false, Time.utc(2012,  3, 31, 14, 0, 0),                              nil, info)
+    end
+  end
+
+  def test_load_offset_split_for_different_utc_offset
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [
+      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST1'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST2'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}]
+
+    transitions = [
+      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  4, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  5, 1), :offset_index => 3},
+      {:at => Time.utc(2000,  6, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  7, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  8, 1), :offset_index => 3},
+      {:at => Time.utc(2000,  9, 1), :offset_index => 1},
+      {:at => Time.utc(2000, 10, 1), :offset_index => 2},
+      {:at => Time.utc(2000, 11, 1), :offset_index => 3},
+      {:at => Time.utc(2000, 12, 1), :offset_index => 2}]
+
+    # XDT will be split and defined according to its surrounding standard time
+    # offsets.
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/SplitUtcOffset', path)
+      assert_equal('Zone/SplitUtcOffset', info.identifier)
+
+      assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
+      assert_period(:XST1, 3600,    0, false, Time.utc(2000,  1, 1), Time.utc(2000,  2, 1), info)
+      assert_period( :XDT, 3600, 7200,  true, Time.utc(2000,  2, 1), Time.utc(2000,  3, 1), info)
+      assert_period(:XST1, 3600,    0, false, Time.utc(2000,  3, 1), Time.utc(2000,  4, 1), info)
+      assert_period(:XST2, 7200,    0, false, Time.utc(2000,  4, 1), Time.utc(2000,  5, 1), info)
+      assert_period( :XDT, 7200, 3600,  true, Time.utc(2000,  5, 1), Time.utc(2000,  6, 1), info)
+      assert_period(:XST2, 7200,    0, false, Time.utc(2000,  6, 1), Time.utc(2000,  7, 1), info)
+      assert_period(:XST1, 3600,    0, false, Time.utc(2000,  7, 1), Time.utc(2000,  8, 1), info)
+      assert_period( :XDT, 3600, 7200,  true, Time.utc(2000,  8, 1), Time.utc(2000,  9, 1), info)
+      assert_period(:XST1, 3600,    0, false, Time.utc(2000,  9, 1), Time.utc(2000, 10, 1), info)
+      assert_period(:XST2, 7200,    0, false, Time.utc(2000, 10, 1), Time.utc(2000, 11, 1), info)
+      assert_period( :XDT, 7200, 3600,  true, Time.utc(2000, 11, 1), Time.utc(2000, 12, 1), info)
+      assert_period(:XST2, 7200,    0, false, Time.utc(2000, 12, 1),                   nil, info)
+
+      1.upto(6) do |i|
+        assert_same(info.period_for_utc(Time.utc(2000, i, 1)).offset, info.period_for_utc(Time.utc(2000, i + 6, 1)).offset)
+      end
+    end
+  end
+
+  def test_load_offset_utc_offset_taken_from_minimum_difference_minimum_after
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [
+      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST1'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST2'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}]
+
+    transitions = [
+      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 2}]
+
+    # XDT should use the closest utc_offset (7200) (and not an equivalent
+    # utc_offset of 3600 and std_offset of 7200).
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/MinimumUtcOffset', path)
+      assert_equal('Zone/MinimumUtcOffset', info.identifier)
+
+      assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
+      assert_period(:XST1, 3600,    0, false, Time.utc(2000,  1, 1), Time.utc(2000,  2, 1), info)
+      assert_period( :XDT, 7200, 3600,  true, Time.utc(2000,  2, 1), Time.utc(2000,  3, 1), info)
+      assert_period(:XST2, 7200,    0, false, Time.utc(2000,  3, 1),                   nil, info)
+    end
+  end
+
+  def test_load_offset_utc_offset_taken_from_minimum_difference_minimum_before
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [
+      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST1'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST2'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}]
+
+    transitions = [
+      {:at => Time.utc(2000,  1, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 1}]
+
+    # XDT should use the closest utc_offset (7200) (and not an equivalent
+    # utc_offset of 3600 and std_offset of 7200).
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/MinimumUtcOffset', path)
+      assert_equal('Zone/MinimumUtcOffset', info.identifier)
+
+      assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
+      assert_period(:XST2, 7200,    0, false, Time.utc(2000,  1, 1), Time.utc(2000,  2, 1), info)
+      assert_period( :XDT, 7200, 3600,  true, Time.utc(2000,  2, 1), Time.utc(2000,  3, 1), info)
+      assert_period(:XST1, 3600,    0, false, Time.utc(2000,  3, 1),                   nil, info)
+    end
+  end
+
+  def test_load_offset_does_not_use_equal_utc_total_offset_equal_after
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST1'},
+      {:gmtoff => 7200, :isdst => false, :abbrev => 'XST2'},
+      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+
+    transitions = [
+      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 2}]
+
+    # XDT will be based on the utc_offset of XST1 even though XST2 has an
+    # equivalent (or greater) utc_total_offset.
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetEqual', path)
+      assert_equal('Zone/UtcOffsetEqual', info.identifier)
+
+      assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
+      assert_period(:XST1, 3600,    0, false, Time.utc(2000,  1, 1), Time.utc(2000,  2, 1), info)
+      assert_period( :XDT, 3600, 3600,  true, Time.utc(2000,  2, 1), Time.utc(2000,  3, 1), info)
+      assert_period(:XST2, 7200,    0, false, Time.utc(2000,  3, 1),                   nil, info)
+    end
+  end
+
+  def test_load_offset_does_not_use_equal_utc_total_offset_equal_before
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST1'},
+      {:gmtoff => 7200, :isdst => false, :abbrev => 'XST2'},
+      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+
+    transitions = [
+      {:at => Time.utc(2000,  1, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 1}]
+
+    # XDT will be based on the utc_offset of XST1 even though XST2 has an
+    # equivalent (or greater) utc_total_offset.
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetEqual', path)
+      assert_equal('Zone/UtcOffsetEqual', info.identifier)
+
+      assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
+      assert_period(:XST2, 7200,    0, false, Time.utc(2000,  1, 1), Time.utc(2000,  2, 1), info)
+      assert_period( :XDT, 3600, 3600,  true, Time.utc(2000,  2, 1), Time.utc(2000,  3, 1), info)
+      assert_period(:XST1, 3600,    0, false, Time.utc(2000,  3, 1),                   nil, info)
+    end
+  end
+
+  def test_load_offset_both_adjacent_non_dst_equal_utc_total_offset
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [
+      {:gmtoff => 7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 7200, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+
+    transitions = [
+      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 1}]
+
+    # XDT will just assume an std_offset of +1 hour and calculate the utc_offset
+    # from utc_total_offset - std_offset.
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/AdjacentEqual', path)
+      assert_equal('Zone/AdjacentEqual', info.identifier)
+
+      assert_period(:LMT, 7142,    0, false,                   nil, Time.utc(2000,  1, 1), info)
+      assert_period(:XST, 7200,    0, false, Time.utc(2000,  1, 1), Time.utc(2000,  2, 1), info)
+      assert_period(:XDT, 3600, 3600,  true, Time.utc(2000,  2, 1), Time.utc(2000,  3, 1), info)
+      assert_period(:XST, 7200,    0, false, Time.utc(2000,  3, 1),                   nil, info)
+    end
+  end
+
+  def test_load_offset_utc_offset_preserved_from_next
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [
+      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST1'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST2'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT1'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT2'}]
+
+    transitions = [
+      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 4},
+      {:at => Time.utc(2000,  4, 1), :offset_index => 2}]
+
+    # Both XDT1 and XDT2 should both use the closest utc_offset (7200) (and not
+    # an equivalent utc_offset of 3600 and std_offset of 7200).
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetPreserved', path)
+      assert_equal('Zone/UtcOffsetPreserved', info.identifier)
+
+      assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
+      assert_period(:XST1, 3600,    0, false, Time.utc(2000,  1, 1), Time.utc(2000,  2, 1), info)
+      assert_period(:XDT1, 7200, 3600,  true, Time.utc(2000,  2, 1), Time.utc(2000,  3, 1), info)
+      assert_period(:XDT2, 7200, 3600,  true, Time.utc(2000,  3, 1), Time.utc(2000,  4, 1), info)
+      assert_period(:XST2, 7200,    0, false, Time.utc(2000,  4, 1),                   nil, info)
+    end
+  end
+
+  def test_load_offset_utc_offset_preserved_from_previous
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [
+      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST1'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST2'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT1'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT2'}]
+
+    transitions = [
+      {:at => Time.utc(2000,  1, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 4},
+      {:at => Time.utc(2000,  4, 1), :offset_index => 1}]
+
+    # Both XDT1 and XDT2 should both use the closest utc_offset (7200) (and not
+    # an equivalent utc_offset of 3600 and std_offset of 7200).
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetPreserved', path)
+      assert_equal('Zone/UtcOffsetPreserved', info.identifier)
+
+      assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
+      assert_period(:XST2, 7200,    0, false, Time.utc(2000,  1, 1), Time.utc(2000,  2, 1), info)
+      assert_period(:XDT1, 7200, 3600,  true, Time.utc(2000,  2, 1), Time.utc(2000,  3, 1), info)
+      assert_period(:XDT2, 7200, 3600,  true, Time.utc(2000,  3, 1), Time.utc(2000,  4, 1), info)
+      assert_period(:XST1, 3600,    0, false, Time.utc(2000,  4, 1),                   nil, info)
     end
   end
   
