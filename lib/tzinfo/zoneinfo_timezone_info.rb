@@ -67,8 +67,8 @@ module TZInfo
         # before the first transition. Fallback to the first DST offset if there
         # are no non-DST offsets.
         first_non_dst_offset_index = offsets.index {|o| !o[:is_dst] }
-        first_offset = first_non_dst_offset_index || 0
-        return first_offset if transitions.empty?
+        first_offset_index = first_non_dst_offset_index || 0
+        return first_offset_index if transitions.empty?
 
         # Determine the utc_offset of the next non-dst offset at each transition.
         utc_offset_from_next = nil
@@ -134,7 +134,7 @@ module TZInfo
           end
         end
 
-        first_offset
+        first_offset_index
       end
 
       # Defines an offset for the timezone based on the given index and offset
