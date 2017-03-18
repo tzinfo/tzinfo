@@ -1072,8 +1072,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     transitions = [
       {:at => Time.utc(2000,  1, 1), :offset_index => 1},
       {:at => Time.utc(2000,  2, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  2, 1), :offset_index => 4},
-      {:at => Time.utc(2000,  3, 1), :offset_index => 2}]
+      {:at => Time.utc(2000,  3, 1), :offset_index => 4},
+      {:at => Time.utc(2000,  4, 1), :offset_index => 2}]
 
     # Both XDT1 and XDT2 should both use the closest utc_offset (7200) (and not
     # an equivalent utc_offset of 3600 and std_offset of 7200).
@@ -1086,8 +1086,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
     t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
     t1 = TimezoneTransition.new(o3, o1, Time.utc(2000,  2, 1).to_i)
-    t2 = TimezoneTransition.new(o4, o3, Time.utc(2000,  2, 1).to_i)
-    t3 = TimezoneTransition.new(o2, o4, Time.utc(2000,  3, 1).to_i)
+    t2 = TimezoneTransition.new(o4, o3, Time.utc(2000,  3, 1).to_i)
+    t3 = TimezoneTransition.new(o2, o4, Time.utc(2000,  4, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
       info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetPreserved', path)
@@ -1111,8 +1111,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     transitions = [
       {:at => Time.utc(2000,  1, 1), :offset_index => 2},
       {:at => Time.utc(2000,  2, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  2, 1), :offset_index => 4},
-      {:at => Time.utc(2000,  3, 1), :offset_index => 1}]
+      {:at => Time.utc(2000,  3, 1), :offset_index => 4},
+      {:at => Time.utc(2000,  4, 1), :offset_index => 1}]
 
     # Both XDT1 and XDT2 should both use the closest utc_offset (7200) (and not
     # an equivalent utc_offset of 3600 and std_offset of 7200).
@@ -1125,8 +1125,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
     t0 = TimezoneTransition.new(o2, o0, Time.utc(2000,  1, 1).to_i)
     t1 = TimezoneTransition.new(o3, o2, Time.utc(2000,  2, 1).to_i)
-    t2 = TimezoneTransition.new(o4, o3, Time.utc(2000,  2, 1).to_i)
-    t3 = TimezoneTransition.new(o1, o4, Time.utc(2000,  3, 1).to_i)
+    t2 = TimezoneTransition.new(o4, o3, Time.utc(2000,  3, 1).to_i)
+    t3 = TimezoneTransition.new(o1, o4, Time.utc(2000,  4, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
       info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetPreserved', path)
