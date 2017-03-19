@@ -14,7 +14,6 @@ rvm:
   - 2.4.0
   - ruby-head
   - jruby-18mode
-  - jruby-19mode
   - jruby-1.7.26
   - jruby-9.1.8.0
   - jruby-head
