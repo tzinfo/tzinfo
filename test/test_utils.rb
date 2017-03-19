@@ -28,7 +28,9 @@ module TestUtils
     
       begin
         FileUtils.ln_s(target, path)
-      rescue NotImplementedError
+      rescue NotImplementedError, Errno::EACCES
+        # Symlinks not supported on this platform, or permission denied
+        # (administrative rights are required on Windows). Copy instead.
         target_path = File.join(TZINFO_TEST_ZONEINFO_DIR, target)
         FileUtils.cp(target_path, path)
       end

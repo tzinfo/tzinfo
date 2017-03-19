@@ -415,7 +415,9 @@ class TCZoneinfoDataSource < Minitest::Test
         symlink_path = File.join(dir, 'timeconfig')
         begin
           FileUtils.ln_s(target_path, symlink_path)
-        rescue NotImplementedError
+        rescue NotImplementedError, Errno::EACCES
+          # Symlinks not supported on this platform, or permission denied
+          # (administrative rights are required on Windows). Copy instead.
           FileUtils.cp(target_path, symlink_path)
         end
 
@@ -486,8 +488,9 @@ class TCZoneinfoDataSource < Minitest::Test
         
         begin
           FileUtils.ln_s(outside_file, file)
-        rescue NotImplementedError
-          # Symlinks not supported on this platform - skip test
+        rescue NotImplementedError, Errno::EACCES
+          # Symlinks not supported on this platform, or permission denied
+          # (administrative rights are required on Windows). Skip test.
           return
         end
         
@@ -511,8 +514,9 @@ class TCZoneinfoDataSource < Minitest::Test
       
       begin  
         FileUtils.ln_s(File.join(File.expand_path(dir), 'EST'), link)      
-      rescue NotImplementedError
-        # Symlinks not supported on this platform - skip test
+      rescue NotImplementedError, Errno::EACCES
+        # Symlinks not supported on this platform, or permission denied
+        # (administrative rights are required on Windows). Skip test.
         return
       end
       
@@ -538,8 +542,9 @@ class TCZoneinfoDataSource < Minitest::Test
       
       begin
         FileUtils.ln_s('../outside', link)
-      rescue NotImplementedError
-        # Symlinks not supported on this platform - skip test
+      rescue NotImplementedError, Errno::EACCES
+        # Symlinks not supported on this platform, or permission denied
+        # (administrative rights are required on Windows). Skip test.
         return
       end
       
@@ -574,8 +579,9 @@ class TCZoneinfoDataSource < Minitest::Test
       subdir_link = File.join(subdir, 'Link')
       begin
         FileUtils.ln_s('../Subdir/EST', subdir_link)
-      rescue NotImplementedError
-        # Symlinks not supported on this platform - skip test
+      rescue NotImplementedError, Errno::EACCES
+        # Symlinks not supported on this platform, or permission denied
+        # (administrative rights are required on Windows). Skip test.
         return
       end
       
@@ -767,7 +773,9 @@ class TCZoneinfoDataSource < Minitest::Test
         symlink_path = File.join(dir, 'timeconfig')
         begin
           FileUtils.ln_s(target_path, symlink_path)
-        rescue NotImplementedError
+        rescue NotImplementedError, Errno::EACCES
+          # Symlinks not supported on this platform, or permission denied
+          # (administrative rights are required on Windows). Copy instead.
           FileUtils.cp(target_path, symlink_path)
         end
 
