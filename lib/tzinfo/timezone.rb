@@ -553,8 +553,8 @@ module TZInfo
     
     alias :current_time_and_period :current_period_and_time
 
-    # Converts a time in UTC to local time and returns it as a string 
-    # according to the given format.
+    # Converts a time in UTC to local time and returns it as a string according
+    # to the given format.
     #
     # The formatting is identical to Time.strftime and DateTime.strftime, except
     # %Z and %z are replaced with the timezone abbreviation (for example, EST or
@@ -566,6 +566,12 @@ module TZInfo
     # - %:z - hour and minute separated with a colon (e.g. +05:00)
     # - %::z - hour minute and second separated with colons (e.g. +05:00:00)
     # - %:::z - hour only (e.g. +05)
+    #
+    # Timezone#strftime currently handles the replacement of %z. From TZInfo
+    # version 2.0.0, %z will be passed to Time#strftime and DateTime#strftime
+    # instead. Some of the formatting options may cease to be available
+    # depending on the version of Ruby in use (for example, %:::z is only
+    # supported by Time#strftime from MRI version 2.0.0 onwards.)
     def strftime(format, utc = Time.now.utc)      
       period = period_for_utc(utc)
       local = period.to_local(utc)      
@@ -574,7 +580,7 @@ module TZInfo
       
       format = format.gsub(/%(%*)(Z|:{0,3}z)/) do
         if $1.length.odd?
-          # return %%Z so the real strftime treats it as a literal %Z too
+          # Escaped literal percent or series of percents. Pass on to strftime.          
           "#$1%#$2"
         elsif $2 == "Z"
           "#$1#{abbreviation}"
