@@ -1253,28 +1253,35 @@ class TCTimezone < Minitest::Test
   
   def test_strftime_datetime
     tz = Timezone.get('Europe/London')
-    assert_equal('23:12:02 BST', tz.strftime('%H:%M:%S %Z', DateTime.new(2006, 7, 15, 22, 12, 2)))
-    assert_equal('BST', tz.strftime('%Z', DateTime.new(2006, 7, 15, 22, 12, 2)))
-    assert_equal('%ZBST', tz.strftime('%%Z%Z', DateTime.new(2006, 7, 15, 22, 12, 2)))
-    assert_equal('BST BST', tz.strftime('%Z %Z', DateTime.new(2006, 7, 15, 22, 12, 2)))
+    dt = DateTime.new(2006, 7, 15, 22, 12, 2)
+    assert_equal('23:12:02 BST', tz.strftime('%H:%M:%S %Z', dt))
+    assert_equal('BST', tz.strftime('%Z', dt))
+    assert_equal('%ZBST', tz.strftime('%%Z%Z', dt))
+    assert_equal('BST BST', tz.strftime('%Z %Z', dt))
+    assert_equal('BST %Z %BST %%Z %%BST', tz.strftime('%Z %%Z %%%Z %%%%Z %%%%%Z', dt))
+    assert_equal('+0100 +01:00 +01:00:00 +01 %::::z', tz.strftime('%z %:z %::z %:::z %::::z', dt))
   end
   
   def test_strftime_time
     tz = Timezone.get('Europe/London')
-    assert_equal('23:12:02 BST', tz.strftime('%H:%M:%S %Z', Time.utc(2006, 7, 15, 22, 12, 2)))
-    assert_equal('BST', tz.strftime('%Z', Time.utc(2006, 7, 15, 22, 12, 2)))
-    assert_equal('%ZBST', tz.strftime('%%Z%Z', Time.utc(2006, 7, 15, 22, 12, 2)))
-    assert_equal('BST BST', tz.strftime('%Z %Z', Time.utc(2006, 7, 15, 22, 12, 2)))
+    t = Time.utc(2006, 7, 15, 22, 12, 2)
+    assert_equal('23:12:02 BST', tz.strftime('%H:%M:%S %Z', t))
+    assert_equal('BST', tz.strftime('%Z', t))
+    assert_equal('%ZBST', tz.strftime('%%Z%Z', t))
+    assert_equal('BST BST', tz.strftime('%Z %Z', t))
+    assert_equal('BST %Z %BST %%Z %%BST', tz.strftime('%Z %%Z %%%Z %%%%Z %%%%%Z', t))
+    assert_equal('+0100 +01:00 +01:00:00 +01 %::::z', tz.strftime('%z %:z %::z %:::z %::::z', t))
   end
   
   def test_strftime_int
     tz = Timezone.get('Europe/London')
-    assert_equal('23:12:02 BST', tz.strftime('%H:%M:%S %Z', Time.utc(2006, 7, 15, 22, 12, 2).to_i))
-    assert_equal('BST', tz.strftime('%Z', Time.utc(2006, 7, 15, 22, 12, 2).to_i))
-    assert_equal('%ZBST', tz.strftime('%%Z%Z', Time.utc(2006, 7, 15, 22, 12, 2).to_i))
-    assert_equal('BST BST', tz.strftime('%Z %Z', Time.utc(2006, 7, 15, 22, 12, 2).to_i))
-    assert_equal('BST %Z %BST %%Z %%BST', tz.strftime('%Z %%Z %%%Z %%%%Z %%%%%Z', 0))
-    assert_equal('+0100 +01:00 +01:00:00 +01 %::::z', tz.strftime('%z %:z %::z %:::z %::::z', 0))
+    i = Time.utc(2006, 7, 15, 22, 12, 2).to_i
+    assert_equal('23:12:02 BST', tz.strftime('%H:%M:%S %Z', i))
+    assert_equal('BST', tz.strftime('%Z', i))
+    assert_equal('%ZBST', tz.strftime('%%Z%Z', i))
+    assert_equal('BST BST', tz.strftime('%Z %Z', i))
+    assert_equal('BST %Z %BST %%Z %%BST', tz.strftime('%Z %%Z %%%Z %%%%Z %%%%%Z', i))
+    assert_equal('+0100 +01:00 +01:00:00 +01 %::::z', tz.strftime('%z %:z %::z %:::z %::::z', i))
   end
   
   def test_get_missing_data_source
