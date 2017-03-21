@@ -578,7 +578,7 @@ module TZInfo
       local = Time.at(local).utc unless local.kind_of?(Time) || local.kind_of?(DateTime)
       abbreviation = period.abbreviation.to_s.gsub(/%/, '%%')
       
-      format = format.gsub(/%(%*)(Z|:{0,3}z)/) do
+      format = format.gsub(/%(%*)(Z|:*z)/) do
         if $1.length.odd?
           # Escaped literal percent or series of percents. Pass on to strftime.          
           "#$1%#$2"
@@ -594,8 +594,18 @@ module TZInfo
             "#$1#{'%+03d:%02d' % [h,m]}"
           when 3
             "#$1#{'%+03d:%02d:%02d' % [h,m,s]}"
-          else # 4
+          when 4
             "#$1#{'%+03d' % [h]}"
+          else # more than 3 colons - not a valid option
+            # Passing the invalid format string through to Time#strftime or
+            # DateTime#strtime would normally result in it being returned in the
+            # result. However, with Ruby 1.8.7 on Windows (as tested with Ruby
+            # 1.8.7-p374 from http://rubyinstaller.org/downloads/archives), this
+            # causes Time#strftime to always return an empty string (e.g.
+            # Time.now.strftime('a %::::z b') returns '').
+            #
+            # Escape the percent to force it to be evaluated as a literal.
+            "#$1%%#$2"
           end
         end
       end
