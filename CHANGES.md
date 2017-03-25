@@ -1,3 +1,24 @@
+Version 1.2.3 - 25-Mar-2017
+---------------------------
+
+* Reduce the number of String objects allocated when loading zoneinfo files.
+  #54.
+* Make Timezone#friendly_identifier compatible with frozen string literals.
+* Improve the algorithm for deriving the utc_offset from zoneinfo files. This
+  now correctly handles Pacific/Apia switching from one side of the
+  International Date Line to the other whilst observing daylight savings time.
+  #66.
+* Fix an UnknownTimezone exception when calling transitions_up_to or
+  offsets_up_to on a TimezoneProxy instance obtained from Timezone.get_proxy.
+* Allow the Factory zone to be obtained from the Zoneinfo data source.
+* Ignore the /usr/share/zoneinfo/timeconfig symlink included in Slackware
+  distributions. #64.
+* Fix Timezone#strftime handling of %Z expansion when %Z is prefixed with more
+  than one percent. #31.
+* Support expansion of %z, %:z, %::z and %:::z to the UTC offset of the time
+  zone in Timezone#strftime. #31 and #67.
+
+
 Version 1.2.2 - 8-Aug-2014
 --------------------------
 
