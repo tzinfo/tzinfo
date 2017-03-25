@@ -92,6 +92,106 @@ Version 1.0.0 - 2-Jun-2013
   use other TimezonePeriod instance methods instead (issue #7655).
 
 
+Version 0.3.53 (tzdata v2017b) - 23-Mar-2017
+--------------------------------------------
+
+* Updated to tzdata version 2017b
+  (https://mm.icann.org/pipermail/tz-announce/2017-March/000046.html).
+
+
+Version 0.3.52 (tzdata v2016h) - 28-Oct-2016
+--------------------------------------------
+
+* Updated to tzdata version 2016h
+  (https://mm.icann.org/pipermail/tz-announce/2016-October/000042.html).
+
+
+Version 0.3.51 (tzdata v2016f) - 5-Jul-2016
+-------------------------------------------
+
+* Updated to tzdata version 2016f
+  (https://mm.icann.org/pipermail/tz-announce/2016-July/000040.html).
+
+
+Version 0.3.50 (tzdata v2016e) - 14-Jun-2016
+--------------------------------------------
+
+* Updated to tzdata version 2016e
+  (https://mm.icann.org/pipermail/tz-announce/2016-June/000039.html).
+
+
+Version 0.3.49 (tzdata v2016d) - 18-Apr-2016
+--------------------------------------------
+
+* Updated to tzdata version 2016d
+  (https://mm.icann.org/pipermail/tz-announce/2016-April/000038.html).
+
+
+Version 0.3.48 (tzdata v2016c) - 23-Mar-2016
+--------------------------------------------
+
+* Updated to tzdata version 2016c
+  (https://mm.icann.org/pipermail/tz-announce/2016-March/000037.html).
+
+
+Version 0.3.47 (tzdata v2016b) - 15-Mar-2016
+--------------------------------------------
+
+* Updated to tzdata version 2016b
+  (https://mm.icann.org/pipermail/tz-announce/2016-March/000036.html).
+
+
+Version 0.3.46 (tzdata v2015g) - 2-Dec-2015
+-------------------------------------------
+
+* From version 2015e, the IANA time zone database uses non-ASCII characters in
+  country names. Backport the encoding handling from TZInfo::Data to allow
+  TZInfo 0.3.x to support Ruby 1.9 (which would otherwise fail with an invalid
+  byte sequence error when loading the countries index). Resolves #41.
+
+
+Version 0.3.45 (tzdata v2015g) - 3-Oct-2015
+-------------------------------------------
+
+* Updated to tzdata version 2015g
+  (http://mm.icann.org/pipermail/tz-announce/2015-October/000034.html).
+
+
+Version 0.3.44 (tzdata v2015d) - 24-Apr-2015
+--------------------------------------------
+
+* Updated to tzdata version 2015d
+  (http://mm.icann.org/pipermail/tz-announce/2015-April/000031.html).
+
+
+Version 0.3.43 (tzdata v2015a) - 31-Jan-2015
+--------------------------------------------
+
+* Updated to tzdata version 2015a
+  (http://mm.icann.org/pipermail/tz-announce/2015-January/000028.html).
+
+
+Version 0.3.42 (tzdata v2014i) - 23-Oct-2014
+--------------------------------------------
+
+* Updated to tzdata version 2014i
+  (http://mm.icann.org/pipermail/tz-announce/2014-October/000026.html).
+
+
+Version 0.3.41 (tzdata v2014f) - 8-Aug-2014
+-------------------------------------------
+
+* Updated to tzdata version 2014f
+  (http://mm.icann.org/pipermail/tz-announce/2014-August/000023.html).
+
+
+Version 0.3.40 (tzdata v2014e) - 10-Jul-2014
+--------------------------------------------
+
+* Updated to tzdata version 2014e
+  (http://mm.icann.org/pipermail/tz-announce/2014-June/000022.html).
+
+
 Version 0.3.39 (tzdata v2014a) - 9-Mar-2014
 -------------------------------------------
 
