@@ -23,8 +23,6 @@ module TZInfo
       @timestamp = timestamp
       @local_end_at = nil
       @local_start_at = nil
-      @absolute_local_end_at = nil
-      @absolute_local_start_at = nil
     end
 
     # A Timestamp instance representing the UTC time when this transition
