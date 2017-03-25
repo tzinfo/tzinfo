@@ -177,7 +177,7 @@ Version 0.3.29 (tzdata v2011h) - 27-Jun-2011
 
 
  Version 0.3.28 (tzdata v2011g) - 13-Jun-2011
---------------------------------------------=
+---------------------------------------------
 
 * Add support for Ruby 1.9.3 (trunk revision 31668 and later). Thanks to 
   Aaron Patterson for reporting the problems running on the new version.
