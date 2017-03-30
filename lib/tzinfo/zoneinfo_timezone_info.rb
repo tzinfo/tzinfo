@@ -160,59 +160,32 @@ module TZInfo
           raise InvalidZoneinfoFile, "The zoneinfo file '#{file.path}' contains leap second data. TZInfo requires zoneinfo files that omit leap seconds."
         end
 
-        transitions = []
-
-        if using_64bit
-          timecnt.times do |i|
+        transitions = if using_64bit
+          timecnt.times.map do |i|
             high, low = check_read(file, 8).unpack('NN'.freeze)
             transition_time = make_signed_int64(high, low)
-            transitions << {:at => transition_time}
+            {:at => transition_time}
           end
         else
-          timecnt.times do |i|
+          timecnt.times.map do |i|
             transition_time = make_signed_int32(check_read(file, 4).unpack('N'.freeze)[0])
-            transitions << {:at => transition_time}
+            {:at => transition_time}
           end
         end
 
-        timecnt.times do |i|
-          localtime_type = check_read(file, 1).unpack('C'.freeze)[0]
+        check_read(file, timecnt).unpack('C*'.freeze).each_with_index do |localtime_type, i|
+          raise InvalidZoneinfoFile, "Invalid offset referenced by transition in file '#{file.path}'." if localtime_type >= typecnt
           transitions[i][:offset] = localtime_type
         end
 
-        offsets = []
-
-        typecnt.times do |i|
+        offsets = typecnt.times.map do |i|
           gmtoff, isdst, abbrind = check_read(file, 6).unpack('NCC'.freeze)
           gmtoff = make_signed_int32(gmtoff)
           isdst = isdst == 1
-          offset = {:utc_total_offset => gmtoff, :is_dst => isdst, :abbr_index => abbrind}
-
-          unless isdst
-            offset[:utc_offset] = gmtoff
-            offset[:std_offset] = 0
-          end
-
-          offsets << offset
+          {:utc_total_offset => gmtoff, :is_dst => isdst, :abbr_index => abbrind}
         end
 
         abbrev = check_read(file, charcnt)
-
-        offsets.each do |o|
-          abbrev_start = o[:abbr_index]
-          raise InvalidZoneinfoFile, "Abbreviation index is out of range in file '#{file.path}'" unless abbrev_start < abbrev.length
-
-          abbrev_end = abbrev.index("\0", abbrev_start)
-          raise InvalidZoneinfoFile, "Missing abbreviation null terminator in file '#{file.path}'" unless abbrev_end
-
-          o[:abbr] = abbrev[abbrev_start...abbrev_end].force_encoding(Encoding::UTF_8)
-        end
-
-        transitions.each do |t|
-          if t[:offset] < 0 || t[:offset] >= offsets.length
-            raise InvalidZoneinfoFile, "Invalid offset referenced by transition in file '#{file.path}'."
-          end
-        end
 
         # Derive the offsets from standard time (std_offset).
         first_offset_index = derive_offsets(transitions, offsets)
@@ -236,7 +209,15 @@ module TZInfo
             std_offset = 0
           end
 
-          TimezoneOffset.new(utc_offset, std_offset, o[:abbr].untaint.to_sym)
+          abbrev_start = o[:abbr_index]
+          raise InvalidZoneinfoFile, "Abbreviation index is out of range in file '#{file.path}'" unless abbrev_start < abbrev.length
+
+          abbrev_end = abbrev.index("\0", abbrev_start)
+          raise InvalidZoneinfoFile, "Missing abbreviation null terminator in file '#{file.path}'" unless abbrev_end
+
+          abbr = abbrev[abbrev_start...abbrev_end].force_encoding(Encoding::UTF_8).untaint.to_sym
+
+          TimezoneOffset.new(utc_offset, std_offset, abbr)
         end
 
         first_offset = offsets[first_offset_index]
