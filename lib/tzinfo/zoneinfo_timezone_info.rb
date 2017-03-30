@@ -11,6 +11,8 @@ module TZInfo
 
     # Constructs the new ZoneinfoTimezoneInfo with an identifier and path
     # to the file.
+    #
+    # Raises SecurityError if safe mode is enabled and file_path is tainted.
     def initialize(identifier, file_path)
       transitions_or_constant_offset = File.open(file_path, 'rb') do |file|
         parse(file)

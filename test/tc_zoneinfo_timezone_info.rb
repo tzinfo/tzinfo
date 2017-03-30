@@ -1136,13 +1136,13 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     end
   end
 
-  def test_load_in_safe_mode
+  def test_load_untainted_in_safe_mode
     offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
 
     o0 = TimezoneOffset.new(-12094, 0, :LT)
 
     tzif_test(offsets, []) do |path, format|
-      # untaint only required for Ruby 1.9.2
+      # Temp file path is tainted with Ruby >= 2.3.0. Untaint for this test.
       path.untaint
 
       safe_test do
@@ -1150,6 +1150,19 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
         assert_equal('Zone/three', info.identifier)
         assert_equal(o0, info.constant_offset)
         assert_nil(info.transitions)
+      end
+    end
+  end
+
+  def test_load_tainted_in_safe_mode
+    offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+
+    tzif_test(offsets, []) do |path, format|
+      # Temp file path is only tainted with Ruby >= 2.3.0. Taint for this test.
+      path.taint
+
+      safe_test do
+        assert_raises(SecurityError) { ZoneinfoTimezoneInfo.new('Zone/three', path) }
       end
     end
   end
