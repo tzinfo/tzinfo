@@ -129,7 +129,8 @@ module TZInfo
         first_offset_index
       end
 
-      # Parses a zoneinfo file and intializes the DataTimezoneInfo structures.
+      # Parses a zoneinfo file and returns either a TimezoneOffset that is
+      # constantly observed or an Array of TimezoneTransitions.
       def parse(file)
         magic, version, ttisgmtcnt, ttisstdcnt, leapcnt, timecnt, typecnt, charcnt =
           check_read(file, 44).unpack('a4 a x15 NNNNNN')
