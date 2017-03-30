@@ -1161,7 +1161,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       # Temp file path is only tainted with Ruby >= 2.3.0. Taint for this test.
       path.taint
 
-      safe_test do
+      safe_test(unavailable: :skip) do
         assert_raises(SecurityError) { ZoneinfoTimezoneInfo.new('Zone/three', path) }
       end
     end
