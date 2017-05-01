@@ -141,7 +141,7 @@ module TZInfo
         # allowing one TimezoneInfo to be loaded at a time.
 
         result = load_timezone_info(identifier)
-        @timezones[identifier] = result
+        @timezones[result.identifier] = result
       end
 
       result
