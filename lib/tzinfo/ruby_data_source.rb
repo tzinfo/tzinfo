@@ -45,28 +45,19 @@ module TZInfo
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the
     # identifier is invalid.
     def load_timezone_info(identifier)
-      raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}" unless valid_timezone_identifier?(identifier)
+      valid_identifier = valid_timezone_identifier?(identifier)
+      raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}" unless valid_identifier
 
-      original_identifier = identifier
-      identifier = identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__')
+      valid_identifier = valid_identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__').split('/')
 
-      # Untaint identifier after it has been copied to a new string. We don't
-      # want to modify the original identifier. identifier may also be frozen
-      # and therefore cannot be untainted.
-      identifier.untaint
-
-      identifier = identifier.split('/')
       begin
-        require_definition(identifier)
+        require_definition(valid_identifier)
 
         m = Data::Definitions
-        identifier.each {|part|
-          m = m.const_get(part)
-        }
-
+        valid_identifier.each {|part| m = m.const_get(part) }
         m.get
       rescue LoadError, NameError => e
-        raise InvalidTimezoneIdentifier, "#{e.message} (loading #{original_identifier})"
+        raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
       end
     end
 

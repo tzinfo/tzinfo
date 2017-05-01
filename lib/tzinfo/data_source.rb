@@ -212,12 +212,14 @@ module TZInfo
       raise_invalid_data_source('load_country_info')
     end
 
-    # Returns true if the given identifier is contained within the Array
-    # returned by timezone_identifiers or false if the identifier is not found.
+    # If the given identifier is contained within the timezone_identifiers
+    # Array, the String instance representing identifier from that Array is
+    # returned. Otherwise, nil is returned.
+    #
     # A binary search is performed to locate the identifier within the Array.
     # The identifiers in the Array must be sorted according to String#<=>.
     def valid_timezone_identifier?(identifier)
-      return false unless identifier.kind_of?(String)
+      return nil unless identifier.kind_of?(String)
 
       identifiers = timezone_identifiers
       low = 0
@@ -225,9 +227,10 @@ module TZInfo
 
       while low < high do
         mid = (low + high).div(2)
-        cmp = identifiers[mid] <=> identifier
+        mid_identifier = identifiers[mid]
+        cmp = mid_identifier <=> identifier
 
-        return true if cmp == 0
+        return mid_identifier if cmp == 0
 
         if cmp > 0
           high = mid
@@ -236,7 +239,7 @@ module TZInfo
         end
       end
 
-      false
+      nil
     end
 
     private

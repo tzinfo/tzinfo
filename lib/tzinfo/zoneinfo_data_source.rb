@@ -229,16 +229,12 @@ module TZInfo
     # identifier is invalid.
     def load_timezone_info(identifier)
       begin
-        if valid_timezone_identifier?(identifier)
-          path = File.join(@zoneinfo_dir, identifier)
-
-          # Untaint path rather than identifier. We don't want to modify
-          # identifier. identifier may also be frozen and therefore cannot be
-          # untainted.
-          path.untaint
+        valid_identifier = valid_timezone_identifier?(identifier)
+        if valid_identifier
+          path = File.join(@zoneinfo_dir, valid_identifier)
 
           begin
-            ZoneinfoTimezoneInfo.new(identifier, path)
+            ZoneinfoTimezoneInfo.new(valid_identifier, path)
           rescue InvalidZoneinfoFile => e
             raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
           end
