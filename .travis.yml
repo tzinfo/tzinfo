@@ -13,13 +13,13 @@ rvm:
   - 2.4.1
   - ruby-head
   - jruby-1.7.26
-  - jruby-9.1.8.0
+  - jruby-9.1.9.0
   - jruby-head
   - rbx-2.71828182
-  - rbx-3.29
+  - rbx-3.82
 matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head
     - rvm: rbx-2.71828182
-    - rvm: rbx-3.29
+    - rvm: rbx-3.82
