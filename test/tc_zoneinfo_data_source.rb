@@ -1180,11 +1180,10 @@ class TCZoneinfoDataSource < Minitest::Test
   def test_country_codes
     file_codes = []
 
-    File.open(File.join(@data_source.zoneinfo_dir, 'iso3166.tab'), 'r', :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8) do |file|
-      file.each_line do |line|
-        line.chomp!
-        file_codes << $1 if line =~ /\A([A-Z]{2})\t/
-      end
+    file = File.read(File.join(@data_source.zoneinfo_dir, 'iso3166.tab'), :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8)
+    file.each_line do |line|
+      line.chomp!
+      file_codes << $1 if line =~ /\A([A-Z]{2})\t/
     end
 
     file_codes.sort!

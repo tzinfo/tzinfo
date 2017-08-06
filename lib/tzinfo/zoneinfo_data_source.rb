@@ -407,29 +407,28 @@ module TZInfo
       file_is_5_column = false
       zone_tab = []
 
-      File.open(zone_tab_path, 'r', :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8) do |file|
-        file.each_line do |line|
-          line.chomp!
+      file = File.read(zone_tab_path, :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8)
+      file.each_line do |line|
+        line.chomp!
 
-          if line =~ /\A([A-Z]{2}(?:,[A-Z]{2})*)\t(?:([+\-])(\d{2})(\d{2})([+\-])(\d{3})(\d{2})|([+\-])(\d{2})(\d{2})(\d{2})([+\-])(\d{3})(\d{2})(\d{2}))\t([^\t]+)(?:\t([^\t]+))?(?:\t([^\t]+))?\z/
-            codes = $1
+        if line =~ /\A([A-Z]{2}(?:,[A-Z]{2})*)\t(?:([+\-])(\d{2})(\d{2})([+\-])(\d{3})(\d{2})|([+\-])(\d{2})(\d{2})(\d{2})([+\-])(\d{3})(\d{2})(\d{2}))\t([^\t]+)(?:\t([^\t]+))?(?:\t([^\t]+))?\z/
+          codes = $1
 
-            if $2
-              latitude = dms_to_rational($2, $3, $4)
-              longitude = dms_to_rational($5, $6, $7)
-            else
-              latitude = dms_to_rational($8, $9, $10, $11)
-              longitude = dms_to_rational($12, $13, $14, $15)
-            end
-
-            zone_identifier = $16
-            column4 = $17
-            column5 = $18
-
-            file_is_5_column = true if column5
-
-            zone_tab << [codes.split(','.freeze), zone_identifier, latitude, longitude, column4, column5]
+          if $2
+            latitude = dms_to_rational($2, $3, $4)
+            longitude = dms_to_rational($5, $6, $7)
+          else
+            latitude = dms_to_rational($8, $9, $10, $11)
+            longitude = dms_to_rational($12, $13, $14, $15)
           end
+
+          zone_identifier = $16
+          column4 = $17
+          column5 = $18
+
+          file_is_5_column = true if column5
+
+          zone_tab << [codes.split(','.freeze), zone_identifier, latitude, longitude, column4, column5]
         end
       end
 
@@ -451,21 +450,20 @@ module TZInfo
 
       countries = {}
 
-      File.open(iso3166_tab_path, 'r', :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8) do |file|
-        file.each_line do |line|
-          line.chomp!
+      file = File.read(iso3166_tab_path, :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8)
+      file.each_line do |line|
+        line.chomp!
 
-          # Handle both the two column alpha-2 and name format used in the tz
-          # database as well as the 4 column alpha-2, alpha-3, numeric-3 and
-          # name format used by FreeBSD and OpenBSD.
+        # Handle both the two column alpha-2 and name format used in the tz
+        # database as well as the 4 column alpha-2, alpha-3, numeric-3 and
+        # name format used by FreeBSD and OpenBSD.
 
-          if line =~ /\A([A-Z]{2})(?:\t[A-Z]{3}\t[0-9]{3})?\t(.+)\z/
-            code = $1
-            name = $2
-            zones = (primary_zones[code] || []) + (secondary_zones[code] || [])
+        if line =~ /\A([A-Z]{2})(?:\t[A-Z]{3}\t[0-9]{3})?\t(.+)\z/
+          code = $1
+          name = $2
+          zones = (primary_zones[code] || []) + (secondary_zones[code] || [])
 
-            countries[code] = CountryInfo.new(code, name, zones)
-          end
+          countries[code] = CountryInfo.new(code, name, zones)
         end
       end
 
