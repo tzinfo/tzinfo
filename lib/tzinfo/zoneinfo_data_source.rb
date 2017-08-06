@@ -474,10 +474,15 @@ module TZInfo
 
     # Converts degrees, minutes and seconds to a Rational.
     def dms_to_rational(sign, degrees, minutes, seconds = nil)
-      result = degrees.to_i + Rational(minutes.to_i, 60)
-      result += Rational(seconds.to_i, 3600) if seconds
-      result = -result if sign == '-'.freeze
-      result
+      degrees = degrees.to_i
+      minutes = minutes.to_i
+      sign = sign == '-'.freeze ? -1 : 1
+
+      if seconds
+        Rational(sign * (degrees * 3600 + minutes * 60 + seconds.to_i), 3600)
+      else
+        Rational(sign * (degrees * 60 + minutes), 60)
+      end
     end
   end
 end
