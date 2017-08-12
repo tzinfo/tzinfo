@@ -27,9 +27,9 @@ class TZInfoPackageTask < Gem::PackageTask
     elsif cmd.first =~ /\A__tar_with_owner__ -?([zjcvf]+)(.*)\z/
       opts = $1
       args = $2
-      cmd[0] = "tar c --owner 0 --group 0 -#{opts.gsub('c', '')}#{args}"    
+      cmd[0] = "tar c --owner 0 --group 0 -#{opts.gsub('c', '')}#{args}"
     end
-  
+
     orig_sh(*cmd, &block)
   end
 end
@@ -37,7 +37,7 @@ end
 def add_signing_key(spec)
   # Attempt to find the private key and add options to sign the gem if found.
   private_key_path = File.expand_path(File.join(BASE_DIR, '..', 'key', 'gem-private_key.pem'))
-  
+
   if File.exist?(private_key_path)
     spec = spec.clone
     spec.signing_key = private_key_path
@@ -45,7 +45,7 @@ def add_signing_key(spec)
   else
     puts 'WARNING: Private key not found. Not signing gem file.'
   end
-  
+
   spec
 end
 
@@ -60,8 +60,8 @@ if defined?(RDoc) && defined?(RDoc::Task)
   RDoc::Task.new do |rdoc|
     rdoc.rdoc_dir = 'doc'
     rdoc.options.concat spec.rdoc_options
-    rdoc.rdoc_files.include(spec.extra_rdoc_files) 
-    rdoc.rdoc_files.include('lib')  
+    rdoc.rdoc_files.include(spec.extra_rdoc_files)
+    rdoc.rdoc_files.include('lib')
   end
 end
 
@@ -75,9 +75,9 @@ end
 
 def recurse_chmod(dir)
   File.chmod(0755, dir)
-  
+
   Dir.entries(dir).each do |entry|
-    if entry != '.' && entry != '..'    
+    if entry != '.' && entry != '..'
       path = File.join(dir, entry)
       if File.directory?(path)
         recurse_chmod(path)

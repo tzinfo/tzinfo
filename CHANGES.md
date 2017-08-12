@@ -76,7 +76,7 @@ Version 1.1.0 - 25-Sep-2013
   2013e onwards).
 * Support using YARD to generate documentation (added a .yardopts file).
 * Ignore the +VERSION file included in the zoneinfo directory on Mac OS X.
-* Added a note to the documentation concerning 32-bit zoneinfo files (as 
+* Added a note to the documentation concerning 32-bit zoneinfo files (as
   included with Mac OS X).
 
 
@@ -97,9 +97,9 @@ Version 1.0.0 - 2-Jun-2013
   distributions.
 * Remove the definition and index Ruby modules from TZInfo and move them into
   a separate TZInfo::Data library (available as the tzinfo-data gem).
-* Default to using the TZInfo::Data library as the data source if it is 
+* Default to using the TZInfo::Data library as the data source if it is
   installed, otherwise use zoneinfo files instead.
-* Preserve the nanoseconds of local timezone Time objects when performing 
+* Preserve the nanoseconds of local timezone Time objects when performing
   conversions (issue #29705).
 * Don't add the tzinfo lib directory to the search path when requiring 'tzinfo'.
   The tzinfo lib directory must now be in the search path before 'tzinfo' is
@@ -239,7 +239,7 @@ Version 0.3.36 (tzdata v2013a) - 3-Mar-2013
 
 * Updated to tzdata version 2013a
   (http://mm.icann.org/pipermail/tz-announce/2013-March/000009.html).
-* Fix TimezoneTransitionInfo#eql? incorrectly returning false when running on 
+* Fix TimezoneTransitionInfo#eql? incorrectly returning false when running on
   Ruby 2.0.
 * Change eql? and == implementations to test the class of the passed in object
   instead of checking individual properties with 'respond_to?'.
@@ -292,7 +292,7 @@ Version 0.3.29 (tzdata v2011h) - 27-Jun-2011
 
 * Updated to tzdata version 2011h
   (http://article.gmane.org/gmane.comp.time.tz/3814).
-* Allow the default value of the local_to_utc and period_for_local dst 
+* Allow the default value of the local_to_utc and period_for_local dst
   parameter to be specified globally with a Timezone.default_dst attribute.
   Thanks to Kurt Werle for the suggestion and patch.
 
@@ -300,7 +300,7 @@ Version 0.3.29 (tzdata v2011h) - 27-Jun-2011
  Version 0.3.28 (tzdata v2011g) - 13-Jun-2011
 ---------------------------------------------
 
-* Add support for Ruby 1.9.3 (trunk revision 31668 and later). Thanks to 
+* Add support for Ruby 1.9.3 (trunk revision 31668 and later). Thanks to
   Aaron Patterson for reporting the problems running on the new version.
   Closes #29233.
 
@@ -540,19 +540,19 @@ Version 0.3.0 (tzdata v2006g) - 17-Jul-2006
 
 * New timezone data format. Timezone data now occupies less space on disk and
   takes less memory once loaded. #4142, #4144.
-* Timezone data is defined in modules rather than classes. Timezone instances 
+* Timezone data is defined in modules rather than classes. Timezone instances
   returned by Timezone.get are no longer instances of data classes, but are
   instead instances of new DataTimezone and LinkedTimezone classes.
 * Timezone instances can now be used with Marshal.dump and Marshal.load. #4240.
-* Added a Timezone.get_proxy method that returns a TimezoneProxy object for a 
+* Added a Timezone.get_proxy method that returns a TimezoneProxy object for a
   given identifier.
 * Country index data is now defined in a single module that is independent
   of the Country class implementation.
 * Country instances can now be used with Marshal.dump and Marshal.load. #4240.
 * Country has a new zone_info method that returns CountryTimezone objects
-  containing additional information (latitude, longitude and a description) 
+  containing additional information (latitude, longitude and a description)
   relating to each Timezone. #4140.
-* Timezones within a Country are now returned in an order that makes 
+* Timezones within a Country are now returned in an order that makes
   geographic sense.
 * The zdumptest utility now checks local to utc conversions in addition to
   utc to local conversions.
@@ -568,19 +568,19 @@ Version 0.3.0 (tzdata v2006g) - 17-Jul-2006
   previously ignored with #:nodoc: anyway).
 * Removed no longer needed #:nodoc: directives from timezone data files (which
   are now excluded from the rdoc build).
-* Installation of the gem now causes rdoc API documentation to be generated. 
+* Installation of the gem now causes rdoc API documentation to be generated.
   #4905.
 * When optimizing transitions to generate zone definitions, check the
   UTC and standard offsets separately rather than just the total offset to UTC.
-  Fixes an incorrect abbreviation issue with Europe/London, Europe/Dublin and 
+  Fixes an incorrect abbreviation issue with Europe/London, Europe/Dublin and
   Pacific/Auckland.
 * Eliminated unnecessary .nil? calls to give a minor performance gain.
-* Timezone.all and Timezone.all_identifiers now return all the 
+* Timezone.all and Timezone.all_identifiers now return all the
   Timezones/identifiers rather than just those associated with countries. #4146.
 * Added all_data_zones, all_data_zone_identifiers, all_linked_zones and
   all_linked_zone_identifiers class methods to Timezone.
 * Added a strftime method to Timezone that converts a time in UTC to local
-  time and then returns it formatted. %Z is replaced with the Timezone 
+  time and then returns it formatted. %Z is replaced with the Timezone
   abbreviation for the given time (for example, EST or EDT). #4143.
 * Fix escaping of quotes in TZDataParser. This affected country names and
   descriptions of timezones within countries.
@@ -589,7 +589,7 @@ Version 0.3.0 (tzdata v2006g) - 17-Jul-2006
 Version 0.2.2 (tzdata v2006g) - 17-May-2006
 -------------------------------------------
 
-* Use class-scoped instance variables to store the Timezone identifier and 
+* Use class-scoped instance variables to store the Timezone identifier and
   singleton instance. Loading a linked zone no longer causes the parent
   zone's identifier to be changed. The instance method of a linked zone class
   also now returns an instance of the linked zone class rather than the parent
@@ -604,22 +604,22 @@ Version 0.2.2 (tzdata v2006g) - 17-May-2006
 Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
 -------------------------------------------
 
-* Fix a performance issue caused in 0.2.0 with Timezone.local_to_utc. 
+* Fix a performance issue caused in 0.2.0 with Timezone.local_to_utc.
   Conversions performed on TimeOrDateTime instances passed to <=> are now
   cached as originally intended. Thanks to Michael Smedberg for spotting this.
-* Fix a performance issue with the local_to_utc period search algorithm 
+* Fix a performance issue with the local_to_utc period search algorithm
   originally implemented in 0.1.0. The condition that was supposed to cause
   the search to terminate when enough periods had been found was only being
-  evaluated in a small subset of cases. Thanks to Michael Smedberg and 
+  evaluated in a small subset of cases. Thanks to Michael Smedberg and
   Jamis Buck for reporting this.
 * Added abbreviation as an alias for TimezonePeriod.zone_identifier.
 * Updated to tzdata version 2006d
   (http://article.gmane.org/gmane.comp.time.tz/936).
 * Ignore any offset in DateTimes passed in (as is already done for Times).
-  All of the following now refer to the same UTC time (15:40 on 17 April 2006). 
-  Previously, the DateTime in the second line would have been interpreted 
+  All of the following now refer to the same UTC time (15:40 on 17 April 2006).
+  Previously, the DateTime in the second line would have been interpreted
   as 20:40.
-  
+
     tz.utc_to_local(DateTime.new(2006, 4, 17, 15, 40, 0))
     tz.utc_to_local(DateTime.new(2006, 4, 17, 15, 40, 0).new_offset(Rational(5, 24)))
     tz.utc_to_local(Time.utc(2006, 4, 17, 15, 40, 0))
@@ -631,10 +631,10 @@ Version 0.2.0 (tzdata v2006c) - 3-Apr-2006
 
 * Use timestamps rather than DateTime objects in zone files for times between
   1970 and 2037 (the range of Time).
-* Don't convert passed in Time objects to DateTime in most cases (provides 
+* Don't convert passed in Time objects to DateTime in most cases (provides
   a substantial performance improvement).
-* Allow integer timestamps (time in seconds since 1970-1-1) to be used as well 
-  as Time and DateTime objects in all public methods that take times as 
+* Allow integer timestamps (time in seconds since 1970-1-1) to be used as well
+  as Time and DateTime objects in all public methods that take times as
   parameters.
 * Tool to compare TZInfo conversions with output from zdump.
 * TZDataParser zone generation algorithm rewritten. Now based on the zic code.
@@ -654,22 +654,22 @@ Version 0.1.2 (tzdata v2006a) - 5-Feb-2006
 ------------------------------------------
 
 * Add lib directory to the load path when tzinfo is required. Makes it easier
-  to use tzinfo gem when unpacked to vendor directory in rails. 
-* Updated to tzdata version 2006a 
+  to use tzinfo gem when unpacked to vendor directory in rails.
+* Updated to tzdata version 2006a
   (http://article.gmane.org/gmane.comp.time.tz/738).
-* build_tz_classes rake task now handles running svn add and svn delete as new 
+* build_tz_classes rake task now handles running svn add and svn delete as new
   timezones and countries are added and old ones are removed.
 * Return a better error when attempting to use a Timezone instance that was
   constructed with Timezone.new(nil). This will occur when using Rails'
   composed_of. When the timezone identifier in the database is null, attempting
-  to use the Timezone will now result in an UnknownTimezone exception rather 
+  to use the Timezone will now result in an UnknownTimezone exception rather
   than a NameError.
 
 
 Version 0.1.1 (tzdata v2005q) - 18-Dec-2005
 -------------------------------------------
 
-* Timezones that are defined by a single unbounded period (e.g. UTC) now 
+* Timezones that are defined by a single unbounded period (e.g. UTC) now
   work again.
 * Updated to tzdata version 2005q.
 
@@ -678,7 +678,7 @@ Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
 -------------------------------------------
 
 * period_for_local and local_to_utc now allow resolution of ambiguous
-  times (e.g. when switching from daylight savings to standard time). 
+  times (e.g. when switching from daylight savings to standard time).
   The behaviour of these methods when faced with an ambiguous local time
   has now changed. If you are using these methods you should check
   the documentation. Thanks to Cliff Matthews for suggesting this change.
@@ -695,7 +695,7 @@ Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
   perform searches for periods.
 * Timezones now defined using blocks. TimezonePeriods are only instantiated
   when they are needed. Thanks to Jamis Buck for the suggestion.
-* Add options to TZDataParser to allow exclusion of specific zones and 
+* Add options to TZDataParser to allow exclusion of specific zones and
   countries.
 * Exclude the Riyadh Solar Time zones. The rules are only for 1987 to 1989 and
   take a long time to generate and process. Riyadh Solar Time is no longer
@@ -720,7 +720,7 @@ Version 0.0.4 (tzdata v2005m) - 18-Sep-2005
 * Added testcases for Timezone, TimezoneProxy, TimezonePeriod, Country and
   some selected timezones.
 
-  
+
 Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
 -------------------------------------------
 
@@ -738,17 +738,17 @@ Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
   actually load in its definition until it is actually required.
 * Modified Timezone and Country methods that return Timezones to return
   TimezoneProxy instances instead. This makes these methods much quicker.
-  
+
   In Ruby on Rails, you can now show a drop-down list of all timezones using the
   Rails time_zone_select helper method:
-  
+
   <%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %>
 
 
-Version 0.0.2 (tzdata v2005m) - 13-Sep-2005 
+Version 0.0.2 (tzdata v2005m) - 13-Sep-2005
 -------------------------------------------
 
-* Country and Timezone data is now loaded into class rather than instance 
+* Country and Timezone data is now loaded into class rather than instance
   variables. This makes Timezone links more efficient and saves memory if
   creating specific Timezone and Country classes directly.
 * TimezonePeriod zone_identifier is now defined as a symbol to save memory
@@ -760,7 +760,7 @@ Version 0.0.2 (tzdata v2005m) - 13-Sep-2005
 * Added new class methods to Timezone to return sets of zones and identifiers.
 
 Thanks to Scott Barron of Lunchbox Software for the suggestions in his
-article about using TZInfo with Rails 
+article about using TZInfo with Rails
 (http://lunchroom.lunchboxsoftware.com/pages/tzinfo_rails)
 
 
