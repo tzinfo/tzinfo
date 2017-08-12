@@ -88,8 +88,8 @@ def recurse_chmod(dir)
   end
 end
 
-desc 'Run tests using RubyDataSource, then ZoneinfoDataSource'
-task :test => [:test_ruby, :test_zoneinfo] do
+desc 'Run tests using RubyDataSource with a format 1 version of TZInfo::Data, RubyDataSource with a format 2 version of TZInfo::Data and ZoneinfoDataSource'
+task :test => [:test_ruby_format1, :test_ruby_format2, :test_zoneinfo] do
 end
 
 def setup_tests(test_task, type)
@@ -98,8 +98,12 @@ def setup_tests(test_task, type)
   test_task.warning = true
 end
 
-Rake::TestTask.new(:test_ruby) do |t|
-  setup_tests(t, :ruby)
+Rake::TestTask.new(:test_ruby_format1) do |t|
+  setup_tests(t, :ruby_format1)
+end
+
+Rake::TestTask.new(:test_ruby_format2) do |t|
+  setup_tests(t, :ruby_format2)
 end
 
 Rake::TestTask.new(:test_zoneinfo) do |t|

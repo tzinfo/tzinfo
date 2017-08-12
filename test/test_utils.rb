@@ -1,13 +1,13 @@
 TESTS_DIR = File.expand_path(File.dirname(__FILE__)).untaint
 TZINFO_LIB_DIR = File.expand_path(File.join(TESTS_DIR, '..', 'lib'))
-TZINFO_TEST_DATA_DIR = File.join(TESTS_DIR, 'tzinfo-data')
 TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
 
 $:.unshift(TZINFO_LIB_DIR) unless $:.include?(TZINFO_LIB_DIR)
 
-# tzinfo-data contains a cut down copy of tzinfo-data for use in the tests.
-# Add it to the load path.
-$:.unshift(TZINFO_TEST_DATA_DIR) unless $:.include?(TZINFO_TEST_DATA_DIR)
+unless defined? TZINFO_TEST_DATA_DIR
+  TZINFO_TEST_DATA_DIR = File.join(TESTS_DIR, "tzinfo-data#{(defined? TZINFO_TEST_DATA_FORMAT) ? TZINFO_TEST_DATA_FORMAT : 2}")
+  $:.unshift(TZINFO_TEST_DATA_DIR) unless $:.include?(TZINFO_TEST_DATA_DIR)
+end
 
 require 'minitest/autorun'
 require 'tzinfo'
