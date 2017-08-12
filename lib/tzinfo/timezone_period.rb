@@ -34,8 +34,6 @@ module TZInfo
           raise ArgumentError, 'No offset specified and no transitions to determine it from'
         end
       end
-
-      @utc_total_offset_rational = nil
     end
 
     # Base offset of the timezone from UTC (seconds).
@@ -65,15 +63,7 @@ module TZInfo
 
     # Total offset from UTC (days). Result is a Rational.
     def utc_total_offset_rational
-      # Thread-safety: It is possible that the value of
-      # @utc_total_offset_rational may be calculated multiple times in
-      # concurrently executing threads. It is not worth the overhead of locking
-      # to ensure that @zone_identifiers is only calculated once.
-
-      unless @utc_total_offset_rational
-        @utc_total_offset_rational = OffsetRationals.rational_for_offset(utc_total_offset)
-      end
-      @utc_total_offset_rational
+      OffsetRationals.rational_for_offset(utc_total_offset)
     end
 
     # The start time of the period in UTC as a DateTime. May be nil if unbounded.
