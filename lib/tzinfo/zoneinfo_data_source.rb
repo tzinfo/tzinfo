@@ -266,7 +266,7 @@ module TZInfo
         if path.kind_of?(String)
           path.split(File::PATH_SEPARATOR)
         else
-          path.collect {|p| p.to_s}
+          path.collect(&:to_s)
         end
       else
         default.dup

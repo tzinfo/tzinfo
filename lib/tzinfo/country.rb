@@ -76,7 +76,7 @@ module TZInfo
     # referring to a city or region in a different country will be listed after
     # those relating to this country.
     def zone_identifiers
-      zone_info.map {|z| z.identifier }.freeze
+      zone_info.map(&:identifier).freeze
     end
     alias zone_names zone_identifiers
 
@@ -93,7 +93,7 @@ module TZInfo
     # zones referring to a city or region in a different country will be listed
     # after those relating to this country.
     def zones
-      zone_info.map {|z| z.timezone }
+      zone_info.map(&:timezone)
     end
 
     # Returns a frozen array of all the timezones for the for the country as

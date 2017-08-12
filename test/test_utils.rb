@@ -200,7 +200,7 @@ module TestUtils
         process.close_write
 
         actual_lines = process.readlines
-        actual_lines = actual_lines.collect {|l| l.chomp}
+        actual_lines = actual_lines.collect(&:chomp)
         assert_equal(expected_lines, actual_lines)
       end
     end

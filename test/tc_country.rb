@@ -80,7 +80,7 @@ class TCCountry < Minitest::Test
   end
 
   def test_all
-    assert_equal(Country.all_codes, Country.all.collect {|c| c.code })
+    assert_equal(Country.all_codes, Country.all.collect(&:code))
   end
 
   def test_initialize
@@ -106,7 +106,7 @@ class TCCountry < Minitest::Test
 
   def test_zone_identifiers
     zone_identifiers = Country.get('US').zone_identifiers
-    assert_equal(DataSource.get.get_country_info('US').zones.map {|z| z.identifier }, zone_identifiers)
+    assert_equal(DataSource.get.get_country_info('US').zones.map(&:identifier), zone_identifiers)
     assert_equal(true, zone_identifiers.frozen?)
   end
 
@@ -117,7 +117,7 @@ class TCCountry < Minitest::Test
   def test_zones
     zones = Country.get('US').zones
     assert_kind_of(Array, zones)
-    assert_equal(Country.get('US').zone_identifiers, zones.collect {|z| z.identifier})
+    assert_equal(Country.get('US').zone_identifiers, zones.collect(&:identifier))
 
     zones.each {|z| assert_kind_of(TimezoneProxy, z)}
   end
