@@ -96,21 +96,21 @@ module TZInfo
 
     # Returns true if this TimezoneTransition is equal to the given
     # TimezoneTransition. Two TimezoneTransition instances are considered to be
-    # equal if offset, previous_offset and at are all equal.
+    # equal if offset, previous_offset and timestamp are all equal.
     def ==(tti)
       tti.kind_of?(TimezoneTransition) &&
-        offset == tti.offset && previous_offset == tti.previous_offset && at == tti.at
+        offset == tti.offset && previous_offset == tti.previous_offset && timestamp == tti.timestamp
     end
     alias_method :eql?, :==
 
     # Returns a hash of this TimezoneTransition instance.
     def hash
-      @offset.hash ^ @previous_offset.hash ^ at.hash
+      @offset.hash ^ @previous_offset.hash ^ @timestamp.hash
     end
 
     # Returns the internal object state as a programmer-readable string.
     def inspect
-      "#<#{self.class}: @offset=#{offset.inspect}, @previous_offset=#{@previous_offset.inspect}, at=#{at.inspect}>"
+      "#<#{self.class}: @offset=#{offset.inspect}, @previous_offset=#{@previous_offset.inspect}, @timestamp=#{@timestamp}>"
     end
 
     private
