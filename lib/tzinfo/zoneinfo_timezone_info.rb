@@ -167,12 +167,12 @@ module TZInfo
           timecnt.times.map do |i|
             high, low = check_read(file, 8).unpack('NN'.freeze)
             transition_time = make_signed_int64(high, low)
-            {:at => transition_time}
+            {at: transition_time}
           end
         else
           timecnt.times.map do |i|
             transition_time = make_signed_int32(check_read(file, 4).unpack('N'.freeze)[0])
-            {:at => transition_time}
+            {at: transition_time}
           end
         end
 
@@ -185,7 +185,7 @@ module TZInfo
           gmtoff, isdst, abbrind = check_read(file, 6).unpack('NCC'.freeze)
           gmtoff = make_signed_int32(gmtoff)
           isdst = isdst == 1
-          {:utc_total_offset => gmtoff, :is_dst => isdst, :abbr_index => abbrind}
+          {utc_total_offset: gmtoff, is_dst: isdst, abbr_index: abbrind}
         end
 
         abbrev = check_read(file, charcnt)

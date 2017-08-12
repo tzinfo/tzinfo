@@ -12,7 +12,7 @@ end
 
 BASE_DIR = File.expand_path(File.dirname(__FILE__))
 
-task :default => [:test]
+task default: [:test]
 
 spec = eval(File.read('tzinfo.gemspec'))
 
@@ -89,7 +89,7 @@ def recurse_chmod(dir)
 end
 
 desc 'Run tests using RubyDataSource with a format 1 version of TZInfo::Data, RubyDataSource with a format 2 version of TZInfo::Data and ZoneinfoDataSource'
-task :test => [:test_ruby_format1, :test_ruby_format2, :test_zoneinfo] do
+task test: [:test_ruby_format1, :test_ruby_format2, :test_zoneinfo] do
 end
 
 def setup_tests(test_task, type)

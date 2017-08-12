@@ -407,7 +407,7 @@ module TZInfo
       file_is_5_column = false
       zone_tab = []
 
-      file = File.read(zone_tab_path, :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8)
+      file = File.read(zone_tab_path, external_encoding: Encoding::UTF_8, internal_encoding: Encoding::UTF_8)
       file.each_line do |line|
         line.chomp!
 
@@ -450,7 +450,7 @@ module TZInfo
 
       countries = {}
 
-      file = File.read(iso3166_tab_path, :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8)
+      file = File.read(iso3166_tab_path, external_encoding: Encoding::UTF_8, internal_encoding: Encoding::UTF_8)
       file.each_line do |line|
         line.chomp!
 

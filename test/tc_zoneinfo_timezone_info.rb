@@ -159,16 +159,16 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'},
-      {:gmtoff =>    0, :isdst => false, :abbrev => 'XNST'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'},
+      {gmtoff:    0, isdst: false, abbrev: 'XNST'}]
 
     transitions = [
-      {:at => Time.utc(1971,  1,  2), :offset_index => 1},
-      {:at => Time.utc(1980,  4, 22), :offset_index => 2},
-      {:at => Time.utc(1980, 10, 21), :offset_index => 1},
-      {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
+      {at: Time.utc(1971,  1,  2), offset_index: 1},
+      {at: Time.utc(1980,  4, 22), offset_index: 2},
+      {at: Time.utc(1980, 10, 21), offset_index: 1},
+      {at: Time.utc(2000, 12, 31), offset_index: 3}]
 
     o0 = TimezoneOffset.new(3542,    0, :LMT)
     o1 = TimezoneOffset.new(3600,    0, :XST)
@@ -190,16 +190,16 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_negative_utc_offset
     offsets = [
-      {:gmtoff => -12492, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => -12000, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff => -8400,  :isdst => true,  :abbrev => 'XDT'},
-      {:gmtoff => -8400,  :isdst => false, :abbrev => 'XNST'}]
+      {gmtoff: -12492, isdst: false, abbrev: 'LMT'},
+      {gmtoff: -12000, isdst: false, abbrev: 'XST'},
+      {gmtoff: -8400,  isdst: true,  abbrev: 'XDT'},
+      {gmtoff: -8400,  isdst: false, abbrev: 'XNST'}]
 
     transitions = [
-      {:at => Time.utc(1971,  7,  9, 3,  0, 0), :offset_index => 1},
-      {:at => Time.utc(1972, 10, 12, 3,  0, 0), :offset_index => 2},
-      {:at => Time.utc(1973,  4, 29, 3,  0, 0), :offset_index => 1},
-      {:at => Time.utc(1992,  4,  1, 4, 30, 0), :offset_index => 3}]
+      {at: Time.utc(1971,  7,  9, 3,  0, 0), offset_index: 1},
+      {at: Time.utc(1972, 10, 12, 3,  0, 0), offset_index: 2},
+      {at: Time.utc(1973,  4, 29, 3,  0, 0), offset_index: 1},
+      {at: Time.utc(1992,  4,  1, 4, 30, 0), offset_index: 3}]
 
     o0 = TimezoneOffset.new(-12492,    0, :LMT)
     o1 = TimezoneOffset.new(-12000,    0, :XST)
@@ -221,16 +221,16 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_dst_first
     offsets = [
-      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'},
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff =>    0, :isdst => false, :abbrev => 'XNST'}]
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'},
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+      {gmtoff:    0, isdst: false, abbrev: 'XNST'}]
 
     transitions = [
-      {:at => Time.utc(1979,  1,  2), :offset_index => 2},
-      {:at => Time.utc(1980,  4, 22), :offset_index => 0},
-      {:at => Time.utc(1980, 10, 21), :offset_index => 2},
-      {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
+      {at: Time.utc(1979,  1,  2), offset_index: 2},
+      {at: Time.utc(1980,  4, 22), offset_index: 0},
+      {at: Time.utc(1980, 10, 21), offset_index: 2},
+      {at: Time.utc(2000, 12, 31), offset_index: 3}]
 
     o1 = TimezoneOffset.new(3542, 0, :LMT)
     o2 = TimezoneOffset.new(3600, 0, :XST)
@@ -244,7 +244,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   end
 
   def test_load_no_transitions
-    offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+    offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
     o0 = TimezoneOffset.new(-12094, 0, :LT)
 
     tzif_test(offsets, []) do |path, format|
@@ -257,8 +257,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_no_transitions_dst_first
     offsets = [
-      {:gmtoff => -10800, :isdst => true, :abbrev => 'XDT'},
-      {:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+      {gmtoff: -10800, isdst: true, abbrev: 'XDT'},
+      {gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
     o1 = TimezoneOffset.new(-12094, 0, :LT)
 
@@ -271,7 +271,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   end
 
   def test_load_no_transitions_dst_only
-    offsets = [{:gmtoff => -10800, :isdst => true, :abbrev => 'XDT'}]
+    offsets = [{gmtoff: -10800, isdst: true, abbrev: 'XDT'}]
     o0 = TimezoneOffset.new(-14400, 3600, :XDT)
 
     tzif_test(offsets, []) do |path, format|
@@ -284,12 +284,12 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_initial_transition_to_first_offset
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
 
     transitions = [
-      {:at => Time.utc(1950, 1, 1), :offset_index => 0},
-      {:at => Time.utc(2000, 1, 1), :offset_index => 1}]
+      {at: Time.utc(1950, 1, 1), offset_index: 0},
+      {at: Time.utc(2000, 1, 1), offset_index: 1}]
 
     o0 = TimezoneOffset.new(3542, 0, :LMT)
     o1 = TimezoneOffset.new(3600, 0, :XST)
@@ -306,7 +306,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_no_offsets
     offsets = []
-    transitions = [{:at => Time.utc(2000, 12, 31), :offset_index => 0}]
+    transitions = [{at: Time.utc(2000, 12, 31), offset_index: 0}]
 
     tzif_test(offsets, transitions) do |path, format|
       assert_raises(InvalidZoneinfoFile) do
@@ -316,8 +316,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   end
 
   def test_load_invalid_offset_index
-    offsets = [{:gmtoff => -0, :isdst => false, :abbrev => 'LMT'}]
-    transitions = [{:at => Time.utc(2000, 12, 31), :offset_index => 2}]
+    offsets = [{gmtoff: -0, isdst: false, abbrev: 'LMT'}]
+    transitions = [{at: Time.utc(2000, 12, 31), offset_index: 2}]
 
     tzif_test(offsets, transitions) do |path, format|
       assert_raises(InvalidZoneinfoFile) do
@@ -327,8 +327,8 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   end
 
   def test_load_with_leap_seconds
-    offsets = [{:gmtoff => -0, :isdst => false, :abbrev => 'LMT'}]
-    leaps = [{:at => Time.utc(1972,6,30,23,59,60), :seconds => 1}]
+    offsets = [{gmtoff: -0, isdst: false, abbrev: 'LMT'}]
+    leaps = [{at: Time.utc(1972,6,30,23,59,60), seconds: 1}]
 
     tzif_test(offsets, [], leaps) do |path, format|
       assert_raises(InvalidZoneinfoFile) do
@@ -339,9 +339,9 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_invalid_magic
     ['TZif4', 'tzif2', '12345'].each do |magic|
-      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+      offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
-      tzif_test(offsets, [], [], :magic => magic) do |path, format|
+      tzif_test(offsets, [], [], magic: magic) do |path, format|
         assert_raises(InvalidZoneinfoFile) do
           ZoneinfoTimezoneInfo.new('Zone2', path)
         end
@@ -351,9 +351,9 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_invalid_section2_magic
     ['TZif4', 'tzif2', '12345'].each do |section2_magic|
-      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+      offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
-      tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|
+      tzif_test(offsets, [], [], min_format: 2, section2_magic: section2_magic) do |path, format|
         assert_raises(InvalidZoneinfoFile) do
           ZoneinfoTimezoneInfo.new('Zone4', path)
         end
@@ -366,9 +366,9 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     plus_one = Proc.new {|f| "TZif#{f + 1}" }
 
     [minus_one, plus_one].each do |section2_magic|
-      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+      offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
-      tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|
+      tzif_test(offsets, [], [], min_format: 2, section2_magic: section2_magic) do |path, format|
         assert_raises(InvalidZoneinfoFile) do
           ZoneinfoTimezoneInfo.new('Zone5', path)
         end
@@ -389,13 +389,13 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_missing_abbrev_null_termination
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false,  :abbrev => 'XST'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false,  abbrev: 'XST'}]
 
     transitions = [
-      {:at => Time.utc(2000, 1, 1), :offset_index => 1}]
+      {at: Time.utc(2000, 1, 1), offset_index: 1}]
 
-    tzif_test(offsets, transitions, [], :abbrev_separator => '^') do |path, format|
+    tzif_test(offsets, transitions, [], abbrev_separator: '^') do |path, format|
       assert_raises(InvalidZoneinfoFile) do
         ZoneinfoTimezoneInfo.new('Zone', path)
       end
@@ -404,13 +404,13 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_out_of_range_abbrev_offsets
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false,  :abbrev => 'XST'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false,  abbrev: 'XST'}]
 
     transitions = [
-      {:at => Time.utc(2000, 1, 1), :offset_index => 1}]
+      {at: Time.utc(2000, 1, 1), offset_index: 1}]
 
-    tzif_test(offsets, transitions, [], :abbrev_offset_base => 8) do |path, format|
+    tzif_test(offsets, transitions, [], abbrev_offset_base: 8) do |path, format|
       assert_raises(InvalidZoneinfoFile) do
         ZoneinfoTimezoneInfo.new('Zone', path)
       end
@@ -419,16 +419,16 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_before_epoch
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'},
-      {:gmtoff =>    0, :isdst => false, :abbrev => 'XNST'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'},
+      {gmtoff:    0, isdst: false, abbrev: 'XNST'}]
 
     transitions = [
-      {:at => Time.utc(1948,  1,  2), :offset_index => 1},
-      {:at => Time.utc(1969,  4, 22), :offset_index => 2},
-      {:at => Time.utc(1970, 10, 21), :offset_index => 1},
-      {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
+      {at: Time.utc(1948,  1,  2), offset_index: 1},
+      {at: Time.utc(1969,  4, 22), offset_index: 2},
+      {at: Time.utc(1970, 10, 21), offset_index: 1},
+      {at: Time.utc(2000, 12, 31), offset_index: 3}]
 
     o0 = TimezoneOffset.new(3542,    0, :LMT)
     o1 = TimezoneOffset.new(3600,    0, :XST)
@@ -450,16 +450,16 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_on_epoch
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'},
-      {:gmtoff =>    0, :isdst => false, :abbrev => 'XNST'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'},
+      {gmtoff:    0, isdst: false, abbrev: 'XNST'}]
 
     transitions = [
-      {:at => Time.utc(1948,  1,  2), :offset_index => 1},
-      {:at => Time.utc(1969,  4, 22), :offset_index => 2},
-      {:at => Time.utc(1970,  1,  1), :offset_index => 1},
-      {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
+      {at: Time.utc(1948,  1,  2), offset_index: 1},
+      {at: Time.utc(1969,  4, 22), offset_index: 2},
+      {at: Time.utc(1970,  1,  1), offset_index: 1},
+      {at: Time.utc(2000, 12, 31), offset_index: 3}]
 
     o0 = TimezoneOffset.new(3542,    0, :LMT)
     o1 = TimezoneOffset.new(3600,    0, :XST)
@@ -484,16 +484,16 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # TZif 2 or later file is provided, the 64-bit times should be used.
 
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'},
-      {:gmtoff =>    0, :isdst => false, :abbrev => 'XNST'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'},
+      {gmtoff:    0, isdst: false, abbrev: 'XNST'}]
 
     transitions = [
-      {:at => Time.utc(1850,  1,  2), :offset_index => 1},
-      {:at => Time.utc(2003,  4, 22), :offset_index => 2},
-      {:at => Time.utc(2003, 10, 21), :offset_index => 1},
-      {:at => Time.utc(2040, 12, 31), :offset_index => 3}]
+      {at: Time.utc(1850,  1,  2), offset_index: 1},
+      {at: Time.utc(2003,  4, 22), offset_index: 2},
+      {at: Time.utc(2003, 10, 21), offset_index: 1},
+      {at: Time.utc(2040, 12, 31), offset_index: 3}]
 
     o0 = TimezoneOffset.new(3542,    0, :LMT)
     o1 = TimezoneOffset.new(3600,    0, :XST)
@@ -522,14 +522,14 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_64bit_range
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff => 7200, :isdst => false, :abbrev => 'XNST'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+      {gmtoff: 7200, isdst: false, abbrev: 'XNST'}]
 
     transitions = [
-      {:at => -2**63,                :offset_index => 1},
-      {:at => Time.utc(2014, 5, 27), :offset_index => 2},
-      {:at => 2**63 - 1,             :offset_index => 0}]
+      {at: -2**63,                offset_index: 1},
+      {at: Time.utc(2014, 5, 27), offset_index: 2},
+      {at: 2**63 - 1,             offset_index: 0}]
 
     o0 = TimezoneOffset.new(3542,    0, :LMT)
     o1 = TimezoneOffset.new(3600,    0, :XST)
@@ -556,14 +556,14 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_32bit_range
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff => 7200, :isdst => false, :abbrev => 'XNST'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+      {gmtoff: 7200, isdst: false, abbrev: 'XNST'}]
 
     transitions = [
-      {:at => -2**31,                :offset_index => 1},
-      {:at => Time.utc(2014, 5, 27), :offset_index => 2},
-      {:at => 2**31 - 1,             :offset_index => 0}]
+      {at: -2**31,                offset_index: 1},
+      {at: Time.utc(2014, 5, 27), offset_index: 2},
+      {at: 2**31 - 1,             offset_index: 0}]
 
     o0 = TimezoneOffset.new(3542, 0, :LMT)
     o1 = TimezoneOffset.new(3600, 0, :XST)
@@ -586,16 +586,16 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff =>  7200, :isdst => true,  :abbrev => 'XDT'},
-      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDDT'}]
+      {gmtoff:  3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff:  3600, isdst: false, abbrev: 'XST'},
+      {gmtoff:  7200, isdst: true,  abbrev: 'XDT'},
+      {gmtoff: 10800, isdst: true,  abbrev: 'XDDT'}]
 
     transitions = [
-      {:at => Time.utc(2000, 1, 1), :offset_index => 1},
-      {:at => Time.utc(2000, 2, 1), :offset_index => 2},
-      {:at => Time.utc(2000, 3, 1), :offset_index => 3},
-      {:at => Time.utc(2000, 4, 1), :offset_index => 1}]
+      {at: Time.utc(2000, 1, 1), offset_index: 1},
+      {at: Time.utc(2000, 2, 1), offset_index: 2},
+      {at: Time.utc(2000, 3, 1), offset_index: 3},
+      {at: Time.utc(2000, 4, 1), offset_index: 1}]
 
     o0 = TimezoneOffset.new(3542,    0, :LMT)
     o1 = TimezoneOffset.new(3600,    0, :XST)
@@ -620,14 +620,14 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDDT'}]
+      {gmtoff:  3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff:  3600, isdst: false, abbrev: 'XST'},
+      {gmtoff: 10800, isdst: true,  abbrev: 'XDDT'}]
 
     transitions = [
-      {:at => Time.utc(2000, 4, 1), :offset_index => 1},
-      {:at => Time.utc(2000, 5, 1), :offset_index => 2},
-      {:at => Time.utc(2000, 6, 1), :offset_index => 1}]
+      {at: Time.utc(2000, 4, 1), offset_index: 1},
+      {at: Time.utc(2000, 5, 1), offset_index: 2},
+      {at: Time.utc(2000, 6, 1), offset_index: 1}]
 
     o0 = TimezoneOffset.new(3542,    0, :LMT)
     o1 = TimezoneOffset.new(3600,    0, :XST)
@@ -650,18 +650,18 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff => -10821, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => -10800, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff =>  -7200, :isdst => true,  :abbrev => 'XDT'},
-      {:gmtoff =>  -3600, :isdst => true,  :abbrev => 'XDDT'}]
+      {gmtoff: -10821, isdst: false, abbrev: 'LMT'},
+      {gmtoff: -10800, isdst: false, abbrev: 'XST'},
+      {gmtoff:  -7200, isdst: true,  abbrev: 'XDT'},
+      {gmtoff:  -3600, isdst: true,  abbrev: 'XDDT'}]
 
     transitions = [
-      {:at => Time.utc(2000, 1, 1), :offset_index => 1},
-      {:at => Time.utc(2000, 2, 1), :offset_index => 2},
-      {:at => Time.utc(2000, 3, 1), :offset_index => 3},
-      {:at => Time.utc(2000, 4, 1), :offset_index => 1},
-      {:at => Time.utc(2000, 5, 1), :offset_index => 3},
-      {:at => Time.utc(2000, 6, 1), :offset_index => 1}]
+      {at: Time.utc(2000, 1, 1), offset_index: 1},
+      {at: Time.utc(2000, 2, 1), offset_index: 2},
+      {at: Time.utc(2000, 3, 1), offset_index: 3},
+      {at: Time.utc(2000, 4, 1), offset_index: 1},
+      {at: Time.utc(2000, 5, 1), offset_index: 3},
+      {at: Time.utc(2000, 6, 1), offset_index: 1}]
 
     o0 = TimezoneOffset.new(-10821,    0, :LMT)
     o1 = TimezoneOffset.new(-10800,    0, :XST)
@@ -688,15 +688,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff =>  7200, :isdst => true,  :abbrev => 'XDT'},
-      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDDT'}]
+      {gmtoff:  3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff:  3600, isdst: false, abbrev: 'XST'},
+      {gmtoff:  7200, isdst: true,  abbrev: 'XDT'},
+      {gmtoff: 10800, isdst: true,  abbrev: 'XDDT'}]
 
     transitions = [
-      {:at => Time.utc(2000, 1, 1), :offset_index => 3},
-      {:at => Time.utc(2000, 2, 1), :offset_index => 2},
-      {:at => Time.utc(2000, 3, 1), :offset_index => 1}]
+      {at: Time.utc(2000, 1, 1), offset_index: 3},
+      {at: Time.utc(2000, 2, 1), offset_index: 2},
+      {at: Time.utc(2000, 3, 1), offset_index: 1}]
 
     o0 = TimezoneOffset.new(3542, 0, :LMT)
     o1 = TimezoneOffset.new(3600, 0, :XST)
@@ -720,10 +720,10 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'}]
 
-    transitions = [{:at => Time.utc(2000, 1, 1), :offset_index => 1}]
+    transitions = [{at: Time.utc(2000, 1, 1), offset_index: 1}]
 
     o0 = TimezoneOffset.new(3542,    0, :LMT)
     o1 = TimezoneOffset.new(3542, 3658, :XDT)
@@ -742,9 +742,9 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
-    offsets = [{:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+    offsets = [{gmtoff: 7200, isdst: true,  abbrev: 'XDT'}]
 
-    transitions = [{:at => Time.utc(2000, 1, 1), :offset_index => 0}]
+    transitions = [{at: Time.utc(2000, 1, 1), offset_index: 0}]
 
     o0 = TimezoneOffset.new(3600, 3600, :XDT)
 
@@ -766,13 +766,13 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # back an hour (i.e. wall clock time doesn't change).
 
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'YST'},
-      {:gmtoff => 3600, :isdst => true,  :abbrev => 'XDT'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'YST'},
+      {gmtoff: 3600, isdst: true,  abbrev: 'XDT'}]
 
     transitions = [
-      {:at => Time.utc(2000, 1, 1), :offset_index => 1},
-      {:at => Time.utc(2000, 2, 1), :offset_index => 2}]
+      {at: Time.utc(2000, 1, 1), offset_index: 1},
+      {at: Time.utc(2000, 2, 1), offset_index: 2}]
 
     o0 = TimezoneOffset.new(3542,    0, :LMT)
     o1 = TimezoneOffset.new(3600,    0, :YST)
@@ -797,17 +797,17 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # daylight savings time.
 
     offsets = [
-      {:gmtoff =>  45184, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => -39600, :isdst => false, :abbrev => '-11'},
-      {:gmtoff => -36000, :isdst => true,  :abbrev => '-10'},
-      {:gmtoff =>  50400, :isdst => true,  :abbrev => '+14'},
-      {:gmtoff =>  46800, :isdst => false, :abbrev => '+13'}]
+      {gmtoff:  45184, isdst: false, abbrev: 'LMT'},
+      {gmtoff: -39600, isdst: false, abbrev: '-11'},
+      {gmtoff: -36000, isdst: true,  abbrev: '-10'},
+      {gmtoff:  50400, isdst: true,  abbrev: '+14'},
+      {gmtoff:  46800, isdst: false, abbrev: '+13'}]
 
     transitions = [
-      {:at => Time.utc(2011,  4,  2, 14, 0, 0), :offset_index => 1},
-      {:at => Time.utc(2011,  9, 24, 14, 0, 0), :offset_index => 2},
-      {:at => Time.utc(2011, 12, 30, 10, 0, 0), :offset_index => 3},
-      {:at => Time.utc(2012,  3, 31, 14, 0, 0), :offset_index => 4}]
+      {at: Time.utc(2011,  4,  2, 14, 0, 0), offset_index: 1},
+      {at: Time.utc(2011,  9, 24, 14, 0, 0), offset_index: 2},
+      {at: Time.utc(2011, 12, 30, 10, 0, 0), offset_index: 3},
+      {at: Time.utc(2012,  3, 31, 14, 0, 0), offset_index: 4}]
 
     o0 = TimezoneOffset.new( 45184,    0, :LMT)
     o1 = TimezoneOffset.new(-39600,    0, :'-11')
@@ -833,24 +833,24 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST1'},
-      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST2'},
-      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}]
+      {gmtoff:  3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff:  3600, isdst: false, abbrev: 'XST1'},
+      {gmtoff:  7200, isdst: false, abbrev: 'XST2'},
+      {gmtoff: 10800, isdst: true,  abbrev: 'XDT'}]
 
     transitions = [
-      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
-      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  3, 1), :offset_index => 1},
-      {:at => Time.utc(2000,  4, 1), :offset_index => 2},
-      {:at => Time.utc(2000,  5, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  6, 1), :offset_index => 2},
-      {:at => Time.utc(2000,  7, 1), :offset_index => 1},
-      {:at => Time.utc(2000,  8, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  9, 1), :offset_index => 1},
-      {:at => Time.utc(2000, 10, 1), :offset_index => 2},
-      {:at => Time.utc(2000, 11, 1), :offset_index => 3},
-      {:at => Time.utc(2000, 12, 1), :offset_index => 2}]
+      {at: Time.utc(2000,  1, 1), offset_index: 1},
+      {at: Time.utc(2000,  2, 1), offset_index: 3},
+      {at: Time.utc(2000,  3, 1), offset_index: 1},
+      {at: Time.utc(2000,  4, 1), offset_index: 2},
+      {at: Time.utc(2000,  5, 1), offset_index: 3},
+      {at: Time.utc(2000,  6, 1), offset_index: 2},
+      {at: Time.utc(2000,  7, 1), offset_index: 1},
+      {at: Time.utc(2000,  8, 1), offset_index: 3},
+      {at: Time.utc(2000,  9, 1), offset_index: 1},
+      {at: Time.utc(2000, 10, 1), offset_index: 2},
+      {at: Time.utc(2000, 11, 1), offset_index: 3},
+      {at: Time.utc(2000, 12, 1), offset_index: 2}]
 
     # XDT will be split and defined according to its surrounding standard time
     # offsets.
@@ -890,15 +890,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST1'},
-      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST2'},
-      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}]
+      {gmtoff:  3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff:  3600, isdst: false, abbrev: 'XST1'},
+      {gmtoff:  7200, isdst: false, abbrev: 'XST2'},
+      {gmtoff: 10800, isdst: true,  abbrev: 'XDT'}]
 
     transitions = [
-      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
-      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  3, 1), :offset_index => 2}]
+      {at: Time.utc(2000,  1, 1), offset_index: 1},
+      {at: Time.utc(2000,  2, 1), offset_index: 3},
+      {at: Time.utc(2000,  3, 1), offset_index: 2}]
 
     # XDT should use the closest utc_offset (7200) (and not an equivalent
     # utc_offset of 3600 and std_offset of 7200).
@@ -925,15 +925,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST1'},
-      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST2'},
-      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}]
+      {gmtoff:  3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff:  3600, isdst: false, abbrev: 'XST1'},
+      {gmtoff:  7200, isdst: false, abbrev: 'XST2'},
+      {gmtoff: 10800, isdst: true,  abbrev: 'XDT'}]
 
     transitions = [
-      {:at => Time.utc(2000,  1, 1), :offset_index => 2},
-      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  3, 1), :offset_index => 1}]
+      {at: Time.utc(2000,  1, 1), offset_index: 2},
+      {at: Time.utc(2000,  2, 1), offset_index: 3},
+      {at: Time.utc(2000,  3, 1), offset_index: 1}]
 
     # XDT should use the closest utc_offset (7200) (and not an equivalent
     # utc_offset of 3600 and std_offset of 7200).
@@ -960,15 +960,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST1'},
-      {:gmtoff => 7200, :isdst => false, :abbrev => 'XST2'},
-      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST1'},
+      {gmtoff: 7200, isdst: false, abbrev: 'XST2'},
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'}]
 
     transitions = [
-      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
-      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  3, 1), :offset_index => 2}]
+      {at: Time.utc(2000,  1, 1), offset_index: 1},
+      {at: Time.utc(2000,  2, 1), offset_index: 3},
+      {at: Time.utc(2000,  3, 1), offset_index: 2}]
 
     # XDT will be based on the utc_offset of XST1 even though XST2 has an
     # equivalent (or greater) utc_total_offset.
@@ -995,15 +995,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST1'},
-      {:gmtoff => 7200, :isdst => false, :abbrev => 'XST2'},
-      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST1'},
+      {gmtoff: 7200, isdst: false, abbrev: 'XST2'},
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'}]
 
     transitions = [
-      {:at => Time.utc(2000,  1, 1), :offset_index => 2},
-      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  3, 1), :offset_index => 1}]
+      {at: Time.utc(2000,  1, 1), offset_index: 2},
+      {at: Time.utc(2000,  2, 1), offset_index: 3},
+      {at: Time.utc(2000,  3, 1), offset_index: 1}]
 
     # XDT will be based on the utc_offset of XST1 even though XST2 has an
     # equivalent (or greater) utc_total_offset.
@@ -1030,14 +1030,14 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff => 7142, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 7200, :isdst => false, :abbrev => 'XST'},
-      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+      {gmtoff: 7142, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 7200, isdst: false, abbrev: 'XST'},
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'}]
 
     transitions = [
-      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
-      {:at => Time.utc(2000,  2, 1), :offset_index => 2},
-      {:at => Time.utc(2000,  3, 1), :offset_index => 1}]
+      {at: Time.utc(2000,  1, 1), offset_index: 1},
+      {at: Time.utc(2000,  2, 1), offset_index: 2},
+      {at: Time.utc(2000,  3, 1), offset_index: 1}]
 
     # XDT will just assume an std_offset of +1 hour and calculate the utc_offset
     # from utc_total_offset - std_offset.
@@ -1063,17 +1063,17 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST1'},
-      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST2'},
-      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT1'},
-      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT2'}]
+      {gmtoff:  3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff:  3600, isdst: false, abbrev: 'XST1'},
+      {gmtoff:  7200, isdst: false, abbrev: 'XST2'},
+      {gmtoff: 10800, isdst: true,  abbrev: 'XDT1'},
+      {gmtoff: 10800, isdst: true,  abbrev: 'XDT2'}]
 
     transitions = [
-      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
-      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  3, 1), :offset_index => 4},
-      {:at => Time.utc(2000,  4, 1), :offset_index => 2}]
+      {at: Time.utc(2000,  1, 1), offset_index: 1},
+      {at: Time.utc(2000,  2, 1), offset_index: 3},
+      {at: Time.utc(2000,  3, 1), offset_index: 4},
+      {at: Time.utc(2000,  4, 1), offset_index: 2}]
 
     # Both XDT1 and XDT2 should both use the closest utc_offset (7200) (and not
     # an equivalent utc_offset of 3600 and std_offset of 7200).
@@ -1102,17 +1102,17 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST1'},
-      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST2'},
-      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT1'},
-      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT2'}]
+      {gmtoff:  3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff:  3600, isdst: false, abbrev: 'XST1'},
+      {gmtoff:  7200, isdst: false, abbrev: 'XST2'},
+      {gmtoff: 10800, isdst: true,  abbrev: 'XDT1'},
+      {gmtoff: 10800, isdst: true,  abbrev: 'XDT2'}]
 
     transitions = [
-      {:at => Time.utc(2000,  1, 1), :offset_index => 2},
-      {:at => Time.utc(2000,  2, 1), :offset_index => 3},
-      {:at => Time.utc(2000,  3, 1), :offset_index => 4},
-      {:at => Time.utc(2000,  4, 1), :offset_index => 1}]
+      {at: Time.utc(2000,  1, 1), offset_index: 2},
+      {at: Time.utc(2000,  2, 1), offset_index: 3},
+      {at: Time.utc(2000,  3, 1), offset_index: 4},
+      {at: Time.utc(2000,  4, 1), offset_index: 1}]
 
     # Both XDT1 and XDT2 should both use the closest utc_offset (7200) (and not
     # an equivalent utc_offset of 3600 and std_offset of 7200).
@@ -1137,7 +1137,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   end
 
   def test_load_untainted_in_safe_mode
-    offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+    offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
     o0 = TimezoneOffset.new(-12094, 0, :LT)
 
@@ -1155,7 +1155,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   end
 
   def test_load_tainted_in_safe_mode
-    offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+    offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
     tzif_test(offsets, []) do |path, format|
       # Temp file path is only tainted with Ruby >= 2.3.0. Taint for this test.
@@ -1172,11 +1172,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # ZoneinfoTimezoneInfo will load as UTF-8 (a superset of ASCII).
 
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST©'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST©'}]
 
     transitions = [
-      {:at => Time.utc(1971, 1, 2), :offset_index => 1}]
+      {at: Time.utc(1971, 1, 2), offset_index: 1}]
 
     o0 = TimezoneOffset.new(3542, 0, :LMT)
     o1 = TimezoneOffset.new(3600, 0, :"XST©")
@@ -1193,13 +1193,13 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_binmode
     offsets = [
-      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'}]
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
 
     # Transition time that includes CRLF (4EFF0D0A).
     # Test that this doesn't get corrupted by translating CRLF to LF.
     transitions = [
-      {:at => Time.utc(2011, 12, 31, 13, 24, 26), :offset_index => 1}]
+      {at: Time.utc(2011, 12, 31, 13, 24, 26), offset_index: 1}]
 
     o0 = TimezoneOffset.new(3542, 0, :LMT)
     o1 = TimezoneOffset.new(3600, 0, :XST)

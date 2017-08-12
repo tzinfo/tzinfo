@@ -688,7 +688,7 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_load_timezone_info_tainted_zoneinfo_dir_safe_mode
-    safe_test(:unavailable => :skip) do
+    safe_test(unavailable: :skip) do
       assert_raises(SecurityError) do
         ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
       end
@@ -895,14 +895,14 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_country_info_check_zones
     Dir.mktmpdir('tzinfo_test') do |dir|
-      File.open(File.join(dir, 'iso3166.tab'), 'w', :external_encoding => Encoding::UTF_8) do |iso3166|
+      File.open(File.join(dir, 'iso3166.tab'), 'w', external_encoding: Encoding::UTF_8) do |iso3166|
         iso3166.puts('# iso3166.tab')
         iso3166.puts('')
         iso3166.puts("FC\tFake Country")
         iso3166.puts("OC\tOther Country")
       end
 
-      File.open(File.join(dir, 'zone.tab'), 'w', :external_encoding => Encoding::UTF_8) do |zone|
+      File.open(File.join(dir, 'zone.tab'), 'w', external_encoding: Encoding::UTF_8) do |zone|
         zone.puts('# zone.tab')
         zone.puts('')
         zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
@@ -932,7 +932,7 @@ class TCZoneinfoDataSource < Minitest::Test
 
   def test_load_country_info_check_zones_zone1970
     Dir.mktmpdir('tzinfo_test') do |dir|
-      File.open(File.join(dir, 'iso3166.tab'), 'w', :external_encoding => Encoding::UTF_8) do |iso3166|
+      File.open(File.join(dir, 'iso3166.tab'), 'w', external_encoding: Encoding::UTF_8) do |iso3166|
         iso3166.puts('# iso3166.tab')
         iso3166.puts('')
         iso3166.puts("AC\tAnother Country")
@@ -941,7 +941,7 @@ class TCZoneinfoDataSource < Minitest::Test
       end
 
       # zone.tab will be ignored.
-      File.open(File.join(dir, 'zone.tab'), 'w', :external_encoding => Encoding::UTF_8) do |zone|
+      File.open(File.join(dir, 'zone.tab'), 'w', external_encoding: Encoding::UTF_8) do |zone|
         zone.puts('# zone.tab')
         zone.puts('')
         zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
@@ -951,7 +951,7 @@ class TCZoneinfoDataSource < Minitest::Test
       end
 
       # zone1970.tab will be used.
-      File.open(File.join(dir, 'zone1970.tab'), 'w', :external_encoding => Encoding::UTF_8) do |zone|
+      File.open(File.join(dir, 'zone1970.tab'), 'w', external_encoding: Encoding::UTF_8) do |zone|
         zone.puts('# zone1970.tab')
         zone.puts('')
         zone.puts("AC,OC\t+0000+00000\tMiddle/Another/One\tAnother's One")
@@ -1012,14 +1012,14 @@ class TCZoneinfoDataSource < Minitest::Test
       tab_dir = File.join(dir, 'tab')
       FileUtils.mkdir(tab_dir)
 
-      File.open(File.join(tab_dir, 'country.tab'), 'w', :external_encoding => Encoding::UTF_8) do |country|
+      File.open(File.join(tab_dir, 'country.tab'), 'w', external_encoding: Encoding::UTF_8) do |country|
         country.puts('# country.tab')
         country.puts('# Solaris')
         country.puts("FC\tFake Country")
         country.puts("OC\tOther Country")
       end
 
-      File.open(File.join(tab_dir, 'zone_sun.tab'), 'w', :external_encoding => Encoding::UTF_8) do |zone_sun|
+      File.open(File.join(tab_dir, 'zone_sun.tab'), 'w', external_encoding: Encoding::UTF_8) do |zone_sun|
         zone_sun.puts('# zone_sun.tab')
         zone_sun.puts('# Solaris')
         zone_sun.puts('# Countries')
@@ -1063,13 +1063,13 @@ class TCZoneinfoDataSource < Minitest::Test
       FileUtils.mkdir(tab_dir)
 
       tab_file = File.join(tab_dir, 'iso3166')
-      File.open(tab_file, 'w', :external_encoding => Encoding::UTF_8) do |iso3166|
+      File.open(tab_file, 'w', external_encoding: Encoding::UTF_8) do |iso3166|
         # Use the BSD 4 column format (alternate iso3166 is used on BSD).
         iso3166.puts("FC\tFCC\t001\tFake Country")
         iso3166.puts("OC\tOCC\t002\tOther Country")
       end
 
-      File.open(File.join(zoneinfo_dir, 'zone.tab'), 'w', :external_encoding => Encoding::UTF_8) do |zone|
+      File.open(File.join(zoneinfo_dir, 'zone.tab'), 'w', external_encoding: Encoding::UTF_8) do |zone|
         zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
         zone.puts("FC\t+353916+1394441\tFake/Two\tAnother description")
         zone.puts("FC\t-2332-04637\tFake/Three\tThis is Three")
@@ -1101,12 +1101,12 @@ class TCZoneinfoDataSource < Minitest::Test
     # tz database version.
 
     Dir.mktmpdir('tzinfo_test') do |dir|
-      File.open(File.join(dir, 'iso3166.tab'), 'w', :external_encoding => Encoding::UTF_8) do |iso3166|
+      File.open(File.join(dir, 'iso3166.tab'), 'w', external_encoding: Encoding::UTF_8) do |iso3166|
         iso3166.puts("FC\tFCC\t001\tFake Country")
         iso3166.puts("OC\tOCC\t002\tOther Country")
       end
 
-      File.open(File.join(dir, 'zone.tab'), 'w', :external_encoding => Encoding::UTF_8) do |zone|
+      File.open(File.join(dir, 'zone.tab'), 'w', external_encoding: Encoding::UTF_8) do |zone|
         zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
         zone.puts("OC\t+5005+01426\tOther/One")
       end
@@ -1131,11 +1131,11 @@ class TCZoneinfoDataSource < Minitest::Test
     # UTF-8, test that this is loaded in UTF-8 anyway.
 
     Dir.mktmpdir('tzinfo_test') do |dir|
-      File.open(File.join(dir, 'iso3166.tab'), 'w', :external_encoding => Encoding::UTF_8) do |iso3166|
+      File.open(File.join(dir, 'iso3166.tab'), 'w', external_encoding: Encoding::UTF_8) do |iso3166|
         iso3166.puts("UT\tUnicode Test ✓")
       end
 
-      File.open(File.join(dir, 'zone.tab'), 'w', :external_encoding => Encoding::UTF_8) do |zone|
+      File.open(File.join(dir, 'zone.tab'), 'w', external_encoding: Encoding::UTF_8) do |zone|
         zone.puts("UT\t+513030-0000731\tUnicode✓/One\tUnicode Description ✓")
       end
 
@@ -1155,11 +1155,11 @@ class TCZoneinfoDataSource < Minitest::Test
     # zone1970.tab is in UTF-8.
 
     Dir.mktmpdir('tzinfo_test') do |dir|
-      File.open(File.join(dir, 'iso3166.tab'), 'w', :external_encoding => Encoding::UTF_8) do |iso3166|
+      File.open(File.join(dir, 'iso3166.tab'), 'w', external_encoding: Encoding::UTF_8) do |iso3166|
         iso3166.puts("UT\tUnicode Test ✓")
       end
 
-      File.open(File.join(dir, 'zone1970.tab'), 'w', :external_encoding => Encoding::UTF_8) do |zone|
+      File.open(File.join(dir, 'zone1970.tab'), 'w', external_encoding: Encoding::UTF_8) do |zone|
         zone.puts("UT\t+513030-0000731\tUnicode✓/One\tUnicode Description ✓")
       end
 
@@ -1180,7 +1180,7 @@ class TCZoneinfoDataSource < Minitest::Test
   def test_country_codes
     file_codes = []
 
-    file = File.read(File.join(@data_source.zoneinfo_dir, 'iso3166.tab'), :external_encoding => Encoding::UTF_8, :internal_encoding => Encoding::UTF_8)
+    file = File.read(File.join(@data_source.zoneinfo_dir, 'iso3166.tab'), external_encoding: Encoding::UTF_8, internal_encoding: Encoding::UTF_8)
     file.each_line do |line|
       line.chomp!
       file_codes << $1 if line =~ /\A([A-Z]{2})\t/
@@ -1202,12 +1202,12 @@ class TCZoneinfoDataSource < Minitest::Test
     # tz database version.
 
     Dir.mktmpdir('tzinfo_test') do |dir|
-      File.open(File.join(dir, 'iso3166.tab'), 'w', :external_encoding => Encoding::UTF_8) do |iso3166|
+      File.open(File.join(dir, 'iso3166.tab'), 'w', external_encoding: Encoding::UTF_8) do |iso3166|
         iso3166.puts("FC\tFCC\t001\tFake Country")
         iso3166.puts("OC\tOCC\t002\tOther Country")
       end
 
-      File.open(File.join(dir, 'zone.tab'), 'w', :external_encoding => Encoding::UTF_8) do |zone|
+      File.open(File.join(dir, 'zone.tab'), 'w', external_encoding: Encoding::UTF_8) do |zone|
         zone.puts("FC\t+513030-0000731\tFake/One\tDescription of one")
         zone.puts("OC\t+5005+01426\tOther/One")
       end
