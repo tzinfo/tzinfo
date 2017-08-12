@@ -315,9 +315,9 @@ class TCTimezone < Minitest::Test
   def test_all_country_zones
     # Probably should relax this test - just need all the zones, don't care
     # about order.
-    expected = Country.all.inject([]) {|result,country|
+    expected = Country.all.inject([]) do |result,country|
       result += country.zones
-    }
+    end
     expected.uniq!
 
     all_country_zones = Timezone.all_country_zones
@@ -326,18 +326,18 @@ class TCTimezone < Minitest::Test
     all_country_zone_identifiers = Timezone.all_country_zone_identifiers
     assert_equal(all_country_zone_identifiers.length, all_country_zones.length)
 
-    all_country_zones.each {|zone|
+    all_country_zones.each do |zone|
       assert_kind_of(TimezoneProxy, zone)
       assert(all_country_zone_identifiers.include?(zone.identifier))
-    }
+    end
   end
 
   def test_all_country_zone_identifiers
     # Probably should relax this test - just need all the zones, don't care
     # about order.
-    expected = Country.all.inject([]) {|result,country|
+    expected = Country.all.inject([]) do |result,country|
       result += country.zone_identifiers
-    }
+    end
     expected.uniq!
 
     assert_equal(expected, Timezone.all_country_zone_identifiers)
@@ -352,10 +352,10 @@ class TCTimezone < Minitest::Test
     us_zone_identifiers = Timezone.us_zone_identifiers
     assert_equal(us_zone_identifiers.length, us_zones.length)
 
-    us_zones.each {|zone|
+    us_zones.each do |zone|
       assert_kind_of(TimezoneProxy, zone)
       assert(us_zone_identifiers.include?(zone.identifier))
-    }
+    end
   end
 
   def test_us_zone_identifiers
@@ -545,14 +545,14 @@ class TCTimezone < Minitest::Test
 
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
 
-    assert_raises(BlockCalled) {
-      tz.period_for_local(dt) {|periods|
+    assert_raises(BlockCalled) do
+      tz.period_for_local(dt) do |periods|
         assert_equal([p1, p2], periods)
 
         # raise exception to test that the block was called
         raise BlockCalled, 'should be raised'
-      }
-    }
+      end
+    end
 
     assert_equal(p1, tz.period_for_local(dt) {|periods| periods.first})
     assert_equal(p2, tz.period_for_local(dt) {|periods| periods.last})
@@ -581,19 +581,19 @@ class TCTimezone < Minitest::Test
 
     tz = TestTimezone.new('Europe/Warsaw', nil, [p1, p2], dt)
 
-    assert_raises(BlockCalled) {
-      tz.period_for_local(dt, true) {|periods|
+    assert_raises(BlockCalled) do
+      tz.period_for_local(dt, true) do |periods|
         assert_equal([p1, p2], periods)
         raise BlockCalled, 'should be raised'
-      }
-    }
+      end
+    end
 
-    assert_raises(BlockCalled) {
-      tz.period_for_local(dt, false) {|periods|
+    assert_raises(BlockCalled) do
+      tz.period_for_local(dt, false) do |periods|
         assert_equal([p1, p2], periods)
         raise BlockCalled, 'should be raised'
-      }
-    }
+      end
+    end
   end
 
   def test_period_for_local_block_ambiguous
