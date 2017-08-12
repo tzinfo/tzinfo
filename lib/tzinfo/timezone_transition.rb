@@ -108,9 +108,9 @@ module TZInfo
       @offset.hash ^ @previous_offset.hash ^ at.hash
     end
 
-    # Returns internal object state as a programmer-readable string.
+    # Returns the internal object state as a programmer-readable string.
     def inspect
-      "#<#{self.class}: #{at.inspect},#{@offset.inspect}>"
+      "#<#{self.class}: @offset=#{offset.inspect}, @previous_offset=#{@previous_offset.inspect}, at=#{at.inspect}>"
     end
 
     private

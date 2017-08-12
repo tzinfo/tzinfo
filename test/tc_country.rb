@@ -104,6 +104,10 @@ class TCCountry < Minitest::Test
     assert_equal(Country.get('GB').name, Country.get('GB').to_s)
   end
 
+  def test_inspect
+    assert_equal('#<TZInfo::Country: GB>', Country.get('GB').inspect)
+  end
+
   def test_zone_identifiers
     zone_identifiers = Country.get('US').zone_identifiers
     assert_equal(DataSource.get.get_country_info('US').zones.map(&:identifier), zone_identifiers)

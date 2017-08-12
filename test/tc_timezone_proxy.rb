@@ -135,4 +135,9 @@ class TCTimezoneProxy < Minitest::Test
     assert_kind_of(TimezoneProxy, tp2)
     assert_equal('Europe/London', tp2.identifier)
   end
+
+  def test_inspect
+    tp = TimezoneProxy.new('Europe/London')
+    assert_equal('#<TZInfo::TimezoneProxy: Europe/London>', tp.inspect)
+  end
 end

@@ -139,12 +139,5 @@ module TZInfo
       result ^= @offset.hash unless @start_transition || @end_transition
       result
     end
-
-    # Returns internal object state as a programmer-readable string.
-    def inspect
-      result = "#<#{self.class}: #{@start_transition.inspect},#{@end_transition.inspect}"
-      result << ",#{@offset.inspect}>" unless @start_transition || @end_transition
-      result + '>'
-    end
   end
 end

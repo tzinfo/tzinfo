@@ -178,4 +178,9 @@ class TCLinkedTimezone < Minitest::Test
     linked_tz = Timezone.get('Test/Recursive/Data')
     assert_same(linked_tz, tz.canonical_zone)
   end
+
+  def test_inspect
+    tz = LinkedTimezone.new(LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked'))
+    assert_equal('#<TZInfo::LinkedTimezone: Test/Zone>', tz.inspect)
+  end
 end

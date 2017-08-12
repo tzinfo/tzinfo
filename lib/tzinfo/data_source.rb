@@ -187,7 +187,7 @@ module TZInfo
       "Default DataSource"
     end
 
-    # Returns internal object state as a programmer-readable string.
+    # Returns the internal object state as a programmer-readable string.
     def inspect
       "#<#{self.class}>"
     end

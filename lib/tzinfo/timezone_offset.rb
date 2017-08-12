@@ -50,9 +50,9 @@ module TZInfo
       utc_offset.hash ^ std_offset.hash ^ abbreviation.hash
     end
 
-    # Returns internal object state as a programmer-readable string.
+    # Returns the internal object state as a programmer-readable string.
     def inspect
-      "#<#{self.class}: #@utc_offset,#@std_offset,#@abbreviation>"
+      "#<#{self.class}: @utc_offset=#{utc_offset}, @std_offset=#{std_offset}, @abbreviation=#{abbreviation.inspect}>"
     end
   end
 end

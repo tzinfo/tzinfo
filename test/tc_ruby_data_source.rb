@@ -188,4 +188,8 @@ class TCRubyDataSource < Minitest::Test
     assert(codes.all?(&:frozen?))
     assert_same(codes, @data_source.country_codes)
   end
+
+  def test_inspect
+    assert_equal('#<TZInfo::RubyDataSource>', @data_source.inspect)
+  end
 end

@@ -174,4 +174,11 @@ class TCTimezoneTransition < Minitest::Test
       TimezoneOffset.new(3600, 0, :TSTA).hash ^ Timestamp.utc(1148949080).hash,
       t.hash)
   end
+
+  def test_inspect
+    t = TimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDTA),
+      TimezoneOffset.new(3600, 0, :TSTA), 1148949080)
+
+    assert_equal("#<TZInfo::TimezoneTransition: @offset=#{t.offset.inspect}, @previous_offset=#{t.previous_offset.inspect}, at=#{t.at.inspect}>", t.inspect)
+  end
 end

@@ -44,4 +44,9 @@ class TCCountryInfo < Minitest::Test
     assert_same(zones, value)
     assert(value.frozen?)
   end
+
+  def test_inspect
+    ci = CountryInfo.new('ZZ', 'Zzz', [])
+    assert_equal('#<TZInfo::CountryInfo: ZZ>', ci.inspect)
+  end
 end

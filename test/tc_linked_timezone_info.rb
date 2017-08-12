@@ -22,4 +22,9 @@ class TCLinkedTimezoneInfo < Minitest::Test
     assert_kind_of(LinkedTimezone, tz)
     assert_equal('Test/Zone', tz.identifier)
   end
+
+  def test_inspect
+    lti = LinkedTimezoneInfo.new('Test/Zone', 'Europe/London')
+    assert_equal('#<TZInfo::LinkedTimezoneInfo: Test/Zone>', lti.inspect)
+  end
 end

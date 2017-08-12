@@ -1218,4 +1218,8 @@ class TCZoneinfoDataSource < Minitest::Test
       assert_equal(%w(FC OC), codes)
     end
   end
+
+  def test_inspect
+    assert_equal("#<TZInfo::ZoneinfoDataSource: #{ZONEINFO_DIR}>", @data_source.inspect)
+  end
 end

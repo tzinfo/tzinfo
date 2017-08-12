@@ -320,6 +320,10 @@ class TCDataSource < Minitest::Test
     assert_equal('Default DataSource', DataSource.new.to_s)
   end
 
+  def test_inspect
+    assert_equal('#<TCDataSource::TestDataSource>', TestDataSource.new.inspect)
+  end
+
   def test_load_timezone_info
     abstract_test(:load_timezone_info, 'Test/Identifier')
   end

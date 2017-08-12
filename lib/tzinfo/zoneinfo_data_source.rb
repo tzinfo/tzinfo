@@ -217,7 +217,7 @@ module TZInfo
       "Zoneinfo DataSource: #{@zoneinfo_dir}"
     end
 
-    # Returns internal object state as a programmer-readable string.
+    # Returns the internal object state as a programmer-readable string.
     def inspect
       "#<#{self.class}: #{@zoneinfo_dir}>"
     end

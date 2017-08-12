@@ -14,11 +14,6 @@ module TZInfo
       @link_to_identifier = link_to_identifier.freeze
     end
 
-    # Returns internal object state as a programmer-readable string.
-    def inspect
-      "#<#{self.class}: #@identifier,#@link_to_identifier>"
-    end
-
     # Constructs a Timezone instance for the timezone represented by this
     # DataTimezoneInfo.
     def create_timezone

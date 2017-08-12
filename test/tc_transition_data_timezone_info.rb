@@ -347,4 +347,9 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
 
     assert_raises(ArgumentError) { dti.transitions_up_to(nil) }
   end
+
+  def test_inspect
+    dti = TransitionDataTimezoneInfo.new('Test/Zone', TimezoneOffset.new(0, 0, :TEST))
+    assert_equal('#<TZInfo::TransitionDataTimezoneInfo: Test/Zone>', dti.inspect)
+  end
 end

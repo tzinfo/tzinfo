@@ -33,4 +33,9 @@ class TCDataTimezoneInfo < Minitest::Test
     ts = Timestamp.utc(1480291200)
     assert_raises(NotImplementedError) { ti.transitions_up_to(ts) }
   end
+
+  def test_inspect
+    ti = DataTimezoneInfo.new('Test/Zone')
+    assert_equal('#<TZInfo::DataTimezoneInfo: Test/Zone>', ti.inspect)
+  end
 end

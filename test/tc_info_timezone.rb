@@ -13,5 +13,10 @@ class TCInfoTimezone < Minitest::Test
     tz = InfoTimezone.new(i)
     assert_same(i, tz.send(:info))
   end
+
+  def test_inspect
+    tz = InfoTimezone.new(TimezoneInfo.new('Test/Identifier'))
+    assert_equal('#<TZInfo::InfoTimezone: Test/Identifier>', tz.inspect)
+  end
 end
 

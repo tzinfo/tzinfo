@@ -1213,4 +1213,13 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       assert_nil(info.constant_offset)
     end
   end
+
+  def test_inspect
+    offsets = [{gmtoff: 0, isdst: false, abbrev: 'LT'}]
+
+    tzif_test(offsets, []) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
+      assert_equal('#<TZInfo::ZoneinfoTimezoneInfo: Zone/One>', info.inspect)
+    end
+  end
 end

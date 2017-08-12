@@ -1482,4 +1482,9 @@ class TCTimezone < Minitest::Test
       Timezone.all_linked_zone_identifiers
     end
   end
+
+  def test_inspect
+    tz = TestTimezone.new('Europe/London')
+    assert_equal('#<TCTimezone::TestTimezone: Europe/London>', tz.inspect)
+  end
 end

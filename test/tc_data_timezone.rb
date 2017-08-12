@@ -317,4 +317,9 @@ class TCDataTimezone < Minitest::Test
     tz = DataTimezone.new(TestTimezoneInfo.new('Test/Zone', nil, [], []))
     assert_same(tz, tz.canonical_zone)
   end
+
+  def test_inspect
+    tz = DataTimezone.new(TestTimezoneInfo.new('Test/Zone', nil, [], []))
+    assert_equal('#<TZInfo::DataTimezone: Test/Zone>', tz.inspect)
+  end
 end
