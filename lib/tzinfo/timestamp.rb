@@ -1,16 +1,19 @@
 module TZInfo
-  # A time represented as an Integer number of seconds 1970-01-01 00:00:00 UTC
-  # the fraction through the second (sub_second as a Rational) and an
-  # optional UTC offset. Like Ruby's Time class, Timestamp can distguish between
-  # a local time with a zero offset from and a time actually specified as UTC.
+  # A time represented as an Integer number of seconds since 1970-01-01 00:00:00
+  # UTC (ignoring leap seconds), the fraction through the second (sub_second as
+  # a Rational) and an optional UTC offset. Like Ruby's Time class, Timestamp
+  # can distinguish between a local time with a zero offset and a time specified
+  # explicitly as UTC.
   class Timestamp
     include Comparable
 
-    # The Unix epoch as a chronological Julian day number.
+    # The Unix epoch (1970-01-01 00:00:00 UTC) as a chronological Julian day
+    # number.
     JD_EPOCH = 2440588
     private_constant :JD_EPOCH
 
-    # The number of seconds since 1970-01-01 00:00:00 UTC.
+    # The number of seconds since 1970-01-01 00:00:00 UTC ignoring leap seconds
+    # (i.e. each day is treated as if it were 86,400 seconds long).
     attr_reader :value
 
     # The fraction of a second elapsed since timestamp as a Rational or the
@@ -18,9 +21,9 @@ module TZInfo
     attr_reader :sub_second
 
     # Constructs a new Timestamp with a Integer timestamp value (seconds since
-    # 1970-01-01 00:00:00 UTC), sub_second (a Rational >= 0 and < 1, or the
-    # Integer 0) and an optional offset from UTC (either an Integer number of
-    # seconds or the symbol :utc).
+    # 1970-01-01 00:00:00 UTC ignoring leap seconds), sub_second (a Rational >=
+    # 0 and < 1, or the Integer 0) and an optional offset from UTC (either an
+    # Integer number of seconds or the symbol :utc).
     def initialize(value, sub_second = 0, utc_offset = nil)
       raise ArgumentError, 'value must be an Integer' unless value.kind_of?(Integer)
       raise ArgumentError, 'sub_second must be a Rational or the Integer 0' unless (sub_second.kind_of?(Integer) && sub_second == 0) || sub_second.kind_of?(Rational)
@@ -100,7 +103,7 @@ module TZInfo
     end
 
     # Returns an Integer representation of this Timestamp (the number of
-    # seconds since 1970-01-01 00:00:00 UTC).
+    # seconds since 1970-01-01 00:00:00 UTC ignoring leap seconds).
     def to_i
       value
     end

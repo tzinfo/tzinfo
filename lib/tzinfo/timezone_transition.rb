@@ -9,12 +9,14 @@ module TZInfo
     attr_reader :previous_offset
 
     # When this transition occurs as an Integer number of seconds since
-    # 1970-01-01 UTC.
+    # 1970-01-01 00:00:00 UTC ignoring leap seconds (i.e. each day is treated as
+    # if it were 86,400 seconds long).
     attr_reader :timestamp
 
     # Initializes a new TimezoneTransition with the given offset,
-    # previous_offset (both TimezoneOffset instances) and UTC time specified as
-    # an Integer number of seconds since 1970-01-01.
+    # previous_offset (both as TimezoneOffset instances) and UTC time specified
+    # as an Integer number of seconds since 1970-01-01 00:00:00 UTC ignoring
+    # leap seconds, i.e. each day is treated as if it were 86,400 seconds long).
     #
     # TimezoneTransition instances should not normally be constructed manually.
     def initialize(offset, previous_offset, timestamp)

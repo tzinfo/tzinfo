@@ -52,7 +52,8 @@ module TZInfo
       # offset_id references the id of a previously defined offset.
       #
       # timestamp is the time the transition occurs as an Integer number of
-      # seconds since 1970-01-01 00:00:00 UTC.
+      # seconds since 1970-01-01 00:00:00 UTC ignoring leap seconds (i.e. each
+      # day is treated as if it were 86,400 seconds long).
       #
       # Transitions must be defined in increasing time order.
       #
