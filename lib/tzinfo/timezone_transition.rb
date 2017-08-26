@@ -30,6 +30,9 @@ module TZInfo
 
     # A Timestamp instance representing the UTC time when this transition
     # occurs.
+    #
+    # To obtain the result as a Time or DateTime, call either to_time or
+    # to_datetime on the Timestamp instance that is returned.
     def at
       # Thread-safety: It is possible that the value of @at may be calculated
       # multiple times in concurrently executing threads. It is not worth the
@@ -38,19 +41,12 @@ module TZInfo
       @at ||= Timestamp.utc(@timestamp_value)
     end
 
-    # The UTC time when this transition occurs, returned as a DateTime instance.
-    def datetime
-      at.to_datetime
-    end
-
-    # The UTC time when this transition occurs, returned as a Time instance.
-    def time
-      at.to_time
-    end
-
     # A Timestamp instance representing the local time when this transition
     # causes the previous observance to end (calculated from at using
     # previous_offset).
+    #
+    # To obtain the result as a Time or DateTime, call either to_time or
+    # to_datetime on the Timestamp instance that is returned.
     def local_end_at
       # Thread-safety: It is possible that the value of @local_end_at may be
       # calculated multiple times in concurrently executing threads. It is not
@@ -61,20 +57,11 @@ module TZInfo
       @local_end_at
     end
 
-    # The local time when this transition causes the previous observance to end,
-    # returned as a DateTime instance.
-    def local_end
-      local_end_at.to_datetime
-    end
-
-    # The local time when this transition causes the previous observance to end,
-    # returned as a Time instance.
-    def local_end_time
-      local_end_at.to_time
-    end
-
     # A Timestamp instance representing the local time when this transition
     # causes the next observance to start (calculated from at using offset).
+    #
+    # To obtain the result as a Time or DateTime, call either to_time or
+    # to_datetime on the Timestamp instance that is returned.
     def local_start_at
       # Thread-safety: It is possible that the value of @local_start_at may be
       # calculated multiple times in concurrently executing threads. It is not
@@ -83,18 +70,6 @@ module TZInfo
 
       @local_start_at = at.apply_offset(@offset.utc_total_offset) unless @local_start_at
       @local_start_at
-    end
-
-    # The local time when this transition causes the next observance to start,
-    # returned as a DateTime instance.
-    def local_start
-      local_start_at.to_datetime
-    end
-
-    # The local time when this transition causes the next observance to start,
-    # returned as a Time instance.
-    def local_start_time
-      local_start_at.to_time
     end
 
     # Returns true if this TimezoneTransition is equal to the given
