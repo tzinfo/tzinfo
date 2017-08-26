@@ -51,14 +51,14 @@ module TZInfo
       if @constant_offset
         TimezonePeriod.new(nil, nil, @constant_offset)
       else
-        timestamp = timestamp.value
+        timestamp_value = timestamp.value
 
-        index = find_minimum_transition {|t| t.timestamp >= timestamp }
+        index = find_minimum_transition {|t| t.timestamp_value >= timestamp_value }
 
         if index
           transition = @transitions[index]
 
-          if transition.timestamp == timestamp
+          if transition.timestamp_value == timestamp_value
             # timestamp occurs within the second of the found transition, so is
             # the transition that starts the period.
             start_transition = transition
@@ -94,18 +94,18 @@ module TZInfo
       if @constant_offset
         [TimezonePeriod.new(nil, nil, @constant_offset)]
       else
-        local_timestamp = local_timestamp.value
-        latest_possible_utc = local_timestamp + 86400
-        earliest_possible_utc = local_timestamp - 86400
+        local_timestamp_value = local_timestamp.value
+        latest_possible_utc_value = local_timestamp_value + 86400
+        earliest_possible_utc_value = local_timestamp_value - 86400
 
         # Find the index of the first transition that occurs after a latest
         # possible UTC representation of the local timestamp and then search
         # backwards until an earliest possible UTC representation.
 
-        index = find_minimum_transition {|t| t.timestamp >= latest_possible_utc }
+        index = find_minimum_transition {|t| t.timestamp_value >= latest_possible_utc_value }
 
-        # No transitions after latest_possible_utc, set to max index + 1 to
-        # search backwards including the period after the last transition
+        # No transitions after latest_possible_utc_value, set to max index + 1
+        # to search backwards including the period after the last transition
         index = @transitions.length unless index
 
         result = []
@@ -114,15 +114,15 @@ module TZInfo
           start_transition = i > 0 ? @transitions[i - 1] : nil
           end_transition = @transitions[i]
           offset = start_transition ? start_transition.offset : end_transition.previous_offset
-          utc_timestamp = local_timestamp - offset.utc_total_offset
+          utc_timestamp_value = local_timestamp_value - offset.utc_total_offset
 
           # It is not necessary to compare the sub-seconds because a timestamp
           # is in the period if is >= the start transition (sub-seconds would
           # make == become >) and if it is < the end transition (which
           # sub-seconds cannot affect).
-          if (!start_transition || utc_timestamp >= start_transition.timestamp) && (!end_transition || utc_timestamp < end_transition.timestamp)
+          if (!start_transition || utc_timestamp_value >= start_transition.timestamp_value) && (!end_transition || utc_timestamp_value < end_transition.timestamp_value)
             result << TimezonePeriod.new(start_transition, end_transition)
-          elsif end_transition && end_transition.timestamp < earliest_possible_utc
+          elsif end_transition && end_transition.timestamp_value < earliest_possible_utc_value
             break
           end
         end
@@ -214,9 +214,9 @@ module TZInfo
     # Determines if a transition occurs at or after a given Timestamp,
     # considering the Timestamp sub_second.
     def transition_on_or_after_to_timestamp?(transition, timestamp)
-      transition_timestamp = transition.timestamp
+      transition_timestamp_value = transition.timestamp_value
       timestamp_value = timestamp.value
-      transition_timestamp > timestamp_value || transition_timestamp == timestamp_value && timestamp.sub_second == 0
+      transition_timestamp_value > timestamp_value || transition_timestamp_value == timestamp_value && timestamp.sub_second == 0
     end
   end
 end

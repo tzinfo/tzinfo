@@ -10,8 +10,9 @@ module TZInfo
 
     # When this transition occurs as an Integer number of seconds since
     # 1970-01-01 00:00:00 UTC ignoring leap seconds (i.e. each day is treated as
-    # if it were 86,400 seconds long).
-    attr_reader :timestamp
+    # if it were 86,400 seconds long). Equivalent to the result of calling
+    # #value on the Timestamp returned by #at.
+    attr_reader :timestamp_value
 
     # Initializes a new TimezoneTransition with the given offset,
     # previous_offset (both as TimezoneOffset instances) and UTC time specified
@@ -19,10 +20,10 @@ module TZInfo
     # leap seconds, i.e. each day is treated as if it were 86,400 seconds long).
     #
     # TimezoneTransition instances should not normally be constructed manually.
-    def initialize(offset, previous_offset, timestamp)
+    def initialize(offset, previous_offset, timestamp_value)
       @offset = offset
       @previous_offset = previous_offset
-      @timestamp = timestamp
+      @timestamp_value = timestamp_value
       @local_end_at = nil
       @local_start_at = nil
     end
@@ -34,7 +35,7 @@ module TZInfo
       # multiple times in concurrently executing threads. It is not worth the
       # overhead of locking to ensure that @at is only calculated once.
 
-      @at ||= Timestamp.utc(@timestamp)
+      @at ||= Timestamp.utc(@timestamp_value)
     end
 
     # The UTC time when this transition occurs, returned as a DateTime instance.
@@ -101,18 +102,18 @@ module TZInfo
     # equal if offset, previous_offset and timestamp are all equal.
     def ==(tti)
       tti.kind_of?(TimezoneTransition) &&
-        offset == tti.offset && previous_offset == tti.previous_offset && timestamp == tti.timestamp
+        offset == tti.offset && previous_offset == tti.previous_offset && timestamp_value == tti.timestamp_value
     end
     alias_method :eql?, :==
 
     # Returns a hash of this TimezoneTransition instance.
     def hash
-      @offset.hash ^ @previous_offset.hash ^ @timestamp.hash
+      @offset.hash ^ @previous_offset.hash ^ @timestamp_value.hash
     end
 
     # Returns the internal object state as a programmer-readable string.
     def inspect
-      "#<#{self.class}: @offset=#{offset.inspect}, @previous_offset=#{@previous_offset.inspect}, @timestamp=#{@timestamp}>"
+      "#<#{self.class}: @offset=#{offset.inspect}, @previous_offset=#{@previous_offset.inspect}, @timestamp_value=#{@timestamp_value}>"
     end
 
     private

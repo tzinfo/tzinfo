@@ -19,11 +19,11 @@ class TCTimezoneTransition < Minitest::Test
     assert_equal(TimezoneOffset.new(3600, 0, :TST), t.previous_offset)
   end
 
-  def test_timestamp
+  def test_timestamp_value
     t = TimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
       TimezoneOffset.new(3600, 0, :TST), 1148949080)
 
-    assert_equal(1148949080, t.timestamp)
+    assert_equal(1148949080, t.timestamp_value)
   end
 
   def test_at
@@ -179,6 +179,6 @@ class TCTimezoneTransition < Minitest::Test
     t = TimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDTA),
       TimezoneOffset.new(3600, 0, :TSTA), 1148949080)
 
-    assert_equal("#<TZInfo::TimezoneTransition: @offset=#{t.offset.inspect}, @previous_offset=#{t.previous_offset.inspect}, @timestamp=#{t.timestamp}>", t.inspect)
+    assert_equal("#<TZInfo::TimezoneTransition: @offset=#{t.offset.inspect}, @previous_offset=#{t.previous_offset.inspect}, @timestamp_value=#{t.timestamp_value}>", t.inspect)
   end
 end

@@ -51,21 +51,21 @@ module TZInfo
       #
       # offset_id references the id of a previously defined offset.
       #
-      # timestamp is the time the transition occurs as an Integer number of
-      # seconds since 1970-01-01 00:00:00 UTC ignoring leap seconds (i.e. each
-      # day is treated as if it were 86,400 seconds long).
+      # timestamp_value is the time the transition occurs as an Integer number
+      # of seconds since 1970-01-01 00:00:00 UTC ignoring leap seconds (i.e.
+      # each day is treated as if it were 86,400 seconds long).
       #
       # Transitions must be defined in increasing time order.
       #
       # Raises ArgumentError if offset_id does not reference a defined offset.
       #
-      # Raises ArgumentError if timestamp is not greater than the timestamp of
-      # the previously defined transtion.
-      def transition(offset_id, timestamp)
+      # Raises ArgumentError if timestamp_value is not greater than the
+      # timestamp_value of the previously defined transtion.
+      def transition(offset_id, timestamp_value)
         offset = @offsets[offset_id]
         raise ArgumentError, 'offset_id has not been defined' unless offset
-        raise ArgumentError, 'timestamp is not greater than the timestamp of the previously defined transition' if !@transitions.empty? && @transitions.last.timestamp >= timestamp
-        @transitions << TimezoneTransition.new(offset, @previous_offset, timestamp)
+        raise ArgumentError, 'timestamp is not greater than the timestamp of the previously defined transition' if !@transitions.empty? && @transitions.last.timestamp_value >= timestamp_value
+        @transitions << TimezoneTransition.new(offset, @previous_offset, timestamp_value)
         @previous_offset = offset
       end
     end
