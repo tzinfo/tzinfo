@@ -15,20 +15,16 @@ class TCTimezonePeriod < Minitest::Test
     assert_same(start_t, p.start_transition)
     assert_same(end_t, p.end_transition)
     assert_same(dst, p.offset)
-    assert_equal_with_offset_and_class(DateTime.new(2006,1,1,0,0,0), p.utc_start)
-    assert_equal_with_offset_and_class(Time.utc(2006,1,1,0,0,0), p.utc_start_time)
-    assert_equal_with_offset_and_class(DateTime.new(2006,1,2,0,0,0), p.utc_end)
-    assert_equal_with_offset_and_class(Time.utc(2006,1,2,0,0,0), p.utc_end_time)
+    assert_equal_with_offset_and_class(Timestamp.utc(1136073600), p.starts_at)
+    assert_equal_with_offset_and_class(Timestamp.utc(1136160000), p.ends_at)
     assert_equal(-7200, p.utc_offset)
     assert_equal(3600, p.std_offset)
     assert_equal(-3600, p.utc_total_offset)
     assert_equal(Rational(-3600, 86400), p.utc_total_offset_rational)
     assert_equal(:TEST, p.zone_identifier)
     assert_equal(:TEST, p.abbreviation)
-    assert_equal_with_offset_and_period(LocalDateTime.new(2005,12,31,23,0,0,'-01:00').localize(p), p.local_start)
-    assert_equal_with_offset_and_period(LocalTime.new(2005,12,31,23,0,0,'-01:00').localize(p), p.local_start_time)
-    assert_equal_with_offset_and_period(LocalDateTime.new(2006,1,1,23,0,0,'-01:00').localize(p), p.local_end)
-    assert_equal_with_offset_and_period(LocalTime.new(2006,1,1,23,0,0,'-01:00').localize(p), p.local_end_time)
+    assert_equal_with_offset_and_period(LocalTimestamp.new(1136073600, 0, -3600).localize(p), p.local_starts_at)
+    assert_equal_with_offset_and_period(LocalTimestamp.new(1136160000, 0, -3600).localize(p), p.local_ends_at)
   end
 
   def test_initialize_start_end_offset
@@ -51,20 +47,16 @@ class TCTimezonePeriod < Minitest::Test
     assert_same(start_t, p.start_transition)
     assert_nil(p.end_transition)
     assert_same(dst, p.offset)
-    assert_equal_with_offset_and_class(DateTime.new(2006,1,1,0,0,0), p.utc_start)
-    assert_equal_with_offset_and_class(Time.utc(2006,1,1,0,0,0), p.utc_start_time)
-    assert_nil(p.utc_end)
-    assert_nil(p.utc_end_time)
+    assert_equal_with_offset_and_class(Timestamp.utc(1136073600), p.starts_at)
+    assert_nil(p.ends_at)
     assert_equal(-7200, p.utc_offset)
     assert_equal(3600, p.std_offset)
     assert_equal(-3600, p.utc_total_offset)
     assert_equal(Rational(-3600, 86400), p.utc_total_offset_rational)
     assert_equal(:TEST, p.zone_identifier)
     assert_equal(:TEST, p.abbreviation)
-    assert_equal_with_offset_and_period(LocalDateTime.new(2005,12,31,23,0,0,'-01:00').localize(p), p.local_start)
-    assert_equal_with_offset_and_period(LocalTime.new(2005,12,31,23,0,0,'-01:00').localize(p), p.local_start_time)
-    assert_nil(p.local_end)
-    assert_nil(p.local_end_time)
+    assert_equal_with_offset_and_period(LocalTimestamp.new(1136073600, 0, -3600).localize(p), p.local_starts_at)
+    assert_nil(p.local_ends_at)
   end
 
   def test_initialize_start_offset
@@ -86,20 +78,16 @@ class TCTimezonePeriod < Minitest::Test
     assert_nil(p.start_transition)
     assert_same(end_t, p.end_transition)
     assert_same(dst, p.offset)
-    assert_nil(p.utc_start)
-    assert_nil(p.utc_start_time)
-    assert_equal_with_offset_and_class(DateTime.new(2006,1,2,0,0,0), p.utc_end)
-    assert_equal_with_offset_and_class(Time.utc(2006,1,2,0,0,0), p.utc_end_time)
+    assert_nil(p.starts_at)
+    assert_equal_with_offset_and_class(Timestamp.utc(1136160000), p.ends_at)
     assert_equal(-7200, p.utc_offset)
     assert_equal(3600, p.std_offset)
     assert_equal(-3600, p.utc_total_offset)
     assert_equal(Rational(-3600, 86400), p.utc_total_offset_rational)
     assert_equal(:TEST, p.zone_identifier)
     assert_equal(:TEST, p.abbreviation)
-    assert_nil(p.local_start)
-    assert_nil(p.local_start_time)
-    assert_equal_with_offset_and_period(LocalDateTime.new(2006,1,1,23,0,0,'-01:00').localize(p), p.local_end)
-    assert_equal_with_offset_and_period(LocalTime.new(2006,1,1,23,0,0,'-01:00').localize(p), p.local_end_time)
+    assert_nil(p.local_starts_at)
+    assert_equal_with_offset_and_period(LocalTimestamp.new(1136160000, 0, -3600).localize(p), p.local_ends_at)
   end
 
   def test_initialize_end_offset
@@ -123,20 +111,16 @@ class TCTimezonePeriod < Minitest::Test
     assert_nil(p.start_transition)
     assert_nil(p.end_transition)
     assert_same(special, p.offset)
-    assert_nil(p.utc_start)
-    assert_nil(p.utc_start_time)
-    assert_nil(p.utc_end)
-    assert_nil(p.utc_end_time)
+    assert_nil(p.starts_at)
+    assert_nil(p.ends_at)
     assert_equal(0, p.utc_offset)
     assert_equal(0, p.std_offset)
     assert_equal(0, p.utc_total_offset)
     assert_equal(Rational(0, 86400), p.utc_total_offset_rational)
     assert_equal(:SPECIAL, p.zone_identifier)
     assert_equal(:SPECIAL, p.abbreviation)
-    assert_nil(p.local_start)
-    assert_nil(p.local_start_time)
-    assert_nil(p.local_end)
-    assert_nil(p.local_end_time)
+    assert_nil(p.local_starts_at)
+    assert_nil(p.local_ends_at)
   end
 
   def test_dst
@@ -160,8 +144,7 @@ class TCTimezonePeriod < Minitest::Test
 
     p1 = TimezonePeriod.new(t1, nil)
 
-    assert_equal_with_offset(DateTime.new(1969,12,31,23,0,0,'-01:00'), p1.local_start)
-    assert_equal_with_offset(Time.new(1969,12,31,23,0,0,'-01:00'), p1.local_start_time)
+    assert_equal_with_offset(Timestamp.new(0, 0, -3600), p1.local_starts_at)
   end
 
   def test_time_boundary_end
@@ -171,8 +154,7 @@ class TCTimezonePeriod < Minitest::Test
 
     p1 = TimezonePeriod.new(nil, t1)
 
-    assert_equal_with_offset(DateTime.new(2038,1,19,4,0,0,'+01:00'), p1.local_end)
-    assert_equal_with_offset(Time.new(2038,1,19,4,0,0,'+01:00'), p1.local_end_time)
+    assert_equal_with_offset(Timestamp.new(2147482800, 0, 3600), p1.local_ends_at)
   end
 
   def test_equality

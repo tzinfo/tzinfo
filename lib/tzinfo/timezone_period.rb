@@ -66,48 +66,40 @@ module TZInfo
       OffsetRationals.rational_for_offset(utc_total_offset)
     end
 
-    # The start time of the period in UTC as a DateTime. May be nil if unbounded.
-    def utc_start
-      @start_transition ? @start_transition.at.to_datetime : nil
+    # The start time of the period as a UTC Timestamp. Make be nil if the period
+    # is unbounded.
+    #
+    # To obtain the result as a Time or DateTime, call either to_time or
+    # to_datetime on the Timestamp instance that is returned.
+    def starts_at
+      @start_transition ? @start_transition.at : nil
     end
 
-    # The start time of the period in UTC as a Time. May be nil if unbounded.
-    def utc_start_time
-      @start_transition ? @start_transition.at.to_time : nil
+    # The start time of the period as a UTC Timestamp. Make be nil if the period
+    # is unbounded.
+    #
+    # To obtain the result as a Time or DateTime, call either to_time or
+    # to_datetime on the Timestamp instance that is returned.
+    def ends_at
+      @end_transition ? @end_transition.at : nil
     end
 
-    # The end time of the period in UTC as a DateTime. May be nil if unbounded.
-    def utc_end
-      @end_transition ? @end_transition.at.to_datetime : nil
+    # The start time of the period as a LocalTimestamp. Make be nil if the
+    # period is unbounded.
+    #
+    # To obtain the result as a Time or DateTime, call either to_time or
+    # to_datetime on the Timestamp instance that is returned.
+    def local_starts_at
+      @start_transition ? LocalTimestamp.localize(@start_transition.at, self) : nil
     end
 
-    # The end time of the period in UTC as a Time. May be nil if unbounded.
-    def utc_end_time
-      @end_transition ? @end_transition.at.to_time : nil
-    end
-
-    # The start time of the period in local time as a LocalDateTime. May be nil
-    # if unbounded.
-    def local_start
-      @start_transition ? LocalTimestamp.localize(@start_transition.at, self).to_datetime : nil
-    end
-
-    # The start time of the period in local time as a LocalTime. May be nil if
-    # unbounded.
-    def local_start_time
-      @start_transition ? LocalTimestamp.localize(@start_transition.at, self).to_time : nil
-    end
-
-    # The end time of the period in local time as a LocalDateTime. May be nil if
-    # unbounded.
-    def local_end
-      @end_transition ? LocalTimestamp.localize(@end_transition.at, self).to_datetime : nil
-    end
-
-    # The end time of the period in local time as a LocalTime. May be nil if
-    # unbounded.
-    def local_end_time
-      @end_transition ? LocalTimestamp.localize(@end_transition.at, self).to_time : nil
+    # The end time of the period as a LocalTimestamp. Make be nil if the
+    # period is unbounded.
+    #
+    # To obtain the result as a Time or DateTime, call either to_time or
+    # to_datetime on the Timestamp instance that is returned.
+    def local_ends_at
+      @end_transition ? LocalTimestamp.localize(@end_transition.at, self) : nil
     end
 
     # true if daylight savings is in effect for this period; otherwise false.
