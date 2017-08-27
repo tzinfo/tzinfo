@@ -61,11 +61,6 @@ module TZInfo
       @offset.utc_total_offset
     end
 
-    # Total offset from UTC (days). Result is a Rational.
-    def utc_total_offset_rational
-      OffsetRationals.rational_for_offset(utc_total_offset)
-    end
-
     # The start time of the period as a UTC Timestamp. Make be nil if the period
     # is unbounded.
     #

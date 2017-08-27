@@ -84,7 +84,7 @@ module TestUtils
     end
 
     def local_time(period, year, month, day, hour, minute, second, sub_second = 0)
-      TZInfo::LocalDateTime.new(year, month, day, hour, minute, second + sub_second, period.utc_total_offset_rational).localize(period)
+      TZInfo::LocalDateTime.new(year, month, day, hour, minute, second + sub_second, period.utc_total_offset.to_r / 86400).localize(period)
     end
   end
 
