@@ -24,8 +24,6 @@ module TZInfo
       @offset = offset
       @previous_offset = previous_offset
       @timestamp_value = timestamp_value
-      @local_end_at = nil
-      @local_start_at = nil
     end
 
     # A Timestamp instance representing the UTC time when this transition
@@ -34,11 +32,7 @@ module TZInfo
     # To obtain the result as a Time or DateTime, call either to_time or
     # to_datetime on the Timestamp instance that is returned.
     def at
-      # Thread-safety: It is possible that the value of @at may be calculated
-      # multiple times in concurrently executing threads. It is not worth the
-      # overhead of locking to ensure that @at is only calculated once.
-
-      @at ||= Timestamp.utc(@timestamp_value)
+      Timestamp.utc(@timestamp_value)
     end
 
     # A Timestamp instance representing the local time when this transition
@@ -48,13 +42,7 @@ module TZInfo
     # To obtain the result as a Time or DateTime, call either to_time or
     # to_datetime on the Timestamp instance that is returned.
     def local_end_at
-      # Thread-safety: It is possible that the value of @local_end_at may be
-      # calculated multiple times in concurrently executing threads. It is not
-      # worth the overhead of locking to ensure that @local_end_at is only
-      # calculated once.
-
-      @local_end_at = at.apply_offset(@previous_offset.utc_total_offset) unless @local_end_at
-      @local_end_at
+      at.apply_offset(@previous_offset.utc_total_offset)
     end
 
     # A Timestamp instance representing the local time when this transition
@@ -63,13 +51,7 @@ module TZInfo
     # To obtain the result as a Time or DateTime, call either to_time or
     # to_datetime on the Timestamp instance that is returned.
     def local_start_at
-      # Thread-safety: It is possible that the value of @local_start_at may be
-      # calculated multiple times in concurrently executing threads. It is not
-      # worth the overhead of locking to ensure that @local_start_at is only
-      # calculated once.
-
-      @local_start_at = at.apply_offset(@offset.utc_total_offset) unless @local_start_at
-      @local_start_at
+      at.apply_offset(@offset.utc_total_offset)
     end
 
     # Returns true if this TimezoneTransition is equal to the given
@@ -84,11 +66,6 @@ module TZInfo
     # Returns a hash of this TimezoneTransition instance.
     def hash
       @offset.hash ^ @previous_offset.hash ^ @timestamp_value.hash
-    end
-
-    # Returns the internal object state as a programmer-readable string.
-    def inspect
-      "#<#{self.class}: @offset=#{offset.inspect}, @previous_offset=#{@previous_offset.inspect}, @timestamp_value=#{@timestamp_value}>"
     end
 
     private
