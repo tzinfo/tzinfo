@@ -42,7 +42,7 @@ module TZInfo
     # To obtain the result as a Time or DateTime, call either to_time or
     # to_datetime on the Timestamp instance that is returned.
     def local_end_at
-      at.apply_offset(@previous_offset.utc_total_offset)
+      Timestamp.new(@timestamp_value, 0, @previous_offset.utc_total_offset)
     end
 
     # A Timestamp instance representing the local time when this transition
@@ -51,7 +51,7 @@ module TZInfo
     # To obtain the result as a Time or DateTime, call either to_time or
     # to_datetime on the Timestamp instance that is returned.
     def local_start_at
-      at.apply_offset(@offset.utc_total_offset)
+      Timestamp.new(@timestamp_value, 0, @offset.utc_total_offset)
     end
 
     # Returns true if this TimezoneTransition is equal to the given
