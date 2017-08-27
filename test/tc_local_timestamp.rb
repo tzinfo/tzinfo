@@ -125,16 +125,6 @@ class TCLocalTimestamp < Minitest::Test
     assert_equal(Timestamp, (lt - 1).class)
   end
 
-  def test_apply_offset_unchanged
-    lt = localized_timestamp(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, :TEST))
-    assert_same(lt, lt.apply_offset(3600))
-  end
-
-  def test_apply_offset_changed
-    lt = localized_timestamp(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, :TEST))
-    assert_equal(Timestamp, lt.apply_offset(7200).class)
-  end
-
   def test_utc
     lt = localized_timestamp(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
     assert_equal(Timestamp, lt.utc.class)

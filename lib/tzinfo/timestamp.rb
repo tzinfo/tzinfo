@@ -66,22 +66,11 @@ module TZInfo
       self + (-seconds)
     end
 
-    # Returns a Timestamp equivalent to this instance, but with the given
-    # UTC offset. self is returned if new_utc_offset matches the current offset.
-    #
-    # new_utc_offset can either be an Integer number of seconds or :utc.
-    #
-    # Raises ArgumentError if new_utc_offset is nil.
-    def apply_offset(new_utc_offset)
-      raise ArgumentError, 'new_utc_offset must not be nil' unless new_utc_offset
-      return self if @utc_offset == new_utc_offset
-      Timestamp.new(@value, @sub_second, new_utc_offset)
-    end
-
     # Returns a UTC Timestamp equivalent to this instance. self is returned if
     # self.utc? is true.
     def utc
-      apply_offset(:utc)
+      return self if @utc_offset == :utc
+      Timestamp.utc(@value, @sub_second)
     end
 
     # Returns a Time representation of this Timestamp. If utc_offset is not
