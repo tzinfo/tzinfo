@@ -61,8 +61,8 @@ module TZInfo
       @offset.utc_total_offset
     end
 
-    # The start time of the period as a UTC Timestamp. Make be nil if the period
-    # is unbounded.
+    # The start time of the period as a UTC Timestamp or nil if the start of the
+    # period is unbounded.
     #
     # To obtain the result as a Time or DateTime, call either to_time or
     # to_datetime on the Timestamp instance that is returned.
@@ -70,8 +70,8 @@ module TZInfo
       @start_transition ? @start_transition.at : nil
     end
 
-    # The start time of the period as a UTC Timestamp. Make be nil if the period
-    # is unbounded.
+    # The end time of the period as a UTC Timestamp or nil if the end of the
+    # period is unbounded.
     #
     # To obtain the result as a Time or DateTime, call either to_time or
     # to_datetime on the Timestamp instance that is returned.
@@ -79,8 +79,8 @@ module TZInfo
       @end_transition ? @end_transition.at : nil
     end
 
-    # The start time of the period as a LocalTimestamp. Make be nil if the
-    # period is unbounded.
+    # The local start time of the period as a LocalTimestamp or nil if the start
+    # of the period is unbounded.
     #
     # To obtain the result as a Time or DateTime, call either to_time or
     # to_datetime on the Timestamp instance that is returned.
@@ -88,7 +88,7 @@ module TZInfo
       @start_transition ? LocalTimestamp.localize(@start_transition.at, self) : nil
     end
 
-    # The end time of the period as a LocalTimestamp. Make be nil if the
+    # The local end time of the period as a LocalTimestamp or nil if the end of
     # period is unbounded.
     #
     # To obtain the result as a Time or DateTime, call either to_time or
