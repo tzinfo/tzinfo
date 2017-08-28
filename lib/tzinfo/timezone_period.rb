@@ -104,10 +104,12 @@ module TZInfo
 
     # Returns true if this TimezonePeriod is equal to p.
     def ==(p)
-      p.kind_of?(TimezonePeriod) &&
-        start_transition == p.start_transition &&
-        end_transition == p.end_transition &&
+      return false unless p.kind_of?(TimezonePeriod)
+      if start_transition || end_transition
+        start_transition == p.start_transition && end_transition == p.end_transition
+      else
         offset == p.offset
+      end
     end
     alias eql? ==
 
