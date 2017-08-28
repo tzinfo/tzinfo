@@ -102,23 +102,14 @@ module TZInfo
       @offset.dst?
     end
 
-    # Returns true if this TimezonePeriod is equal to p. This compares the
-    # start_transition, end_transition and offset using ==.
+    # Returns true if this TimezonePeriod is equal to p.
     def ==(p)
       p.kind_of?(TimezonePeriod) &&
         start_transition == p.start_transition &&
         end_transition == p.end_transition &&
         offset == p.offset
     end
-
-    # Returns true if this TimezonePeriods is equal to p. This compares the
-    # start_transition, end_transition and offset using eql?
-    def eql?(p)
-      p.kind_of?(TimezonePeriod) &&
-        start_transition.eql?(p.start_transition) &&
-        end_transition.eql?(p.end_transition) &&
-        offset.eql?(p.offset)
-    end
+    alias eql? ==
 
     # Returns a hash of this TimezonePeriod.
     def hash
