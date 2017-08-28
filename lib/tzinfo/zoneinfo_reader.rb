@@ -4,21 +4,20 @@ module TZInfo
   class InvalidZoneinfoFile < StandardError
   end
 
-  # Represents a timezone defined by a compiled zoneinfo TZif (\0, 2 or 3) file.
+  # Reads compiled zoneinfo TZif (\0, 2 or 3) files.
   #
   # @private
-  class ZoneinfoTimezoneInfo < TransitionDataTimezoneInfo #:nodoc:
-
-    # Constructs the new ZoneinfoTimezoneInfo with an identifier and path
-    # to the file.
+  class ZoneinfoReader #:nodoc:
+    # Reads a zoneinfo structure from the file_path file. Returns either a
+    # TimezoneOffset that is constantly observed or an Array of
+    # TimezoneTransitions.
     #
     # Raises SecurityError if safe mode is enabled and file_path is tainted.
-    def initialize(identifier, file_path)
-      transitions_or_constant_offset = File.open(file_path, 'rb') do |file|
-        parse(file)
-      end
-
-      super(identifier, transitions_or_constant_offset)
+    #
+    # Raises InvalidZoneinfoFile if file_path does not refer to a valid zoneinfo
+    # file.
+    def read(file_path)
+      File.open(file_path, 'rb') { |file| parse(file) }
     end
 
     private
@@ -131,6 +130,8 @@ module TZInfo
 
       # Parses a zoneinfo file and returns either a TimezoneOffset that is
       # constantly observed or an Array of TimezoneTransitions.
+      #
+      # Raises InvalidZoneinfoFile if the file is not a valid zoneinfo file.
       def parse(file)
         magic, version, ttisgmtcnt, ttisstdcnt, leapcnt, timecnt, typecnt, charcnt =
           check_read(file, 44).unpack('a4 a x15 NNNNNN')

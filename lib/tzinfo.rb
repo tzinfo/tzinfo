@@ -19,9 +19,10 @@ require 'tzinfo/timezone_info'
 require 'tzinfo/data_timezone_info'
 require 'tzinfo/linked_timezone_info'
 require 'tzinfo/transition_data_timezone_info'
-require 'tzinfo/zoneinfo_timezone_info'
 
 require 'tzinfo/country_info'
+
+require 'tzinfo/zoneinfo_reader'
 
 require 'tzinfo/data_source'
 require 'tzinfo/ruby_data_source'

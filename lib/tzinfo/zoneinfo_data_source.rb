@@ -193,6 +193,7 @@ module TZInfo
       @timezone_identifiers = load_timezone_identifiers.freeze
       @countries = load_countries(iso3166_tab_path, zone_tab_path).freeze
       @country_codes = @countries.keys.sort!.freeze
+      @zoneinfo_reader = ZoneinfoReader.new
     end
 
     # Returns an array of all the available timezone identifiers for
@@ -234,7 +235,7 @@ module TZInfo
           path = File.join(@zoneinfo_dir, valid_identifier)
 
           begin
-            ZoneinfoTimezoneInfo.new(valid_identifier, path)
+            TransitionDataTimezoneInfo.new(valid_identifier, @zoneinfo_reader.read(path))
           rescue InvalidZoneinfoFile => e
             raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
           end

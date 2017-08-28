@@ -5,7 +5,7 @@ require 'tempfile'
 
 include TZInfo
 
-class TCZoneinfoTimezoneInfo < Minitest::Test
+class TCZoneinfoReader < Minitest::Test
   def convert_times_to_i(items, key = :at)
     items.each do |item|
       if item[key].kind_of?(Time)
@@ -157,7 +157,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     end
   end
 
-  def test_load
+  def setup
+    @reader = ZoneinfoReader.new
+  end
+
+  def test_read
     offsets = [
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
       {gmtoff: 3600, isdst: false, abbrev: 'XST'},
@@ -181,14 +185,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t3 = TimezoneTransition.new(o3, o1, Time.utc(2000, 12, 31).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
-      assert_equal('Zone/One', info.identifier)
-      assert_equal([t0,t1,t2,t3], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2,t3], @reader.read(path))
     end
   end
 
-  def test_load_negative_utc_offset
+  def test_read_negative_utc_offset
     offsets = [
       {gmtoff: -12492, isdst: false, abbrev: 'LMT'},
       {gmtoff: -12000, isdst: false, abbrev: 'XST'},
@@ -212,14 +213,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t3 = TimezoneTransition.new(o3, o1, Time.utc(1992,  4,  1, 4, 30, 0).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
-      assert_equal('Zone/One', info.identifier)
-      assert_equal([t0,t1,t2,t3], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2,t3], @reader.read(path))
     end
   end
 
-  def test_load_dst_first
+  def test_read_dst_first
     offsets = [
       {gmtoff: 7200, isdst: true,  abbrev: 'XDT'},
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
@@ -237,25 +235,20 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t0 = TimezoneTransition.new(o2, o1, Time.utc(1979, 1, 2).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/Two', path)
-      assert_equal('Zone/Two', info.identifier)
-      assert_equal(t0, info.transitions.first)
+      assert_equal(t0, @reader.read(path).first)
     end
   end
 
-  def test_load_no_transitions
+  def test_read_no_transitions
     offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
     o0 = TimezoneOffset.new(-12094, 0, :LT)
 
     tzif_test(offsets, []) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/three', path)
-      assert_equal('Zone/three', info.identifier)
-      assert_equal(o0, info.constant_offset)
-      assert_nil(info.transitions)
+      assert_equal(o0, @reader.read(path))
     end
   end
 
-  def test_load_no_transitions_dst_first
+  def test_read_no_transitions_dst_first
     offsets = [
       {gmtoff: -10800, isdst: true, abbrev: 'XDT'},
       {gmtoff: -12094, isdst: false, abbrev: 'LT'}]
@@ -263,26 +256,20 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     o1 = TimezoneOffset.new(-12094, 0, :LT)
 
     tzif_test(offsets, []) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/three', path)
-      assert_equal('Zone/three', info.identifier)
-      assert_equal(o1, info.constant_offset)
-      assert_nil(info.transitions)
+      assert_equal(o1, @reader.read(path))
     end
   end
 
-  def test_load_no_transitions_dst_only
+  def test_read_no_transitions_dst_only
     offsets = [{gmtoff: -10800, isdst: true, abbrev: 'XDT'}]
     o0 = TimezoneOffset.new(-14400, 3600, :XDT)
 
     tzif_test(offsets, []) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/three', path)
-      assert_equal('Zone/three', info.identifier)
-      assert_equal(o0, info.constant_offset)
-      assert_nil(info.transitions)
+      assert_equal(o0, @reader.read(path))
     end
   end
 
-  def test_load_initial_transition_to_first_offset
+  def test_read_initial_transition_to_first_offset
     offsets = [
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
       {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
@@ -298,70 +285,58 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t1 = TimezoneTransition.new(o1, o0, Time.utc(2000, 1, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/Four', path)
-      assert_equal([t0,t1], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1], @reader.read(path))
     end
   end
 
-  def test_load_no_offsets
+  def test_read_no_offsets
     offsets = []
     transitions = [{at: Time.utc(2000, 12, 31), offset_index: 0}]
 
     tzif_test(offsets, transitions) do |path, format|
-      assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone', path)
-      end
+      assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
     end
   end
 
-  def test_load_invalid_offset_index
+  def test_read_invalid_offset_index
     offsets = [{gmtoff: -0, isdst: false, abbrev: 'LMT'}]
     transitions = [{at: Time.utc(2000, 12, 31), offset_index: 2}]
 
     tzif_test(offsets, transitions) do |path, format|
-      assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone', path)
-      end
+      assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
     end
   end
 
-  def test_load_with_leap_seconds
+  def test_read_with_leap_seconds
     offsets = [{gmtoff: -0, isdst: false, abbrev: 'LMT'}]
     leaps = [{at: Time.utc(1972,6,30,23,59,60), seconds: 1}]
 
     tzif_test(offsets, [], leaps) do |path, format|
-      assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone', path)
-      end
+      assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
     end
   end
 
-  def test_load_invalid_magic
+  def test_read_invalid_magic
     ['TZif4', 'tzif2', '12345'].each do |magic|
       offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
       tzif_test(offsets, [], [], magic: magic) do |path, format|
-        assert_raises(InvalidZoneinfoFile) do
-          ZoneinfoTimezoneInfo.new('Zone2', path)
-        end
+        assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
       end
     end
   end
 
-  def test_load_invalid_section2_magic
+  def test_read_invalid_section2_magic
     ['TZif4', 'tzif2', '12345'].each do |section2_magic|
       offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
       tzif_test(offsets, [], [], min_format: 2, section2_magic: section2_magic) do |path, format|
-        assert_raises(InvalidZoneinfoFile) do
-          ZoneinfoTimezoneInfo.new('Zone4', path)
-        end
+        assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
       end
     end
   end
 
-  def test_load_mismatched_section2_magic
+  def test_read_mismatched_section2_magic
     minus_one = Proc.new {|f| f == 2 ? "TZif\0" : "TZif#{f - 1}" }
     plus_one = Proc.new {|f| "TZif#{f + 1}" }
 
@@ -369,25 +344,21 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
       tzif_test(offsets, [], [], min_format: 2, section2_magic: section2_magic) do |path, format|
-        assert_raises(InvalidZoneinfoFile) do
-          ZoneinfoTimezoneInfo.new('Zone5', path)
-        end
+        assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
       end
     end
   end
 
-  def test_load_invalid_format
+  def test_read_invalid_format
     Tempfile.open('tzinfo-test-zone') do |file|
       file.write('Invalid')
       file.flush
 
-      assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone3', file.path)
-      end
+      assert_raises(InvalidZoneinfoFile) { @reader.read(file.path) }
     end
   end
 
-  def test_load_missing_abbrev_null_termination
+  def test_read_missing_abbrev_null_termination
     offsets = [
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
       {gmtoff: 3600, isdst: false,  abbrev: 'XST'}]
@@ -396,13 +367,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {at: Time.utc(2000, 1, 1), offset_index: 1}]
 
     tzif_test(offsets, transitions, [], abbrev_separator: '^') do |path, format|
-      assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone', path)
-      end
+      assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
     end
   end
 
-  def test_load_out_of_range_abbrev_offsets
+  def test_read_out_of_range_abbrev_offsets
     offsets = [
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
       {gmtoff: 3600, isdst: false,  abbrev: 'XST'}]
@@ -411,13 +380,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {at: Time.utc(2000, 1, 1), offset_index: 1}]
 
     tzif_test(offsets, transitions, [], abbrev_offset_base: 8) do |path, format|
-      assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone', path)
-      end
+      assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
     end
   end
 
-  def test_load_before_epoch
+  def test_read_before_epoch
     offsets = [
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
       {gmtoff: 3600, isdst: false, abbrev: 'XST'},
@@ -441,14 +408,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t3 = TimezoneTransition.new(o3, o1, Time.utc(2000, 12, 31).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/Negative', path)
-      assert_equal('Zone/Negative', info.identifier)
-      assert_equal([t0,t1,t2,t3], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2,t3], @reader.read(path))
     end
   end
 
-  def test_load_on_epoch
+  def test_read_on_epoch
     offsets = [
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
       {gmtoff: 3600, isdst: false, abbrev: 'XST'},
@@ -472,14 +436,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t3 = TimezoneTransition.new(o3, o1, Time.utc(2000, 12, 31).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/Negative', path)
-      assert_equal('Zone/Negative', info.identifier)
-      assert_equal([t0,t1,t2,t3], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2,t3], @reader.read(path))
     end
   end
 
-  def test_load_64bit
+  def test_read_64bit
     # TZif format 2 and later contains both 32-bit and 64-bit times. Where a
     # TZif 2 or later file is provided, the 64-bit times should be used.
 
@@ -507,20 +468,17 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t3    = TimezoneTransition.new(o3, o1, Time.utc(2040, 12, 31).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/SixtyFour', path)
-      assert_equal('Zone/SixtyFour', info.identifier)
+      transitions = @reader.read(path)
 
       if format >= 2
-        assert_equal([t0,t1_f2,t2,t3], info.transitions)
+        assert_equal([t0,t1_f2,t2,t3], transitions)
       else
-        assert_equal([t1_f1,t2], info.transitions)
+        assert_equal([t1_f1,t2], transitions)
       end
-
-      assert_nil(info.constant_offset)
     end
   end
 
-  def test_load_64bit_range
+  def test_read_64bit_range
     offsets = [
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
       {gmtoff: 3600, isdst: false, abbrev: 'XST'},
@@ -541,20 +499,17 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t2    = TimezoneTransition.new(o0, o2,                  2**63 - 1)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/SixtyFourRange', path)
-      assert_equal('Zone/SixtyFourRange', info.identifier)
+      transitions = @reader.read(path)
 
       if format >= 2
-        assert_equal([t0, t1_f2, t2], info.transitions)
+        assert_equal([t0, t1_f2, t2], transitions)
       else
-        assert_equal([t1_f1], info.transitions)
+        assert_equal([t1_f1], transitions)
       end
-
-      assert_nil(info.constant_offset)
     end
   end
 
-  def test_load_32bit_range
+  def test_read_32bit_range
     offsets = [
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
       {gmtoff: 3600, isdst: false, abbrev: 'XST'},
@@ -574,14 +529,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t2 = TimezoneTransition.new(o0, o2,                  2**31 - 1)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/ThirtyTwoRange', path)
-      assert_equal('Zone/ThirtyTwoRange', info.identifier)
-      assert_equal([t0,t1,t2], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2], @reader.read(path))
     end
   end
 
-  def test_load_std_offset_changes
+  def test_read_std_offset_changes
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -608,14 +560,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t3 = TimezoneTransition.new(o1, o3, Time.utc(2000, 4, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
-      assert_equal('Zone/DoubleDaylight', info.identifier)
-      assert_equal([t0,t1,t2,t3], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2,t3], @reader.read(path))
     end
   end
 
-  def test_load_std_offset_changes_jump_to_double_dst
+  def test_read_std_offset_changes_jump_to_double_dst
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -638,14 +587,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t2 = TimezoneTransition.new(o1, o2, Time.utc(2000, 6, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
-      assert_equal('Zone/DoubleDaylight', info.identifier)
-      assert_equal([t0,t1,t2], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2], @reader.read(path))
     end
   end
 
-  def test_load_std_offset_changes_negative
+  def test_read_std_offset_changes_negative
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -676,14 +622,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t5 = TimezoneTransition.new(o1, o3, Time.utc(2000, 6, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
-      assert_equal('Zone/DoubleDaylight', info.identifier)
-      assert_equal([t0,t1,t2,t3,t4,t5], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2,t3,t4,t5], @reader.read(path))
     end
   end
 
-  def test_load_starts_two_hour_std_offset
+  def test_read_starts_two_hour_std_offset
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -708,14 +651,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t2 = TimezoneTransition.new(o1, o2, Time.utc(2000, 3, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
-      assert_equal('Zone/DoubleDaylight', info.identifier)
-      assert_equal([t0,t1,t2], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2], @reader.read(path))
     end
   end
 
-  def test_load_starts_only_dst_transition_with_lmt
+  def test_read_starts_only_dst_transition_with_lmt
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -731,14 +671,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t0 = TimezoneTransition.new(o1, o0, Time.utc(2000, 1, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/OnlyDST', path)
-      assert_equal('Zone/OnlyDST', info.identifier)
-      assert_equal([t0], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0], @reader.read(path))
     end
   end
 
-  def test_load_starts_only_dst_transition_without_lmt
+  def test_read_starts_only_dst_transition_without_lmt
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -751,14 +688,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t0 = TimezoneTransition.new(o0, o0, Time.utc(2000, 1, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/OnlyDST', path)
-      assert_equal('Zone/OnlyDST', info.identifier)
-      assert_equal([t0], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0], @reader.read(path))
     end
   end
 
-  def test_load_switch_to_dst_and_change_utc_offset
+  def test_read_switch_to_dst_and_change_utc_offset
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -782,14 +716,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 2, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
-      assert_equal('Zone/DoubleDaylight', info.identifier)
-      assert_equal([t0,t1], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1], @reader.read(path))
     end
   end
 
-  def test_load_apia_international_dateline_change
+  def test_read_apia_international_dateline_change
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -821,14 +752,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t3 = TimezoneTransition.new(o4, o3, Time.utc(2012,  3, 31, 14, 0, 0).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Test/Pacific/Apia', path)
-      assert_equal('Test/Pacific/Apia', info.identifier)
-      assert_equal([t0,t1,t2,t3], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2,t3], @reader.read(path))
     end
   end
 
-  def test_load_offset_split_for_different_utc_offset
+  def test_read_offset_split_for_different_utc_offset
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -875,17 +803,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t11 = TimezoneTransition.new(o2,   o3_2, Time.utc(2000, 12, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/SplitUtcOffset', path)
-      assert_equal('Zone/SplitUtcOffset', info.identifier)
-      assert_equal([t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11], info.transitions)
-      assert_nil(info.constant_offset)
+      transitions = @reader.read(path)
+      assert_equal([t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11], transitions)
       0.upto(5) do |i|
-        assert_same(info.transitions[i].offset, info.transitions[i + 6].offset, "Offsets for transitions #{i} and #{i + 6} are not the same")
+        assert_same(transitions[i].offset, transitions[i + 6].offset, "Offsets for transitions #{i} and #{i + 6} are not the same")
       end
     end
   end
 
-  def test_load_offset_utc_offset_taken_from_minimum_difference_minimum_after
+  def test_read_offset_utc_offset_taken_from_minimum_difference_minimum_after
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -913,14 +839,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t2 = TimezoneTransition.new(o2, o3, Time.utc(2000,  3, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/MinimumUtcOffset', path)
-      assert_equal('Zone/MinimumUtcOffset', info.identifier)
-      assert_equal([t0,t1,t2], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2], @reader.read(path))
     end
   end
 
-  def test_load_offset_utc_offset_taken_from_minimum_difference_minimum_before
+  def test_read_offset_utc_offset_taken_from_minimum_difference_minimum_before
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -948,14 +871,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t2 = TimezoneTransition.new(o1, o3, Time.utc(2000,  3, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/MinimumUtcOffset', path)
-      assert_equal('Zone/MinimumUtcOffset', info.identifier)
-      assert_equal([t0,t1,t2], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2], @reader.read(path))
     end
   end
 
-  def test_load_offset_does_not_use_equal_utc_total_offset_equal_after
+  def test_read_offset_does_not_use_equal_utc_total_offset_equal_after
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -983,14 +903,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t2 = TimezoneTransition.new(o2, o3, Time.utc(2000,  3, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetEqual', path)
-      assert_equal('Zone/UtcOffsetEqual', info.identifier)
-      assert_equal([t0,t1,t2], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2], @reader.read(path))
     end
   end
 
-  def test_load_offset_does_not_use_equal_utc_total_offset_equal_before
+  def test_read_offset_does_not_use_equal_utc_total_offset_equal_before
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -1018,14 +935,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t2 = TimezoneTransition.new(o1, o3, Time.utc(2000,  3, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetEqual', path)
-      assert_equal('Zone/UtcOffsetEqual', info.identifier)
-      assert_equal([t0,t1,t2], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2], @reader.read(path))
     end
   end
 
-  def test_load_offset_both_adjacent_non_dst_equal_utc_total_offset
+  def test_read_offset_both_adjacent_non_dst_equal_utc_total_offset
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -1051,14 +965,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t2 = TimezoneTransition.new(o1, o2, Time.utc(2000,  3, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/AdjacentEqual', path)
-      assert_equal('Zone/AdjacentEqual', info.identifier)
-      assert_equal([t0,t1,t2], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2], @reader.read(path))
     end
   end
 
-  def test_load_offset_utc_offset_preserved_from_next
+  def test_read_offset_utc_offset_preserved_from_next
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -1090,14 +1001,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t3 = TimezoneTransition.new(o2, o4, Time.utc(2000,  4, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetPreserved', path)
-      assert_equal('Zone/UtcOffsetPreserved', info.identifier)
-      assert_equal([t0,t1,t2,t3], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2,t3], @reader.read(path))
     end
   end
 
-  def test_load_offset_utc_offset_preserved_from_previous
+  def test_read_offset_utc_offset_preserved_from_previous
     # The zoneinfo files don't include the offset from standard time, so this
     # has to be derived by looking at changes in the total UTC offset.
 
@@ -1129,14 +1037,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t3 = TimezoneTransition.new(o1, o4, Time.utc(2000,  4, 1).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetPreserved', path)
-      assert_equal('Zone/UtcOffsetPreserved', info.identifier)
-      assert_equal([t0,t1,t2,t3], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0,t1,t2,t3], @reader.read(path))
     end
   end
 
-  def test_load_untainted_in_safe_mode
+  def test_read_untainted_in_safe_mode
     offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
     o0 = TimezoneOffset.new(-12094, 0, :LT)
@@ -1146,15 +1051,12 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       path.untaint
 
       safe_test do
-        info = ZoneinfoTimezoneInfo.new('Zone/three', path)
-        assert_equal('Zone/three', info.identifier)
-        assert_equal(o0, info.constant_offset)
-        assert_nil(info.transitions)
+        assert_equal(o0, @reader.read(path))
       end
     end
   end
 
-  def test_load_tainted_in_safe_mode
+  def test_read_tainted_in_safe_mode
     offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
     tzif_test(offsets, []) do |path, format|
@@ -1162,12 +1064,12 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       path.taint
 
       safe_test(unavailable: :skip) do
-        assert_raises(SecurityError) { ZoneinfoTimezoneInfo.new('Zone/three', path) }
+        assert_raises(SecurityError) { @reader.read(path) }
       end
     end
   end
 
-  def test_load_encoding
+  def test_read_encoding
     # tzfile.5 doesn't specify an encoding, but the source data is in ASCII.
     # ZoneinfoTimezoneInfo will load as UTF-8 (a superset of ASCII).
 
@@ -1184,14 +1086,11 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t0 = TimezoneTransition.new(o1, o0, Time.utc(1971, 1, 2).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
-      assert_equal('Zone/One', info.identifier)
-      assert_equal([t0], info.transitions)
-      assert_nil(info.constant_offset)
+      assert_equal([t0], @reader.read(path))
     end
   end
 
-  def test_load_binmode
+  def test_read_binmode
     offsets = [
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
       {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
@@ -1207,19 +1106,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     t0 = TimezoneTransition.new(o1, o0, Time.utc(2011, 12, 31, 13, 24, 26).to_i)
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
-      assert_equal('Zone/One', info.identifier)
-      assert_equal([t0], info.transitions)
-      assert_nil(info.constant_offset)
-    end
-  end
-
-  def test_inspect
-    offsets = [{gmtoff: 0, isdst: false, abbrev: 'LT'}]
-
-    tzif_test(offsets, []) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
-      assert_equal('#<TZInfo::ZoneinfoTimezoneInfo: Zone/One>', info.inspect)
+      assert_equal([t0], @reader.read(path))
     end
   end
 end
