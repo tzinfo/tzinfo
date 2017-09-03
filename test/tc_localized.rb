@@ -25,7 +25,7 @@ class TCLocalized < Minitest::Test
 
   def strftime_test(expected_super_format, format, abbreviation)
     t = TestClass.new
-    t.period = abbreviation ? TimezonePeriod.new(nil, nil, TimezoneOffset.new(0, 0, abbreviation)) : nil
+    t.period = abbreviation ? OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, abbreviation)) : nil
     expected_result = 'super_result'
     t.strftime_result = expected_result
     assert_same(expected_result, t.strftime(format))
@@ -50,13 +50,13 @@ class TCLocalized < Minitest::Test
 
   def test_strftime_nil_format
     t = TestClass.new
-    t.period = TimezonePeriod.new(nil, nil, TimezoneOffset.new(0, 0, :BST))
+    t.period = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, :BST))
     error = assert_raises(ArgumentError) { t.strftime(nil) }
     assert_match(/\bformat\b/, error.message)
   end
 
   def test_if_period
-    p = TimezonePeriod.new(nil, nil, TimezoneOffset.new(0, 0, :BST))
+    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, :BST))
     t = TestClass.new
     t.period = p
     v = Object.new

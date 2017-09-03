@@ -30,6 +30,8 @@ require 'tzinfo/ruby_data_source'
 require 'tzinfo/zoneinfo_data_source'
 
 require 'tzinfo/timezone_period'
+require 'tzinfo/offset_timezone_period'
+require 'tzinfo/transitions_timezone_period'
 require 'tzinfo/timezone'
 require 'tzinfo/info_timezone'
 require 'tzinfo/data_timezone'

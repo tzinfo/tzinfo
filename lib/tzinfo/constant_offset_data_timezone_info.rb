@@ -40,7 +40,7 @@ module TZInfo
 
     # Returns a TimezonePeriod with the constant offset of this timezone.
     def constant_period
-      TimezonePeriod.new(nil, nil, @constant_offset)
+      OffsetTimezonePeriod.new(@constant_offset)
     end
   end
 end

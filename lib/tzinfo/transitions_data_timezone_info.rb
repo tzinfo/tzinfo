@@ -54,7 +54,7 @@ module TZInfo
         end_transition = nil
       end
 
-      TimezonePeriod.new(start_transition, end_transition)
+      TransitionsTimezonePeriod.new(start_transition, end_transition)
     end
 
     # Returns an array containing the valid TimezonePeriods for the given local
@@ -95,7 +95,7 @@ module TZInfo
         # make == become >) and if it is < the end transition (which
         # sub-seconds cannot affect).
         if (!start_transition || utc_timestamp_value >= start_transition.timestamp_value) && (!end_transition || utc_timestamp_value < end_transition.timestamp_value)
-          result << TimezonePeriod.new(start_transition, end_transition)
+          result << TransitionsTimezonePeriod.new(start_transition, end_transition)
         elsif end_transition && end_transition.timestamp_value < earliest_possible_utc_value
           break
         end

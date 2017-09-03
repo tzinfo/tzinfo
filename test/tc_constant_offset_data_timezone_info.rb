@@ -20,16 +20,16 @@ class TCConstantOffsetDataTimezoneInfo < Minitest::Test
     o = TimezoneOffset.new(-17900, 0, :TESTLMT)
     i = ConstantOffsetDataTimezoneInfo.new('Test/Zone', o)
 
-    assert_equal(TimezonePeriod.new(nil, nil, o), i.period_for(Timestamp.for(Time.utc(2017,1,1,0,0,0))))
-    assert_equal(TimezonePeriod.new(nil, nil, o), i.period_for(Timestamp.for(Time.new(2017,1,1,0,0,0,0))))
-    assert_equal(TimezonePeriod.new(nil, nil, o), i.period_for(Timestamp.for(Time.new(2017,1,1,1,0,0,3600))))
+    assert_equal(OffsetTimezonePeriod.new(o), i.period_for(Timestamp.for(Time.utc(2017,1,1,0,0,0))))
+    assert_equal(OffsetTimezonePeriod.new(o), i.period_for(Timestamp.for(Time.new(2017,1,1,0,0,0,0))))
+    assert_equal(OffsetTimezonePeriod.new(o), i.period_for(Timestamp.for(Time.new(2017,1,1,1,0,0,3600))))
   end
 
   def test_periods_for_local
     o = TimezoneOffset.new(-17900, 0, :TESTLMT)
     i = ConstantOffsetDataTimezoneInfo.new('Test/Zone', o)
 
-    assert_equal([TimezonePeriod.new(nil, nil, o)], i.periods_for_local(Timestamp.for(Time.utc(2017,1,1,0,0,0), offset: :ignore)))
+    assert_equal([OffsetTimezonePeriod.new(o)], i.periods_for_local(Timestamp.for(Time.utc(2017,1,1,0,0,0), offset: :ignore)))
   end
 
   def test_transitions_up_to

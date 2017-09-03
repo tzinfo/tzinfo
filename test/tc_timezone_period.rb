@@ -3,266 +3,130 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 include TZInfo
 
 class TCTimezonePeriod < Minitest::Test
+  class TestTimezonePeriod < TimezonePeriod
+    attr_reader :start_transition
+    attr_reader :end_transition
 
-  def test_initialize_start_end
-    std = TimezoneOffset.new(-7200, 0, :TEST)
-    dst = TimezoneOffset.new(-7200, 3600, :TEST)
-    start_t = TimezoneTransition.new(dst, std, 1136073600)
-    end_t = TimezoneTransition.new(std, dst, 1136160000)
-
-    p = TimezonePeriod.new(start_t, end_t)
-
-    assert_same(start_t, p.start_transition)
-    assert_same(end_t, p.end_transition)
-    assert_same(dst, p.offset)
-    assert_equal_with_offset_and_class(Timestamp.utc(1136073600), p.starts_at)
-    assert_equal_with_offset_and_class(Timestamp.utc(1136160000), p.ends_at)
-    assert_equal(-7200, p.utc_offset)
-    assert_equal(3600, p.std_offset)
-    assert_equal(-3600, p.utc_total_offset)
-    assert_equal(:TEST, p.zone_identifier)
-    assert_equal(:TEST, p.abbreviation)
-    assert_equal_with_offset_and_period(LocalTimestamp.new(1136073600, 0, -3600).localize(p), p.local_starts_at)
-    assert_equal_with_offset_and_period(LocalTimestamp.new(1136160000, 0, -3600).localize(p), p.local_ends_at)
-  end
-
-  def test_initialize_start_end_offset
-    std = TimezoneOffset.new(-7200, 0, :TEST)
-    dst = TimezoneOffset.new(-7200, 3600, :TEST)
-    special = TimezoneOffset.new(0, 0, :SPECIAL)
-    start_t = TimezoneTransition.new(dst, std, 1136073600)
-    end_t = TimezoneTransition.new(std, dst, 1136160000)
-
-    assert_raises(ArgumentError) { TimezonePeriod.new(start_t, end_t, special) }
-  end
-
-  def test_initialize_start
-    std = TimezoneOffset.new(-7200, 0, :TEST)
-    dst = TimezoneOffset.new(-7200, 3600, :TEST)
-    start_t = TimezoneTransition.new(dst, std, 1136073600)
-
-    p = TimezonePeriod.new(start_t, nil)
-
-    assert_same(start_t, p.start_transition)
-    assert_nil(p.end_transition)
-    assert_same(dst, p.offset)
-    assert_equal_with_offset_and_class(Timestamp.utc(1136073600), p.starts_at)
-    assert_nil(p.ends_at)
-    assert_equal(-7200, p.utc_offset)
-    assert_equal(3600, p.std_offset)
-    assert_equal(-3600, p.utc_total_offset)
-    assert_equal(:TEST, p.zone_identifier)
-    assert_equal(:TEST, p.abbreviation)
-    assert_equal_with_offset_and_period(LocalTimestamp.new(1136073600, 0, -3600).localize(p), p.local_starts_at)
-    assert_nil(p.local_ends_at)
-  end
-
-  def test_initialize_start_offset
-    std = TimezoneOffset.new(-7200, 0, :TEST)
-    dst = TimezoneOffset.new(-7200, 3600, :TEST)
-    special = TimezoneOffset.new(0, 0, :SPECIAL)
-    start_t = TimezoneTransition.new(dst, std, 1136073600)
-
-    assert_raises(ArgumentError) { TimezonePeriod.new(start_t, nil, special) }
-  end
-
-  def test_initialize_end
-    std = TimezoneOffset.new(-7200, 0, :TEST)
-    dst = TimezoneOffset.new(-7200, 3600, :TEST)
-    end_t = TimezoneTransition.new(std, dst, 1136160000)
-
-    p = TimezonePeriod.new(nil, end_t)
-
-    assert_nil(p.start_transition)
-    assert_same(end_t, p.end_transition)
-    assert_same(dst, p.offset)
-    assert_nil(p.starts_at)
-    assert_equal_with_offset_and_class(Timestamp.utc(1136160000), p.ends_at)
-    assert_equal(-7200, p.utc_offset)
-    assert_equal(3600, p.std_offset)
-    assert_equal(-3600, p.utc_total_offset)
-    assert_equal(:TEST, p.zone_identifier)
-    assert_equal(:TEST, p.abbreviation)
-    assert_nil(p.local_starts_at)
-    assert_equal_with_offset_and_period(LocalTimestamp.new(1136160000, 0, -3600).localize(p), p.local_ends_at)
-  end
-
-  def test_initialize_end_offset
-    std = TimezoneOffset.new(-7200, 0, :TEST)
-    dst = TimezoneOffset.new(-7200, 3600, :TEST)
-    special = TimezoneOffset.new(0, 0, :SPECIAL)
-    end_t = TimezoneTransition.new(std, dst, 1136160000)
-
-    assert_raises(ArgumentError) { TimezonePeriod.new(nil, end_t, special) }
+    def initialize(start_transition, end_transition, offset)
+      super(offset)
+      @start_transition = start_transition
+      @end_transition = end_transition
+    end
   end
 
   def test_initialize
-    assert_raises(ArgumentError) { TimezonePeriod.new(nil, nil) }
+    offset = TimezoneOffset.new(-7200, 3600, :SPECIAL)
+    p = TimezonePeriod.new(offset)
+    assert_same(offset, p.offset)
   end
 
-  def test_initialize_offset
-    special = TimezoneOffset.new(0, 0, :SPECIAL)
+  def test_initialize_nil
+    error = assert_raises(ArgumentError) { TimezonePeriod.new(nil) }
+    assert_match(/\boffset\b/, error.message)
+  end
 
-    p = TimezonePeriod.new(nil, nil, special)
+  def test_start_transition
+    p = TimezonePeriod.new(TimezoneOffset.new(-7200, 3600, :SPECIAL))
+    error = assert_raises(NotImplementedError) { p.start_transition }
+    assert_match(/\bstart_transition\b/, error.message)
+  end
 
-    assert_nil(p.start_transition)
-    assert_nil(p.end_transition)
-    assert_same(special, p.offset)
-    assert_nil(p.starts_at)
-    assert_nil(p.ends_at)
-    assert_equal(0, p.utc_offset)
-    assert_equal(0, p.std_offset)
-    assert_equal(0, p.utc_total_offset)
-    assert_equal(:SPECIAL, p.zone_identifier)
-    assert_equal(:SPECIAL, p.abbreviation)
-    assert_nil(p.local_starts_at)
-    assert_nil(p.local_ends_at)
+  def test_end_transition
+    p = TimezonePeriod.new(TimezoneOffset.new(-7200, 3600, :SPECIAL))
+    error = assert_raises(NotImplementedError) { p.start_transition }
+    assert_match(/\bstart_transition\b/, error.message)
+  end
+
+  def test_utc_offset
+    p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, :TEST))
+    assert_equal(-14400, p.utc_offset)
+  end
+
+  def test_std_offset
+    p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, :TEST))
+    assert_equal(3600, p.std_offset)
+  end
+
+  def test_abbreviation
+    p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, :TEST))
+    assert_equal(:TEST, p.abbreviation)
+  end
+
+  def test_zone_identifier
+    p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, :TEST))
+    assert_equal(:TEST, p.zone_identifier)
+  end
+
+  def test_utc_total_offset
+    p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, :TEST))
+    assert_equal(-10800, p.utc_total_offset)
   end
 
   def test_dst
-    p1 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, 3600, :TEST))
-    p2 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, 0, :TEST))
-    p3 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, -3600, :TEST))
-    p4 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, 7200, :TEST))
-    p5 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, -7200, :TEST))
+    p1 = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, :TEST))
+    p2 = TimezonePeriod.new(TimezoneOffset.new(-14400, 0, :TEST))
 
     assert_equal(true, p1.dst?)
     assert_equal(false, p2.dst?)
-    assert_equal(true, p3.dst?)
-    assert_equal(true, p4.dst?)
-    assert_equal(true, p5.dst?)
   end
 
-  def test_time_boundary_start
-    o1 = TimezoneOffset.new(-3600, 0, :TEST)
-    o2 = TimezoneOffset.new(-3600, 3600, :TEST)
-    t1 = TimezoneTransition.new(o1, o2, 0)
+  def test_starts_at_bounded
+    std = TimezoneOffset.new(-7200,    0, :TEST)
+    dst = TimezoneOffset.new(-7200, 3600, :TEST)
+    p = TestTimezonePeriod.new(TimezoneTransition.new(dst, std, 1136073600), nil, dst)
 
-    p1 = TimezonePeriod.new(t1, nil)
-
-    assert_equal_with_offset(Timestamp.new(0, 0, -3600), p1.local_starts_at)
+    assert_equal_with_offset_and_class(Timestamp.utc(1136073600), p.starts_at)
   end
 
-  def test_time_boundary_end
-    o1 = TimezoneOffset.new(0, 3600, :TEST)
-    o2 = TimezoneOffset.new(0, 0, :TEST)
-    t1 = TimezoneTransition.new(o2, o1, 2147482800)
+  def test_starts_at_unbounded
+    dst = TimezoneOffset.new(-7200, 3600, :TEST)
+    p = TestTimezonePeriod.new(nil, nil, dst)
 
-    p1 = TimezonePeriod.new(nil, t1)
-
-    assert_equal_with_offset(Timestamp.new(2147482800, 0, 3600), p1.local_ends_at)
+    assert_nil(p.starts_at)
   end
 
-  def test_equality
-    o1 = TimezoneOffset.new(0, 3600, :TEST)
-    o2 = TimezoneOffset.new(0, 0, :TEST)
-    t1 = TimezoneTransition.new(o1, o2, 1149368400)
-    t2 = TimezoneTransition.new(o1, o2, 1149454800)
-    t3 = TimezoneTransition.new(o1, o2, 1149541200)
+  def test_ends_at_bounded
+    std = TimezoneOffset.new(-7200,    0, :TEST)
+    dst = TimezoneOffset.new(-7200, 3600, :TEST)
+    p = TestTimezonePeriod.new(nil, TimezoneTransition.new(std, dst, 1136160000), dst)
 
-    p1 = TimezonePeriod.new(t1, t2)
-    p2 = TimezonePeriod.new(t1, t2)
-    p3 = TimezonePeriod.new(t2, nil)
-    p4 = TimezonePeriod.new(t2, nil)
-    p5 = TimezonePeriod.new(t3, nil)
-    p6 = TimezonePeriod.new(nil, t2)
-    p7 = TimezonePeriod.new(nil, t2)
-    p8 = TimezonePeriod.new(nil, t3)
-    p9 = TimezonePeriod.new(nil, nil, o1)
-    p10 = TimezonePeriod.new(nil, nil, o1)
-    p11 = TimezonePeriod.new(nil, nil, o2)
-
-    assert_equal(true, p1 == p1)
-    assert_equal(true, p1 == p2)
-    assert_equal(false, p1 == p3)
-    assert_equal(false, p1 == p4)
-    assert_equal(false, p1 == p5)
-    assert_equal(false, p1 == p6)
-    assert_equal(false, p1 == p7)
-    assert_equal(false, p1 == p8)
-    assert_equal(false, p1 == p9)
-    assert_equal(false, p1 == p10)
-    assert_equal(false, p1 == p11)
-    assert_equal(false, p1 == Object.new)
-
-    assert_equal(true, p3 == p3)
-    assert_equal(true, p3 == p4)
-    assert_equal(false, p3 == p5)
-    assert_equal(false, p3 == Object.new)
-
-    assert_equal(true, p6 == p6)
-    assert_equal(true, p6 == p7)
-    assert_equal(false, p6 == p8)
-    assert_equal(false, p6 == Object.new)
-
-    assert_equal(true, p9 == p9)
-    assert_equal(true, p9 == p10)
-    assert_equal(false, p9 == p11)
-    assert_equal(false, p9 == Object.new)
+    assert_equal_with_offset_and_class(Timestamp.utc(1136160000), p.ends_at)
   end
 
-  def test_eql
-    o1 = TimezoneOffset.new(0, 3600, :TEST)
-    o2 = TimezoneOffset.new(0, 0, :TEST)
-    t1 = TimezoneTransition.new(o1, o2, 1149368400)
-    t2 = TimezoneTransition.new(o1, o2, 1149454800)
-    t3 = TimezoneTransition.new(o1, o2, 1149541200)
+  def test_ends_at_unbounded
+    dst = TimezoneOffset.new(-7200, 3600, :TEST)
+    p = TestTimezonePeriod.new(nil, nil, dst)
 
-    p1 = TimezonePeriod.new(t1, t2)
-    p2 = TimezonePeriod.new(t1, t2)
-    p3 = TimezonePeriod.new(t2, nil)
-    p4 = TimezonePeriod.new(t2, nil)
-    p5 = TimezonePeriod.new(t3, nil)
-    p6 = TimezonePeriod.new(nil, t2)
-    p7 = TimezonePeriod.new(nil, t2)
-    p8 = TimezonePeriod.new(nil, t3)
-    p9 = TimezonePeriod.new(nil, nil, o1)
-    p10 = TimezonePeriod.new(nil, nil, o1)
-    p11 = TimezonePeriod.new(nil, nil, o2)
-
-    assert_equal(true, p1.eql?(p1))
-    assert_equal(true, p1.eql?(p2))
-    assert_equal(false, p1.eql?(p3))
-    assert_equal(false, p1.eql?(p4))
-    assert_equal(false, p1.eql?(p5))
-    assert_equal(false, p1.eql?(p6))
-    assert_equal(false, p1.eql?(p7))
-    assert_equal(false, p1.eql?(p8))
-    assert_equal(false, p1.eql?(p9))
-    assert_equal(false, p1.eql?(p10))
-    assert_equal(false, p1.eql?(p11))
-    assert_equal(false, p1.eql?(Object.new))
-
-    assert_equal(true, p3.eql?(p3))
-    assert_equal(true, p3.eql?(p4))
-    assert_equal(false, p3.eql?(p5))
-    assert_equal(false, p3.eql?(Object.new))
-
-    assert_equal(true, p6.eql?(p6))
-    assert_equal(true, p6.eql?(p7))
-    assert_equal(false, p6.eql?(p8))
-    assert_equal(false, p6.eql?(Object.new))
-
-    assert_equal(true, p9.eql?(p9))
-    assert_equal(true, p9.eql?(p10))
-    assert_equal(false, p9.eql?(p11))
-    assert_equal(false, p9.eql?(Object.new))
+    assert_nil(p.ends_at)
   end
 
-  def test_hash
-    o1 = TimezoneOffset.new(0, 3600, :TEST)
-    o2 = TimezoneOffset.new(0, 0, :TEST)
-    t1 = TimezoneTransition.new(o1, o2, 1149368400)
-    t2 = TimezoneTransition.new(o1, o2, 1149454800)
+  def test_local_starts_at_bounded
+    std = TimezoneOffset.new(-7200,    0, :TEST)
+    dst = TimezoneOffset.new(-7200, 3600, :TEST)
+    p = TestTimezonePeriod.new(TimezoneTransition.new(dst, std, 1136073600), nil, dst)
 
-    p1 = TimezonePeriod.new(t1, t2)
-    p2 = TimezonePeriod.new(t1, nil)
-    p3 = TimezonePeriod.new(nil, t2)
-    p4 = TimezonePeriod.new(nil, nil, o1)
+    assert_equal_with_offset_and_period(LocalTimestamp.new(1136073600, 0, -3600).localize(p), p.local_starts_at)
+  end
 
-    assert_equal(t1.hash ^ t2.hash, p1.hash)
-    assert_equal(t1.hash ^ nil.hash, p2.hash)
-    assert_equal(nil.hash ^ t2.hash, p3.hash)
-    assert_equal(nil.hash ^ nil.hash ^ o1.hash, p4.hash)
+  def test_local_starts_at_unbounded
+    dst = TimezoneOffset.new(-7200, 3600, :TEST)
+    p = TestTimezonePeriod.new(nil, nil, dst)
+
+    assert_nil(p.local_starts_at)
+  end
+
+  def test_local_ends_at_bounded
+    std = TimezoneOffset.new(-7200,    0, :TEST)
+    dst = TimezoneOffset.new(-7200, 3600, :TEST)
+    p = TestTimezonePeriod.new(nil, TimezoneTransition.new(std, dst, 1136160000), dst)
+
+    assert_equal_with_offset_and_class(LocalTimestamp.new(1136160000, 0, -3600).localize(p), p.local_ends_at)
+  end
+
+  def test_local_ends_at_unbounded
+    dst = TimezoneOffset.new(-7200, 3600, :TEST)
+    p = TestTimezonePeriod.new(nil, nil, dst)
+
+    assert_nil(p.local_ends_at)
   end
 end
