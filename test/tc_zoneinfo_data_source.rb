@@ -359,10 +359,9 @@ class TCZoneinfoDataSource < Minitest::Test
     info = @data_source.send(:load_timezone_info, 'Europe/London')
 
     reader_mock.verify
-    assert_kind_of(TransitionDataTimezoneInfo, info)
+    assert_kind_of(TransitionsDataTimezoneInfo, info)
     assert_equal('Europe/London', info.identifier)
     assert_equal(transitions, info.transitions)
-    assert_nil(info.constant_offset)
   end
 
   def test_load_timezone_info_constant_offset
@@ -375,15 +374,14 @@ class TCZoneinfoDataSource < Minitest::Test
     info = @data_source.send(:load_timezone_info, 'Europe/London')
 
     reader_mock.verify
-    assert_kind_of(TransitionDataTimezoneInfo, info)
+    assert_kind_of(ConstantOffsetDataTimezoneInfo, info)
     assert_equal('Europe/London', info.identifier)
-    assert_nil(info.transitions)
     assert_same(offset, info.constant_offset)
   end
 
   def test_load_timezone_info_data
     info = @data_source.send(:load_timezone_info, 'Europe/London')
-    assert_kind_of(TransitionDataTimezoneInfo, info)
+    assert_kind_of(TransitionsDataTimezoneInfo, info)
     assert_equal('Europe/London', info.identifier)
   end
 
@@ -391,9 +389,9 @@ class TCZoneinfoDataSource < Minitest::Test
     info = @data_source.send(:load_timezone_info, 'UTC')
 
     # On platforms that don't support symlinks, 'UTC' will be created as a copy.
-    # Either way, a TransitionDataTimezoneInfo should be returned.
+    # Either way, a TransitionsDataTimezoneInfo should be returned.
 
-    assert_kind_of(TransitionDataTimezoneInfo, info)
+    assert_kind_of(TransitionsDataTimezoneInfo, info)
     assert_equal('UTC', info.identifier)
   end
 
@@ -553,7 +551,7 @@ class TCZoneinfoDataSource < Minitest::Test
         data_source = ZoneinfoDataSource.new(dir)
 
         info = data_source.send(:load_timezone_info, 'EST')
-        assert_kind_of(TransitionDataTimezoneInfo, info)
+        assert_kind_of(TransitionsDataTimezoneInfo, info)
         assert_equal('EST', info.identifier)
       end
     end
@@ -579,7 +577,7 @@ class TCZoneinfoDataSource < Minitest::Test
       data_source = ZoneinfoDataSource.new(dir)
 
       info = data_source.send(:load_timezone_info, 'Link')
-      assert_kind_of(TransitionDataTimezoneInfo, info)
+      assert_kind_of(TransitionsDataTimezoneInfo, info)
       assert_equal('Link', info.identifier)
     end
   end
@@ -612,11 +610,11 @@ class TCZoneinfoDataSource < Minitest::Test
       data_source = ZoneinfoDataSource.new(dir)
 
       info = data_source.send(:load_timezone_info, 'Link')
-      assert_kind_of(TransitionDataTimezoneInfo, info)
+      assert_kind_of(TransitionsDataTimezoneInfo, info)
       assert_equal('Link', info.identifier)
 
       info = data_source.send(:load_timezone_info, 'Subdir/Link')
-      assert_kind_of(TransitionDataTimezoneInfo, info)
+      assert_kind_of(TransitionsDataTimezoneInfo, info)
       assert_equal('Subdir/Link', info.identifier)
     end
   end
@@ -652,15 +650,15 @@ class TCZoneinfoDataSource < Minitest::Test
       data_source = ZoneinfoDataSource.new(dir)
 
       info = data_source.send(:load_timezone_info, 'Subdir/Link')
-      assert_kind_of(TransitionDataTimezoneInfo, info)
+      assert_kind_of(TransitionsDataTimezoneInfo, info)
       assert_equal('Subdir/Link', info.identifier)
 
       info = data_source.send(:load_timezone_info, 'Subdir/Link2')
-      assert_kind_of(TransitionDataTimezoneInfo, info)
+      assert_kind_of(TransitionsDataTimezoneInfo, info)
       assert_equal('Subdir/Link2', info.identifier)
 
       info = data_source.send(:load_timezone_info, 'Subdir2/Link')
-      assert_kind_of(TransitionDataTimezoneInfo, info)
+      assert_kind_of(TransitionsDataTimezoneInfo, info)
       assert_equal('Subdir2/Link', info.identifier)
     end
   end
@@ -738,7 +736,7 @@ class TCZoneinfoDataSource < Minitest::Test
   def test_load_timezone_info_tainted_zoneinfo_dir
     data_source = ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
     info = data_source.send(:load_timezone_info, 'Europe/London')
-    assert_kind_of(TransitionDataTimezoneInfo, info)
+    assert_kind_of(TransitionsDataTimezoneInfo, info)
     assert_equal('Europe/London', info.identifier)
   end
 

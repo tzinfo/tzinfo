@@ -235,7 +235,12 @@ module TZInfo
           path = File.join(@zoneinfo_dir, valid_identifier)
 
           begin
-            TransitionDataTimezoneInfo.new(valid_identifier, @zoneinfo_reader.read(path))
+            zoneinfo = @zoneinfo_reader.read(path)
+            if zoneinfo.kind_of?(TimezoneOffset)
+              ConstantOffsetDataTimezoneInfo.new(valid_identifier, zoneinfo)
+            else
+              TransitionsDataTimezoneInfo.new(valid_identifier, zoneinfo)
+            end
           rescue InvalidZoneinfoFile => e
             raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
           end

@@ -18,7 +18,8 @@ require 'tzinfo/timezone_transition'
 require 'tzinfo/timezone_info'
 require 'tzinfo/data_timezone_info'
 require 'tzinfo/linked_timezone_info'
-require 'tzinfo/transition_data_timezone_info'
+require 'tzinfo/constant_offset_data_timezone_info'
+require 'tzinfo/transitions_data_timezone_info'
 
 require 'tzinfo/country_info'
 

@@ -28,7 +28,7 @@ module Format1
       assert_equal(1, block_called)
 
       ti = m.get
-      assert_kind_of(TransitionDataTimezoneInfo, ti)
+      assert_kind_of(TransitionsDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone', ti.identifier)
 
       o0 = TimezoneOffset.new(-75,    0, :LMT)
@@ -55,7 +55,7 @@ module Format1
       assert_equal(1, block_called)
 
       ti = m.get
-      assert_kind_of(TransitionDataTimezoneInfo, ti)
+      assert_kind_of(ConstantOffsetDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone', ti.identifier)
       assert_equal(TimezoneOffset.new(-75, 0, :LMT), ti.constant_offset)
     end
@@ -117,7 +117,7 @@ module Format1
       assert_equal(2, block_called)
 
       ti = m.get
-      assert_kind_of(TransitionDataTimezoneInfo, ti)
+      assert_kind_of(TransitionsDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone2', ti.identifier)
 
       o0 = TimezoneOffset.new(3525, 0, :LMT)
@@ -180,7 +180,7 @@ module Format1
       assert_equal(1, block_called)
 
       ti = m.get
-      assert_kind_of(TransitionDataTimezoneInfo, ti)
+      assert_kind_of(TransitionsDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone2', ti.identifier)
 
       o0 = TimezoneOffset.new(-75, 0, :LMT)

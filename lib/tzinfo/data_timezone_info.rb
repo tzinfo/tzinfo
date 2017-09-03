@@ -5,8 +5,8 @@ module TZInfo
     # Returns the TimezonePeriod for the given Timestamp. The Timestamp must
     # have a specified utc_offset.
     #
-    # Raises ArgumentError if timestamp is nil or does not have a specified
-    # utc_offset.
+    # An ArgumentError may be raised if timestamp is nil or does not have a
+    # specified utc_offset.
     def period_for(timestamp)
       raise_not_implemented('period_for_utc')
     end
@@ -15,6 +15,9 @@ module TZInfo
     # Timestamp. The Timestamp must have an unspecified utc_offset. The results
     # returned are ordered by increasing UTC start date. An empty array is
     # returned if no periods are found for the given time.
+    #
+    # An ArgumentError may be raised if local_timestamp is nil, or has a
+    # specified utc_offset.
     def periods_for_local(local_timestamp)
       raise_not_implemented('periods_for_local')
     end
@@ -35,8 +38,10 @@ module TZInfo
     # Transitions returned are ordered by when they occur, from earliest to
     # latest.
     #
-    # If from_timestamp is specified and to_timestamp is not greater than
-    # from_timestamp, then transitions_up_to raises an ArgumentError exception.
+    # An ArgumentError may be raised if to_timestamp is nil or does not have a
+    # specified utc_offset. If from_timestamp is specified, an ArgumentError may
+    # be raised if from_timestamp does not have a specified offset or if
+    # to_timestamp is not greater than from_timestamp.
     def transitions_up_to(to_timestamp, from_timestamp = nil)
       raise_not_implemented('transitions_up_to')
     end

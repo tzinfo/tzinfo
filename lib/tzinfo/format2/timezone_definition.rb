@@ -34,7 +34,11 @@ module TZInfo
           definer = timezone_definer_class.new
           yield definer
           transitions = definer.transitions
-          @timezone = TransitionDataTimezoneInfo.new(identifier, transitions.empty? ? definer.first_offset : transitions)
+          @timezone = if transitions.empty?
+            ConstantOffsetDataTimezoneInfo.new(identifier, definer.first_offset)
+          else
+            TransitionsDataTimezoneInfo.new(identifier, transitions)
+          end
         end
 
         # Defines a linked timezone.
