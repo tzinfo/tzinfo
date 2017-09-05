@@ -65,7 +65,7 @@ module TZInfo
 
     # Returns a hash of this TimezoneTransition instance.
     def hash
-      @offset.hash ^ @previous_offset.hash ^ @timestamp_value.hash
+      [@offset, @previous_offset, @timestamp_value].hash
     end
 
     private

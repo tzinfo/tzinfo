@@ -47,7 +47,7 @@ module TZInfo
 
     # Returns a hash of this TimezoneOffset.
     def hash
-      utc_offset.hash ^ std_offset.hash ^ abbreviation.hash
+      [utc_offset, std_offset, abbreviation].hash
     end
 
     # Returns the internal object state as a programmer-readable string.

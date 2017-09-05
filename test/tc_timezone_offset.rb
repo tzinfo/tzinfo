@@ -78,8 +78,8 @@ class TCTimezoneOffset < Minitest::Test
     o1 = TimezoneOffset.new(18000, 0, :TEST)
     o2 = TimezoneOffset.new(-3600, 3600, :TEST2)
 
-    assert_equal(18000.hash ^ 0.hash ^ :TEST.hash, o1.hash)
-    assert_equal(-3600.hash ^ 3600.hash ^ :TEST2.hash, o2.hash)
+    assert_equal([18000, 0, :TEST].hash, o1.hash)
+    assert_equal([-3600, 3600, :TEST2].hash, o2.hash)
   end
 
   def test_inspect
