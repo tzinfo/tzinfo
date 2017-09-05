@@ -231,11 +231,15 @@ module TZInfo
           first_offset
         else
           previous_offset = first_offset
+          previous_at = nil
 
           transitions.map do |t|
             offset = offsets[t[:offset]]
-            tt = TimezoneTransition.new(offset, previous_offset, t[:at])
+            at = t[:at]
+            raise InvalidZoneinfoFile, "Transition at #{at} is not later than the previous transition at #{previous_at} in file '#{file.path}'" if previous_at && previous_at >= at
+            tt = TimezoneTransition.new(offset, previous_offset, at)
             previous_offset = offset
+            previous_at = at
             tt
           end
         end

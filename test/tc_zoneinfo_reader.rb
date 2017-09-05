@@ -384,6 +384,40 @@ class TCZoneinfoReader < Minitest::Test
     end
   end
 
+  def test_read_subsequent_transition_same
+    offsets = [
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'}]
+
+    transitions = [
+      {at: Time.utc(2000, 1, 1, 12, 0, 0), offset_index: 1},
+      {at: Time.utc(2000, 1, 1, 12, 0, 0), offset_index: 2}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+      assert_match(/\btransition\b/, error.message)
+      assert_match(path, error.message)
+    end
+  end
+
+  def test_read_subsequent_transition_less
+    offsets = [
+      {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+      {gmtoff: 7200, isdst: true,  abbrev: 'XDT'}]
+
+    transitions = [
+      {at: Time.utc(2000, 1, 1, 12,  0,  0), offset_index: 1},
+      {at: Time.utc(2000, 1, 1, 11, 59, 59), offset_index: 2}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+      assert_match(/\btransition\b/, error.message)
+      assert_match(path, error.message)
+    end
+  end
+
   def test_read_before_epoch
     offsets = [
       {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
