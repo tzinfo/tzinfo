@@ -136,13 +136,13 @@ module TZInfo
       end
 
       if from_timestamp
-        from_index = find_minimum_transition {|t| transition_on_or_after_to_timestamp?(t, from_timestamp) }
+        from_index = find_minimum_transition {|t| transition_on_or_after_timestamp?(t, from_timestamp) }
         return [] unless from_index
       else
         from_index = 0
       end
 
-      to_index = find_minimum_transition {|t| transition_on_or_after_to_timestamp?(t, to_timestamp) }
+      to_index = find_minimum_transition {|t| transition_on_or_after_timestamp?(t, to_timestamp) }
 
       if to_index
         return [] if to_index < 1
@@ -186,7 +186,7 @@ module TZInfo
 
     # Determines if a transition occurs at or after a given Timestamp,
     # considering the Timestamp sub_second.
-    def transition_on_or_after_to_timestamp?(transition, timestamp)
+    def transition_on_or_after_timestamp?(transition, timestamp)
       transition_timestamp_value = transition.timestamp_value
       timestamp_value = timestamp.value
       transition_timestamp_value > timestamp_value || transition_timestamp_value == timestamp_value && timestamp.sub_second == 0
