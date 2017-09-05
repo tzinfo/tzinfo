@@ -1,6 +1,8 @@
 language: ruby
 dist: trusty
 sudo: false
+before_install:
+  - gem update bundler
 before_script:
   - bundle update
 cache: bundler
