@@ -12,7 +12,9 @@ module TZInfo
     #
     # A reference to the passed in Array will be retained.
     #
-    # Transitions in the array must be in ascending timestamp order.
+    # Transitions in the array must be in ascending timestamp order. Each
+    # transition must have a timestamp_value that is greater than the prior
+    # transition.
     #
     # Raises ArgumentError if transitions is nil or an empty Array.
     def initialize(identifier, transitions)
