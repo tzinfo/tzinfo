@@ -7,6 +7,22 @@ class TCRubyDataSource < Minitest::Test
     @data_source = RubyDataSource.new
   end
 
+  def test_initialize_not_found
+    code = <<-EOF
+      begin
+        ds = TZInfo::RubyDataSource.new
+        puts "No exception raised, returned \#{ds} instead"
+      rescue Exception => e
+        puts e.class
+        puts e.message
+      end
+    EOF
+
+    assert_sub_process_returns([
+      'TZInfo::TZInfoDataNotFound',
+      'TZInfo::Data could not be found (require \'tzinfo/data\' failed).'], code)
+  end
+
   def test_load_timezone_info_data
     info = @data_source.send(:load_timezone_info, 'Europe/London')
     assert_kind_of(DataTimezoneInfo, info)

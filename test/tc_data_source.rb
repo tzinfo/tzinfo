@@ -156,6 +156,22 @@ class TCDataSource < Minitest::Test
     assert_kind_of(RubyDataSource, data_source)
   end
 
+  def test_set_standard_ruby_not_found
+    code = <<-EOF
+      begin
+        TZInfo::RubyDataSource.set(:ruby)
+        puts 'No exception raised'
+      rescue Exception => e
+        puts e.class
+        puts e.message
+      end
+    EOF
+
+    assert_sub_process_returns([
+      'TZInfo::TZInfoDataNotFound',
+      'TZInfo::Data could not be found (require \'tzinfo/data\' failed).'], code)
+  end
+
   def test_set_standard_zoneinfo_search
     Dir.mktmpdir('tzinfo_test_dir') do |dir|
       FileUtils.touch(File.join(dir, 'iso3166.tab'))

@@ -1,4 +1,9 @@
 module TZInfo
+  # A TZInfoDataNotFound exception is raised if TZInfo::Data could not be found
+  # (i.e. require 'tzinfo/data' failed) when selecting the Ruby DataSource.
+  class TZInfoDataNotFound < StandardError
+  end
+
   # A DataSource that loads data from the set of Ruby modules included in the
   # TZInfo::Data library (tzinfo-data gem).
   #
@@ -10,8 +15,18 @@ module TZInfo
     attr_reader :country_codes
 
     # Creates a new RubyDataSource instance.
+    #
+    # Raises TZInfoDataNotFound if TZInfo::Data could not be found (i.e.
+    # require 'tzinfo/data' failed).
     def initialize
       super
+
+      begin
+        require_data
+      rescue LoadError
+        raise TZInfoDataNotFound, "TZInfo::Data could not be found (require 'tzinfo/data' failed)."
+      end
+
       require_index('timezones')
       require_index('countries')
       @country_codes = Data::Indexes::Countries.countries.keys.sort!.freeze
