@@ -264,19 +264,23 @@ class TCTimezone < Minitest::Test
 
     assert_raises(UnknownTimezone) { tz.identifier }
     assert_raises(UnknownTimezone) { tz.friendly_identifier }
-    assert_raises(UnknownTimezone) { tz.utc_to_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.to_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.local_to_utc(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.period_for(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.period_for_utc(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.periods_for_local(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.period_for_local(DateTime.new(2006,1,1,1,0,0)) }
     assert_raises(UnknownTimezone) { tz.now }
     assert_raises(UnknownTimezone) { tz.current_period_and_time }
-    assert_raises(UnknownTimezone) { tz.transitions_up_to(DateTime.new(2006,1,1,1,0,0)) }
-    assert_raises(UnknownTimezone) { tz.offsets_up_to(DateTime.new(2006,1,1,1,0,0)) }
     assert_raises(UnknownTimezone) { tz.canonical_identifier }
     assert_raises(UnknownTimezone) { tz.canonical_zone }
+
+    time_types_test do |h|
+      time = h.time(2006,1,1,1,0,0)
+      assert_raises(UnknownTimezone) { tz.utc_to_local(time) }
+      assert_raises(UnknownTimezone) { tz.to_local(time) }
+      assert_raises(UnknownTimezone) { tz.local_to_utc(time) }
+      assert_raises(UnknownTimezone) { tz.period_for(time) }
+      assert_raises(UnknownTimezone) { tz.period_for_utc(time) }
+      assert_raises(UnknownTimezone) { tz.periods_for_local(time) }
+      assert_raises(UnknownTimezone) { tz.period_for_local(time) }
+      assert_raises(UnknownTimezone) { tz.transitions_up_to(time) }
+      assert_raises(UnknownTimezone) { tz.offsets_up_to(time) }
+    end
   end
 
   def test_all
@@ -476,14 +480,14 @@ class TCTimezone < Minitest::Test
     p1 = TransitionsTimezonePeriod.new(t1, t2)
     p2 = TransitionsTimezonePeriod.new(t2, t3)
 
-    dt = DateTime.new(2004,10,31,1,30,0)
+    t = Time.utc(2004,10,31,1,30,0)
 
-    tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+    tz = TestTimezone.new('America/New_York', nil, [p1, p2], t)
 
-    assert_equal(p1, tz.period_for_local(dt))
-    assert_equal(p1, tz.period_for_local(dt, true))
-    assert_equal(p2, tz.period_for_local(dt, false))
-    assert_raises(AmbiguousTime) { tz.period_for_local(dt, nil) }
+    assert_equal(p1, tz.period_for_local(t))
+    assert_equal(p1, tz.period_for_local(t, true))
+    assert_equal(p2, tz.period_for_local(t, false))
+    assert_raises(AmbiguousTime) { tz.period_for_local(t, nil) }
   end
 
   def test_period_for_local_default_dst_set_false
@@ -499,14 +503,14 @@ class TCTimezone < Minitest::Test
     p1 = TransitionsTimezonePeriod.new(t1, t2)
     p2 = TransitionsTimezonePeriod.new(t2, t3)
 
-    dt = DateTime.new(2004,10,31,1,30,0)
+    t = Time.utc(2004,10,31,1,30,0)
 
-    tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+    tz = TestTimezone.new('America/New_York', nil, [p1, p2], t)
 
-    assert_equal(p2, tz.period_for_local(dt))
-    assert_equal(p1, tz.period_for_local(dt, true))
-    assert_equal(p2, tz.period_for_local(dt, false))
-    assert_raises(AmbiguousTime) { tz.period_for_local(dt, nil) }
+    assert_equal(p2, tz.period_for_local(t))
+    assert_equal(p1, tz.period_for_local(t, true))
+    assert_equal(p2, tz.period_for_local(t, false))
+    assert_raises(AmbiguousTime) { tz.period_for_local(t, nil) }
   end
 
   def test_period_for_local_dst_flag_resolved
@@ -520,14 +524,14 @@ class TCTimezone < Minitest::Test
     p1 = TransitionsTimezonePeriod.new(t1, t2)
     p2 = TransitionsTimezonePeriod.new(t2, t3)
 
-    dt = DateTime.new(2004,10,31,1,30,0)
+    t = Time.utc(2004,10,31,1,30,0)
 
-    tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+    tz = TestTimezone.new('America/New_York', nil, [p1, p2], t)
 
-    assert_equal(p1, tz.period_for_local(dt, true))
-    assert_equal(p2, tz.period_for_local(dt, false))
-    assert_equal(p1, tz.period_for_local(dt, true) {|periods| raise BlockCalled, 'should not be called' })
-    assert_equal(p2, tz.period_for_local(dt, false) {|periods| raise BlockCalled, 'should not be called' })
+    assert_equal(p1, tz.period_for_local(t, true))
+    assert_equal(p2, tz.period_for_local(t, false))
+    assert_equal(p1, tz.period_for_local(t, true) {|periods| raise BlockCalled, 'should not be called' })
+    assert_equal(p2, tz.period_for_local(t, false) {|periods| raise BlockCalled, 'should not be called' })
   end
 
   def test_period_for_local_dst_block_called
@@ -541,12 +545,12 @@ class TCTimezone < Minitest::Test
     p1 = TransitionsTimezonePeriod.new(t1, t2)
     p2 = TransitionsTimezonePeriod.new(t2, t3)
 
-    dt = DateTime.new(2004,10,31,1,30,0)
+    t = Time.utc(2004,10,31,1,30,0)
 
-    tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+    tz = TestTimezone.new('America/New_York', nil, [p1, p2], t)
 
     assert_raises(BlockCalled) do
-      tz.period_for_local(dt) do |periods|
+      tz.period_for_local(t) do |periods|
         assert_equal([p1, p2], periods)
 
         # raise exception to test that the block was called
@@ -554,10 +558,10 @@ class TCTimezone < Minitest::Test
       end
     end
 
-    assert_equal(p1, tz.period_for_local(dt) {|periods| periods.first})
-    assert_equal(p2, tz.period_for_local(dt) {|periods| periods.last})
-    assert_equal(p1, tz.period_for_local(dt) {|periods| [periods.first]})
-    assert_equal(p2, tz.period_for_local(dt) {|periods| [periods.last]})
+    assert_equal(p1, tz.period_for_local(t) {|periods| periods.first})
+    assert_equal(p2, tz.period_for_local(t) {|periods| periods.last})
+    assert_equal(p1, tz.period_for_local(t) {|periods| [periods.first]})
+    assert_equal(p2, tz.period_for_local(t) {|periods| [periods.last]})
   end
 
   def test_period_for_local_dst_cannot_resolve
@@ -577,19 +581,19 @@ class TCTimezone < Minitest::Test
     p1 = TransitionsTimezonePeriod.new(t1, t2)
     p2 = TransitionsTimezonePeriod.new(t2, t3)
 
-    dt = DateTime.new(1915,8,4,23,40,0)
+    t = Time.utc(1915,8,4,23,40,0)
 
-    tz = TestTimezone.new('Europe/Warsaw', nil, [p1, p2], dt)
+    tz = TestTimezone.new('Europe/Warsaw', nil, [p1, p2], t)
 
     assert_raises(BlockCalled) do
-      tz.period_for_local(dt, true) do |periods|
+      tz.period_for_local(t, true) do |periods|
         assert_equal([p1, p2], periods)
         raise BlockCalled, 'should be raised'
       end
     end
 
     assert_raises(BlockCalled) do
-      tz.period_for_local(dt, false) do |periods|
+      tz.period_for_local(t, false) do |periods|
         assert_equal([p1, p2], periods)
         raise BlockCalled, 'should be raised'
       end
@@ -607,24 +611,24 @@ class TCTimezone < Minitest::Test
     p1 = TransitionsTimezonePeriod.new(t1, t2)
     p2 = TransitionsTimezonePeriod.new(t2, t3)
 
-    dt = DateTime.new(2004,10,31,1,30,0)
+    t = Time.utc(2004,10,31,1,30,0)
 
-    tz = TestTimezone.new('America/New_York', nil, [p1, p2], dt)
+    tz = TestTimezone.new('America/New_York', nil, [p1, p2], t)
 
     assert_raises(AmbiguousTime) do
-      tz.period_for_local(dt) {|periods| nil}
+      tz.period_for_local(t) {|periods| nil }
     end
 
     assert_raises(AmbiguousTime) do
-      tz.period_for_local(dt) {|periods| periods}
+      tz.period_for_local(t) {|periods| periods }
     end
 
     assert_raises(AmbiguousTime) do
-      tz.period_for_local(dt) {|periods| []}
+      tz.period_for_local(t) {|periods| [] }
     end
 
     assert_raises(AmbiguousTime) do
-      tz.period_for_local(dt) {|periods| raise AmbiguousTime, 'Ambiguous time'}
+      tz.period_for_local(t) {|periods| raise AmbiguousTime, 'Ambiguous time' }
     end
   end
 
