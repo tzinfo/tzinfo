@@ -64,8 +64,9 @@ module TZInfo
     #
     # \DataSource.set(:zoneinfo) will automatically search for the zoneinfo
     # directory by checking the paths specified in
-    # ZoneinfoDataSource.search_paths. ZoneinfoDirectoryNotFound will be raised
-    # if no valid zoneinfo directory could be found.
+    # DataSources::ZoneinfoDataSource.search_paths.
+    # DataSources::ZoneinfoDirectoryNotFound will be raised if no valid zoneinfo
+    # directory could be found.
     #
     # \DataSource.set(:zoneinfo, zoneinfo_dir) uses the specified zoneinfo
     # directory as the data source. If the directory is not a valid zoneinfo
@@ -86,8 +87,8 @@ module TZInfo
     # * \load_country_info
     # * \country_codes
     #
-    # To have TZInfo use the custom data source, call \DataSource.set
-    # as follows:
+    # To have TZInfo use the custom data source, call \DataSource.set as
+    # follows:
     #
     #   TZInfo::DataSource.set(CustomDataSource.new)
     #
@@ -98,14 +99,14 @@ module TZInfo
     # as the data source. If TZInfo::Data is not available (i.e. if require
     # 'tzinfo/data' fails), then TZInfo will search for a zoneinfo directory
     # instead (using the search path specified by
-    # TZInfo::ZoneinfoDataSource::DEFAULT_SEARCH_PATH).
+    # TZInfo::DataSources::ZoneinfoDataSource::DEFAULT_SEARCH_PATH).
     def self.set(data_source_or_type, *args)
       if data_source_or_type.kind_of?(DataSource)
         @@instance = data_source_or_type
       elsif data_source_or_type == :ruby
-        @@instance = RubyDataSource.new
+        @@instance = DataSources::RubyDataSource.new
       elsif data_source_or_type == :zoneinfo
-        @@instance = ZoneinfoDataSource.new(*args)
+        @@instance = DataSources::ZoneinfoDataSource.new(*args)
       else
         raise ArgumentError, 'data_source_or_type must be a DataSource instance or a data source type (:ruby)'
       end
@@ -117,14 +118,14 @@ module TZInfo
       @timezones = Concurrent::Map.new
     end
 
-    # Returns a TimezoneInfo instance for a given identifier. The TimezoneInfo
-    # instance should derive from either DataTimzoneInfo for timezones that
-    # define their own data or LinkedTimezoneInfo for links or aliases to
-    # other timezones.
+    # Returns a DataSources::TimezoneInfo instance for a given identifier. The
+    # DataSources::TimezoneInfo instance should derive from either
+    # DataSources::DataTimzoneInfo for timezones that define their own data or
+    # DataSources::LinkedTimezoneInfo for links or aliases to other timezones.
     #
-    # get_timezone_info calls load_timezone_info to obtain a TimezoneInfo
-    # instance. The returned instance is cached and returned in subsequent
-    # calls to get_timezone_info for the identifier.
+    # get_timezone_info calls load_timezone_info to obtain a
+    # DataSources::TimezoneInfo instance. The returned instance is cached and
+    # returned in subsequent calls to get_timezone_info for the identifier.
     #
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the
     # identifier is invalid.
@@ -167,9 +168,9 @@ module TZInfo
       raise_invalid_data_source('linked_timezone_identifiers')
     end
 
-    # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2 country
-    # code. Raises InvalidCountryCode if the country could not be found or the
-    # code is invalid.
+    # Returns a DataSources::CountryInfo instance for the given ISO 3166-1
+    # alpha-2 country code. Raises InvalidCountryCode if the country could not
+    # be found or the code is invalid.
     #
     # get_country_info calls load_country_info to obtain a CountryInfo instance.
     def get_country_info(code)
@@ -194,10 +195,10 @@ module TZInfo
 
     protected
 
-    # Returns a TimezoneInfo instance for a given identifier. The TimezoneInfo
-    # instance should derive from either DataTimzoneInfo for timezones that
-    # define their own data or LinkedTimezoneInfo for links or aliases to
-    # other timezones.
+    # Returns a DataSources::TimezoneInfo instance for a given identifier. The
+    # DataSources::TimezoneInfo instance should derive from either
+    # DataSources::DataTimzoneInfo for timezones that define their own data or
+    # DataSources::LinkedTimezoneInfo for links or aliases to other timezones.
     #
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the
     # identifier is invalid.
@@ -205,9 +206,9 @@ module TZInfo
       raise_invalid_data_source('load_timezone_info')
     end
 
-    # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2
-    # country code. Raises InvalidCountryCode if the country could not be found
-    # or the code is invalid.
+    # Returns a DataSources::CountryInfo instance for the given ISO 3166-1
+    # alpha-2 country code. Raises InvalidCountryCode if the country could not
+    # be found or the code is invalid.
     def load_country_info(code)
       raise_invalid_data_source('load_country_info')
     end
@@ -255,11 +256,11 @@ module TZInfo
       rescue LoadError
       end
 
-      return RubyDataSource.new if has_tzinfo_data
+      return DataSources::RubyDataSource.new if has_tzinfo_data
 
       begin
-        return ZoneinfoDataSource.new
-      rescue ZoneinfoDirectoryNotFound
+        return DataSources::ZoneinfoDataSource.new
+      rescue DataSources::ZoneinfoDirectoryNotFound
         raise DataSourceNotFound, "No source of timezone data could be found.\nPlease refer to http://tzinfo.github.io/datasourcenotfound for help resolving this error."
       end
     end

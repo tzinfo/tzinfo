@@ -15,19 +15,19 @@ require 'tzinfo/local_timestamp'
 require 'tzinfo/timezone_offset'
 require 'tzinfo/timezone_transition'
 
-require 'tzinfo/timezone_info'
-require 'tzinfo/data_timezone_info'
-require 'tzinfo/linked_timezone_info'
-require 'tzinfo/constant_offset_data_timezone_info'
-require 'tzinfo/transitions_data_timezone_info'
+require 'tzinfo/data_sources/timezone_info'
+require 'tzinfo/data_sources/data_timezone_info'
+require 'tzinfo/data_sources/linked_timezone_info'
+require 'tzinfo/data_sources/constant_offset_data_timezone_info'
+require 'tzinfo/data_sources/transitions_data_timezone_info'
 
-require 'tzinfo/country_info'
+require 'tzinfo/data_sources/country_info'
 
-require 'tzinfo/zoneinfo_reader'
+require 'tzinfo/data_sources/zoneinfo_reader'
 
 require 'tzinfo/data_source'
-require 'tzinfo/ruby_data_source'
-require 'tzinfo/zoneinfo_data_source'
+require 'tzinfo/data_sources/ruby_data_source'
+require 'tzinfo/data_sources/zoneinfo_data_source'
 
 require 'tzinfo/timezone_period'
 require 'tzinfo/offset_timezone_period'

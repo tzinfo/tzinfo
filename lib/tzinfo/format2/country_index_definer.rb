@@ -37,7 +37,7 @@ module TZInfo
         else
           []
         end
-        @countries[code.freeze] = CountryInfo.new(code, name, timezones)
+        @countries[code.freeze] = DataSources::CountryInfo.new(code, name, timezones)
       end
     end
   end

@@ -40,7 +40,7 @@ module TZInfo
       data_source.country_codes.collect {|code| get(code)}
     end
 
-    # Initializes a new Country with a CountryInfo instance.
+    # Initializes a new Country with a DataSources::CountryInfo instance.
     def initialize(info)
       @info = info
     end

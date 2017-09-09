@@ -1,6 +1,6 @@
 module TZInfo
 
-  # A Timezone based on a DataTimezoneInfo.
+  # A Timezone based on a DataSources::DataTimezoneInfo.
   #
   # @private
   class DataTimezone < InfoTimezone #:nodoc:

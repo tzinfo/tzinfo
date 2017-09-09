@@ -35,15 +35,15 @@ module TZInfo
           yield definer
           transitions = definer.transitions
           @timezone = if transitions.empty?
-            ConstantOffsetDataTimezoneInfo.new(identifier, definer.first_offset)
+            DataSources::ConstantOffsetDataTimezoneInfo.new(identifier, definer.first_offset)
           else
-            TransitionsDataTimezoneInfo.new(identifier, transitions)
+            DataSources::TransitionsDataTimezoneInfo.new(identifier, transitions)
           end
         end
 
         # Defines a linked timezone.
         def linked_timezone(identifier, link_to_identifier)
-          @timezone = LinkedTimezoneInfo.new(identifier, link_to_identifier)
+          @timezone = DataSources::LinkedTimezoneInfo.new(identifier, link_to_identifier)
         end
       end
     end

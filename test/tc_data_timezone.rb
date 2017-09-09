@@ -4,7 +4,7 @@ include TZInfo
 
 class TCDataTimezone < Minitest::Test
 
-  class TestTimezoneInfo < TimezoneInfo
+  class TestTimezoneInfo < DataSources::TimezoneInfo
     attr_reader :timestamp
     attr_reader :local_timestamp
     attr_reader :to_timestamp

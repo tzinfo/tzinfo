@@ -1,11 +1,11 @@
 module TZInfo
 
-  # A Timezone based on a TimezoneInfo.
+  # A Timezone based on a DataSources::TimezoneInfo.
   #
   # @private
   class InfoTimezone < Timezone #:nodoc:
 
-    # Constructs a new InfoTimezone with a TimezoneInfo instance.
+    # Constructs a new InfoTimezone with a DataSources::TimezoneInfo instance.
     def initialize(info)
       super()
       @info = info
@@ -17,7 +17,7 @@ module TZInfo
     end
 
     protected
-      # The TimezoneInfo for this Timezone.
+      # The DataSources::TimezoneInfo for this Timezone.
       def info
         @info
       end

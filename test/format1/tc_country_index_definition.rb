@@ -39,13 +39,13 @@ module Format1
       assert(countries.frozen?)
 
       country = countries['ZZ']
-      assert_kind_of(CountryInfo, country)
+      assert_kind_of(DataSources::CountryInfo, country)
       assert_equal('ZZ', country.code)
       assert_equal('Country One', country.name)
       assert_equal([CountryTimezone.new('Test/Zone/1', Rational(3, 2), Rational(41, 20))], country.zones)
 
       country = countries['AA']
-      assert_kind_of(CountryInfo, country)
+      assert_kind_of(DataSources::CountryInfo, country)
       assert_equal('AA', country.code)
       assert_equal('Aland', country.name)
       assert_equal([
@@ -53,13 +53,13 @@ module Format1
         CountryTimezone.new('Test/Zone/2', Rational(41, 20), Rational(211, 30))], country.zones)
 
       country = countries['TE']
-      assert_kind_of(CountryInfo, country)
+      assert_kind_of(DataSources::CountryInfo, country)
       assert_equal('TE', country.code)
       assert_equal('Three', country.name)
       assert_equal([], country.zones)
 
       country = countries['FR']
-      assert_kind_of(CountryInfo, country)
+      assert_kind_of(DataSources::CountryInfo, country)
       assert_equal('FR', country.code)
       assert_equal('Four', country.name)
       assert_equal([], country.zones)
@@ -84,7 +84,7 @@ module Format1
       assert(countries.frozen?)
 
       country = countries['TT']
-      assert_kind_of(CountryInfo, country)
+      assert_kind_of(DataSources::CountryInfo, country)
       assert_equal('TT', country.code)
       assert_equal('Test2', country.name)
       assert_equal([CountryTimezone.new('Test/Zone/2', Rational(5, 6), Rational(7, 8), 'Zone 2')], country.zones)

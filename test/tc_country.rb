@@ -84,7 +84,7 @@ class TCCountry < Minitest::Test
   end
 
   def test_initialize
-    info = CountryInfo.new('TT', 'Test', [])
+    info = DataSources::CountryInfo.new('TT', 'Test', [])
     c = Country.new(info)
     assert_equal('TT', c.code)
     assert_equal('Test', c.name)

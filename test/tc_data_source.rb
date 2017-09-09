@@ -25,7 +25,7 @@ class TCDataSource < Minitest::Test
     def load_timezone_info(identifier)
       @called += 1
       raise InvalidTimezoneIdentifier, identifier if identifier == 'Test/Invalid'
-      TimezoneInfo.new(identifier)
+      DataSources::TimezoneInfo.new(identifier)
     end
   end
 
@@ -35,7 +35,7 @@ class TCDataSource < Minitest::Test
     def load_country_info(code)
       @called += 1
       raise InvalidCountryCode, code if code == 'XX'
-      CountryInfo.new(code, "Country #{code}", [])
+      DataSources::CountryInfo.new(code, "Country #{code}", [])
     end
   end
 
@@ -55,12 +55,12 @@ class TCDataSource < Minitest::Test
   def setup
     @orig_data_source = DataSource.get
     DataSource.set(InitDataSource.new)
-    @orig_search_path = ZoneinfoDataSource.search_path.clone
+    @orig_search_path = DataSources::ZoneinfoDataSource.search_path.clone
   end
 
   def teardown
     DataSource.set(@orig_data_source)
-    ZoneinfoDataSource.search_path = @orig_search_path
+    DataSources::ZoneinfoDataSource.search_path = @orig_search_path
   end
 
   def test_get
@@ -74,7 +74,7 @@ class TCDataSource < Minitest::Test
 
       begin
         Dir.mktmpdir('tzinfo_test_dir') do |dir|
-          TZInfo::ZoneinfoDataSource.search_path = [dir]
+          TZInfo::DataSources::ZoneinfoDataSource.search_path = [dir]
 
           puts TZInfo::DataSource.get.class
         end
@@ -83,7 +83,7 @@ class TCDataSource < Minitest::Test
       end
     EOF
 
-    assert_sub_process_returns(['TZInfo::RubyDataSource'], code, [TZINFO_TEST_DATA_DIR])
+    assert_sub_process_returns(['TZInfo::DataSources::RubyDataSource'], code, [TZINFO_TEST_DATA_DIR])
   end
 
   def test_get_default_zoneinfo_only
@@ -92,7 +92,7 @@ class TCDataSource < Minitest::Test
 
       begin
         Dir.mktmpdir('tzinfo_test_dir') do |dir|
-          TZInfo::ZoneinfoDataSource.search_path = [dir, '#{TZINFO_TEST_ZONEINFO_DIR}']
+          TZInfo::DataSources::ZoneinfoDataSource.search_path = [dir, '#{TZINFO_TEST_ZONEINFO_DIR}']
 
           puts TZInfo::DataSource.get.class
           puts TZInfo::DataSource.get.zoneinfo_dir
@@ -103,14 +103,14 @@ class TCDataSource < Minitest::Test
     EOF
 
     assert_sub_process_returns(
-      ['TZInfo::ZoneinfoDataSource', TZINFO_TEST_ZONEINFO_DIR],
+      ['TZInfo::DataSources::ZoneinfoDataSource', TZINFO_TEST_ZONEINFO_DIR],
       code)
   end
 
   def test_get_default_ruby_and_zoneinfo
     code = <<-EOF
       begin
-        TZInfo::ZoneinfoDataSource.search_path = ['#{TZINFO_TEST_ZONEINFO_DIR}']
+        TZInfo::DataSources::ZoneinfoDataSource.search_path = ['#{TZINFO_TEST_ZONEINFO_DIR}']
 
         puts TZInfo::DataSource.get.class
       rescue Exception => e
@@ -118,7 +118,7 @@ class TCDataSource < Minitest::Test
       end
     EOF
 
-    assert_sub_process_returns(['TZInfo::RubyDataSource'], code, [TZINFO_TEST_DATA_DIR])
+    assert_sub_process_returns(['TZInfo::DataSources::RubyDataSource'], code, [TZINFO_TEST_DATA_DIR])
   end
 
   def test_get_default_no_data
@@ -127,7 +127,7 @@ class TCDataSource < Minitest::Test
 
       begin
         Dir.mktmpdir('tzinfo_test_dir') do |dir|
-          TZInfo::ZoneinfoDataSource.search_path = [dir]
+          TZInfo::DataSources::ZoneinfoDataSource.search_path = [dir]
 
           begin
             data_source = TZInfo::DataSource.get
@@ -153,13 +153,13 @@ class TCDataSource < Minitest::Test
   def test_set_standard_ruby
     DataSource.set(:ruby)
     data_source = DataSource.get
-    assert_kind_of(RubyDataSource, data_source)
+    assert_kind_of(DataSources::RubyDataSource, data_source)
   end
 
   def test_set_standard_ruby_not_found
     code = <<-EOF
       begin
-        TZInfo::RubyDataSource.set(:ruby)
+        TZInfo::DataSources::RubyDataSource.set(:ruby)
         puts 'No exception raised'
       rescue Exception => e
         puts e.class
@@ -168,7 +168,7 @@ class TCDataSource < Minitest::Test
     EOF
 
     assert_sub_process_returns([
-      'TZInfo::TZInfoDataNotFound',
+      'TZInfo::DataSources::TZInfoDataNotFound',
       'TZInfo::Data could not be found (require \'tzinfo/data\' failed).'], code)
   end
 
@@ -177,11 +177,11 @@ class TCDataSource < Minitest::Test
       FileUtils.touch(File.join(dir, 'iso3166.tab'))
       FileUtils.touch(File.join(dir, 'zone.tab'))
 
-      ZoneinfoDataSource.search_path = [dir]
+      DataSources::ZoneinfoDataSource.search_path = [dir]
 
       DataSource.set(:zoneinfo)
       data_source = DataSource.get
-      assert_kind_of(ZoneinfoDataSource, data_source)
+      assert_kind_of(DataSources::ZoneinfoDataSource, data_source)
       assert_equal(dir, data_source.zoneinfo_dir)
     end
   end
@@ -191,11 +191,11 @@ class TCDataSource < Minitest::Test
       FileUtils.touch(File.join(dir, 'iso3166.tab'))
       FileUtils.touch(File.join(dir, 'zone1970.tab'))
 
-      ZoneinfoDataSource.search_path = [dir]
+      DataSources::ZoneinfoDataSource.search_path = [dir]
 
       DataSource.set(:zoneinfo)
       data_source = DataSource.get
-      assert_kind_of(ZoneinfoDataSource, data_source)
+      assert_kind_of(DataSources::ZoneinfoDataSource, data_source)
       assert_equal(dir, data_source.zoneinfo_dir)
     end
   end
@@ -207,7 +207,7 @@ class TCDataSource < Minitest::Test
 
       DataSource.set(:zoneinfo, dir)
       data_source = DataSource.get
-      assert_kind_of(ZoneinfoDataSource, data_source)
+      assert_kind_of(DataSources::ZoneinfoDataSource, data_source)
       assert_equal(dir, data_source.zoneinfo_dir)
     end
   end
@@ -219,7 +219,7 @@ class TCDataSource < Minitest::Test
 
       DataSource.set(:zoneinfo, dir)
       data_source = DataSource.get
-      assert_kind_of(ZoneinfoDataSource, data_source)
+      assert_kind_of(DataSources::ZoneinfoDataSource, data_source)
       assert_equal(dir, data_source.zoneinfo_dir)
     end
   end
@@ -239,16 +239,16 @@ class TCDataSource < Minitest::Test
 
       DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_file)
       data_source = DataSource.get
-      assert_kind_of(ZoneinfoDataSource, data_source)
+      assert_kind_of(DataSources::ZoneinfoDataSource, data_source)
       assert_equal(zoneinfo_dir, data_source.zoneinfo_dir)
     end
   end
 
   def test_set_standard_zoneinfo_search_not_found
     Dir.mktmpdir('tzinfo_test_dir') do |dir|
-      ZoneinfoDataSource.search_path = [dir]
+      DataSources::ZoneinfoDataSource.search_path = [dir]
 
-      assert_raises(ZoneinfoDirectoryNotFound) do
+      assert_raises(DataSources::ZoneinfoDirectoryNotFound) do
         DataSource.set(:zoneinfo)
       end
 
@@ -258,7 +258,7 @@ class TCDataSource < Minitest::Test
 
   def test_set_standard_zoneinfo_explicit_invalid
     Dir.mktmpdir('tzinfo_test_dir') do |dir|
-      assert_raises(InvalidZoneinfoDirectory) do
+      assert_raises(DataSources::InvalidZoneinfoDirectory) do
         DataSource.set(:zoneinfo, dir)
       end
 

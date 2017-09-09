@@ -89,7 +89,7 @@ class TCTimezoneProxy < Minitest::Test
       assert_equal('Etc/UTC', proxy.canonical_identifier)
       assert_equal('Etc/UTC', proxy.canonical_zone.identifier)
     else
-      if DataSource.get.kind_of?(RubyDataSource)
+      if DataSource.get.kind_of?(DataSources::RubyDataSource)
         # Not got a LinkedTimezone despite using a DataSource that supports it.
         # Raise an exception as this shouldn't happen.
         raise 'Non-LinkedTimezone instance returned for UTC using RubyDataSource'

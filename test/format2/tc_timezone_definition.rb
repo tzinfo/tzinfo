@@ -28,7 +28,7 @@ module Format2
       assert_equal(1, block_called)
 
       ti = m.get
-      assert_kind_of(TransitionsDataTimezoneInfo, ti)
+      assert_kind_of(DataSources::TransitionsDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone', ti.identifier)
 
       o0 = TimezoneOffset.new(-75,    0, :LMT)
@@ -55,7 +55,7 @@ module Format2
       assert_equal(1, block_called)
 
       ti = m.get
-      assert_kind_of(ConstantOffsetDataTimezoneInfo, ti)
+      assert_kind_of(DataSources::ConstantOffsetDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone', ti.identifier)
       assert_equal(TimezoneOffset.new(-75, 0, :LMT), ti.constant_offset)
     end
@@ -76,7 +76,7 @@ module Format2
       m.send(:linked_timezone, 'Test/Linked/Zone', 'Test/Linked_To/Zone')
 
       ti = m.get
-      assert_kind_of(LinkedTimezoneInfo, ti)
+      assert_kind_of(DataSources::LinkedTimezoneInfo, ti)
       assert_equal('Test/Linked/Zone', ti.identifier)
       assert_equal('Test/Linked_To/Zone', ti.link_to_identifier)
     end
@@ -117,7 +117,7 @@ module Format2
       assert_equal(2, block_called)
 
       ti = m.get
-      assert_kind_of(TransitionsDataTimezoneInfo, ti)
+      assert_kind_of(DataSources::TransitionsDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone2', ti.identifier)
 
       o0 = TimezoneOffset.new(3525, 0, :LMT)
@@ -135,7 +135,7 @@ module Format2
       m.send(:linked_timezone, 'Test/Linked/Zone2', 'Test/Linked_To/Zone2')
 
       ti = m.get
-      assert_kind_of(LinkedTimezoneInfo, ti)
+      assert_kind_of(DataSources::LinkedTimezoneInfo, ti)
       assert_equal('Test/Linked/Zone2', ti.identifier)
       assert_equal('Test/Linked_To/Zone2', ti.link_to_identifier)
     end
@@ -158,7 +158,7 @@ module Format2
       m.send(:linked_timezone, 'Test/Linked/Zone2', 'Test/Linked_To/Zone2')
 
       ti = m.get
-      assert_kind_of(LinkedTimezoneInfo, ti)
+      assert_kind_of(DataSources::LinkedTimezoneInfo, ti)
       assert_equal('Test/Linked/Zone2', ti.identifier)
       assert_equal('Test/Linked_To/Zone2', ti.link_to_identifier)
     end
@@ -178,7 +178,7 @@ module Format2
       end
 
       ti = m.get
-      assert_kind_of(TransitionsDataTimezoneInfo, ti)
+      assert_kind_of(DataSources::TransitionsDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone2', ti.identifier)
 
       o0 = TimezoneOffset.new(-75, 0, :LMT)

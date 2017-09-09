@@ -41,7 +41,7 @@ module Format2
       assert_equal(%w(ZZ AA TE FR), countries.keys)
 
       country_zz = countries['ZZ']
-      assert_kind_of(CountryInfo, country_zz)
+      assert_kind_of(DataSources::CountryInfo, country_zz)
       assert_equal('ZZ', country_zz.code)
       assert_equal('Country One', country_zz.name)
       assert_equal([
@@ -49,7 +49,7 @@ module Format2
         CountryTimezone.new('Test/Zone/1', Rational(3, 2), Rational(41, 20))], country_zz.zones)
 
       country_aa = countries['AA']
-      assert_kind_of(CountryInfo, country_aa)
+      assert_kind_of(DataSources::CountryInfo, country_aa)
       assert_equal('AA', country_aa.code)
       assert_equal('Aland', country_aa.name)
       assert_equal([
@@ -61,13 +61,13 @@ module Format2
       assert_same(country_zz.zones[0], country_aa.zones[2])
 
       country_te = countries['TE']
-      assert_kind_of(CountryInfo, country_te)
+      assert_kind_of(DataSources::CountryInfo, country_te)
       assert_equal('TE', country_te.code)
       assert_equal('Three', country_te.name)
       assert_equal([], country_te.zones)
 
       country_fr = countries['FR']
-      assert_kind_of(CountryInfo, country_fr)
+      assert_kind_of(DataSources::CountryInfo, country_fr)
       assert_equal('FR', country_fr.code)
       assert_equal('Four', country_fr.name)
       assert_equal([], country_fr.zones)
@@ -90,7 +90,7 @@ module Format2
       assert_equal(%w(TT), countries.keys)
 
       country_tt = countries['TT']
-      assert_kind_of(CountryInfo, country_tt)
+      assert_kind_of(DataSources::CountryInfo, country_tt)
       assert_equal('TT', country_tt.code)
       assert_equal('Test2', country_tt.name)
       assert_equal([CountryTimezone.new('Test/Zone/2', Rational(5, 6), Rational(7, 8), 'Zone 2')], country_tt.zones)
@@ -111,7 +111,7 @@ module Format2
       assert_equal(%w(TT), countries.keys)
 
       country_tt = countries['TT']
-      assert_kind_of(CountryInfo, country_tt)
+      assert_kind_of(DataSources::CountryInfo, country_tt)
       assert_equal('TT', country_tt.code)
       assert_equal('Test1', country_tt.name)
       assert_equal([CountryTimezone.new('Test/Zone/Shared2', Rational(1, 2), Rational(3, 4), 'Shared 2')], country_tt.zones)
