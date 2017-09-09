@@ -7,7 +7,7 @@ module Format1
 
     def test_none
       m = Module.new
-      m.send(:include, Format1::CountryIndexDefinition)
+      m.send(:include, CountryIndexDefinition)
 
       countries = m.countries
       assert_equal({}, countries)
@@ -16,15 +16,15 @@ module Format1
 
     def test_multiple
       m = Module.new
-      m.send(:include, Format1::CountryIndexDefinition)
+      m.send(:include, CountryIndexDefinition)
 
       m.send(:country, 'ZZ', 'Country One') do |c|
-        assert_kind_of(Format1::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/1', 3, 2, 41, 20
       end
 
       m.send(:country, 'AA', 'Aland') do |c|
-        assert_kind_of(Format1::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/3', 71, 30, 358, 15, 'Zone 3'
         c.timezone 'Test/Zone/2', 41, 20, 211, 30
       end
@@ -67,15 +67,15 @@ module Format1
 
     def test_redefined
       m = Module.new
-      m.send(:include, Format1::CountryIndexDefinition)
+      m.send(:include, CountryIndexDefinition)
 
       m.send(:country, 'TT', 'Test1') do |c|
-        assert_kind_of(Format1::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/1', 1, 2, 3, 4, 'Zone 1'
       end
 
       m.send(:country, 'TT', 'Test2') do |c|
-        assert_kind_of(Format1::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/2', 5, 6, 7, 8, 'Zone 2'
       end
 
@@ -92,10 +92,10 @@ module Format1
 
     def test_strings_frozen
       m = Module.new
-      m.send(:include, Format1::CountryIndexDefinition)
+      m.send(:include, CountryIndexDefinition)
 
       m.send(:country, 'TT', 'Test') do |c|
-        assert_kind_of(Format1::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/1', 1, 2, 3, 4, 'Zone One'
       end
 
@@ -110,7 +110,7 @@ module Format1
     end
 
     def test_tzinfo_module_alias
-      assert_same(Format1::CountryIndexDefinition, CountryIndexDefinition)
+      assert_same(CountryIndexDefinition, CountryIndexDefinition)
     end
   end
 end

@@ -5,13 +5,13 @@ include TZInfo
 module Format2
   class TCTimezoneDefiner < Minitest::Test
     def test_no_offsets_or_transitions
-      d = Format2::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       assert_nil(d.first_offset)
       assert_equal([], d.transitions)
     end
 
     def test_single_offset_no_transitions
-      d = Format2::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900, 0, :TESTLMT
 
       o1 = TimezoneOffset.new(-17900, 0, :TESTLMT)
@@ -21,7 +21,7 @@ module Format2
     end
 
     def test_single_offset_single_transition
-      d = Format2::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900, 0, :TESTLMT
       d.transition :o1, 1456790400
 
@@ -33,7 +33,7 @@ module Format2
     end
 
     def test_multiple_offsets_single_transition
-      d = Format2::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900,    0, :TESTLMT
       d.offset :o2, -18000, 3600, :TEST
       d.transition :o2, 1456790400
@@ -47,7 +47,7 @@ module Format2
     end
 
     def test_multiple_offsets_multiple_transitions
-      d = Format2::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900,    0, :TESTLMT
       d.offset :o2, -18000, 3600, :TEST
       d.offset :o3, -18000,    0, :TESTD
@@ -67,7 +67,7 @@ module Format2
     end
 
     def test_offset_already_defined
-      d = Format2::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900, 0, :TESTLMT
       d.offset :o2,  18000, 0, :TEST
 
@@ -76,14 +76,14 @@ module Format2
     end
 
     def test_transition_with_no_offsets
-      d = Format2::TimezoneDefiner.new
+      d = TimezoneDefiner.new
 
       error = assert_raises(ArgumentError) { d.transition :o1, 1456790400 }
       assert_match(/\boffset_id\b/, error.message)
     end
 
     def test_transition_with_undefined_offset
-      d = Format2::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900, 0, :TESTLMT
 
       d.transition :o1, 1456790400
@@ -93,7 +93,7 @@ module Format2
     end
 
     def test_transition_not_increased
-      d = Format2::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900, 0, :TESTLMT
 
       d.transition :o1, 1456790400
@@ -103,7 +103,7 @@ module Format2
     end
 
     def test_transition_decreased
-      d = Format2::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900, 0, :TESTLMT
 
       d.transition :o1, 1456790400

@@ -6,26 +6,26 @@ module Format2
   class TCCountryIndexDefiner < Minitest::Test
 
     def test_none
-      d = Format2::CountryIndexDefiner.new
+      d = CountryIndexDefiner.new
 
       countries = d.countries
       assert_equal({}, countries)
     end
 
     def test_multiple
-      d = Format2::CountryIndexDefiner.new
+      d = CountryIndexDefiner.new
 
       d.timezone(:t1, 'Test/Zone/Shared1', -1, -2, -3, -4)
       d.timezone(:t2, 'Test/Zone/Shared2', 1, 2, 3, 4, 'Shared 2')
 
       d.country('ZZ', 'Country One') do |c|
-        assert_kind_of(Format2::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone :t1
         c.timezone 'Test/Zone/1', 3, 2, 41, 20
       end
 
       d.country('AA', 'Aland') do |c|
-        assert_kind_of(Format2::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/3', 71, 30, 358, 15, 'Zone 3'
         c.timezone 'Test/Zone/2', 41, 20, 211, 30
         c.timezone :t1
@@ -74,15 +74,15 @@ module Format2
     end
 
     def test_redefined_country
-      d = Format2::CountryIndexDefiner.new
+      d = CountryIndexDefiner.new
 
       d.country('TT', 'Test1') do |c|
-        assert_kind_of(Format2::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/1', 1, 2, 3, 4, 'Zone 1'
       end
 
       d.country('TT', 'Test2') do |c|
-        assert_kind_of(Format2::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/2', 5, 6, 7, 8, 'Zone 2'
       end
 
@@ -97,13 +97,13 @@ module Format2
     end
 
     def test_redefined_shared_timezone
-      d = Format2::CountryIndexDefiner.new
+      d = CountryIndexDefiner.new
 
       d.timezone(:t1, 'Test/Zone/Shared1', -1, -2, -3, -4)
       d.timezone(:t1, 'Test/Zone/Shared2', 1, 2, 3, 4, 'Shared 2')
 
       d.country('TT', 'Test1') do |c|
-        assert_kind_of(Format2::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone(:t1)
       end
 
@@ -118,12 +118,12 @@ module Format2
     end
 
     def test_strings_frozen
-      d = Format2::CountryIndexDefiner.new
+      d = CountryIndexDefiner.new
 
       d.timezone(:t1, 'Test/Zone/Shared1', 1, 2, 3, 4, 'Shared 1')
 
       d.country('TT', 'Test') do |c|
-        assert_kind_of(Format2::CountryDefiner, c)
+        assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/1', 1, 2, 3, 4, 'Zone One'
         c.timezone :t1
       end

@@ -6,7 +6,7 @@ module Format1
   class TCTimezoneIndexDefinition < Minitest::Test
     def test_mixed
       m = Module.new
-      m.send(:include, Format1::TimezoneIndexDefinition)
+      m.send(:include, TimezoneIndexDefinition)
 
       m.send(:timezone, 'Test/One')
       m.send(:timezone, 'Test/Two')
@@ -35,7 +35,7 @@ module Format1
 
     def test_data_only
       m = Module.new
-      m.send(:include, Format1::TimezoneIndexDefinition)
+      m.send(:include, TimezoneIndexDefinition)
 
       m.send(:timezone, 'Test/A/One')
       m.send(:timezone, 'Test/A/Two')
@@ -61,7 +61,7 @@ module Format1
 
     def test_linked_only
       m = Module.new
-      m.send(:include, Format1::TimezoneIndexDefinition)
+      m.send(:include, TimezoneIndexDefinition)
 
       m.send(:linked_timezone, 'Test/B/One')
       m.send(:linked_timezone, 'Test/B/Two')
@@ -87,7 +87,7 @@ module Format1
 
     def test_none
       m = Module.new
-      m.send(:include, Format1::TimezoneIndexDefinition)
+      m.send(:include, TimezoneIndexDefinition)
 
       timezones = m.timezones
       assert_equal([], timezones)
@@ -106,7 +106,7 @@ module Format1
     end
 
     def test_tzinfo_module_alias
-      assert_same(Format1::TimezoneIndexDefinition, TimezoneIndexDefinition)
+      assert_same(TimezoneIndexDefinition, TimezoneIndexDefinition)
     end
   end
 end

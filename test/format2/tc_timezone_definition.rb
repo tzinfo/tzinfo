@@ -6,13 +6,13 @@ module Format2
   class TCTimezoneDefinition < Minitest::Test
     def test_timezone_definer_class
       m = Module.new
-      m.send(:include, Format2::TimezoneDefinition)
-      assert_same(Format2::TimezoneDefiner, m.send(:timezone_definer_class))
+      m.send(:include, TimezoneDefinition)
+      assert_same(TimezoneDefiner, m.send(:timezone_definer_class))
     end
 
     def test_data_transitions
       m = Module.new
-      m.send(:include, Format2::TimezoneDefinition)
+      m.send(:include, TimezoneDefinition)
       block_called = 0
 
       m.send(:timezone, 'Test/Data/Zone') do |tz|
@@ -43,7 +43,7 @@ module Format2
 
     def test_data_constant_offset
       m = Module.new
-      m.send(:include, Format2::TimezoneDefinition)
+      m.send(:include, TimezoneDefinition)
       block_called = 0
 
       m.send(:timezone, 'Test/Data/Zone') do |tz|
@@ -62,7 +62,7 @@ module Format2
 
     def test_data_frozen_identifier
       m = Module.new
-      m.send(:include, Format2::TimezoneDefinition)
+      m.send(:include, TimezoneDefinition)
 
       m.send(:timezone, 'Test/Data/Zone') {|tz| tz.offset :o0, 0, 0, :UTC }
 
@@ -72,7 +72,7 @@ module Format2
 
     def test_linked
       m = Module.new
-      m.send(:include, Format2::TimezoneDefinition)
+      m.send(:include, TimezoneDefinition)
       m.send(:linked_timezone, 'Test/Linked/Zone', 'Test/Linked_To/Zone')
 
       ti = m.get
@@ -83,7 +83,7 @@ module Format2
 
     def test_linked_frozen_identifiers
       m = Module.new
-      m.send(:include, Format2::TimezoneDefinition)
+      m.send(:include, TimezoneDefinition)
       m.send(:linked_timezone, 'Test/Linked/Zone', 'Test/Linked_To/Zone')
 
       ti = m.get
@@ -93,7 +93,7 @@ module Format2
 
     def test_double_data
       m = Module.new
-      m.send(:include, Format2::TimezoneDefinition)
+      m.send(:include, TimezoneDefinition)
       block_called = 0
 
       m.send(:timezone, 'Test/Data/Zone') do |tz|
@@ -130,7 +130,7 @@ module Format2
 
     def test_double_linked
       m = Module.new
-      m.send(:include, Format2::TimezoneDefinition)
+      m.send(:include, TimezoneDefinition)
       m.send(:linked_timezone, 'Test/Linked/Zone', 'Test/Linked_To/Zone')
       m.send(:linked_timezone, 'Test/Linked/Zone2', 'Test/Linked_To/Zone2')
 
@@ -142,7 +142,7 @@ module Format2
 
     def test_data_linked
       m = Module.new
-      m.send(:include, Format2::TimezoneDefinition)
+      m.send(:include, TimezoneDefinition)
       block_called = 0
 
       m.send(:timezone, 'Test/Data/Zone') do |tz|
@@ -165,7 +165,7 @@ module Format2
 
     def test_linked_data
       m = Module.new
-      m.send(:include, Format2::TimezoneDefinition)
+      m.send(:include, TimezoneDefinition)
       m.send(:linked_timezone, 'Test/Linked/Zone1', 'Test/Linked_To/Zone1')
       block_called = 0
 

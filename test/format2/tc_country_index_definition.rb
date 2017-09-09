@@ -7,7 +7,7 @@ module Format2
 
     def test_not_defined
       m = Module.new
-      m.send(:include, Format2::CountryIndexDefinition)
+      m.send(:include, CountryIndexDefinition)
 
       countries = m.countries
       assert_equal({}, countries)
@@ -16,10 +16,10 @@ module Format2
 
     def test_none
       m = Module.new
-      m.send(:include, Format2::CountryIndexDefinition)
+      m.send(:include, CountryIndexDefinition)
 
       m.send(:country_index) do |i|
-        assert_kind_of(Format2::CountryIndexDefiner, i)
+        assert_kind_of(CountryIndexDefiner, i)
       end
 
       countries = m.countries
@@ -29,10 +29,10 @@ module Format2
 
     def test_multiple
       m = Module.new
-      m.send(:include, Format2::CountryIndexDefinition)
+      m.send(:include, CountryIndexDefinition)
 
       m.send(:country_index) do |i|
-        assert_kind_of(Format2::CountryIndexDefiner, i)
+        assert_kind_of(CountryIndexDefiner, i)
         i.timezone(:t1, 'Test/Zone/Shared1', -1, -2, -3, -4)
         i.timezone(:t2, 'Test/Zone/Shared2', 1, 2, 3, 4, 'Shared 2')
 

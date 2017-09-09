@@ -5,7 +5,7 @@ include TZInfo
 module Format1
   class TCTimezoneDefiner < Minitest::Test
     def test_transitions_with_timestamps
-      d = Format1::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900,    0, :TESTLMT
       d.offset :o2, -18000, 3600, :TEST
       d.offset :o3, -18000,    0, :TESTD
@@ -25,7 +25,7 @@ module Format1
     end
 
     def test_transitions_with_timestamps_and_datetimes
-      d = Format1::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900,    0, :TESTLMT
       d.offset :o2, -18000, 3600, :TEST
       d.offset :o3, -18000,    0, :TESTD
@@ -50,7 +50,7 @@ module Format1
     def test_transition_with_datetime
       # The ability to specify a transition solely as a DateTime has not been used
       # in any released version of TZInfo::Data. This is now not supported.
-      d = Format1::TimezoneDefiner.new
+      d = TimezoneDefiner.new
       d.offset :o1, -17900, 0, :TESTLMT
 
       error = assert_raises(ArgumentError) { d.transition 2016, 3, :o1, 4914897, 2 }

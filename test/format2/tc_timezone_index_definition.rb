@@ -6,10 +6,10 @@ module Format2
   class TCTimezoneIndexDefinition < Minitest::Test
     def test_mixed
       m = Module.new
-      m.send(:include, Format2::TimezoneIndexDefinition)
+      m.send(:include, TimezoneIndexDefinition)
 
       m.send(:timezone_index) do |i|
-        assert_kind_of(Format2::TimezoneIndexDefiner, i)
+        assert_kind_of(TimezoneIndexDefiner, i)
         i.data_timezone 'Test/One'
         i.data_timezone 'Test/Two'
         i.linked_timezone 'Test/Three'
@@ -38,10 +38,10 @@ module Format2
 
     def test_data_only
       m = Module.new
-      m.send(:include, Format2::TimezoneIndexDefinition)
+      m.send(:include, TimezoneIndexDefinition)
 
       m.send(:timezone_index) do |i|
-        assert_kind_of(Format2::TimezoneIndexDefiner, i)
+        assert_kind_of(TimezoneIndexDefiner, i)
         i.data_timezone 'Test/A/One'
         i.data_timezone 'Test/A/Two'
         i.data_timezone 'Test/A/Three'
@@ -67,10 +67,10 @@ module Format2
 
     def test_linked_only
       m = Module.new
-      m.send(:include, Format2::TimezoneIndexDefinition)
+      m.send(:include, TimezoneIndexDefinition)
 
       m.send(:timezone_index) do |i|
-        assert_kind_of(Format2::TimezoneIndexDefiner, i)
+        assert_kind_of(TimezoneIndexDefiner, i)
         i.linked_timezone 'Test/B/One'
         i.linked_timezone 'Test/B/Two'
         i.linked_timezone 'Test/B/Three'
@@ -96,10 +96,10 @@ module Format2
 
     def test_none
       m = Module.new
-      m.send(:include, Format2::TimezoneIndexDefinition)
+      m.send(:include, TimezoneIndexDefinition)
 
       m.send(:timezone_index) do |i|
-        assert_kind_of(Format2::TimezoneIndexDefiner, i)
+        assert_kind_of(TimezoneIndexDefiner, i)
       end
 
       timezones = m.timezones
@@ -120,7 +120,7 @@ module Format2
 
     def test_not_defined
       m = Module.new
-      m.send(:include, Format2::TimezoneIndexDefinition)
+      m.send(:include, TimezoneIndexDefinition)
 
       timezones = m.timezones
       assert_equal([], timezones)

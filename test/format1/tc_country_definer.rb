@@ -5,12 +5,12 @@ include TZInfo
 module Format1
   class TCCountryDefiner < Minitest::Test
     def test_no_timezones
-      cd = Format1::CountryDefiner.new
+      cd = CountryDefiner.new
       assert_equal([], cd.timezones)
     end
 
     def test_timezones
-      cd = Format1::CountryDefiner.new
+      cd = CountryDefiner.new
       cd.timezone('Test/One',   1, 2,  3, 4)
       cd.timezone('Test/Two',  -1, 2, -3, 4, nil)
       cd.timezone('Test/Three', 5, 6, -7, 8, 'Test Three')
@@ -21,7 +21,7 @@ module Format1
     end
 
     def test_strings_frozen
-      cd = Format1::CountryDefiner.new
+      cd = CountryDefiner.new
       cd.timezone('Test/One', 1, 2, 3, 4, 'Test 1')
       timezone = cd.timezones.first
       assert(timezone.identifier.frozen?)

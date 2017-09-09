@@ -5,7 +5,7 @@ include TZInfo
 module Format2
   class TCTimezoneIndexDefiner < Minitest::Test
     def test_mixed
-      d = Format2::TimezoneIndexDefiner.new
+      d = TimezoneIndexDefiner.new
       d.data_timezone 'Test/One'
       d.data_timezone 'Test/Two'
       d.linked_timezone 'Test/Three'
@@ -19,7 +19,7 @@ module Format2
     end
 
     def test_data_only
-      d = Format2::TimezoneIndexDefiner.new
+      d = TimezoneIndexDefiner.new
       d.data_timezone 'Test/A/One'
       d.data_timezone 'Test/A/Two'
       d.data_timezone 'Test/A/Three'
@@ -30,7 +30,7 @@ module Format2
     end
 
     def test_linked_only
-      d = Format2::TimezoneIndexDefiner.new
+      d = TimezoneIndexDefiner.new
       d.linked_timezone 'Test/B/One'
       d.linked_timezone 'Test/B/Two'
       d.linked_timezone 'Test/B/Three'
@@ -41,7 +41,7 @@ module Format2
     end
 
     def test_none
-      d = Format2::TimezoneIndexDefiner.new
+      d = TimezoneIndexDefiner.new
 
       assert_equal([], d.data_timezones)
       assert_equal([], d.linked_timezones)
