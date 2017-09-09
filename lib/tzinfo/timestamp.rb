@@ -206,7 +206,7 @@ module TZInfo
     # same value, sub_second and utc_offset as this Timestamp.
     def new_datetime(klass = DateTime)
       date_time = klass.jd(JD_EPOCH + ((@value.to_r + @sub_second) / 86400))
-      @utc_offset && @utc_offset != 0 && @utc_offset != :utc ? date_time.new_offset(OffsetRationals.rational_for_offset(@utc_offset)) : date_time
+      @utc_offset && @utc_offset != 0 && @utc_offset != :utc ? date_time.new_offset(Rational(@utc_offset, 86400)) : date_time
     end
 
     private

@@ -4,7 +4,6 @@ end
 
 require 'tzinfo/version'
 
-require 'tzinfo/offset_rationals'
 require 'tzinfo/timestamp'
 
 require 'tzinfo/localized'
