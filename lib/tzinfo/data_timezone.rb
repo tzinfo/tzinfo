@@ -1,9 +1,7 @@
 module TZInfo
 
   # A Timezone based on a DataSources::DataTimezoneInfo.
-  #
-  # @private
-  class DataTimezone < InfoTimezone #:nodoc:
+  class DataTimezone < InfoTimezone
 
     # Returns the TimezonePeriod for the given time. time can either be
     # a Time, DateTime or Timestamp.

@@ -1,9 +1,7 @@
 module TZInfo
   module DataSources
     # Represents a data timezone defined by a list of transitions.
-    #
-    # @private
-    class TransitionsDataTimezoneInfo < DataTimezoneInfo #:nodoc:
+    class TransitionsDataTimezoneInfo < DataTimezoneInfo
 
       # The list of transitions as a frozen Array of TimezoneTransition instances.
       attr_reader :transitions

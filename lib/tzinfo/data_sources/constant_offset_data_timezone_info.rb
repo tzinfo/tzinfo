@@ -1,9 +1,7 @@
 module TZInfo
   module DataSources
     # Represents a data timezone defined by a constantly observed offset.
-    #
-    # @private
-    class ConstantOffsetDataTimezoneInfo < DataTimezoneInfo #:nodoc:
+    class ConstantOffsetDataTimezoneInfo < DataTimezoneInfo
       # The offset constantly observed as a TimezoneOffset.
       attr_reader :constant_offset
 

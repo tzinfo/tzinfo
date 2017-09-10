@@ -1,9 +1,7 @@
 module TZInfo
 
   # A Timezone based on a DataSources::LinkedTimezoneInfo.
-  #
-  # @private
-  class LinkedTimezone < InfoTimezone #:nodoc:
+  class LinkedTimezone < InfoTimezone
     # Constructs a new LinkedTimezone with a DataSources::LinkedTimezoneInfo
     # instance.
     def initialize(info)
