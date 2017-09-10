@@ -76,9 +76,11 @@ module TZInfo
     class ZoneinfoDataSource < DataSource
       # The default value of ZoneinfoDataSource.search_path.
       DEFAULT_SEARCH_PATH = ['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'].freeze
+      private_constant :DEFAULT_SEARCH_PATH
 
       # The default value of ZoneinfoDataSource.alternate_iso3166_tab_search_path.
       DEFAULT_ALTERNATE_ISO3166_TAB_SEARCH_PATH = ['/usr/share/misc/iso3166.tab', '/usr/share/misc/iso3166'].freeze
+      private_constant :DEFAULT_ALTERNATE_ISO3166_TAB_SEARCH_PATH
 
       # Paths to be checked to find the system zoneinfo directory.
       @@search_path = DEFAULT_SEARCH_PATH.dup
