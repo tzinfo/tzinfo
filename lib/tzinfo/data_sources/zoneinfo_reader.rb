@@ -246,5 +246,6 @@ module TZInfo
           end
         end
     end
+    private_constant :ZoneinfoReader
   end
 end
