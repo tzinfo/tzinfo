@@ -29,7 +29,7 @@ module TZInfo
         end
       end
 
-      super(format)
+      super
     end
 
     protected
