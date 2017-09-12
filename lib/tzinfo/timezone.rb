@@ -589,8 +589,7 @@ module TZInfo
       local_time = now
       [local_time, local_time.period]
     end
-
-    alias :current_time_and_period :current_period_and_time
+    alias current_time_and_period current_period_and_time
 
     # Converts a time to local and returns a string representation of the local
     # time according to the given format.

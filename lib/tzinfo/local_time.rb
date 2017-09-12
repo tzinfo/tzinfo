@@ -31,7 +31,7 @@ module TZInfo
       p = period
       p ? p.dst? : super
     end
-    alias_method :isdst, :dst?
+    alias isdst dst?
 
     # Overridden version of Time#gmtime that clears the associated
     # TimezonePeriod.

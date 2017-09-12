@@ -50,7 +50,7 @@ module TZInfo
     def abbreviation
       @offset.abbreviation
     end
-    alias :zone_identifier :abbreviation
+    alias zone_identifier abbreviation
 
     # Total offset from UTC (seconds). Equal to utc_offset + std_offset.
     def utc_total_offset

@@ -63,7 +63,7 @@ module TZInfo
       tti.kind_of?(TimezoneTransition) &&
         offset == tti.offset && previous_offset == tti.previous_offset && timestamp_value == tti.timestamp_value
     end
-    alias_method :eql?, :==
+    alias eql? ==
 
     # Returns a hash of this TimezoneTransition instance.
     def hash

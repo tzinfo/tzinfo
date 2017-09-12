@@ -136,7 +136,7 @@ module TZInfo
       result
     end
 
-    alias_method :eql?, :==
+    alias eql? ==
 
     # Returns a hash of this Timestamp.
     def hash
