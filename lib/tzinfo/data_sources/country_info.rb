@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   module DataSources
     # Represents a country and references to its timezones as returned by a

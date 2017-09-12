@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   module DataSources
     # An InvalidZoneinfoFile exception is raised if an attempt is made to load an

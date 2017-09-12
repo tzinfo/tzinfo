@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Force a particular timezone to be local (helps find issues when local
 # timezone isn't GMT). This won't work on Windows.
 ENV['TZ'] = 'America/Los_Angeles'

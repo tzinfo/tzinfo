@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   module Format1
     # Instances of Format1::TimezoneDefiner are yielded to TZInfo::Data format 1

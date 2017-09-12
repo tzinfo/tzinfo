@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   module DataSources
     # A TZInfoDataNotFound exception is raised if TZInfo::Data could not be found

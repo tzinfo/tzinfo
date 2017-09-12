@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   module DataSources
     # Represents a defined timezone containing transition data.

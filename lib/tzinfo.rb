@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Top level module for TZInfo.
 module TZInfo
 end

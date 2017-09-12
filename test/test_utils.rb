@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 TESTS_DIR = File.expand_path(File.dirname(__FILE__)).untaint
 TZINFO_LIB_DIR = File.expand_path(File.join(TESTS_DIR, '..', 'lib'))
 TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   module Format2
     # Instances of Format2::CountryDefiner are yielded to the format 2 version

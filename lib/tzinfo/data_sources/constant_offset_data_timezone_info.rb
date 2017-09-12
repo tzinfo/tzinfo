@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   module DataSources
     # Represents a data timezone defined by a constantly observed offset.

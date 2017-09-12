@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
 
   # A Timezone based on a DataSources::DataTimezoneInfo.

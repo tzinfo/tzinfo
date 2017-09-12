@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   # The Localized module is included in LocalTime, LocalDateTime and
   # LocalTimestamp. It provides an overridden strftime method that handles

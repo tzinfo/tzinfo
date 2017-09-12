@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   # An TransitionsTimezonePeriod instance represents a period of time in a
   # timezone where the same offset from UTC applies. The period of time is

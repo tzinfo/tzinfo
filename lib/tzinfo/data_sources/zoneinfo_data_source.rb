@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   module DataSources
     # An InvalidZoneinfoDirectory exception is raised if the DataSource is

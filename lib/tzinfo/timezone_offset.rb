@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   # Represents an offset defined in a Timezone data file.
   class TimezoneOffset

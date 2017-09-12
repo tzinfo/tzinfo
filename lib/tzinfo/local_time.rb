@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   # A subclass of Time used to represent local times. LocalTime holds a
   # reference to the related TimezonePeriod and overrides various methods to

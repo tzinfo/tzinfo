@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TZInfo
   # A subclass of Timestamp used to represent local times. LocalTimestamp holds
   # a reference to the related TimezonePeriod and overrides various methods to
