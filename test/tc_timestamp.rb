@@ -484,15 +484,15 @@ class TCTimestamp < Minitest::Test
     assert_kind_of(Timestamp, t)
     yield t
 
-    block_called = false
+    block_called = 0
     block_result = Timestamp.for(*args) do |t2|
-      block_called = true
+      block_called += 1
       assert_kind_of(Timestamp, t2)
       yield t2
       t2
     end
 
-    assert(block_called, 'block was not called')
+    assert_equal(1, block_called)
 
     expected_class = args[0].class
     expected_class = Timestamp if expected_class == TestTimestampSubclass
