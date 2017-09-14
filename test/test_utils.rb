@@ -10,6 +10,21 @@ unless defined? TZINFO_TEST_DATA_DIR
   $:.unshift(TZINFO_TEST_DATA_DIR) unless $:.include?(TZINFO_TEST_DATA_DIR)
 end
 
+if defined? COVERAGE_TYPE
+  require 'simplecov'
+
+  SimpleCov.command_name COVERAGE_TYPE
+
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter
+  ]
+
+  SimpleCov.start do
+    add_filter 'test'
+    project_name 'TZInfo'
+  end
+end
+
 require 'minitest/autorun'
 require 'tzinfo'
 require 'date'
@@ -163,6 +178,10 @@ module TestUtils
       assert(condition, full_message)
     end
 
+    # Keeps track of the number of times assert_sub_process_returns has been
+    # called in order to name each SimpleCov run.
+    @@assert_sub_process_returns_count = 0
+
     # Assert that starting a Ruby sub process to run code returns the output
     # contained in the expected_lines array. Directories in load_path are added
     # to the start of the load path before running requires. Each item in
@@ -178,9 +197,21 @@ module TestUtils
         args = ''
       end
 
+      @@assert_sub_process_returns_count += 1
+
       IO.popen("\"#{ruby}\"#{args}", 'r+') do |process|
         load_path.each do |p|
           process.puts("$:.unshift('#{p.gsub("'", "\\\\'")}')")
+        end
+
+        if COVERAGE_TYPE
+          process.puts("require 'simplecov'")
+          process.puts("SimpleCov.command_name '#{COVERAGE_TYPE}:sp#{@@assert_sub_process_returns_count}'")
+          process.puts('SimpleCov.formatters = []')
+          process.puts('SimpleCov.start do')
+          process.puts("  add_filter 'test'")
+          process.puts("  project_name 'TZInfo'")
+          process.puts('end')
         end
 
         required.each do |r|

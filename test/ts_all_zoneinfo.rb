@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+COVERAGE_TYPE = 'zoneinfo'
+
 require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils.rb')
 
 # Use a zoneinfo directory containing files needed by the tests.

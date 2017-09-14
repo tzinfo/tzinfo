@@ -89,7 +89,12 @@ def recurse_chmod(dir)
 end
 
 desc 'Run tests using RubyDataSource with a format 1 version of TZInfo::Data, RubyDataSource with a format 2 version of TZInfo::Data and ZoneinfoDataSource'
-task test: [:test_ruby_format1, :test_ruby_format2, :test_zoneinfo] do
+task test: [:clean_coverage, :test_ruby_format1, :test_ruby_format2, :test_zoneinfo] do
+end
+
+desc 'Remove coverage results'
+task :clean_coverage do
+  FileUtils.rm_f(File.join(BASE_DIR, 'coverage', '.resultset.json'))
 end
 
 def setup_tests(test_task, type)
