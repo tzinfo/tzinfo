@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-TESTS_DIR = File.expand_path(File.dirname(__FILE__)).untaint
-TZINFO_LIB_DIR = File.expand_path(File.join(TESTS_DIR, '..', 'lib'))
-TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
+raise 'Tests must be run with bundler, e.g. bundle exec rake test' unless defined?(Bundler)
 
-$:.unshift(TZINFO_LIB_DIR) unless $:.include?(TZINFO_LIB_DIR)
+TESTS_DIR = File.expand_path(File.dirname(__FILE__)).untaint
+TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
 
 unless defined? TZINFO_TEST_DATA_DIR
   TZINFO_TEST_DATA_DIR = File.join(TESTS_DIR, "tzinfo-data#{(defined? TZINFO_TEST_DATA_FORMAT) ? TZINFO_TEST_DATA_FORMAT : 2}")
@@ -165,21 +164,12 @@ module TestUtils
     end
 
     # Assert that starting a Ruby sub process to run code returns the output
-    # contained in the expected_lines array. The load path includes the
-    # tzinfo lib directory by default. Additional directories can be added
-    # using extra_load_path. Requires each item in required before running the
-    # specified code.
-    def assert_sub_process_returns(expected_lines, code, extra_load_path = [], required = ['tzinfo'])
+    # contained in the expected_lines array. Directories in load_path are added
+    # to the start of the load path before running requires. Each item in
+    # required is passed to require before running the specified code.
+    def assert_sub_process_returns(expected_lines, code, load_path = [], required = ['tzinfo'])
       ruby = File.join(RbConfig::CONFIG['bindir'],
         RbConfig::CONFIG['ruby_install_name'] + RbConfig::CONFIG['EXEEXT'])
-
-      load_path = [TZINFO_LIB_DIR] + extra_load_path
-
-      # If RubyGems is loaded in the current process, then require it in the
-      # sub-process, as it may be needed in order to require dependencies.
-      if defined?(Gem) && Gem.instance_of?(Module)
-        required = ['rubygems'] + required
-      end
 
       if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
         # Stop Rubinius from operating as irb.
