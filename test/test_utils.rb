@@ -11,24 +11,20 @@ unless defined? TZINFO_TEST_DATA_DIR
 end
 
 if defined? COVERAGE_TYPE
-  require 'simplecov'
-
-  SimpleCov.command_name COVERAGE_TYPE
-
-  SimpleCov.formatters = [
-    SimpleCov::Formatter::HTMLFormatter
-  ]
-
   COVERAGE_NOCOV_TOKEN = if [].respond_to?(:bsearch_index)
     'nocov(_bsearch_index)?'
   else
     'nocov(_no_bsearch_index)?'
   end
 
+  require 'simplecov'
+
   SimpleCov.start do
+    command_name COVERAGE_TYPE
     add_filter 'test'
-    project_name 'TZInfo'
     nocov_token COVERAGE_NOCOV_TOKEN
+    project_name 'TZInfo'
+    self.formatters = [SimpleCov::Formatter::HTMLFormatter]
   end
 end
 
@@ -213,12 +209,12 @@ module TestUtils
 
         if COVERAGE_TYPE
           process.puts("require 'simplecov'")
-          process.puts("SimpleCov.command_name '#{COVERAGE_TYPE}:sp#{@@assert_sub_process_returns_count}'")
-          process.puts('SimpleCov.formatters = []')
           process.puts('SimpleCov.start do')
+          process.puts("  command_name '#{COVERAGE_TYPE.gsub("'", "\\\\'")}:sp#{@@assert_sub_process_returns_count}'")
           process.puts("  add_filter 'test'")
-          process.puts("  project_name 'TZInfo'")
           process.puts("  nocov_token '#{COVERAGE_NOCOV_TOKEN.gsub("'", "\\\\'")}'")
+          process.puts("  project_name 'TZInfo'")
+          process.puts('  self.formatters = []')
           process.puts('end')
         end
 
