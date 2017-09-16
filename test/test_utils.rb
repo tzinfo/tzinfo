@@ -2,14 +2,6 @@
 
 raise 'Tests must be run with bundler, e.g. bundle exec rake test' unless defined?(Bundler)
 
-TESTS_DIR = File.expand_path(File.dirname(__FILE__)).untaint
-TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
-
-unless defined? TZINFO_TEST_DATA_DIR
-  TZINFO_TEST_DATA_DIR = File.join(TESTS_DIR, "tzinfo-data#{(defined? TZINFO_TEST_DATA_FORMAT) ? TZINFO_TEST_DATA_FORMAT : 2}")
-  $:.unshift(TZINFO_TEST_DATA_DIR) unless $:.include?(TZINFO_TEST_DATA_DIR)
-end
-
 if defined? COVERAGE_TYPE
   COVERAGE_NOCOV_TOKEN = if [].respond_to?(:bsearch_index)
     'nocov(_bsearch_index)?'
@@ -26,6 +18,14 @@ if defined? COVERAGE_TYPE
     project_name 'TZInfo'
     self.formatters = [SimpleCov::Formatter::HTMLFormatter]
   end
+end
+
+TESTS_DIR = File.expand_path(File.dirname(__FILE__)).untaint
+TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
+
+unless defined? TZINFO_TEST_DATA_DIR
+  TZINFO_TEST_DATA_DIR = File.join(TESTS_DIR, "tzinfo-data#{(defined? TZINFO_TEST_DATA_FORMAT) ? TZINFO_TEST_DATA_FORMAT : 2}")
+  $:.unshift(TZINFO_TEST_DATA_DIR) unless $:.include?(TZINFO_TEST_DATA_DIR)
 end
 
 require 'minitest/autorun'
