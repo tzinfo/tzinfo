@@ -170,22 +170,6 @@ class TCCountry < Minitest::Test
     assert_equal('US', marshalled_c.code)
   end
 
-  def test_reload
-    # If country gets reloaded for some reason, it needs to force a reload of
-    # the country index.
-
-    c = Country.get('US')
-    assert_equal('US', Country.get('US').code)
-
-    # Suppress redefined method warnings.
-    without_warnings do
-      load 'tzinfo/country.rb'
-    end
-
-    c = Country.get('US')
-    assert_equal('US', Country.get('US').code)
-  end
-
   def test_get_missing_data_source
     DataSource.set(DataSource.new)
 
