@@ -19,9 +19,16 @@ if defined? COVERAGE_TYPE
     SimpleCov::Formatter::HTMLFormatter
   ]
 
+  COVERAGE_NOCOV_TOKEN = if [].respond_to?(:bsearch_index)
+    'nocov(_bsearch_index)?'
+  else
+    'nocov(_no_bsearch_index)?'
+  end
+
   SimpleCov.start do
     add_filter 'test'
     project_name 'TZInfo'
+    nocov_token COVERAGE_NOCOV_TOKEN
   end
 end
 
@@ -211,6 +218,7 @@ module TestUtils
           process.puts('SimpleCov.start do')
           process.puts("  add_filter 'test'")
           process.puts("  project_name 'TZInfo'")
+          process.puts("  nocov_token '#{COVERAGE_NOCOV_TOKEN.gsub("'", "\\\\'")}'")
           process.puts('end')
         end
 

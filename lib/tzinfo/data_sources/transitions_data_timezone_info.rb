@@ -161,11 +161,14 @@ module TZInfo
       # transitions if it is available, otherwise use a Ruby implementation.
       if [].respond_to?(:bsearch_index)
         # Calls bsearch_index on @transitions.
+        # :nocov_no_bsearch_index:
         def find_minimum_transition(&block)
           @transitions.bsearch_index(&block)
         end
+        # :nocov_no_bsearch_index:
       else
         # A Ruby implementation of the find-minimum mode of Array#bsearch_index.
+        # :nocov_bsearch_index:
         def find_minimum_transition
           low = 0
           high = @transitions.length
@@ -183,6 +186,7 @@ module TZInfo
 
           satisfied ? low : nil
         end
+        # :nocov_bsearch_index:
       end
 
       # Determines if a transition occurs at or after a given Timestamp,
