@@ -2,7 +2,11 @@
 
 raise 'Tests must be run with bundler, e.g. bundle exec rake test' unless defined?(Bundler)
 
-if defined? COVERAGE_TYPE
+# Only run coverage tests on MRI. SimpleCov is supported on JRuby 9.1, but
+# generates warnings. It is not supported on Rubinius.
+COVERAGE_ENABLED = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'ruby'
+
+if COVERAGE_ENABLED && defined?(COVERAGE_TYPE)
   COVERAGE_NOCOV_TOKEN = if [].respond_to?(:bsearch_index)
     'nocov(_bsearch_index)?'
   else
@@ -212,7 +216,7 @@ module TestUtils
           process.puts("require 'bundler/setup'")
         end
 
-        if COVERAGE_TYPE
+        if COVERAGE_ENABLED && defined?(COVERAGE_TYPE)
           process.puts("require 'simplecov'")
           process.puts('SimpleCov.start do')
           process.puts("  command_name '#{COVERAGE_TYPE.gsub("'", "\\\\'")}:sp#{@@assert_sub_process_returns_count}'")
