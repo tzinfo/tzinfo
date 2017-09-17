@@ -207,6 +207,11 @@ module TestUtils
           process.puts("$:.unshift('#{p.gsub("'", "\\\\'")}')")
         end
 
+        if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
+          # Bundler doesn't get set up automatically on Rubinius.
+          process.puts("require 'bundler/setup'")
+        end
+
         if COVERAGE_TYPE
           process.puts("require 'simplecov'")
           process.puts('SimpleCov.start do')
