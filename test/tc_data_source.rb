@@ -276,6 +276,16 @@ class TCDataSource < Minitest::Test
     assert_kind_of(InitDataSource, DataSource.get)
   end
 
+  def test_set_invalid_datasource_type
+    error = assert_raises(ArgumentError) { DataSource.set(:other) }
+    assert_equal('data_source_or_type must be a DataSource instance or a data source type (:ruby or :zoneinfo)', error.message)
+  end
+
+  def test_set_not_a_datasource
+    error = assert_raises(ArgumentError) { DataSource.set(Object.new) }
+    assert_equal('data_source_or_type must be a DataSource instance or a data source type (:ruby or :zoneinfo)', error.message)
+  end
+
   def test_get_timezone_info
     ds = GetTimezoneInfoTestDataSource.new
     info = ds.get_timezone_info('Test/Simple')

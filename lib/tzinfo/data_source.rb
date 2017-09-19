@@ -110,7 +110,7 @@ module TZInfo
       elsif data_source_or_type == :zoneinfo
         @@instance = DataSources::ZoneinfoDataSource.new(*args)
       else
-        raise ArgumentError, 'data_source_or_type must be a DataSource instance or a data source type (:ruby)'
+        raise ArgumentError, 'data_source_or_type must be a DataSource instance or a data source type (:ruby or :zoneinfo)'
       end
     end
 
