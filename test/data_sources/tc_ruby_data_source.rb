@@ -47,6 +47,28 @@ module DataSources
       assert_match(/\bNowhere\/Special\b/, error.message)
     end
 
+    def test_load_timezone_info_in_index_but_file_does_not_exist
+      error = assert_raises(InvalidTimezoneIdentifier) do
+        @data_source.send(:load_timezone_info, 'Europe/Berlin')
+      end
+
+      assert_match(/\bEurope\/Berlin\b/, error.message)
+      assert_kind_of(LoadError, error.cause) if error.respond_to?(:cause)
+    end
+
+    def test_load_timezone_info_module_names_do_not_match_zone
+      def @data_source.valid_timezone_identifier?(identifier)
+        identifier == 'Invalid/Incorrect_Module' ? 'Invalid/Incorrect_Module' : nil
+      end
+
+      error = assert_raises(InvalidTimezoneIdentifier) do
+        @data_source.send(:load_timezone_info, 'Invalid/Incorrect_Module')
+      end
+
+      assert_match(/\bInvalid\/Incorrect_Module\b/, error.message)
+      assert_kind_of(NameError, error.cause) if error.respond_to?(:cause)
+    end
+
     def test_load_timezone_info_invalid
       error = assert_raises(InvalidTimezoneIdentifier) do
         @data_source.send(:load_timezone_info, '../Definitions/UTC')
