@@ -35,8 +35,8 @@ class TCTimezonePeriod < Minitest::Test
 
   def test_end_transition
     p = TimezonePeriod.new(TimezoneOffset.new(-7200, 3600, :SPECIAL))
-    error = assert_raises(NotImplementedError) { p.start_transition }
-    assert_match(/\bstart_transition\b/, error.message)
+    error = assert_raises(NotImplementedError) { p.end_transition }
+    assert_match(/\bend_transition\b/, error.message)
   end
 
   def test_utc_offset
