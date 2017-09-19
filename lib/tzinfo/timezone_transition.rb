@@ -69,11 +69,5 @@ module TZInfo
     def hash
       [@offset, @previous_offset, @timestamp_value].hash
     end
-
-    private
-
-    def raise_not_implemented(method_name)
-      raise NotImplementedError, "Subclasses must override #{method_name}"
-    end
   end
 end
