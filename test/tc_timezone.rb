@@ -399,6 +399,9 @@ class TCTimezone < Minitest::Test
     assert_equal('UTC', TestTimezone.new('UTC').friendly_identifier(true))
     assert_equal('UTC', TestTimezone.new('UTC').friendly_identifier(false))
     assert_equal('UTC', TestTimezone.new('UTC').friendly_identifier)
+    assert_equal('', TestTimezone.new('').friendly_identifier(true))
+    assert_equal('', TestTimezone.new('').friendly_identifier(false))
+    assert_equal('', TestTimezone.new('').friendly_identifier)
   end
 
   def test_friendly_identifier_non_binary_encoding
