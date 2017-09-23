@@ -88,6 +88,11 @@ def recurse_chmod(dir)
   end
 end
 
+# Only run coverage tests on MRI. SimpleCov is supported on JRuby 9.1, but
+# generates warnings. It is not supported on Rubinius.
+TEST_COVERAGE = RUBY_ENGINE == 'ruby'
+ENV['TEST_COVERAGE'] = TEST_COVERAGE ? '1' : '0'
+
 desc 'Run tests using RubyDataSource with a format 1 version of TZInfo::Data, RubyDataSource with a format 2 version of TZInfo::Data and ZoneinfoDataSource'
 task test: [:clean_coverage, :test_ruby_format1, :test_ruby_format2, :test_zoneinfo] do
 end
