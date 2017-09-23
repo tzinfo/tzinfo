@@ -4,7 +4,7 @@ raise 'Tests must be run with bundler, e.g. bundle exec rake test' unless define
 
 # Only run coverage tests on MRI. SimpleCov is supported on JRuby 9.1, but
 # generates warnings. It is not supported on Rubinius.
-COVERAGE_ENABLED = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'ruby'
+COVERAGE_ENABLED = RUBY_ENGINE == 'ruby'
 
 if COVERAGE_ENABLED && defined?(COVERAGE_TYPE)
   COVERAGE_NOCOV_TOKEN = if [].respond_to?(:bsearch_index)
@@ -151,7 +151,7 @@ module TestUtils
     # Runs a test with safe mode enabled ($SAFE = 1).
     def safe_test(options = {})
       # JRuby and Rubinius us don't support SAFE levels.
-      available = !(defined?(RUBY_ENGINE) && %w(jruby rbx).include?(RUBY_ENGINE))
+      available = !%w(jruby rbx).include?(RUBY_ENGINE)
 
       if available || options[:unavailable] != :skip
         thread = Thread.new do
@@ -197,7 +197,7 @@ module TestUtils
       ruby = File.join(RbConfig::CONFIG['bindir'],
         RbConfig::CONFIG['ruby_install_name'] + RbConfig::CONFIG['EXEEXT'])
 
-      if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
+      if RUBY_ENGINE == 'rbx'
         # Stop Rubinius from operating as irb.
         args = ' -'
       else
@@ -211,7 +211,7 @@ module TestUtils
           process.puts("$:.unshift('#{p.gsub("'", "\\\\'")}')")
         end
 
-        if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
+        if RUBY_ENGINE == 'rbx'
           # Bundler doesn't get set up automatically on Rubinius.
           process.puts("require 'bundler/setup'")
         end

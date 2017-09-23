@@ -421,7 +421,7 @@ module DataSources
 
     # Reading attempting to read a child entry of a file on JRuby 9.1.12.0
     # raises a Java::JavaLang::Runtime exception instead of Errno::EISDIR.
-    if !defined?(RUBY_ENGINE) || RUBY_ENGINE != 'jruby'
+    unless RUBY_ENGINE == 'jruby'
       def test_load_timezone_info_path_component_not_dir
         # Override the index so that an attempt is made to load the file.
         def @data_source.valid_timezone_identifier?(identifier)
@@ -581,7 +581,7 @@ module DataSources
     end
 
     # Reading a directory hangs on JRuby 9.1.12.0 instead of raising Errno::EISDIR.
-    if !defined?(RUBY_ENGINE) || RUBY_ENGINE != 'jruby'
+    unless RUBY_ENGINE == 'jruby'
       def test_load_timezone_info_file_is_directory
         Dir.mktmpdir('tzinfo_test') do |dir|
           FileUtils.touch(File.join(dir, 'zone.tab'))
