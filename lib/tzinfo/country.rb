@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'concurrent/map'
-
 module TZInfo
   # Raised by Country#get if the code given is not valid.
   class InvalidCountryCode < StandardError

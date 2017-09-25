@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'date'
 require 'set'
-require 'concurrent/map'
 
 module TZInfo
   # AmbiguousTime is raised to indicates that a specified time in a local
