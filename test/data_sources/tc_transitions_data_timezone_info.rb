@@ -29,6 +29,16 @@ module DataSources
       assert_match(/\btransitions\b/, error.message)
     end
 
+    def test_initialize_nil_identifier
+      o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
+      o2 = TimezoneOffset.new(-18000,    0, :TESTS)
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,10,1,1,0,0).to_i)
+      transitions = [t1]
+
+      error = assert_raises(ArgumentError) { TransitionsDataTimezoneInfo.new(nil, transitions) }
+      assert_match(/\bidentifier\b/, error.message)
+    end
+
     def test_initialize_nil_transitions
       error = assert_raises(ArgumentError) { TransitionsDataTimezoneInfo.new('Test/Zone', nil) }
       assert_match(/\btransitions\b/, error.message)

@@ -6,12 +6,16 @@ module TZInfo
       # The zone that provides the data (that this zone is an alias for).
       attr_reader :link_to_identifier
 
-      # Constructs a new LinkedTimezoneInfo with an identifier and the identifier
-      # of the zone linked to.
+      # Constructs a new LinkedTimezoneInfo with an identifier and the
+      # identifier of the zone linked to.
       #
-      # The passed in identifier and link_to_identifier instances will be frozen.
+      # The passed in identifier and link_to_identifier instances will be
+      # frozen.
+      #
+      # Raises ArgumentError if identifier or link_to_identifier are nil.
       def initialize(identifier, link_to_identifier)
         super(identifier)
+        raise ArgumentError, 'link_to_identifier must not be nil' unless link_to_identifier
         @link_to_identifier = link_to_identifier.freeze
       end
 

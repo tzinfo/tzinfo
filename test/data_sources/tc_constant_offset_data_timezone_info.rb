@@ -14,6 +14,13 @@ module DataSources
       assert_same(o, i.constant_offset)
     end
 
+    def test_initialize_nil_identifier
+      o = TimezoneOffset.new(-17900, 0, :TESTLMT)
+
+      error = assert_raises(ArgumentError) { ConstantOffsetDataTimezoneInfo.new(nil, o) }
+      assert_match(/\bidentifier\b/, error.message)
+    end
+
     def test_initialize_nil_constant_offset
       error = assert_raises(ArgumentError) { ConstantOffsetDataTimezoneInfo.new('Test/Zone', nil) }
       assert_match(/\bconstant_offset\b/, error.message)

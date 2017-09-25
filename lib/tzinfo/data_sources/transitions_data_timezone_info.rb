@@ -8,8 +8,8 @@ module TZInfo
       # The list of transitions as a frozen Array of TimezoneTransition instances.
       attr_reader :transitions
 
-      # Constructs a new TransitionDataTimezoneInfo with its identifier and
-      # an Array of TimezoneTransitions.
+      # Constructs a new TransitionDataTimezoneInfo with its identifier and an
+      # Array of TimezoneTransitions.
       #
       # A reference to the passed in Array will be retained.
       #
@@ -17,7 +17,8 @@ module TZInfo
       # transition must have a timestamp_value that is greater than the prior
       # transition.
       #
-      # Raises ArgumentError if transitions is nil or an empty Array.
+      # Raises ArgumentError if identifier is nil or if transitions is nil or an
+      # empty Array.
       def initialize(identifier, transitions)
         super(identifier)
         raise ArgumentError, 'transitions must not be nil' unless transitions

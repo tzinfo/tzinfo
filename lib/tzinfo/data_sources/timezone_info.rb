@@ -11,7 +11,10 @@ module TZInfo
       # Constructs a new TimezoneInfo with an identifier.
       #
       # The passed in identifer instance will be frozen.
+      #
+      # Raises ArgumentError if identifier is nil.
       def initialize(identifier)
+        raise ArgumentError, 'identifier must not be nil' unless identifier
         @identifier = identifier.freeze
       end
 

@@ -6,6 +6,10 @@ include TZInfo
 
 module DataSources
   class TCDataTimezoneInfo < Minitest::Test
+    def test_initialize_nil_identifier
+      error = assert_raises(ArgumentError) { DataTimezoneInfo.new(nil) }
+      assert_match(/\bidentifier\b/, error.message)
+    end
 
     def test_identifier
       ti = DataTimezoneInfo.new('Test/Zone')

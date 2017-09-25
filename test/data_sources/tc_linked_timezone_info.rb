@@ -6,6 +6,15 @@ include TZInfo
 
 module DataSources
   class TCLinkedTimezoneInfo < Minitest::Test
+    def test_initialize_nil_identifier
+      error = assert_raises(ArgumentError) { LinkedTimezoneInfo.new(nil, 'Test/Linked') }
+      assert_match(/\bidentifier\b/, error.message)
+    end
+
+    def test_initialize_nil_link_to_identifier
+      error = assert_raises(ArgumentError) { LinkedTimezoneInfo.new('Test/Zone', nil) }
+      assert_match(/\blink_to_identifier\b/, error.message)
+    end
 
     def test_identifier
       lti = LinkedTimezoneInfo.new('Test/Zone', 'Test/Linked')

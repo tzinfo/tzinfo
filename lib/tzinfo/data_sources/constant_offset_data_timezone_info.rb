@@ -12,7 +12,7 @@ module TZInfo
       #
       # A reference to the passed in TimezoneOffset will be retained.
       #
-      # Raises ArgumentError if constant_offset is nil.
+      # Raises ArgumentError if identifier or constant_offset are nil.
       def initialize(identifier, constant_offset)
         super(identifier)
         raise ArgumentError, 'constant_offset must not be nil' unless constant_offset
