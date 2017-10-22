@@ -54,10 +54,12 @@ Example Usage
 The following code will obtain the America/New_York timezone (as an instance
 of `TZInfo::Timezone`) and convert a time in UTC to local New York time:
 
+```ruby
     require 'tzinfo'
 
     tz = TZInfo::Timezone.get('America/New_York')
     local = tz.utc_to_local(Time.utc(2005,8,29,15,35,0))
+```
 
 Note that the local Time returned will have a UTC timezone (`local.zone` will
 return `"UTC"`). This is because the Ruby Time class only supports two timezones:
@@ -66,15 +68,19 @@ UTC and the current system local timezone.
 To convert from a local time to UTC, the `local_to_utc` method can be used as
 follows:
 
+```ruby
     utc = tz.local_to_utc(local)
+```
 
 Note that the timezone information of the local Time object is ignored (TZInfo
 will just read the date and time and treat them as if there were in the `tz`
 timezone). The following two lines will return the same result regardless of
 the system's local timezone:
 
+```ruby
     tz.local_to_utc(Time.local(2006,6,26,1,0,0))
     tz.local_to_utc(Time.utc(2006,6,26,1,0,0))
+```
 
 To obtain information about the rules in force at a particular UTC or local
 time, the `TZInfo::Timezone.period_for_utc` and
@@ -82,13 +88,17 @@ time, the `TZInfo::Timezone.period_for_utc` and
 return `TZInfo::TimezonePeriod` objects. The following gets the identifier for
 the period (in this case EDT).
 
+```ruby
     period = tz.period_for_utc(Time.utc(2005,8,29,15,35,0))
     id = period.zone_identifier
+```
 
 The current local time in a `Timezone` can be obtained with the
 `TZInfo::Timezone#now` method:
 
+```ruby
     now = tz.now
+```
 
 All methods in TZInfo that operate on a time can be used with either `Time` or
 `DateTime` instances or with Integer timestamps (i.e. as returned by
@@ -103,8 +113,10 @@ code). The following code retrieves the `TZInfo::Country` instance representing
 the USA (country code 'US') and then gets all the timezone identifiers used in
 the USA.
 
+```ruby
     us = TZInfo::Country.get('US')
     timezones = us.zone_identifiers
+```
 
 The `TZInfo::Country#zone_info` method provides an additional description and
 geographic location for each timezone in a country.
