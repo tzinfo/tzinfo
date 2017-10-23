@@ -7,7 +7,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'America/Adak' do |tz|
-          tz.offset :o0, 44001, 0, :LMT
+          tz.offset :o0, 44002, 0, :LMT
           tz.offset :o1, -42398, 0, :LMT
           tz.offset :o2, -39600, 0, :NST
           tz.offset :o3, -39600, 3600, :NWT
@@ -18,7 +18,7 @@ module TZInfo
           tz.offset :o8, -36000, 0, :HST
           tz.offset :o9, -36000, 3600, :HDT
           
-          tz.transition 1867, 10, :o1, 23071267111, 9600
+          tz.transition 1867, 10, :o1, 207641536273, 86400
           tz.transition 1900, 8, :o2, 104338907599, 43200
           tz.transition 1942, 2, :o3, 58329601, 24
           tz.transition 1945, 8, :o4, 58360379, 24

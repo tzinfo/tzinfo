@@ -329,7 +329,7 @@ module TZInfo
         c.timezone 'America/Cayenne', 74, 15, -157, 3
       end
       country 'GG', 'Guernsey' do |c|
-        c.timezone 'Europe/Guernsey', 989, 20, -38, 15
+        c.timezone 'Europe/Guernsey', 178037, 3600, -913, 360
       end
       country 'GH', 'Ghana' do |c|
         c.timezone 'Africa/Accra', 111, 20, -13, 60
@@ -423,7 +423,7 @@ module TZInfo
         c.timezone 'Europe/Rome', 419, 10, 749, 60
       end
       country 'JE', 'Jersey' do |c|
-        c.timezone 'Europe/Jersey', 246, 5, -127, 60
+        c.timezone 'Europe/Jersey', 177061, 3600, -158, 75
       end
       country 'JM', 'Jamaica' do |c|
         c.timezone 'America/Jamaica', 12937, 720, -11519, 150

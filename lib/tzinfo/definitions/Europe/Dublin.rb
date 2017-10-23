@@ -65,9 +65,9 @@ module TZInfo
           tz.transition 1939, 4, :o5, 29152435, 12
           tz.transition 1939, 11, :o3, 29155039, 12
           tz.transition 1940, 2, :o5, 29156215, 12
-          tz.transition 1946, 10, :o3, 58370389, 24
+          tz.transition 1946, 10, :o3, 29185195, 12
           tz.transition 1947, 3, :o5, 29187127, 12
-          tz.transition 1947, 11, :o3, 58379797, 24
+          tz.transition 1947, 11, :o3, 29189899, 12
           tz.transition 1948, 4, :o5, 29191915, 12
           tz.transition 1948, 10, :o3, 29194267, 12
           tz.transition 1949, 4, :o5, 29196115, 12
