@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2016 Philip Ross
+# Copyright (c) 2005-2017 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -107,7 +107,7 @@ module TZInfo
 
       files = Dir.entries(@input_dir).select do |file|
         file =~ /\A[^\.]+\z/ &&            
-          !%w(backzone checktab.awk leapseconds leapseconds.awk leap-seconds.list version zoneinfo2tdf.pl CONTRIBUTING LICENSE Makefile NEWS README Readme.txt SOURCE Theory).include?(file) &&
+          !%w(backzone calendars leapseconds version CONTRIBUTING LICENSE Makefile NEWS README SOURCE Theory version).include?(file) &&
           File.file?(File.join(@input_dir, file))
       end
     
