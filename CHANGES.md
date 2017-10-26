@@ -1,3 +1,10 @@
+Version 1.2.4 - 26-Oct-2017
+---------------------------
+
+* Ignore the leapseconds file that is included in zoneinfo directories installed
+  with version 2017c and later of the Time Zone Database.
+
+
 Version 1.2.3 - 25-Mar-2017
 ---------------------------
 
