@@ -369,9 +369,11 @@ class TCZoneinfoDataSource < Minitest::Test
     end
   end
   
-  def test_load_timezone_info_ignored_file
-    assert_raises(InvalidTimezoneIdentifier) do
-      @data_source.load_timezone_info('localtime')
+  %w(leapseconds localtime).each do |file_name|
+    define_method("test_load_timezone_info_ignored_#{file_name}_file") do
+      assert_raises(InvalidTimezoneIdentifier) do
+        @data_source.load_timezone_info(file_name)
+      end
     end
   end
   
@@ -692,11 +694,11 @@ class TCZoneinfoDataSource < Minitest::Test
        
     entries = entries.collect {|file| file[directory.length + File::SEPARATOR.length, file.length - directory.length - File::SEPARATOR.length]}
 
-    # Exclude right (with leapseconds) and posix (copy) directories; .tab files; localtime and posixrules files.
+    # Exclude right (with leapseconds) and posix (copy) directories; .tab files; leapseconds, localtime and posixrules files.
     entries = entries.select do |file| 
       file !~ /\A(posix|right)\// &&
         file !~ /\.tab\z/ &&
-        !%w(localtime posixrules).include?(file)
+        !%w(leapseconds localtime posixrules).include?(file)
     end
     
     entries.sort
