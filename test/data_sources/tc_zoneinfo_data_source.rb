@@ -779,11 +779,11 @@ module DataSources
 
       entries = entries.collect {|file| file[directory.length + File::SEPARATOR.length, file.length - directory.length - File::SEPARATOR.length]}
 
-      # Exclude right (with leapseconds) and posix (copy) directories; .tab files; localtime and posixrules files.
+      # Exclude right (with leapseconds) and posix (copy) directories; .tab files; leapseconds, localtime and posixrules files.
       entries = entries.select do |file|
         file !~ /\A(posix|right)\// &&
           file !~ /\.tab\z/ &&
-          !%w(localtime posixrules).include?(file)
+          !%w(leapseconds localtime posixrules).include?(file)
       end
 
       entries.sort

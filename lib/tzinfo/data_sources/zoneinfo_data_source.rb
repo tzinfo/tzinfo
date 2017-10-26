@@ -353,12 +353,13 @@ module TZInfo
 
         # Ignoring particular files:
         # +VERSION is included on Mac OS X.
-        # localtime current local timezone (may be a link).
+        # leapseconds is a list of leap seconds.
+        # localtime is the current local timezone (may be a link).
         # posix, posixrules and right are directories containing other versions of the zoneinfo files.
         # src is a directory containing the tzdata source included on Solaris.
         # timeconfig is a symlink included on Slackware.
 
-        enum_timezones(nil, ['+VERSION', 'localtime', 'posix', 'posixrules', 'right', 'src', 'timeconfig']) do |identifier|
+        enum_timezones(nil, ['+VERSION', 'leapseconds', 'localtime', 'posix', 'posixrules', 'right', 'src', 'timeconfig']) do |identifier|
           index << identifier.freeze
         end
 
