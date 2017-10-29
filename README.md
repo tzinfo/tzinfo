@@ -40,13 +40,16 @@ Installation
 
 The TZInfo gem can be installed by running:
 
-    gem install tzinfo
+```
+gem install tzinfo
+```
 
 To use the Ruby modules as the data source, TZInfo::Data will also need to be
 installed:
 
-    gem install tzinfo-data
-
+```
+gem install tzinfo-data
+```
 
 Example Usage
 -------------
