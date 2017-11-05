@@ -61,10 +61,12 @@ module TZInfo
       raise ArgumentError, 'to must not be nil' unless to
       to_timestamp = Timestamp.for(to)
       from_timestamp = from && Timestamp.for(from)
-      raise ArgumentError, 'to must have a specified utc_offset' unless to_timestamp.utc_offset
-      raise ArgumentError, 'from must have a specified utc_offset' if from_timestamp && !from_timestamp.utc_offset
 
-      info.transitions_up_to(to_timestamp, from_timestamp)
+      begin
+        info.transitions_up_to(to_timestamp, from_timestamp)
+      rescue ArgumentError => e
+        raise ArgumentError, e.message.gsub('_timestamp', '')
+      end
     end
 
     # Returns the canonical zone for this Timezone.

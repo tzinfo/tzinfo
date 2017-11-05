@@ -41,7 +41,7 @@ class TCDataTimezone < Minitest::Test
 
       if from_timestamp
         raise ArgumentError, 'from_timestamp must have a specified utc_offset' unless from_timestamp.utc_offset
-        raise ArgumentError, 'to_timestamp must be greater than from' if to_timestamp <= from_timestamp
+        raise ArgumentError, 'to_timestamp must be greater than from_timestamp' if to_timestamp <= from_timestamp
       end
 
       @to_timestamp = to_timestamp
@@ -242,6 +242,19 @@ class TCDataTimezone < Minitest::Test
       assert_same(transitions, tz.transitions_up_to(h.time(2013, 1, 1, 0, 0, 0, Rational(1,10), -3600), h.time(2012, 1, 1, 0, 0, 0, Rational(1,10), 3600)))
       assert_equal_with_offset(Timestamp.new(Time.new(2013, 1, 1, 0, 0, 0, -3600).to_i, Rational(1,10), -3600), tti.to_timestamp)
       assert_equal_with_offset(Timestamp.new(Time.new(2012, 1, 1, 0, 0, 0, 3600).to_i, Rational(1,10), 3600), tti.from_timestamp)
+    end
+  end
+
+  def test_transitions_up_to_utc_to_not_greater_than_utc_from
+    time_types_test do |h|
+      tti = TestTimezoneInfo.new('Test/Zone', nil, nil, nil)
+      tz = DataTimezone.new(tti)
+
+      to = h.time(2013,1,1,0,0,0,0,0)
+      from = h.time(2013,1,1,0,0,0,0,0)
+
+      error = assert_raises(ArgumentError) { tz.transitions_up_to(to, from) }
+      assert_equal('to must be greater than from', error.message)
     end
   end
 
