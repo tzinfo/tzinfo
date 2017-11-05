@@ -250,9 +250,10 @@ class TCDataSource < Minitest::Test
     Dir.mktmpdir('tzinfo_test_dir') do |dir|
       DataSources::ZoneinfoDataSource.search_path = [dir]
 
-      assert_raises(DataSources::ZoneinfoDirectoryNotFound) do
+      error = assert_raises(DataSources::ZoneinfoDirectoryNotFound) do
         DataSource.set(:zoneinfo)
       end
+      assert_equal('None of the paths included in TZInfo::DataSources::ZoneinfoDataSource.search_path are valid zoneinfo directories.', error.message)
 
       assert_kind_of(InitDataSource, DataSource.get)
     end
@@ -260,9 +261,10 @@ class TCDataSource < Minitest::Test
 
   def test_set_standard_zoneinfo_explicit_invalid
     Dir.mktmpdir('tzinfo_test_dir') do |dir|
-      assert_raises(DataSources::InvalidZoneinfoDirectory) do
+      error = assert_raises(DataSources::InvalidZoneinfoDirectory) do
         DataSource.set(:zoneinfo, dir)
       end
+      assert_equal("#{dir} is not a directory or doesn't contain a iso3166.tab file and a zone1970.tab or zone.tab file.", error.message)
 
       assert_kind_of(InitDataSource, DataSource.get)
     end

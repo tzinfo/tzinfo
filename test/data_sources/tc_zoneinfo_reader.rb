@@ -296,7 +296,8 @@ module DataSources
       transitions = [{at: Time.utc(2000, 12, 31), offset_index: 0}]
 
       tzif_test(offsets, transitions) do |path, format|
-        assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid offset referenced by transition in file '#{path}'.", error.message)
       end
     end
 
@@ -305,7 +306,8 @@ module DataSources
       transitions = [{at: Time.utc(2000, 12, 31), offset_index: 2}]
 
       tzif_test(offsets, transitions) do |path, format|
-        assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid offset referenced by transition in file '#{path}'.", error.message)
       end
     end
 
@@ -314,17 +316,28 @@ module DataSources
       leaps = [{at: Time.utc(1972,6,30,23,59,60), seconds: 1}]
 
       tzif_test(offsets, [], leaps) do |path, format|
-        assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("The file '#{path}' contains leap second data. TZInfo requires zoneinfo files that omit leap seconds.", error.message)
       end
     end
 
     def test_read_invalid_magic
-      ['TZif4', 'tzif2', '12345'].each do |magic|
+      ['tzif2', '12345'].each do |magic|
         offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
         tzif_test(offsets, [], [], magic: magic) do |path, format|
-          assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+          error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+          assert_equal("The file '#{path}' does not start with the expected header.", error.message)
         end
+      end
+    end
+
+    def test_read_invalid_version
+      offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
+
+      tzif_test(offsets, [], [], magic: 'TZif4') do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("The file '#{path}' contains a version of the zoneinfo format that is not currently supported.", error.message)
       end
     end
 
@@ -333,7 +346,8 @@ module DataSources
         offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
         tzif_test(offsets, [], [], min_format: 2, section2_magic: section2_magic) do |path, format|
-          assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+          error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+          assert_equal("The file '#{path}' contains an invalid 64-bit section header.", error.message)
         end
       end
     end
@@ -346,7 +360,8 @@ module DataSources
         offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
         tzif_test(offsets, [], [], min_format: 2, section2_magic: section2_magic) do |path, format|
-          assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+          error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+          assert_equal("The file '#{path}' contains an invalid 64-bit section header.", error.message)
         end
       end
     end
@@ -356,7 +371,8 @@ module DataSources
         file.write('Invalid')
         file.flush
 
-        assert_raises(InvalidZoneinfoFile) { @reader.read(file.path) }
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(file.path) }
+        assert_match(/Expected \d+ bytes reading/, error.message)
       end
     end
 
@@ -369,7 +385,8 @@ module DataSources
         {at: Time.utc(2000, 1, 1), offset_index: 1}]
 
       tzif_test(offsets, transitions, [], abbrev_separator: '^') do |path, format|
-        assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Missing abbreviation null terminator in file '#{path}'.", error.message)
       end
     end
 
@@ -382,7 +399,8 @@ module DataSources
         {at: Time.utc(2000, 1, 1), offset_index: 1}]
 
       tzif_test(offsets, transitions, [], abbrev_offset_base: 8) do |path, format|
-        assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Abbreviation index is out of range in file '#{path}'.", error.message)
       end
     end
 
@@ -398,8 +416,7 @@ module DataSources
 
       tzif_test(offsets, transitions) do |path, format|
         error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
-        assert_match(/\btransition\b/, error.message)
-        assert_match(path, error.message)
+        assert_equal("Transition at #{Time.utc(2000, 1, 1, 12, 0, 0).to_i} is not later than the previous transition at #{Time.utc(2000, 1, 1, 12, 0, 0).to_i} in file '#{path}'.", error.message)
       end
     end
 
@@ -415,8 +432,7 @@ module DataSources
 
       tzif_test(offsets, transitions) do |path, format|
         error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
-        assert_match(/\btransition\b/, error.message)
-        assert_match(path, error.message)
+        assert_equal("Transition at #{Time.utc(2000, 1, 1, 11, 59, 59).to_i} is not later than the previous transition at #{Time.utc(2000, 1, 1, 12, 0, 0).to_i} in file '#{path}'.", error.message)
       end
     end
 

@@ -26,19 +26,22 @@ module DataSources
     def test_period_for
       ti = DataTimezoneInfo.new('Test/Zone')
       ts = Timestamp.utc(1480291200)
-      assert_raises(NotImplementedError) { ti.period_for(ts) }
+      error = assert_raises(NotImplementedError) { ti.period_for(ts) }
+      assert_equal('Subclasses must override period_for', error.message)
     end
 
     def test_periods_for_local
       ti = DataTimezoneInfo.new('Test/Zone')
       ts = Timestamp.new(1480291200)
-      assert_raises(NotImplementedError) { ti.periods_for_local(ts) }
+      error = assert_raises(NotImplementedError) { ti.periods_for_local(ts) }
+      assert_equal('Subclasses must override periods_for_local', error.message)
     end
 
     def test_transitions_up_to
       ti = DataTimezoneInfo.new('Test/Zone')
       ts = Timestamp.utc(1480291200)
-      assert_raises(NotImplementedError) { ti.transitions_up_to(ts) }
+      error = assert_raises(NotImplementedError) { ti.transitions_up_to(ts) }
+      assert_equal('Subclasses must override transitions_up_to', error.message)
     end
 
     def test_inspect

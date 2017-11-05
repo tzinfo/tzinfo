@@ -190,7 +190,7 @@ module TZInfo
           @zoneinfo_dir, iso3166_tab_path, zone_tab_path = find_zoneinfo_dir
 
           unless @zoneinfo_dir && iso3166_tab_path && zone_tab_path
-            raise ZoneinfoDirectoryNotFound, "None of the paths included in TZInfo::ZoneinfoDataSource.search_path are valid zoneinfo directories."
+            raise ZoneinfoDirectoryNotFound, "None of the paths included in #{self.class.name}.search_path are valid zoneinfo directories."
           end
         end
 
@@ -250,7 +250,7 @@ module TZInfo
               raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
             end
           else
-            raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}"
+            raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier.nil? ? 'nil' : identifier}"
           end
         rescue Errno::EISDIR, Errno::ENAMETOOLONG, Errno::ENOENT, Errno::ENOTDIR
           raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}"
@@ -264,7 +264,7 @@ module TZInfo
       # or the code is invalid.
       def load_country_info(code)
         info = @countries[code]
-        raise InvalidCountryCode, "Invalid country code: #{code}" unless info
+        raise InvalidCountryCode, "Invalid country code: #{code.nil? ? 'nil' : code}" unless info
         info
       end
 

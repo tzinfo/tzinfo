@@ -64,7 +64,7 @@ module TZInfo
       # identifier is invalid.
       def load_timezone_info(identifier)
         valid_identifier = valid_timezone_identifier?(identifier)
-        raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}" unless valid_identifier
+        raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier.nil? ? 'nil' : identifier}" unless valid_identifier
 
         valid_identifier = valid_identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__').split('/')
 
@@ -84,7 +84,7 @@ module TZInfo
       # or the code is invalid.
       def load_country_info(code)
         info = Data::Indexes::Countries.countries[code]
-        raise InvalidCountryCode, "Invalid country code: #{code}" unless info
+        raise InvalidCountryCode, "Invalid country code: #{code.nil? ? 'nil' : code}" unless info
         info
       end
 

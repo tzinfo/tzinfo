@@ -254,7 +254,7 @@ class TCDataTimezone < Minitest::Test
       from = h.time(2012, 1, 1, 0, 0, 0, Rational(1,10))
 
       error = assert_raises(ArgumentError) { tz.transitions_up_to(to, from) }
-      assert_match(/\bfrom\b/, error.message)
+      assert_equal('from must have a specified utc_offset', error.message)
     end
   end
 
@@ -266,7 +266,7 @@ class TCDataTimezone < Minitest::Test
       to = h.time(2013, 1, 1, 0, 0, 0, Rational(1,10))
 
       error = assert_raises(ArgumentError) { tz.transitions_up_to(to) }
-      assert_match(/\bto\b/, error.message)
+      assert_equal('to must have a specified utc_offset', error.message)
     end
   end
 
@@ -288,7 +288,7 @@ class TCDataTimezone < Minitest::Test
     tz = DataTimezone.new(tti)
 
     error = assert_raises(ArgumentError) { tz.transitions_up_to(nil) }
-    assert_match(/\bto\b/, error.message)
+    assert_equal('to must not be nil', error.message)
   end
 
   def test_transitions_up_to_unsupported_to

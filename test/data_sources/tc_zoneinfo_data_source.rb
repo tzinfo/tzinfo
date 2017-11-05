@@ -162,9 +162,7 @@ module DataSources
           ZoneinfoDataSource.search_path = [zoneinfo_dir]
           ZoneinfoDataSource.alternate_iso3166_tab_search_path = [tab_file]
 
-          assert_raises(ZoneinfoDirectoryNotFound) do
-            ZoneinfoDataSource.new
-          end
+          assert_raises_directory_not_found { ZoneinfoDataSource.new }
 
           FileUtils.touch(tab_file)
 
@@ -189,9 +187,7 @@ module DataSources
                 ZoneinfoDataSource.search_path = [file, dir2, dir3, dir4, dir5]
                 ZoneinfoDataSource.alternate_iso3166_tab_search_path = []
 
-                assert_raises(ZoneinfoDirectoryNotFound) do
-                  ZoneinfoDataSource.new
-                end
+                assert_raises_directory_not_found { ZoneinfoDataSource.new }
               end
             end
           end
@@ -261,7 +257,7 @@ module DataSources
 
           ZoneinfoDataSource.alternate_iso3166_tab_search_path = [tab_file]
 
-          assert_raises(InvalidZoneinfoDirectory) do
+          assert_raises_invalid_directory(zoneinfo_dir) do
             # The alternate_iso3166_tab_search_path should not be used. This should raise
             # an exception.
             ZoneinfoDataSource.new(zoneinfo_dir)
@@ -275,9 +271,7 @@ module DataSources
 
     def test_new_dir_invalid
       Dir.mktmpdir('tzinfo_test') do |dir|
-        assert_raises(InvalidZoneinfoDirectory) do
-          ZoneinfoDataSource.new(dir)
-        end
+        assert_raises_invalid_directory(dir) { ZoneinfoDataSource.new(dir) }
       end
     end
 
@@ -286,7 +280,7 @@ module DataSources
         Dir.mktmpdir('tzinfo_test_dir_tab') do |tab_dir|
           FileUtils.touch(File.join(zoneinfo_dir, 'zone.tab'))
 
-          assert_raises(InvalidZoneinfoDirectory) do
+          assert_raises_invalid_directory(zoneinfo_dir) do
             ZoneinfoDataSource.new(zoneinfo_dir, File.join(tab_dir, 'iso3166'))
           end
         end
@@ -299,7 +293,7 @@ module DataSources
           FileUtils.touch(File.join(zoneinfo_dir, 'iso3166.tab'))
           FileUtils.touch(File.join(zoneinfo_dir, 'zone.tab'))
 
-          assert_raises(InvalidZoneinfoDirectory) do
+          assert_raises_invalid_directory(zoneinfo_dir) do
             ZoneinfoDataSource.new(zoneinfo_dir, File.join(tab_dir, 'iso3166'))
           end
         end
@@ -311,7 +305,7 @@ module DataSources
         file = File.join(dir, 'file')
         FileUtils.touch(file)
 
-        assert_raises(InvalidZoneinfoDirectory) do
+        assert_raises_invalid_directory(file) do
           ZoneinfoDataSource.new(file)
         end
       end
@@ -463,9 +457,19 @@ module DataSources
     end
 
     def test_load_timezone_info_nil
-      assert_raises(InvalidTimezoneIdentifier) do
+      error = assert_raises(InvalidTimezoneIdentifier) do
         @data_source.send(:load_timezone_info, nil)
       end
+
+      assert_match(/\bnil\b/, error.message)
+    end
+
+    def test_load_timezone_info_false
+      error = assert_raises(InvalidTimezoneIdentifier) do
+        @data_source.send(:load_timezone_info, false)
+      end
+
+      assert_match(/\bfalse\b/, error.message)
     end
 
     def test_load_timezone_info_case
@@ -911,9 +915,19 @@ module DataSources
     end
 
     def test_load_country_info_nil
-      assert_raises(InvalidCountryCode) do
+      error = assert_raises(InvalidCountryCode) do
         @data_source.send(:load_country_info, nil)
       end
+
+      assert_match(/\bnil\b/, error.message)
+    end
+
+    def test_load_country_info_false
+      error = assert_raises(InvalidCountryCode) do
+        @data_source.send(:load_country_info, false)
+      end
+
+      assert_match(/\bfalse\b/, error.message)
     end
 
     def test_load_country_info_case
@@ -1270,6 +1284,18 @@ module DataSources
 
     def test_inspect
       assert_equal("#<TZInfo::DataSources::ZoneinfoDataSource: #{ZONEINFO_DIR}>", @data_source.inspect)
+    end
+
+    private
+
+    def assert_raises_directory_not_found(&block)
+      error = assert_raises(ZoneinfoDirectoryNotFound, &block)
+      assert_equal('None of the paths included in TZInfo::DataSources::ZoneinfoDataSource.search_path are valid zoneinfo directories.', error.message)
+    end
+
+    def assert_raises_invalid_directory(zoneinfo_dir, &block)
+      error = assert_raises(InvalidZoneinfoDirectory, &block)
+      assert_equal("#{zoneinfo_dir} is not a directory or doesn't contain a iso3166.tab file and a zone1970.tab or zone.tab file.", error.message)
     end
   end
 end

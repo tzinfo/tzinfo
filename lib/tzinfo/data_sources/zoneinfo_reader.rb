@@ -164,7 +164,7 @@ module TZInfo
           end
 
           unless leapcnt == 0
-            raise InvalidZoneinfoFile, "The zoneinfo file '#{file.path}' contains leap second data. TZInfo requires zoneinfo files that omit leap seconds."
+            raise InvalidZoneinfoFile, "The file '#{file.path}' contains leap second data. TZInfo requires zoneinfo files that omit leap seconds."
           end
 
           transitions = if using_64bit
@@ -217,10 +217,10 @@ module TZInfo
             end
 
             abbrev_start = o[:abbr_index]
-            raise InvalidZoneinfoFile, "Abbreviation index is out of range in file '#{file.path}'" unless abbrev_start < abbrev.length
+            raise InvalidZoneinfoFile, "Abbreviation index is out of range in file '#{file.path}'." unless abbrev_start < abbrev.length
 
             abbrev_end = abbrev.index("\0", abbrev_start)
-            raise InvalidZoneinfoFile, "Missing abbreviation null terminator in file '#{file.path}'" unless abbrev_end
+            raise InvalidZoneinfoFile, "Missing abbreviation null terminator in file '#{file.path}'." unless abbrev_end
 
             abbr = abbrev[abbrev_start...abbrev_end].force_encoding(Encoding::UTF_8).untaint.to_sym
 
@@ -239,7 +239,7 @@ module TZInfo
             transitions.map do |t|
               offset = offsets[t[:offset]]
               at = t[:at]
-              raise InvalidZoneinfoFile, "Transition at #{at} is not later than the previous transition at #{previous_at} in file '#{file.path}'" if previous_at && previous_at >= at
+              raise InvalidZoneinfoFile, "Transition at #{at} is not later than the previous transition at #{previous_at} in file '#{file.path}'." if previous_at && previous_at >= at
               tt = TimezoneTransition.new(offset, previous_offset, at)
               previous_offset = offset
               previous_at = at

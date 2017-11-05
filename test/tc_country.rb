@@ -31,7 +31,8 @@ class TCCountry < Minitest::Test
   end
 
   def test_get_nil
-    assert_raises(InvalidCountryCode) { Country.get(nil) }
+    error = assert_raises(InvalidCountryCode) { Country.get(nil) }
+    assert_match(/\bnil\b/, error.message)
   end
 
   def test_get_case
@@ -173,24 +174,27 @@ class TCCountry < Minitest::Test
   def test_get_missing_data_source
     DataSource.set(DataSource.new)
 
-    assert_raises(InvalidDataSource) do
+    error = assert_raises(InvalidDataSource) do
       Country.get('GB')
     end
+    assert_equal('load_country_info not defined', error.message)
   end
 
   def test_all_codes_missing_data_source
     DataSource.set(DataSource.new)
 
-    assert_raises(InvalidDataSource) do
+    error = assert_raises(InvalidDataSource) do
       Country.all_codes
     end
+    assert_equal('country_codes not defined', error.message)
   end
 
   def test_all_missing_data_source
     DataSource.set(DataSource.new)
 
-    assert_raises(InvalidDataSource) do
+    error = assert_raises(InvalidDataSource) do
       Country.all
     end
+    assert_equal('country_codes not defined', error.message)
   end
 end

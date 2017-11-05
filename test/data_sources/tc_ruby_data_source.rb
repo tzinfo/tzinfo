@@ -78,9 +78,19 @@ module DataSources
     end
 
     def test_load_timezone_info_nil
-      assert_raises(InvalidTimezoneIdentifier) do
+      error = assert_raises(InvalidTimezoneIdentifier) do
         @data_source.send(:load_timezone_info, nil)
       end
+
+      assert_match(/\bnil\b/, error.message)
+    end
+
+    def test_load_timezone_info_false
+      error = assert_raises(InvalidTimezoneIdentifier) do
+        @data_source.send(:load_timezone_info, false)
+      end
+
+      assert_match(/\bfalse\b/, error.message)
     end
 
     def test_load_timezone_info_case
@@ -179,9 +189,19 @@ module DataSources
     end
 
     def test_load_country_info_nil
-      assert_raises(InvalidCountryCode) do
+      error = assert_raises(InvalidCountryCode) do
         @data_source.send(:load_country_info, nil)
       end
+
+      assert_match(/\bnil\b/, error.message)
+    end
+
+    def test_load_country_info_false
+      error = assert_raises(InvalidCountryCode) do
+        @data_source.send(:load_country_info, false)
+      end
+
+      assert_match(/\bfalse\b/, error.message)
     end
 
     def test_load_country_info_case

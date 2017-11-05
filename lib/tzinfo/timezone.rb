@@ -378,7 +378,7 @@ module TZInfo
       results = periods_for_local(local_time)
 
       if results.empty?
-        raise PeriodNotFound
+        raise PeriodNotFound, "#{local_time.strftime('%Y-%m-%d %H:%M:%S')} is an invalid local time."
       elsif results.size < 2
         results.first
       else
@@ -403,7 +403,7 @@ module TZInfo
           elsif results && results.size == 1
             results.first
           else
-            raise AmbiguousTime, "#{local_time} is an ambiguous local time."
+            raise AmbiguousTime, "#{local_time.strftime('%Y-%m-%d %H:%M:%S')} is an ambiguous local time."
           end
         end
       end
@@ -652,7 +652,7 @@ module TZInfo
 
       # Raises an UnknownTimezone exception.
       def raise_unknown_timezone
-        raise UnknownTimezone, 'TZInfo::Timezone constructed directly'
+        raise UnknownTimezone, 'TZInfo::Timezone should not be constructed directly (use TZInfo::Timezone.get instead)'
       end
   end
 end

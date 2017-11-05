@@ -11,7 +11,7 @@ module TZInfo
       # An ArgumentError may be raised if timestamp is nil or does not have a
       # specified utc_offset.
       def period_for(timestamp)
-        raise_not_implemented('period_for_utc')
+        raise_not_implemented('period_for')
       end
 
       # Returns an array containing the valid TimezonePeriods for the given local

@@ -51,36 +51,45 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_initialize_value_nil
-    assert_raises(ArgumentError) { Timestamp.new(nil) }
+    error = assert_raises(ArgumentError) { Timestamp.new(nil) }
+    assert_equal('value must be an Integer', error.message)
   end
 
   def test_initialize_valuenot_integer
-    assert_raises(ArgumentError) { Timestamp.new(1476316800.0) }
+    error = assert_raises(ArgumentError) { Timestamp.new(1476316800.0) }
+    assert_equal('value must be an Integer', error.message)
   end
 
   def test_initialize_sub_second_nil
-    assert_raises(ArgumentError) { Timestamp.new(1476316800, nil) }
+    error = assert_raises(ArgumentError) { Timestamp.new(1476316800, nil) }
+    assert_equal('sub_second must be a Rational or the Integer 0', error.message)
   end
 
   def test_initialize_sub_second_not_integer_or_rational
-    assert_raises(ArgumentError) { Timestamp.new(1476316800, 0.1) }
+    error = assert_raises(ArgumentError) { Timestamp.new(1476316800, 0.1) }
+    assert_equal('sub_second must be a Rational or the Integer 0', error.message)
   end
 
   def test_initialize_sub_second_integer_not_zero
-    assert_raises(ArgumentError) { Timestamp.new(1476316800, 1) }
+    error = assert_raises(ArgumentError) { Timestamp.new(1476316800, 1) }
+    assert_equal('sub_second must be a Rational or the Integer 0', error.message)
   end
 
   def test_initialize_sub_second_less_than_zero
-    assert_raises(RangeError) { Timestamp.new(1476316800, Rational(-1, 10)) }
+    error = assert_raises(RangeError) { Timestamp.new(1476316800, Rational(-1, 10)) }
+    assert_equal('sub_second must be >= 0 and < 1', error.message)
   end
 
   def test_initialize_sub_second_greater_than_one
-    assert_raises(RangeError) { Timestamp.new(1476316800, Rational(11, 10)) }
+    error = assert_raises(RangeError) { Timestamp.new(1476316800, Rational(11, 10)) }
+    assert_equal('sub_second must be >= 0 and < 1', error.message)
   end
 
   def test_initialize_utc_offset_not_integer_or_utc
-    assert_raises(ArgumentError) { Timestamp.new(1476316800, 0, 1.0) }
-    assert_raises(ArgumentError) { Timestamp.new(1476316800, 0, :zero) }
+    [1.0, :zero].each do |utc_offset|
+      error = assert_raises(ArgumentError) { Timestamp.new(1476316800, 0, utc_offset) }
+      assert_equal('utc_offset must be an Integer, :utc or nil', error.message)
+    end
   end
 
   def test_add_without_offset
@@ -176,11 +185,13 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_add_nil
-    assert_raises(ArgumentError) { Timestamp.new(1476316800) + nil }
+    error = assert_raises(ArgumentError) { Timestamp.new(1476316800) + nil }
+    assert_equal('seconds must be an Integer', error.message)
   end
 
   def test_add_non_integer
-    assert_raises(ArgumentError) { Timestamp.new(1476316800) + 1.0 }
+    error = assert_raises(ArgumentError) { Timestamp.new(1476316800) + 1.0 }
+    assert_equal('seconds must be an Integer', error.message)
   end
 
   def test_subtract_without_offset
@@ -276,11 +287,13 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_subtract_nil
-    assert_raises(ArgumentError) { Timestamp.new(1476316800) - nil }
+    error = assert_raises(ArgumentError) { Timestamp.new(1476316800) - nil }
+    assert_equal('seconds must be an Integer', error.message)
   end
 
   def test_subtract_non_integer
-    assert_raises(ArgumentError) { Timestamp.new(1476316800) - 1.0 }
+    error = assert_raises(ArgumentError) { Timestamp.new(1476316800) - 1.0 }
+    assert_equal('seconds must be an Integer', error.message)
   end
 
   def test_utc_from_utc
@@ -364,7 +377,8 @@ class TCTimestamp < Minitest::Test
 
   def test_strftime_nil_format
     t = Timestamp.new(1476316800, Rational(1,10))
-    assert_raises(ArgumentError) { t.strftime(nil) }
+    error = assert_raises(ArgumentError) { t.strftime(nil) }
+    assert_equal('format must not be nil', error.message)
   end
 
   def test_to_s_without_offset
@@ -744,26 +758,29 @@ class TCTimestamp < Minitest::Test
     end
   end
 
-  def for_raises_test(exception, *args)
-    assert_raises(exception) { Timestamp.for(*args) }
-    assert_raises(exception) do
+  def for_raises_test(exception, message, *args)
+    error = assert_raises(exception) { Timestamp.for(*args) }
+    assert_equal(message, error.message)
+
+    error = assert_raises(exception) do
       Timestamp.for(*args) do |t|
         flunk('block should not have been called')
       end
     end
+    assert_equal(message, error.message)
   end
 
   def test_for_nil_value
-    for_raises_test(ArgumentError, nil)
+    for_raises_test(ArgumentError, 'value must not be nil', nil)
   end
 
   def test_for_invalid_value
-    for_raises_test(ArgumentError, Object.new)
-    for_raises_test(ArgumentError, Time.utc(2016,10,13,0,0,0).to_i)
+    for_raises_test(ArgumentError, 'Object values are not supported', Object.new)
+    for_raises_test(ArgumentError, "#{Time.utc(2016,10,13,0,0,0).to_i.class} values are not supported", Time.utc(2016,10,13,0,0,0).to_i)
   end
 
   def test_for_invalid_offset
-    for_raises_test(ArgumentError, Time.utc(2016,10,13,0,0,0), offset: :invalid)
+    for_raises_test(ArgumentError, ':offset must be :ignore or :preserve', Time.utc(2016,10,13,0,0,0), offset: :invalid)
   end
 
   def test_for_block_result_timestamp
@@ -808,12 +825,13 @@ class TCTimestamp < Minitest::Test
 
   def for_block_invalid_result_test(block_result)
     block_called = false
-    assert_raises(ArgumentError) do
+    error = assert_raises(ArgumentError) do
       Timestamp.for(Timestamp.new(1476316800)) do |t|
         block_called = true
         block_result
       end
     end
+    assert_equal('block must return a Timestamp', error.message)
     assert(block_called, 'block was not called')
   end
 
@@ -844,30 +862,37 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_class_utc_value_nil
-    assert_raises(ArgumentError) { Timestamp.utc(nil) }
+    error = assert_raises(ArgumentError) { Timestamp.utc(nil) }
+    assert_equal('value must be an Integer', error.message)
   end
 
   def test_class_utc_value_not_integer
-    assert_raises(ArgumentError) { Timestamp.utc(1476316800.1) }
+    error = assert_raises(ArgumentError) { Timestamp.utc(1476316800.1) }
+    assert_equal('value must be an Integer', error.message)
   end
 
   def test_class_utc_sub_second_nil
-    assert_raises(ArgumentError) { Timestamp.utc(1476316800, nil) }
+    error = assert_raises(ArgumentError) { Timestamp.utc(1476316800, nil) }
+    assert_equal('sub_second must be a Rational or the Integer 0', error.message)
   end
 
   def test_class_utc_sub_second_not_integer_or_rational
-    assert_raises(ArgumentError) { Timestamp.utc(1476316800, 0.1) }
+    error = assert_raises(ArgumentError) { Timestamp.utc(1476316800, 0.1) }
+    assert_equal('sub_second must be a Rational or the Integer 0', error.message)
   end
 
   def test_class_utc_sub_second_integer_not_zero
-    assert_raises(ArgumentError) { Timestamp.utc(1476316800, 1) }
+    error = assert_raises(ArgumentError) { Timestamp.utc(1476316800, 1) }
+    assert_equal('sub_second must be a Rational or the Integer 0', error.message)
   end
 
   def test_class_utc_sub_second_less_than_zero
-    assert_raises(RangeError) { Timestamp.utc(1476316800, Rational(-1, 10)) }
+    error = assert_raises(RangeError) { Timestamp.utc(1476316800, Rational(-1, 10)) }
+    assert_equal('sub_second must be >= 0 and < 1', error.message)
   end
 
   def test_class_utc_sub_second_greater_than_one
-    assert_raises(RangeError) { Timestamp.utc(1476316800, Rational(11, 10)) }
+    error = assert_raises(RangeError) { Timestamp.utc(1476316800, Rational(11, 10)) }
+    assert_equal('sub_second must be >= 0 and < 1', error.message)
   end
 end

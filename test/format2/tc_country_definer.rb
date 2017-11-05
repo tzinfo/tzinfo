@@ -40,16 +40,20 @@ module Format2
 
     def test_shared_timezone_not_found
       cd = CountryDefiner.new({})
-      assert_raises(ArgumentError) { cd.timezone(:t1) }
+      error = assert_raises(ArgumentError) { cd.timezone(:t1) }
+      assert_equal("Unknown shared timezone: t1", error.message)
     end
 
     def test_missing_arguments
       cd = CountryDefiner.new({
         t1: CountryTimezone.new('Test/One',   Rational( 1, 2), Rational( 3, 4), nil)
       })
-      assert_raises(ArgumentError) { cd.timezone(:t1, 1) }
-      assert_raises(ArgumentError) { cd.timezone(:t1, 1, 2) }
-      assert_raises(ArgumentError) { cd.timezone(:t1, 1, 2, 3) }
+
+      1.upto(3) do |count|
+        args = [:t1] + 1.upto(count).to_a
+        error = assert_raises(ArgumentError) { cd.timezone(*args) }
+        assert_equal('Either just a reference should be supplied, or the identifier, latitude and longitude must all be specified', error.message)
+      end
     end
 
     def test_strings_frozen

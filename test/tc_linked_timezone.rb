@@ -72,7 +72,8 @@ class TCLinkedTimezone < Minitest::Test
   end
 
   def test_invalid_linked_identifier
-    assert_raises(InvalidTimezoneIdentifier) { LinkedTimezone.new(DataSources::LinkedTimezoneInfo.new('Test/Zone', 'Invalid/Identifier')) }
+    error = assert_raises(InvalidTimezoneIdentifier) { LinkedTimezone.new(DataSources::LinkedTimezoneInfo.new('Test/Zone', 'Invalid/Identifier')) }
+    assert_match(/\bInvalid\/Identifier\b/, error.message)
   end
 
   def test_period_for

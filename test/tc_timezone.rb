@@ -196,7 +196,8 @@ class TCTimezone < Minitest::Test
   end
 
   def test_get_nil
-    assert_raises(InvalidTimezoneIdentifier) { Timezone.get(nil) }
+    error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get(nil) }
+    assert_match(/\bnil\b/, error.message)
   end
 
   def test_get_case
@@ -264,24 +265,24 @@ class TCTimezone < Minitest::Test
   def test_new_no_args
     tz = Timezone.new
 
-    assert_raises(UnknownTimezone) { tz.identifier }
-    assert_raises(UnknownTimezone) { tz.friendly_identifier }
-    assert_raises(UnknownTimezone) { tz.now }
-    assert_raises(UnknownTimezone) { tz.current_period_and_time }
-    assert_raises(UnknownTimezone) { tz.canonical_identifier }
-    assert_raises(UnknownTimezone) { tz.canonical_zone }
+    assert_raises_unknown_timezone { tz.identifier }
+    assert_raises_unknown_timezone { tz.friendly_identifier }
+    assert_raises_unknown_timezone { tz.now }
+    assert_raises_unknown_timezone { tz.current_period_and_time }
+    assert_raises_unknown_timezone { tz.canonical_identifier }
+    assert_raises_unknown_timezone { tz.canonical_zone }
 
     time_types_test do |h|
       time = h.time(2006,1,1,1,0,0)
-      assert_raises(UnknownTimezone) { tz.utc_to_local(time) }
-      assert_raises(UnknownTimezone) { tz.to_local(time) }
-      assert_raises(UnknownTimezone) { tz.local_to_utc(time) }
-      assert_raises(UnknownTimezone) { tz.period_for(time) }
-      assert_raises(UnknownTimezone) { tz.period_for_utc(time) }
-      assert_raises(UnknownTimezone) { tz.periods_for_local(time) }
-      assert_raises(UnknownTimezone) { tz.period_for_local(time) }
-      assert_raises(UnknownTimezone) { tz.transitions_up_to(time) }
-      assert_raises(UnknownTimezone) { tz.offsets_up_to(time) }
+      assert_raises_unknown_timezone { tz.utc_to_local(time) }
+      assert_raises_unknown_timezone { tz.to_local(time) }
+      assert_raises_unknown_timezone { tz.local_to_utc(time) }
+      assert_raises_unknown_timezone { tz.period_for(time) }
+      assert_raises_unknown_timezone { tz.period_for_utc(time) }
+      assert_raises_unknown_timezone { tz.periods_for_local(time) }
+      assert_raises_unknown_timezone { tz.period_for_local(time) }
+      assert_raises_unknown_timezone { tz.transitions_up_to(time) }
+      assert_raises_unknown_timezone { tz.offsets_up_to(time) }
     end
   end
 
@@ -371,12 +372,12 @@ class TCTimezone < Minitest::Test
   end
 
   def test_identifier
-    assert_raises(UnknownTimezone) { Timezone.new.identifier }
+    assert_raises_unknown_timezone { Timezone.new.identifier }
     assert_equal('Europe/Paris', TestTimezone.new('Europe/Paris').identifier)
   end
 
   def test_name
-    assert_raises(UnknownTimezone) { Timezone.new.name }
+    assert_raises_unknown_timezone { Timezone.new.name }
     assert_equal('Europe/Paris', TestTimezone.new('Europe/Paris').name)
   end
 
@@ -451,7 +452,7 @@ class TCTimezone < Minitest::Test
     t = Time.utc(2004,4,4,2,30,0)
     tz = TestTimezone.new('America/New_York', nil, [], t)
 
-    assert_raises(PeriodNotFound) { tz.period_for_local(t) }
+    assert_raises_period_not_found(t) { tz.period_for_local(t) }
   end
 
   def test_period_for_local_ambiguous
@@ -469,7 +470,7 @@ class TCTimezone < Minitest::Test
 
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], t)
 
-    assert_raises(AmbiguousTime) { tz.period_for_local(t) }
+    assert_raises_ambiguous_time(t) { tz.period_for_local(t) }
   end
 
   def test_period_for_local_default_dst_set_true
@@ -492,7 +493,7 @@ class TCTimezone < Minitest::Test
     assert_equal(p1, tz.period_for_local(t))
     assert_equal(p1, tz.period_for_local(t, true))
     assert_equal(p2, tz.period_for_local(t, false))
-    assert_raises(AmbiguousTime) { tz.period_for_local(t, nil) }
+    assert_raises_ambiguous_time(t) { tz.period_for_local(t, nil) }
   end
 
   def test_period_for_local_default_dst_set_false
@@ -515,7 +516,7 @@ class TCTimezone < Minitest::Test
     assert_equal(p2, tz.period_for_local(t))
     assert_equal(p1, tz.period_for_local(t, true))
     assert_equal(p2, tz.period_for_local(t, false))
-    assert_raises(AmbiguousTime) { tz.period_for_local(t, nil) }
+    assert_raises_ambiguous_time(t) { tz.period_for_local(t, nil) }
   end
 
   def test_period_for_local_dst_flag_resolved
@@ -620,21 +621,22 @@ class TCTimezone < Minitest::Test
 
     tz = TestTimezone.new('America/New_York', nil, [p1, p2], t)
 
-    assert_raises(AmbiguousTime) do
+    assert_raises_ambiguous_time(t) do
       tz.period_for_local(t) {|periods| nil }
     end
 
-    assert_raises(AmbiguousTime) do
+    assert_raises_ambiguous_time(t) do
       tz.period_for_local(t) {|periods| periods }
     end
 
-    assert_raises(AmbiguousTime) do
+    assert_raises_ambiguous_time(t) do
       tz.period_for_local(t) {|periods| [] }
     end
 
-    assert_raises(AmbiguousTime) do
-      tz.period_for_local(t) {|periods| raise AmbiguousTime, 'Ambiguous time' }
+    error = assert_raises(AmbiguousTime) do
+      tz.period_for_local(t) {|periods| raise AmbiguousTime, 'Custom ambiguous time message' }
     end
+    assert_equal('Custom ambiguous time message', error.message)
   end
 
   def test_period_for_local_nil
@@ -899,7 +901,7 @@ class TCTimezone < Minitest::Test
     time_types_test do |h|
       t = h.time(2004,4,4,2,30,0)
       tz = TestTimezone.new('America/New_York', nil, [], Timestamp.new(Time.utc(2004,4,4,2,30,0).to_i))
-      assert_raises(PeriodNotFound) { tz.local_to_utc(t) }
+      assert_raises_period_not_found(t) { tz.local_to_utc(t) }
     end
   end
 
@@ -921,8 +923,8 @@ class TCTimezone < Minitest::Test
       tz1 = TestTimezone.new('America/New_York', nil, [p1, p2], Timestamp.new(Time.utc(2004,10,31,1,30,0).to_i))
       tz2 = TestTimezone.new('America/New_York', nil, [p1, p2], Timestamp.new(Time.utc(2004,10,31,1,30,0).to_i, Rational(501,1000000)))
 
-      assert_raises(AmbiguousTime) { tz1.local_to_utc(t1) }
-      assert_raises(AmbiguousTime) { tz2.local_to_utc(t2) }
+      assert_raises_ambiguous_time(t1) { tz1.local_to_utc(t1) }
+      assert_raises_ambiguous_time(t2) { tz2.local_to_utc(t2) }
     end
   end
 
@@ -930,7 +932,7 @@ class TCTimezone < Minitest::Test
     time_types_test do |h|
       t = h.time(2004,4,4,2,0,0)
       tz = TestTimezone.new('America/New_York', nil, [], Timestamp.new(Time.utc(2004,4,4,2,0,0).to_i))
-      assert_raises(PeriodNotFound) { tz.local_to_utc(t) }
+      assert_raises_period_not_found(t) { tz.local_to_utc(t) }
     end
   end
 
@@ -954,7 +956,7 @@ class TCTimezone < Minitest::Test
       assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t))
       assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t, true))
       assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t, false))
-      assert_raises(AmbiguousTime) { tz.local_to_utc(t, nil) }
+      assert_raises_ambiguous_time(t) { tz.local_to_utc(t, nil) }
       assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t) {|periods| raise BlockCalled, 'should not be called' })
     end
   end
@@ -979,7 +981,7 @@ class TCTimezone < Minitest::Test
       assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t))
       assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t, false))
       assert_equal_with_offset_and_class(h.time(2004,10,31,5,30,0,0,:utc), tz.local_to_utc(t, true))
-      assert_raises(AmbiguousTime) { tz.local_to_utc(t, nil) }
+      assert_raises_ambiguous_time(t) { tz.local_to_utc(t, nil) }
       assert_equal_with_offset_and_class(h.time(2004,10,31,6,30,0,0,:utc), tz.local_to_utc(t) {|periods| raise BlockCalled, 'should not be called' })
     end
   end
@@ -1094,10 +1096,11 @@ class TCTimezone < Minitest::Test
       t = h.time(2004,10,31,1,30,0)
       tz = TestTimezone.new('America/New_York', nil, [p1, p2], Timestamp.new(Time.utc(2004,10,31,1,30,0).to_i))
 
-      assert_raises(AmbiguousTime) { tz.local_to_utc(t) {|periods| nil} }
-      assert_raises(AmbiguousTime) { tz.local_to_utc(t) {|periods| periods} }
-      assert_raises(AmbiguousTime) { tz.local_to_utc(t) {|periods| []} }
-      assert_raises(AmbiguousTime) { tz.local_to_utc(t) {|periods| raise AmbiguousTime, 'Ambiguous time'} }
+      assert_raises_ambiguous_time(t) { tz.local_to_utc(t) {|periods| nil} }
+      assert_raises_ambiguous_time(t) { tz.local_to_utc(t) {|periods| periods} }
+      assert_raises_ambiguous_time(t) { tz.local_to_utc(t) {|periods| []} }
+      error = assert_raises(AmbiguousTime) { tz.local_to_utc(t) {|periods| raise AmbiguousTime, 'Custom ambiguous time message'} }
+      assert_equal('Custom ambiguous time message', error.message)
     end
   end
 
@@ -1232,7 +1235,8 @@ class TCTimezone < Minitest::Test
       tz = OffsetsUpToTestTimezone.new('Test/Zone', ts, ts, [])
       to = h.time(2012,8,1,0,0,0,0,0)
       from = h.time(2012,8,1,0,0,0,0,0)
-      assert_raises(ArgumentError) { tz.offsets_up_to(to, from) }
+      error = assert_raises(ArgumentError) { tz.offsets_up_to(to, from) }
+      assert_equal('to must be greater than from', error.message)
     end
   end
 
@@ -1242,7 +1246,7 @@ class TCTimezone < Minitest::Test
     time_types_test(:unspecified_offset) do |h|
       to = h.time(2012,8,1,0,0,0,0,nil)
       error = assert_raises(ArgumentError) { tz.offsets_up_to(to) }
-      assert_match(/\bto\b/, error.message)
+      assert_equal('to must have a specified utc_offset', error.message)
     end
   end
 
@@ -1253,14 +1257,14 @@ class TCTimezone < Minitest::Test
       to = h.time(2012,8,1,0,0,0,0,0)
       from = h.time(2012,1,1,0,0,0,0,nil)
       error = assert_raises(ArgumentError) { tz.offsets_up_to(to, from) }
-      assert_match(/\bfrom\b/, error.message)
+      assert_equal('from must have a specified utc_offset', error.message)
     end
   end
 
   def test_offsets_up_to_nil_to
     tz = OffsetsUpToTestTimezone.new('Test/Zone', nil, nil, [])
     error = assert_raises(ArgumentError) { tz.offsets_up_to(nil) }
-    assert_match(/\bto\b/, error.message)
+    assert_equal('to must not be nil', error.message)
   end
 
   def test_offsets_up_to_unsupported_to
@@ -1417,61 +1421,85 @@ class TCTimezone < Minitest::Test
   def test_get_missing_data_source
     DataSource.set(DataSource.new)
 
-    assert_raises(InvalidDataSource) do
+    error = assert_raises(InvalidDataSource) do
       Timezone.get('Europe/London')
     end
+    assert_equal('load_timezone_info not defined', error.message)
   end
 
   def test_all_missing_data_source
     DataSource.set(DataSource.new)
 
-    assert_raises(InvalidDataSource) do
+    error = assert_raises(InvalidDataSource) do
       Timezone.all
     end
+    assert_equal('timezone_identifiers not defined', error.message)
   end
 
   def test_all_identifiers_missing_data_source
     DataSource.set(DataSource.new)
 
-    assert_raises(InvalidDataSource) do
+    error = assert_raises(InvalidDataSource) do
       Timezone.all_identifiers
     end
+    assert_equal('timezone_identifiers not defined', error.message)
   end
 
   def test_all_data_zones_missing_data_source
     DataSource.set(DataSource.new)
 
-    assert_raises(InvalidDataSource) do
+    error = assert_raises(InvalidDataSource) do
       Timezone.all_data_zones
     end
+    assert_equal('data_timezone_identifiers not defined', error.message)
   end
 
   def test_all_data_zone_identifiers_missing_data_source
     DataSource.set(DataSource.new)
 
-    assert_raises(InvalidDataSource) do
+    error = assert_raises(InvalidDataSource) do
       Timezone.all_data_zone_identifiers
     end
+    assert_equal('data_timezone_identifiers not defined', error.message)
   end
 
   def test_all_linked_zones_missing_data_source
     DataSource.set(DataSource.new)
 
-    assert_raises(InvalidDataSource) do
+    error = assert_raises(InvalidDataSource) do
       Timezone.all_linked_zones
     end
+    assert_equal('linked_timezone_identifiers not defined', error.message)
   end
 
   def test_all_linked_zone_identifiers_missing_data_source
     DataSource.set(DataSource.new)
 
-    assert_raises(InvalidDataSource) do
+    error = assert_raises(InvalidDataSource) do
       Timezone.all_linked_zone_identifiers
     end
+    assert_equal('linked_timezone_identifiers not defined', error.message)
   end
 
   def test_inspect
     tz = TestTimezone.new('Europe/London')
     assert_equal('#<TCTimezone::TestTimezone: Europe/London>', tz.inspect)
+  end
+
+  private
+
+  def assert_raises_unknown_timezone(&block)
+    error = assert_raises(UnknownTimezone, &block)
+    assert_equal('TZInfo::Timezone should not be constructed directly (use TZInfo::Timezone.get instead)', error.message)
+  end
+
+  def assert_raises_ambiguous_time(time, &block)
+    error = assert_raises(AmbiguousTime, &block)
+    assert_equal("#{time.strftime('%Y-%m-%d %H:%M:%S')} is an ambiguous local time.", error.message)
+  end
+
+  def assert_raises_period_not_found(time, &block)
+    error = assert_raises(PeriodNotFound, &block)
+    assert_equal("#{time.strftime('%Y-%m-%d %H:%M:%S')} is an invalid local time.", error.message)
   end
 end

@@ -118,12 +118,14 @@ module DataSources
 
     def test_period_for_timestamp_with_unspecified_offset
       i = create_basic_info
-      assert_raises(ArgumentError) { i.period_for(Timestamp.for(Time.utc(2005,1,1,0,0,0), offset: :ignore)) }
+      error = assert_raises(ArgumentError) { i.period_for(Timestamp.for(Time.utc(2005,1,1,0,0,0), offset: :ignore)) }
+      assert_equal('timestamp must have a specified utc_offset', error.message)
     end
 
     def test_period_for_nil
       i = create_basic_info
-      assert_raises(ArgumentError) { i.period_for(nil) }
+      error = assert_raises(ArgumentError) { i.period_for(nil) }
+      assert_equal('timestamp must not be nil', error.message)
     end
 
     def test_periods_for_local
@@ -210,12 +212,14 @@ module DataSources
 
     def test_periods_for_local_timestamp_with_specified_offset
       i = create_basic_info
-      assert_raises(ArgumentError) { i.periods_for_local(Timestamp.for(Time.utc(2005,1,1,0,0,0))) }
+      error = assert_raises(ArgumentError) { i.periods_for_local(Timestamp.for(Time.utc(2005,1,1,0,0,0))) }
+      assert_equal('local_timestamp must have an unspecified utc_offset', error.message)
     end
 
     def test_periods_for_local_nil
       i = create_basic_info
-      assert_raises(ArgumentError) { i.periods_for_local(nil) }
+      error = assert_raises(ArgumentError) { i.periods_for_local(nil) }
+      assert_equal('local_timestamp must not be nil', error.message)
     end
 
     def test_transitions_up_to
@@ -286,7 +290,8 @@ module DataSources
       to = Timestamp.for(Time.utc(2012,8,1,0,0,0))
       from = Timestamp.for(Time.utc(2013,8,1,0,0,0))
 
-      assert_raises(ArgumentError) { i.transitions_up_to(to, from) }
+      error = assert_raises(ArgumentError) { i.transitions_up_to(to, from) }
+      assert_equal('to_timestamp must be greater than from_timestamp', error.message)
     end
 
     def test_transitions_up_to_to_not_greater_than_from_subsecond
@@ -295,7 +300,8 @@ module DataSources
       to = Timestamp.for(Time.utc(2012,8,1,0,0,0))
       from = Timestamp.for(Time.utc(2012,8,1,0,0,0,1))
 
-      assert_raises(ArgumentError) { i.transitions_up_to(to, from) }
+      error = assert_raises(ArgumentError) { i.transitions_up_to(to, from) }
+      assert_equal('to_timestamp must be greater than from_timestamp', error.message)
     end
 
     def test_transitions_up_to_to_timestamp_with_unspecified_offset
@@ -303,7 +309,8 @@ module DataSources
 
       to = Timestamp.for(Time.utc(2015,1,1,0,0,0), offset: :ignore)
 
-      assert_raises(ArgumentError) { i.transitions_up_to(to) }
+      error = assert_raises(ArgumentError) { i.transitions_up_to(to) }
+      assert_equal('to_timestamp must have a specified utc_offset', error.message)
     end
 
     def test_transitions_up_to_from_timestamp_with_unspecified_offset
@@ -312,12 +319,14 @@ module DataSources
       to = Timestamp.for(Time.utc(2015,1,1,0,0,0))
       from = Timestamp.for(Time.utc(2014,1,1,0,0,0), offset: :ignore)
 
-      assert_raises(ArgumentError) { i.transitions_up_to(to, from) }
+      error = assert_raises(ArgumentError) { i.transitions_up_to(to, from) }
+      assert_equal('from_timestamp must have a specified utc_offset', error.message)
     end
 
     def test_transitions_up_to_to_timestamp_nil
       i = create_basic_info
-      assert_raises(ArgumentError) { i.transitions_up_to(nil) }
+      error = assert_raises(ArgumentError) { i.transitions_up_to(nil) }
+      assert_equal('to_timestamp must not be nil', error.message)
     end
 
     def test_inspect
