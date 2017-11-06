@@ -2,7 +2,6 @@ language: ruby
 dist: trusty
 sudo: false
 before_install:
-  - if [[ $TRAVIS_RUBY_VERSION = rbx-3.86 ]]; then gem update --system 2.6.14; fi
   - gem update bundler
 before_script:
   - bundle update
@@ -23,3 +22,4 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head
+    - rvm: rbx-3.86
