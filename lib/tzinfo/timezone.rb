@@ -3,7 +3,7 @@
 require 'set'
 
 module TZInfo
-  # AmbiguousTime is raised to indicates that a specified time in a local
+  # AmbiguousTime is raised to indicate that a specified time in a local
   # timezone has more than one possible equivalent UTC time. This happens when
   # transitioning from daylight savings time to standard time where the clocks
   # are rolled back.
