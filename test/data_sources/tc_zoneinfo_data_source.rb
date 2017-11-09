@@ -413,22 +413,18 @@ module DataSources
       assert_kind_of(Errno::ENOENT, error.cause) if error.respond_to?(:cause)
     end
 
-    # Reading attempting to read a child entry of a file on JRuby 9.1.12.0
-    # raises a Java::JavaLang::Runtime exception instead of Errno::EISDIR.
-    unless RUBY_ENGINE == 'jruby'
-      def test_load_timezone_info_path_component_not_dir
-        # Override the index so that an attempt is made to load the file.
-        def @data_source.valid_timezone_identifier?(identifier)
-          identifier == 'UTC/File' ? 'UTC/File' : nil
-        end
-
-        error = assert_raises(InvalidTimezoneIdentifier) do
-          @data_source.send(:load_timezone_info, 'UTC/File')
-        end
-
-        assert_match(/\bUTC\/File\b/, error.message)
-        assert_kind_of(Errno::ENOTDIR, error.cause) if error.respond_to?(:cause)
+    def test_load_timezone_info_path_component_not_dir
+      # Override the index so that an attempt is made to load the file.
+      def @data_source.valid_timezone_identifier?(identifier)
+        identifier == 'UTC/File' ? 'UTC/File' : nil
       end
+
+      error = assert_raises(InvalidTimezoneIdentifier) do
+        @data_source.send(:load_timezone_info, 'UTC/File')
+      end
+
+      assert_match(/\bUTC\/File\b/, error.message)
+      assert_kind_of(Errno::ENOTDIR, error.cause) if error.respond_to?(:cause)
     end
 
     def test_load_timezone_info_name_to_long
@@ -517,30 +513,27 @@ module DataSources
       end
     end
 
-    # Reading a directory hangs on JRuby 9.1.12.0 instead of raising Errno::EISDIR.
-    unless RUBY_ENGINE == 'jruby'
-      def test_load_timezone_info_file_is_directory
-        Dir.mktmpdir('tzinfo_test') do |dir|
-          FileUtils.touch(File.join(dir, 'zone.tab'))
-          FileUtils.touch(File.join(dir, 'iso3166.tab'))
+    def test_load_timezone_info_file_is_directory
+      Dir.mktmpdir('tzinfo_test') do |dir|
+        FileUtils.touch(File.join(dir, 'zone.tab'))
+        FileUtils.touch(File.join(dir, 'iso3166.tab'))
 
-          subdir = File.join(dir, 'Subdir')
-          FileUtils.mkdir(subdir)
+        subdir = File.join(dir, 'Subdir')
+        FileUtils.mkdir(subdir)
 
-          data_source = ZoneinfoDataSource.new(dir)
+        data_source = ZoneinfoDataSource.new(dir)
 
-          # Override the index so that an attempt is made to load the file.
-          def data_source.valid_timezone_identifier?(identifier)
-            identifier == 'Subdir' ? 'Subdir' : nil
-          end
-
-          error = assert_raises(InvalidTimezoneIdentifier) do
-            data_source.send(:load_timezone_info, 'Subdir')
-          end
-
-          assert_match(/\bSubdir\b/, error.message)
-          assert_kind_of(Errno::EISDIR, error.cause) if error.respond_to?(:cause)
+        # Override the index so that an attempt is made to load the file.
+        def data_source.valid_timezone_identifier?(identifier)
+          identifier == 'Subdir' ? 'Subdir' : nil
         end
+
+        error = assert_raises(InvalidTimezoneIdentifier) do
+          data_source.send(:load_timezone_info, 'Subdir')
+        end
+
+        assert_match(/\bSubdir\b/, error.message)
+        assert_kind_of(Errno::EISDIR, error.cause) if error.respond_to?(:cause)
       end
     end
 
