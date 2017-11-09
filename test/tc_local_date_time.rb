@@ -195,7 +195,7 @@ class TCLocalDateTime < Minitest::Test
   def new_start_wrapper_test(method, start)
     p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, :TEST))
     ldt = localized_date_time(2017,1,15,23,0,1,p)
-    result = ldt.send(method)
+    result = ldt.public_send(method)
     assert_equal(start, result.start)
     assert_same(p, result.period)
   end
@@ -234,12 +234,12 @@ class TCLocalDateTime < Minitest::Test
     ldt = localized_date_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
     method = "#{type}_#{unit}"
 
-    no_args = ldt.send(method)
-    assert_equal_with_offset(dt.send(method), no_args)
+    no_args = ldt.public_send(method)
+    assert_equal_with_offset(dt.public_send(method), no_args)
     assert_nil(no_args.period)
 
-    args = ldt.send(method, 2)
-    assert_equal_with_offset(dt.send(method, 2), args)
+    args = ldt.public_send(method, 2)
+    assert_equal_with_offset(dt.public_send(method, 2), args)
     assert_nil(args.period)
   end
 

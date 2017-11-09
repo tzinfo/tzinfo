@@ -310,22 +310,22 @@ class TCDataSource < Minitest::Test
     assert(1, ds.called)
   end
 
-  def abstract_test(method, *args)
+  def abstract_test(method, public, *args)
     ds = DataSource.new
-    error = assert_raises(InvalidDataSource) { ds.send(*([method] + args)) }
+    error = assert_raises(InvalidDataSource) { ds.public_send(*([public ? :public_send : :send, method] + args)) }
     assert_equal("#{method} not defined", error.message)
   end
 
   def test_timezone_identifiers
-    abstract_test(:timezone_identifiers)
+    abstract_test(:timezone_identifiers, true)
   end
 
   def test_data_timezone_identifiers
-    abstract_test(:data_timezone_identifiers)
+    abstract_test(:data_timezone_identifiers, true)
   end
 
   def test_linked_timezone_identifiers
-    abstract_test(:linked_timezone_identifiers)
+    abstract_test(:linked_timezone_identifiers, true)
   end
 
   def test_get_country_info
@@ -343,7 +343,7 @@ class TCDataSource < Minitest::Test
   end
 
   def test_country_codes
-    abstract_test(:country_codes)
+    abstract_test(:country_codes, true)
   end
 
   def test_to_s
@@ -355,11 +355,11 @@ class TCDataSource < Minitest::Test
   end
 
   def test_load_timezone_info
-    abstract_test(:load_timezone_info, 'Test/Identifier')
+    abstract_test(:load_timezone_info, false, 'Test/Identifier')
   end
 
   def test_load_country_info
-    abstract_test(:load_country_info, 'CC')
+    abstract_test(:load_country_info, false, 'CC')
   end
 
   def test_valid_timezone_identifier
