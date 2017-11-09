@@ -1285,29 +1285,59 @@ class TCTimezone < Minitest::Test
   end
 
   def test_now
-    result = Timezone.get('Europe/London').now
-    assert_kind_of(LocalTime, result)
-    assert_kind_of(TimezonePeriod, result.period)
+    o1 = TimezoneOffset.new(0, 0, :GMT)
+    o2 = TimezoneOffset.new(0, 3600, :BST)
+
+    period = TransitionsTimezonePeriod.new(
+      TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+      TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+
+    now = Time.utc(2005,6,18,16,24,23).localtime
+
+    tz = TestTimezone.new('Europe/London', period, [], Timestamp.for(now))
+
+    Time.stub(:now, now) do
+      assert_equal_with_offset_and_period(LocalTime.new(2005,6,18,17,24,23,3600).localize(period), tz.now)
+    end
   end
 
   def test_current_period
-    assert_kind_of(TimezonePeriod, Timezone.get('Europe/London').current_period)
+    o1 = TimezoneOffset.new(0, 0, :GMT)
+    o2 = TimezoneOffset.new(0, 3600, :BST)
+
+    period = TransitionsTimezonePeriod.new(
+      TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+      TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+
+    now = Time.utc(2005,6,18,16,24,23).localtime
+
+    tz = TestTimezone.new('Europe/London', period, [], now)
+
+    Time.stub(:now, now) do
+      assert_same(period, tz.current_period)
+    end
   end
 
-  def test_current_period_and_time
-    current = Timezone.get('Europe/London').current_period_and_time
-    assert_equal(2, current.length)
-    assert_kind_of(LocalTime, current[0])
-    assert_kind_of(TimezonePeriod, current[0].period)
-    assert_kind_of(TimezonePeriod, current[1])
-  end
+  [:current_period_and_time, :current_time_and_period].each do |method|
+    define_method("test_#{method}") do
+      o1 = TimezoneOffset.new(0, 0, :GMT)
+      o2 = TimezoneOffset.new(0, 3600, :BST)
 
-  def test_current_time_and_period
-    current = Timezone.get('Europe/London').current_time_and_period
-    assert_equal(2, current.length)
-    assert_kind_of(LocalTime, current[0])
-    assert_kind_of(TimezonePeriod, current[0].period)
-    assert_kind_of(TimezonePeriod, current[1])
+      period = TransitionsTimezonePeriod.new(
+        TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+        TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+
+      now = Time.utc(2005,6,18,16,24,23).localtime
+
+      tz = TestTimezone.new('Europe/London', period, [], Timestamp.for(now))
+
+      Time.stub(:now, now) do
+        current = tz.public_send(method)
+        assert_equal(2, current.length)
+        assert_equal_with_offset_and_period(LocalTime.new(2005,6,18,17,24,23,3600).localize(period), current.first)
+        assert_same(period, current.last)
+      end
+    end
   end
 
   def test_compare
