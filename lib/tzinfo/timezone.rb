@@ -639,20 +639,21 @@ module TZInfo
     end
 
     private
-      # Returns an array of proxies corresponding to the given array of
-      # identifiers.
-      def self.get_proxies(identifiers)
-        identifiers.collect {|identifier| get_proxy(identifier)}
-      end
 
-      # Returns the current DataSource.
-      def self.data_source
-        DataSource.get
-      end
+    # Returns an array of proxies corresponding to the given array of
+    # identifiers.
+    def self.get_proxies(identifiers)
+      identifiers.collect {|identifier| get_proxy(identifier)}
+    end
 
-      # Raises an UnknownTimezone exception.
-      def raise_unknown_timezone
-        raise UnknownTimezone, 'TZInfo::Timezone should not be constructed directly (use TZInfo::Timezone.get instead)'
-      end
+    # Returns the current DataSource.
+    def self.data_source
+      DataSource.get
+    end
+
+    # Raises an UnknownTimezone exception.
+    def raise_unknown_timezone
+      raise UnknownTimezone, 'TZInfo::Timezone should not be constructed directly (use TZInfo::Timezone.get instead)'
+    end
   end
 end

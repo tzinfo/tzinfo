@@ -90,12 +90,13 @@ module TZInfo
     end
 
     private
-      def real_timezone
-        # Thread-safety: It is possible that the value of @real_timezone may be
-        # calculated multiple times in concurrently executing threads. It is not
-        # worth the overhead of locking to ensure that @real_timezone is only
-        # calculated once.
-        @real_timezone ||= Timezone.get(@identifier)
-      end
+
+    def real_timezone
+      # Thread-safety: It is possible that the value of @real_timezone may be
+      # calculated multiple times in concurrently executing threads. It is not
+      # worth the overhead of locking to ensure that @real_timezone is only
+      # calculated once.
+      @real_timezone ||= Timezone.get(@identifier)
+    end
   end
 end

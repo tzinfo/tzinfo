@@ -142,9 +142,10 @@ module TZInfo
     end
 
     private
-      # Returns the current DataSource
-      def self.data_source
-        DataSource.get
-      end
+
+    # Returns the current DataSource
+    def self.data_source
+      DataSource.get
+    end
   end
 end

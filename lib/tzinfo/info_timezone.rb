@@ -15,9 +15,10 @@ module TZInfo
     end
 
     protected
-      # The DataSources::TimezoneInfo for this Timezone.
-      def info
-        @info
-      end
+
+    # The DataSources::TimezoneInfo for this Timezone.
+    def info
+      @info
+    end
   end
 end
