@@ -83,7 +83,6 @@ module TZInfo
     # implementing the following methods:
     #
     # * \load_timezone_info
-    # * \timezone_identifiers
     # * \data_timezone_identifiers
     # * \linked_timezone_identifiers
     # * \load_country_info
@@ -153,7 +152,11 @@ module TZInfo
     # Returns a frozen array of all the available timezone identifiers. The
     # identifiers are sorted according to String#<=>.
     def timezone_identifiers
-      raise_invalid_data_source('timezone_identifiers')
+      # Thread-safety: It is possible that the value of @timezone_identifiers
+      # may be calculated multiple times in concurrently executing threads. It
+      # is not worth the overhead of locking to ensure that
+      # @timezone_identifiers is only calculated once.
+      @timezone_identifiers ||= build_timezone_identifiers
     end
 
     # Returns a frozen array of all the available timezone identifiers for data
@@ -216,7 +219,7 @@ module TZInfo
     end
 
     # If the given identifier is contained within the timezone_identifiers
-    # Array, the String instance representing identifier from that Array is
+    # Array, the String instance representing that identifier from that Array is
     # returned. Otherwise, nil is returned.
     #
     # A binary search is performed to locate the identifier within the Array.
@@ -269,6 +272,12 @@ module TZInfo
 
     def raise_invalid_data_source(method_name)
       raise InvalidDataSource, "#{method_name} not defined"
+    end
+
+    def build_timezone_identifiers
+      data = data_timezone_identifiers
+      linked = linked_timezone_identifiers
+      linked.empty? ? data : (data + linked).sort!.freeze
     end
   end
 end

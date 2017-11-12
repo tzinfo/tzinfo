@@ -16,12 +16,6 @@ module Format1
       m.send(:timezone, 'Another/Zone')
       m.send(:linked_timezone, 'And/Yet/Another')
 
-      timezones = m.timezones
-      assert_equal(['And/Yet/Another', 'Another/Zone', 'Test/One', 'Test/Three', 'Test/Two'], timezones)
-      assert(timezones.frozen?)
-      assert(timezones.all?(&:frozen?))
-      assert_same(timezones, m.timezones)
-
       data_timezones = m.data_timezones
       assert_equal(['Another/Zone', 'Test/One', 'Test/Two'], data_timezones)
       assert(data_timezones.frozen?)
@@ -43,12 +37,6 @@ module Format1
       m.send(:timezone, 'Test/A/Two')
       m.send(:timezone, 'Test/A/Three')
 
-      timezones = m.timezones
-      assert_equal(['Test/A/One', 'Test/A/Three', 'Test/A/Two'], timezones)
-      assert(timezones.frozen?)
-      assert(timezones.all?(&:frozen?))
-      assert_same(timezones, m.timezones)
-
       data_timezones = m.data_timezones
       assert_equal(['Test/A/One', 'Test/A/Three', 'Test/A/Two'], data_timezones)
       assert(data_timezones.frozen?)
@@ -69,12 +57,6 @@ module Format1
       m.send(:linked_timezone, 'Test/B/Two')
       m.send(:linked_timezone, 'Test/B/Three')
 
-      timezones = m.timezones
-      assert_equal(['Test/B/One', 'Test/B/Three', 'Test/B/Two'], timezones)
-      assert(timezones.frozen?)
-      assert(timezones.all?(&:frozen?))
-      assert_same(timezones, m.timezones)
-
       data_timezones = m.data_timezones
       assert_equal([], data_timezones)
       assert(data_timezones.frozen?)
@@ -90,11 +72,6 @@ module Format1
     def test_none
       m = Module.new
       m.send(:include, TimezoneIndexDefinition)
-
-      timezones = m.timezones
-      assert_equal([], timezones)
-      assert(timezones.frozen?)
-      assert_same(timezones, m.timezones)
 
       data_timezones = m.data_timezones
       assert_equal([], data_timezones)

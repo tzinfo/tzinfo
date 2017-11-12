@@ -22,10 +22,6 @@ module TZInfo
       #
       # @private
       module ClassMethods #:nodoc:
-        # Returns a frozen array containing the identifiers of all the
-        # timezones. Identifiers are sorted according to String#<=>.
-        attr_reader :timezones
-
         # Returns a frozen array containing the identifiers of all data
         # timezones. Identifiers are sorted according to String#<=>.
         attr_reader :data_timezones
@@ -41,7 +37,6 @@ module TZInfo
           yield definer
           @data_timezones = definer.data_timezones.sort!.freeze
           @linked_timezones = definer.linked_timezones.sort!.freeze
-          @timezones = (@data_timezones + @linked_timezones).sort!.freeze
         end
       end
     end

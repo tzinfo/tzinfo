@@ -21,15 +21,6 @@ module TZInfo
       #
       # @private
       module ClassMethods #:nodoc:
-        # Returns a frozen array containing the identifiers of all the timezones.
-        # Identifiers are sorted according to String#<=>.
-        def timezones
-          unless @timezones.frozen?
-            @timezones = @timezones.sort.freeze
-          end
-          @timezones
-        end
-
         # Returns a frozen array containing the identifiers of all data timezones.
         # Identifiers are sorted according to String#<=>.
         def data_timezones

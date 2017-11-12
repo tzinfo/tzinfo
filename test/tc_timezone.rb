@@ -1463,7 +1463,7 @@ class TCTimezone < Minitest::Test
     error = assert_raises(InvalidDataSource) do
       Timezone.all
     end
-    assert_equal('timezone_identifiers not defined', error.message)
+    assert_match(/\A(data|linked)_timezone_identifiers not defined\z/, error.message)
   end
 
   def test_all_identifiers_missing_data_source
@@ -1472,7 +1472,7 @@ class TCTimezone < Minitest::Test
     error = assert_raises(InvalidDataSource) do
       Timezone.all_identifiers
     end
-    assert_equal('timezone_identifiers not defined', error.message)
+    assert_match(/\A(data|linked)_timezone_identifiers not defined\z/, error.message)
   end
 
   def test_all_data_zones_missing_data_source

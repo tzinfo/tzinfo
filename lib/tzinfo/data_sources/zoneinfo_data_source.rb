@@ -141,9 +141,6 @@ module TZInfo
       # The zoneinfo directory being used.
       attr_reader :zoneinfo_dir
 
-      # Returns an array of all the available timezone identifiers.
-      attr_reader :timezone_identifiers
-
       # Returns an array of all the available ISO 3166-1 alpha-2 country codes.
       attr_reader :country_codes
 
@@ -201,8 +198,9 @@ module TZInfo
         @zoneinfo_reader = ZoneinfoReader.new
       end
 
-      # Returns an array of all the available timezone identifiers for
-      # data timezones (i.e. those that actually contain definitions).
+      # Returns a frozen array of all the available timezone identifiers for
+      # data timezones (i.e. those that actually contain definitions). The
+      # identifiers are sorted according to String#<=>.
       #
       # For ZoneinfoDataSource, this will always be identical to
       # timezone_identifers.
@@ -210,8 +208,9 @@ module TZInfo
         @timezone_identifiers
       end
 
-      # Returns an array of all the available timezone identifiers that
-      # are links to other timezones.
+      # Returns a frozen array of all the available timezone identifiers that
+      # are links to other timezones. The identifiers are sorted according to
+      # String#<=>.
       #
       # For ZoneinfoDataSource, this will always be an empty array.
       def linked_timezone_identifiers

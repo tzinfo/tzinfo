@@ -19,12 +19,6 @@ module Format2
         i.linked_timezone 'And/Yet/Another'
       end
 
-      timezones = m.timezones
-      assert_equal(['And/Yet/Another', 'Another/Zone', 'Test/One', 'Test/Three', 'Test/Two'], timezones)
-      assert(timezones.frozen?)
-      assert(timezones.all?(&:frozen?))
-      assert_same(timezones, m.timezones)
-
       data_timezones = m.data_timezones
       assert_equal(['Another/Zone', 'Test/One', 'Test/Two'], data_timezones)
       assert(data_timezones.frozen?)
@@ -49,12 +43,6 @@ module Format2
         i.data_timezone 'Test/A/Three'
       end
 
-      timezones = m.timezones
-      assert_equal(['Test/A/One', 'Test/A/Three', 'Test/A/Two'], timezones)
-      assert(timezones.frozen?)
-      assert(timezones.all?(&:frozen?))
-      assert_same(timezones, m.timezones)
-
       data_timezones = m.data_timezones
       assert_equal(['Test/A/One', 'Test/A/Three', 'Test/A/Two'], data_timezones)
       assert(data_timezones.frozen?)
@@ -78,12 +66,6 @@ module Format2
         i.linked_timezone 'Test/B/Three'
       end
 
-      timezones = m.timezones
-      assert_equal(['Test/B/One', 'Test/B/Three', 'Test/B/Two'], timezones)
-      assert(timezones.frozen?)
-      assert(timezones.all?(&:frozen?))
-      assert_same(timezones, m.timezones)
-
       data_timezones = m.data_timezones
       assert_equal([], data_timezones)
       assert(data_timezones.frozen?)
@@ -104,11 +86,6 @@ module Format2
         assert_kind_of(TimezoneIndexDefiner, i)
       end
 
-      timezones = m.timezones
-      assert_equal([], timezones)
-      assert(timezones.frozen?)
-      assert_same(timezones, m.timezones)
-
       data_timezones = m.data_timezones
       assert_equal([], data_timezones)
       assert(data_timezones.frozen?)
@@ -123,11 +100,6 @@ module Format2
     def test_not_defined
       m = Module.new
       m.send(:include, TimezoneIndexDefinition)
-
-      timezones = m.timezones
-      assert_equal([], timezones)
-      assert(timezones.frozen?)
-      assert_same(timezones, m.timezones)
 
       data_timezones = m.data_timezones
       assert_equal([], data_timezones)

@@ -148,7 +148,7 @@ module DataSources
 
     def test_timezone_identifiers
       all = @data_source.timezone_identifiers
-      assert_same(TZInfo::Data::Indexes::Timezones.timezones, all)
+      assert_equal((TZInfo::Data::Indexes::Timezones.data_timezones + TZInfo::Data::Indexes::Timezones.linked_timezones).sort, all)
       assert(all.frozen?)
       assert(all.all?(&:frozen?))
     end

@@ -41,6 +41,28 @@ class TCDataSource < Minitest::Test
     end
   end
 
+  class GetTimezoneIdentifiersTestDataSource < DataSource
+    attr_reader :data_timezone_identifiers_called
+    attr_reader :linked_timezone_identifiers_called
+
+    def initialize(data_timezone_identifiers, linked_timezone_identifiers)
+      @data_timezone_identifiers = data_timezone_identifiers
+      @linked_timezone_identifiers = linked_timezone_identifiers
+      @data_timezone_identifiers_called = 0
+      @linked_timezone_identifiers_called = 0
+    end
+
+    def data_timezone_identifiers
+      @data_timezone_identifiers_called += 1
+      @data_timezone_identifiers
+    end
+
+    def linked_timezone_identifiers
+      @linked_timezone_identifiers_called += 1
+      @linked_timezone_identifiers
+    end
+  end
+
   class ValidTimezoneIdentifierTestDataSource < DataSource
     attr_reader :timezone_identifiers
 
@@ -310,14 +332,48 @@ class TCDataSource < Minitest::Test
     assert(1, ds.called)
   end
 
+  def test_timezone_identifiers
+    ds = GetTimezoneIdentifiersTestDataSource.new(['Test/Aaa', 'Test/Ccc'], ['Test/Bbb'])
+    result = ds.timezone_identifiers
+    assert_kind_of(Array, result)
+    assert_equal(['Test/Aaa', 'Test/Bbb', 'Test/Ccc'], result)
+    assert(result.frozen?)
+    assert(result.all?(&:frozen?))
+    assert_equal(1, ds.data_timezone_identifiers_called)
+    assert_equal(1, ds.linked_timezone_identifiers_called)
+  end
+
+  def test_timezone_identifiers_caches_result
+    ds = GetTimezoneIdentifiersTestDataSource.new(['Test/Aaa', 'Test/Ccc'], ['Test/Bbb'])
+    result = ds.timezone_identifiers
+    assert_same(result, ds.timezone_identifiers)
+    assert_equal(1, ds.data_timezone_identifiers_called)
+    assert_equal(1, ds.linked_timezone_identifiers_called)
+  end
+
+  def test_timezone_identifiers_returns_data_array_if_linked_is_empty
+    data_identifiers = ['Test/Aaa'.freeze, 'Test/Ccc'.freeze].freeze
+    ds = GetTimezoneIdentifiersTestDataSource.new(data_identifiers, [])
+    result = ds.timezone_identifiers
+    assert_same(data_identifiers, result)
+    assert_equal(1, ds.data_timezone_identifiers_called)
+    assert_equal(1, ds.linked_timezone_identifiers_called)
+  end
+
+  def test_timezone_identifiers_caches_result_if_linked_is_empty
+    data_identifiers = ['Test/Aaa'.freeze, 'Test/Ccc'.freeze].freeze
+    ds = GetTimezoneIdentifiersTestDataSource.new(data_identifiers, [])
+    result = ds.timezone_identifiers
+    assert_same(data_identifiers, result)
+    assert_same(data_identifiers, ds.timezone_identifiers)
+    assert_equal(1, ds.data_timezone_identifiers_called)
+    assert_equal(1, ds.linked_timezone_identifiers_called)
+  end
+
   def abstract_test(method, public, *args)
     ds = DataSource.new
     error = assert_raises(InvalidDataSource) { ds.public_send(*([public ? :public_send : :send, method] + args)) }
     assert_equal("#{method} not defined", error.message)
-  end
-
-  def test_timezone_identifiers
-    abstract_test(:timezone_identifiers, true)
   end
 
   def test_data_timezone_identifiers

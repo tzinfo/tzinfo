@@ -35,19 +35,16 @@ module TZInfo
         @country_codes = Data::Indexes::Countries.countries.keys.sort!.freeze
       end
 
-      # Returns an array of all the available timezone identifiers.
-      def timezone_identifiers
-        Data::Indexes::Timezones.timezones
-      end
-
-      # Returns an array of all the available timezone identifiers for
-      # data timezones (i.e. those that actually contain definitions).
+      # Returns a frozen array of all the available timezone identifiers for
+      # data timezones (i.e. those that actually contain definitions). The
+      # identifiers are sorted according to String#<=>.
       def data_timezone_identifiers
         Data::Indexes::Timezones.data_timezones
       end
 
-      # Returns an array of all the available timezone identifiers that
-      # are links to other timezones.
+      # Returns a frozen array of all the available timezone identifiers that
+      # are links to other timezones. The identifiers are sorted according to
+      # String#<=>.
       def linked_timezone_identifiers
         Data::Indexes::Timezones.linked_timezones
       end
