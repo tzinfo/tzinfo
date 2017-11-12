@@ -46,8 +46,8 @@ class TCDataSource < Minitest::Test
     attr_reader :linked_timezone_identifiers_called
 
     def initialize(data_timezone_identifiers, linked_timezone_identifiers)
-      @data_timezone_identifiers = data_timezone_identifiers
-      @linked_timezone_identifiers = linked_timezone_identifiers
+      @data_timezone_identifiers = data_timezone_identifiers.each {|i| i.freeze}.freeze
+      @linked_timezone_identifiers = linked_timezone_identifiers.each {|i| i.freeze}.freeze
       @data_timezone_identifiers_called = 0
       @linked_timezone_identifiers_called = 0
     end
@@ -352,7 +352,7 @@ class TCDataSource < Minitest::Test
   end
 
   def test_timezone_identifiers_returns_data_array_if_linked_is_empty
-    data_identifiers = ['Test/Aaa'.freeze, 'Test/Ccc'.freeze].freeze
+    data_identifiers = ['Test/Aaa', 'Test/Ccc']
     ds = GetTimezoneIdentifiersTestDataSource.new(data_identifiers, [])
     result = ds.timezone_identifiers
     assert_same(data_identifiers, result)
@@ -361,7 +361,7 @@ class TCDataSource < Minitest::Test
   end
 
   def test_timezone_identifiers_caches_result_if_linked_is_empty
-    data_identifiers = ['Test/Aaa'.freeze, 'Test/Ccc'.freeze].freeze
+    data_identifiers = ['Test/Aaa', 'Test/Ccc']
     ds = GetTimezoneIdentifiersTestDataSource.new(data_identifiers, [])
     result = ds.timezone_identifiers
     assert_same(data_identifiers, result)

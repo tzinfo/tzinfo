@@ -5,11 +5,9 @@ raise 'Tests must be run with bundler, e.g. bundle exec rake test' unless define
 COVERAGE_ENABLED = ENV['TEST_COVERAGE'] == '1'
 
 if COVERAGE_ENABLED && defined?(COVERAGE_TYPE)
-  COVERAGE_NOCOV_TOKEN = if [].respond_to?(:bsearch_index)
-    'nocov(_bsearch_index)?'
-  else
-    'nocov(_no_bsearch_index)?'
-  end
+  COVERAGE_NOCOV_TOKEN = 'nocov' + [[[], :bsearch], [[], :bsearch_index]].map do |object, method|
+    "(#{object.respond_to?(method) ? '' : '_no'}_#{method})?"
+  end.join
 
   require 'simplecov'
 

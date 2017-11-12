@@ -218,34 +218,54 @@ module TZInfo
       raise_invalid_data_source('load_country_info')
     end
 
-    # If the given identifier is contained within the timezone_identifiers
-    # Array, the String instance representing that identifier from that Array is
-    # returned. Otherwise, nil is returned.
-    #
-    # A binary search is performed to locate the identifier within the Array.
-    # The identifiers in the Array must be sorted according to String#<=>.
-    def valid_timezone_identifier?(identifier)
-      return nil unless identifier.kind_of?(String)
-
-      identifiers = timezone_identifiers
-      low = 0
-      high = identifiers.length
-
-      while low < high do
-        mid = (low + high).div(2)
-        mid_identifier = identifiers[mid]
-        cmp = mid_identifier <=> identifier
-
-        return mid_identifier if cmp == 0
-
-        if cmp > 0
-          high = mid
-        else
-          low = mid + 1
-        end
+    if [].respond_to?(:bsearch)
+      # If the given identifier is contained within the timezone_identifiers
+      # Array, the String instance representing that identifier from that Array
+      # is returned. Otherwise, nil is returned.
+      #
+      # A binary search is performed to locate the identifier within the Array.
+      # The identifiers in the Array must be sorted according to String#<=>.
+      #
+      # :nocov_no_bsearch:
+      def valid_timezone_identifier?(identifier)
+        return nil unless identifier.kind_of?(String)
+        result = timezone_identifiers.bsearch {|i| i >= identifier }
+        result == identifier ? result : nil
       end
+      # :nocov_no_bsearch:
+    else
+      # If the given identifier is contained within the timezone_identifiers
+      # Array, the String instance representing that identifier from that Array
+      # is returned. Otherwise, nil is returned.
+      #
+      # A binary search is performed to locate the identifier within the Array.
+      # The identifiers in the Array must be sorted according to String#<=>.
+      #
+      # :nocov_bsearch:
+      def valid_timezone_identifier?(identifier)
+        return nil unless identifier.kind_of?(String)
 
-      nil
+        identifiers = timezone_identifiers
+        low = 0
+        high = identifiers.length
+
+        while low < high do
+          mid = (low + high).div(2)
+          mid_identifier = identifiers[mid]
+          cmp = mid_identifier <=> identifier
+
+          return mid_identifier if cmp == 0
+
+          if cmp > 0
+            high = mid
+          else
+            low = mid + 1
+          end
+        end
+
+        nil
+      end
+      # :nocov_bsearch:
     end
 
     private
