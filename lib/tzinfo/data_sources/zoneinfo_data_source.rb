@@ -234,22 +234,18 @@ module TZInfo
       # identifier is invalid.
       def load_timezone_info(identifier)
         begin
-          valid_identifier = valid_timezone_identifier?(identifier)
-          if valid_identifier
-            path = File.join(@zoneinfo_dir, valid_identifier)
+          valid_identifier = validate_timezone_identifier(identifier)
+          path = File.join(@zoneinfo_dir, valid_identifier)
 
-            begin
-              zoneinfo = @zoneinfo_reader.read(path)
-              if zoneinfo.kind_of?(TimezoneOffset)
-                ConstantOffsetDataTimezoneInfo.new(valid_identifier, zoneinfo)
-              else
-                TransitionsDataTimezoneInfo.new(valid_identifier, zoneinfo)
-              end
-            rescue InvalidZoneinfoFile => e
-              raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
+          begin
+            zoneinfo = @zoneinfo_reader.read(path)
+            if zoneinfo.kind_of?(TimezoneOffset)
+              ConstantOffsetDataTimezoneInfo.new(valid_identifier, zoneinfo)
+            else
+              TransitionsDataTimezoneInfo.new(valid_identifier, zoneinfo)
             end
-          else
-            raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier.nil? ? 'nil' : identifier}"
+          rescue InvalidZoneinfoFile => e
+            raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
           end
         rescue Errno::EISDIR, Errno::ENAMETOOLONG, Errno::ENOENT, Errno::ENOTDIR
           raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}"

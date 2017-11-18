@@ -401,8 +401,9 @@ module DataSources
 
     def test_load_timezone_info_file_does_not_exist
       # Override the index so that an attempt is made to load the file.
-      def @data_source.valid_timezone_identifier?(identifier)
-        identifier == 'Nowhere/Special' ? 'Nowhere/Special' : nil
+      def @data_source.validate_timezone_identifier(identifier)
+        raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'Nowhere/Special'
+        'Nowhere/Special'.freeze
       end
 
       error = assert_raises(InvalidTimezoneIdentifier) do
@@ -415,8 +416,9 @@ module DataSources
 
     def test_load_timezone_info_path_component_not_dir
       # Override the index so that an attempt is made to load the file.
-      def @data_source.valid_timezone_identifier?(identifier)
-        identifier == 'UTC/File' ? 'UTC/File' : nil
+      def @data_source.validate_timezone_identifier(identifier)
+        raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'UTC/File'
+        'UTC/File'.freeze
       end
 
       error = assert_raises(InvalidTimezoneIdentifier) do
@@ -524,8 +526,9 @@ module DataSources
         data_source = ZoneinfoDataSource.new(dir)
 
         # Override the index so that an attempt is made to load the file.
-        def data_source.valid_timezone_identifier?(identifier)
-          identifier == 'Subdir' ? 'Subdir' : nil
+        def data_source.validate_timezone_identifier(identifier)
+          raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'Subdir'
+          'Subdir'.freeze
         end
 
         error = assert_raises(InvalidTimezoneIdentifier) do

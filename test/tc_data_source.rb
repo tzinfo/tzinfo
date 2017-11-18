@@ -63,16 +63,18 @@ class TCDataSource < Minitest::Test
     end
   end
 
-  class ValidTimezoneIdentifierTestDataSource < DataSource
-    attr_reader :timezone_identifiers
+  class ValidateTimezoneIdentifierTestDataSource < DataSource
+    attr_reader :data_timezone_identifiers
+    attr_reader :linked_timezone_identifiers
 
-    def initialize(timezone_identifiers)
+    def initialize(data_timezone_identifiers, linked_timezone_identifiers)
       super()
-      @timezone_identifiers = timezone_identifiers.freeze
+      @data_timezone_identifiers = data_timezone_identifiers.sort.freeze
+      @linked_timezone_identifiers = linked_timezone_identifiers.sort.freeze
     end
 
-    def call_valid_timezone_identifier?(identifier)
-      valid_timezone_identifier?(identifier)
+    def call_validate_timezone_identifier(identifier)
+      validate_timezone_identifier(identifier)
     end
   end
 
@@ -418,24 +420,26 @@ class TCDataSource < Minitest::Test
     abstract_test(:load_country_info, false, 'CC')
   end
 
-  def test_valid_timezone_identifier
-    identifiers = ['America/Argentina/Buenos_Aires', 'America/New_York', 'Australia/Melbourne', 'EST', 'Etc/UTC', 'Europe/Paris', 'Europe/Prague', 'UTC']
-    ds = ValidTimezoneIdentifierTestDataSource.new(identifiers.sort)
-    assert_same(identifiers[0], ds.call_valid_timezone_identifier?('America/Argentina/Buenos_Aires'))
-    assert_same(identifiers[1], ds.call_valid_timezone_identifier?('America/New_York'))
-    assert_same(identifiers[2], ds.call_valid_timezone_identifier?('Australia/Melbourne'))
-    assert_same(identifiers[3], ds.call_valid_timezone_identifier?('EST'))
-    assert_same(identifiers[4], ds.call_valid_timezone_identifier?('Etc/UTC'))
-    assert_same(identifiers[5], ds.call_valid_timezone_identifier?('Europe/Paris'))
-    assert_same(identifiers[6], ds.call_valid_timezone_identifier?('Europe/Prague'))
-    assert_same(identifiers[7], ds.call_valid_timezone_identifier?('UTC'))
-    assert_nil(ds.call_valid_timezone_identifier?('Aaa/Test'))
-    assert_nil(ds.call_valid_timezone_identifier?('Americax/New_York'))
-    assert_nil(ds.call_valid_timezone_identifier?('Europe/London'))
-    assert_nil(ds.call_valid_timezone_identifier?('Europe/Parisx'))
-    assert_nil(ds.call_valid_timezone_identifier?('PST'))
-    assert_nil(ds.call_valid_timezone_identifier?('Zzz/Test'))
-    assert_nil(ds.call_valid_timezone_identifier?(nil))
-    assert_nil(ds.call_valid_timezone_identifier?(Object.new))
+  def test_validate_timezone_identifier
+    data_identifiers = ['Test/One', 'Test/Two', 'Test/Three']
+    linked_identifiers = ['Test/Four', 'Test/Five']
+    ds = ValidateTimezoneIdentifierTestDataSource.new(data_identifiers, linked_identifiers)
+
+    [data_identifiers, linked_identifiers].each do |identifiers|
+      identifiers.each do |identifier|
+        assert_same(identifier, ds.call_validate_timezone_identifier(identifier.dup))
+      end
+    end
+
+    ['Test/Invalid', 'Invalid/Test', 'TST'].each do |identifier|
+      error = assert_raises(InvalidTimezoneIdentifier) { ds.call_validate_timezone_identifier(identifier) }
+      assert_match(Regexp.new("\\b#{Regexp.escape(identifier)}\\b"), error.message)
+    end
+
+    error = assert_raises(InvalidTimezoneIdentifier) { ds.call_validate_timezone_identifier(nil) }
+    assert_match(/\bnil\b/, error.message)
+
+    error = assert_raises(InvalidTimezoneIdentifier) { ds.call_validate_timezone_identifier(false) }
+    assert_match(/\bfalse\b/, error.message)
   end
 end

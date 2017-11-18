@@ -57,8 +57,9 @@ module DataSources
     end
 
     def test_load_timezone_info_module_names_do_not_match_zone
-      def @data_source.valid_timezone_identifier?(identifier)
-        identifier == 'Invalid/Incorrect_Module' ? 'Invalid/Incorrect_Module' : nil
+      def @data_source.validate_timezone_identifier(identifier)
+        raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'Invalid/Incorrect_Module'
+        'Invalid/Incorrect_Module'.freeze
       end
 
       error = assert_raises(InvalidTimezoneIdentifier) do

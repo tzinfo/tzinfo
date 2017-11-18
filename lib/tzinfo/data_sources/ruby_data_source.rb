@@ -60,9 +60,7 @@ module TZInfo
       # Raises InvalidTimezoneIdentifier if the timezone is not found or the
       # identifier is invalid.
       def load_timezone_info(identifier)
-        valid_identifier = valid_timezone_identifier?(identifier)
-        raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier.nil? ? 'nil' : identifier}" unless valid_identifier
-
+        valid_identifier = validate_timezone_identifier(identifier)
         valid_identifier = valid_identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__').split('/')
 
         begin
