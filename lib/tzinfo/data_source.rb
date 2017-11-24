@@ -121,7 +121,7 @@ module TZInfo
 
     # Returns a DataSources::TimezoneInfo instance for a given identifier. The
     # DataSources::TimezoneInfo instance should derive from either
-    # DataSources::DataTimzoneInfo for timezones that define their own data or
+    # DataSources::DataTimezoneInfo for timezones that define their own data or
     # DataSources::LinkedTimezoneInfo for links or aliases to other timezones.
     #
     # get_timezone_info calls load_timezone_info to obtain a
@@ -202,7 +202,7 @@ module TZInfo
 
     # Returns a DataSources::TimezoneInfo instance for a given identifier. The
     # DataSources::TimezoneInfo instance should derive from either
-    # DataSources::DataTimzoneInfo for timezones that define their own data or
+    # DataSources::DataTimezoneInfo for timezones that define their own data or
     # DataSources::LinkedTimezoneInfo for links or aliases to other timezones.
     #
     # Raises InvalidTimezoneIdentifier if the timezone is not found or the
