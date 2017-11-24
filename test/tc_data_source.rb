@@ -46,8 +46,8 @@ class TCDataSource < Minitest::Test
     attr_reader :linked_timezone_identifiers_called
 
     def initialize(data_timezone_identifiers, linked_timezone_identifiers)
-      @data_timezone_identifiers = data_timezone_identifiers.each {|i| i.freeze}.freeze
-      @linked_timezone_identifiers = linked_timezone_identifiers.each {|i| i.freeze}.freeze
+      @data_timezone_identifiers = data_timezone_identifiers.each(&:freeze).freeze
+      @linked_timezone_identifiers = linked_timezone_identifiers.each(&:freeze).freeze
       @data_timezone_identifiers_called = 0
       @linked_timezone_identifiers_called = 0
     end
