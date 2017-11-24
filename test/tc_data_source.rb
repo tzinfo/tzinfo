@@ -335,10 +335,15 @@ class TCDataSource < Minitest::Test
   end
 
   def test_timezone_identifiers
-    ds = GetTimezoneIdentifiersTestDataSource.new(['Test/Aaa', 'Test/Ccc'], ['Test/Bbb'])
+    data_identifiers = ['Test/Aaa', 'Test/Ccc']
+    linked_identifiers = ['Test/Bbb']
+    ds = GetTimezoneIdentifiersTestDataSource.new(data_identifiers, linked_identifiers)
     result = ds.timezone_identifiers
     assert_kind_of(Array, result)
     assert_equal(['Test/Aaa', 'Test/Bbb', 'Test/Ccc'], result)
+    assert_same(data_identifiers[0], result[0])
+    assert_same(linked_identifiers[0], result[1])
+    assert_same(data_identifiers[1], result[2])
     assert(result.frozen?)
     assert(result.all?(&:frozen?))
     assert_equal(1, ds.data_timezone_identifiers_called)
