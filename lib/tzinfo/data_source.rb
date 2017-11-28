@@ -246,7 +246,7 @@ module TZInfo
       begin
         return DataSources::ZoneinfoDataSource.new
       rescue DataSources::ZoneinfoDirectoryNotFound
-        raise DataSourceNotFound, "No source of timezone data could be found.\nPlease refer to http://tzinfo.github.io/datasourcenotfound for help resolving this error."
+        raise DataSourceNotFound, "No source of timezone data could be found.\nPlease refer to https://tzinfo.github.io/datasourcenotfound for help resolving this error."
       end
     end
 

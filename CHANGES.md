@@ -182,70 +182,70 @@ Version 0.3.45 (tzdata v2015g) - 3-Oct-2015
 -------------------------------------------
 
 * Updated to tzdata version 2015g
-  (http://mm.icann.org/pipermail/tz-announce/2015-October/000034.html).
+  (https://mm.icann.org/pipermail/tz-announce/2015-October/000034.html).
 
 
 Version 0.3.44 (tzdata v2015d) - 24-Apr-2015
 --------------------------------------------
 
 * Updated to tzdata version 2015d
-  (http://mm.icann.org/pipermail/tz-announce/2015-April/000031.html).
+  (https://mm.icann.org/pipermail/tz-announce/2015-April/000031.html).
 
 
 Version 0.3.43 (tzdata v2015a) - 31-Jan-2015
 --------------------------------------------
 
 * Updated to tzdata version 2015a
-  (http://mm.icann.org/pipermail/tz-announce/2015-January/000028.html).
+  (https://mm.icann.org/pipermail/tz-announce/2015-January/000028.html).
 
 
 Version 0.3.42 (tzdata v2014i) - 23-Oct-2014
 --------------------------------------------
 
 * Updated to tzdata version 2014i
-  (http://mm.icann.org/pipermail/tz-announce/2014-October/000026.html).
+  (https://mm.icann.org/pipermail/tz-announce/2014-October/000026.html).
 
 
 Version 0.3.41 (tzdata v2014f) - 8-Aug-2014
 -------------------------------------------
 
 * Updated to tzdata version 2014f
-  (http://mm.icann.org/pipermail/tz-announce/2014-August/000023.html).
+  (https://mm.icann.org/pipermail/tz-announce/2014-August/000023.html).
 
 
 Version 0.3.40 (tzdata v2014e) - 10-Jul-2014
 --------------------------------------------
 
 * Updated to tzdata version 2014e
-  (http://mm.icann.org/pipermail/tz-announce/2014-June/000022.html).
+  (https://mm.icann.org/pipermail/tz-announce/2014-June/000022.html).
 
 
 Version 0.3.39 (tzdata v2014a) - 9-Mar-2014
 -------------------------------------------
 
 * Updated to tzdata version 2014a
-  (http://mm.icann.org/pipermail/tz-announce/2014-March/000018.html).
+  (https://mm.icann.org/pipermail/tz-announce/2014-March/000018.html).
 
 
 Version 0.3.38 (tzdata v2013g) - 8-Oct-2013
 -------------------------------------------
 
 * Updated to tzdata version 2013g
-  (http://mm.icann.org/pipermail/tz-announce/2013-October/000015.html).
+  (https://mm.icann.org/pipermail/tz-announce/2013-October/000015.html).
 
 
 Version 0.3.37 (tzdata v2013b) - 11-Mar-2013
 --------------------------------------------
 
 * Updated to tzdata version 2013b
-  (http://mm.icann.org/pipermail/tz-announce/2013-March/000010.html).
+  (https://mm.icann.org/pipermail/tz-announce/2013-March/000010.html).
 
 
 Version 0.3.36 (tzdata v2013a) - 3-Mar-2013
 -------------------------------------------
 
 * Updated to tzdata version 2013a
-  (http://mm.icann.org/pipermail/tz-announce/2013-March/000009.html).
+  (https://mm.icann.org/pipermail/tz-announce/2013-March/000009.html).
 * Fix TimezoneTransitionInfo#eql? incorrectly returning false when running on
   Ruby 2.0.
 * Change eql? and == implementations to test the class of the passed in object
@@ -256,14 +256,14 @@ Version 0.3.35 (tzdata v2012i) - 4-Nov-2012
 -------------------------------------------
 
 * Updated to tzdata version 2012i
-  (http://mm.icann.org/pipermail/tz-announce/2012-November/000007.html).
+  (https://mm.icann.org/pipermail/tz-announce/2012-November/000007.html).
 
 
 Version 0.3.34 (tzdata v2012h) - 27-Oct-2012
 --------------------------------------------
 
 * Updated to tzdata version 2012h
-  (http://mm.icann.org/pipermail/tz-announce/2012-October/000006.html).
+  (https://mm.icann.org/pipermail/tz-announce/2012-October/000006.html).
 
 
 Version 0.3.33 (tzdata v2012c) - 8-Apr-2012
