@@ -330,7 +330,7 @@ Version 0.3.25 (tzdata v2011d) - 14-Mar-2011
 --------------------------------------------
 
 * Updated to tzdata version 2011d
-  (http://article.gmane.org/gmane.comp.time.tz/3662).
+  (https://mm.icann.org/pipermail/tz/2011-March/016746.html).
 
 
 Version 0.3.24 (tzdata v2010o) - 15-Jan-2011
