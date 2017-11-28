@@ -144,7 +144,7 @@ thread boundaries.
 Documentation
 -------------
 
-API documentation for TZInfo is available on [RubyDoc.info](http://rubydoc.info/gems/tzinfo/frames).
+API documentation for TZInfo is available on [RubyDoc.info](http://rubydoc.info/gems/tzinfo/).
 
 
 License
