@@ -746,8 +746,8 @@ Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
 * Modified Timezone and Country methods that return Timezones to return
   TimezoneProxy instances instead. This makes these methods much quicker.
 
-  In Ruby on Rails, you can now show a drop-down list of all timezones using the
-  Rails time_zone_select helper method:
+In Ruby on Rails, you can now show a drop-down list of all timezones using the
+Rails time_zone_select helper method:
 
   <%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %>
 
