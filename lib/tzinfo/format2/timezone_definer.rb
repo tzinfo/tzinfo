@@ -70,6 +70,17 @@ module TZInfo
         @transitions << TimezoneTransition.new(offset, @previous_offset, timestamp_value)
         @previous_offset = offset
       end
+
+      # Defines the rules that will be used for handling instants after the last
+      # transition.
+      #
+      # This method is currently just a placeholder for forward compatibility
+      # that accepts and ignores any arguments passed.
+      #
+      # Support for subsequent rules will be added in a future version of TZInfo
+      # and the rules will be included in format 2 releases of TZInfo::Data.
+      def subsequent_rules(*args)
+      end
     end
   end
 end

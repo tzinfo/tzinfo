@@ -8,6 +8,8 @@ module TZInfo
     #
     # @private
     class TimezoneDefiner < Format2::TimezoneDefiner #:nodoc:
+      undef_method :subsequent_rules
+
       # Defines a transition to a given offset.
       #
       # year and month are Integers giving the UTC year and month in which the

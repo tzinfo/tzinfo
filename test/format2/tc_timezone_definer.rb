@@ -113,5 +113,13 @@ module Format2
       error = assert_raises(ArgumentError) { d.transition :o1, 1456790399 }
       assert_match(/\btimestamp\b/, error.message)
     end
+
+    def test_subsequent_rules
+      # subsequent_rules is just a placeholder for forward compatibility,
+      # accepting an arbitrary number of arguments and ignoring them.
+      0.upto(5) do |n|
+        assert_nil(TimezoneDefiner.new.subsequent_rules(*(0..n).to_a))
+      end
+    end
   end
 end
