@@ -426,7 +426,13 @@ module DataSources
       end
 
       assert_match(/\bUTC\/File\b/, error.message)
-      assert_kind_of(Errno::ENOTDIR, error.cause) if error.respond_to?(:cause)
+
+      # The cause is usually Errno::ENOTDIR. On Windows it is Errno::ENOENT
+      # instead.
+      if error.respond_to?(:cause)
+        expected_cause = get_expected_file_open_and_read_cause(File.join(ZONEINFO_DIR, 'UTC', 'File'))
+        assert_kind_of(expected_cause, error.cause)
+      end
     end
 
     def test_load_timezone_info_name_to_long
@@ -536,7 +542,19 @@ module DataSources
         end
 
         assert_match(/\bSubdir\b/, error.message)
-        assert_kind_of(Errno::EISDIR, error.cause) if error.respond_to?(:cause)
+
+        if error.respond_to?(:cause)
+          # Errno::EISDIR is normally raised either when attempting to read or
+          # when opening the file (Windows). However, JRuby on Windows 9.1.14.0
+          # raises Errno::EACCES instead.
+          #
+          # Once https://github.com/jruby/jruby/pull/4818 has been fixed/merged,
+          # this can be changed to:
+          #
+          # assert_kind_of(Errno::EISDIR, error.cause)
+          expected_cause = get_expected_file_open_and_read_cause(File.join(dir, 'Subdir'))
+          assert_kind_of(expected_cause, error.cause)
+        end
       end
     end
 
@@ -1292,6 +1310,13 @@ module DataSources
     def assert_raises_invalid_directory(zoneinfo_dir, &block)
       error = assert_raises(InvalidZoneinfoDirectory, &block)
       assert_equal("#{zoneinfo_dir} is not a directory or doesn't contain a iso3166.tab file and a zone1970.tab or zone.tab file.", error.message)
+    end
+
+    def get_expected_file_open_and_read_cause(path)
+      expected_error = assert_raises(SystemCallError) do
+        File.open(path, 'r') {|f| f.read(1) }
+      end
+      expected_error.class
     end
   end
 end
