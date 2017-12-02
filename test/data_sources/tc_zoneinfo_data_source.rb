@@ -582,6 +582,9 @@ module DataSources
           info = data_source.send(:load_timezone_info, 'EST')
           assert_kind_of(TransitionsDataTimezoneInfo, info)
           assert_equal('EST', info.identifier)
+
+          # JRuby 9.1.14.0 on Windows (running elevated) fails to clean up symlinks.
+          File.delete(file)
         end
       end
     end
@@ -608,6 +611,9 @@ module DataSources
         info = data_source.send(:load_timezone_info, 'Link')
         assert_kind_of(TransitionsDataTimezoneInfo, info)
         assert_equal('Link', info.identifier)
+
+        # JRuby 9.1.14.0 on Windows (running elevated) fails to clean up symlinks.
+        File.delete(link)
       end
     end
 
@@ -645,6 +651,10 @@ module DataSources
         info = data_source.send(:load_timezone_info, 'Subdir/Link')
         assert_kind_of(TransitionsDataTimezoneInfo, info)
         assert_equal('Subdir/Link', info.identifier)
+
+        # JRuby 9.1.14.0 on Windows (running elevated) fails to clean up symlinks.
+        File.delete(link)
+        File.delete(subdir_link)
       end
     end
 
@@ -689,6 +699,11 @@ module DataSources
         info = data_source.send(:load_timezone_info, 'Subdir2/Link')
         assert_kind_of(TransitionsDataTimezoneInfo, info)
         assert_equal('Subdir2/Link', info.identifier)
+
+        # JRuby 9.1.14.0 on Windows (running elevated) fails to clean up symlinks.
+        File.delete(subdir_link)
+        File.delete(subdir_link2)
+        File.delete(subdir2_link)
       end
     end
 
