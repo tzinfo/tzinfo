@@ -57,7 +57,7 @@ install:
 build: off
 
 before_test:
-  - ruby -v
+  - "%RUBY_PLATFORM% -v"
   - gem -v
   - bundle -v
 
