@@ -1,4 +1,4 @@
-version: {branch}-{build}
+version: "{build}-{branch}"
 
 cache:
   - vendor/bundle
@@ -17,7 +17,7 @@ environment:
     - RUBY_VERSION: 24
     - RUBY_VERSION: 24-x64
 
-install
+install:
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - bundle config --local path vendor/bundle
   - bundle update
