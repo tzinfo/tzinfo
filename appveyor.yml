@@ -5,20 +5,52 @@ cache:
 
 environment:
   matrix:
-    - RUBY_VERSION: 193
-    - RUBY_VERSION: 200
-    - RUBY_VERSION: 200-x64
-    - RUBY_VERSION: 21
-    - RUBY_VERSION: 21-x64
-    - RUBY_VERSION: 22
-    - RUBY_VERSION: 22-x64
-    - RUBY_VERSION: 23
-    - RUBY_VERSION: 23-x64
-    - RUBY_VERSION: 24
-    - RUBY_VERSION: 24-x64
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 193
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 200
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 200-x64
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 21
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 21-x64
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 22
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 22-x64
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 23
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 23-x64
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 24
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 24-x64
+
+    - RUBY_PLATFORM: jruby
+      JRUBY_VERSION: 1.7.27
+
+    - RUBY_PLATFORM: jruby
+      JRUBY_VERSION: 9.1.14.0
 
 install:
-  - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
+  - if not exist vendor mkdir vendor
+  - if %RUBY_PLATFORM%==jruby appveyor DownloadFile https://s3.amazonaws.com/jruby.org/downloads/%JRUBY_VERSION%/jruby-bin-%JRUBY_VERSION%.zip -FileName vendor\jruby-bin-%JRUBY_VERSION%.zip
+  - if %RUBY_PLATFORM%==jruby 7z x vendor\jruby-bin-%JRUBY_VERSION%.zip -ovendor -y
+  - if %RUBY_PLATFORM%==jruby set PATH=C:\projects\tzinfo\vendor\jruby-%JRUBY_VERSION%\bin;%PATH%
+  - if %RUBY_PLATFORM%==jruby gem install bundler
+  - if %RUBY_PLATFORM%==ruby set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - bundle config --local path vendor/bundle
   - bundle update
 
