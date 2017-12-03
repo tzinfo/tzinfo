@@ -493,6 +493,12 @@ module DataSources
         FileUtils.touch(file)
         FileUtils.chmod(0200, file)
 
+        if File.stat(file).mode & 0400 == 0400
+          # chmod failed to remove read permissions. Assume this is Windows and
+          # try setting permissions with icacls instead.
+          `icacls "#{file}" /deny Everyone:R`
+        end
+
         data_source = ZoneinfoDataSource.new(dir)
 
         error = assert_raises(InvalidTimezoneIdentifier) do
@@ -500,6 +506,7 @@ module DataSources
         end
 
         assert_match(/\bUTC\b/, error.message)
+        assert_kind_of(Errno::EACCES, error.cause) if error.respond_to?(:cause)
       end
     end
 
