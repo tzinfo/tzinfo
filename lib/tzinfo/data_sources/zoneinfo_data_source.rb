@@ -233,24 +233,21 @@ module TZInfo
       # Raises InvalidTimezoneIdentifier if the timezone is not found or the
       # identifier is invalid.
       def load_timezone_info(identifier)
-        begin
-          valid_identifier = validate_timezone_identifier(identifier)
-          path = File.join(@zoneinfo_dir, valid_identifier)
+        valid_identifier = validate_timezone_identifier(identifier)
+        path = File.join(@zoneinfo_dir, valid_identifier)
 
-          begin
-            zoneinfo = @zoneinfo_reader.read(path)
-            if zoneinfo.kind_of?(TimezoneOffset)
-              ConstantOffsetDataTimezoneInfo.new(valid_identifier, zoneinfo)
-            else
-              TransitionsDataTimezoneInfo.new(valid_identifier, zoneinfo)
-            end
-          rescue InvalidZoneinfoFile => e
-            raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
-          end
+        zoneinfo = begin
+          @zoneinfo_reader.read(path)
+        rescue Errno::EACCES, InvalidZoneinfoFile => e
+          raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
         rescue Errno::EISDIR, Errno::ENAMETOOLONG, Errno::ENOENT, Errno::ENOTDIR
           raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}"
-        rescue Errno::EACCES => e
-          raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
+        end
+
+        if zoneinfo.kind_of?(TimezoneOffset)
+          ConstantOffsetDataTimezoneInfo.new(valid_identifier, zoneinfo)
+        else
+          TransitionsDataTimezoneInfo.new(valid_identifier, zoneinfo)
         end
       end
 
