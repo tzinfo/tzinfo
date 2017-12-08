@@ -16,7 +16,7 @@ module TZInfo
     #
     # TimezonePeriod instances should not normally be constructed manually.
     def initialize(offset)
-      raise ArgumentError, 'offset must not be nil' unless offset
+      raise ArgumentError, 'offset must be specified' unless offset
       @offset = offset
     end
 

@@ -13,7 +13,7 @@ module TZInfo
     # Raises ArgumentError if time is nil or a Timestamp with an unspecified
     # offset.
     def period_for(time)
-      raise ArgumentError, 'time must not be nil' unless time
+      raise ArgumentError, 'time must be specified' unless time
       timestamp = Timestamp.for(time)
       raise ArgumentError, 'time must have a specified utc_offset' unless timestamp.utc_offset
       info.period_for(timestamp)
@@ -28,7 +28,7 @@ module TZInfo
     #
     # Raises ArgumentError if local_time is nil.
     def periods_for_local(local_time)
-      raise ArgumentError, 'local_time must not be nil' unless local_time
+      raise ArgumentError, 'local_time must be specified' unless local_time
       info.periods_for_local(Timestamp.for(local_time, offset: :ignore))
     end
 
@@ -58,7 +58,7 @@ module TZInfo
     # ArgumentError is raised if to is nil or of either to or from are
     # Timestamps with unspecified offsets.
     def transitions_up_to(to, from = nil)
-      raise ArgumentError, 'to must not be nil' unless to
+      raise ArgumentError, 'to must be specified' unless to
       to_timestamp = Timestamp.for(to)
       from_timestamp = from && Timestamp.for(from)
 

@@ -313,7 +313,7 @@ module TZInfo
     #
     # Raises ArgumentError if utc_time is nil.
     def period_for_utc(utc_time)
-      raise ArgumentError, 'utc_time must not be nil' unless utc_time
+      raise ArgumentError, 'utc_time must be specified' unless utc_time
       period_for(Timestamp.for(utc_time, offset: :ignore).utc)
     end
 
@@ -359,7 +359,7 @@ module TZInfo
     #
     # Raises ArgumentError if local_time is nil.
     def period_for_local(local_time, dst = Timezone.default_dst)
-      raise ArgumentError, 'local_time must not be nil' unless local_time
+      raise ArgumentError, 'local_time must be specified' unless local_time
       results = periods_for_local(local_time)
 
       if results.empty?
@@ -408,7 +408,7 @@ module TZInfo
     # raises ArgumentError if time is nil or does not have a specified UTC
     # offset.
     def to_local(time)
-      raise ArgumentError, 'time must not be nil' unless time
+      raise ArgumentError, 'time must be specified' unless time
 
       Timestamp.for(time) do |ts|
         LocalTimestamp.localize(ts, period_for(ts))
@@ -429,7 +429,7 @@ module TZInfo
     #
     # Raises ArgumentErrror if utc_time is nil.
     def utc_to_local(utc_time)
-      raise ArgumentError, 'utc_time must not be nil' unless utc_time
+      raise ArgumentError, 'utc_time must be specified' unless utc_time
 
       Timestamp.for(utc_time, offset: :ignore) do |ts|
         to_local(ts.utc)
@@ -477,7 +477,7 @@ module TZInfo
     #
     # Raises ArgumentError if local_time is nil.
     def local_to_utc(local_time, dst = Timezone.default_dst)
-      raise ArgumentError, 'local_time must not be nil' unless local_time
+      raise ArgumentError, 'local_time must be specified' unless local_time
 
       Timestamp.for(local_time, offset: :ignore) do |ts|
         period = if block_given?
@@ -509,7 +509,7 @@ module TZInfo
     # ArgumentError is raised if to is nil or of either to or from are
     # Timestamps with unspecified offsets.
     def offsets_up_to(to, from = nil)
-      raise ArgumentError, 'to must not be nil' unless to
+      raise ArgumentError, 'to must be specified' unless to
 
       to_timestamp = Timestamp.for(to)
       from_timestamp = from && Timestamp.for(from)

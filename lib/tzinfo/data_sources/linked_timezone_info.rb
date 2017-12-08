@@ -15,7 +15,7 @@ module TZInfo
       # Raises ArgumentError if identifier or link_to_identifier are nil.
       def initialize(identifier, link_to_identifier)
         super(identifier)
-        raise ArgumentError, 'link_to_identifier must not be nil' unless link_to_identifier
+        raise ArgumentError, 'link_to_identifier must be specified' unless link_to_identifier
         @link_to_identifier = link_to_identifier.freeze
       end
 

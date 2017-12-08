@@ -14,7 +14,7 @@ module TZInfo
       #
       # Raises ArgumentError if identifier is nil.
       def initialize(identifier)
-        raise ArgumentError, 'identifier must not be nil' unless identifier
+        raise ArgumentError, 'identifier must be specified' unless identifier
         @identifier = identifier.freeze
       end
 

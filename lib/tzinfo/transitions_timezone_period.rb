@@ -27,7 +27,7 @@ module TZInfo
       elsif end_transition
         super(end_transition.previous_offset)
       else
-        raise ArgumentError, 'At least one of start_transition and end_transition must not be nil'
+        raise ArgumentError, 'At least one of start_transition and end_transition must be specified'
       end
 
       @start_transition = start_transition

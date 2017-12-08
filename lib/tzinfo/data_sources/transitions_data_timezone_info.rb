@@ -21,7 +21,7 @@ module TZInfo
       # empty Array.
       def initialize(identifier, transitions)
         super(identifier)
-        raise ArgumentError, 'transitions must not be nil' unless transitions
+        raise ArgumentError, 'transitions must be specified' unless transitions
         raise ArgumentError, 'transitions must not be an empty Array' if transitions.empty?
         @transitions = transitions.freeze
       end
@@ -32,7 +32,7 @@ module TZInfo
       # Raises ArgumentError if timestamp is nil or does not have a specified
       # utc_offset.
       def period_for(timestamp)
-        raise ArgumentError, 'timestamp must not be nil' unless timestamp
+        raise ArgumentError, 'timestamp must be specified' unless timestamp
         raise ArgumentError, 'timestamp must have a specified utc_offset' unless timestamp.utc_offset
 
         timestamp_value = timestamp.value
@@ -69,7 +69,7 @@ module TZInfo
       # Raises ArgumentError if local_timestamp is nil, or has a specified
       # utc_offset.
       def periods_for_local(local_timestamp)
-        raise ArgumentError, 'local_timestamp must not be nil' unless local_timestamp
+        raise ArgumentError, 'local_timestamp must be specified' unless local_timestamp
         raise ArgumentError, 'local_timestamp must have an unspecified utc_offset' if local_timestamp.utc_offset
 
         local_timestamp_value = local_timestamp.value
@@ -129,7 +129,7 @@ module TZInfo
       # raised if from_timestamp does not have a specified offset or if
       # to_timestamp is not greater than from_timestamp.
       def transitions_up_to(to_timestamp, from_timestamp = nil)
-        raise ArgumentError, 'to_timestamp must not be nil' unless to_timestamp
+        raise ArgumentError, 'to_timestamp must be specified' unless to_timestamp
         raise ArgumentError, 'to_timestamp must have a specified utc_offset' unless to_timestamp.utc_offset
 
         if from_timestamp

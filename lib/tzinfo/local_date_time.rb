@@ -23,7 +23,7 @@ module TZInfo
     # Raises ArgumentError if period.utc_total_offset does not equal
     # self.offset * 86400.
     def localize(period)
-      raise ArgumentError, 'period must not be nil' unless period
+      raise ArgumentError, 'period must be specified' unless period
       raise ArgumentError, 'period.utc_total_offset does not match self.utc_offset' if offset * 86400 != period.utc_total_offset
       @period = period
       self

@@ -19,8 +19,8 @@ module TZInfo
     #
     # Raises ArgumentError if timestamp or period are nil.
     def self.localize(timestamp, period)
-      raise ArgumentError, 'timestamp must not be nil' unless timestamp
-      raise ArgumentError, 'period must not be nil' unless period
+      raise ArgumentError, 'timestamp must be specified' unless timestamp
+      raise ArgumentError, 'period must be specified' unless period
       new(timestamp.value, timestamp.sub_second, period.utc_total_offset).localize(period)
     end
 
@@ -35,7 +35,7 @@ module TZInfo
     # Raises ArgumentError if period.utc_total_offset does not equal
     # self.utc_offset.
     def localize(period)
-      raise ArgumentError, 'period must not be nil' unless period
+      raise ArgumentError, 'period must be specified' unless period
       raise ArgumentError, 'period.utc_total_offset does not match self.utc_offset' if utc? || utc_offset != period.utc_total_offset
       @period = period
       self

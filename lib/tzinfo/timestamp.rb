@@ -105,7 +105,7 @@ module TZInfo
     #
     # Raises ArgumentError if format is nil.
     def strftime(format)
-      raise ArgumentError, 'format must not be nil' unless format
+      raise ArgumentError, 'format must be specified' unless format
       to_time.strftime(format)
     end
 
@@ -157,7 +157,7 @@ module TZInfo
     def self.for(value, options = {})
       offset = options[:offset] || :preserve
       raise ArgumentError, ':offset must be :ignore or :preserve' unless offset == :preserve || offset == :ignore
-      raise ArgumentError, 'value must not be nil' unless value
+      raise ArgumentError, 'value must be specified' unless value
 
       ignore_offset = offset == :ignore
 

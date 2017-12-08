@@ -378,7 +378,7 @@ class TCTimestamp < Minitest::Test
   def test_strftime_nil_format
     t = Timestamp.new(1476316800, Rational(1,10))
     error = assert_raises(ArgumentError) { t.strftime(nil) }
-    assert_equal('format must not be nil', error.message)
+    assert_equal('format must be specified', error.message)
   end
 
   def test_to_s_without_offset
@@ -771,7 +771,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_nil_value
-    for_raises_test(ArgumentError, 'value must not be nil', nil)
+    for_raises_test(ArgumentError, 'value must be specified', nil)
   end
 
   def test_for_invalid_value

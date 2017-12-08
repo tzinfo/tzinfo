@@ -14,7 +14,7 @@ module TZInfo
     #
     # Raises ArgumentError if format is nil.
     def strftime(format)
-      raise ArgumentError, 'format must not be nil' unless format
+      raise ArgumentError, 'format must be specified' unless format
 
       if_period do |p|
         abbreviation = p.abbreviation.to_s.gsub(/%/, '%%')

@@ -125,7 +125,7 @@ module DataSources
     def test_period_for_nil
       i = create_basic_info
       error = assert_raises(ArgumentError) { i.period_for(nil) }
-      assert_equal('timestamp must not be nil', error.message)
+      assert_equal('timestamp must be specified', error.message)
     end
 
     def test_periods_for_local
@@ -219,7 +219,7 @@ module DataSources
     def test_periods_for_local_nil
       i = create_basic_info
       error = assert_raises(ArgumentError) { i.periods_for_local(nil) }
-      assert_equal('local_timestamp must not be nil', error.message)
+      assert_equal('local_timestamp must be specified', error.message)
     end
 
     def test_transitions_up_to
@@ -326,7 +326,7 @@ module DataSources
     def test_transitions_up_to_to_timestamp_nil
       i = create_basic_info
       error = assert_raises(ArgumentError) { i.transitions_up_to(nil) }
-      assert_equal('to_timestamp must not be nil', error.message)
+      assert_equal('to_timestamp must be specified', error.message)
     end
 
     def test_inspect

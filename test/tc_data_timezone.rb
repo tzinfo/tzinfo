@@ -20,7 +20,7 @@ class TCDataTimezone < Minitest::Test
     end
 
     def period_for(timestamp)
-      raise ArgumentError, 'timestamp must not be nil' unless timestamp
+      raise ArgumentError, 'timestamp must be specified' unless timestamp
       raise ArgumentError, 'timestamp must have a specified utc_offset' unless timestamp.utc_offset
 
       @timestamp = timestamp
@@ -28,7 +28,7 @@ class TCDataTimezone < Minitest::Test
     end
 
     def periods_for_local(local_timestamp)
-      raise ArgumentError, 'local_timestamp must not be nil' unless local_timestamp
+      raise ArgumentError, 'local_timestamp must be specified' unless local_timestamp
       raise ArgumentError, 'local_timestamp must have an unspecified utc_offset' if local_timestamp.utc_offset
 
       @local_timestamp = local_timestamp
@@ -36,7 +36,7 @@ class TCDataTimezone < Minitest::Test
     end
 
     def transitions_up_to(to_timestamp, from_timestamp = nil)
-      raise ArgumentError, 'to_timestamp must not be nil' unless to_timestamp
+      raise ArgumentError, 'to_timestamp must be specified' unless to_timestamp
       raise ArgumentError, 'to_timestamp must have a specified utc_offset' unless to_timestamp.utc_offset
 
       if from_timestamp
@@ -301,7 +301,7 @@ class TCDataTimezone < Minitest::Test
     tz = DataTimezone.new(tti)
 
     error = assert_raises(ArgumentError) { tz.transitions_up_to(nil) }
-    assert_equal('to must not be nil', error.message)
+    assert_equal('to must be specified', error.message)
   end
 
   def test_transitions_up_to_unsupported_to

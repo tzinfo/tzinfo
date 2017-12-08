@@ -15,7 +15,7 @@ module TZInfo
       # Raises ArgumentError if identifier or constant_offset are nil.
       def initialize(identifier, constant_offset)
         super(identifier)
-        raise ArgumentError, 'constant_offset must not be nil' unless constant_offset
+        raise ArgumentError, 'constant_offset must be specified' unless constant_offset
         @constant_offset = constant_offset
       end
 

@@ -81,7 +81,7 @@ class TCTimezone < Minitest::Test
     end
 
     def transitions_up_to(to, from = nil)
-      raise ArgumentError, 'to must not be nil' unless to
+      raise ArgumentError, 'to must be specified' unless to
       raise "Unexpected to #{to || 'nil'} in transitions_up_to (expecting #{@expected_to})" unless times_equal(@expected_to, to)
       raise "Unexpected from #{from || 'nil'} in transitions_up_to (expecting #{@expected_from})" unless (!@expected_from && !from) || times_equal(@expected_from, from)
 
@@ -1243,7 +1243,7 @@ class TCTimezone < Minitest::Test
   def test_offsets_up_to_nil_to
     tz = OffsetsUpToTestTimezone.new('Test/Zone', nil, nil, [])
     error = assert_raises(ArgumentError) { tz.offsets_up_to(nil) }
-    assert_equal('to must not be nil', error.message)
+    assert_equal('to must be specified', error.message)
   end
 
   def test_offsets_up_to_unsupported_to
