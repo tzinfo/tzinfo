@@ -350,27 +350,6 @@ class TCTimezone < Minitest::Test
     assert_equal(expected, Timezone.all_country_zone_identifiers)
   end
 
-  def test_us_zones
-    # Probably should relax this test - just need all the zones, don't care
-    # about order.
-    us_zones = Timezone.us_zones
-    assert_equal(Country.get('US').zones.uniq, us_zones)
-
-    us_zone_identifiers = Timezone.us_zone_identifiers
-    assert_equal(us_zone_identifiers.length, us_zones.length)
-
-    us_zones.each do |zone|
-      assert_kind_of(TimezoneProxy, zone)
-      assert(us_zone_identifiers.include?(zone.identifier))
-    end
-  end
-
-  def test_us_zone_identifiers
-    # Probably should relax this test - just need all the zones, don't care
-    # about order.
-    assert_equal(Country.get('US').zone_identifiers.uniq, Timezone.us_zone_identifiers)
-  end
-
   def test_identifier
     assert_raises_unknown_timezone { Timezone.new.identifier }
     assert_equal('Europe/Paris', TestTimezone.new('Europe/Paris').identifier)

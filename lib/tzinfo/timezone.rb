@@ -151,21 +151,6 @@ module TZInfo
       end.uniq
     end
 
-    # Returns all US Timezone instances. A shortcut for
-    # TZInfo::Country.get('US').zones.
-    #
-    # Returns TimezoneProxy objects to avoid the overhead of loading Timezone
-    # definitions until a conversion is actually required.
-    def self.us_zones
-      Country.get('US').zones
-    end
-
-    # Returns all US zone identifiers. A shortcut for
-    # TZInfo::Country.get('US').zone_identifiers.
-    def self.us_zone_identifiers
-      Country.get('US').zone_identifiers
-    end
-
     # The identifier of the timezone, e.g. "Europe/Paris".
     def identifier
       raise_unknown_timezone
