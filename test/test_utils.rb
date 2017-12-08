@@ -36,8 +36,8 @@ require 'rbconfig'
 
 module TestUtils
   ZONEINFO_SYMLINKS = [
-    ['localtime', 'America/New_York'],
-    ['UTC', 'Etc/UTC']]
+    ['localtime', File.join('America', 'New_York')],
+    ['UTC', File.join('Etc', 'UTC')]]
 
 
   def self.prepare_test_zoneinfo_dir
