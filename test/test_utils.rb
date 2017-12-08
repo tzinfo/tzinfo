@@ -146,7 +146,7 @@ module TestUtils
 
     # Runs a test with safe mode enabled ($SAFE = 1).
     def safe_test(options = {})
-      # JRuby and Rubinius us don't support SAFE levels.
+      # JRuby and Rubinius don't support SAFE levels.
       available = !%w(jruby rbx).include?(RUBY_ENGINE)
 
       if available || options[:unavailable] != :skip
