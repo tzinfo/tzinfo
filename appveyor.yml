@@ -42,7 +42,7 @@ environment:
       JRUBY_VERSION: 1.7.27
 
     - RUBY_PLATFORM: jruby
-      JRUBY_VERSION: 9.1.14.0
+      JRUBY_VERSION: 9.1.15.0
 
 install:
   - if not exist vendor mkdir vendor
