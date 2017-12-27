@@ -1,96 +1,82 @@
 module TZInfo
 
-  # A proxy class representing a timezone with a given identifier. TimezoneProxy
-  # inherits from Timezone and can be treated like any Timezone loaded with
-  # Timezone.get.
+  # A proxy class standing in for a {Timezone} with a given identifier.
+  # {TimezoneProxy} inherits from {Timezone} and can be treated identically to
+  # {Timezone} instances loaded with {Timezone.get}.
   #
-  # The first time an attempt is made to access the data for the timezone, the
-  # real Timezone is loaded. If the proxy's identifier was not valid, then an
-  # exception will be raised at this point.
+  # {TimezoneProxy} instances are used to avoid the performance overhead of
+  # loading time zone data into memory, for example, by {Timezone.all}.
+  #
+  # The first time an attempt is made to access the data for the time zone, the
+  # real {Timezone} will be loaded is loaded. If the proxy's identifier was not
+  # valid, then an exception will be raised at this point.
   class TimezoneProxy < Timezone
-    # Construct a new TimezoneProxy for the given identifier. The identifier
-    # is not checked when constructing the proxy. It will be validated on the
-    # when the real Timezone is loaded.
+    # Initializes a new {TimezoneProxy}.
+    #
+    # The `identifier` parameter is not checked when initializing the proxy. It
+    # will be validated when the real {Timezone} instance is loaded.
+    #
+    # @param identifier [String] an IANA Time Zone Database time zone
+    #   identifier.
     def initialize(identifier)
       super()
       @identifier = identifier
       @real_timezone = nil
     end
 
-    # The identifier of the timezone, e.g. "Europe/Paris".
+    # (see Timezone#identifier)
     def identifier
       @real_timezone ? @real_timezone.identifier : @identifier
     end
 
-    # Returns the TimezonePeriod for the given time. time can either be
-    # a Time, DateTime or Timestamp.
-    #
-    # The UTC offset of time is taken into account.
-    #
-    # Raises ArgumentError if time is nil or a Timestamp with an unspecified
-    # offset.
+    # (see Timezone#period_for)
     def period_for(time)
       real_timezone.period_for_utc(time)
     end
 
-    # Returns the set of TimezonePeriod instances that are valid for the given
-    # local time as an array. local_time can be specified using either a Time,
-    # DateTime or Timestamp. The UTC offset of local_time is ignored (it is
-    # treated as a time in the current timezone).
-    #
-    # An empty array is returned if no periods are found for the given time.
-    #
-    # Raises ArgumentError if local_time is nil.
+    # (see Timezone#periods_for_local)
     def periods_for_local(local_time)
       real_timezone.periods_for_local(local_time)
     end
 
-    # Returns an Array of TimezoneTransition instances representing the times
-    # where the UTC offset of the timezone changes.
-    #
-    # Transitions are returned up to a given date and time up to a given date
-    # and time (to).
-    #
-    # A from date and time may also be supplied using the from parameter. If
-    # from is not nil, only transitions from that date and time onwards will be
-    # returned.
-    #
-    # Comparisons with to are exclusive. Comparisons with from are inclusive.
-    # If a transition falls precisely on to, it will be excluded. If a
-    # transition falls on from, it will be included.
-    #
-    # Transitions returned are ordered by when they occur, from earliest to
-    # latest.
-    #
-    # to and from can be specified using either a Time, DateTime, Time or
-    # Timestamp.
-    #
-    # If from is specified and to is not greater than from, then an
-    # ArgumentError exception is raised.
-    #
-    # ArgumentError is raised if to is nil or of either to or from are
-    # Timestamps with unspecified offsets.
+    # (see Timezone#transitions_up_to)
     def transitions_up_to(to, from = nil)
       real_timezone.transitions_up_to(to, from)
     end
 
-    # Returns the canonical zone for this Timezone.
+    # (see Timezone#canonical_zone)
     def canonical_zone
       real_timezone.canonical_zone
     end
 
-    # Dumps this TimezoneProxy for marshalling.
+    # Returns a serialized representation of this {TimezoneProxy}. This method
+    # is called when using `Marshal.dump` with an instance of {TimezoneProxy}.
+    #
+    # @param limit [Integer] the maximum depth to dump - ignored. @return
+    #   [String] a serialized representation of this {TimezoneProxy}.
+    # @return [String] a serialized representation of this {TimezoneProxy}.
     def _dump(limit)
       identifier
     end
 
-    # Loads a marshalled TimezoneProxy.
+    # Loads a {TimezoneProxy} from the serialized representation returned by
+    # {_dump}. This is method is called when using `Marshal.load` or
+    # `Marshal.restore` to restore a serialized {Timezone}.
+    #
+    # @param data [String] a serialized representation of a {TimezoneProxy}.
+    # @return [TimezoneProxy] the result of converting `data` back into a
+    #   {TimezoneProxy}.
     def self._load(data)
       TimezoneProxy.new(data)
     end
 
     private
 
+    # Returns the real {Timezone} instance being proxied.
+    #
+    # The real {Timezone} is loaded using {Timezone.get} on the first access.
+    #
+    # @return [Timezone] the real {Timezone} instance being proxied.
     def real_timezone
       # Thread-safety: It is possible that the value of @real_timezone may be
       # calculated multiple times in concurrently executing threads. It is not

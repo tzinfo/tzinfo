@@ -1,18 +1,22 @@
 # frozen_string_literal: true
 
 module TZInfo
-  # The Localized module is included in LocalTime, LocalDateTime and
-  # LocalTimestamp. It provides an overridden strftime method that handles
-  # expanding the %Z directive according to the abbreviation of the
-  # TimezonePeriod associated with a local time.
+  # The {Localized} module is included in {LocalTime}, {LocalDateTime} and
+  # {LocalTimestamp}. It provides an override for the {strftime} method that
+  # handles expanding the `%Z` directive according to the
+  # {TimezonePeriod#abbreviation abbreviation} of the {TimezonePeriod}
+  # associated with a local time.
   module Localized
-    # Overrides the Time, DateTime or Timestamp version of strftime, replacing
-    # %Z with the abbreviation of the associated TimezonePeriod (period). If
-    # period is nil, %Z is expanded by the base class instead.
+    # Overrides the `Time`, `DateTime` or {Timestamp} version of `strftime`,
+    # replacing `%Z` with the {TimezonePeriod#abbreviation abbreviation} of the
+    # associated {TimezonePeriod}. If there is no associated period, `%Z` is
+    # expanded by the base class instead.
     #
-    # Supports all the format directives handled by the base class.
+    # All the format directives handled by the base class are supported.
     #
-    # Raises ArgumentError if format is nil.
+    # @param format [String] the format string.
+    # @return [String] the formatted time.
+    # @raise [ArgumentError] if `format` is `nil`.
     def strftime(format)
       raise ArgumentError, 'format must be specified' unless format
 
@@ -34,10 +38,21 @@ module TZInfo
 
     protected
 
-    # If there is an associated TimezonePeriod, yields the TimezonePeriod and
-    # the passed in result to the given block and returns the result of the
-    # block. Otherwise returns result.
-    def if_period(result = nil)
+    # Performs a calculation if there is an associated {TimezonePeriod}.
+    #
+    # @param result [Object] a result value that can be manipulated by the block
+    #   if there is an associated {TimezonePeriod}.
+    # @yield [period, result] if there is an associated {TimezonePeriod}, the
+    #   block is yielded to in order to calculate the method result.
+    # @yieldparam period [TimezonePeriod] the associated {TimezonePeriod}.
+    # @yieldparam result [Object] the `result` parameter.
+    # @yieldreturn [Object] the result of the calculation performed if there is
+    #   an associated {TimezonePeriod}.
+    # @return [Object] the result of the block if there is an associated
+    #   {TimezonePeriod}, otherwise the `result` parameter.
+    #
+    # @private
+    def if_period(result = nil) #:nodoc:
       p = period
       p ? yield(p, result) : result
     end

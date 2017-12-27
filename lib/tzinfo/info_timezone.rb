@@ -1,22 +1,31 @@
 module TZInfo
 
-  # A Timezone based on a DataSources::TimezoneInfo.
+  # A {Timezone} based on a {DataSources::TimezoneInfo}.
+  #
+  # @abstract
   class InfoTimezone < Timezone
-
-    # Constructs a new InfoTimezone with a DataSources::TimezoneInfo instance.
+    # Initializes a new {InfoTimezone}.
+    #
+    # {InfoTimezone} instances should not normally be created directly. Use
+    # the {Timezone.get} method to obtain {Timezone} instances.
+    #
+    # @param info [DataSources::TimezoneInfo] a {DataSources::TimezoneInfo}
+    #   instance supplied by a {DataSource} that will be used as the source of
+    #   data for this {InfoTimezone}.
     def initialize(info)
       super()
       @info = info
     end
 
-    # The identifier of the timezone, e.g. "Europe/Paris".
+    # (see Timezone#identifier)
     def identifier
       @info.identifier
     end
 
     protected
 
-    # The DataSources::TimezoneInfo for this Timezone.
+    # @return [DataSources::TimezoneInfo] the {DataSources::TimezoneInfo} this
+    #   {InfoTimezone} is based on.
     def info
       @info
     end

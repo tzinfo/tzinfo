@@ -2,23 +2,31 @@
 
 module TZInfo
   module DataSources
-    # Represents a data timezone defined by a list of transitions.
+    # Represents a data time zone defined by a list of transitions that change
+    # the locally observed time.
     class TransitionsDataTimezoneInfo < DataTimezoneInfo
-
-      # The list of transitions as a frozen Array of TimezoneTransition instances.
+      # @return [Array<TimezoneTransition>] the transitions that define this
+      #   time zone in order of ascending timestamp.
       attr_reader :transitions
 
-      # Constructs a new TransitionDataTimezoneInfo with its identifier and an
-      # Array of TimezoneTransitions.
+      # Initializes a new {TransitionsDataTimezoneInfo}.
       #
-      # A reference to the passed in Array will be retained.
+      # The passed in `identifer` instance will be frozen. A reference to the
+      # passed in `Array` will be retained.
       #
-      # Transitions in the array must be in ascending timestamp order. Each
-      # transition must have a timestamp_value that is greater than the prior
-      # transition.
+      # The `transitions` `Array` must be sorted in order of ascending
+      # timestamp. Each transition must have a
+      # {TimezoneTransition#timestamp_value timestamp_value} that is greater
+      # than the {TimezoneTransition#timestamp_value timestamp_value} of the
+      # prior transition.
       #
-      # Raises ArgumentError if identifier is nil or if transitions is nil or an
-      # empty Array.
+      # @param identifier [String] the identifier of the time zone.
+      # @param transitions [Array<TimezoneTransitions>] an `Array` of
+      #   transitions that each indicate when a change occurs in the locally
+      #   observed time.
+      # @raise [ArgumentError] if `identifier` is `nil`.
+      # @raise [ArgumentError] if `transitions` is `nil`.
+      # @raise [ArgumentError] if `transitions` is an empty `Array`.
       def initialize(identifier, transitions)
         super(identifier)
         raise ArgumentError, 'transitions must be specified' unless transitions
@@ -26,11 +34,7 @@ module TZInfo
         @transitions = transitions.freeze
       end
 
-      # Returns the TimezonePeriod for the given Timestamp. The Timestamp must
-      # have a specified utc_offset.
-      #
-      # Raises ArgumentError if timestamp is nil or does not have a specified
-      # utc_offset.
+      # (see DataTimezoneInfo#period_for)
       def period_for(timestamp)
         raise ArgumentError, 'timestamp must be specified' unless timestamp
         raise ArgumentError, 'timestamp must have a specified utc_offset' unless timestamp.utc_offset
@@ -61,13 +65,7 @@ module TZInfo
         TransitionsTimezonePeriod.new(start_transition, end_transition)
       end
 
-      # Returns an array containing the valid TimezonePeriods for the given local
-      # Timestamp. The Timestamp must have an unspecified utc_offset. The results
-      # returned are ordered by increasing UTC start date. An empty array is
-      # returned if no periods are found for the given time.
-      #
-      # Raises ArgumentError if local_timestamp is nil, or has a specified
-      # utc_offset.
+      # (see DataTimezoneInfo#periods_for_local)
       def periods_for_local(local_timestamp)
         raise ArgumentError, 'local_timestamp must be specified' unless local_timestamp
         raise ArgumentError, 'local_timestamp must have an unspecified utc_offset' if local_timestamp.utc_offset
@@ -108,26 +106,7 @@ module TZInfo
         result.reverse!
       end
 
-      # Returns an Array of TimezoneTransition instances representing the times
-      # where the UTC offset of the timezone changes.
-      #
-      # Transitions are returned up to a given Timestamp (to_timestamp).
-      #
-      # A from Timestamp may also be supplied using the from_timestamp parameter.
-      # If from_timestamp is not nil, only transitions from that time will be
-      # returned.
-      #
-      # Comparisons with to_timestamp are exclusive. Comparisons with from are
-      # inclusive. If a transition falls precisely on to_timestamp, it will be
-      # excluded. If a transition falls on from_timestamp, it will be included.
-      #
-      # Transitions returned are ordered by when they occur, from earliest to
-      # latest.
-      #
-      # ArgumentError is raised if to_timestamp is nil or does not have a
-      # specified utc_offset. If from_timestamp is specified, ArgumentError is
-      # raised if from_timestamp does not have a specified offset or if
-      # to_timestamp is not greater than from_timestamp.
+      # (see DataTimezoneInfo#transitions_up_to)
       def transitions_up_to(to_timestamp, from_timestamp = nil)
         raise ArgumentError, 'to_timestamp must be specified' unless to_timestamp
         raise ArgumentError, 'to_timestamp must have a specified utc_offset' unless to_timestamp.utc_offset
@@ -161,16 +140,43 @@ module TZInfo
       # Array#bsearch_index was added in Ruby 2.3.0. Use bsearch_index to find
       # transitions if it is available, otherwise use a Ruby implementation.
       if [].respond_to?(:bsearch_index)
-        # Calls bsearch_index on @transitions.
+        # Performs a binary search on {transitions} to find the index of the
+        # earliest transition satisfying a condition.
+        #
+        # @yield transition the caller will be yielded to to test the search
+        #   condition.
+        # @yieldparam transition [TimezoneTransition] a {TimezoneTransition}
+        #   instance from {transitions}.
+        # @yieldreturn [Boolean] `true` for the earliest transition that
+        #   satisfies the condition and return `true` for all subsequent
+        #   transitions. In all other cases, the result of the block must be
+        #   `false`.
+        # @return [Integer] the index of the earliest transition safisfying
+        #   the condition or `nil` if there are no such transitions.
+        #
         # :nocov_no_bsearch_index:
         def find_minimum_transition(&block)
           @transitions.bsearch_index(&block)
         end
         # :nocov_no_bsearch_index:
       else
-        # A Ruby implementation of the find-minimum mode of Array#bsearch_index.
+        # Performs a binary search on {transitions} to find the index of the
+        # earliest transition satisfying a condition.
+        #
+        # @yield transition the caller will be yielded to to test the search
+        #   condition.
+        # @yieldparam transition [TimezoneTransition] a {TimezoneTransition}
+        #   instance from {transitions}.
+        # @yieldreturn [Boolean] `true` for the earliest transition that
+        #   satisfies the condition and return `true` for all subsequent
+        #   transitions. In all other cases, the result of the block must be
+        #   `false`.
+        # @return [Integer] the index of the earliest transition safisfying
+        #   the condition or `nil` if there are no such transitions.
+        #
         # :nocov_bsearch_index:
         def find_minimum_transition
+          # A Ruby implementation of the find-minimum mode of Array#bsearch_index.
           low = 0
           high = @transitions.length
           satisfied = false
@@ -190,8 +196,13 @@ module TZInfo
         # :nocov_bsearch_index:
       end
 
-      # Determines if a transition occurs at or after a given Timestamp,
-      # considering the Timestamp sub_second.
+      # Determines if a transition occurs at or after a given {Timestamp},
+      # taking the {Timestamp#sub_second sub_second} into consideration.
+      #
+      # @param transition [TimezoneTransition] the transition to compare.
+      # @param timestamp [Timestamp] the timestamp to compare.
+      # @return [Boolean] `true` if `transition` occurs at or after `timestamp`,
+      #   otherwise `false`.
       def transition_on_or_after_timestamp?(transition, timestamp)
         transition_timestamp_value = transition.timestamp_value
         timestamp_value = timestamp.value

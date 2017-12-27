@@ -2,32 +2,35 @@
 
 module TZInfo
   module DataSources
-    # A TZInfoDataNotFound exception is raised if TZInfo::Data could not be found
-    # (i.e. require 'tzinfo/data' failed) when selecting the Ruby DataSource.
+    # A {TZInfoDataNotFound} exception is raised if the tzinfo-data gem could
+    # not be found (i.e. `require 'tzinfo/data'` failed) when selecting the Ruby
+    # data source.
     class TZInfoDataNotFound < StandardError
     end
 
-    # A DataSource that loads data from the set of Ruby modules included in the
-    # TZInfo::Data library (tzinfo-data gem).
+    # A DataSource implementation that loads data from the set of Ruby modules
+    # included in the tzinfo-data gem.
     #
-    # To have TZInfo use this DataSource, call TZInfo::DataSource.set as follows:
+    # TZInfo will use {RubyDataSource} by default if the tzinfo-data gem
+    # is available on the load path. It can also be selected by calling
+    # {DataSource.set} as follows:
     #
-    #   TZInfo::DataSource.set(:ruby)
+    #     TZInfo::DataSource.set(:ruby)
     class RubyDataSource < DataSource
-      # Returns an array of all the available ISO 3166-1 alpha-2 country codes.
+      # (see DataSource#country_codes)
       attr_reader :country_codes
 
-      # Creates a new RubyDataSource instance.
+      # Initializes a new {RubyDataSource} instance.
       #
-      # Raises TZInfoDataNotFound if TZInfo::Data could not be found (i.e.
-      # require 'tzinfo/data' failed).
+      # @raise [TZInfoDataNotFound] if the tzinfo-data gem could not be found
+      #   (i.e. `require 'tzinfo/data'` failed).
       def initialize
         super
 
         begin
           require_data
         rescue LoadError
-          raise TZInfoDataNotFound, "TZInfo::Data could not be found (require 'tzinfo/data' failed)."
+          raise TZInfoDataNotFound, "The tzinfo-data gem could not be found (require 'tzinfo/data' failed)."
         end
 
         require_index('timezones')
@@ -35,30 +38,33 @@ module TZInfo
         @country_codes = Data::Indexes::Countries.countries.keys.sort!.freeze
       end
 
-      # Returns a frozen array of all the available timezone identifiers for
-      # data timezones (i.e. those that actually contain definitions). The
-      # identifiers are sorted according to String#<=>.
+      # (see DataSource#data_timezone_identifiers)
       def data_timezone_identifiers
         Data::Indexes::Timezones.data_timezones
       end
 
-      # Returns a frozen array of all the available timezone identifiers that
-      # are links to other timezones. The identifiers are sorted according to
-      # String#<=>.
+      # (see DataSource#linked_timezone_identifiers)
       def linked_timezone_identifiers
         Data::Indexes::Timezones.linked_timezones
       end
 
-      # Returns the name of this DataSource.
+      # (see DataSource#to_s)
       def to_s
         "Ruby DataSource"
       end
 
       protected
 
-      # Returns a TimezoneInfo instance for a given identifier.
-      # Raises InvalidTimezoneIdentifier if the timezone is not found or the
-      # identifier is invalid.
+      # Returns a {TimezoneInfo} instance for the given time zone identifier.
+      # The result will either be a {ConstantOffsetDataTimezoneInfo}, a
+      # {TransitionsDataTimezoneInfo} or a {LinkedTimezoneInfo} depending on the
+      # type of time zone.
+      #
+      # @param identifier [String] A time zone identifier.
+      # @return [TimezoneInfo] a {TimezoneInfo} instance for the given time zone
+      #   identifier.
+      # @raise [InvalidTimezoneIdentifier] if the time zone is not found or the
+      #   identifier is invalid.
       def load_timezone_info(identifier)
         valid_identifier = validate_timezone_identifier(identifier)
         valid_identifier = valid_identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__').split('/')
@@ -74,9 +80,7 @@ module TZInfo
         end
       end
 
-      # Returns a CountryInfo instance for the given ISO 3166-1 alpha-2
-      # country code. Raises InvalidCountryCode if the country could not be found
-      # or the code is invalid.
+      # (see DataSource#load_country_info)
       def load_country_info(code)
         info = Data::Indexes::Countries.countries[code]
         raise InvalidCountryCode, "Invalid country code: #{code.nil? ? 'nil' : code}" unless info
@@ -86,16 +90,23 @@ module TZInfo
       private
 
       # Requires a zone definition by its identifier (split on /).
+      #
+      # @param identifier [String] a time zone identifier. This must have
+      #   already been validated.
       def require_definition(identifier)
         require_data(*(['definitions'] + identifier))
       end
 
       # Requires an index by its name.
+      #
+      # @param name [String] an index name.
       def require_index(name)
         require_data(*['indexes', name])
       end
 
       # Requires a file from tzinfo/data.
+      #
+      # @param file [Array<String>] a relative path to a file to be required.
       def require_data(*file)
         require File.join('tzinfo', 'data', *file)
       end

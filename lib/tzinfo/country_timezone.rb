@@ -1,30 +1,40 @@
 module TZInfo
-  # A Timezone within a Country. This contains extra information about the
-  # Timezone that is specific to the Country (a Timezone could be used by
-  # multiple countries).
+  # Information about a time zone used by a {Country}.
   class CountryTimezone
-    # The zone identifier.
+    # @return [String] the identifier of the {Timezone} being described.
     attr_reader :identifier
 
-    # The latitude of this timezone in degrees as a Rational.
+    # The latitude of this time zone in degrees. Note that depending on the data
+    # source, the position given by {#latitude} and {#longitude} may not be
+    # within the country.
+    #
+    # @return [Rational] the latitude in degrees.
     attr_reader :latitude
 
-    # The longitude of this timezone in degrees as a Rational.
+    # The longitude of this time zone in degrees. Note that depending on the
+    # data source, the position given by {#latitude} and {#longitude} may not be
+    # within the country.
+    #
+    # @return [Rational] the longitude in degrees.
     attr_reader :longitude
 
-    # A description of this timezone in relation to the country, e.g.
-    # "Eastern Time". This is usually nil for countries having only a single
-    # Timezone.
+    # A description of this time zone in relation to the country, e.g. "Eastern
+    # Time". This is usually `nil` for countries that have a single time zone.
+    #
+    # @return [String] an optional description of the time zone.
     attr_reader :description
 
-    # Creates a new CountryTimezone with a timezone identifier, latitude,
-    # longitude and description. The latitude and longitude must be specified
-    # as instances of Rational.
+    # Creates a new {CountryTimezone}.
     #
     # The passed in identifier and description instances will be frozen.
     #
-    # CountryTimezone instances should normally only be constructed when
-    # by implementations of DataSource.
+    # {CountryTimezone} instances should normally only be constructed
+    # by implementations of {DataSource}.
+    #
+    # @param identifier [String] the {Timezone} identifier.
+    # @param latitude [Rational] the latitude of the time zone.
+    # @param longitude [Rational] the longitude of the time zone.
+    # @param description [String] an optional description of the time zone.
     def initialize(identifier, latitude, longitude, description = nil)
       @identifier = identifier.freeze
       @latitude = latitude
@@ -32,34 +42,44 @@ module TZInfo
       @description = description.freeze
     end
 
-    # The Timezone (actually a TimezoneProxy for performance reasons).
+    # Returns the associated {Timezone}.
+    #
+    # The result is actually an instance of {TimezoneProxy} in order to defer
+    # loading of the time zone transition data until it is first needed.
+    #
+    # @return [Timezone] the associated {Timezone}.
     def timezone
       Timezone.get_proxy(@identifier)
     end
 
-    # if description is not nil, this method returns description; otherwise it
-    # returns timezone.friendly_identifier(true).
+    # @return [String] the {description} if present, otherwise a human-readable
+    #   representation of the identifier (using {Timezone#friendly_identifier}).
     def description_or_friendly_identifier
       description || timezone.friendly_identifier(true)
     end
 
-    # Returns true if and only if the given CountryTimezone is equal to the
-    # current CountryTimezone (has the same identifer, latitude, longitude
-    # and description).
+    # Tests if the given object is equal to the current instance (has the same
+    # identifer, latitude, longitude and description).
+    #
+    # @param ct [Object] the object to be compared.
+    # @return [TrueClass] `true` if `ct` is equal to the current instance.
     def ==(ct)
       ct.kind_of?(CountryTimezone) &&
         identifier == ct.identifier  && latitude == ct.latitude &&
         longitude == ct.longitude   && description == ct.description
     end
 
-    # Returns true if and only if the given CountryTimezone is equal to the
-    # current CountryTimezone (has the same identifer, latitude, longitude
-    # and description).
+    # Tests if the given object is equal to the current instance (has the same
+    # identifer, latitude, longitude and description).
+    #
+    # @param ct [Object] the object to be compared.
+    # @return [Boolean] `true` if `ct` is equal to the current instance.
     def eql?(ct)
       self == ct
     end
 
-    # Returns a hash of this CountryTimezone.
+    # @return [Integer] a hash based on the {identifier}, {latitude},
+    # {longitude} and {description}.
     def hash
       [@identifier, @latitude, @longitude, @description].hash
     end

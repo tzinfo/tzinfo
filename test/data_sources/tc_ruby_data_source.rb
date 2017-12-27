@@ -23,7 +23,7 @@ module DataSources
 
       assert_sub_process_returns([
         'TZInfo::DataSources::TZInfoDataNotFound',
-        'TZInfo::Data could not be found (require \'tzinfo/data\' failed).'], code)
+        'The tzinfo-data gem could not be found (require \'tzinfo/data\' failed).'], code)
     end
 
     def test_load_timezone_info_data

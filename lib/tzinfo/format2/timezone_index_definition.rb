@@ -1,12 +1,15 @@
 module TZInfo
   module Format2
-    # The format 2 timezone index file includes TimezoneIndexDefinition, which
-    # provides methods used to define timezones in the index.
+    # The format 2 timezone index file includes {TimezoneIndexDefinition}, which
+    # provides the {TimezoneIndexDefinition::ClassMethods#timezone_index
+    # timezone_index} method used to define the index.
     #
     # @private
     module TimezoneIndexDefinition #:nodoc:
-      # Add class methods to the includee and initialize class instance
+      # Adds class methods to the includee and initializes class instance
       # variables.
+      #
+      # @param base [Module] the includee.
       def self.append_features(base)
         super
         base.extend(ClassMethods)
@@ -22,16 +25,22 @@ module TZInfo
       #
       # @private
       module ClassMethods #:nodoc:
-        # Returns a frozen array containing the identifiers of all data
-        # timezones. Identifiers are sorted according to String#<=>.
+        # @return [Array<String>] a frozen `Array` containing the identifiers of
+        #   all data timezones. Identifiers are sorted according to
+        #   `String#<=>`.
         attr_reader :data_timezones
 
-        # Returns a frozen array containing the identifiers of all linked
-        # timezones. Identifiers are sorted according to String#<=>.
+        # @return [Array<String>] a frozen `Array` containing the identifiers of
+        #   all linked timezones. Identifiers are sorted according to
+        #   `String#<=>`.
         attr_reader :linked_timezones
 
-        # Yields an instance of TimezoneIndexDefiner to the caller to be used
-        # to define the index.
+        # Defines the index.
+        #
+        # @yield [definer] yields to the caller to allow the index to be
+        #   defined.
+        # @yieldparam definer [TimezoneIndexDefiner] a {TimezoneIndexDefiner}
+        #   instance that should be used to define the index.
         def timezone_index
           definer = TimezoneIndexDefiner.new
           yield definer

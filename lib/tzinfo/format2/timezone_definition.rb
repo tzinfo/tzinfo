@@ -1,11 +1,13 @@
 module TZInfo
   module Format2
-    # Format2::TimezoneDefinition is included into format 2 Timezone definition
-    # modules and provides methods for defining timezones.
+    # {Format2::TimezoneDefinition} is included into format 2 time zone
+    # definition modules and provides methods for defining time zones.
     #
     # @private
     module TimezoneDefinition #:nodoc:
-      # Add class methods to the includee.
+      # Adds class methods to the includee.
+      #
+      # @param base [Module] the includee.
       def self.append_features(base)
         super
         base.extend(ClassMethods)
@@ -15,21 +17,25 @@ module TZInfo
       #
       # @private
       module ClassMethods #:nodoc:
-        # Returns the last TimezoneInfo to be defined with timezone or
-        # linked_timezone.
+        # @return [TimezoneInfo] the last time zone to be defined.
         def get
           @timezone
         end
 
         private
 
-        # Returns the class to be instantiated and yielded by timezone.
+        # @return [Class] the class to be instantiated and yielded by
+        #   {#timezone}.
         def timezone_definer_class
           TimezoneDefiner
         end
 
-        # Creates a TimezoneDefiner instance and yields it to the caller in order
-        # to define the timezone.
+        # Defines a data time zone.
+        #
+        # @param identifier [String] the identifier of the time zone.
+        # @yield [definer] yields to the caller to define the time zone.
+        # @yieldparam definer [Object] an instance of the class returned by
+        #   {#timezone_definer_class}, typically {TimezoneDefiner}.
         def timezone(identifier)
           definer = timezone_definer_class.new
           yield definer
@@ -41,7 +47,12 @@ module TZInfo
           end
         end
 
-        # Defines a linked timezone.
+        # Defines a linked time zone.
+        #
+        # @param identifier [String] the identifier of the time zone being
+        #   defined.
+        # @param link_to_identifier [String] the identifier the new time zone
+        #   links to (is an alias for).
         def linked_timezone(identifier, link_to_identifier)
           @timezone = DataSources::LinkedTimezoneInfo.new(identifier, link_to_identifier)
         end

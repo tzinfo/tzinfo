@@ -1,12 +1,15 @@
 module TZInfo
   module Format1
-    # The format 1 timezone index file includes
-    # Format1::TimezoneIndexDefinition, which provides methods used to define
-    # timezones in the index.
+    # The format 1 TZInfo::Data time zone index file includes
+    # {Format1::TimezoneIndexDefinition}, which provides methods used to define
+    # time zones in the index.
     #
     # @private
     module TimezoneIndexDefinition #:nodoc:
-      # Add class methods to the includee and initialize class instance variables.
+      # Adds class methods to the includee and initializes class instance
+      # variables.
+      #
+      # @param base [Module] the includee.
       def self.append_features(base)
         super
         base.extend(ClassMethods)
@@ -21,8 +24,9 @@ module TZInfo
       #
       # @private
       module ClassMethods #:nodoc:
-        # Returns a frozen array containing the identifiers of all data timezones.
-        # Identifiers are sorted according to String#<=>.
+        # @return [Array<String>] a frozen `Array` containing the identifiers of
+        #   all data time zones. Identifiers are sorted according to
+        #   `String#<=>`.
         def data_timezones
           unless @data_timezones.frozen?
             @data_timezones = @data_timezones.sort.freeze
@@ -30,8 +34,9 @@ module TZInfo
           @data_timezones
         end
 
-        # Returns a frozen array containing the identifiers of all linked
-        # timezones. Identifiers are sorted according to String#<=>.
+        # @return [Array<String>] a frozen `Array` containing the identifiers of
+        #   all linked time zones. Identifiers are sorted according to
+        #   `String#<=>`.
         def linked_timezones
           unless @linked_timezones.frozen?
             @linked_timezones = @linked_timezones.sort.freeze
@@ -41,14 +46,18 @@ module TZInfo
 
         private
 
-        # Defines a timezone based on data.
+        # Adds a data time zone to the index.
+        #
+        # @param identifier [String] the time zone identifier.
         def timezone(identifier)
           identifier.freeze
           @timezones << identifier
           @data_timezones << identifier
         end
 
-        # Defines a timezone which is a link to another timezone.
+        # Adds a linked time zone to the index.
+        #
+        # @param identifier [String] the time zone identifier.
         def linked_timezone(identifier)
           identifier.freeze
           @timezones << identifier
@@ -58,6 +67,8 @@ module TZInfo
     end
   end
 
-  # Alias used by TZInfo::Data format1 releases.
-  TimezoneIndexDefinition = Format1::TimezoneIndexDefinition
+  # Alias used by TZInfo::Data format 1 releases.
+  #
+  # @private
+  TimezoneIndexDefinition = Format1::TimezoneIndexDefinition #:nodoc:
 end

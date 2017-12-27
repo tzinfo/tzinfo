@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Top level module for TZInfo.
+# The top level module for TZInfo.
 module TZInfo
 end
 
@@ -16,6 +16,7 @@ require 'tzinfo/local_timestamp'
 require 'tzinfo/timezone_offset'
 require 'tzinfo/timezone_transition'
 
+require 'tzinfo/data_sources'
 require 'tzinfo/data_sources/timezone_info'
 require 'tzinfo/data_sources/data_timezone_info'
 require 'tzinfo/data_sources/linked_timezone_info'
@@ -42,6 +43,7 @@ require 'tzinfo/timezone_proxy'
 require 'tzinfo/country'
 require 'tzinfo/country_timezone'
 
+require 'tzinfo/format2'
 require 'tzinfo/format2/country_definer'
 require 'tzinfo/format2/country_index_definer'
 require 'tzinfo/format2/country_index_definition'
@@ -50,6 +52,7 @@ require 'tzinfo/format2/timezone_definition'
 require 'tzinfo/format2/timezone_index_definer'
 require 'tzinfo/format2/timezone_index_definition'
 
+require 'tzinfo/format1'
 require 'tzinfo/format1/country_definer'
 require 'tzinfo/format1/country_index_definition'
 require 'tzinfo/format1/timezone_definer'

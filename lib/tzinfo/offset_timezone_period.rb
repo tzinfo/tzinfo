@@ -1,35 +1,38 @@
 module TZInfo
-  # An OffsetTimezonePeriod instance represents a period of time in a timezone
-  # where the same offset from UTC applies. The offset is constantly observed -
-  # the period of time extends indefinitely forward and back.
+  # Represents the infinite period of time in a time zone that constantly
+  # observes the same offset from UTC (has an unbounded start and end).
   class OffsetTimezonePeriod < TimezonePeriod
-    # Initializes a new OffsetTimezonePeriod with a TimezoneOffset.
+    # Initializes an {OffsetTimezonePeriod}.
     #
-    # Raises ArgumentError if offset is nil.
-    #
-    # OffsetTimezonePeriod instances should not normally be constructed
-    # manually.
+    # @param offset [TimezoneOffset] the offset that is constantly observed.
+    # @raise [ArgumentError] if `offset` is `nil`.
     def initialize(offset)
       super
     end
 
-    # Returns nil - OffsetTimezonePeriods have no start.
+    # @return [TimezoneTransition] the transition that defines the start of this
+    #   {TimezonePeriod}, always `nil` for {OffsetTimezonePeriod}.
     def start_transition
       nil
     end
 
-    # Returns nil - OffsetTimezonePeriods have no end.
+    # @return [TimezoneTransition] the transition that defines the end of this
+    #   {TimezonePeriod}, always `nil` for {OffsetTimezonePeriod}.
     def end_transition
       nil
     end
 
-    # Returns true if this OffsetTimezonePeriod is equal to p.
+    # Determines if this {OffsetTimezonePeriod} is equal to another instance.
+    #
+    # @param p [Object] the instance to test for equality.
+    # @return [Boolean] `true` if `p` is a {OffsetTimezonePeriod} with the same
+    #   {offset}, otherwise `false`.
     def ==(p)
       p.kind_of?(OffsetTimezonePeriod) && offset == p.offset
     end
     alias eql? ==
 
-    # Returns a hash of this OffsetTimezonePeriod.
+    # @return [Integer] a hash based on {offset}.
     def hash
       offset.hash
     end

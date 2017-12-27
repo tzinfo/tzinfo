@@ -4,39 +4,49 @@ require 'concurrent/map'
 require 'thread'
 
 module TZInfo
-  # InvalidDataSource is raised if the DataSource is used doesn't implement one
-  # of the required methods.
+  # {InvalidDataSource} is raised if the selected {DataSource} doesn't implement
+  # one of the required methods.
   class InvalidDataSource < StandardError
   end
 
-  # DataSourceNotFound is raised if no data source could be found (i.e.
-  # if 'tzinfo/data' cannot be found on the load path and no valid zoneinfo
+  # {DataSourceNotFound} is raised if no data source could be found (i.e. if
+  # `'tzinfo/data'` cannot be found on the load path and no valid zoneinfo
   # directory can be found on the system).
   class DataSourceNotFound < StandardError
   end
 
-  # The base class for data sources of timezone and country data.
+  # TZInfo can be used with different data sources for time zone and country
+  # data. Each source of data is implemented as a subclass of {DataSource}.
   #
-  # Use DataSource.set to change the data source being used.
+  # To choose a data source and override the default selection, use the
+  # {DataSource.set} method.
+  #
+  # @abstract To create a custom data source, create a subclass of {DataSource}
+  #   and implement the {load_timezone_info}, {data_timezone_identifiers},
+  #   {linked_timezone_identifiers}, {load_country_info} and {country_codes}
+  #   methods.
   class DataSource
     # The currently selected data source.
+    #
+    # @private
     @@instance = nil
 
     # Mutex used to ensure the default data source is only created once.
+    #
+    # @private
     @@default_mutex = Mutex.new
 
-    # Returns the currently selected DataSource instance.
+    # @return [DataSource] the currently selected source of data.
     def self.get
-      # If a DataSource hasn't been manually set when the first request is
-      # made to obtain a DataSource, then a Default data source is created.
-
+      # If a DataSource hasn't been manually set when the first request is made
+      # to obtain a DataSource, then a default data source is created.
+      #
       # This is done at the first request rather than when TZInfo is loaded to
-      # avoid unnecessary (or in some cases potentially harmful) attempts to
-      # find a suitable DataSource.
-
-      # A Mutex is used to ensure that only a single default instance is
-      # created (having two different DataSources in use simultaneously could
-      # cause unexpected results).
+      # avoid unnecessary attempts to find a suitable DataSource.
+      #
+      # A Mutex is used to ensure that only a single default instance is created
+      # (this avoiding the possibility of retaining two copies of the same data
+      # in memory).
 
       unless @@instance
         @@default_mutex.synchronize do
@@ -47,60 +57,71 @@ module TZInfo
       @@instance
     end
 
-    # Sets the currently selected data source for Timezone and Country data.
+    # Sets the currently selected data source for time zone and country data.
     #
     # This should usually be set to one of the two standard data source types:
     #
-    # * +:ruby+ - read data from the Ruby modules included in the TZInfo::Data
+    # * `:ruby` - read data from the Ruby modules included in the TZInfo::Data
     #   library (tzinfo-data gem).
-    # * +:zoneinfo+ - read data from the zoneinfo files included with most
+    # * `:zoneinfo` - read data from the zoneinfo files included with most
     #   Unix-like operating sytems (e.g. in /usr/share/zoneinfo).
     #
     # To set TZInfo to use one of the standard data source types, call
-    # \TZInfo::DataSource.set in one of the following ways:
+    # `TZInfo::DataSource.set`` in one of the following ways:
     #
-    #   TZInfo::DataSource.set(:ruby)
-    #   TZInfo::DataSource.set(:zoneinfo)
-    #   TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir)
-    #   TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_tab_file)
+    #     TZInfo::DataSource.set(:ruby)
+    #     TZInfo::DataSource.set(:zoneinfo)
+    #     TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir)
+    #     TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_tab_file)
     #
-    # \DataSource.set(:zoneinfo) will automatically search for the zoneinfo
+    # `DataSource.set(:zoneinfo)` will automatically search for the zoneinfo
     # directory by checking the paths specified in
-    # DataSources::ZoneinfoDataSource.search_paths.
-    # DataSources::ZoneinfoDirectoryNotFound will be raised if no valid zoneinfo
-    # directory could be found.
+    # {DataSources::ZoneinfoDataSource.search_path}.
+    # {DataSources::ZoneinfoDirectoryNotFound} will be raised if no valid
+    # zoneinfo directory could be found.
     #
-    # \DataSource.set(:zoneinfo, zoneinfo_dir) uses the specified zoneinfo
-    # directory as the data source. If the directory is not a valid zoneinfo
-    # directory, an InvalidZoneinfoDirectory exception will be raised.
+    # `DataSource.set(:zoneinfo, zoneinfo_dir)` uses the specified
+    # `zoneinfo_dir` directory as the data source. If the directory is not a
+    # valid zoneinfo directory, a {DataSources::InvalidZoneinfoDirectory}
+    # exception will be raised.
     #
-    # \DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_tab_file) uses the
-    # specified zoneinfo directory as the data source, but loads the iso3166.tab
-    # file from an alternate path. If the directory is not a valid zoneinfo
-    # directory, an InvalidZoneinfoDirectory exception will be raised.
+    # `DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_tab_file)` uses the
+    # specified `zoneinfo_dir` directory as the data source, but loads the
+    # `iso3166.tab` file from the path given by `iso3166_tab_file`. If the
+    # directory is not a valid zoneinfo directory, a
+    # {DataSources::InvalidZoneinfoDirectory} exception will be raised.
     #
     # Custom data sources can be created by subclassing TZInfo::DataSource and
     # implementing the following methods:
     #
-    # * \load_timezone_info
-    # * \data_timezone_identifiers
-    # * \linked_timezone_identifiers
-    # * \load_country_info
-    # * \country_codes
+    # * {load_timezone_info}
+    # * {data_timezone_identifiers}
+    # * {linked_timezone_identifiers}
+    # * {load_country_info}
+    # * {country_codes}
     #
-    # To have TZInfo use the custom data source, call \DataSource.set as
-    # follows:
+    # To have TZInfo use the custom data source, call {DataSource.set}, passing
+    # an instance of the custom data source implementation as follows:
     #
-    #   TZInfo::DataSource.set(CustomDataSource.new)
+    #     TZInfo::DataSource.set(CustomDataSource.new)
     #
-    # To avoid inconsistent data, \DataSource.set should be called before
-    # accessing any Timezone or Country data.
+    # Calling {DataSource.set} will only affect instances of {Timezone} and
+    # {Country} obtained with {Timezone.get} and {Country.get} subsequent to the
+    # {DataSource.set} call. Existing {Timezone} and {Country} instances will be
+    # unaffected.
     #
-    # If \DataSource.set is not called, TZInfo will by default use TZInfo::Data
-    # as the data source. If TZInfo::Data is not available (i.e. if require
-    # 'tzinfo/data' fails), then TZInfo will search for a zoneinfo directory
-    # instead (using the search path specified by
-    # TZInfo::DataSources::ZoneinfoDataSource::DEFAULT_SEARCH_PATH).
+    # If {DataSource.set} is not called, TZInfo will by default attempt to use
+    # TZInfo::Data as the data source. If TZInfo::Data is not available (i.e. if
+    # `require 'tzinfo/data'` fails), then TZInfo will search for a zoneinfo
+    # directory instead (using the search path specified by
+    # {DataSources::ZoneinfoDataSource.search_path}).
+    #
+    # @param data_source_or_type [Object] either `:ruby`, `:zoneinfo` or an
+    #   instance of a {DataSource}.
+    # @param args [Array<Object>] when `data_source_or_type` is a symbol,
+    #   optional arguments to use when initializing the data source.
+    # @raise [ArgumentError] if `data_source_or_type` is not `:ruby`,
+    #   `:zoneinfo` or an instance of {DataSource}.
     def self.set(data_source_or_type, *args)
       if data_source_or_type.kind_of?(DataSource)
         @@instance = data_source_or_type
@@ -113,34 +134,36 @@ module TZInfo
       end
     end
 
-    # Creates a new DataSource instance. Typically only called via DataSource
-    # subclasses.
+    # Initializes a new {DataSource} instance. Typically only called via
+    # subclasses of {DataSource}.
     def initialize
       @timezones = Concurrent::Map.new
     end
 
-    # Returns a DataSources::TimezoneInfo instance for a given identifier. The
-    # DataSources::TimezoneInfo instance should derive from either
-    # DataSources::DataTimezoneInfo for timezones that define their own data or
-    # DataSources::LinkedTimezoneInfo for links or aliases to other timezones.
+    # Returns a {DataSources::TimezoneInfo} instance for the given identifier.
+    # The result will derive from either {DataSources::DataTimezoneInfo} for
+    # time zones that define their own data or {DataSources::LinkedTimezoneInfo}
+    # for links or aliases to other time zones.
     #
-    # get_timezone_info calls load_timezone_info to obtain a
-    # DataSources::TimezoneInfo instance. The returned instance is cached and
-    # returned in subsequent calls to get_timezone_info for the identifier.
+    # {get_timezone_info} calls {load_timezone_info} to create the
+    # {DataSources::TimezoneInfo} instance. The returned instance is cached and
+    # returned in subsequent calls to {get_timezone_info} for the identifier.
     #
-    # Raises InvalidTimezoneIdentifier if the timezone is not found or the
-    # identifier is invalid.
+    # @param identifier [String] A time zone identifier.
+    # @return [DataSources::TimezoneInfo] a {DataSources::TimezoneInfo} instance
+    #   for a given identifier.
+    # @raise [InvalidTimezoneIdentifier] if the time zone is not found or the
+    #   identifier is invalid.
     def get_timezone_info(identifier)
       result = @timezones[identifier]
 
       unless result
         # Thread-safety: It is possible that multiple equivalent TimezoneInfo
-        # instances could be created here in concurrently executing threads.
-        # The consequences of this are that the data may be loaded more than
-        # once (depending on the data source) and memoized calculations could
-        # be discarded. The performance benefit of ensuring that only a single
-        # instance is created is unlikely to be worth the overhead of only
-        # allowing one TimezoneInfo to be loaded at a time.
+        # instances could be created here in concurrently executing threads. The
+        # consequences of this are that the data may be loaded more than once
+        # (depending on the data source). The performance benefit of ensuring
+        # that only a single instance is created is unlikely to be worth the
+        # overhead of only allowing one TimezoneInfo to be loaded at a time.
 
         result = load_timezone_info(identifier)
         @timezones[result.identifier] = result
@@ -149,8 +172,8 @@ module TZInfo
       result
     end
 
-    # Returns a frozen array of all the available timezone identifiers. The
-    # identifiers are sorted according to String#<=>.
+    # @return [Array<String>] a frozen `Array`` of all the available time zone
+    #   identifiers. The identifiers are sorted according to `String#<=>`.
     def timezone_identifiers
       # Thread-safety: It is possible that the value of @timezone_identifiers
       # may be calculated multiple times in concurrently executing threads. It
@@ -159,69 +182,92 @@ module TZInfo
       @timezone_identifiers ||= build_timezone_identifiers
     end
 
-    # Returns a frozen array of all the available timezone identifiers for data
-    # timezones (i.e. those that actually contain definitions). The identifiers
-    # are sorted according to String#<=>.
+    # Returns a frozen `Array` of all the available time zone identifiers for
+    # data time zones (i.e. those that actually contain definitions). The
+    # identifiers are sorted according to `String#<=>`.
+    #
+    # @return [Array<String>] a frozen `Array` of all the available time zone
+    #   identifiers for data time zones.
     def data_timezone_identifiers
       raise_invalid_data_source('data_timezone_identifiers')
     end
 
-    # Returns a frozen array of all the available timezone identifiers that are
-    # links to other timezones. The identifiers are sorted according to
-    # String#<=>.
+    # Returns a frozen `Array` of all the available time zone identifiers that
+    # are links to other time zones. The identifiers are sorted according to
+    # `String#<=>`.
+    #
+    # @return [Array<String>] a frozen `Array` of all the available time zone
+    #   identifiers that are links to other time zones.
     def linked_timezone_identifiers
       raise_invalid_data_source('linked_timezone_identifiers')
     end
 
-    # Returns a DataSources::CountryInfo instance for the given ISO 3166-1
-    # alpha-2 country code. Raises InvalidCountryCode if the country could not
-    # be found or the code is invalid.
-    #
-    # get_country_info calls load_country_info to obtain a CountryInfo instance.
+    # @param code [String] an ISO 3166-1 alpha-2 country code.
+    # @return [DataSources::CountryInfo] a {DataSources::CountryInfo} instance
+    #   for the given ISO 3166-1 alpha-2 country code.
+    # @raise [InvalidCountryCode] if the country could not be found or the code
+    #   is invalid.
     def get_country_info(code)
       load_country_info(code)
     end
 
-    # Returns a frozen array of all the available ISO 3166-1 alpha-2 country
-    # codes. The identifiers are sorted according to String#<=>.
+    # Returns a frozen `Array` of all the available ISO 3166-1 alpha-2 country
+    # codes. The identifiers are sorted according to `String#<=>`.
+    #
+    # @return [Array<String>] a frozen `Array` of all the available ISO 3166-1
+    #   alpha-2 country codes.
     def country_codes
       raise_invalid_data_source('country_codes')
     end
 
-    # Returns the name of this DataSource.
+    # @return [String] a description of the {DataSource}.
     def to_s
       "Default DataSource"
     end
 
-    # Returns the internal object state as a programmer-readable string.
+    # @return [String] the internal object state as a programmer-readable
+    #   `String`.
     def inspect
       "#<#{self.class}>"
     end
 
     protected
 
-    # Returns a DataSources::TimezoneInfo instance for a given identifier. The
-    # DataSources::TimezoneInfo instance should derive from either
-    # DataSources::DataTimezoneInfo for timezones that define their own data or
-    # DataSources::LinkedTimezoneInfo for links or aliases to other timezones.
+    # Returns a {DataSources::TimezoneInfo} instance for the given time zone
+    # identifier. The result should derive from either
+    # {DataSources::DataTimezoneInfo} for time zones that define their own data
+    # or {DataSources::LinkedTimezoneInfo} for links to or aliases for other
+    # time zones.
     #
-    # Raises InvalidTimezoneIdentifier if the timezone is not found or the
-    # identifier is invalid.
+    # @param identifier [String] A time zone identifier.
+    # @return [DataSources::TimezoneInfo] a {DataSources::TimezoneInfo} instance
+    #   for the given time zone identifier.
+    # @raise [InvalidTimezoneIdentifier] if the time zone is not found or the
+    #   identifier is invalid.
     def load_timezone_info(identifier)
       raise_invalid_data_source('load_timezone_info')
     end
 
-    # Returns a DataSources::CountryInfo instance for the given ISO 3166-1
-    # alpha-2 country code. Raises InvalidCountryCode if the country could not
-    # be found or the code is invalid.
+    # @param code [String] an ISO 3166-1 alpha-2 country code.
+    # @return [DataSources::CountryInfo] a {DataSources::CountryInfo} instance
+    #   for the given ISO 3166-1 alpha-2 country code.
+    # @raise [InvalidCountryCode] if the country could not be found or the code
+    #   is invalid.
     def load_country_info(code)
       raise_invalid_data_source('load_country_info')
     end
 
-    # Checks that the given identifier is a valid timezone identifier (can be
-    # found in the timezone_identifiers Array). If the identifier is valid, the
-    # String instance representing that identifier from timezone_identifiers is
-    # returned. Otherwise an InvalidTimezoneIdentifier exception is raised.
+    # Checks that the given identifier is a valid time zone identifier (can be
+    # found in the {timezone_identifiers} `Array`). If the identifier is valid,
+    # the `String` instance representing that identifier from
+    # `timezone_identifiers` is returned. Otherwise an
+    # {InvalidTimezoneIdentifier} exception is raised.
+    #
+    # @param identifier [String] a time zone identifier to be validated.
+    # @return [String] the `String` instance equivalent to `identifier` from
+    #   {timezone_identifiers}.
+    # @raise [InvalidTimezoneIdentifier] if `identifier` was not found in
+    #   {timezone_identifiers}.
     def validate_timezone_identifier(identifier)
       valid_identifier = find_timezone_identifier(identifier)
       raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier.nil? ? 'nil' : identifier}" unless valid_identifier
@@ -230,8 +276,10 @@ module TZInfo
 
     private
 
-    # Creates a DataSource instance for use as the default. Used if
-    # no preference has been specified manually.
+    # Creates a {DataSource} instance for use as the default. Used if no
+    # preference has been specified manually.
+    #
+    # @return [DataSource] the newly created default {DataSource} instance.
     def self.create_default_data_source
       has_tzinfo_data = false
 
@@ -250,10 +298,24 @@ module TZInfo
       end
     end
 
+    # Raises {InvalidDataSource} to indicate that a method has not been
+    # overridden by a particular data source implementation.
+    #
+    # @raise [InvalidDataSource] always.
     def raise_invalid_data_source(method_name)
       raise InvalidDataSource, "#{method_name} not defined"
     end
 
+    # Combines {data_timezone_identifiers} and {linked_timezone_identifiers}
+    # to create an `Array` containing all valid time zone identifiers. If
+    # {linked_timezone_identifiers} is empty, the {data_timezone_identifiers}
+    # instance is returned.
+    #
+    # The returned `Array` is frozen. The identifiers are sorted according to
+    # `String#<=>`.
+    #
+    # @return [Array<String>] an `Array` containing all valid time zone
+    #   identifiers.
     def build_timezone_identifiers
       data = data_timezone_identifiers
       linked = linked_timezone_identifiers
@@ -261,9 +323,13 @@ module TZInfo
     end
 
     if [].respond_to?(:bsearch)
-      # If the given identifier is contained within the timezone_identifiers
-      # Array, the String instance representing that identifier from
-      # timezone_identifiers is returned. Otherwise, nil is returned.
+      # If the given `identifier` is contained within the {timezone_identifiers}
+      # `Array`, the `String` instance representing that identifier from
+      # {timezone_identifiers} is returned. Otherwise, `nil` is returned.
+      #
+      # @param identifier [String] A time zone identifier to search for.
+      # @return [String] the `String` instance representing `identifier` from
+      #   {timezone_identifiers} if found, or `nil` if not found.
       #
       # :nocov_no_bsearch:
       def find_timezone_identifier(identifier)
@@ -273,9 +339,13 @@ module TZInfo
       end
       # :nocov_no_bsearch:
     else
-      # If the given identifier is contained within the timezone_identifiers
-      # Array, the String instance representing that identifier from
-      # timezone_identifiers is returned. Otherwise, nil is returned.
+      # If the given `identifier` is contained within the {timezone_identifiers}
+      # `Array`, the `String` instance representing that identifier from
+      # {timezone_identifiers} is returned. Otherwise, `nil` is returned.
+      #
+      # @param identifier [String] A time zone identifier to search for.
+      # @return [String] the `String` instance representing `identifier` from
+      #   {timezone_identifiers} if found, or `nil` if not found.
       #
       # :nocov_bsearch:
       def find_timezone_identifier(identifier)

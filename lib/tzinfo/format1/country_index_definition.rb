@@ -1,11 +1,16 @@
 module TZInfo
   module Format1
-    # The format 1 country index file includes Format1::CountryIndexDefinition,
-    # which provides a country method used to define each country in the index.
+    # The format 1 TZInfo::Data country index file includes
+    # {Format1::CountryIndexDefinition}, which provides a
+    # {CountryIndexDefinition::ClassMethods#country country} method used to
+    # define each country in the index.
     #
     # @private
     module CountryIndexDefinition #:nodoc:
-      # Add class methods to the includee and initialize class instance variables.
+      # Adds class methods to the includee and initializes class instance
+      # variables.
+      #
+      # @param base [Module] the includee.
       def self.append_features(base)
         super
         base.extend(ClassMethods)
@@ -16,17 +21,21 @@ module TZInfo
       #
       # @private
       module ClassMethods #:nodoc:
-        # Returns a frozen hash of all the countries that have been defined in
-        # the index.
+        # @return [Hash<String, DataSources::CountryInfo>] a frozen `Hash`
+        #   of all the countries that have been defined in the index keyed by
+        #   their codes.
         def countries
           @countries.freeze
         end
 
         private
 
-        # Defines a country with an ISO 3166 country code and name. If a block
-        # is supplied, a CountryDefinerFormat instance is yielded to obtain the
-        # timezones for the country.
+        # Defines a country with an ISO 3166-1 alpha-2 country code and name.
+        #
+        # @param code [String] the ISO 3166-1 alpha-2 country code.
+        # @param name [String] the name of the country.
+        # @yield [definer] (optional) to obtain the time zones for the country.
+        # @yieldparam definer [CountryDefiner] a {CountryDefiner} instance.
         def country(code, name)
           zones = if block_given?
             definer = CountryDefiner.new
@@ -43,5 +52,7 @@ module TZInfo
   end
 
   # Alias used by TZInfo::Data format1 releases.
-  CountryIndexDefinition = Format1::CountryIndexDefinition
+  #
+  # @private
+  CountryIndexDefinition = Format1::CountryIndexDefinition #:nodoc:
 end

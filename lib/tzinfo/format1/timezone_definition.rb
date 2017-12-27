@@ -1,11 +1,13 @@
 module TZInfo
   module Format1
-    # Format1::TimezoneDefinition is included into format 1 Timezone definition
-    # modules and provides the methods for defining timezones.
+    # {Format1::TimezoneDefinition} is included into format 1 time zone
+    # definition modules and provides the methods for defining time zones.
     #
     # @private
     module TimezoneDefinition #:nodoc:
-      # Add class methods to the includee.
+      # Adds class methods to the includee.
+      #
+      # @param base [Module] the includee.
       def self.append_features(base)
         super
         base.extend(Format2::TimezoneDefinition::ClassMethods)
@@ -18,7 +20,8 @@ module TZInfo
       module ClassMethods #:nodoc:
         private
 
-        # Returns the class to be instantiated and yielded by timezone.
+        # @return the class to be instantiated and yielded by
+        # {Format2::TimezoneDefinition::ClassMethods#timezone}.
         def timezone_definer_class
           TimezoneDefiner
         end
@@ -27,5 +30,7 @@ module TZInfo
   end
 
   # Alias used by TZInfo::Data format1 releases.
-  TimezoneDefinition = Format1::TimezoneDefinition
+  #
+  # @private
+  TimezoneDefinition = Format1::TimezoneDefinition #:nodoc:
 end

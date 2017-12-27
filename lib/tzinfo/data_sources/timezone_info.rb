@@ -2,35 +2,42 @@
 
 module TZInfo
   module DataSources
-    # Represents a timezone defined by a data source.
+    # Represents a time zone defined by a data source.
+    #
+    # @abstract Data sources return instances of {TimezoneInfo} subclasses.
     class TimezoneInfo
-
-      # The timezone identifier.
+      # @return [String] the identifier of the time zone.
       attr_reader :identifier
 
-      # Constructs a new TimezoneInfo with an identifier.
+      # Initializes a new TimezoneInfo. The passed in `identifer` instance will
+      # be frozen.
       #
-      # The passed in identifer instance will be frozen.
-      #
-      # Raises ArgumentError if identifier is nil.
+      # @param identifier [String] the identifier of the time zone.
+      # @raise [ArgumentError] if identifier is `nil`.
       def initialize(identifier)
         raise ArgumentError, 'identifier must be specified' unless identifier
         @identifier = identifier.freeze
       end
 
-      # Returns the internal object state as a programmer-readable string.
+      # @return [String] the internal object state as a programmer-readable
+      #   `String`.
       def inspect
         "#<#{self.class}: #@identifier>"
       end
 
-      # Constructs a Timezone instance for the timezone represented by this
-      # TimezoneInfo.
+      # @return [Timezone] A new {Timezone} instance for the time zone
+      #   represented by this {TimezoneInfo}.
       def create_timezone
         raise_not_implemented('create_timezone')
       end
 
       private
 
+      # Raises a {NotImplementedError}.
+      #
+      # @param method_name [String] the name of the method that must be
+      #   overridden.
+      # @raise NotImplementedError always.
       def raise_not_implemented(method_name)
         raise NotImplementedError, "Subclasses must override #{method_name}"
       end

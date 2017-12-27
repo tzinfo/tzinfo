@@ -2,44 +2,51 @@
 
 module TZInfo
   module DataSources
-    # Represents a data timezone defined by a constantly observed offset.
+    # Represents a data time zone defined by a constantly observed offset.
     class ConstantOffsetDataTimezoneInfo < DataTimezoneInfo
-      # The offset constantly observed as a TimezoneOffset.
+      # @return [TimezoneOffset] the offset that is constantly observed.
       attr_reader :constant_offset
 
-      # Constructs a new ConstantOffsetDataTimezoneInfo with its identifier anda
-      # TimezoneOffset that is constantly observed.
+      # Initializes a new {ConstantOffsetDataTimezoneInfo}.
       #
-      # A reference to the passed in TimezoneOffset will be retained.
+      # The passed in `identifer` instance will be frozen. A reference to the
+      # passed in {TimezoneOffset} will be retained.
       #
-      # Raises ArgumentError if identifier or constant_offset are nil.
+      # @param identifier [String] the identifier of the time zone.
+      # @param constant_offset [TimezoneOffset] the constantly observed offset.
+      # @raise [ArgumentError] if `identifier` or `constant_offset` is `nil`.
       def initialize(identifier, constant_offset)
         super(identifier)
         raise ArgumentError, 'constant_offset must be specified' unless constant_offset
         @constant_offset = constant_offset
       end
 
-      # Returns the unbounded TimezonePeriod for the timezone's constantly
-      # observed offset.
+      # @param timestamp [Timestamp] ignored.
+      # @return [TimezonePeriod] an unbounded {TimezonePeriod} for the time
+      #   zone's constantly observed offset.
       def period_for(timestamp)
         constant_period
       end
 
-      # Returns an Array containing a single unbounded TimezonePeriod for the
-      # timezone's constantly observed offset.
+      # @param local_timestamp [Timestamp] ignored.
+      # @return [Array<TimezonePeriod>] an `Array` containing a single unbounded
+      #   {TimezonePeriod} for the time zone's constantly observed offset.
       def periods_for_local(local_timestamp)
         [constant_period]
       end
 
-      # Returns an empty Array, since there are no transitions if timezones that
-      # observe a constant offset.
+      # @param to_timestamp [Timestamp] ignored.
+      # @param from_timestamp [Timestamp] ignored.
+      # @return [Array] an empty `Array`, since there are no transitions in time
+      #   zones that observe a constant offset.
       def transitions_up_to(to_timestamp, from_timestamp = nil)
         []
       end
 
       private
 
-      # Returns a TimezonePeriod with the constant offset of this timezone.
+      # @return [TimezonePeriod] an unbounded {TimezonePeriod} with the constant
+      #   offset of this timezone.
       def constant_period
         OffsetTimezonePeriod.new(@constant_offset)
       end

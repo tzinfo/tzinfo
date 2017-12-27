@@ -2,45 +2,59 @@
 
 module TZInfo
   module DataSources
-    # An InvalidZoneinfoFile exception is raised if an attempt is made to load an
-    # invalid zoneinfo file.
+    # An {InvalidZoneinfoFile} exception is raised if an attempt is made to load
+    # an invalid zoneinfo file.
     class InvalidZoneinfoFile < StandardError
     end
 
     # Reads compiled zoneinfo TZif (\0, 2 or 3) files.
-    #
-    # @private
     class ZoneinfoReader #:nodoc:
-      # Reads a zoneinfo structure from the file_path file. Returns either a
-      # TimezoneOffset that is constantly observed or an Array of
-      # TimezoneTransitions.
+      # Reads a zoneinfo structure from the given path. Returns either a
+      # {TimezoneOffset} that is constantly observed or an `Array`
+      # {TimezoneTransition}s.
       #
-      # Raises SecurityError if safe mode is enabled and file_path is tainted.
-      #
-      # Raises InvalidZoneinfoFile if file_path does not refer to a valid zoneinfo
-      # file.
+      # @param file_path [String] the path of a zoneinfo file.
+      # @return [Object] either a {TimezoneOffset} or an `Array` of
+      #   {TimezoneTransition}s.
+      # @raise [SecurityError] if safe mode is enabled and `file_path` is
+      # tainted.
+      # @raise [InvalidZoneinfoFile] if `file_path`` does not refer to a valid
+      #   zoneinfo file.
       def read(file_path)
         File.open(file_path, 'rb') { |file| parse(file) }
       end
 
       private
 
-      # Unpack will return unsigned 32-bit integers. Translate to
-      # signed 32-bit.
+      # Translates an unsigned 32-bit integer (as returned by unpack) to signed
+      # 32-bit.
+      #
+      # @param long [Integer] an unsigned 32-bit integer.
+      # @return [Integer] {long} translated to signed 32-bit.
       def make_signed_int32(long)
         long >= 0x80000000 ? long - 0x100000000 : long
       end
 
-      # Unpack will return a 64-bit integer as two unsigned 32-bit integers
-      # (most significant first). Translate to signed 64-bit
+      # Translates a pair of unsigned 32-bit integers (as returned by unpack,
+      # most significant first) to a signed 64-bit integer.
+      #
+      # @param high [Integer] the most significant 32-bits.
+      # @param low [Integer] the least significant 32-bits.
+      # @result [Integer] {high} and {low} combined and translated to signed
+      #   64-bit.
       def make_signed_int64(high, low)
         unsigned = (high << 32) | low
         unsigned >= 0x8000000000000000 ? unsigned - 0x10000000000000000 : unsigned
       end
 
-      # Read bytes from file and check that the correct number of bytes could
-      # be read. Raises InvalidZoneinfoFile if the number of bytes didn't match
-      # the number requested.
+      # Reads the given number of bytes from the given file and checks that the
+      # correct number of bytes could be read.
+      #
+      # @param file [IO] the file to read from.
+      # @param bytes [Integer] the number of bytes to read.
+      # @return [String] the bytes that were read.
+      # @raise [InvalidZoneinfoFile] if the number of bytes available didn't
+      #   match the number requested.
       def check_read(file, bytes)
         result = file.read(bytes)
 
@@ -55,8 +69,10 @@ module TZInfo
       # for DST periods. Derive the base offset (utc_offset) where DST is
       # observed from either the previous or next non-DST period.
       #
-      # Returns the index of the offset to be used prior to the first
-      # transition.
+      # @param transitions [Array<Hash>] an `Array` of transition hashes.
+      # @param offsets [Array<Hash>] an `Array` of offset hashes.
+      # @return [Integer] the index of the offset to be used prior to the first
+      #   transition.
       def derive_offsets(transitions, offsets)
         # The first non-DST offset (if there is one) is the offset observed
         # before the first transition. Fallback to the first DST offset if there
@@ -132,10 +148,13 @@ module TZInfo
         first_offset_index
       end
 
-      # Parses a zoneinfo file and returns either a TimezoneOffset that is
-      # constantly observed or an Array of TimezoneTransitions.
+      # Parses a zoneinfo file and returns either a {TimezoneOffset} that is
+      # constantly observed or an `Array` of {TimezoneTransition}s.
       #
-      # Raises InvalidZoneinfoFile if the file is not a valid zoneinfo file.
+      # @param file [IO] the file to be read.
+      # @return [Object] either a {TimezoneOffset} or an `Array` of
+      #   {TimezoneTransition}s.
+      # @raise [InvalidZoneinfoFile] if the file is not a valid zoneinfo file.
       def parse(file)
         magic, version, ttisgmtcnt, ttisstdcnt, leapcnt, timecnt, typecnt, charcnt =
           check_read(file, 44).unpack('a4 a x15 NNNNNN')

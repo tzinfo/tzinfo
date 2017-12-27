@@ -2,29 +2,32 @@
 
 module TZInfo
   module DataSources
-    # Represents a country and references to its timezones as returned by a
-    # DataSource.
+    # Represents a country and references to its time zones as returned by a
+    # {DataSource}.
     class CountryInfo
-      # The ISO 3166 country code.
+      # @return [String] the ISO 3166-1 alpha-2 country code.
       attr_reader :code
 
-      # The name of the country.
+      # @return [String] the name of the country.
       attr_reader :name
 
-      # A frozen array of CountryTimezone instances.
+      # @return [Array<CountryTimezone>] the time zones observed in the country.
       attr_reader :zones
 
-      # Constructs a new CountryInfo with an ISO 3166 country code, name and Array
-      # of CountryTimezone instances.
+      # Initializes a new {CountryInfo}. The passed in `code`, `name` and
+      # `zones` instances will be frozen.
       #
-      # The passed in code, name and zones instances will be frozen.
+      # @param code [String] an ISO 3166-1 alpha-2 country code.
+      # @param name [String] the name of the country.
+      # @param zones [Array<CountryTimezone>] the time zones observed in the country.
       def initialize(code, name, zones)
         @code = code.freeze
         @name = name.freeze
         @zones = zones.freeze
       end
 
-      # Returns the internal object state as a programmer-readable string.
+      # @return [String] the internal object state as a programmer-readable
+      #   `String`.
       def inspect
         "#<#{self.class}: #@code>"
       end

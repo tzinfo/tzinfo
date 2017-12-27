@@ -1,12 +1,16 @@
 module TZInfo
   module Format2
-    # The format 2 country index file includes CountryIndexDefinition2, which
-    # provides a country_index method used to define the country index.
+    # The format 2 country index file includes
+    # {Format2::CountryIndexDefinition}, which provides a
+    # {CountryIndexDefinition::ClassMethods#country_index country_index} method
+    # used to define the country index.
     #
     # @private
     module CountryIndexDefinition #:nodoc:
-      # Add class methods to the includee and initialize class instance
+      # Adds class methods to the includee and initializes class instance
       # variables.
+      #
+      # @param base [Module] the includee.
       def self.append_features(base)
         super
         base.extend(ClassMethods)
@@ -17,13 +21,18 @@ module TZInfo
       #
       # @private
       module ClassMethods #:nodoc:
-        # Returns a frozen hash of all the countries that have been defined in
-        # the index.
+        # @return [Hash<String, DataSources::CountryInfo>] a frozen `Hash`
+        #   of all the countries that have been defined in the index keyed by
+        #   their codes.
         attr_reader :countries
 
         private
 
-        # Yields a CountryIndexDefiner instance to define the index.
+        # Defines the index.
+        #
+        # @yield [definer] yields to allow the index to be defined.
+        # @yieldparam definer [CountryIndexDefiner] a {CountryIndexDefiner}
+        #   instance that should be used to define the index.
         def country_index
           definer = CountryIndexDefiner.new
           yield definer

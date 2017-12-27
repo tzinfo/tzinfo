@@ -1,29 +1,33 @@
 module TZInfo
   module Format2
-    # Instances of TimezoneIndexDefiner are yielded to TZInfo::Data modules by
-    # TimezoneIndexDefinition to allow the offsets and transitions of the
-    # timezone to be specified.
+    # Instances of {TimezoneIndexDefiner} are yielded by
+    # {TimezoneIndexDefinition} to allow the time zone index to be defined.
     #
     # @private
     class TimezoneIndexDefiner #:nodoc:
-      # Returns an array containing the identifiers of all data timezones.
+      # @return [Array<String>] Returns the identifiers of all data time zones.
       attr_reader :data_timezones
 
-      # Returns an array containing the identifiers of all linked timezones.
+      # @return [Array<String>] Returns the identifiers of all linked time
+      #   zones.
       attr_reader :linked_timezones
 
-      # Creates a new TimezoneDefiner.
+      # Initializes a new TimezoneDefiner.
       def initialize
         @data_timezones = []
         @linked_timezones = []
       end
 
-      # Defines a timezone based on data.
+      # Adds a data time zone to the index.
+      #
+      # @param identifier [String] the time zone identifier.
       def data_timezone(identifier)
         @data_timezones << identifier.freeze
       end
 
-      # Defines a timezone which is a link to another timezone.
+      # Adds a linked time zone to the index.
+      #
+      # @param identifier [String] the time zone identifier.
       def linked_timezone(identifier)
         @linked_timezones << identifier.freeze
       end
