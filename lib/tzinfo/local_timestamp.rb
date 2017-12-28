@@ -25,7 +25,7 @@ module TZInfo
     #   {utc_offset utc_offset} equal to the {TimezonePeriod#utc_total_offset
     #   utc_total_offset} of the `period` parameter and {period period} set to
     #   the `period` parameter.
-    # @raise [ArgumentError] if timestamp or period are `nil`.
+    # @raise [ArgumentError] if `timestamp` or `period` is `nil`.
     def self.localize(timestamp, period)
       raise ArgumentError, 'timestamp must be specified' unless timestamp
       raise ArgumentError, 'period must be specified' unless period

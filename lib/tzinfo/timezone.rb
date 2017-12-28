@@ -734,7 +734,7 @@ module TZInfo
     # @param format [String] the format string.
     # @param time [Object] a `Time`, `DateTime` or `Timestamp`.
     # @return [String] the formatted local time.
-    # @raise [ArgumentError] if `format` or `time` are `nil`.
+    # @raise [ArgumentError] if `format` or `time` is `nil`.
     # @raise [ArgumentError] if `time` is a {Timestamp} with an unspecified UTC
     #   offset.
     def strftime(format, time = Time.now)

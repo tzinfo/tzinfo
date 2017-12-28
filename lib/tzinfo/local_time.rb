@@ -19,7 +19,7 @@ module TZInfo
     # @param period [TimezonePeriod] the {TimezonePeriod} to use as the offset
     #   and period of this {LocalTime}.
     # @return [LocalTime] `self`.
-    # @raise [ArgumentError] if period` is `nil`.
+    # @raise [ArgumentError] if `period` is `nil`.
     def localize(period)
       raise ArgumentError, 'period must be specified' unless period
       localtime(period.utc_total_offset)

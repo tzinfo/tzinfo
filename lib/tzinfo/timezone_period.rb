@@ -144,14 +144,14 @@ module TZInfo
 
     # @param  transition [TimezoneTransition] a transition or `nil`.
     # @return [Timestamp] the {Timestamp} representing when a transition occurs,
-    #   or `nil` if the given transition is `nil`.
+    #   or `nil` if `transition` is `nil`.
     def timestamp(transition)
       transition ? transition.at : nil
     end
 
     # @param transition [TimezoneTransition] a transition or `nil`.
     # @return [LocalTimestamp] a localized {Timestamp} representing when a
-    #   transition occurs, or `nil` if the given transition is `nil`.
+    #   transition occurs, or `nil` if `transition` is `nil`.
     def localized_timestamp(transition)
       transition ? LocalTimestamp.localize(transition.at, self) : nil
     end
