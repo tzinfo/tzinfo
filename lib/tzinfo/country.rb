@@ -99,7 +99,7 @@ module TZInfo
     # @return [Array<String>] an `Array` containing the identifier for each time
     #   zone observed by the country
     def zone_identifiers
-      zone_info.map(&:identifier).freeze
+      zone_info.map(&:identifier)
     end
     alias zone_names zone_identifiers
 
