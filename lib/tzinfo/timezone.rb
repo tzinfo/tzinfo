@@ -737,7 +737,7 @@ module TZInfo
     # @raise [ArgumentError] if `format` or `time` are `nil`.
     # @raise [ArgumentError] if `time` is a {Timestamp} with an unspecified UTC
     #   offset.
-    def strftime(format, time = Time.now.utc)
+    def strftime(format, time = Time.now)
       to_local(time).strftime(format)
     end
 
