@@ -13,7 +13,7 @@ module TZInfo
       # be frozen.
       #
       # @param identifier [String] the identifier of the time zone.
-      # @raise [ArgumentError] if identifier is `nil`.
+      # @raise [ArgumentError] if `identifier` is `nil`.
       def initialize(identifier)
         raise ArgumentError, 'identifier must be specified' unless identifier
         @identifier = identifier.freeze
