@@ -13,10 +13,7 @@ Gem::Specification.new do |s|
   s.email = 'phil.ross@gmail.com'
   s.homepage = 'https://tzinfo.github.io'
   s.license = 'MIT'
-  s.files = %w(CHANGES.md LICENSE Rakefile README.md tzinfo.gemspec .yardopts) +
-            Dir['lib/**/*.rb'] +
-            Dir['test/**/*.rb'] +
-            Dir['test/zoneinfo/**/*'].delete_if {|f| File.symlink?(f) }
+  s.files = %w(CHANGES.md LICENSE README.md .yardopts) + Dir['lib/**/*.rb']
   s.platform = Gem::Platform::RUBY
   s.require_path = 'lib'
   s.rdoc_options << '--title' << 'TZInfo' <<
