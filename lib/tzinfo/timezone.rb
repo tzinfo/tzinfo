@@ -192,14 +192,14 @@ module TZInfo
       end.uniq
     end
 
-    # Returns an `Array` of the idenifiers of all the time zones that are
+    # Returns an `Array` of the identifiers of all the time zones that are
     # observed by at least one {Country}. This is not the complete set of time
     # zone identifiers as some are not country specific (e.g. `'Etc/GMT'`).
     #
     # {TimezoneProxy} instances are returned to avoid the overhead of loading
     # time zone data until it is first needed.
     #
-    # @return [Array<String>] an `Array` of the idenifiers of all the time
+    # @return [Array<String>] an `Array` of the identifiers of all the time
     # zones that are observed by at least one {Country}.
     def self.all_country_zone_identifiers
       Country.all_codes.inject([]) do |zones,country|
