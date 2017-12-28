@@ -187,9 +187,7 @@ module TZInfo
     # @return [Array<Timezone>] an `Array` of all the time zones that are
     #   observed by at least one {Country}.
     def self.all_country_zones
-      Country.all_codes.inject([]) do |zones,country|
-        zones += Country.get(country).zones
-      end.uniq
+      Country.all.map(&:zones).flatten.uniq
     end
 
     # Returns an `Array` of the identifiers of all the time zones that are
@@ -202,9 +200,7 @@ module TZInfo
     # @return [Array<String>] an `Array` of the identifiers of all the time
     # zones that are observed by at least one {Country}.
     def self.all_country_zone_identifiers
-      Country.all_codes.inject([]) do |zones,country|
-        zones += Country.get(country).zone_identifiers
-      end.uniq
+      Country.all.map(&:zone_identifiers).flatten.uniq
     end
 
     # @return [String] the identifier of the time zone, for example,
