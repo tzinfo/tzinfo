@@ -6,6 +6,20 @@ include TZInfo
 
 module DataSources
   class TCCountryInfo < Minitest::Test
+    def test_initialize_nil_code
+      error = assert_raises(ArgumentError) { CountryInfo.new(nil, 'Zzz', []) }
+      assert_match(/\bcode\b/, error.message)
+    end
+
+    def test_initialize_nil_name
+      error = assert_raises(ArgumentError) { CountryInfo.new('ZZ', nil, []) }
+      assert_match(/\bname\b/, error.message)
+    end
+
+    def test_initialize_nil_zones
+      error = assert_raises(ArgumentError) { CountryInfo.new('ZZ', 'Zzz', nil) }
+      assert_match(/\bzones\b/, error.message)
+    end
 
     def test_code
       ci = CountryInfo.new('ZZ', 'Zzz', [])
