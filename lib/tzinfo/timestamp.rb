@@ -365,7 +365,7 @@ module TZInfo
     def self.for_timestamp(timestamp, ignore_offset)
       if ignore_offset && timestamp.utc_offset
         new(timestamp.value + timestamp.utc_offset, timestamp.sub_second)
-      elsif timestamp.class != Timestamp
+      elsif !timestamp.instance_of?(Timestamp)
         new(timestamp.value, timestamp.sub_second, timestamp.utc? ? :utc : timestamp.utc_offset)
       else
         timestamp
