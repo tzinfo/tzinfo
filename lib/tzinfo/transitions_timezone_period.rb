@@ -52,5 +52,11 @@ module TZInfo
     def hash
       [@start_transition, @end_transition].hash
     end
+
+    # @return [String] the internal object state as a programmer-readable
+    #   `String`.
+    def inspect
+      "#<#{self.class}: @start_transition=#{@start_transition.inspect}, @end_transition=#{@end_transition.inspect}>"
+    end
   end
 end

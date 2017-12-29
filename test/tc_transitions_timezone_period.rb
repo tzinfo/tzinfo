@@ -145,4 +145,19 @@ class TCTransitionsTimezonePeriod < Minitest::Test
     assert_equal([t1, nil].hash, p2.hash)
     assert_equal([nil, t2].hash, p3.hash)
   end
+
+  def test_inspect
+    o1 = TimezoneOffset.new(0, 3600, :TESTD)
+    o2 = TimezoneOffset.new(0, 0, :TEST)
+    t1 = TimezoneTransition.new(o1, o2, 1149368400)
+    t2 = TimezoneTransition.new(o2, o1, 1149454800)
+
+    p1 = TransitionsTimezonePeriod.new(t1, t2)
+    p2 = TransitionsTimezonePeriod.new(t1, nil)
+    p3 = TransitionsTimezonePeriod.new(nil, t2)
+
+    assert_equal("#<TZInfo::TransitionsTimezonePeriod: @start_transition=#{t1.inspect}, @end_transition=#{t2.inspect}>", p1.inspect)
+    assert_equal("#<TZInfo::TransitionsTimezonePeriod: @start_transition=#{t1.inspect}, @end_transition=nil>", p2.inspect)
+    assert_equal("#<TZInfo::TransitionsTimezonePeriod: @start_transition=nil, @end_transition=#{t2.inspect}>", p3.inspect)
+  end
 end
