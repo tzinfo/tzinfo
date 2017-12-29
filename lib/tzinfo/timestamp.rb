@@ -184,6 +184,12 @@ module TZInfo
       [@value, @sub_second, !!@utc_offset].hash
     end
 
+    # @return [String] the internal object state as a programmer-readable
+    #   `String`.
+    def inspect
+      "#<#{self.class}: @value=#{@value}, @sub_second=#{@sub_second}, @utc_offset=#{@utc_offset.inspect}>"
+    end
+
     # When used without a block, returns a {Timestamp} representation of a given
     # `Time`, `DateTime` or {Timestamp}.
     #

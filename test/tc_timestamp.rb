@@ -492,6 +492,12 @@ class TCTimestamp < Minitest::Test
     assert_equal([1476316800, Rational(1, 10), true].hash, Timestamp.new(1476316800, Rational(1, 10), 3600).hash)
   end
 
+  def test_inspect
+    assert_equal('#<TZInfo::Timestamp: @value=1476316800, @sub_second=0, @utc_offset=0>', Timestamp.new(1476316800, 0, 0).inspect)
+    assert_equal('#<TZInfo::Timestamp: @value=1476316800, @sub_second=0, @utc_offset=:utc>', Timestamp.new(1476316800, Rational(0, 1), :utc).inspect)
+    assert_equal('#<TZInfo::Timestamp: @value=1476316800, @sub_second=1/10, @utc_offset=3600>', Timestamp.new(1476316800, Rational(1, 10), 3600).inspect)
+  end
+
   # Test Timestamp.for with and without a block.
   def for_test(*args)
     t = Timestamp.for(*args)
