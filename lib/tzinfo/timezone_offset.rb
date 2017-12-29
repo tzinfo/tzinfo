@@ -77,13 +77,13 @@ module TZInfo
     # @return [Integer] a hash based on {utc_offset}, {std_offset} and
     #   {abbreviation}.
     def hash
-      [utc_offset, std_offset, abbreviation].hash
+      [@utc_offset, @std_offset, @abbreviation].hash
     end
 
     # @return [String] the internal object state as a programmer-readable
     #   `String`.
     def inspect
-      "#<#{self.class}: @utc_offset=#{utc_offset}, @std_offset=#{std_offset}, @abbreviation=#{abbreviation.inspect}>"
+      "#<#{self.class}: @utc_offset=#{@utc_offset}, @std_offset=#{@std_offset}, @abbreviation=#{@abbreviation.inspect}>"
     end
   end
 end
