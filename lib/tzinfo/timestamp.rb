@@ -296,7 +296,7 @@ module TZInfo
     # Converts the {sub_second} value to a `String` suitable for appending to
     # the `String` representation of a {Timestamp}.
     #
-    # @result [String] a `String` representation of {sub_second}.
+    # @return [String] a `String` representation of {sub_second}.
     def sub_second_to_s
       if @sub_second == 0
         ''

@@ -40,7 +40,7 @@ module TZInfo
       #
       # @param high [Integer] the most significant 32-bits.
       # @param low [Integer] the least significant 32-bits.
-      # @result [Integer] {high} and {low} combined and translated to signed
+      # @return [Integer] {high} and {low} combined and translated to signed
       #   64-bit.
       def make_signed_int64(high, low)
         unsigned = (high << 32) | low
