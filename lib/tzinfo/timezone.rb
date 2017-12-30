@@ -73,134 +73,152 @@ module TZInfo
     # @!visibility private
     @@default_dst = nil
 
-    # Sets the default value of the optional `dst` parameter of the
-    # {local_to_utc} and {period_for_local} methods. Can be set to `nil`, `true`
-    # or `false`.
-    #
-    # @param value [Boolean] `nil`, `true` or `false`.
-    def self.default_dst=(value)
-      @@default_dst = value.nil? ? nil : !!value
-    end
+    class << self
+      # Sets the default value of the optional `dst` parameter of the
+      # {local_to_utc} and {period_for_local} methods. Can be set to `nil`,
+      # `true` or `false`.
+      #
+      # @param value [Boolean] `nil`, `true` or `false`.
+      def default_dst=(value)
+        @@default_dst = value.nil? ? nil : !!value
+      end
 
-    # Returns the default value of the optional `dst` parameter of the
-    # {local_to_utc} and {period_for_local} methods (`nil`, `true` or `false`).
-    #
-    # {default_dst} defaults to `nil` unless changed with {default_dst=}.
-    #
-    # @return [Boolean] the default value of the optional dst parameter of the
-    #   {local_to_utc} and {period_for_local} methods (`nil`, `true` or
-    #   `false`).
-    def self.default_dst
-      @@default_dst
-    end
+      # Returns the default value of the optional `dst` parameter of the
+      # {local_to_utc} and {period_for_local} methods (`nil`, `true` or
+      # `false`).
+      #
+      # {default_dst} defaults to `nil` unless changed with {default_dst=}.
+      #
+      # @return [Boolean] the default value of the optional dst parameter of the
+      #   {local_to_utc} and {period_for_local} methods (`nil`, `true` or
+      #   `false`).
+      def default_dst
+        @@default_dst
+      end
 
-    # Returns a time zone by its IANA Time Zone Database identifier (e.g.
-    # `"Europe/London"` or `"America/Chicago"`). Call {all_identifiers} for a
-    # list of all the valid identifiers.
-    #
-    # The {get} method will return a subclass of {Timezone}, either a
-    # {DataTimezone} (for a time zone defined by rules that set out when
-    # transitions occur) or a {LinkedTimezone} (for a time zone that is just a
-    # link to or alias for a another time zone).
-    #
-    # @param identifier [String] an IANA Time Zone Database time zone
-    #   identifier.
-    # @return [Timezone] the {Timezone} with the given `identifier`.
-    # @raise [InvalidTimezoneIdentifier] if the `identifier` is not valid.
-    def self.get(identifier)
-      data_source.get_timezone_info(identifier).create_timezone
-    end
+      # Returns a time zone by its IANA Time Zone Database identifier (e.g.
+      # `"Europe/London"` or `"America/Chicago"`). Call {all_identifiers} for a
+      # list of all the valid identifiers.
+      #
+      # The {get} method will return a subclass of {Timezone}, either a
+      # {DataTimezone} (for a time zone defined by rules that set out when
+      # transitions occur) or a {LinkedTimezone} (for a time zone that is just a
+      # link to or alias for a another time zone).
+      #
+      # @param identifier [String] an IANA Time Zone Database time zone
+      #   identifier.
+      # @return [Timezone] the {Timezone} with the given `identifier`.
+      # @raise [InvalidTimezoneIdentifier] if the `identifier` is not valid.
+      def get(identifier)
+        data_source.get_timezone_info(identifier).create_timezone
+      end
 
-    # Returns a proxy for the time zone with the given identifier. This allows
-    # loading of the time zone data to be deferred until it is first needed.
-    #
-    # The identifier will not be validated. If an invalid identifier is
-    # specified, no exception will be raised until the proxy is used.
-    #
-    # @param identifier [String] an IANA Time Zone Database time zone
-    #   identifier.
-    # @return [TimezoneProxy] a proxy for the time zone with the given
-    #   `identifier`.
-    def self.get_proxy(identifier)
-      TimezoneProxy.new(identifier)
-    end
+      # Returns a proxy for the time zone with the given identifier. This allows
+      # loading of the time zone data to be deferred until it is first needed.
+      #
+      # The identifier will not be validated. If an invalid identifier is
+      # specified, no exception will be raised until the proxy is used.
+      #
+      # @param identifier [String] an IANA Time Zone Database time zone
+      #   identifier.
+      # @return [TimezoneProxy] a proxy for the time zone with the given
+      #   `identifier`.
+      def get_proxy(identifier)
+        TimezoneProxy.new(identifier)
+      end
 
-    # Returns an `Array` of all the available time zones.
-    #
-    # {TimezoneProxy} instances are returned to avoid the overhead of loading
-    # time zone data until it is first needed.
-    #
-    # @return [Array<Timezone>] all available time zones.
-    def self.all
-      get_proxies(all_identifiers)
-    end
+      # Returns an `Array` of all the available time zones.
+      #
+      # {TimezoneProxy} instances are returned to avoid the overhead of loading
+      # time zone data until it is first needed.
+      #
+      # @return [Array<Timezone>] all available time zones.
+      def all
+        get_proxies(all_identifiers)
+      end
 
-    # @return [Array<String>] an `Array` containing the identifiers of all the
-    #   available time zones.
-    def self.all_identifiers
-      data_source.timezone_identifiers
-    end
+      # @return [Array<String>] an `Array` containing the identifiers of all the
+      #   available time zones.
+      def all_identifiers
+        data_source.timezone_identifiers
+      end
 
-    # Returns an `Array` of all the available time zones that are
-    # defined by offsets and transitions.
-    #
-    # {TimezoneProxy} instances are returned to avoid the overhead of loading
-    # time zone data until it is first needed.
-    #
-    # @return [Array<Timezone>] an `Array` of all the available time zones that
-    #   are defined by offsets and transitions.
-    def self.all_data_zones
-      get_proxies(all_data_zone_identifiers)
-    end
+      # Returns an `Array` of all the available time zones that are
+      # defined by offsets and transitions.
+      #
+      # {TimezoneProxy} instances are returned to avoid the overhead of loading
+      # time zone data until it is first needed.
+      #
+      # @return [Array<Timezone>] an `Array` of all the available time zones
+      #   that are defined by offsets and transitions.
+      def all_data_zones
+        get_proxies(all_data_zone_identifiers)
+      end
 
-    # @return [Array<String>] an `Array` of the identifiers of all available
-    # time zones that are defined by offsets and transitions.
-    def self.all_data_zone_identifiers
-      data_source.data_timezone_identifiers
-    end
+      # @return [Array<String>] an `Array` of the identifiers of all available
+      # time zones that are defined by offsets and transitions.
+      def all_data_zone_identifiers
+        data_source.data_timezone_identifiers
+      end
 
-    # Returns an `Array` of all the available time zones that are
-    # defined as links to / aliases for other time zones.
-    #
-    # {TimezoneProxy} instances are returned to avoid the overhead of loading
-    # time zone data until it is first needed.
-    #
-    # @return [Array<Timezone>] an `Array` of all the available time zones that
-    #   are defined as links to / aliases for other time zones.
-    def self.all_linked_zones
-      get_proxies(all_linked_zone_identifiers)
-    end
+      # Returns an `Array` of all the available time zones that are
+      # defined as links to / aliases for other time zones.
+      #
+      # {TimezoneProxy} instances are returned to avoid the overhead of loading
+      # time zone data until it is first needed.
+      #
+      # @return [Array<Timezone>] an `Array` of all the available time zones
+      #   that are defined as links to / aliases for other time zones.
+      def all_linked_zones
+        get_proxies(all_linked_zone_identifiers)
+      end
 
-    # @return [Array<String>] an `Array` of the identifiers of all available
-    # time zones that are defined as links to / aliases for other time zones.
-    def self.all_linked_zone_identifiers
-      data_source.linked_timezone_identifiers
-    end
+      # @return [Array<String>] an `Array` of the identifiers of all available
+      # time zones that are defined as links to / aliases for other time zones.
+      def all_linked_zone_identifiers
+        data_source.linked_timezone_identifiers
+      end
 
-    # Returns an `Array` of all the time zones that are observed by at least
-    # one {Country}. This is not the complete set of time zones as some are not
-    # country specific (e.g. `'Etc/GMT'`).
-    #
-    # {TimezoneProxy} instances are returned to avoid the overhead of loading
-    # time zone data until it is first needed.
-    #
-    # @return [Array<Timezone>] an `Array` of all the time zones that are
-    #   observed by at least one {Country}.
-    def self.all_country_zones
-      Country.all.map(&:zones).flatten.uniq
-    end
+      # Returns an `Array` of all the time zones that are observed by at least
+      # one {Country}. This is not the complete set of time zones as some are
+      # not country specific (e.g. `'Etc/GMT'`).
+      #
+      # {TimezoneProxy} instances are returned to avoid the overhead of loading
+      # time zone data until it is first needed.
+      #
+      # @return [Array<Timezone>] an `Array` of all the time zones that are
+      #   observed by at least one {Country}.
+      def all_country_zones
+        Country.all.map(&:zones).flatten.uniq
+      end
 
-    # Returns an `Array` of the identifiers of all the time zones that are
-    # observed by at least one {Country}. This is not the complete set of time
-    # zone identifiers as some are not country specific (e.g. `'Etc/GMT'`).
-    #
-    # {TimezoneProxy} instances are returned to avoid the overhead of loading
-    # time zone data until it is first needed.
-    #
-    # @return [Array<String>] an `Array` of the identifiers of all the time
-    # zones that are observed by at least one {Country}.
-    def self.all_country_zone_identifiers
-      Country.all.map(&:zone_identifiers).flatten.uniq
+      # Returns an `Array` of the identifiers of all the time zones that are
+      # observed by at least one {Country}. This is not the complete set of time
+      # zone identifiers as some are not country specific (e.g. `'Etc/GMT'`).
+      #
+      # {TimezoneProxy} instances are returned to avoid the overhead of loading
+      # time zone data until it is first needed.
+      #
+      # @return [Array<String>] an `Array` of the identifiers of all the time
+      # zones that are observed by at least one {Country}.
+      def all_country_zone_identifiers
+        Country.all.map(&:zone_identifiers).flatten.uniq
+      end
+
+      private
+
+      # @param [Enumerable<String>] identifiers an `Enumerable` of time zone
+      #   identifiers.
+      # @return [Array<TimezoneProxy>] an `Array` of {TimezoneProxy}
+      #   instances corresponding to the given identifiers.
+      def get_proxies(identifiers)
+        identifiers.collect {|identifier| get_proxy(identifier)}
+      end
+
+      # @return [DataSource] the current DataSource.
+      def data_source
+        DataSource.get
+      end
     end
 
     # @return [String] the identifier of the time zone, for example,
@@ -780,19 +798,6 @@ module TZInfo
     end
 
     private
-
-    # @param [Enumerable<String>] identifiers an `Enumerable` of time zone
-    #   identifiers.
-    # @return [Array<TimezoneProxy>] an `Array` of {TimezoneProxy}
-    #   instances corresponding to the given identifiers.
-    def self.get_proxies(identifiers)
-      identifiers.collect {|identifier| get_proxy(identifier)}
-    end
-
-    # @return [DataSource] the current DataSource.
-    def self.data_source
-      DataSource.get
-    end
 
     # Raises an {UnknownTimezone} exception.
     #

@@ -14,6 +14,166 @@ module TZInfo
     JD_EPOCH = 2440588
     private_constant :JD_EPOCH
 
+    class << self
+      # When used without a block, returns a {Timestamp} representation of a
+      # given `Time`, `DateTime` or {Timestamp}.
+      #
+      # When called with a block, the {Timestamp} representation of `value` is
+      # passed to the block. The block must then return a {Timestamp}, which
+      # will be converted back to the type of the initial value. If the initial
+      # value was a {Timestamp}, the block result will just be returned.
+      #
+      # The UTC offset of `value` can either be preserved (the {Timestamp}
+      # representation will have the same UTC offset as `value`) or ignored (the
+      # {Timestamp} representation will have no defined UTC offset).
+      #
+      # @param value [Object] a `Time`, `DateTime` or {Timestamp}.
+      # @param options [Hash] options used to convert `value`.
+      # @option options [Symbol] :offset (:preserve) either `:preserve` or
+      #   `:ignore` to  preserve or ignore the offset of `value`.
+      # @yield [timestamp] if a block is provided, the {Timestamp}
+      #   representation is passed to the block.
+      # @yieldparam timestamp [Timestamp] the {Timestamp} representation of
+      #   `value`.
+      # @yieldreturn [Timestamp] a {Timestamp} to be converted back to the type
+      #   of `value`.
+      # @return [Object] if called without a block, the {Timestamp}
+      #   representation of `value`, otherwise the result of the block,
+      #   converted back to the type of `value`.
+      def for(value, options = {})
+        offset = options[:offset] || :preserve
+        raise ArgumentError, ':offset must be :ignore or :preserve' unless offset == :preserve || offset == :ignore
+        raise ArgumentError, 'value must be specified' unless value
+
+        ignore_offset = offset == :ignore
+
+        timestamp = case value
+          when Time
+            for_time(value, ignore_offset)
+          when DateTime
+            for_date_time(value, ignore_offset)
+          when Timestamp
+            for_timestamp(value, ignore_offset)
+          else
+            raise ArgumentError, "#{value.class} values are not supported"
+        end
+
+        if block_given?
+          result = yield timestamp
+          raise ArgumentError, 'block must return a Timestamp' unless result.kind_of?(Timestamp)
+
+          case value
+            when Time
+              result.to_time
+            when DateTime
+              result.to_datetime
+            else # Timestamp
+              result
+          end
+        else
+          timestamp
+        end
+      end
+
+      # Creates a new UTC {Timestamp}.
+      #
+      # @param value [Integer] the number of seconds since 1970-01-01 00:00:00
+      #   UTC ignoring leap seconds.
+      # @param sub_second [Numeric] either a `Rational` that is greater than or
+      #   equal to 0 and less than 1, or the `Integer` 0.
+      # @raise [ArgumentError] if `value` is not an `Integer`.
+      # @raise [ArgumentError] if `sub_second` is not a `Rational`, or the
+      #   `Integer` 0.
+      # @raise [RangeError] if `sub_second` is a `Rational` but that is less
+      #   than 0 or greater than or equal to 1.
+      def utc(value, sub_second = 0)
+        new(value, sub_second, :utc)
+      end
+
+      private
+
+      # Constructs a new instance of `self` (i.e. {Timestamp} or a subclass of
+      # {Timestamp}) without validating the parameters. This method is used
+      # internally within {Timestamp} to avoid the overhead of checking
+      # parameters.
+      #
+      # @param value [Integer] the number of seconds since 1970-01-01 00:00:00
+      #   UTC ignoring leap seconds.
+      # @param sub_second [Numeric] either a `Rational` that is greater than or
+      #   equal to 0 and less than 1, or the `Integer` 0.
+      # @param utc_offset [Object] either `nil` for a {Timestamp} without a
+      #   specified offset, an offset from UTC specified as an `Integer` number
+      #   of seconds or the `Symbol` `:utc`).
+      # @return [Timestamp] a new instance of `self`.
+      def new!(value, sub_second = 0, utc_offset = nil)
+        result = allocate
+        result.send(:initialize!, value, sub_second, utc_offset)
+        result
+      end
+
+      # Creates a {Timestamp} for a given `Time`, optionally ignoring the
+      # offset.
+      #
+      # @param time [Time] a `Time`.
+      # @param ignore_offset [Boolean] whether to ignore the offset of `time`.
+      # @return [Timestamp] the {Timestamp} representation of `time`.
+      def for_time(time, ignore_offset)
+        value = time.to_i
+        sub_second = time.subsec
+
+        if ignore_offset
+          utc_offset = nil
+          value += time.utc_offset
+        elsif time.utc?
+          utc_offset = :utc
+        else
+          utc_offset = time.utc_offset
+        end
+
+        new!(value, sub_second, utc_offset)
+      end
+
+      # Creates a {Timestamp} for a given `DateTime`, optionally ignoring the
+      # offset.
+      #
+      # @param date_time [DateTime] a `DateTime`.
+      # @param ignore_offset [Boolean] whether to ignore the offset of
+      #   `date_time`.
+      # @return [Timestamp] the {Timestamp} representation of `date_time`.
+      def for_date_time(date_time, ignore_offset)
+        value = (date_time.jd - JD_EPOCH) * 86400 + date_time.sec + date_time.min * 60 + date_time.hour * 3600
+        sub_second = date_time.sec_fraction
+
+        if ignore_offset
+          utc_offset = nil
+        else
+          utc_offset = (date_time.offset * 86400).to_i
+          value -= utc_offset
+        end
+
+        new!(value, sub_second, utc_offset)
+      end
+
+      # Returns a {Timestamp} for another {Timestamp}, optionally ignoring the
+      # offset. If the result would have the same value, the same instance is
+      # returned. If the passed in value is an instance of a subclass of
+      # {Timestamp}, then a new {Timestamp} will always be returned.
+      #
+      # @param timestamp [Timestamp] a {Timestamp}.
+      # @param ignore_offset [Boolean] whether to ignore the offset of
+      #   `timestamp`.
+      # @return [Timestamp] a [Timestamp] representation of `timestamp`.
+      def for_timestamp(timestamp, ignore_offset)
+        if ignore_offset && timestamp.utc_offset
+          new!(timestamp.value + timestamp.utc_offset, timestamp.sub_second)
+        elsif !timestamp.instance_of?(Timestamp)
+          new!(timestamp.value, timestamp.sub_second, timestamp.utc? ? :utc : timestamp.utc_offset)
+        else
+          timestamp
+        end
+      end
+    end
+
     # @return [Integer] the number of seconds since 1970-01-01 00:00:00 UTC
     #   ignoring leap seconds (i.e. each day is treated as if it were 86,400
     #   seconds long).
@@ -89,7 +249,7 @@ module TZInfo
     #   `self` if {#utc? self.utc?} is `true`.
     def utc
       return self if @utc_offset == :utc
-      Timestamp.new!(@value, @sub_second, :utc)
+      Timestamp.send(:new!, @value, @sub_second, :utc)
     end
 
     # Converts this {Timestamp} to a `Time`.
@@ -184,80 +344,7 @@ module TZInfo
       "#<#{self.class}: @value=#{@value}, @sub_second=#{@sub_second}, @utc_offset=#{@utc_offset.inspect}>"
     end
 
-    # When used without a block, returns a {Timestamp} representation of a given
-    # `Time`, `DateTime` or {Timestamp}.
-    #
-    # When called with a block, the {Timestamp} representation of `value` is
-    # passed to the block. The block must then return a {Timestamp}, which will
-    # be converted back to the type of the initial value. If the initial value
-    # was a {Timestamp}, the block result will just be returned.
-    #
-    # The UTC offset of `value` can either be preserved (the {Timestamp}
-    # representation will have the same UTC offset as `value`) or ignored (the
-    # {Timestamp} representation will have no defined UTC offset).
-    #
-    # @param value [Object] a `Time`, `DateTime` or {Timestamp}.
-    # @param options [Hash] options used to convert `value`.
-    # @option options [Symbol] :offset (:preserve) either `:preserve` or
-    #   `:ignore` to  preserve or ignore the offset of `value`.
-    # @yield [timestamp] if a block is provided, the {Timestamp} representation
-    #   is passed to the block.
-    # @yieldparam timestamp [Timestamp] the {Timestamp} representation of
-    #   `value`.
-    # @yieldreturn [Timestamp] a {Timestamp} to be converted back to the type of
-    #   `value`.
-    # @return [Object] if called without a block, the {Timestamp} representation
-    #   of `value`, otherwise the result of the block, converted back to the
-    #   type of `value`.
-    def self.for(value, options = {})
-      offset = options[:offset] || :preserve
-      raise ArgumentError, ':offset must be :ignore or :preserve' unless offset == :preserve || offset == :ignore
-      raise ArgumentError, 'value must be specified' unless value
 
-      ignore_offset = offset == :ignore
-
-      timestamp = case value
-        when Time
-          for_time(value, ignore_offset)
-        when DateTime
-          for_date_time(value, ignore_offset)
-        when Timestamp
-          for_timestamp(value, ignore_offset)
-        else
-          raise ArgumentError, "#{value.class} values are not supported"
-      end
-
-      if block_given?
-        result = yield timestamp
-        raise ArgumentError, 'block must return a Timestamp' unless result.kind_of?(Timestamp)
-
-        case value
-          when Time
-            result.to_time
-          when DateTime
-            result.to_datetime
-          else # Timestamp
-            result
-        end
-      else
-        timestamp
-      end
-    end
-
-    # Creates a new UTC {Timestamp}.
-    #
-    # @param value [Integer] the number of seconds since 1970-01-01 00:00:00 UTC
-    #   ignoring leap seconds.
-    # @param sub_second [Numeric] either a `Rational` that is greater than or
-    #   equal to 0 and less than 1, or the `Integer` 0.
-    # @raise [ArgumentError] if `value` is not an `Integer`.
-    # @raise [ArgumentError] if `sub_second` is not a `Rational`, or the
-    #   `Integer` 0.
-    # @raise [RangeError] if `sub_second` is a `Rational` but that is less
-    #   than 0 or greater than or equal to 1.
-    def self.utc(value, sub_second = 0)
-      new(value, sub_second, :utc)
-    end
 
     protected
 
@@ -323,86 +410,6 @@ module TZInfo
       @sub_second = sub_second == 0 ? 0 : sub_second
 
       @utc_offset = utc_offset
-    end
-
-    # Constructs a new instance of `self` (i.e. {Timestamp} or a subclass of
-    # {Timestamp}) without validating the parameters. This method is used
-    # internally within {Timestamp} to avoid the overhead of checking
-    # parameters.
-    #
-    # @param value [Integer] the number of seconds since 1970-01-01 00:00:00 UTC
-    #   ignoring leap seconds.
-    # @param sub_second [Numeric] either a `Rational` that is greater than or
-    #   equal to 0 and less than 1, or the `Integer` 0.
-    # @param utc_offset [Object] either `nil` for a {Timestamp} without a
-    #   specified offset, an offset from UTC specified as an `Integer` number of
-    #   seconds or the `Symbol` `:utc`).
-    # @return [Timestamp] a new instance of `self`.
-    def self.new!(value, sub_second = 0, utc_offset = nil)
-      result = allocate
-      result.send(:initialize!, value, sub_second, utc_offset)
-      result
-    end
-
-    # Creates a {Timestamp} for a given `Time`, optionally ignoring the offset.
-    #
-    # @param time [Time] a `Time`.
-    # @param ignore_offset [Boolean] whether to ignore the offset of `time`.
-    # @return [Timestamp] the {Timestamp} representation of `time`.
-    def self.for_time(time, ignore_offset)
-      value = time.to_i
-      sub_second = time.subsec
-
-      if ignore_offset
-        utc_offset = nil
-        value += time.utc_offset
-      elsif time.utc?
-        utc_offset = :utc
-      else
-        utc_offset = time.utc_offset
-      end
-
-      new!(value, sub_second, utc_offset)
-    end
-
-    # Creates a {Timestamp} for a given `DateTime`, optionally ignoring the
-    # offset.
-    #
-    # @param date_time [DateTime] a `DateTime`.
-    # @param ignore_offset [Boolean] whether to ignore the offset of
-    #   `date_time`.
-    # @return [Timestamp] the {Timestamp} representation of `date_time`.
-    def self.for_date_time(date_time, ignore_offset)
-      value = (date_time.jd - JD_EPOCH) * 86400 + date_time.sec + date_time.min * 60 + date_time.hour * 3600
-      sub_second = date_time.sec_fraction
-
-      if ignore_offset
-        utc_offset = nil
-      else
-        utc_offset = (date_time.offset * 86400).to_i
-        value -= utc_offset
-      end
-
-      new!(value, sub_second, utc_offset)
-    end
-
-    # Returns a {Timestamp} for another {Timestamp}, optionally ignoring the
-    # offset. If the result would have the same value, the same instance is
-    # returned. If the passed in value is an instance of a subclass of
-    # {Timestamp}, then a new {Timestamp} will always be returned.
-    #
-    # @param timestamp [Timestamp] a {Timestamp}.
-    # @param ignore_offset [Boolean] whether to ignore the offset of
-    #   `timestamp`.
-    # @return [Timestamp] a [Timestamp] representation of `timestamp`.
-    def self.for_timestamp(timestamp, ignore_offset)
-      if ignore_offset && timestamp.utc_offset
-        new!(timestamp.value + timestamp.utc_offset, timestamp.sub_second)
-      elsif !timestamp.instance_of?(Timestamp)
-        new!(timestamp.value, timestamp.sub_second, timestamp.utc? ? :utc : timestamp.utc_offset)
-      else
-        timestamp
-      end
     end
   end
 end

@@ -25,30 +25,39 @@ module TZInfo
   class Country
     include Comparable
 
-    # Gets a {Country} by its ISO 3166-1 alpha-2 code.
-    #
-    # The {Country.all_codes} method can be used to obtain a list of valid ISO
-    # 3166-1 alpha-2 codes.
-    #
-    # @param code [String] An ISO 3166-1 alpha-2 code.
-    # @return [Country] A {Country} instance representing the ISO-3166-1 country
-    #   identified by the `code` parameter.
-    # @raise [InvalidCountryCode] If {code} is not a valid ISO 3166-1 alpha-2
-    #   code it couldn't be found.
-    def self.get(code)
-      Country.new(data_source.get_country_info(code))
-    end
+    class << self
+      # Gets a {Country} by its ISO 3166-1 alpha-2 code.
+      #
+      # The {Country.all_codes} method can be used to obtain a list of valid ISO
+      # 3166-1 alpha-2 codes.
+      #
+      # @param code [String] An ISO 3166-1 alpha-2 code.
+      # @return [Country] A {Country} instance representing the ISO-3166-1
+      #   country identified by the `code` parameter.
+      # @raise [InvalidCountryCode] If {code} is not a valid ISO 3166-1 alpha-2
+      #   code it couldn't be found.
+      def get(code)
+        Country.new(data_source.get_country_info(code))
+      end
 
-    # @return [Array<String>] an `Array` containing all the valid ISO 3166-1
-    #   alpha-2 country codes.
-    def self.all_codes
-      data_source.country_codes
-    end
+      # @return [Array<String>] an `Array` containing all the valid ISO 3166-1
+      #   alpha-2 country codes.
+      def all_codes
+        data_source.country_codes
+      end
 
-    # @return [Array<Country>] an `Array` containing one {Country} instance for
-    #   each defined country.
-    def self.all
-      data_source.country_codes.collect {|code| get(code)}
+      # @return [Array<Country>] an `Array` containing one {Country} instance
+      #   for each defined country.
+      def all
+        data_source.country_codes.collect {|code| get(code)}
+      end
+
+      private
+
+      # @return [DataSouce] the current DataSource.
+      def data_source
+        DataSource.get
+      end
     end
 
     # Initializes a new {Country} based upon a {DataSources::CountryInfo}
@@ -183,13 +192,6 @@ module TZInfo
     # @return [Country] the result of converting `data` back into a {Country}.
     def self._load(data)
       Country.get(data)
-    end
-
-    private
-
-    # @return [DataSouce] the current DataSource.
-    def self.data_source
-      DataSource.get
     end
   end
 end

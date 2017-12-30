@@ -84,68 +84,92 @@ module TZInfo
       # @private
       @@alternate_iso3166_tab_search_path = DEFAULT_ALTERNATE_ISO3166_TAB_SEARCH_PATH.dup
 
-      # An `Array` of directories that will be checked to find the system
-      # zoneinfo directory.
-      #
-      # Directories are checked in the order they appear in the `Array`.
-      #
-      # The default value is `['/usr/share/zoneinfo',
-      # '/usr/share/lib/zoneinfo', '/etc/zoneinfo']`.
-      #
-      # @return [Array<String>] an `Array` of directories to check in order to
-      #   find the system zoneinfo directory.
-      def self.search_path
-        @@search_path
-      end
+      class << self
+        # An `Array` of directories that will be checked to find the system
+        # zoneinfo directory.
+        #
+        # Directories are checked in the order they appear in the `Array`.
+        #
+        # The default value is `['/usr/share/zoneinfo',
+        # '/usr/share/lib/zoneinfo', '/etc/zoneinfo']`.
+        #
+        # @return [Array<String>] an `Array` of directories to check in order to
+        #   find the system zoneinfo directory.
+        def search_path
+          @@search_path
+        end
 
-      # Sets the directories to be checked when locating the system zoneinfo
-      # directory.
-      #
-      # Can be set to an `Array` of directories or a `String` containing
-      # directories separated with `File::PATH_SEPARATOR`.
-      #
-      # Directories are checked in the order they appear in the `Array` or
-      # `String`.
-      #
-      # Set to `nil` to revert to the default paths.
-      #
-      # @param search_path [Object] either `nil` or a list of directories to
-      #   check as either an `Array` of `String` or a `File::PATH_SEPARATOR`
-      #   separated `String`.
-      def self.search_path=(search_path)
-        @@search_path = process_search_path(search_path, DEFAULT_SEARCH_PATH)
-      end
+        # Sets the directories to be checked when locating the system zoneinfo
+        # directory.
+        #
+        # Can be set to an `Array` of directories or a `String` containing
+        # directories separated with `File::PATH_SEPARATOR`.
+        #
+        # Directories are checked in the order they appear in the `Array` or
+        # `String`.
+        #
+        # Set to `nil` to revert to the default paths.
+        #
+        # @param search_path [Object] either `nil` or a list of directories to
+        #   check as either an `Array` of `String` or a `File::PATH_SEPARATOR`
+        #   separated `String`.
+        def search_path=(search_path)
+          @@search_path = process_search_path(search_path, DEFAULT_SEARCH_PATH)
+        end
 
-      # An `Array` of paths that will be checked to find an alternate
-      # iso3166.tab file if one was not included in the zoneinfo directory (for
-      # example, on FreeBSD and OpenBSD systems).
-      #
-      # Paths are checked in the order they appear in the `Array`.
-      #
-      # The default value is `['/usr/share/misc/iso3166.tab',
-      # '/usr/share/misc/iso3166']`.
-      #
-      # @return [Array<String>] an `Array` of paths to check in order to locate
-      #   an iso3166.tab file.
-      def self.alternate_iso3166_tab_search_path
-        @@alternate_iso3166_tab_search_path
-      end
+        # An `Array` of paths that will be checked to find an alternate
+        # iso3166.tab file if one was not included in the zoneinfo directory
+        # (for example, on FreeBSD and OpenBSD systems).
+        #
+        # Paths are checked in the order they appear in the `Array`.
+        #
+        # The default value is `['/usr/share/misc/iso3166.tab',
+        # '/usr/share/misc/iso3166']`.
+        #
+        # @return [Array<String>] an `Array` of paths to check in order to
+        #   locate an iso3166.tab file.
+        def alternate_iso3166_tab_search_path
+          @@alternate_iso3166_tab_search_path
+        end
 
-      # Sets the paths to check to locate an alternate iso3166.tab file if one
-      # was not included in the zoneinfo directory.
-      #
-      # Can be set to an `Array` of paths or a `String` containing paths
-      # separated with `File::PATH_SEPARATOR`.
-      #
-      # Paths are checked in the order they appear in the array.
-      #
-      # Set to `nil` to revert to the default paths.
-      #
-      # @param alternate_iso3166_tab_search_path [Object] either `nil` or a list
-      #   of paths to check as either an `Array` of `String` or a
-      #   `File::PATH_SEPARATOR` separated `String`.
-      def self.alternate_iso3166_tab_search_path=(alternate_iso3166_tab_search_path)
-        @@alternate_iso3166_tab_search_path = process_search_path(alternate_iso3166_tab_search_path, DEFAULT_ALTERNATE_ISO3166_TAB_SEARCH_PATH)
+        # Sets the paths to check to locate an alternate iso3166.tab file if one
+        # was not included in the zoneinfo directory.
+        #
+        # Can be set to an `Array` of paths or a `String` containing paths
+        # separated with `File::PATH_SEPARATOR`.
+        #
+        # Paths are checked in the order they appear in the array.
+        #
+        # Set to `nil` to revert to the default paths.
+        #
+        # @param alternate_iso3166_tab_search_path [Object] either `nil` or a
+        #   list of paths to check as either an `Array` of `String` or a
+        #   `File::PATH_SEPARATOR` separated `String`.
+        def alternate_iso3166_tab_search_path=(alternate_iso3166_tab_search_path)
+          @@alternate_iso3166_tab_search_path = process_search_path(alternate_iso3166_tab_search_path, DEFAULT_ALTERNATE_ISO3166_TAB_SEARCH_PATH)
+        end
+
+        private
+
+        # Processes a path for use as the {search_path} or
+        # {alternate_iso3166_tab_search_path}.
+        #
+        # @param path [Object] either `nil` or a list of paths to check as
+        #   either an `Array` of `String` or a `File::PATH_SEPARATOR` separated
+        #   `String`.
+        # @param default [Array<String>] the default value.
+        # @return [Array<String>] the processed path.
+        def process_search_path(path, default)
+          if path
+            if path.kind_of?(String)
+              path.split(File::PATH_SEPARATOR)
+            else
+              path.collect(&:to_s)
+            end
+          else
+            default.dup
+          end
+        end
       end
 
       # @return [String] the zoneinfo directory being used.
@@ -278,25 +302,6 @@ module TZInfo
       end
 
       private
-
-      # Processes a path for use as the {search_path} or
-      # {alternate_iso3166_tab_search_path}.
-      #
-      # @param path [Object] either `nil` or a list of paths to check as either
-      #   an `Array` of `String` or a `File::PATH_SEPARATOR` separated `String`.
-      # @param default [Array<String>] the default value.
-      # @return [Array<String>] the processed path.
-      def self.process_search_path(path, default)
-        if path
-          if path.kind_of?(String)
-            path.split(File::PATH_SEPARATOR)
-          else
-            path.collect(&:to_s)
-          end
-        else
-          default.dup
-        end
-      end
 
       # Validates a zoneinfo directory and returns the paths to the iso3166.tab
       # and zone1970.tab or zone.tab files if valid. If the directory is not

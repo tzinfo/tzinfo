@@ -36,101 +36,127 @@ module TZInfo
     # @private
     @@default_mutex = Mutex.new
 
-    # @return [DataSource] the currently selected source of data.
-    def self.get
-      # If a DataSource hasn't been manually set when the first request is made
-      # to obtain a DataSource, then a default data source is created.
-      #
-      # This is done at the first request rather than when TZInfo is loaded to
-      # avoid unnecessary attempts to find a suitable DataSource.
-      #
-      # A Mutex is used to ensure that only a single default instance is created
-      # (this avoiding the possibility of retaining two copies of the same data
-      # in memory).
+    class << self
+      # @return [DataSource] the currently selected source of data.
+      def get
+        # If a DataSource hasn't been manually set when the first request is
+        # made to obtain a DataSource, then a default data source is created.
+        #
+        # This is done at the first request rather than when TZInfo is loaded to
+        # avoid unnecessary attempts to find a suitable DataSource.
+        #
+        # A Mutex is used to ensure that only a single default instance is
+        # created (this avoiding the possibility of retaining two copies of the
+        # same data in memory).
 
-      unless @@instance
-        @@default_mutex.synchronize do
-          set(create_default_data_source) unless @@instance
+        unless @@instance
+          @@default_mutex.synchronize do
+            set(create_default_data_source) unless @@instance
+          end
+        end
+
+        @@instance
+      end
+
+      # Sets the currently selected data source for time zone and country data.
+      #
+      # This should usually be set to one of the two standard data source types:
+      #
+      # * `:ruby` - read data from the Ruby modules included in the TZInfo::Data
+      #   library (tzinfo-data gem).
+      # * `:zoneinfo` - read data from the zoneinfo files included with most
+      #   Unix-like operating sytems (e.g. in /usr/share/zoneinfo).
+      #
+      # To set TZInfo to use one of the standard data source types, call
+      # `TZInfo::DataSource.set`` in one of the following ways:
+      #
+      #     TZInfo::DataSource.set(:ruby)
+      #     TZInfo::DataSource.set(:zoneinfo)
+      #     TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir)
+      #     TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_tab_file)
+      #
+      # `DataSource.set(:zoneinfo)` will automatically search for the zoneinfo
+      # directory by checking the paths specified in
+      # {DataSources::ZoneinfoDataSource.search_path}.
+      # {DataSources::ZoneinfoDirectoryNotFound} will be raised if no valid
+      # zoneinfo directory could be found.
+      #
+      # `DataSource.set(:zoneinfo, zoneinfo_dir)` uses the specified
+      # `zoneinfo_dir` directory as the data source. If the directory is not a
+      # valid zoneinfo directory, a {DataSources::InvalidZoneinfoDirectory}
+      # exception will be raised.
+      #
+      # `DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_tab_file)` uses the
+      # specified `zoneinfo_dir` directory as the data source, but loads the
+      # `iso3166.tab` file from the path given by `iso3166_tab_file`. If the
+      # directory is not a valid zoneinfo directory, a
+      # {DataSources::InvalidZoneinfoDirectory} exception will be raised.
+      #
+      # Custom data sources can be created by subclassing TZInfo::DataSource and
+      # implementing the following methods:
+      #
+      # * {load_timezone_info}
+      # * {data_timezone_identifiers}
+      # * {linked_timezone_identifiers}
+      # * {load_country_info}
+      # * {country_codes}
+      #
+      # To have TZInfo use the custom data source, call {DataSource.set},
+      # passing an instance of the custom data source implementation as follows:
+      #
+      #     TZInfo::DataSource.set(CustomDataSource.new)
+      #
+      # Calling {DataSource.set} will only affect instances of {Timezone} and
+      # {Country} obtained with {Timezone.get} and {Country.get} subsequent to
+      # the {DataSource.set} call. Existing {Timezone} and {Country} instances
+      # will be unaffected.
+      #
+      # If {DataSource.set} is not called, TZInfo will by default attempt to use
+      # TZInfo::Data as the data source. If TZInfo::Data is not available (i.e.
+      # if `require 'tzinfo/data'` fails), then TZInfo will search for a
+      # zoneinfo directory instead (using the search path specified by
+      # {DataSources::ZoneinfoDataSource.search_path}).
+      #
+      # @param data_source_or_type [Object] either `:ruby`, `:zoneinfo` or an
+      #   instance of a {DataSource}.
+      # @param args [Array<Object>] when `data_source_or_type` is a symbol,
+      #   optional arguments to use when initializing the data source.
+      # @raise [ArgumentError] if `data_source_or_type` is not `:ruby`,
+      #   `:zoneinfo` or an instance of {DataSource}.
+      def set(data_source_or_type, *args)
+        if data_source_or_type.kind_of?(DataSource)
+          @@instance = data_source_or_type
+        elsif data_source_or_type == :ruby
+          @@instance = DataSources::RubyDataSource.new
+        elsif data_source_or_type == :zoneinfo
+          @@instance = DataSources::ZoneinfoDataSource.new(*args)
+        else
+          raise ArgumentError, 'data_source_or_type must be a DataSource instance or a data source type (:ruby or :zoneinfo)'
         end
       end
 
-      @@instance
-    end
+      private
 
-    # Sets the currently selected data source for time zone and country data.
-    #
-    # This should usually be set to one of the two standard data source types:
-    #
-    # * `:ruby` - read data from the Ruby modules included in the TZInfo::Data
-    #   library (tzinfo-data gem).
-    # * `:zoneinfo` - read data from the zoneinfo files included with most
-    #   Unix-like operating sytems (e.g. in /usr/share/zoneinfo).
-    #
-    # To set TZInfo to use one of the standard data source types, call
-    # `TZInfo::DataSource.set`` in one of the following ways:
-    #
-    #     TZInfo::DataSource.set(:ruby)
-    #     TZInfo::DataSource.set(:zoneinfo)
-    #     TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir)
-    #     TZInfo::DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_tab_file)
-    #
-    # `DataSource.set(:zoneinfo)` will automatically search for the zoneinfo
-    # directory by checking the paths specified in
-    # {DataSources::ZoneinfoDataSource.search_path}.
-    # {DataSources::ZoneinfoDirectoryNotFound} will be raised if no valid
-    # zoneinfo directory could be found.
-    #
-    # `DataSource.set(:zoneinfo, zoneinfo_dir)` uses the specified
-    # `zoneinfo_dir` directory as the data source. If the directory is not a
-    # valid zoneinfo directory, a {DataSources::InvalidZoneinfoDirectory}
-    # exception will be raised.
-    #
-    # `DataSource.set(:zoneinfo, zoneinfo_dir, iso3166_tab_file)` uses the
-    # specified `zoneinfo_dir` directory as the data source, but loads the
-    # `iso3166.tab` file from the path given by `iso3166_tab_file`. If the
-    # directory is not a valid zoneinfo directory, a
-    # {DataSources::InvalidZoneinfoDirectory} exception will be raised.
-    #
-    # Custom data sources can be created by subclassing TZInfo::DataSource and
-    # implementing the following methods:
-    #
-    # * {load_timezone_info}
-    # * {data_timezone_identifiers}
-    # * {linked_timezone_identifiers}
-    # * {load_country_info}
-    # * {country_codes}
-    #
-    # To have TZInfo use the custom data source, call {DataSource.set}, passing
-    # an instance of the custom data source implementation as follows:
-    #
-    #     TZInfo::DataSource.set(CustomDataSource.new)
-    #
-    # Calling {DataSource.set} will only affect instances of {Timezone} and
-    # {Country} obtained with {Timezone.get} and {Country.get} subsequent to the
-    # {DataSource.set} call. Existing {Timezone} and {Country} instances will be
-    # unaffected.
-    #
-    # If {DataSource.set} is not called, TZInfo will by default attempt to use
-    # TZInfo::Data as the data source. If TZInfo::Data is not available (i.e. if
-    # `require 'tzinfo/data'` fails), then TZInfo will search for a zoneinfo
-    # directory instead (using the search path specified by
-    # {DataSources::ZoneinfoDataSource.search_path}).
-    #
-    # @param data_source_or_type [Object] either `:ruby`, `:zoneinfo` or an
-    #   instance of a {DataSource}.
-    # @param args [Array<Object>] when `data_source_or_type` is a symbol,
-    #   optional arguments to use when initializing the data source.
-    # @raise [ArgumentError] if `data_source_or_type` is not `:ruby`,
-    #   `:zoneinfo` or an instance of {DataSource}.
-    def self.set(data_source_or_type, *args)
-      if data_source_or_type.kind_of?(DataSource)
-        @@instance = data_source_or_type
-      elsif data_source_or_type == :ruby
-        @@instance = DataSources::RubyDataSource.new
-      elsif data_source_or_type == :zoneinfo
-        @@instance = DataSources::ZoneinfoDataSource.new(*args)
-      else
-        raise ArgumentError, 'data_source_or_type must be a DataSource instance or a data source type (:ruby or :zoneinfo)'
+      # Creates a {DataSource} instance for use as the default. Used if no
+      # preference has been specified manually.
+      #
+      # @return [DataSource] the newly created default {DataSource} instance.
+      def create_default_data_source
+        has_tzinfo_data = false
+
+        begin
+          require 'tzinfo/data'
+          has_tzinfo_data = true
+        rescue LoadError
+        end
+
+        return DataSources::RubyDataSource.new if has_tzinfo_data
+
+        begin
+          return DataSources::ZoneinfoDataSource.new
+        rescue DataSources::ZoneinfoDirectoryNotFound
+          raise DataSourceNotFound, "No source of timezone data could be found.\nPlease refer to https://tzinfo.github.io/datasourcenotfound for help resolving this error."
+        end
       end
     end
 
@@ -275,28 +301,6 @@ module TZInfo
     end
 
     private
-
-    # Creates a {DataSource} instance for use as the default. Used if no
-    # preference has been specified manually.
-    #
-    # @return [DataSource] the newly created default {DataSource} instance.
-    def self.create_default_data_source
-      has_tzinfo_data = false
-
-      begin
-        require 'tzinfo/data'
-        has_tzinfo_data = true
-      rescue LoadError
-      end
-
-      return DataSources::RubyDataSource.new if has_tzinfo_data
-
-      begin
-        return DataSources::ZoneinfoDataSource.new
-      rescue DataSources::ZoneinfoDirectoryNotFound
-        raise DataSourceNotFound, "No source of timezone data could be found.\nPlease refer to https://tzinfo.github.io/datasourcenotfound for help resolving this error."
-      end
-    end
 
     # Raises {InvalidDataSource} to indicate that a method has not been
     # overridden by a particular data source implementation.
