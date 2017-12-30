@@ -45,13 +45,7 @@ module TZInfo
       raise ArgumentError, 'sub_second must be a Rational or the Integer 0' unless (sub_second.kind_of?(Integer) && sub_second == 0) || sub_second.kind_of?(Rational)
       raise RangeError, 'sub_second must be >= 0 and < 1' if sub_second < 0 || sub_second >= 1
       raise ArgumentError, 'utc_offset must be an Integer, :utc or nil' if utc_offset && utc_offset != :utc && !utc_offset.kind_of?(Integer)
-
-      @value = value
-
-      # Convert Rational(0,1) to 0.
-      @sub_second = sub_second == 0 ? 0 : sub_second
-
-      @utc_offset = utc_offset
+      initialize!(value, sub_second, utc_offset)
     end
 
     # @return [Integer] the offset from UTC in seconds or `nil` if the
@@ -95,7 +89,7 @@ module TZInfo
     #   `self` if {#utc? self.utc?} is `true`.
     def utc
       return self if @utc_offset == :utc
-      Timestamp.utc(@value, @sub_second)
+      Timestamp.new!(@value, @sub_second, :utc)
     end
 
     # Converts this {Timestamp} to a `Time`.
@@ -311,6 +305,45 @@ module TZInfo
       end
     end
 
+    # Initializes a new {Timestamp} without validating the parameters. This
+    # method is used internally within {Timestamp} to avoid the overhead of
+    # checking parameters.
+    #
+    # @param value [Integer] the number of seconds since 1970-01-01 00:00:00 UTC
+    #   ignoring leap seconds.
+    # @param sub_second [Numeric] either a `Rational` that is greater than or
+    #   equal to 0 and less than 1, or the `Integer` 0.
+    # @param utc_offset [Object] either `nil` for a {Timestamp} without a
+    #   specified offset, an offset from UTC specified as an `Integer` number of
+    #   seconds or the `Symbol` `:utc`).
+    def initialize!(value, sub_second = 0, utc_offset = nil)
+      @value = value
+
+      # Convert Rational(0,1) to 0.
+      @sub_second = sub_second == 0 ? 0 : sub_second
+
+      @utc_offset = utc_offset
+    end
+
+    # Constructs a new instance of `self` (i.e. {Timestamp} or a subclass of
+    # {Timestamp}) without validating the parameters. This method is used
+    # internally within {Timestamp} to avoid the overhead of checking
+    # parameters.
+    #
+    # @param value [Integer] the number of seconds since 1970-01-01 00:00:00 UTC
+    #   ignoring leap seconds.
+    # @param sub_second [Numeric] either a `Rational` that is greater than or
+    #   equal to 0 and less than 1, or the `Integer` 0.
+    # @param utc_offset [Object] either `nil` for a {Timestamp} without a
+    #   specified offset, an offset from UTC specified as an `Integer` number of
+    #   seconds or the `Symbol` `:utc`).
+    # @return [Timestamp] a new instance of `self`.
+    def self.new!(value, sub_second = 0, utc_offset = nil)
+      result = allocate
+      result.send(:initialize!, value, sub_second, utc_offset)
+      result
+    end
+
     # Creates a {Timestamp} for a given `Time`, optionally ignoring the offset.
     #
     # @param time [Time] a `Time`.
@@ -329,7 +362,7 @@ module TZInfo
         utc_offset = time.utc_offset
       end
 
-      new(value, sub_second, utc_offset)
+      new!(value, sub_second, utc_offset)
     end
 
     # Creates a {Timestamp} for a given `DateTime`, optionally ignoring the
@@ -350,7 +383,7 @@ module TZInfo
         value -= utc_offset
       end
 
-      new(value, sub_second, utc_offset)
+      new!(value, sub_second, utc_offset)
     end
 
     # Returns a {Timestamp} for another {Timestamp}, optionally ignoring the
@@ -364,9 +397,9 @@ module TZInfo
     # @return [Timestamp] a [Timestamp] representation of `timestamp`.
     def self.for_timestamp(timestamp, ignore_offset)
       if ignore_offset && timestamp.utc_offset
-        new(timestamp.value + timestamp.utc_offset, timestamp.sub_second)
+        new!(timestamp.value + timestamp.utc_offset, timestamp.sub_second)
       elsif !timestamp.instance_of?(Timestamp)
-        new(timestamp.value, timestamp.sub_second, timestamp.utc? ? :utc : timestamp.utc_offset)
+        new!(timestamp.value, timestamp.sub_second, timestamp.utc? ? :utc : timestamp.utc_offset)
       else
         timestamp
       end

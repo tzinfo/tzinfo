@@ -29,7 +29,7 @@ module TZInfo
     def self.localize(timestamp, period)
       raise ArgumentError, 'timestamp must be specified' unless timestamp
       raise ArgumentError, 'period must be specified' unless period
-      new(timestamp.value, timestamp.sub_second, period.utc_total_offset).localize(period)
+      new!(timestamp.value, timestamp.sub_second, period.utc_total_offset).localize(period)
     end
 
     # Sets the associated {TimezonePeriod} of this {LocalTimestamp}.
