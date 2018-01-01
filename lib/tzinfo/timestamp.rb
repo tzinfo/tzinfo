@@ -263,7 +263,7 @@ module TZInfo
     # @raise [ArgumentError] if `seconds` is not an `Integer`.
     def +(seconds)
       raise ArgumentError, 'seconds must be an Integer' unless seconds.kind_of?(Integer)
-      Timestamp.new(@value + seconds, @sub_second, @utc_offset)
+      Timestamp.send(:new!, @value + seconds, @sub_second, @utc_offset)
     end
 
     # Subtracts a number of seconds from the {Timestamp} value.
