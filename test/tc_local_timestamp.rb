@@ -187,8 +187,8 @@ class TCLocalTimestamp < Minitest::Test
   end
 
   def test_inspect
-    assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=0, @utc_offset=0>', localized_timestamp(2016,10,13,0,0,0,TimezoneOffset.new(0, 0, :TEST)).inspect)
-    assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=1/10, @utc_offset=3600>', localized_timestamp(2016,10,13,1,0,Rational(1,10),TimezoneOffset.new(3600, 0, :TEST)).inspect)
-    assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=0, @utc_offset=:utc>', LocalTimestamp.utc(1476316800, Rational(0, 1)).inspect)
+    assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=0, @utc_offset=0, @utc=false>', localized_timestamp(2016,10,13,0,0,0,TimezoneOffset.new(0, 0, :TEST)).inspect)
+    assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=1/10, @utc_offset=3600, @utc=false>', localized_timestamp(2016,10,13,1,0,Rational(1,10),TimezoneOffset.new(3600, 0, :TEST)).inspect)
+    assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=0, @utc_offset=0, @utc=true>', LocalTimestamp.utc(1476316800, Rational(0, 1)).inspect)
   end
 end

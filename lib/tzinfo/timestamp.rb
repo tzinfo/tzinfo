@@ -214,6 +214,10 @@ module TZInfo
     #   0 and less than 1.
     attr_reader :sub_second
 
+    # @return [Integer] the offset from UTC in seconds or `nil` if the
+    #   {Timestamp} doesn't have a specified offset.
+    attr_reader :utc_offset
+
     # Initializes a new {Timestamp}.
     #
     # @param value [Integer] the number of seconds since 1970-01-01 00:00:00 UTC
@@ -238,18 +242,11 @@ module TZInfo
       initialize!(value, sub_second, utc_offset)
     end
 
-    # @return [Integer] the offset from UTC in seconds or `nil` if the
-    #   {Timestamp} doesn't have a specified offset.
-    def utc_offset
-      @utc_offset == :utc ? 0 : @utc_offset
-    end
-
     # @return [Boolean] `true` if this {Timestamp} represents UTC, `false` if
     #   the {Timestamp} wasn't specified as UTC or `nil` if the {Timestamp} has
     #   no specified offset.
     def utc?
-      return nil unless @utc_offset
-      @utc_offset == :utc
+      @utc
     end
 
     # Adds a number of seconds to the {Timestamp} value.
@@ -261,7 +258,7 @@ module TZInfo
     def +(seconds)
       raise ArgumentError, 'seconds must be an Integer' unless seconds.kind_of?(Integer)
       return self if seconds == 0
-      Timestamp.send(:new!, @value + seconds, @sub_second, @utc_offset)
+      Timestamp.send(:new!, @value + seconds, @sub_second, @utc ? :utc : @utc_offset)
     end
 
     # Subtracts a number of seconds from the {Timestamp} value.
@@ -292,14 +289,14 @@ module TZInfo
     def add_and_set_utc_offset(seconds, utc_offset)
       raise ArgumentError, 'seconds must be an Integer' unless seconds.kind_of?(Integer)
       raise ArgumentError, 'utc_offset must be an Integer, :utc or nil' if utc_offset && utc_offset != :utc && !utc_offset.kind_of?(Integer)
-      return self if seconds == 0 && @utc_offset == utc_offset
+      return self if seconds == 0 && utc_offset == (@utc ? :utc : @utc_offset)
       Timestamp.send(:new!, @value + seconds, @sub_second, utc_offset)
     end
 
     # @return [Timestamp] a UTC {Timestamp} equivalent to this instance. Returns
     #   `self` if {#utc? self.utc?} is `true`.
     def utc
-      return self if @utc_offset == :utc
+      return self if @utc
       Timestamp.send(:new!, @value, @sub_second, :utc)
     end
 
@@ -311,7 +308,7 @@ module TZInfo
     def to_time
       time = new_time
 
-      if @utc_offset && @utc_offset != :utc
+      if @utc_offset && !@utc
         time.localtime(@utc_offset)
       else
         time.utc
@@ -351,7 +348,7 @@ module TZInfo
     # @return [String] a `String` representation of this {Timestamp}.
     def to_s
       return value_and_sub_second_to_s unless @utc_offset
-      return "#{value_and_sub_second_to_s} UTC" if @utc_offset == :utc
+      return "#{value_and_sub_second_to_s} UTC" if @utc
 
       sign = @utc_offset >= 0 ? '+' : '-'
       min, sec = @utc_offset.abs.divmod(60)
@@ -392,10 +389,8 @@ module TZInfo
     # @return [String] the internal object state as a programmer-readable
     #   `String`.
     def inspect
-      "#<#{self.class}: @value=#{@value}, @sub_second=#{@sub_second}, @utc_offset=#{@utc_offset.inspect}>"
+      "#<#{self.class}: @value=#{@value}, @sub_second=#{@sub_second}, @utc_offset=#{@utc_offset.inspect}, @utc=#{@utc.inspect}>"
     end
-
-
 
     protected
 
@@ -417,7 +412,7 @@ module TZInfo
     # @private
     def new_datetime(klass = DateTime)
       date_time = klass.jd(JD_EPOCH + ((@value.to_r + @sub_second) / 86400))
-      @utc_offset && @utc_offset != 0 && @utc_offset != :utc ? date_time.new_offset(Rational(@utc_offset, 86400)) : date_time
+      @utc_offset && @utc_offset != 0 ? date_time.new_offset(Rational(@utc_offset, 86400)) : date_time
     end
 
     private
@@ -460,7 +455,12 @@ module TZInfo
       # Convert Rational(0,1) to 0.
       @sub_second = sub_second == 0 ? 0 : sub_second
 
-      @utc_offset = utc_offset
+      if utc_offset
+        @utc = utc_offset == :utc
+        @utc_offset = @utc ? 0 : utc_offset
+      else
+        @utc = @utc_offset = nil
+      end
     end
   end
 end
