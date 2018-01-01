@@ -634,7 +634,7 @@ module TZInfo
           period_for_local(ts, dst)
         end
 
-        (ts - period.utc_total_offset).utc
+        ts.add_and_set_utc_offset(-period.utc_total_offset, :utc)
       end
     end
 

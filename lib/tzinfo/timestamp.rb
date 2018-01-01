@@ -279,6 +279,26 @@ module TZInfo
       self + (-seconds)
     end
 
+    # Adds a number of seconds to the {Timestamp} value, setting the UTC offset
+    # of the result.
+    #
+    # @param seconds [Integer] the number of seconds to be added.
+    # @param utc_offset [Object] either `nil` for a {Timestamp} without a
+    #   specified offset, an offset from UTC specified as an `Integer` number of
+    #   seconds or the `Symbol` `:utc`).
+    # @return [Timestamp] the result of adding `seconds` to the
+    #   {Timestamp} value as a new {Timestamp} instance with the chosen
+    #   `utc_offset`.
+    # @raise [ArgumentError] if `seconds` is not an `Integer`.
+    # @raise [ArgumentError] if `utc_offset` is not `nil`, not an `Integer` and
+    #   not the `Symbol` `:utc`.
+    def add_and_set_utc_offset(seconds, utc_offset)
+      raise ArgumentError, 'seconds must be an Integer' unless seconds.kind_of?(Integer)
+      raise ArgumentError, 'utc_offset must be an Integer, :utc or nil' if utc_offset && utc_offset != :utc && !utc_offset.kind_of?(Integer)
+      return self if seconds == 0 && @utc_offset == utc_offset
+      Timestamp.send(:new!, @value + seconds, @sub_second, utc_offset)
+    end
+
     # @return [Timestamp] a UTC {Timestamp} equivalent to this instance. Returns
     #   `self` if {#utc? self.utc?} is `true`.
     def utc

@@ -92,7 +92,7 @@ class TCTimestamp < Minitest::Test
     end
   end
 
-  def test_add_without_offset
+  def test_add_operator_without_offset
     t = Timestamp.new(1476316800, Rational(1, 10))
     t1 = t + 0
     t2 = t + 1
@@ -113,7 +113,7 @@ class TCTimestamp < Minitest::Test
     assert_nil(t3.utc?)
   end
 
-  def test_add_with_zero_offset
+  def test_add_operator_with_zero_offset
     t = Timestamp.new(1476316800, Rational(1, 10), 0)
     t1 = t + 0
     t2 = t + 1
@@ -134,7 +134,7 @@ class TCTimestamp < Minitest::Test
     assert_equal(false, t3.utc?)
   end
 
-  def test_add_with_non_zero_offset
+  def test_add_operator_with_non_zero_offset
     t = Timestamp.new(1476316800, Rational(1, 10), 3600)
     t1 = t + 0
     t2 = t + 1
@@ -155,7 +155,7 @@ class TCTimestamp < Minitest::Test
     assert_equal(false, t3.utc?)
   end
 
-  def test_add_with_utc_offset
+  def test_add_operator_with_utc_offset
     t = Timestamp.new(1476316800, Rational(1, 10), :utc)
     t1 = t + 0
     t2 = t + 1
@@ -176,17 +176,17 @@ class TCTimestamp < Minitest::Test
     assert_equal(true, t3.utc?)
   end
 
-  def test_add_nil
+  def test_add_operator_nil
     error = assert_raises(ArgumentError) { Timestamp.new(1476316800) + nil }
     assert_equal('seconds must be an Integer', error.message)
   end
 
-  def test_add_non_integer
+  def test_add_operator_non_integer
     error = assert_raises(ArgumentError) { Timestamp.new(1476316800) + 1.0 }
     assert_equal('seconds must be an Integer', error.message)
   end
 
-  def test_subtract_without_offset
+  def test_subtract_operator_without_offset
     t = Timestamp.new(1476316800, Rational(1, 10))
     t1 = t - 0
     t2 = t - 1
@@ -207,7 +207,7 @@ class TCTimestamp < Minitest::Test
     assert_nil(t3.utc?)
   end
 
-  def test_subtract_with_zero_offset
+  def test_subtract_operator_with_zero_offset
     t = Timestamp.new(1476316800, Rational(1, 10), 0)
     t1 = t - 0
     t2 = t - 1
@@ -228,7 +228,7 @@ class TCTimestamp < Minitest::Test
     assert_equal(false, t3.utc?)
   end
 
-  def test_subtract_with_non_zero_offset
+  def test_subtract_operator_with_non_zero_offset
     t = Timestamp.new(1476316800, Rational(1, 10), 3600)
     t1 = t - 0
     t2 = t - 1
@@ -249,7 +249,7 @@ class TCTimestamp < Minitest::Test
     assert_equal(false, t3.utc?)
   end
 
-  def test_subtract_with_utc_offset
+  def test_subtract_operator_with_utc_offset
     t = Timestamp.new(1476316800, Rational(1, 10), :utc)
     t1 = t - 0
     t2 = t - 1
@@ -270,14 +270,149 @@ class TCTimestamp < Minitest::Test
     assert_equal(true, t3.utc?)
   end
 
-  def test_subtract_nil
+  def test_subtract_operator_nil
     error = assert_raises(ArgumentError) { Timestamp.new(1476316800) - nil }
     assert_equal('seconds must be an Integer', error.message)
   end
 
-  def test_subtract_non_integer
+  def test_subtract_operator_non_integer
     error = assert_raises(ArgumentError) { Timestamp.new(1476316800) - 1.0 }
     assert_equal('seconds must be an Integer', error.message)
+  end
+
+  def test_add_and_set_utc_offset_utc
+    t1 = Timestamp.new(1476316800, Rational(1, 10))
+    t2 = Timestamp.new(1476316800, Rational(1, 10), 0)
+    t3 = Timestamp.new(1476316800, Rational(1, 10), :utc)
+
+    r1 = t1.add_and_set_utc_offset(-1, :utc)
+    r2 = t2.add_and_set_utc_offset(1, :utc)
+    r3 = t3.add_and_set_utc_offset(2, :utc)
+
+    assert_equal(1476316799, r1.value)
+    assert_equal(1476316801, r2.value)
+    assert_equal(1476316802, r3.value)
+
+    assert_equal(Rational(1, 10), r1.sub_second)
+    assert_equal(Rational(1, 10), r2.sub_second)
+    assert_equal(Rational(1, 10), r3.sub_second)
+
+    assert_equal(0, r1.utc_offset)
+    assert_equal(0, r2.utc_offset)
+    assert_equal(0, r3.utc_offset)
+
+    assert_equal(true, r1.utc?)
+    assert_equal(true, r2.utc?)
+    assert_equal(true, r3.utc?)
+  end
+
+  def test_add_and_set_utc_offset_zero
+    t1 = Timestamp.new(1476316800, Rational(1, 10))
+    t2 = Timestamp.new(1476316800, Rational(1, 10), 0)
+    t3 = Timestamp.new(1476316800, Rational(1, 10), :utc)
+
+    r1 = t1.add_and_set_utc_offset(-1, 0)
+    r2 = t2.add_and_set_utc_offset(1, 0)
+    r3 = t3.add_and_set_utc_offset(2, 0)
+
+    assert_equal(1476316799, r1.value)
+    assert_equal(1476316801, r2.value)
+    assert_equal(1476316802, r3.value)
+
+    assert_equal(Rational(1, 10), r1.sub_second)
+    assert_equal(Rational(1, 10), r2.sub_second)
+    assert_equal(Rational(1, 10), r3.sub_second)
+
+    assert_equal(0, r1.utc_offset)
+    assert_equal(0, r2.utc_offset)
+    assert_equal(0, r3.utc_offset)
+
+    assert_equal(false, r1.utc?)
+    assert_equal(false, r2.utc?)
+    assert_equal(false, r3.utc?)
+  end
+
+  def test_add_and_set_utc_offset_non_zero
+    t1 = Timestamp.new(1476316800, Rational(1, 10))
+    t2 = Timestamp.new(1476316800, Rational(1, 10), 0)
+    t3 = Timestamp.new(1476316800, Rational(1, 10), :utc)
+
+    r1 = t1.add_and_set_utc_offset(-1, 3600)
+    r2 = t2.add_and_set_utc_offset(1, 3600)
+    r3 = t3.add_and_set_utc_offset(2, 3600)
+
+    assert_equal(1476316799, r1.value)
+    assert_equal(1476316801, r2.value)
+    assert_equal(1476316802, r3.value)
+
+    assert_equal(Rational(1, 10), r1.sub_second)
+    assert_equal(Rational(1, 10), r2.sub_second)
+    assert_equal(Rational(1, 10), r3.sub_second)
+
+    assert_equal(3600, r1.utc_offset)
+    assert_equal(3600, r2.utc_offset)
+    assert_equal(3600, r3.utc_offset)
+
+    assert_equal(false, r1.utc?)
+    assert_equal(false, r2.utc?)
+    assert_equal(false, r3.utc?)
+  end
+
+  def test_add_and_set_utc_offset_unspecified
+    t1 = Timestamp.new(1476316800, Rational(1, 10))
+    t2 = Timestamp.new(1476316800, Rational(1, 10), 0)
+    t3 = Timestamp.new(1476316800, Rational(1, 10), :utc)
+
+    r1 = t1.add_and_set_utc_offset(-1, nil)
+    r2 = t2.add_and_set_utc_offset(1, nil)
+    r3 = t3.add_and_set_utc_offset(2, nil)
+
+    assert_equal(1476316799, r1.value)
+    assert_equal(1476316801, r2.value)
+    assert_equal(1476316802, r3.value)
+
+    assert_equal(Rational(1, 10), r1.sub_second)
+    assert_equal(Rational(1, 10), r2.sub_second)
+    assert_equal(Rational(1, 10), r3.sub_second)
+
+    assert_nil(r1.utc_offset)
+    assert_nil(r2.utc_offset)
+    assert_nil(r3.utc_offset)
+
+    assert_nil(r1.utc?)
+    assert_nil(r2.utc?)
+    assert_nil(r3.utc?)
+  end
+
+  def test_add_and_set_utc_offset_add_zero_same_offset
+    t1 = Timestamp.new(1476316800, Rational(1, 10))
+    t2 = Timestamp.new(1476316800, Rational(1, 10), 0)
+    t3 = Timestamp.new(1476316800, Rational(1, 10), :utc)
+
+    r1 = t1.add_and_set_utc_offset(0, nil)
+    r2 = t2.add_and_set_utc_offset(0, 0)
+    r3 = t3.add_and_set_utc_offset(0, :utc)
+
+    assert_same(t1, r1)
+    assert_same(t2, r2)
+    assert_same(t3, r3)
+  end
+
+  def test_add_and_set_utc_offset_seconds_nil
+    error = assert_raises(ArgumentError) { Timestamp.new(1476316800).add_and_set_utc_offset(nil, 0) }
+    assert_equal('seconds must be an Integer', error.message)
+  end
+
+  def test_add_and_set_utc_offset_seconds_non_integer
+    error = assert_raises(ArgumentError) { Timestamp.new(1476316800).add_and_set_utc_offset(1.0, 0) }
+    assert_equal('seconds must be an Integer', error.message)
+  end
+
+  def test_add_and_set_utc_offset_utc_offset_not_integer_or_utc
+    [1.0, :zero].each do |utc_offset|
+      error = assert_raises(ArgumentError) { Timestamp.new(1476316800).add_and_set_utc_offset(1, utc_offset) }
+      assert_equal('utc_offset must be an Integer, :utc or nil', error.message)
+    end
   end
 
   def test_utc_from_utc
