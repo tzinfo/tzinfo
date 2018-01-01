@@ -496,6 +496,16 @@ module TZInfo
 
         zone_tab.each do |codes, zone_identifier, latitude, longitude, column4, column5|
           description = file_is_5_column ? column5 : column4
+
+          # Lookup the identifier in the timezone index, so that the same
+          # String instance can be used (saving memory).
+          begin
+            zone_identifier = validate_timezone_identifier(zone_identifier)
+          rescue InvalidTimezoneIdentifier
+            # zone_identifier is not valid, use the String instance from
+            # zone.tab.
+          end
+
           country_timezone = CountryTimezone.new(zone_identifier, latitude, longitude, description)
 
           # codes will always have at least one element
