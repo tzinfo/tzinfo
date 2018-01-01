@@ -500,10 +500,10 @@ module TZInfo
 
           # codes will always have at least one element
 
-          (primary_zones[codes.first] ||= []) << country_timezone
+          (primary_zones[codes.first.freeze] ||= []) << country_timezone
 
           codes[1..-1].each do |code|
-            (secondary_zones[code] ||= []) << country_timezone
+            (secondary_zones[code.freeze] ||= []) << country_timezone
           end
         end
 
