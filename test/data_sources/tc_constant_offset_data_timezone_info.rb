@@ -39,7 +39,7 @@ module DataSources
       o = TimezoneOffset.new(-17900, 0, :TESTLMT)
       i = ConstantOffsetDataTimezoneInfo.new('Test/Zone', o)
 
-      assert_equal([OffsetTimezonePeriod.new(o)], i.periods_for_local(Timestamp.for(Time.utc(2017,1,1,0,0,0), offset: :ignore)))
+      assert_equal([OffsetTimezonePeriod.new(o)], i.periods_for_local(Timestamp.for(Time.utc(2017,1,1,0,0,0), :ignore)))
     end
 
     def test_transitions_up_to

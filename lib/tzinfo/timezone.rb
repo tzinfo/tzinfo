@@ -407,7 +407,7 @@ module TZInfo
     # @raise [ArgumentError] if `utc_time` is `nil`.
     def period_for_utc(utc_time)
       raise ArgumentError, 'utc_time must be specified' unless utc_time
-      period_for(Timestamp.for(utc_time, offset: :treat_as_utc))
+      period_for(Timestamp.for(utc_time, :treat_as_utc))
     end
 
     # Returns the {TimezonePeriod} that is valid at the given local time.
@@ -554,7 +554,7 @@ module TZInfo
     def utc_to_local(utc_time)
       raise ArgumentError, 'utc_time must be specified' unless utc_time
 
-      Timestamp.for(utc_time, offset: :treat_as_utc) do |ts|
+      Timestamp.for(utc_time, :treat_as_utc) do |ts|
         to_local(ts)
       end
     end
@@ -627,7 +627,7 @@ module TZInfo
     def local_to_utc(local_time, dst = Timezone.default_dst)
       raise ArgumentError, 'local_time must be specified' unless local_time
 
-      Timestamp.for(local_time, offset: :ignore) do |ts|
+      Timestamp.for(local_time, :ignore) do |ts|
         period = if block_given?
           period_for_local(ts, dst) {|periods| yield periods }
         else

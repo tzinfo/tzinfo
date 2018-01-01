@@ -15,7 +15,7 @@ module TZInfo
     # (see Timezone#periods_for_local)
     def periods_for_local(local_time)
       raise ArgumentError, 'local_time must be specified' unless local_time
-      info.periods_for_local(Timestamp.for(local_time, offset: :ignore))
+      info.periods_for_local(Timestamp.for(local_time, :ignore))
     end
 
     # (see Timezone#transitions_up_to)

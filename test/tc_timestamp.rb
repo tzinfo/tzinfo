@@ -639,7 +639,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_timestamp_ignore_offset_utc
-    for_test(Timestamp.new(1476316800, 0, :utc), offset: :ignore) do |t|
+    for_test(Timestamp.new(1476316800, 0, :utc), :ignore) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.sub_second)
       assert_nil(t.utc_offset)
@@ -648,7 +648,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_timestamp_ignore_offset_with_zero_offset
-    for_test(Timestamp.new(1476316800, 0, 0), offset: :ignore) do |t|
+    for_test(Timestamp.new(1476316800, 0, 0), :ignore) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.sub_second)
       assert_nil(t.utc_offset)
@@ -657,7 +657,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_timestamp_ignore_offset_with_offset
-    for_test(Timestamp.new(1476316800, 0, 3600), offset: :ignore) do |t|
+    for_test(Timestamp.new(1476316800, 0, 3600), :ignore) do |t|
       assert_equal(1476320400, t.value)
       assert_equal(0, t.sub_second)
       assert_nil(t.utc_offset)
@@ -666,7 +666,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_timestamp_ignore_offset_sub_second
-    for_test(Timestamp.new(1476316800, Rational(1, 10), 3600), offset: :ignore) do |t|
+    for_test(Timestamp.new(1476316800, Rational(1, 10), 3600), :ignore) do |t|
       assert_equal(1476320400, t.value)
       assert_equal(Rational(1, 10), t.sub_second)
       assert_nil(t.utc_offset)
@@ -676,11 +676,11 @@ class TCTimestamp < Minitest::Test
 
   def test_for_timestamp_ignore_offset_no_offset
     orig = Timestamp.new(1476316800)
-    for_test(orig, offset: :ignore) {|t| assert_same(orig, t) }
+    for_test(orig, :ignore) {|t| assert_same(orig, t) }
   end
 
   def test_for_timestamp_ignore_offset_subclass_no_offset
-    for_test(TestTimestampSubclass.new(1476316800, Rational(1, 10)), offset: :ignore) do |t|
+    for_test(TestTimestampSubclass.new(1476316800, Rational(1, 10)), :ignore) do |t|
       assert_equal(Timestamp, t.class)
       assert_equal(1476316800, t.value)
       assert_equal(Rational(1, 10), t.sub_second)
@@ -691,11 +691,11 @@ class TCTimestamp < Minitest::Test
 
   def test_for_timestamp_treat_offset_as_utc_utc
     orig = Timestamp.new(1476316800, 0, :utc)
-    for_test(orig, offset: :treat_as_utc) {|t| assert_same(orig, t) }
+    for_test(orig, :treat_as_utc) {|t| assert_same(orig, t) }
   end
 
   def test_for_timestamp_treat_offset_as_utc_with_zero_offset
-    for_test(Timestamp.new(1476316800, 0, 0), offset: :treat_as_utc) do |t|
+    for_test(Timestamp.new(1476316800, 0, 0), :treat_as_utc) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.sub_second)
       assert_equal(0, t.utc_offset)
@@ -704,7 +704,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_timestamp_treat_offset_as_utc_with_offset
-    for_test(Timestamp.new(1476316800, 0, 3600), offset: :treat_as_utc) do |t|
+    for_test(Timestamp.new(1476316800, 0, 3600), :treat_as_utc) do |t|
       assert_equal(1476320400, t.value)
       assert_equal(0, t.sub_second)
       assert_equal(0, t.utc_offset)
@@ -713,7 +713,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_timestamp_treat_offset_as_utc_sub_second
-    for_test(Timestamp.new(1476316800, Rational(1, 10), 3600), offset: :treat_as_utc) do |t|
+    for_test(Timestamp.new(1476316800, Rational(1, 10), 3600), :treat_as_utc) do |t|
       assert_equal(1476320400, t.value)
       assert_equal(Rational(1, 10), t.sub_second)
       assert_equal(0, t.utc_offset)
@@ -722,7 +722,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_timestamp_treat_offset_as_utc_no_offset
-    for_test(Timestamp.new(1476316800), offset: :treat_as_utc) do |t|
+    for_test(Timestamp.new(1476316800), :treat_as_utc) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.sub_second)
       assert_equal(0, t.utc_offset)
@@ -731,7 +731,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_timestamp_treat_offset_as_utc_subclass_utc
-    for_test(TestTimestampSubclass.new(1476316800, Rational(1, 10), :utc), offset: :treat_as_utc) do |t|
+    for_test(TestTimestampSubclass.new(1476316800, Rational(1, 10), :utc), :treat_as_utc) do |t|
       assert_equal(Timestamp, t.class)
       assert_equal(1476316800, t.value)
       assert_equal(Rational(1, 10), t.sub_second)
@@ -742,17 +742,17 @@ class TCTimestamp < Minitest::Test
 
   def test_for_timestamp_preserve_offset_utc
     orig = Timestamp.new(1476316800, 0, :utc)
-    for_test(orig, offset: :preserve) {|t| assert_same(orig, t) }
+    for_test(orig, :preserve) {|t| assert_same(orig, t) }
   end
 
   def test_for_timestamp_preserve_offset_with_zero_offset
     orig = Timestamp.new(1476316800, 0, 0)
-    for_test(orig, offset: :preserve) {|t| assert_same(orig, t) }
+    for_test(orig, :preserve) {|t| assert_same(orig, t) }
   end
 
   def test_for_timestamp_preserve_offset_with_offset
     orig = Timestamp.new(1476316800, 0, 3600)
-    for_test(orig, offset: :preserve) {|t| assert_same(orig, t) }
+    for_test(orig, :preserve) {|t| assert_same(orig, t) }
   end
 
   def test_for_timestamp_preserve_offset_by_default_with_offset
@@ -762,12 +762,12 @@ class TCTimestamp < Minitest::Test
 
   def test_for_timestamp_preserve_offset_no_offset
     orig = Timestamp.new(1476316800)
-    for_test(orig, offset: :preserve) {|t| assert_same(orig, t) }
+    for_test(orig, :preserve) {|t| assert_same(orig, t) }
   end
 
   def test_for_timestamp_preserve_offset_sub_second
     orig = Timestamp.new(1476316800, Rational(1, 10), 0)
-    for_test(orig, offset: :preserve) {|t| assert_same(orig, t) }
+    for_test(orig, :preserve) {|t| assert_same(orig, t) }
   end
 
   def test_for_timestamp_preserve_offset_subclass_utc
@@ -811,7 +811,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_time_ignore_offset_utc
-    for_test(Time.utc(2016,10,13,0,0,0), offset: :ignore) do |t|
+    for_test(Time.utc(2016,10,13,0,0,0), :ignore) do |t|
       assert_equal(1476316800, t.value)
       assert_nil(t.utc_offset)
       assert_nil(t.utc?)
@@ -819,7 +819,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_time_ignore_offset_with_zero_offset
-    for_test(Time.new(2016,10,13,0,0,0,0), offset: :ignore) do |t|
+    for_test(Time.new(2016,10,13,0,0,0,0), :ignore) do |t|
       assert_equal(1476316800, t.value)
       assert_nil(t.utc_offset)
       assert_nil(t.utc?)
@@ -827,7 +827,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_time_ignore_offset_with_offset
-    for_test(Time.new(2016,10,13,0,0,0,3600), offset: :ignore) do |t|
+    for_test(Time.new(2016,10,13,0,0,0,3600), :ignore) do |t|
       assert_equal(1476316800, t.value)
       assert_nil(t.utc_offset)
       assert_nil(t.utc?)
@@ -835,7 +835,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_time_treat_offset_as_utc_utc
-    for_test(Time.utc(2016,10,13,0,0,0), offset: :treat_as_utc) do |t|
+    for_test(Time.utc(2016,10,13,0,0,0), :treat_as_utc) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.utc_offset)
       assert_equal(true, t.utc?)
@@ -843,7 +843,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_time_treat_offset_as_utc_with_zero_offset
-    for_test(Time.new(2016,10,13,0,0,0,0), offset: :treat_as_utc) do |t|
+    for_test(Time.new(2016,10,13,0,0,0,0), :treat_as_utc) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.utc_offset)
       assert_equal(true, t.utc?)
@@ -851,7 +851,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_time_treat_offset_as_utc_with_offset
-    for_test(Time.new(2016,10,13,0,0,0,3600), offset: :treat_as_utc) do |t|
+    for_test(Time.new(2016,10,13,0,0,0,3600), :treat_as_utc) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.utc_offset)
       assert_equal(true, t.utc?)
@@ -859,7 +859,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_time_preserve_offset_utc
-    for_test(Time.utc(2016,10,13,0,0,0), offset: :preserve) do |t|
+    for_test(Time.utc(2016,10,13,0,0,0), :preserve) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.utc_offset)
       assert_equal(true, t.utc?)
@@ -867,7 +867,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_time_preserve_offset_zero_offset
-    for_test(Time.new(2016,10,13,0,0,0,0), offset: :preserve) do |t|
+    for_test(Time.new(2016,10,13,0,0,0,0), :preserve) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.utc_offset)
       assert_equal(!TestUtils::TIME_SUPPORTS_DISTINCT_UTC, t.utc?)
@@ -875,7 +875,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_time_preserve_offset_with_offset
-    for_test(Time.new(2016,10,13,1,0,0,3600), offset: :preserve) do |t|
+    for_test(Time.new(2016,10,13,1,0,0,3600), :preserve) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(3600, t.utc_offset)
       assert_equal(false, t.utc?)
@@ -905,7 +905,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_datetime_ignore_offset_utc
-    for_test(DateTime.new(2016,10,13,0,0,0), offset: :ignore) do |t|
+    for_test(DateTime.new(2016,10,13,0,0,0), :ignore) do |t|
       assert_equal(1476316800, t.value)
       assert_nil(t.utc_offset)
       assert_nil(t.utc?)
@@ -913,7 +913,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_datetime_ignore_offset_with_offset
-    for_test(DateTime.new(2016,10,13,0,0,0,Rational(1,24)), offset: :ignore) do |t|
+    for_test(DateTime.new(2016,10,13,0,0,0,Rational(1,24)), :ignore) do |t|
       assert_equal(1476316800, t.value)
       assert_nil(t.utc_offset)
       assert_nil(t.utc?)
@@ -921,7 +921,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_datetime_treat_offset_as_utc_utc
-    for_test(DateTime.new(2016,10,13,0,0,0), offset: :treat_as_utc) do |t|
+    for_test(DateTime.new(2016,10,13,0,0,0), :treat_as_utc) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.utc_offset)
       assert_equal(true, t.utc?)
@@ -929,7 +929,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_datetime_treat_offset_as_utc_with_offset
-    for_test(DateTime.new(2016,10,13,0,0,0,Rational(1,24)), offset: :treat_as_utc) do |t|
+    for_test(DateTime.new(2016,10,13,0,0,0,Rational(1,24)), :treat_as_utc) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.utc_offset)
       assert_equal(true, t.utc?)
@@ -937,7 +937,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_datetime_preserve_offset_with_zero_offset
-    for_test(DateTime.new(2016,10,13,0,0,0), offset: :preserve) do |t|
+    for_test(DateTime.new(2016,10,13,0,0,0), :preserve) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(0, t.utc_offset)
       assert_equal(false, t.utc?)
@@ -945,7 +945,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_datetime_preserve_offset_with_offset
-    for_test(DateTime.new(2016,10,13,1,0,0,Rational(1,24)), offset: :preserve) do |t|
+    for_test(DateTime.new(2016,10,13,1,0,0,Rational(1,24)), :preserve) do |t|
       assert_equal(1476316800, t.value)
       assert_equal(3600, t.utc_offset)
       assert_equal(false, t.utc?)
@@ -996,7 +996,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_invalid_offset
-    for_raises_test(ArgumentError, ':offset must be :preserve, :ignore or :treat_as_utc', Time.utc(2016,10,13,0,0,0), offset: :invalid)
+    for_raises_test(ArgumentError, 'offset must be :preserve, :ignore or :treat_as_utc', Time.utc(2016,10,13,0,0,0), :invalid)
   end
 
   def test_for_block_result_timestamp

@@ -30,12 +30,11 @@ module TZInfo
       # {utc_offset} of 0 and {utc?} will return `true`).
       #
       # @param value [Object] a `Time`, `DateTime` or {Timestamp}.
-      # @param options [Hash] options used to convert `value`.
-      # @option options [Symbol] :offset (:preserve) either `:preserve` to
-      #   preserve the offset of `value`, `:ignore` to ignore the offset of
-      #   `value` and create a Timestamp with an unspecified offset, or
-      #   `:treat_as_utc` to treat the offset of `value` as though it were UTC
-      #   and create a UTC {Timestamp}.
+      # @param offset [Symbol] either `:preserve` to preserve the offset of
+      #   `value`, `:ignore` to ignore the offset of `value` and create a
+      #   {Timestamp} with an unspecified offset, or `:treat_as_utc` to treat
+      #   the offset of `value` as though it were UTC and create a UTC
+      #   {Timestamp}.
       # @yield [timestamp] if a block is provided, the {Timestamp}
       #   representation is passed to the block.
       # @yieldparam timestamp [Timestamp] the {Timestamp} representation of
@@ -45,10 +44,8 @@ module TZInfo
       # @return [Object] if called without a block, the {Timestamp}
       #   representation of `value`, otherwise the result of the block,
       #   converted back to the type of `value`.
-      def for(value, options = {})
+      def for(value, offset = :preserve)
         raise ArgumentError, 'value must be specified' unless value
-
-        offset = options[:offset] || :preserve
 
         case offset
           when :ignore
@@ -61,7 +58,7 @@ module TZInfo
             ignore_offset = false
             target_utc_offset = nil
           else
-            raise ArgumentError, ':offset must be :preserve, :ignore or :treat_as_utc'
+            raise ArgumentError, 'offset must be :preserve, :ignore or :treat_as_utc'
         end
 
         timestamp = case value
