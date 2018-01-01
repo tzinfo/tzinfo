@@ -98,19 +98,17 @@ class TCTimestamp < Minitest::Test
     t2 = t + 1
     t3 = t + (-1)
 
-    assert_equal(1476316800, t1.value)
+    assert_same(t, t1)
+
     assert_equal(1476316801, t2.value)
     assert_equal(1476316799, t3.value)
 
-    assert_equal(Rational(1, 10), t1.sub_second)
     assert_equal(Rational(1, 10), t2.sub_second)
     assert_equal(Rational(1, 10), t3.sub_second)
 
-    assert_nil(t1.utc_offset)
     assert_nil(t2.utc_offset)
     assert_nil(t3.utc_offset)
 
-    assert_nil(t1.utc?)
     assert_nil(t2.utc?)
     assert_nil(t3.utc?)
   end
@@ -121,19 +119,17 @@ class TCTimestamp < Minitest::Test
     t2 = t + 1
     t3 = t + (-1)
 
-    assert_equal(1476316800, t1.value)
+    assert_same(t, t1)
+
     assert_equal(1476316801, t2.value)
     assert_equal(1476316799, t3.value)
 
-    assert_equal(Rational(1, 10), t1.sub_second)
     assert_equal(Rational(1, 10), t2.sub_second)
     assert_equal(Rational(1, 10), t3.sub_second)
 
-    assert_equal(0, t1.utc_offset)
     assert_equal(0, t2.utc_offset)
     assert_equal(0, t3.utc_offset)
 
-    assert_equal(false, t1.utc?)
     assert_equal(false, t2.utc?)
     assert_equal(false, t3.utc?)
   end
@@ -144,19 +140,17 @@ class TCTimestamp < Minitest::Test
     t2 = t + 1
     t3 = t + (-1)
 
-    assert_equal(1476316800, t1.value)
+    assert_same(t, t1)
+
     assert_equal(1476316801, t2.value)
     assert_equal(1476316799, t3.value)
 
-    assert_equal(Rational(1, 10), t1.sub_second)
     assert_equal(Rational(1, 10), t2.sub_second)
     assert_equal(Rational(1, 10), t3.sub_second)
 
-    assert_equal(3600, t1.utc_offset)
     assert_equal(3600, t2.utc_offset)
     assert_equal(3600, t3.utc_offset)
 
-    assert_equal(false, t1.utc?)
     assert_equal(false, t2.utc?)
     assert_equal(false, t3.utc?)
   end
@@ -167,19 +161,17 @@ class TCTimestamp < Minitest::Test
     t2 = t + 1
     t3 = t + (-1)
 
-    assert_equal(1476316800, t1.value)
+    assert_same(t, t1)
+
     assert_equal(1476316801, t2.value)
     assert_equal(1476316799, t3.value)
 
-    assert_equal(Rational(1, 10), t1.sub_second)
     assert_equal(Rational(1, 10), t2.sub_second)
     assert_equal(Rational(1, 10), t3.sub_second)
 
-    assert_equal(0, t1.utc_offset)
     assert_equal(0, t2.utc_offset)
     assert_equal(0, t3.utc_offset)
 
-    assert_equal(true, t1.utc?)
     assert_equal(true, t2.utc?)
     assert_equal(true, t3.utc?)
   end
@@ -200,19 +192,17 @@ class TCTimestamp < Minitest::Test
     t2 = t - 1
     t3 = t - (-1)
 
-    assert_equal(1476316800, t1.value)
+    assert_same(t, t1)
+
     assert_equal(1476316799, t2.value)
     assert_equal(1476316801, t3.value)
 
-    assert_equal(Rational(1, 10), t1.sub_second)
     assert_equal(Rational(1, 10), t2.sub_second)
     assert_equal(Rational(1, 10), t3.sub_second)
 
-    assert_nil(t1.utc_offset)
     assert_nil(t2.utc_offset)
     assert_nil(t3.utc_offset)
 
-    assert_nil(t1.utc?)
     assert_nil(t2.utc?)
     assert_nil(t3.utc?)
   end
@@ -223,19 +213,17 @@ class TCTimestamp < Minitest::Test
     t2 = t - 1
     t3 = t - (-1)
 
-    assert_equal(1476316800, t1.value)
+    assert_same(t, t1)
+
     assert_equal(1476316799, t2.value)
     assert_equal(1476316801, t3.value)
 
-    assert_equal(Rational(1, 10), t1.sub_second)
     assert_equal(Rational(1, 10), t2.sub_second)
     assert_equal(Rational(1, 10), t3.sub_second)
 
-    assert_equal(0, t1.utc_offset)
     assert_equal(0, t2.utc_offset)
     assert_equal(0, t3.utc_offset)
 
-    assert_equal(false, t1.utc?)
     assert_equal(false, t2.utc?)
     assert_equal(false, t3.utc?)
   end
@@ -246,19 +234,17 @@ class TCTimestamp < Minitest::Test
     t2 = t - 1
     t3 = t - (-1)
 
-    assert_equal(1476316800, t1.value)
+    assert_same(t, t1)
+
     assert_equal(1476316799, t2.value)
     assert_equal(1476316801, t3.value)
 
-    assert_equal(Rational(1, 10), t1.sub_second)
     assert_equal(Rational(1, 10), t2.sub_second)
     assert_equal(Rational(1, 10), t3.sub_second)
 
-    assert_equal(3600, t1.utc_offset)
     assert_equal(3600, t2.utc_offset)
     assert_equal(3600, t3.utc_offset)
 
-    assert_equal(false, t1.utc?)
     assert_equal(false, t2.utc?)
     assert_equal(false, t3.utc?)
   end
@@ -269,19 +255,17 @@ class TCTimestamp < Minitest::Test
     t2 = t - 1
     t3 = t - (-1)
 
-    assert_equal(1476316800, t1.value)
+    assert_same(t, t1)
+
     assert_equal(1476316799, t2.value)
     assert_equal(1476316801, t3.value)
 
-    assert_equal(Rational(1, 10), t1.sub_second)
     assert_equal(Rational(1, 10), t2.sub_second)
     assert_equal(Rational(1, 10), t3.sub_second)
 
-    assert_equal(0, t1.utc_offset)
     assert_equal(0, t2.utc_offset)
     assert_equal(0, t3.utc_offset)
 
-    assert_equal(true, t1.utc?)
     assert_equal(true, t2.utc?)
     assert_equal(true, t3.utc?)
   end
