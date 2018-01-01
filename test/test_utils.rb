@@ -153,18 +153,34 @@ module TestUtils
         thread = Thread.new do
           orig_diff = Minitest::Assertions.diff
 
-          $SAFE = options[:level] || 1 if available
-
-          # Disable the use of external diff tools during safe mode tests (since
-          # safe mode will prevent their use). The initial value is retrieved
-          # before activating safe mode because the first time
-          # Minitest::Assertions.diff is called, it will attempt to find a diff
-          # tool. Finding the diff tool will also fail in safe mode.
-          Minitest::Assertions.diff = nil
+          if available
+            orig_safe = $SAFE
+            $SAFE = options[:level] || 1
+          end
           begin
-            yield
+            # Disable the use of external diff tools during safe mode tests (since
+            # safe mode will prevent their use). The initial value is retrieved
+            # before activating safe mode because the first time
+            # Minitest::Assertions.diff is called, it will attempt to find a diff
+            # tool. Finding the diff tool will also fail in safe mode.
+            Minitest::Assertions.diff = nil
+            begin
+              yield
+            ensure
+              Minitest::Assertions.diff = orig_diff
+            end
           ensure
-            Minitest::Assertions.diff = orig_diff
+            if available
+              # On Ruby < 2.6, setting $SAFE affects only the current thread
+              # and the $SAFE level cannot be downgraded. Catch and ignore the
+              # SecurityError.
+              # On Ruby >= 2.6, setting $SAFE is global, and the $SAFE level
+              # can be downgraded. Restore $SAFE back to the original level.
+              begin
+                $SAFE = orig_safe
+              rescue SecurityError
+              end
+            end
           end
         end
 
