@@ -1,4 +1,5 @@
 # encoding: UTF-8
+# frozen_string_literal: true
 
 # This file was created manually. It purposefully contains module names that
 # don't match the zone identifier to test load errors.

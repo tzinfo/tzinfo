@@ -1,4 +1,5 @@
 # encoding: UTF-8
+# frozen_string_literal: true
 
 # This file contains data derived from the IANA Time Zone Database
 # (http://www.iana.org/time-zones).
