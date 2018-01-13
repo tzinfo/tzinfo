@@ -618,6 +618,170 @@ class TCTimestamp < Minitest::Test
     assert_equal('#<TZInfo::Timestamp: @value=1476316800, @sub_second=1/10, @utc_offset=nil, @utc=nil>', Timestamp.new(1476316800, Rational(1, 10), nil).inspect)
   end
 
+  def test_create_unspecified_offset
+    t = Timestamp.create(2018, 1, 10, 12, 0, 0, 0, nil)
+    assert_equal(1515585600, t.value)
+    assert_nil(t.utc_offset)
+    assert_nil(t.utc?)
+  end
+
+  def test_create_utc
+    t = Timestamp.create(2018, 1, 10, 12, 0, 0, 0, :utc)
+    assert_equal(1515585600, t.value)
+    assert_equal(0, t.utc_offset)
+    assert_equal(true, t.utc?)
+  end
+
+  def test_create_zero_offset
+    t = Timestamp.create(2018, 1, 10, 12, 0, 0, 0, 0)
+    assert_equal(1515585600, t.value)
+    assert_equal(0, t.utc_offset)
+    assert_equal(false, t.utc?)
+  end
+
+  def test_create_local_offset_positive
+    t = Timestamp.create(2018, 1, 10, 12, 0, 0, 0, 3600)
+    assert_equal(1515582000, t.value)
+    assert_equal(3600, t.utc_offset)
+    assert_equal(false, t.utc?)
+  end
+
+  def test_create_local_offset_negative
+    t = Timestamp.create(2018, 1, 10, 12, 0, 0, 0, -3600)
+    assert_equal(1515589200, t.value)
+    assert_equal(-3600, t.utc_offset)
+    assert_equal(false, t.utc?)
+  end
+
+  def test_create_local_offset_zero_sub_second
+    t = Timestamp.create(2018, 1, 10, 12, 0, 0, 0)
+    assert_equal(1515585600, t.value)
+    assert_equal(0, t.sub_second)
+  end
+
+  def test_create_local_offset_non_zero_sub_second
+    t = Timestamp.create(2018, 1, 10, 12, 0, 0, Rational(1, 10))
+    assert_equal(1515585600, t.value)
+    assert_equal(Rational(1, 10), t.sub_second)
+  end
+
+  def test_create_valid
+    assert_equal(-76350405973, Timestamp.create(-450,  7, 21, 17, 53, 47).value)
+    assert_equal(-62198755200, Timestamp.create(  -1,  1,  1,  0,  0,  0).value)
+    assert_equal(-62162035200, Timestamp.create(   0,  3,  1,  0,  0,  0).value)
+    assert_equal(          -1, Timestamp.create(1969, 12, 31, 23, 59, 59).value)
+    assert_equal(           0, Timestamp.create(1970,  1,  1,  0,  0,  0).value)
+    assert_equal(           1, Timestamp.create(1970,  1,  1,  0,  0,  1).value)
+    assert_equal(       47843, Timestamp.create(1970,  1,  1, 13, 17, 23).value)
+    assert_equal(   951782400, Timestamp.create(2000,  2, 29,  0,  0,  0).value)
+    assert_equal(   951868800, Timestamp.create(2000,  3,  1,  0,  0,  0).value)
+    assert_equal(   954547200, Timestamp.create(2000,  4,  1,  0,  0,  0).value)
+    assert_equal(   957139200, Timestamp.create(2000,  5,  1,  0,  0,  0).value)
+    assert_equal(   959817600, Timestamp.create(2000,  6,  1,  0,  0,  0).value)
+    assert_equal(   962409600, Timestamp.create(2000,  7,  1,  0,  0,  0).value)
+    assert_equal(   965088000, Timestamp.create(2000,  8,  1,  0,  0,  0).value)
+    assert_equal(   967766400, Timestamp.create(2000,  9,  1,  0,  0,  0).value)
+    assert_equal(   970358400, Timestamp.create(2000, 10,  1,  0,  0,  0).value)
+    assert_equal(   973036800, Timestamp.create(2000, 11,  1,  0,  0,  0).value)
+    assert_equal(   975628800, Timestamp.create(2000, 12,  1,  0,  0,  0).value)
+    assert_equal(   978307200, Timestamp.create(2001,  1,  1,  0,  0,  0).value)
+    assert_equal(   980985600, Timestamp.create(2001,  2,  1,  0,  0,  0).value)
+    assert_equal(   983404800, Timestamp.create(2001,  3,  1,  0,  0,  0).value)
+    assert_equal(  4107456000, Timestamp.create(2100,  2, 28,  0,  0,  0).value)
+    assert_equal(  4107542400, Timestamp.create(2100,  3,  1,  0,  0,  0).value)
+  end
+
+  def test_create_invalid_days_for_specific_month
+    assert_equal(1519862400, Timestamp.create(2018, 2, 29).value)
+    assert_equal(1525132800, Timestamp.create(2018, 4, 31).value)
+  end
+
+  def test_create_month_out_of_range
+    [0, 13].each do |month|
+      error = assert_raises(RangeError) { Timestamp.create(2018, month) }
+      assert_equal('month must be between 1 and 12', error.message)
+    end
+  end
+
+  def test_create_day_out_of_range
+    [0, 32].each do |day|
+      error = assert_raises(RangeError) { Timestamp.create(2018, 1, day) }
+      assert_equal('day must be between 1 and 31', error.message)
+    end
+  end
+
+  def test_create_hour_out_of_range
+    [-1, 24].each do |hour|
+      error = assert_raises(RangeError) { Timestamp.create(2018, 1, 1, hour) }
+      assert_equal('hour must be between 0 and 23', error.message)
+    end
+  end
+
+  def test_create_minute_out_of_range
+    [-1, 60].each do |minute|
+      error = assert_raises(RangeError) { Timestamp.create(2018, 1, 1, 0, minute) }
+      assert_equal('minute must be between 0 and 59', error.message)
+    end
+  end
+
+  def test_create_second_out_of_range
+    [-1, 60].each do |second|
+      error = assert_raises(RangeError) { Timestamp.create(2018, 1, 1, 0, 0, second) }
+      assert_equal('second must be between 0 and 59', error.message)
+    end
+  end
+
+  def test_create_year_not_integer
+    error = assert_raises(ArgumentError) { Timestamp.create(2018.0) }
+    assert_equal('year must be an Integer', error.message)
+  end
+
+  def test_create_month_not_integer
+    error = assert_raises(ArgumentError) { Timestamp.create(2018, 1.0) }
+    assert_equal('month must be an Integer', error.message)
+  end
+
+  def test_create_day_not_integer
+    error = assert_raises(ArgumentError) { Timestamp.create(2018, 1, 1.0) }
+    assert_equal('day must be an Integer', error.message)
+  end
+
+  def test_create_hour_not_integer
+    error = assert_raises(ArgumentError) { Timestamp.create(2018, 1, 1, 0.0) }
+    assert_equal('hour must be an Integer', error.message)
+  end
+
+  def test_create_minute_not_integer
+    error = assert_raises(ArgumentError) { Timestamp.create(2018, 1, 1, 0, 0.0) }
+    assert_equal('minute must be an Integer', error.message)
+  end
+
+  def test_create_second_not_integer
+    error = assert_raises(ArgumentError) { Timestamp.create(2018, 1, 1, 0, 0, 0.0) }
+    assert_equal('second must be an Integer', error.message)
+  end
+
+  def test_create_sub_second_not_zero_integer_or_rational
+    [nil, 0.1, 1].each do |sub_second|
+      error = assert_raises(ArgumentError) { Timestamp.create(2018, 1, 1, 0, 0, 0, sub_second) }
+      assert_equal('sub_second must be a Rational or the Integer 0', error.message)
+    end
+  end
+
+  def test_create_sub_second_out_of_range
+    [Rational(-1, 10), Rational(11, 10)].each do |sub_second|
+      error = assert_raises(RangeError) { Timestamp.create(2018, 1, 1, 0, 0, 0, sub_second) }
+      assert_equal('sub_second must be >= 0 and < 1', error.message)
+    end
+  end
+
+  def test_create_utc_offset_not_integer_or_utc
+    [1.0, :zero].each do |utc_offset|
+      error = assert_raises(ArgumentError) { Timestamp.create(2018, 1, 1, 0, 0, 0, 0, utc_offset) }
+      assert_equal('utc_offset must be an Integer, :utc or nil', error.message)
+    end
+  end
+
   # Test Timestamp.for with and without a block.
   def for_test(*args)
     t = Timestamp.for(*args)

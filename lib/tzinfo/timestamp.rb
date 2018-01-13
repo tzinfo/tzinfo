@@ -15,6 +15,68 @@ module TZInfo
     private_constant :JD_EPOCH
 
     class << self
+      # Returns a new {Timestamp} representing the (Gregorian calendar) date and
+      # time specified by the supplied parameters.
+      #
+      # If `utc_offset` is `nil`, `:utc` or 0, the date and time parameters will
+      # be interpreted as representing a UTC date and time. Otherwise the date
+      # and time parameters will be interpreted as a local date and time with
+      # the given offset.
+      #
+      # @param year [Integer] the year.
+      # @param month [Integer] the month (1-12).
+      # @param day [Integer] the day of the month (1-31).
+      # @param hour [Integer] the hour (0-23).
+      # @param minute [Integer] the minute (0-59).
+      # @param second [Integer] the second (0-59).
+      # @param sub_second [Numeric] the fractional part of the second as either
+      #   a `Rational` that is greater than or equal to 0 and less than 1, or
+      #   the `Integer` 0.
+      # @param utc_offset [Object] either `nil` for a {Timestamp} without a
+      #   specified offset, an offset from UTC specified as an `Integer` number
+      #   of seconds or the `Symbol` `:utc`).
+      # @return [Timestamp] a new {Timestamp} representing the specified
+      #   (Gregorian calendar) date and time.
+      # @raise [ArgumentError] if either of `year`, `month`, `day`, `hour`,
+      #   `minute`, or `second` is not an `Integer`.
+      # @raise [ArgumentError] if `sub_second` is not a `Rational`, or the
+      #   `Integer` 0.
+      # @raise [ArgumentError] if `utc_offset` is not `nil`, not an `Integer`
+      #   and not the `Symbol` `:utc`.
+      # @raise [RangeError] if `month` is not between 1 and 12.
+      # @raise [RangeError] if `day` is not between 1 and 31.
+      # @raise [RangeError] if `hour` is not between 0 and 23.
+      # @raise [RangeError] if `minute` is not between 0 and 59.
+      # @raise [RangeError] if `second` is not between 0 and 59.
+      # @raise [RangeError] if `sub_second` is a `Rational` but that is less
+      #   than 0 or greater than or equal to 1.
+      def create(year, month = 1, day = 1, hour = 0, minute = 0, second = 0, sub_second = 0, utc_offset = nil)
+        raise ArgumentError, 'year must be an Integer' unless year.kind_of?(Integer)
+        raise ArgumentError, 'month must be an Integer' unless month.kind_of?(Integer)
+        raise ArgumentError, 'day must be an Integer' unless day.kind_of?(Integer)
+        raise ArgumentError, 'hour must be an Integer' unless hour.kind_of?(Integer)
+        raise ArgumentError, 'minute must be an Integer' unless minute.kind_of?(Integer)
+        raise ArgumentError, 'second must be an Integer' unless second.kind_of?(Integer)
+        raise RangeError, 'month must be between 1 and 12' if month < 1 || month > 12
+        raise RangeError, 'day must be between 1 and 31' if day < 1 || day > 31
+        raise RangeError, 'hour must be between 0 and 23' if hour < 0 || hour > 23
+        raise RangeError, 'minute must be between 0 and 59' if minute < 0 || minute > 59
+        raise RangeError, 'second must be between 0 and 59' if second < 0 || second > 59
+
+        # Based on days_from_civil from https://howardhinnant.github.io/date_algorithms.html#days_from_civil
+        after_february = month > 2
+        year -= 1 unless after_february
+        era = year / 400
+        year_of_era = year - era * 400
+        day_of_year = (153 * (month + (after_february ? -3 : 9)) + 2) / 5 + day - 1
+        day_of_era = year_of_era * 365 + year_of_era / 4 - year_of_era / 100 + day_of_year
+        days_since_epoch = era * 146097 + day_of_era - 719468
+        value = ((days_since_epoch * 24 + hour) * 60 + minute) * 60 + second
+        value -= utc_offset if utc_offset.kind_of?(Integer)
+
+        new(value, sub_second, utc_offset)
+      end
+
       # When used without a block, returns a {Timestamp} representation of a
       # given `Time`, `DateTime` or {Timestamp}.
       #

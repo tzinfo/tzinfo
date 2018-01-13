@@ -191,4 +191,9 @@ class TCLocalTimestamp < Minitest::Test
     assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=1/10, @utc_offset=3600, @utc=false>', localized_timestamp(2016,10,13,1,0,Rational(1,10),TimezoneOffset.new(3600, 0, :TEST)).inspect)
     assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=0, @utc_offset=0, @utc=true>', LocalTimestamp.utc(1476316800, Rational(0, 1)).inspect)
   end
+
+  def test_create_returns_local_timestamp
+    t = LocalTimestamp.create(2018, 1, 10, 12, 0, 0, 0, 3600)
+    assert_kind_of(LocalTimestamp, t)
+  end
 end
