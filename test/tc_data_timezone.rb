@@ -64,7 +64,7 @@ class TCDataTimezone < Minitest::Test
       tz = DataTimezone.new(tti)
 
       assert_same(period, tz.period_for(h.time(2006, 6, 27, 22, 50, 12, Rational(1,10), :utc)))
-      assert_equal_with_offset(Timestamp.new(Time.utc(2006, 6, 27, 22, 50, 12).to_i, Rational(1,10), :utc), tti.timestamp)
+      assert_equal_with_offset(Timestamp.create(2006, 6, 27, 22, 50, 12, Rational(1,10), :utc), tti.timestamp)
     end
   end
 
@@ -77,7 +77,7 @@ class TCDataTimezone < Minitest::Test
       tz = DataTimezone.new(tti)
 
       assert_same(period, tz.period_for(h.time(2006, 6, 27, 22, 50, 12, Rational(1,10), 0)))
-      assert_equal_with_offset(Timestamp.new(Time.utc(2006, 6, 27, 22, 50, 12).to_i, Rational(1,10), h.expected_zero_offset), tti.timestamp)
+      assert_equal_with_offset(Timestamp.create(2006, 6, 27, 22, 50, 12, Rational(1,10), h.expected_zero_offset), tti.timestamp)
     end
   end
 
@@ -90,7 +90,7 @@ class TCDataTimezone < Minitest::Test
       tz = DataTimezone.new(tti)
 
       assert_same(period, tz.period_for(h.time(2006, 6, 27, 22, 50, 12, Rational(1,10), 3600)))
-      assert_equal_with_offset(Timestamp.new(Time.utc(2006, 6, 27, 21, 50, 12).to_i, Rational(1,10), 3600), tti.timestamp)
+      assert_equal_with_offset(Timestamp.create(2006, 6, 27, 22, 50, 12, Rational(1,10), 3600), tti.timestamp)
     end
   end
 
@@ -133,7 +133,7 @@ class TCDataTimezone < Minitest::Test
       tz = DataTimezone.new(tti)
 
       assert_same(periods, tz.periods_for_local(h.time(2006, 6, 27, 22, 50, 12, Rational(1,10))))
-      assert_equal_with_offset(Timestamp.new(Time.utc(2006, 6, 27, 22, 50, 12).to_i, Rational(1,10)), tti.local_timestamp)
+      assert_equal_with_offset(Timestamp.create(2006, 6, 27, 22, 50, 12, Rational(1,10)), tti.local_timestamp)
     end
   end
 
@@ -146,7 +146,7 @@ class TCDataTimezone < Minitest::Test
       tz = DataTimezone.new(tti)
 
       assert_same(periods, tz.periods_for_local(h.time(2006, 6, 27, 22, 50, 12, Rational(1,10), :utc)))
-      assert_equal_with_offset(Timestamp.new(Time.utc(2006, 6, 27, 22, 50, 12).to_i, Rational(1,10)), tti.local_timestamp)
+      assert_equal_with_offset(Timestamp.create(2006, 6, 27, 22, 50, 12, Rational(1,10)), tti.local_timestamp)
     end
   end
 
@@ -159,7 +159,7 @@ class TCDataTimezone < Minitest::Test
       tz = DataTimezone.new(tti)
 
       assert_same(periods, tz.periods_for_local(h.time(2006, 6, 27, 22, 50, 12, Rational(1,10), 0)))
-      assert_equal_with_offset(Timestamp.new(Time.utc(2006, 6, 27, 22, 50, 12).to_i, Rational(1,10)), tti.local_timestamp)
+      assert_equal_with_offset(Timestamp.create(2006, 6, 27, 22, 50, 12, Rational(1,10)), tti.local_timestamp)
     end
   end
 
@@ -172,7 +172,7 @@ class TCDataTimezone < Minitest::Test
       tz = DataTimezone.new(tti)
 
       assert_same(periods, tz.periods_for_local(h.time(2006, 6, 27, 22, 50, 12, Rational(1,10), 3600)))
-      assert_equal_with_offset(Timestamp.new(Time.utc(2006, 6, 27, 22, 50, 12 + Rational(1,10)).to_i, Rational(1,10)), tti.local_timestamp)
+      assert_equal_with_offset(Timestamp.create(2006, 6, 27, 22, 50, 12, Rational(1,10)), tti.local_timestamp)
     end
   end
 
@@ -212,8 +212,8 @@ class TCDataTimezone < Minitest::Test
       tz = DataTimezone.new(tti)
 
       assert_same(transitions, tz.transitions_up_to(h.time(2013, 1, 1, 0, 0, 0, Rational(1,10), :utc), h.time(2012, 1, 1, 0, 0, 0, Rational(1,10), :utc)))
-      assert_equal_with_offset(Timestamp.new(Time.utc(2013, 1, 1, 0, 0, 0).to_i, Rational(1,10), :utc), tti.to_timestamp)
-      assert_equal_with_offset(Timestamp.new(Time.utc(2012, 1, 1, 0, 0, 0).to_i, Rational(1,10), :utc), tti.from_timestamp)
+      assert_equal_with_offset(Timestamp.create(2013, 1, 1, 0, 0, 0, Rational(1,10), :utc), tti.to_timestamp)
+      assert_equal_with_offset(Timestamp.create(2012, 1, 1, 0, 0, 0, Rational(1,10), :utc), tti.from_timestamp)
     end
   end
 
@@ -226,8 +226,8 @@ class TCDataTimezone < Minitest::Test
       tz = DataTimezone.new(tti)
 
       assert_same(transitions, tz.transitions_up_to(h.time(2013, 1, 1, 0, 0, 0, Rational(1,10), 0), h.time(2012, 1, 1, 0, 0, 0, Rational(1,10), 0)))
-      assert_equal_with_offset(Timestamp.new(Time.utc(2013, 1, 1, 0, 0, 0).to_i, Rational(1,10), h.expected_zero_offset), tti.to_timestamp)
-      assert_equal_with_offset(Timestamp.new(Time.utc(2012, 1, 1, 0, 0, 0).to_i, Rational(1,10), h.expected_zero_offset), tti.from_timestamp)
+      assert_equal_with_offset(Timestamp.create(2013, 1, 1, 0, 0, 0, Rational(1,10), h.expected_zero_offset), tti.to_timestamp)
+      assert_equal_with_offset(Timestamp.create(2012, 1, 1, 0, 0, 0, Rational(1,10), h.expected_zero_offset), tti.from_timestamp)
     end
   end
 
@@ -240,8 +240,8 @@ class TCDataTimezone < Minitest::Test
       tz = DataTimezone.new(tti)
 
       assert_same(transitions, tz.transitions_up_to(h.time(2013, 1, 1, 0, 0, 0, Rational(1,10), -3600), h.time(2012, 1, 1, 0, 0, 0, Rational(1,10), 3600)))
-      assert_equal_with_offset(Timestamp.new(Time.new(2013, 1, 1, 0, 0, 0, -3600).to_i, Rational(1,10), -3600), tti.to_timestamp)
-      assert_equal_with_offset(Timestamp.new(Time.new(2012, 1, 1, 0, 0, 0, 3600).to_i, Rational(1,10), 3600), tti.from_timestamp)
+      assert_equal_with_offset(Timestamp.create(2013, 1, 1, 0, 0, 0, Rational(1,10), -3600), tti.to_timestamp)
+      assert_equal_with_offset(Timestamp.create(2012, 1, 1, 0, 0, 0, Rational(1,10), 3600), tti.from_timestamp)
     end
   end
 

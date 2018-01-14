@@ -113,11 +113,11 @@ module TestUtils
     end
 
     def time(year, month, day, hour, minute, second, sub_second = 0, utc_offset = nil)
-      Timestamp.new(Time.new(year, month, day, hour, minute, second, !utc_offset || utc_offset == :utc ? 0 : utc_offset).to_i, sub_second, utc_offset)
+      Timestamp.create(year, month, day, hour, minute, second, sub_second, utc_offset)
     end
 
     def local_time(period, year, month, day, hour, minute, second, sub_second = 0)
-      LocalTimestamp.new(Time.new(year, month, day, hour, minute, second, period.utc_total_offset).to_i, sub_second, period.utc_total_offset).localize(period)
+      LocalTimestamp.create(year, month, day, hour, minute, second, sub_second, period.utc_total_offset).localize(period)
     end
   end
 

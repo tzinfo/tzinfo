@@ -52,14 +52,14 @@ class TCLocalTimestamp < Minitest::Test
   end
 
   def test_localize_utc
-    lt = LocalTimestamp.utc(Time.utc(2017,1,15,23,0,1).to_i, Rational(1,10))
+    lt = LocalTimestamp.create(2017,1,15,23,0,1,Rational(1,10),:utc)
     p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, :TEST))
     error = assert_raises(ArgumentError) { lt.localize(p) }
     assert_match(/\bmatch\b/, error.message)
   end
 
   def test_localize_unspecified_offset
-    lt = LocalTimestamp.new(Time.utc(2017,1,15,23,0,1).to_i, Rational(1,10))
+    lt = LocalTimestamp.create(2017,1,15,23,0,1,Rational(1,10))
     p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, :TEST))
     error = assert_raises(ArgumentError) { lt.localize(p) }
     assert_match(/\bmatch\b/, error.message)
