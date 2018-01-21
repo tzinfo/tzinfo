@@ -79,6 +79,10 @@ module TestUtils
       (feature == :distinct_utc && TIME_SUPPORTS_DISTINCT_UTC) || feature == :utc
     end
 
+    def type
+      :time
+    end
+
     def time(year, month, day, hour, minute, second, sub_second = 0, utc_offset = 0)
       if utc_offset == :utc
         Time.utc(year, month, day, hour, minute, second + sub_second)
@@ -97,6 +101,10 @@ module TestUtils
       false
     end
 
+    def type
+      :date_time
+    end
+
     def time(year, month, day, hour, minute, second, sub_second = 0, utc_offset = 0)
       utc_offset = 0 if utc_offset == :utc
       DateTime.new(year, month, day, hour, minute, second + sub_second, utc_offset.to_r / 86400)
@@ -112,6 +120,10 @@ module TestUtils
       feature == :distinct_utc || feature == :unspecified_offset || feature == :utc
     end
 
+    def type
+      :timestamp
+    end
+
     def time(year, month, day, hour, minute, second, sub_second = 0, utc_offset = nil)
       Timestamp.create(year, month, day, hour, minute, second, sub_second, utc_offset)
     end
@@ -122,15 +134,16 @@ module TestUtils
   end
 
   module Helpers
+    def self.append_features(base)
+      super
+      base.extend(ClassMethods)
+    end
+
     # Runs tests with each of the supported time representation types (DateTime,
-    # Time or Timestamp). Types can be restricted by requring features
+    # Time or Timestamp). Types can be restricted by requiring features
     # (:distinct_utc, :unspecified_offset or :utc).
-    def time_types_test(*required_features)
-      [TestUtils::TimeTypesTimeHelper, TestUtils::TimeTypesDateTimeHelper, TestUtils::TimeTypesTimestampHelper].each do |helper_class|
-        if required_features.all? {|f| helper_class.supports?(f) }
-          yield helper_class.new
-        end
-      end
+    def time_types_test(*required_features, &block)
+      self.class.time_types_helpers(*required_features, &block)
     end
 
     # Suppresses any warnings raised in a specified block.
@@ -185,6 +198,19 @@ module TestUtils
         end
 
         thread.join
+      end
+    end
+
+    module ClassMethods
+      # Yields instances of the TimeTypesHelper subclasses. Types can be
+      # restricted by requiring features (:distinct_utc, :unspecified_offset or
+      # :utc).
+      def time_types_helpers(*required_features)
+        [TestUtils::TimeTypesTimeHelper, TestUtils::TimeTypesDateTimeHelper, TestUtils::TimeTypesTimestampHelper].each do |helper_class|
+          if required_features.all? {|f| helper_class.supports?(f) }
+            yield helper_class.new
+          end
+        end
       end
     end
   end

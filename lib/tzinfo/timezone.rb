@@ -7,9 +7,10 @@ module TZInfo
   # than one possible equivalent UTC time. This happens when transitioning from
   # daylight savings time to standard time where the clocks are rolled back.
   #
-  # {AmbiguousTime} is raised by {Timezone#period_for_local} and
-  # {Timezone#local_to_utc} when using an ambiguous time and not specifying any
-  # means to resolve the ambiguity.
+  # {AmbiguousTime} is raised by {Timezone#local_date_time},
+  # {Timezone#local_time}, {Timezone#local_timestamp}, {Timezone#local_to_utc}
+  # and {Timezone#period_for_local} when using an ambiguous time and not
+  # specifying any means to resolve the ambiguity.
   class AmbiguousTime < StandardError
   end
 
@@ -67,16 +68,17 @@ module TZInfo
   class Timezone
     include Comparable
 
-    # The default value of the dst parameter of the {local_to_utc} and
-    # {period_for_local} methods.
+    # The default value of the dst parameter of the {local_date_time},
+    # {local_time}, {local_timestamp}, {local_to_utc} and {period_for_local}
+    # methods.
     #
     # @!visibility private
     @@default_dst = nil
 
     class << self
       # Sets the default value of the optional `dst` parameter of the
-      # {local_to_utc} and {period_for_local} methods. Can be set to `nil`,
-      # `true` or `false`.
+      # {local_date_time}, {local_time}, {local_timestamp}, {local_to_utc} and
+      # {period_for_local} methods. Can be set to `nil`, `true` or `false`.
       #
       # @param value [Boolean] `nil`, `true` or `false`.
       def default_dst=(value)
@@ -84,12 +86,13 @@ module TZInfo
       end
 
       # Returns the default value of the optional `dst` parameter of the
-      # {local_to_utc} and {period_for_local} methods (`nil`, `true` or
-      # `false`).
+      # {local_time}, {local_date_time} and {local_timestamp}, {local_to_utc}
+      # and {period_for_local} methods (`nil`, `true` or `false`).
       #
       # {default_dst} defaults to `nil` unless changed with {default_dst=}.
       #
-      # @return [Boolean] the default value of the optional dst parameter of the
+      # @return [Boolean] the default value of the optional `dst` parameter of
+      #   the {local_time}, {local_date_time} and {local_timestamp},
       #   {local_to_utc} and {period_for_local} methods (`nil`, `true` or
       #   `false`).
       def default_dst
@@ -636,6 +639,273 @@ module TZInfo
 
         ts.add_and_set_utc_offset(-period.utc_total_offset, :utc)
       end
+    end
+
+    # Creates a `Time` object based on the given (Gregorian calendar) date and
+    # time parameters. The parameters are interpreted as a local time in the
+    # time zone. The result has the appropriate `utc_offset`, `zone` and
+    # {LocalTime#period period}.
+    #
+    # _Warning:_ There are time values that are not valid as local times in a
+    # time zone (for example, during the transition from standard time to
+    # daylight savings time). There are also time values that are ambiguous,
+    # occuring more than once with different offsets to UTC (for example in the
+    # transition from daylight savings time to standard time).
+    #
+    # In the first case (an invalid local time), a {PeriodNotFound} exception
+    # will be raised.
+    #
+    # In the second case (more than one occurrence), an {AmbiguousTime}
+    # exception will be raised unless the optional `dst` parameter or block
+    # handles the ambiguity.
+    #
+    # If the ambiguity is due to a transition from daylight savings time to
+    # standard time, the `dst` parameter can be used to select whether the
+    # daylight savings time or local time is used. For example, the following
+    # code would raise an {AmbiguousTime} exception:
+    #
+    #     tz = TZInfo::Timezone.get('America/New_York')
+    #     tz.local_time(2004,10,31,1,30,0,0)
+    #
+    # Specifying `dst = true` would return a `Time` with a UTC offset of -4
+    # hours and abbreviation EDT (Eastern Daylight Time). Specifying `dst =
+    # false` would return a `Time` with a UTC offset of -5 hours and
+    # abbreviation EST (Eastern Standard Time).
+    #
+    # The `dst` parameter will not be able to resolve an ambiguity resulting
+    # from the clocks being set back without changing from daylight savings time
+    # to standard time. In this case, if a block is specified, it will be called
+    # to resolve the ambiguity. The block must take a single parameter - an
+    # `Array` of {TimezonePeriod}s that need to be resolved. The block can
+    # select and return a single {TimezonePeriod} or return `nil` or an empty
+    # `Array` to cause an {AmbiguousTime} exception to be raised.
+    #
+    # The default value of the `dst` parameter can be specified using
+    # {Timezone.default_dst=}.
+    #
+    # @param year [Integer] the year.
+    # @param month [Integer] the month (1-12).
+    # @param day [Integer] the day of the month (1-31).
+    # @param hour [Integer] the hour (0-23).
+    # @param minute [Integer] the minute (0-59).
+    # @param second [Integer] the second (0-59).
+    # @param sub_second [Numeric] the fractional part of the second as either
+    #   a `Rational` that is greater than or equal to 0 and less than 1, or
+    #   the `Integer` 0.
+    # @param dst [Boolean] whether to resolve ambiguous local times by always
+    #   selecting the period observing daylight savings time (`true`), always
+    #   selecting the period observing standard time (`false`), or leaving the
+    #   ambiguity unresolved (`nil`).
+    # @yield [periods] if the `dst` parameter did not resolve an ambiguity, an
+    #   optional block is yielded to.
+    # @yieldparam periods [Array<TimezonePeriod>] an `Array` containing all
+    #   the {TimezonePeriod}s that still match `local_time` after applying the
+    #   `dst` parameter.
+    # @yieldreturn [Object] to resolve the ambiguity: a chosen {TimezonePeriod}
+    #   or an `Array` containing a chosen {TimezonePeriod}; to leave the
+    #   ambiguity unresolved: an empty `Array`, an `Array` containing more than
+    #   one {TimezonePeriod}, or `nil`.
+    # @return [LocalTime] a new `Time` object based on the given values,
+    #   interpreted as a local time in the time zone.
+    # @raise [ArgumentError] if either of `year`, `month`, `day`, `hour`,
+    #   `minute`, or `second` is not an `Integer`.
+    # @raise [ArgumentError] if `sub_second` is not a `Rational`, or the
+    #   `Integer` 0.
+    # @raise [ArgumentError] if `utc_offset` is not `nil`, not an `Integer`
+    #   and not the `Symbol` `:utc`.
+    # @raise [RangeError] if `month` is not between 1 and 12.
+    # @raise [RangeError] if `day` is not between 1 and 31.
+    # @raise [RangeError] if `hour` is not between 0 and 23.
+    # @raise [RangeError] if `minute` is not between 0 and 59.
+    # @raise [RangeError] if `second` is not between 0 and 59.
+    # @raise [RangeError] if `sub_second` is a `Rational` but that is less
+    #   than 0 or greater than or equal to 1.
+    # @raise [PeriodNotFound] if the date and time parameters do not specify a
+    #   valid local time in the time zone.
+    # @raise [AmbiguousTime] if the date and time parameters are ambiguous for
+    #   the time zone and the `dst` parameter or block did not resolve the
+    #   ambiguity.
+    def local_time(year, month = 1, day = 1, hour = 0, minute = 0, second = 0, sub_second = 0, dst = Timezone.default_dst, &block)
+      local_timestamp(year, month, day, hour, minute, second, sub_second, dst, &block).to_time
+    end
+
+    # Creates a `DateTime` object based on the given (Gregorian calendar) date
+    # and time parameters. The parameters are interpreted as a local time in the
+    # time zone. The result has the appropriate `offset` and
+    # {LocalDateTime#period period}.
+    #
+    # _Warning:_ There are time values that are not valid as local times in a
+    # time zone (for example, during the transition from standard time to
+    # daylight savings time). There are also time values that are ambiguous,
+    # occuring more than once with different offsets to UTC (for example in the
+    # transition from daylight savings time to standard time).
+    #
+    # In the first case (an invalid local time), a {PeriodNotFound} exception
+    # will be raised.
+    #
+    # In the second case (more than one occurrence), an {AmbiguousTime}
+    # exception will be raised unless the optional `dst` parameter or block
+    # handles the ambiguity.
+    #
+    # If the ambiguity is due to a transition from daylight savings time to
+    # standard time, the `dst` parameter can be used to select whether the
+    # daylight savings time or local time is used. For example, the following
+    # code would raise an {AmbiguousTime} exception:
+    #
+    #     tz = TZInfo::Timezone.get('America/New_York')
+    #     tz.local_date_time(2004,10,31,1,30,0,0)
+    #
+    # Specifying `dst = true` would return a `Time` with a UTC offset of -4
+    # hours and abbreviation EDT (Eastern Daylight Time). Specifying `dst =
+    # false` would return a `Time` with a UTC offset of -5 hours and
+    # abbreviation EST (Eastern Standard Time).
+    #
+    # The `dst` parameter will not be able to resolve an ambiguity resulting
+    # from the clocks being set back without changing from daylight savings time
+    # to standard time. In this case, if a block is specified, it will be called
+    # to resolve the ambiguity. The block must take a single parameter - an
+    # `Array` of {TimezonePeriod}s that need to be resolved. The block can
+    # select and return a single {TimezonePeriod} or return `nil` or an empty
+    # `Array` to cause an {AmbiguousTime} exception to be raised.
+    #
+    # The default value of the `dst` parameter can be specified using
+    # {Timezone.default_dst=}.
+    #
+    # @param year [Integer] the year.
+    # @param month [Integer] the month (1-12).
+    # @param day [Integer] the day of the month (1-31).
+    # @param hour [Integer] the hour (0-23).
+    # @param minute [Integer] the minute (0-59).
+    # @param second [Integer] the second (0-59).
+    # @param sub_second [Numeric] the fractional part of the second as either
+    #   a `Rational` that is greater than or equal to 0 and less than 1, or
+    #   the `Integer` 0.
+    # @param dst [Boolean] whether to resolve ambiguous local times by always
+    #   selecting the period observing daylight savings time (`true`), always
+    #   selecting the period observing standard time (`false`), or leaving the
+    #   ambiguity unresolved (`nil`).
+    # @yield [periods] if the `dst` parameter did not resolve an ambiguity, an
+    #   optional block is yielded to.
+    # @yieldparam periods [Array<TimezonePeriod>] an `Array` containing all
+    #   the {TimezonePeriod}s that still match `local_time` after applying the
+    #   `dst` parameter.
+    # @yieldreturn [Object] to resolve the ambiguity: a chosen {TimezonePeriod}
+    #   or an `Array` containing a chosen {TimezonePeriod}; to leave the
+    #   ambiguity unresolved: an empty `Array`, an `Array` containing more than
+    #   one {TimezonePeriod}, or `nil`.
+    # @return [LocalDateTime] a new `DateTime` object based on the given values,
+    #   interpreted as a local time in the time zone.
+    # @raise [ArgumentError] if either of `year`, `month`, `day`, `hour`,
+    #   `minute`, or `second` is not an `Integer`.
+    # @raise [ArgumentError] if `sub_second` is not a `Rational`, or the
+    #   `Integer` 0.
+    # @raise [ArgumentError] if `utc_offset` is not `nil`, not an `Integer`
+    #   and not the `Symbol` `:utc`.
+    # @raise [RangeError] if `month` is not between 1 and 12.
+    # @raise [RangeError] if `day` is not between 1 and 31.
+    # @raise [RangeError] if `hour` is not between 0 and 23.
+    # @raise [RangeError] if `minute` is not between 0 and 59.
+    # @raise [RangeError] if `second` is not between 0 and 59.
+    # @raise [RangeError] if `sub_second` is a `Rational` but that is less
+    #   than 0 or greater than or equal to 1.
+    # @raise [PeriodNotFound] if the date and time parameters do not specify a
+    #   valid local time in the time zone.
+    # @raise [AmbiguousTime] if the date and time parameters are ambiguous for
+    #   the time zone and the `dst` parameter or block did not resolve the
+    #   ambiguity.
+    def local_date_time(year, month = 1, day = 1, hour = 0, minute = 0, second = 0, sub_second = 0, dst = Timezone.default_dst, &block)
+      local_timestamp(year, month, day, hour, minute, second, sub_second, dst, &block).to_datetime
+    end
+
+    # Creates a {Timestamp} object based on the given (Gregorian calendar) date
+    # and time parameters. The parameters are interpreted as a local time in the
+    # time zone. The result has the appropriate
+    # {Timestamp#utc_offset utc_offset} and {LocalTimestamp#period period}.
+    #
+    # _Warning:_ There are time values that are not valid as local times in a
+    # time zone (for example, during the transition from standard time to
+    # daylight savings time). There are also time values that are ambiguous,
+    # occuring more than once with different offsets to UTC (for example in the
+    # transition from daylight savings time to standard time).
+    #
+    # In the first case (an invalid local time), a {PeriodNotFound} exception
+    # will be raised.
+    #
+    # In the second case (more than one occurrence), an {AmbiguousTime}
+    # exception will be raised unless the optional `dst` parameter or block
+    # handles the ambiguity.
+    #
+    # If the ambiguity is due to a transition from daylight savings time to
+    # standard time, the `dst` parameter can be used to select whether the
+    # daylight savings time or local time is used. For example, the following
+    # code would raise an {AmbiguousTime} exception:
+    #
+    #     tz = TZInfo::Timezone.get('America/New_York')
+    #     tz.local_timestamp(2004,10,31,1,30,0,0)
+    #
+    # Specifying `dst = true` would return a `Time` with a UTC offset of -4
+    # hours and abbreviation EDT (Eastern Daylight Time). Specifying `dst =
+    # false` would return a `Time` with a UTC offset of -5 hours and
+    # abbreviation EST (Eastern Standard Time).
+    #
+    # The `dst` parameter will not be able to resolve an ambiguity resulting
+    # from the clocks being set back without changing from daylight savings time
+    # to standard time. In this case, if a block is specified, it will be called
+    # to resolve the ambiguity. The block must take a single parameter - an
+    # `Array` of {TimezonePeriod}s that need to be resolved. The block can
+    # select and return a single {TimezonePeriod} or return `nil` or an empty
+    # `Array` to cause an {AmbiguousTime} exception to be raised.
+    #
+    # The default value of the `dst` parameter can be specified using
+    # {Timezone.default_dst=}.
+    #
+    # @param year [Integer] the year.
+    # @param month [Integer] the month (1-12).
+    # @param day [Integer] the day of the month (1-31).
+    # @param hour [Integer] the hour (0-23).
+    # @param minute [Integer] the minute (0-59).
+    # @param second [Integer] the second (0-59).
+    # @param sub_second [Numeric] the fractional part of the second as either
+    #   a `Rational` that is greater than or equal to 0 and less than 1, or
+    #   the `Integer` 0.
+    # @param dst [Boolean] whether to resolve ambiguous local times by always
+    #   selecting the period observing daylight savings time (`true`), always
+    #   selecting the period observing standard time (`false`), or leaving the
+    #   ambiguity unresolved (`nil`).
+    # @yield [periods] if the `dst` parameter did not resolve an ambiguity, an
+    #   optional block is yielded to.
+    # @yieldparam periods [Array<TimezonePeriod>] an `Array` containing all
+    #   the {TimezonePeriod}s that still match `local_time` after applying the
+    #   `dst` parameter.
+    # @yieldreturn [Object] to resolve the ambiguity: a chosen {TimezonePeriod}
+    #   or an `Array` containing a chosen {TimezonePeriod}; to leave the
+    #   ambiguity unresolved: an empty `Array`, an `Array` containing more than
+    #   one {TimezonePeriod}, or `nil`.
+    # @return [LocalTimestamp] a new {Timestamp} object based on the given
+    #   values, interpreted as a local time in the time zone.
+    # @raise [ArgumentError] if either of `year`, `month`, `day`, `hour`,
+    #   `minute`, or `second` is not an `Integer`.
+    # @raise [ArgumentError] if `sub_second` is not a `Rational`, or the
+    #   `Integer` 0.
+    # @raise [ArgumentError] if `utc_offset` is not `nil`, not an `Integer`
+    #   and not the `Symbol` `:utc`.
+    # @raise [RangeError] if `month` is not between 1 and 12.
+    # @raise [RangeError] if `day` is not between 1 and 31.
+    # @raise [RangeError] if `hour` is not between 0 and 23.
+    # @raise [RangeError] if `minute` is not between 0 and 59.
+    # @raise [RangeError] if `second` is not between 0 and 59.
+    # @raise [RangeError] if `sub_second` is a `Rational` but that is less
+    #   than 0 or greater than or equal to 1.
+    # @raise [PeriodNotFound] if the date and time parameters do not specify a
+    #   valid local time in the time zone.
+    # @raise [AmbiguousTime] if the date and time parameters are ambiguous for
+    #   the time zone and the `dst` parameter or block did not resolve the
+    #   ambiguity.
+    def local_timestamp(year, month = 1, day = 1, hour = 0, minute = 0, second = 0, sub_second = 0, dst = Timezone.default_dst, &block)
+      ts = Timestamp.create(year, month, day, hour, minute, second, sub_second)
+      period = period_for_local(ts, dst, &block)
+      offset = period.utc_total_offset
+      LocalTimestamp.new(ts.value - offset, sub_second, offset).localize(period)
     end
 
     # Returns the unique offsets used by the time zone up to a given time (`to`)

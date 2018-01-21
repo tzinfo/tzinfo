@@ -1097,6 +1097,318 @@ class TCTimezone < Minitest::Test
     assert_match(Regexp.new("\\b#{Regexp.escape(t.class.name)}\\b"), error.message)
   end
 
+  time_types_helpers do |h|
+    method = "local_#{h.type}"
+
+    define_method("test_#{method}") do
+      o1 = TimezoneOffset.new(0, 0, :GMT)
+      o2 = TimezoneOffset.new(0, 3600, :BST)
+
+      period = TransitionsTimezonePeriod.new(
+        TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
+        TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
+
+      assert_equal_with_offset_and_class(h.local_time(period,2005,6,18,16,24,23,0),
+        TestTimezone.new('Europe/London', nil, [period], Timestamp.create(2005,6,18,16,24,23,0)).public_send(method,2005,6,18,16,24,23,0))
+      assert_equal_with_offset_and_class(h.local_time(period,2005,6,18,16,24,23,Rational(567,1000)),
+        TestTimezone.new('Europe/London', nil, [period], Timestamp.create(2005,6,18,16,24,23,Rational(567,1000))).public_send(method,2005,6,18,16,24,23,Rational(567,1000)))
+    end
+
+    define_method("test_#{method}_not_found") do
+      ts = Timestamp.create(2004,4,4,2,30,0)
+      tz = TestTimezone.new('America/New_York', nil, [], ts)
+      assert_raises_period_not_found(ts) { tz.public_send(method,2004,4,4,2,30,0) }
+    end
+
+    define_method("test_#{method}_ambiguous") do
+      o1 = TimezoneOffset.new(-18000, 0, :EST)
+      o2 = TimezoneOffset.new(-18000, 3600, :EDT)
+
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+      t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+
+      p1 = TransitionsTimezonePeriod.new(t1, t2)
+      p2 = TransitionsTimezonePeriod.new(t2, t3)
+
+      ts = Timestamp.create(2004,10,31,1,30,0)
+
+      tz = TestTimezone.new('America/New_York', nil, [p1, p2], ts)
+
+      assert_raises_ambiguous_time(ts) { tz.public_send(method,2004,10,31,1,30,0) }
+    end
+
+    define_method("test_#{method}_default_dst_set_true") do
+      Timezone.default_dst = true
+
+      o1 = TimezoneOffset.new(-18000, 0, :EST)
+      o2 = TimezoneOffset.new(-18000, 3600, :EDT)
+
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+      t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+
+      p1 = TransitionsTimezonePeriod.new(t1, t2)
+      p2 = TransitionsTimezonePeriod.new(t2, t3)
+
+      ts = Timestamp.create(2004,10,31,1,30,0)
+
+      tz = TestTimezone.new('America/New_York', nil, [p1, p2], ts)
+
+      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0))
+      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true))
+      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false))
+      assert_raises_ambiguous_time(ts) { tz.public_send(method,2004,10,31,1,30,0,0,nil) }
+      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0) {|periods| raise BlockCalled, 'should not be called' })
+    end
+
+    define_method("test_#{method}_default_dst_set_false") do
+      Timezone.default_dst = false
+
+      o1 = TimezoneOffset.new(-18000, 0, :EST)
+      o2 = TimezoneOffset.new(-18000, 3600, :EDT)
+
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+      t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+
+      p1 = TransitionsTimezonePeriod.new(t1, t2)
+      p2 = TransitionsTimezonePeriod.new(t2, t3)
+
+      ts = Timestamp.create(2004,10,31,1,30,0)
+
+      tz = TestTimezone.new('America/New_York', nil, [p1, p2], ts)
+
+      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0))
+      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false))
+      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true))
+      assert_raises_ambiguous_time(ts) { tz.public_send(method,2004,10,31,1,30,0,0,nil) }
+      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0) {|periods| raise BlockCalled, 'should not be called' })
+    end
+
+    define_method("test_#{method}_default_dst_flag_resolved") do
+      o1 = TimezoneOffset.new(-18000, 0, :EST)
+      o2 = TimezoneOffset.new(-18000, 3600, :EDT)
+
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+      t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+
+      p1 = TransitionsTimezonePeriod.new(t1, t2)
+      p2 = TransitionsTimezonePeriod.new(t2, t3)
+
+      tz = TestTimezone.new('America/New_York', nil, [p1, p2], Timestamp.create(2004,10,31,1,30,0))
+
+      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true))
+      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false))
+      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true) {|periods| raise BlockCalled, 'should not be called' })
+      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false) {|periods| raise BlockCalled, 'should not be called' })
+    end
+
+    define_method("test_#{method}_default_dst_block_called") do
+      o1 = TimezoneOffset.new(-18000, 0, :EST)
+      o2 = TimezoneOffset.new(-18000, 3600, :EDT)
+
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+      t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+
+      p1 = TransitionsTimezonePeriod.new(t1, t2)
+      p2 = TransitionsTimezonePeriod.new(t2, t3)
+
+      tz = TestTimezone.new('America/New_York', nil, [p1, p2], Timestamp.create(2004,10,31,1,30,0))
+
+      assert_raises(BlockCalled) do
+        tz.public_send(method,2004,10,31,1,30,0) do |periods|
+          assert_equal([p1, p2], periods)
+
+          # raise exception to test that the block was called
+          raise BlockCalled, 'should be raised'
+        end
+      end
+
+      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| periods.first })
+      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| periods.last })
+      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| [periods.first] })
+      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| [periods.last] })
+    end
+
+    define_method("test_#{method}_default_dst_cannot_resolve") do
+      # At midnight local time on Aug 5 1915 in Warsaw, the clocks were put back
+      # 24 minutes and both periods were non-DST. Hence the block should be
+      # called regardless of the value of the Boolean dst parameter.
+
+      o0 = TimezoneOffset.new(5040, 0, :LMT)
+      o1 = TimezoneOffset.new(5040, 0, :WMT)
+      o2 = TimezoneOffset.new(3600, 0, :CET)
+      o3 = TimezoneOffset.new(3600, 3600, :CEST)
+
+      t1 = TimezoneTransition.new(o1, o0, Time.utc(1879, 12, 31, 22, 36, 0).to_i)
+      t2 = TimezoneTransition.new(o2, o1, Time.utc(1915,  8,  4, 22, 36, 0).to_i)
+      t3 = TimezoneTransition.new(o3, o2, Time.utc(1916,  4, 30, 22,  0, 0).to_i)
+
+      p1 = TransitionsTimezonePeriod.new(t1, t2)
+      p2 = TransitionsTimezonePeriod.new(t2, t3)
+
+      tz = TestTimezone.new('Europe/Warsaw', nil, [p1, p2], Timestamp.create(1915,8,4,23,40,0))
+
+      assert_raises(BlockCalled) do
+        tz.public_send(method,1915,8,4,23,40,0,0,true) do |periods|
+          assert_equal([p1, p2], periods)
+          raise BlockCalled, 'should be raised'
+        end
+      end
+
+      assert_raises(BlockCalled) do
+        tz.public_send(method,1915,8,4,23,40,0,0,false) do |periods|
+          assert_equal([p1, p2], periods)
+          raise BlockCalled, 'should be raised'
+        end
+      end
+
+      assert_equal_with_offset_and_class(h.local_time(p1,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| periods.first})
+      assert_equal_with_offset_and_class(h.local_time(p2,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| periods.last})
+      assert_equal_with_offset_and_class(h.local_time(p1,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| [periods.first]})
+      assert_equal_with_offset_and_class(h.local_time(p2,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| [periods.last]})
+    end
+
+    define_method("test_#{method}_block_ambiguous") do
+      o1 = TimezoneOffset.new(-18000, 0, :EST)
+      o2 = TimezoneOffset.new(-18000, 3600, :EDT)
+
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+      t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+
+      p1 = TransitionsTimezonePeriod.new(t1, t2)
+      p2 = TransitionsTimezonePeriod.new(t2, t3)
+
+      ts = Timestamp.create(2004,10,31,1,30,0)
+
+      tz = TestTimezone.new('America/New_York', nil, [p1, p2], ts)
+
+      assert_raises_ambiguous_time(ts) { tz.public_send(method,2004,10,31,1,30,0) {|periods| nil } }
+      assert_raises_ambiguous_time(ts) { tz.public_send(method,2004,10,31,1,30,0) {|periods| periods } }
+      assert_raises_ambiguous_time(ts) { tz.public_send(method,2004,10,31,1,30,0) {|periods| [] } }
+      error = assert_raises(AmbiguousTime) { tz.public_send(method,2004,10,31,1,30,0) {|periods| raise AmbiguousTime, 'Custom ambiguous time message' } }
+      assert_equal('Custom ambiguous time message', error.message)
+    end
+
+    define_method("test_#{method}_invalid_days_for_specific_month") do
+      p = OffsetTimezonePeriod.new(TimezoneOffset.new(18000, 0, :TEST))
+
+      [[2018,2,29],[2018,11,31]].each do |time_args|
+        tz = TestTimezone.new('Test', nil, [p], Timestamp.create(*time_args))
+        assert_equal_with_offset_and_class(h.local_time(p,time_args[0],time_args[1]+1,1,0,0,0,0), tz.public_send(method,*time_args))
+      end
+    end
+
+    define_method("test_#{method}_month_out_of_range") do
+      tz = Timezone.get('Europe/London')
+
+      [0, 13].each do |month|
+        error = assert_raises(RangeError) { tz.public_send(method, 2018, month) }
+        assert_equal('month must be between 1 and 12', error.message)
+      end
+    end
+
+    define_method("test_#{method}_day_out_of_range") do
+      tz = Timezone.get('Europe/London')
+
+      [0, 32].each do |day|
+        error = assert_raises(RangeError) { tz.public_send(method, 2018, 1, day) }
+        assert_equal('day must be between 1 and 31', error.message)
+      end
+    end
+
+    define_method("test_#{method}_hour_out_of_range") do
+      tz = Timezone.get('Europe/London')
+
+      [-1, 24].each do |hour|
+        error = assert_raises(RangeError) { tz.public_send(method, 2018, 1, 1, hour) }
+        assert_equal('hour must be between 0 and 23', error.message)
+      end
+    end
+
+    define_method("test_#{method}_minute_out_of_range") do
+      tz = Timezone.get('Europe/London')
+
+      [-1, 60].each do |minute|
+        error = assert_raises(RangeError) { tz.public_send(method, 2018, 1, 1, 0, minute) }
+        assert_equal('minute must be between 0 and 59', error.message)
+      end
+    end
+
+    define_method("test_#{method}_second_out_of_range") do
+      tz = Timezone.get('Europe/London')
+
+      [-1, 60].each do |second|
+        error = assert_raises(RangeError) { tz.public_send(method, 2018, 1, 1, 0, 0, second) }
+        assert_equal('second must be between 0 and 59', error.message)
+      end
+    end
+
+    define_method("test_#{method}_sub_second_out_of_range") do
+      tz = Timezone.get('Europe/London')
+
+      [Rational(-1, 10), Rational(11, 10)].each do |sub_second|
+        error = assert_raises(RangeError) { tz.public_send(method, 2018, 1, 1, 0, 0, 0, sub_second) }
+        assert_equal('sub_second must be >= 0 and < 1', error.message)
+      end
+    end
+
+    define_method("test_#{method}_year_not_integer") do
+      tz = Timezone.get('Europe/London')
+
+      error = assert_raises(ArgumentError) { tz.public_send(method, 2018.0) }
+      assert_equal('year must be an Integer', error.message)
+    end
+
+    define_method("test_#{method}_month_not_integer") do
+      tz = Timezone.get('Europe/London')
+
+      error = assert_raises(ArgumentError) { tz.public_send(method, 2018, 1.0) }
+      assert_equal('month must be an Integer', error.message)
+    end
+
+    define_method("test_#{method}_day_not_integer") do
+      tz = Timezone.get('Europe/London')
+
+      error = assert_raises(ArgumentError) { tz.public_send(method, 2018, 1, 1.0) }
+      assert_equal('day must be an Integer', error.message)
+    end
+
+    define_method("test_#{method}_hour_not_integer") do
+      tz = Timezone.get('Europe/London')
+
+      error = assert_raises(ArgumentError) { tz.public_send(method, 2018, 1, 1, 0.0) }
+      assert_equal('hour must be an Integer', error.message)
+    end
+
+    define_method("test_#{method}_minute_not_integer") do
+      tz = Timezone.get('Europe/London')
+
+      error = assert_raises(ArgumentError) { tz.public_send(method, 2018, 1, 1, 0, 0.0) }
+      assert_equal('minute must be an Integer', error.message)
+    end
+
+    define_method("test_#{method}_second_not_integer") do
+      tz = Timezone.get('Europe/London')
+
+      error = assert_raises(ArgumentError) { tz.public_send(method, 2018, 1, 1, 0, 0, 0.0) }
+      assert_equal('second must be an Integer', error.message)
+    end
+
+    define_method("test_#{method}_sub_second_not_zero_integer_or_rational") do
+      tz = Timezone.get('Europe/London')
+
+      [nil, 0.1, 1].each do |sub_second|
+        error = assert_raises(ArgumentError) { tz.public_send(method, 2018, 1, 1, 0, 0, 0, sub_second) }
+        assert_equal('sub_second must be a Rational or the Integer 0', error.message)
+      end
+    end
+  end
+
   def test_offsets_up_to_utc_and_zero_offset
     o1 = TimezoneOffset.new(-17900, 0,    :TESTLMT)
     o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
