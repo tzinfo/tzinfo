@@ -4,13 +4,14 @@ require 'set'
 
 module TZInfo
   # {AmbiguousTime} is raised to indicate that a specified local time has more
-  # than one possible equivalent UTC time. This happens when transitioning from
-  # daylight savings time to standard time where the clocks are rolled back.
+  # than one possible equivalent UTC time. Such ambiguities arise when the
+  # clocks are set back in a time zone, most commonly during the repeated hour
+  # when transitioning from daylight savings time to standard time.
   #
   # {AmbiguousTime} is raised by {Timezone#local_date_time},
   # {Timezone#local_time}, {Timezone#local_timestamp}, {Timezone#local_to_utc}
   # and {Timezone#period_for_local} when using an ambiguous time and not
-  # specifying any means to resolve the ambiguity.
+  # specifying how to resolve the ambiguity.
   class AmbiguousTime < StandardError
   end
 
