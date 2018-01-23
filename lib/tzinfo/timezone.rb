@@ -443,7 +443,7 @@ module TZInfo
     #
     # Specifying `dst = true` would select the daylight savings period from
     # April to October 2004. Specifying `dst = false` would return the
-    # standardtime period from October 2004 to April 2005.
+    # standard time period from October 2004 to April 2005.
     #
     # The `dst` parameter will not be able to resolve an ambiguity resulting
     # from the clocks being set back without changing from daylight savings time
@@ -475,7 +475,7 @@ module TZInfo
     # @raise [ArgumentError] if `local_time` is `nil`.
     # @raise [PeriodNotFound] if `local_time` is not valid for the time zone
     #   (there is no equivalent UTC time).
-    # @raise [AmbiuousTime] if `local_time` was ambiguous for the time zone and
+    # @raise [AmbiguousTime] if `local_time` was ambiguous for the time zone and
     #   the `dst` parameter or block did not resolve the ambiguity.
     def period_for_local(local_time, dst = Timezone.default_dst)
       raise ArgumentError, 'local_time must be specified' unless local_time
@@ -593,7 +593,7 @@ module TZInfo
     #
     # Specifying `dst = true` would select the daylight savings period from
     # April to October 2004. Specifying `dst = false` would return the
-    # standardtime period from October 2004 to April 2005.
+    # standard time period from October 2004 to April 2005.
     #
     # The `dst` parameter will not be able to resolve an ambiguity resulting
     # from the clocks being set back without changing from daylight savings time
@@ -625,7 +625,7 @@ module TZInfo
     # @raise [ArgumentError] if `local_time` is `nil`.
     # @raise [PeriodNotFound] if `local_time` is not valid for the time zone
     #   (there is no equivalent UTC time).
-    # @raise [AmbiuousTime] if `local_time` was ambiguous for the time zone and
+    # @raise [AmbiguousTime] if `local_time` was ambiguous for the time zone and
     #   the `dst` parameter or block did not resolve the ambiguity.
     def local_to_utc(local_time, dst = Timezone.default_dst)
       raise ArgumentError, 'local_time must be specified' unless local_time
