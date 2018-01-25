@@ -38,6 +38,12 @@ environment:
     - RUBY_PLATFORM: ruby
       RUBY_VERSION: 24-x64
 
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 25
+
+    - RUBY_PLATFORM: ruby
+      RUBY_VERSION: 25-x64
+
     - RUBY_PLATFORM: jruby
       JRUBY_VERSION: 1.7.27
 
