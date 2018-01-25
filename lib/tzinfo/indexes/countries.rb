@@ -768,7 +768,7 @@ module TZInfo
         c.timezone 'America/Paramaribo', 35, 6, -331, 6
       end
       country 'SS', 'South Sudan' do |c|
-        c.timezone 'Africa/Juba', 97, 20, 158, 5
+        c.timezone 'Africa/Juba', 97, 20, 1897, 60
       end
       country 'ST', 'Sao Tome & Principe' do |c|
         c.timezone 'Africa/Sao_Tome', 1, 3, 101, 15

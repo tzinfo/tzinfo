@@ -6,7 +6,16 @@ module TZInfo
       module Sao_Tome
         include TimezoneDefinition
         
-        linked_timezone 'Africa/Sao_Tome', 'Africa/Abidjan'
+        timezone 'Africa/Sao_Tome' do |tz|
+          tz.offset :o0, 1616, 0, :LMT
+          tz.offset :o1, -2205, 0, :LMT
+          tz.offset :o2, 0, 0, :GMT
+          tz.offset :o3, 3600, 0, :WAT
+          
+          tz.transition 1883, 12, :o1, 13009552999, 5400
+          tz.transition 1912, 1, :o2, 4645252849, 1920
+          tz.transition 2018, 1, :o3, 1514768400
+        end
       end
     end
   end

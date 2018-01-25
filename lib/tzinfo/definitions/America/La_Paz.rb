@@ -9,7 +9,7 @@ module TZInfo
         timezone 'America/La_Paz' do |tz|
           tz.offset :o0, -16356, 0, :LMT
           tz.offset :o1, -16356, 0, :CMT
-          tz.offset :o2, -16356, 3600, :BOST
+          tz.offset :o2, -16356, 3600, :BST
           tz.offset :o3, -14400, 0, :'-04'
           
           tz.transition 1890, 1, :o1, 17361854563, 7200
