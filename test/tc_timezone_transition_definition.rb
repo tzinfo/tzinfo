@@ -281,4 +281,12 @@ class TCTimezoneTransitionDefinition < Minitest::Test
         t6.hash)
     end
   end
+
+  def test_freeze_when_not_fully_initialized
+    transition = TimezoneTransitionDefinition.new(TimezoneOffset.new(3600, 3600, :TDT),
+                                        TimezoneOffset.new(3600, 0, :TST), 1148949080)
+    transition.freeze
+
+    assert_nothing_raised { transition.at }
+  end
 end
