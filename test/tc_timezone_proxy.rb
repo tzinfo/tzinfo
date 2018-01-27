@@ -88,6 +88,15 @@ class TCTimezoneProxy < Minitest::Test
       assert_same(Timezone.get('UTC'), proxy.canonical_zone)
     end
   end
+
+  def test_after_freeze
+    proxy = TimezoneProxy.new('Europe/London')
+    real = Timezone.get('Europe/London')
+    t = Time.utc(2017, 6, 1)
+    proxy.freeze
+    assert_equal('Europe/London', proxy.identifier)
+    assert_equal(real.utc_to_local(t), proxy.utc_to_local(t))
+  end
   
   def test_equals
     assert_equal(true, TimezoneProxy.new('Europe/London') == TimezoneProxy.new('Europe/London'))

@@ -79,7 +79,13 @@ module TZInfo
       # calculated multiple times in concurrently executing threads. It is not 
       # worth the overhead of locking to ensure that @latitude is only 
       # calculated once.
-      @latitude ||= RubyCoreSupport.rational_new!(@latitude_numerator, @latitude_denominator)
+      unless @latitude
+         result = RubyCoreSupport.rational_new!(@latitude_numerator, @latitude_denominator)
+         return result if frozen?
+         @latitude = result
+      end
+
+      @latitude
     end
     
     # The longitude of this timezone in degrees as a Rational.
@@ -88,7 +94,13 @@ module TZInfo
       # calculated multiple times in concurrently executing threads. It is not 
       # worth the overhead of locking to ensure that @longitude is only 
       # calculated once.
-      @longitude ||= RubyCoreSupport.rational_new!(@longitude_numerator, @longitude_denominator)
+      unless @longitude
+        result = RubyCoreSupport.rational_new!(@longitude_numerator, @longitude_denominator)
+        return result if frozen?
+        @longitude = result
+      end
+
+      @longitude
     end
     
     # Returns true if and only if the given CountryTimezone is equal to the

@@ -54,11 +54,14 @@ module TZInfo
       # calculated once.
     
       unless @time
-        if @timestamp
-          @time = Time.at(@timestamp).utc
+        result = if @timestamp
+          Time.at(@timestamp).utc
         else
-          @time = Time.utc(year, mon, mday, hour, min, sec, usec)
+          Time.utc(year, mon, mday, hour, min, sec, usec)
         end
+
+        return result if frozen?
+        @time = result
       end
       
       @time      
@@ -78,7 +81,9 @@ module TZInfo
         # Avoid using Rational unless necessary.
         u = usec
         s = u == 0 ? sec : Rational(sec * 1000000 + u, 1000000)
-        @datetime = RubyCoreSupport.datetime_new(year, mon, mday, hour, min, s)
+        result = RubyCoreSupport.datetime_new(year, mon, mday, hour, min, s)
+        return result if frozen?
+        @datetime = result
       end
       
       @datetime
@@ -92,7 +97,9 @@ module TZInfo
       # calculated once.
     
       unless @timestamp
-        @timestamp = to_time.to_i
+        result = to_time.to_i
+        return result if frozen?
+        @timestamp = result
       end
       
       @timestamp

@@ -71,7 +71,9 @@ module TZInfo
       # to ensure that @zone_identifiers is only calculated once.
     
       unless @utc_total_offset_rational
-        @utc_total_offset_rational = OffsetRationals.rational_for_offset(utc_total_offset) 
+        result = OffsetRationals.rational_for_offset(utc_total_offset)
+        return result if frozen?
+        @utc_total_offset_rational = result
       end
       @utc_total_offset_rational
     end

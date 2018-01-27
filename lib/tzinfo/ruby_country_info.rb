@@ -22,7 +22,9 @@ module TZInfo
       # calculated once.
     
       unless @zone_identifiers
-        @zone_identifiers = zones.collect {|zone| zone.identifier}.freeze
+        result = zones.collect {|zone| zone.identifier}.freeze
+        return result if frozen?
+        @zone_identifiers = result
       end
       
       @zone_identifiers
@@ -40,8 +42,10 @@ module TZInfo
       unless @zones
         zones = Zones.new
         @block.call(zones) if @block
+        result = zones.list.freeze
+        return result if frozen?
         @block = nil
-        @zones = zones.list.freeze
+        @zones = result
       end
       
       @zones

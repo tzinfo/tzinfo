@@ -70,6 +70,17 @@ class TCTimezoneTransitionDefinition < Minitest::Test
       assert(TimeOrDateTime.new(DateTime.new(2038, 1, 19, 3, 14, 8)).eql?(t.at))
     end
   end
+
+  def test_at_after_freeze
+    t1 = TimezoneTransitionDefinition.new(TimezoneOffset.new(3600, 3600, :TDT),
+      TimezoneOffset.new(3600, 0, :TST), 1148949080)
+    t2 = TimezoneTransitionDefinition.new(TimezoneOffset.new(3600, 3600, :TDT),
+      TimezoneOffset.new(3600, 0, :TST), 5300392727, 2160)
+    t1.freeze
+    t2.freeze
+    assert(TimeOrDateTime.new(1148949080).eql?(t1.at))
+    assert(TimeOrDateTime.new(DateTime.new(2006, 5, 30, 0, 31, 20)).eql?(t2.at))
+  end
   
   def test_eql_timestamp
     t1 = TimezoneTransitionDefinition.new(TimezoneOffset.new(3600, 3600, :TDT),

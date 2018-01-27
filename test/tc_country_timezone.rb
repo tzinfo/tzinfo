@@ -17,6 +17,12 @@ class TCCountryTimezone < Minitest::Test
     ct = CountryTimezone.new!('Europe/London', 2059, 40, -5, 16)
     assert_equal(Rational(2059, 40), ct.latitude)
   end
+
+  def test_latitude_after_freeze_new!
+    ct = CountryTimezone.new!('Europe/London', 2059, 40, -5, 16)
+    ct.freeze
+    assert_equal(Rational(2059, 40), ct.latitude)
+  end
   
   def test_latitude_new
     ct = CountryTimezone.new('Europe/London', Rational(2059, 40), Rational(-5, 16))
@@ -25,6 +31,12 @@ class TCCountryTimezone < Minitest::Test
   
   def test_longitude_new!
     ct = CountryTimezone.new!('Europe/London', 2059, 40, -5, 16)
+    assert_equal(Rational(-5, 16), ct.longitude)
+  end
+
+  def test_longitude_after_freeze_new!
+    ct = CountryTimezone.new!('Europe/London', 2059, 40, -5, 16)
+    ct.freeze
     assert_equal(Rational(-5, 16), ct.longitude)
   end
   

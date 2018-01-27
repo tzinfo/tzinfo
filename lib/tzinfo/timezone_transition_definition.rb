@@ -71,13 +71,16 @@ module TZInfo
       # overhead of locking to ensure that @at is only calculated once.
       
       unless @at
-        unless @denominator 
-          @at = TimeOrDateTime.new(@numerator_or_time)
+        result = unless @denominator
+          TimeOrDateTime.new(@numerator_or_time)
         else
           r = RubyCoreSupport.rational_new!(@numerator_or_time, @denominator)
           dt = RubyCoreSupport.datetime_new!(r, 0, Date::ITALY)
-          @at = TimeOrDateTime.new(dt)
+          TimeOrDateTime.new(dt)
         end
+
+        return result if frozen?
+        @at = result
       end
       
       @at

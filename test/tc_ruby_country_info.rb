@@ -37,6 +37,19 @@ class TCRubyCountryInfo < Minitest::Test
     assert_equal(['ZZ/TimezoneB', 'ZZ/TimezoneA', 'ZZ/TimezoneC', 'ZZ/TimezoneD'], ci.zone_identifiers)
     assert(ci.zone_identifiers.frozen?)
   end
+
+  def test_zone_identifiers_after_freeze
+    ci = RubyCountryInfo.new('ZZ', 'Zzz') do |c|
+      c.timezone('ZZ/TimezoneB', 1, 2, 1, 2, 'Timezone B')
+      c.timezone('ZZ/TimezoneA', 1, 4, 1, 4, 'Timezone A')
+      c.timezone('ZZ/TimezoneC', -10, 3, -20, 7, 'C')
+      c.timezone('ZZ/TimezoneD', -10, 3, -20, 7)
+    end
+
+    ci.freeze
+
+    assert_equal(['ZZ/TimezoneB', 'ZZ/TimezoneA', 'ZZ/TimezoneC', 'ZZ/TimezoneD'], ci.zone_identifiers)
+  end
   
   def test_zones_empty
     ci = RubyCountryInfo.new('ZZ', 'Zzz') {|c| }
@@ -64,6 +77,23 @@ class TCRubyCountryInfo < Minitest::Test
       CountryTimezone.new!('ZZ/TimezoneD', -10, 3, -20, 7)],
       ci.zones)
     assert(ci.zones.frozen?)
+  end
+
+  def test_zones_after_freeze
+    ci = RubyCountryInfo.new('ZZ', 'Zzz') do |c|
+      c.timezone('ZZ/TimezoneB', 1, 2, 1, 2, 'Timezone B')
+      c.timezone('ZZ/TimezoneA', 1, 4, 1, 4, 'Timezone A')
+      c.timezone('ZZ/TimezoneC', -10, 3, -20, 7, 'C')
+      c.timezone('ZZ/TimezoneD', -10, 3, -20, 7)
+    end
+
+    ci.freeze
+
+    assert_equal([CountryTimezone.new!('ZZ/TimezoneB', 1, 2, 1, 2, 'Timezone B'),
+      CountryTimezone.new!('ZZ/TimezoneA', 1, 4, 1, 4, 'Timezone A'),
+      CountryTimezone.new!('ZZ/TimezoneC', -10, 3, -20, 7, 'C'),
+      CountryTimezone.new!('ZZ/TimezoneD', -10, 3, -20, 7)],
+      ci.zones)
   end
   
   def test_deferred_evaluate

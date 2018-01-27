@@ -68,6 +68,13 @@ class TCTimezoneTransition < Minitest::Test
     assert(TimeOrDateTime.new(DateTime.new(2006, 5, 30, 1, 31, 20)).eql?(t2.local_end_at))
     assert(TimeOrDateTime.new(Time.utc(2006, 5, 30, 1, 31, 20)).eql?(t3.local_end_at))
   end
+
+  def test_local_end_at_after_freeze
+    t = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
+      TimezoneOffset.new(3600, 0, :TST), 1148949080)
+    t.freeze
+    assert(TimeOrDateTime.new(1148952680).eql?(t.local_end_at))
+  end
   
   def test_local_end
     t1 = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
@@ -106,6 +113,13 @@ class TCTimezoneTransition < Minitest::Test
     assert(TimeOrDateTime.new(1148956280).eql?(t1.local_start_at))
     assert(TimeOrDateTime.new(DateTime.new(2006, 5, 30, 2, 31, 20)).eql?(t2.local_start_at))
     assert(TimeOrDateTime.new(Time.utc(2006, 5, 30, 2, 31, 20)).eql?(t3.local_start_at))
+  end
+
+  def test_local_start_at_after_freeze
+    t = TestTimezoneTransition.new(TimezoneOffset.new(3600, 3600, :TDT),
+      TimezoneOffset.new(3600, 0, :TST), 1148949080)
+    t.freeze
+    assert(TimeOrDateTime.new(1148956280).eql?(t.local_start_at))
   end
   
   def test_local_start

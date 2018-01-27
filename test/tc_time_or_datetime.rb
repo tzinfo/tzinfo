@@ -128,6 +128,11 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 3, 721123),
       TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(7211239, 10000000))).to_time)
   end
+
+  def test_to_time_after_freeze
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).freeze.to_time)
+    assert_equal(Time.utc(2006, 3, 24, 15, 32, 3), TimeOrDateTime.new(1143214323).freeze.to_time)
+  end
   
   def test_to_datetime
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3),
@@ -157,6 +162,11 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721123, 1000000)),
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721123 + Rational(9, 10))).to_datetime)
   end
+
+  def test_to_datetime_after_freeze
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).freeze.to_datetime)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 3), TimeOrDateTime.new(1143214323).freeze.to_datetime)
+  end
   
   def test_to_i
     assert_equal(1143214323,
@@ -171,6 +181,11 @@ class TCTimeOrDateTime < Minitest::Test
       TimeOrDateTime.new(1143214323).to_i)
     assert_equal(1143214323,
       TimeOrDateTime.new('1143214323').to_i)
+  end
+
+  def test_to_i_after_freeze
+    assert_equal(1143214323, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).freeze.to_i)
+    assert_equal(1143214323, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).freeze.to_i)
   end
   
   def test_to_orig

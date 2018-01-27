@@ -149,6 +149,13 @@ class TCTimezonePeriod < Minitest::Test
     assert_nil(p.local_end)
     assert_nil(p.local_end_time)
   end
+
+  def test_utc_total_offset_rational_after_freeze
+    o = TimezoneOffset.new(3600, 0, :TEST)
+    p = TimezonePeriod.new(nil, nil, o)
+    p.freeze
+    assert_equal(Rational(1, 24), p.utc_total_offset_rational)
+  end
   
   def test_dst    
     p1 = TimezonePeriod.new(nil, nil, TimezoneOffset.new(-14400, 3600, :TEST))
