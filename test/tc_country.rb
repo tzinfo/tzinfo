@@ -190,7 +190,6 @@ class TCCountry < Minitest::Test
     # If country gets reloaded for some reason, it needs to force a reload of
     # the country index.
     
-    c = Country.get('US')
     assert_equal('US', Country.get('US').code)
 
     # Suppress redefined method warnings.
@@ -198,7 +197,6 @@ class TCCountry < Minitest::Test
       load 'tzinfo/country.rb'
     end
     
-    c = Country.get('US')
     assert_equal('US', Country.get('US').code)
   end
   
