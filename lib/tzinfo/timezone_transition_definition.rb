@@ -100,5 +100,10 @@ module TZInfo
     def hash
       @offset.hash ^ @previous_offset.hash ^ @numerator_or_time.hash ^ @denominator.hash
     end
+
+    def freeze
+      at # to fully initialize object before freeze
+      super
+    end
   end
 end
