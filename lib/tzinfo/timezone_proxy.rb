@@ -82,7 +82,13 @@ module TZInfo
       # calculated multiple times in concurrently executing threads. It is not
       # worth the overhead of locking to ensure that @real_timezone is only
       # calculated once.
-      @real_timezone ||= Timezone.get(@identifier)
+      unless @real_timezone
+        result = Timezone.get(@identifier)
+        return result if frozen?
+        @real_timezone = result
+      end
+
+      @real_timezone
     end
   end
 end
