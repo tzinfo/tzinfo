@@ -1076,16 +1076,16 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {gmtoff: -100, isdst: false, abbrev: 'LMT'},
-      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
-      {gmtoff:    0, isdst: true,  abbrev: 'XWT'}]
+      {:gmtoff => -100, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff =>    0, :isdst => true,  :abbrev => 'XWT'}]
 
     transitions = [
-      {at: Time.utc(2000,  1, 1), offset_index: 1},
-      {at: Time.utc(2000,  2, 1), offset_index: 2},
-      {at: Time.utc(2000,  3, 1), offset_index: 1},
-      {at: Time.utc(2000,  4, 1), offset_index: 2},
-      {at: Time.utc(2000,  5, 1), offset_index: 1}]
+      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  4, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  5, 1), :offset_index => 1}]
 
     tzif_test(offsets, transitions) do |path, format|
       info = ZoneinfoTimezoneInfo.new('Zone/NegativeStdOffsetDst', path)
@@ -1105,16 +1105,16 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # has to be derived by looking at changes in the total UTC offset.
 
     offsets = [
-      {gmtoff: -100, isdst: false, abbrev: 'LMT'},
-      {gmtoff:    0, isdst: true,  abbrev: 'XWT'},
-      {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+      {:gmtoff => -100, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>    0, :isdst => true,  :abbrev => 'XWT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'}]
 
     transitions = [
-      {at: Time.utc(2000,  1, 1), offset_index: 1},
-      {at: Time.utc(2000,  2, 1), offset_index: 2},
-      {at: Time.utc(2000,  3, 1), offset_index: 1},
-      {at: Time.utc(2000,  4, 1), offset_index: 2},
-      {at: Time.utc(2000,  5, 1), offset_index: 1}]
+      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  4, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  5, 1), :offset_index => 1}]
 
     tzif_test(offsets, transitions) do |path, format|
       info = ZoneinfoTimezoneInfo.new('Zone/NegativeStdOffsetDstInitialDst', path)
@@ -1131,15 +1131,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_read_offset_prefer_base_offset_moves_to_dst_not_hour
     offsets = [
-      {gmtoff: -100, isdst: false, abbrev: 'LMT'},
-      {gmtoff:    0, isdst: false, abbrev: 'XST'},
-      {gmtoff: 1800, isdst: true,  abbrev: 'XDT'},
-      {gmtoff: 1800, isdst: false, abbrev: 'XST'}]
+      {:gmtoff => -100, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>    0, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 1800, :isdst => true,  :abbrev => 'XDT'},
+      {:gmtoff => 1800, :isdst => false, :abbrev => 'XST'}]
 
     transitions = [
-      {at: Time.utc(2000,  1, 1), offset_index: 1},
-      {at: Time.utc(2000,  2, 1), offset_index: 2},
-      {at: Time.utc(2000,  3, 1), offset_index: 3}]
+      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 3}]
 
     tzif_test(offsets, transitions) do |path, format|
       info = ZoneinfoTimezoneInfo.new('Zone/BaseOffsetMovesToDstNotHour', path)
@@ -1154,15 +1154,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_read_offset_prefer_base_offset_moves_from_dst_not_hour
     offsets = [
-      {gmtoff: -100, isdst: false, abbrev: 'LMT'},
-      {gmtoff: 1800, isdst: false, abbrev: 'XST'},
-      {gmtoff: 1800, isdst: true,  abbrev: 'XDT'},
-      {gmtoff:    0, isdst: false, abbrev: 'XST'}]
+      {:gmtoff => -100, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 1800, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 1800, :isdst => true,  :abbrev => 'XDT'},
+      {:gmtoff =>    0, :isdst => false, :abbrev => 'XST'}]
 
     transitions = [
-      {at: Time.utc(2000,  1, 1), offset_index: 1},
-      {at: Time.utc(2000,  2, 1), offset_index: 2},
-      {at: Time.utc(2000,  3, 1), offset_index: 3}]
+      {:at => Time.utc(2000,  1, 1), :offset_index => 1},
+      {:at => Time.utc(2000,  2, 1), :offset_index => 2},
+      {:at => Time.utc(2000,  3, 1), :offset_index => 3}]
 
     tzif_test(offsets, transitions) do |path, format|
       info = ZoneinfoTimezoneInfo.new('Zone/BaseOffsetMovesFromDstNotHour', path)
