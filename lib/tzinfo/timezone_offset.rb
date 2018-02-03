@@ -1,11 +1,34 @@
 module TZInfo
   # Represents an offset defined in a Timezone data file.
   class TimezoneOffset
-    # The base offset of the timezone from UTC in seconds.
+    # The base offset of the timezone from UTC in seconds. This does not include
+    # any adjustment made for daylight savings time and will typically remain
+    # constant throughout the year.
+    #
+    # To obtain the currently observed offset from UTC, including the effect of
+    # daylight savings time, use utc_total_offset instead.
+    #
+    # Note that zoneinfo files only include the value of utc_total_offset and a
+    # DST flag. When using ZoneinfoDataSource, the utc_offset will be derived
+    # from changes to the UTC total offset and the DST flag. As a consequence,
+    # utc_total_offset will always be correct, but utc_offset may be inaccurate.
+    #
+    # If you require utc_offset to be accurate, install the tzinfo-data gem and
+    # set RubyDataSource as the DataSource.
     attr_reader :utc_offset
     
-    # The offset from standard time for the zone in seconds (i.e. non-zero if 
-    # daylight savings is being observed).
+    # The offset from the time zone's standard time in seconds. Zero
+    # when daylight savings time is not in effect. Non-zero (usually 3600 = 1
+    # hour) if daylight savings is being observed.
+    #
+    # Note that zoneinfo files only include the value of utc_total_offset and
+    # a DST flag. When using DataSources::ZoneinfoDataSource, the std_offset
+    # will be derived from changes to the UTC total offset and the DST flag. As
+    # a consequence, utc_total_offset will always be correct, but std_offset
+    # may be inaccurate.
+    #
+    # If you require std_offset to be accurate, install the tzinfo-data gem
+    # and set RubyDataSource as the DataSource.
     attr_reader :std_offset
     
     # The total offset of this observance from UTC in seconds 
