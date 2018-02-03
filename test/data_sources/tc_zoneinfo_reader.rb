@@ -1093,6 +1093,120 @@ module DataSources
       end
     end
 
+    def test_read_offset_negative_std_offset_dst
+      # The zoneinfo files don't include the offset from standard time, so this
+      # has to be derived by looking at changes in the total UTC offset.
+
+      offsets = [
+        {gmtoff: -100, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+        {gmtoff:    0, isdst: true,  abbrev: 'XWT'}]
+
+      transitions = [
+        {at: Time.utc(2000,  1, 1), offset_index: 1},
+        {at: Time.utc(2000,  2, 1), offset_index: 2},
+        {at: Time.utc(2000,  3, 1), offset_index: 1},
+        {at: Time.utc(2000,  4, 1), offset_index: 2},
+        {at: Time.utc(2000,  5, 1), offset_index: 1}]
+
+      o0 = TimezoneOffset.new(-100,     0, :LMT)
+      o1 = TimezoneOffset.new(3600,     0, :XST)
+      o2 = TimezoneOffset.new(3600, -3600, :XWT)
+
+      t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,  2, 1).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.utc(2000,  3, 1).to_i)
+      t3 = TimezoneTransition.new(o2, o1, Time.utc(2000,  4, 1).to_i)
+      t4 = TimezoneTransition.new(o1, o2, Time.utc(2000,  5, 1).to_i)
+
+      tzif_test(offsets, transitions) do |path, format|
+        assert_equal([t0,t1,t2,t3,t4], @reader.read(path))
+      end
+    end
+
+    def test_read_offset_negative_std_offset_dst_initial_dst
+      # The zoneinfo files don't include the offset from standard time, so this
+      # has to be derived by looking at changes in the total UTC offset.
+
+      offsets = [
+        {gmtoff: -100, isdst: false, abbrev: 'LMT'},
+        {gmtoff:    0, isdst: true,  abbrev: 'XWT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000,  1, 1), offset_index: 1},
+        {at: Time.utc(2000,  2, 1), offset_index: 2},
+        {at: Time.utc(2000,  3, 1), offset_index: 1},
+        {at: Time.utc(2000,  4, 1), offset_index: 2},
+        {at: Time.utc(2000,  5, 1), offset_index: 1}]
+
+      o0 = TimezoneOffset.new(-100,     0, :LMT)
+      o1 = TimezoneOffset.new(3600, -3600, :XWT)
+      o2 = TimezoneOffset.new(3600,     0, :XST)
+
+      t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,  2, 1).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.utc(2000,  3, 1).to_i)
+      t3 = TimezoneTransition.new(o2, o1, Time.utc(2000,  4, 1).to_i)
+      t4 = TimezoneTransition.new(o1, o2, Time.utc(2000,  5, 1).to_i)
+
+      tzif_test(offsets, transitions) do |path, format|
+        assert_equal([t0,t1,t2,t3,t4], @reader.read(path))
+      end
+    end
+
+    def test_read_offset_prefer_base_offset_moves_to_dst_not_hour
+      offsets = [
+        {gmtoff: -100, isdst: false, abbrev: 'LMT'},
+        {gmtoff:    0, isdst: false, abbrev: 'XST'},
+        {gmtoff: 1800, isdst: true,  abbrev: 'XDT'},
+        {gmtoff: 1800, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000,  1, 1), offset_index: 1},
+        {at: Time.utc(2000,  2, 1), offset_index: 2},
+        {at: Time.utc(2000,  3, 1), offset_index: 3}]
+
+      o0 = TimezoneOffset.new(-100,    0, :LMT)
+      o1 = TimezoneOffset.new(   0,    0, :XST)
+      o2 = TimezoneOffset.new(   0, 1800, :XDT)
+      o3 = TimezoneOffset.new(1800,    0, :XST)
+
+      t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,  2, 1).to_i)
+      t2 = TimezoneTransition.new(o3, o2, Time.utc(2000,  3, 1).to_i)
+
+      tzif_test(offsets, transitions) do |path, format|
+        assert_equal([t0,t1,t2], @reader.read(path))
+      end
+    end
+
+    def test_read_offset_prefer_base_offset_moves_from_dst_not_hour
+      offsets = [
+        {gmtoff: -100, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 1800, isdst: false, abbrev: 'XST'},
+        {gmtoff: 1800, isdst: true,  abbrev: 'XDT'},
+        {gmtoff:    0, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000,  1, 1), offset_index: 1},
+        {at: Time.utc(2000,  2, 1), offset_index: 2},
+        {at: Time.utc(2000,  3, 1), offset_index: 3}]
+
+      o0 = TimezoneOffset.new(-100,    0, :LMT)
+      o1 = TimezoneOffset.new(1800,    0, :XST)
+      o2 = TimezoneOffset.new(   0, 1800, :XDT)
+      o3 = TimezoneOffset.new(   0,    0, :XST)
+
+      t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
+      t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,  2, 1).to_i)
+      t2 = TimezoneTransition.new(o3, o2, Time.utc(2000,  3, 1).to_i)
+
+      tzif_test(offsets, transitions) do |path, format|
+        assert_equal([t0,t1,t2], @reader.read(path))
+      end
+    end
+
     def test_read_untainted_in_safe_mode
       offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 

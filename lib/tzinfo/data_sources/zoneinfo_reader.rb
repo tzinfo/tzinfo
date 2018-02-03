@@ -104,19 +104,21 @@ module TZInfo
           if offset[:is_dst]
             utc_offset_from_next = transition[:utc_offset_from_next]
 
-            difference_to_previous = utc_total_offset - (utc_offset_from_previous || utc_total_offset)
-            difference_to_next = utc_total_offset - (utc_offset_from_next || utc_total_offset)
+            difference_to_previous = (utc_total_offset - (utc_offset_from_previous || utc_total_offset)).abs
+            difference_to_next = (utc_total_offset - (utc_offset_from_next || utc_total_offset)).abs
 
-            utc_offset = if difference_to_previous > 0 && difference_to_next > 0
+            utc_offset = if difference_to_previous == 3600
+              utc_offset_from_previous
+            elsif difference_to_next == 3600
+              utc_offset_from_next
+            elsif difference_to_previous > 0 && difference_to_next > 0
               difference_to_previous < difference_to_next ? utc_offset_from_previous : utc_offset_from_next
             elsif difference_to_previous > 0
               utc_offset_from_previous
             elsif difference_to_next > 0
               utc_offset_from_next
-            else # difference_to_previous <= 0 && difference_to_next <= 0
-              # DST, but the either the offset has stayed the same or decreased
-              # relative to both the previous and next used base utc offset, or
-              # there are no non-DST offsets. Assume a 1 hour offset from base.
+            else
+              # No difference, assume a 1 hour offset from standard time.
               utc_total_offset - 3600
             end
 
