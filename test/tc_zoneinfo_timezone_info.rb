@@ -1070,6 +1070,110 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       assert_period(:XST1, 3600,    0, false, Time.utc(2000,  4, 1),                   nil, info)
     end
   end
+
+  def test_read_offset_negative_std_offset_dst
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [
+      {gmtoff: -100, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'},
+      {gmtoff:    0, isdst: true,  abbrev: 'XWT'}]
+
+    transitions = [
+      {at: Time.utc(2000,  1, 1), offset_index: 1},
+      {at: Time.utc(2000,  2, 1), offset_index: 2},
+      {at: Time.utc(2000,  3, 1), offset_index: 1},
+      {at: Time.utc(2000,  4, 1), offset_index: 2},
+      {at: Time.utc(2000,  5, 1), offset_index: 1}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/NegativeStdOffsetDst', path)
+      assert_equal('Zone/NegativeStdOffsetDst', info.identifier)
+
+      assert_period(:LMT, -100,     0, false,                  nil, Time.utc(2000, 1, 1), info)
+      assert_period(:XST, 3600,     0, false, Time.utc(2000, 1, 1), Time.utc(2000, 2, 1), info)
+      assert_period(:XWT, 3600, -3600,  true, Time.utc(2000, 2, 1), Time.utc(2000, 3, 1), info)
+      assert_period(:XST, 3600,     0, false, Time.utc(2000, 3, 1), Time.utc(2000, 4, 1), info)
+      assert_period(:XWT, 3600, -3600,  true, Time.utc(2000, 4, 1), Time.utc(2000, 5, 1), info)
+      assert_period(:XST, 3600,     0, false, Time.utc(2000, 5, 1),                  nil, info)
+    end
+  end
+
+  def test_read_offset_negative_std_offset_dst_initial_dst
+    # The zoneinfo files don't include the offset from standard time, so this
+    # has to be derived by looking at changes in the total UTC offset.
+
+    offsets = [
+      {gmtoff: -100, isdst: false, abbrev: 'LMT'},
+      {gmtoff:    0, isdst: true,  abbrev: 'XWT'},
+      {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+    transitions = [
+      {at: Time.utc(2000,  1, 1), offset_index: 1},
+      {at: Time.utc(2000,  2, 1), offset_index: 2},
+      {at: Time.utc(2000,  3, 1), offset_index: 1},
+      {at: Time.utc(2000,  4, 1), offset_index: 2},
+      {at: Time.utc(2000,  5, 1), offset_index: 1}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/NegativeStdOffsetDstInitialDst', path)
+      assert_equal('Zone/NegativeStdOffsetDstInitialDst', info.identifier)
+
+      assert_period(:LMT, -100,     0, false,                  nil, Time.utc(2000, 1, 1), info)
+      assert_period(:XWT, 3600, -3600,  true, Time.utc(2000, 1, 1), Time.utc(2000, 2, 1), info)
+      assert_period(:XST, 3600,     0, false, Time.utc(2000, 2, 1), Time.utc(2000, 3, 1), info)
+      assert_period(:XWT, 3600, -3600,  true, Time.utc(2000, 3, 1), Time.utc(2000, 4, 1), info)
+      assert_period(:XST, 3600,     0, false, Time.utc(2000, 4, 1), Time.utc(2000, 5, 1), info)
+      assert_period(:XWT, 3600, -3600,  true, Time.utc(2000, 5, 1),                  nil, info)
+    end
+  end
+
+  def test_read_offset_prefer_base_offset_moves_to_dst_not_hour
+    offsets = [
+      {gmtoff: -100, isdst: false, abbrev: 'LMT'},
+      {gmtoff:    0, isdst: false, abbrev: 'XST'},
+      {gmtoff: 1800, isdst: true,  abbrev: 'XDT'},
+      {gmtoff: 1800, isdst: false, abbrev: 'XST'}]
+
+    transitions = [
+      {at: Time.utc(2000,  1, 1), offset_index: 1},
+      {at: Time.utc(2000,  2, 1), offset_index: 2},
+      {at: Time.utc(2000,  3, 1), offset_index: 3}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/BaseOffsetMovesToDstNotHour', path)
+      assert_equal('Zone/BaseOffsetMovesToDstNotHour', info.identifier)
+
+      assert_period(:LMT, -100,     0, false,                  nil, Time.utc(2000, 1, 1), info)
+      assert_period(:XST,    0,     0, false, Time.utc(2000, 1, 1), Time.utc(2000, 2, 1), info)
+      assert_period(:XDT,    0,  1800,  true, Time.utc(2000, 2, 1), Time.utc(2000, 3, 1), info)
+      assert_period(:XST, 1800,     0, false, Time.utc(2000, 3, 1),                  nil, info)
+    end
+  end
+
+  def test_read_offset_prefer_base_offset_moves_from_dst_not_hour
+    offsets = [
+      {gmtoff: -100, isdst: false, abbrev: 'LMT'},
+      {gmtoff: 1800, isdst: false, abbrev: 'XST'},
+      {gmtoff: 1800, isdst: true,  abbrev: 'XDT'},
+      {gmtoff:    0, isdst: false, abbrev: 'XST'}]
+
+    transitions = [
+      {at: Time.utc(2000,  1, 1), offset_index: 1},
+      {at: Time.utc(2000,  2, 1), offset_index: 2},
+      {at: Time.utc(2000,  3, 1), offset_index: 3}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/BaseOffsetMovesFromDstNotHour', path)
+      assert_equal('Zone/BaseOffsetMovesFromDstNotHour', info.identifier)
+
+      assert_period(:LMT, -100,     0, false,                  nil, Time.utc(2000, 1, 1), info)
+      assert_period(:XST, 1800,     0, false, Time.utc(2000, 1, 1), Time.utc(2000, 2, 1), info)
+      assert_period(:XDT,    0,  1800,  true, Time.utc(2000, 2, 1), Time.utc(2000, 3, 1), info)
+      assert_period(:XST,    0,     0, false, Time.utc(2000, 3, 1),                  nil, info)
+    end
+  end
   
   def test_load_in_safe_mode
     offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
