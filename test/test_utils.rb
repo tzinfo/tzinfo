@@ -102,7 +102,7 @@ module TestUtils
     end
 
     def type
-      :date_time
+      :datetime
     end
 
     def time(year, month, day, hour, minute, second, sub_second = 0, utc_offset = 0)

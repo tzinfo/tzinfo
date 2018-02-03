@@ -8,7 +8,7 @@ module TZInfo
   # clocks are set back in a time zone, most commonly during the repeated hour
   # when transitioning from daylight savings time to standard time.
   #
-  # {AmbiguousTime} is raised by {Timezone#local_date_time},
+  # {AmbiguousTime} is raised by {Timezone#local_datetime},
   # {Timezone#local_time}, {Timezone#local_timestamp}, {Timezone#local_to_utc}
   # and {Timezone#period_for_local} when using an ambiguous time and not
   # specifying how to resolve the ambiguity.
@@ -69,7 +69,7 @@ module TZInfo
   class Timezone
     include Comparable
 
-    # The default value of the dst parameter of the {local_date_time},
+    # The default value of the dst parameter of the {local_datetime},
     # {local_time}, {local_timestamp}, {local_to_utc} and {period_for_local}
     # methods.
     #
@@ -78,7 +78,7 @@ module TZInfo
 
     class << self
       # Sets the default value of the optional `dst` parameter of the
-      # {local_date_time}, {local_time}, {local_timestamp}, {local_to_utc} and
+      # {local_datetime}, {local_time}, {local_timestamp}, {local_to_utc} and
       # {period_for_local} methods. Can be set to `nil`, `true` or `false`.
       #
       # @param value [Boolean] `nil`, `true` or `false`.
@@ -87,13 +87,13 @@ module TZInfo
       end
 
       # Returns the default value of the optional `dst` parameter of the
-      # {local_time}, {local_date_time} and {local_timestamp}, {local_to_utc}
+      # {local_time}, {local_datetime} and {local_timestamp}, {local_to_utc}
       # and {period_for_local} methods (`nil`, `true` or `false`).
       #
       # {default_dst} defaults to `nil` unless changed with {default_dst=}.
       #
       # @return [Boolean] the default value of the optional `dst` parameter of
-      #   the {local_time}, {local_date_time} and {local_timestamp},
+      #   the {local_time}, {local_datetime} and {local_timestamp},
       #   {local_to_utc} and {period_for_local} methods (`nil`, `true` or
       #   `false`).
       def default_dst
@@ -754,7 +754,7 @@ module TZInfo
     # code would raise an {AmbiguousTime} exception:
     #
     #     tz = TZInfo::Timezone.get('America/New_York')
-    #     tz.local_date_time(2004,10,31,1,30,0,0)
+    #     tz.local_datetime(2004,10,31,1,30,0,0)
     #
     # Specifying `dst = true` would return a `Time` with a UTC offset of -4
     # hours and abbreviation EDT (Eastern Daylight Time). Specifying `dst =
@@ -814,7 +814,7 @@ module TZInfo
     # @raise [AmbiguousTime] if the date and time parameters are ambiguous for
     #   the time zone and the `dst` parameter or block did not resolve the
     #   ambiguity.
-    def local_date_time(year, month = 1, day = 1, hour = 0, minute = 0, second = 0, sub_second = 0, dst = Timezone.default_dst, &block)
+    def local_datetime(year, month = 1, day = 1, hour = 0, minute = 0, second = 0, sub_second = 0, dst = Timezone.default_dst, &block)
       local_timestamp(year, month, day, hour, minute, second, sub_second, dst, &block).to_datetime
     end
 

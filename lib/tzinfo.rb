@@ -9,7 +9,7 @@ require 'tzinfo/version'
 require 'tzinfo/timestamp'
 
 require 'tzinfo/localized'
-require 'tzinfo/local_date_time'
+require 'tzinfo/local_datetime'
 require 'tzinfo/local_time'
 require 'tzinfo/local_timestamp'
 

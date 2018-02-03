@@ -23,23 +23,23 @@ module TZInfo
       # @param timestamp_value [Integer] the time the transition occurs as an
       #   Integer number of seconds since 1970-01-01 00:00:00 UTC ignoring leap
       #   seconds (i.e. each day is treated as if it were 86,400 seconds long).
-      # @param date_time_numerator [Integer] the time of the transition as the
+      # @param datetime_numerator [Integer] the time of the transition as the
       #   numerator of the `Rational` returned by `DateTime#ajd`. Used in
       #   earlier versions of TZInfo, but now ignored.
-      # @param date_time_denominator [Integer] the time of the transition as the
+      # @param datetime_denominator [Integer] the time of the transition as the
       #   denominator of the `Rational` returned by `DateTime#ajd`. Used in
       #   earlier versions of TZInfo, but now ignored.
       # @raise [ArgumentError] if `offset_id` does not reference a defined
       #   offset.
       # @raise [ArgumentError] if `timestamp_value` is not greater than the
       #   `timestamp_value` of the previously defined transtion.
-      # @raise [ArgumentError] if `date_time_numerator` is specified, but
-      #   `date_time_denominator` is not. In older versions of TZInfo, it was
+      # @raise [ArgumentError] if `datetime_numerator` is specified, but
+      #   `datetime_denominator` is not. In older versions of TZInfo, it was
       #   possible to define a transition with the `DateTime` numerator as the
       #   4th parameter and the denominator as the 5th parameter. This style of
       #   definition is not used in released versions of TZInfo::Data.
-      def transition(year, month, offset_id, timestamp_value, date_time_numerator = nil, date_time_denominator = nil)
-        raise ArgumentError, 'DateTime-only transitions are not supported' if date_time_numerator && !date_time_denominator
+      def transition(year, month, offset_id, timestamp_value, datetime_numerator = nil, datetime_denominator = nil)
+        raise ArgumentError, 'DateTime-only transitions are not supported' if datetime_numerator && !datetime_denominator
         super(offset_id, timestamp_value)
       end
     end

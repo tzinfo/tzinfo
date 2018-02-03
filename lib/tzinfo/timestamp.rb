@@ -127,7 +127,7 @@ module TZInfo
           when Time
             for_time(value, ignore_offset, target_utc_offset)
           when DateTime
-            for_date_time(value, ignore_offset, target_utc_offset)
+            for_datetime(value, ignore_offset, target_utc_offset)
           when Timestamp
             for_timestamp(value, ignore_offset, target_utc_offset)
           else
@@ -214,20 +214,20 @@ module TZInfo
       # Creates a {Timestamp} for a given `DateTime`, optionally ignoring the
       # offset.
       #
-      # @param date_time [DateTime] a `DateTime`.
+      # @param datetime [DateTime] a `DateTime`.
       # @param ignore_offset [Boolean] whether to ignore the offset of
-      #   `date_time`.
+      #   `datetime`.
       # @param target_utc_offset [Object] if `ignore_offset` is `true`, the UTC
       #   offset of the result (`:utc`, `nil` or an `Integer`).
-      # @return [Timestamp] the {Timestamp} representation of `date_time`.
-      def for_date_time(date_time, ignore_offset, target_utc_offset)
-        value = (date_time.jd - JD_EPOCH) * 86400 + date_time.sec + date_time.min * 60 + date_time.hour * 3600
-        sub_second = date_time.sec_fraction
+      # @return [Timestamp] the {Timestamp} representation of `datetime`.
+      def for_datetime(datetime, ignore_offset, target_utc_offset)
+        value = (datetime.jd - JD_EPOCH) * 86400 + datetime.sec + datetime.min * 60 + datetime.hour * 3600
+        sub_second = datetime.sec_fraction
 
         if ignore_offset
           utc_offset = target_utc_offset
         else
-          utc_offset = (date_time.offset * 86400).to_i
+          utc_offset = (datetime.offset * 86400).to_i
           value -= utc_offset
         end
 
@@ -473,8 +473,8 @@ module TZInfo
     #
     # @private
     def new_datetime(klass = DateTime)
-      date_time = klass.jd(JD_EPOCH + ((@value.to_r + @sub_second) / 86400))
-      @utc_offset && @utc_offset != 0 ? date_time.new_offset(Rational(@utc_offset, 86400)) : date_time
+      datetime = klass.jd(JD_EPOCH + ((@value.to_r + @sub_second) / 86400))
+      @utc_offset && @utc_offset != 0 ? datetime.new_offset(Rational(@utc_offset, 86400)) : datetime
     end
 
     private
