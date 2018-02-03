@@ -40,14 +40,35 @@ module TZInfo
     # adjustment made for daylight savings time and will typically remain
     # constant throughout the year.
     #
+    # To obtain the currently observed offset from UTC, including the effect
+    # of daylight savings time, use {utc_total_offset} instead.
+    #
+    # Note that zoneinfo files only include the value of {utc_total_offset} and
+    # a DST flag. When using {DataSources::ZoneinfoDataSource}, the {utc_offset}
+    # will be derived from changes to the UTC total offset and the DST flag. As
+    # a consequence, {utc_total_offset} will always be correct, but {utc_offset}
+    # may be inaccurate.
+    #
+    # If you require {utc_offset} to be accurate, install the tzinfo-data gem
+    # and set {DataSources::RubyDataSource} as the {DataSource}.
+    #
     # @return [Integer] The base offset from UTC in seconds.
     def utc_offset
       @offset.utc_offset
     end
 
     # Returns the offset from the time zone's standard time in seconds. Zero
-    # when daylight savings time is not in effect. Non-zero  (usually 3600 = 1
+    # when daylight savings time is not in effect. Non-zero (usually 3600 = 1
     # hour) if daylight savings is being observed.
+    #
+    # Note that zoneinfo files only include the value of {utc_total_offset} and
+    # a DST flag. When using {DataSources::ZoneinfoDataSource}, the {std_offset}
+    # will be derived from changes to the UTC total offset and the DST flag. As
+    # a consequence, {utc_total_offset} will always be correct, but {std_offset}
+    # may be inaccurate.
+    #
+    # If you require {std_offset} to be accurate, install the tzinfo-data gem
+    # and set {DataSources::RubyDataSource} as the {DataSource}.
     #
     # @return [Integer] the offset from the time zone's standard time in
     #   seconds.
