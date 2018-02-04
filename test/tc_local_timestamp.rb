@@ -209,10 +209,4 @@ class TCLocalTimestamp < Minitest::Test
     assert_equal(0, lt.sub_second)
     assert_equal(3600, lt.utc_offset)
   end
-
-  [:for, :utc].each do |method|
-    define_method("test_class_inherited_#{method}_undefined") do
-      assert_raises(NoMethodError) { LocalTimestamp.public_send(method) }
-    end
-  end
 end

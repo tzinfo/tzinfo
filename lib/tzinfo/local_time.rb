@@ -9,15 +9,6 @@ module TZInfo
   class LocalTime < Time
     include Localized
 
-    class << self
-      # Undefine inherited class methods from Time that are not needed.
-      public_instance_methods.each do |m|
-        if ![:at, :new, :utc].include?(m) && public_instance_method(m).owner == Time.singleton_class
-          undef_method(m)
-        end
-      end
-    end
-
     # @return [TimezonePeriod] the {TimezonePeriod} associated with this
     #   instance.
     attr_reader :period

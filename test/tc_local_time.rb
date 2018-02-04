@@ -346,10 +346,4 @@ class TCLocalTime < Minitest::Test
     assert_nil(lt.period)
     assert_equal(1484521201, lt.to_i)
   end
-
-  [:local, :gm, :mktime, :now].each do |method|
-    define_method("test_class_inherited_#{method}_undefined") do
-      assert_raises(NoMethodError) { LocalTimestamp.public_send(method) }
-    end
-  end
 end
