@@ -10,27 +10,36 @@ module TZInfo
   class LocalTimestamp < Timestamp
     include Localized
 
+    class << self
+      # Undefine inherited class methods from Timestamp that are not needed.
+      public_instance_methods.each do |m|
+        if ![:create, :new].include?(m) && public_instance_method(m).owner == Timestamp.singleton_class
+          undef_method(m)
+        end
+      end
+
+      # Creates a new {LocalTimestamp} from a given {Timestamp} and
+      # {TimezonePeriod}.
+      #
+      # @param timestamp [Timestamp] a {Timestamp}.
+      # @param period [TimezonePeriod] a {TimezonePeriod} valid at the time of
+      #   `timestamp`.
+      # @return [LocalTimestamp] a {LocalTimestamp} that has the same {value
+      #   value} and {sub_second sub_second} as the `timestamp` parameter, a
+      #   {utc_offset utc_offset} equal to the {TimezonePeriod#utc_total_offset
+      #   utc_total_offset} of the `period` parameter and {period period} set to
+      #   the `period` parameter.
+      # @raise [ArgumentError] if `timestamp` or `period` is `nil`.
+      def localize(timestamp, period)
+        raise ArgumentError, 'timestamp must be specified' unless timestamp
+        raise ArgumentError, 'period must be specified' unless period
+        new!(timestamp.value, timestamp.sub_second, period.utc_total_offset).localize(period)
+      end
+    end
+
     # @return [TimezonePeriod] the {TimezonePeriod} associated with this
     #   instance.
     attr_reader :period
-
-    # Creates a new {LocalTimestamp} from a given {Timestamp} and
-    # {TimezonePeriod}.
-    #
-    # @param timestamp [Timestamp] a {Timestamp}.
-    # @param period [TimezonePeriod] a {TimezonePeriod} valid at the time of
-    #   `timestamp`.
-    # @return [LocalTimestamp] a {LocalTimestamp} that has the same {value
-    #   value} and {sub_second sub_second} as the `timestamp` parameter, a
-    #   {utc_offset utc_offset} equal to the {TimezonePeriod#utc_total_offset
-    #   utc_total_offset} of the `period` parameter and {period period} set to
-    #   the `period` parameter.
-    # @raise [ArgumentError] if `timestamp` or `period` is `nil`.
-    def self.localize(timestamp, period)
-      raise ArgumentError, 'timestamp must be specified' unless timestamp
-      raise ArgumentError, 'period must be specified' unless period
-      new!(timestamp.value, timestamp.sub_second, period.utc_total_offset).localize(period)
-    end
 
     # Sets the associated {TimezonePeriod} of this {LocalTimestamp}.
     #

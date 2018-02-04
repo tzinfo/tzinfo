@@ -189,11 +189,30 @@ class TCLocalTimestamp < Minitest::Test
   def test_inspect
     assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=0, @utc_offset=0, @utc=false>', localized_timestamp(2016,10,13,0,0,0,TimezoneOffset.new(0, 0, :TEST)).inspect)
     assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=1/10, @utc_offset=3600, @utc=false>', localized_timestamp(2016,10,13,1,0,Rational(1,10),TimezoneOffset.new(3600, 0, :TEST)).inspect)
-    assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=0, @utc_offset=0, @utc=true>', LocalTimestamp.utc(1476316800, Rational(0, 1)).inspect)
+    assert_equal('#<TZInfo::LocalTimestamp: @value=1476316800, @sub_second=0, @utc_offset=0, @utc=true>', LocalTimestamp.new(1476316800, Rational(0, 1), :utc).inspect)
   end
 
-  def test_create_returns_local_timestamp
-    t = LocalTimestamp.create(2018, 1, 10, 12, 0, 0, 0, 3600)
-    assert_kind_of(LocalTimestamp, t)
+  def test_class_create_returns_local_timestamp
+    lt = LocalTimestamp.create(2016, 10, 13, 1, 0, 0, 0, 3600)
+    assert_kind_of(LocalTimestamp, lt)
+    assert_nil(lt.period)
+    assert_equal(1476316800, lt.value)
+    assert_equal(0, lt.sub_second)
+    assert_equal(3600, lt.utc_offset)
+  end
+
+  def test_class_new_returns_local_timestamp
+    lt = LocalTimestamp.new(1476316800, 0, 3600)
+    assert_kind_of(LocalTimestamp, lt)
+    assert_nil(lt.period)
+    assert_equal(1476316800, lt.value)
+    assert_equal(0, lt.sub_second)
+    assert_equal(3600, lt.utc_offset)
+  end
+
+  [:for, :utc].each do |method|
+    define_method("test_class_inherited_#{method}_undefined") do
+      assert_raises(NoMethodError) { LocalTimestamp.public_send(method) }
+    end
   end
 end

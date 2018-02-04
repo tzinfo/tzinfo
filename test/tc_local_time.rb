@@ -325,4 +325,31 @@ class TCLocalTime < Minitest::Test
     assert_equal(DateTime, d.class)
     assert_equal_with_offset(DateTime.new(2017,1,15,23,0,Rational(11,10),Rational(1,24)), d)
   end
+
+  def test_class_at_returns_local_time
+    lt = LocalTime.at(1484521201)
+    assert_kind_of(LocalTime, lt)
+    assert_nil(lt.period)
+    assert_equal(1484521201, lt.to_i)
+  end
+
+  def test_class_new_returns_local_time
+    lt = LocalTime.new(2017,1,15,23,0,1,0)
+    assert_kind_of(LocalTime, lt)
+    assert_nil(lt.period)
+    assert_equal(1484521201, lt.to_i)
+  end
+
+  def test_class_utc_returns_local_time
+    lt = LocalTime.utc(2017,1,15,23,0,1)
+    assert_kind_of(LocalTime, lt)
+    assert_nil(lt.period)
+    assert_equal(1484521201, lt.to_i)
+  end
+
+  [:local, :gm, :mktime, :now].each do |method|
+    define_method("test_class_inherited_#{method}_undefined") do
+      assert_raises(NoMethodError) { LocalTimestamp.public_send(method) }
+    end
+  end
 end

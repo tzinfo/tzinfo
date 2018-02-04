@@ -367,4 +367,31 @@ class TCLocalDateTime < Minitest::Test
       assert_nil(result.period)
     end
   end
+
+  def test_class_jd_returns_local_datetime
+    ld = LocalDateTime.jd(Rational(212351324401, 86400))
+    assert_kind_of(LocalDateTime, ld)
+    assert_nil(ld.period)
+    assert_equal(2457769, ld.jd)
+    assert_equal(Rational(82801, 86400), ld.day_fraction)
+  end
+
+  def test_class_new_returns_local_datetime
+    ld = LocalDateTime.new(2017,1,15,23,0,1)
+    assert_kind_of(LocalDateTime, ld)
+    assert_nil(ld.period)
+    assert_equal(2457769, ld.jd)
+    assert_equal(Rational(82801, 86400), ld.day_fraction)
+  end
+
+  [:_httpdate, :_iso8601, :_jisx0301, :_parse, :_rfc2822, :_rfc3339, :_rfc822,
+   :_strptime, :_xmlschema, :civil, :commercial, :gregorian_leap?, :httpdate,
+   :iso8601, :jisx0301, :julian_leap?, :leap?, :now, :ordinal, :parse, :rfc2822,
+   :rfc3339, :rfc822, :strptime, :today, :valid_civil?, :valid_commercial?,
+   :valid_date?, :valid_jd?, :valid_ordinal?, :xmlschema
+  ].each do |method|
+    define_method("test_class_inherited_#{method}_undefined") do
+      assert_raises(NoMethodError) { LocalTimestamp.public_send(method) }
+    end
+  end
 end
