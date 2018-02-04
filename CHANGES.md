@@ -1,3 +1,12 @@
+Version 1.2.5 - 4-Feb-2018
+--------------------------
+
+* Support recursively (deep) freezing Country and Timezone instances. #80.
+* Allow negative daylight savings time offsets to be derived when reading from
+  zoneinfo files. The utc_offset and std_offset are now derived correctly for
+  Europe/Dublin in the 2018a and 2018b releases of the Time Zone Database.
+
+
 Version 1.2.4 - 26-Oct-2017
 ---------------------------
 
