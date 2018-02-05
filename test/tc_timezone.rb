@@ -876,14 +876,6 @@ class TCTimezone < Minitest::Test
         LocalTimestamp.create(2005,6,18,16,24,23)))
   end
 
-  def test_local_to_utc_invalid
-    time_types_test do |h|
-      t = h.time(2004,4,4,2,30,0)
-      tz = TestTimezone.new('America/New_York', nil, [], Timestamp.create(2004,4,4,2,30,0))
-      assert_raises_period_not_found(t) { tz.local_to_utc(t) }
-    end
-  end
-
   def test_local_to_utc_ambiguous
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
