@@ -888,12 +888,12 @@ class TCTimezone < Minitest::Test
     o1 = TimezoneOffset.new(-18000, 0, :EST)
     o2 = TimezoneOffset.new(-18000, 3600, :EDT)
 
-    t1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
-    t2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
-    t3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
+    tt1 = TimezoneTransition.new(o2, o1, Time.utc(2004,4,4,8,0,0).to_i)
+    tt2 = TimezoneTransition.new(o1, o2, Time.utc(2004,10,31,6,0,0).to_i)
+    tt3 = TimezoneTransition.new(o2, o1, Time.utc(2005,4,3,8,0,0).to_i)
 
-    p1 = TransitionsTimezonePeriod.new(t1, t2)
-    p2 = TransitionsTimezonePeriod.new(t2, t3)
+    p1 = TransitionsTimezonePeriod.new(tt1, tt2)
+    p2 = TransitionsTimezonePeriod.new(tt2, tt3)
 
     time_types_test do |h|
       t1 = h.time(2004,10,31,1,30,0)
