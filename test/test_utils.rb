@@ -2,6 +2,20 @@
 
 raise 'Tests must be run with bundler, e.g. bundle exec rake test' unless defined?(Bundler)
 
+# Workaround an issue on JRuby where the stdlib directory can end up before the
+# minitest gem in the load path. This causes an old built-in version of minitest
+# to be loaded instead of the gem. https://github.com/jruby/jruby/issues/5038
+if RUBY_ENGINE == 'jruby'
+  stdlib_index = $:.find_index(RbConfig::CONFIG['rubylibdir'])
+  minitest_index = $:.find_index(File.join(Bundler.rubygems.find_name('minitest').first.full_gem_path, 'lib'))
+
+  if stdlib_index < minitest_index
+    # The stdlib directoryy is before the minitest gem. Move stdlib to the end
+    # of the load path.
+    $:.push($:.delete_at(stdlib_index))
+  end
+end
+
 COVERAGE_ENABLED = ENV['TEST_COVERAGE'] == '1'
 
 if COVERAGE_ENABLED && defined?(COVERAGE_TYPE)

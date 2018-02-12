@@ -1335,17 +1335,10 @@ module DataSources
     end
 
     def get_expected_file_open_and_read_cause(path)
-      # It should be possible to use assert_raises here, but this fails on JRuby
-      # after updating RubyGems from 2.7.4 to 2.7.5 (see passing
-      # https://travis-ci.org/tzinfo/tzinfo/jobs/337343120 and failing
-      # https://travis-ci.org/tzinfo/tzinfo/jobs/339829912).
-      begin
+      expected_error = assert_raises(SystemCallError) do
         File.open(path, 'r') {|f| f.read(1) }
-        raise 'File.open did not raise an exception as expected'
-      rescue Exception => e
-        raise 'File.open did not raise a SystemCallError as expected' unless e.kind_of?(SystemCallError)
-        e.class
       end
+      expected_error.class
     end
   end
 end
