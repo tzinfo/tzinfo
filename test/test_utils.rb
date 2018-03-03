@@ -10,8 +10,8 @@ if RUBY_ENGINE == 'jruby'
   minitest_index = $:.find_index(File.join(Bundler.rubygems.find_name('minitest').first.full_gem_path, 'lib'))
 
   if stdlib_index < minitest_index
-    # The stdlib directoryy is before the minitest gem. Move stdlib to the end
-    # of the load path.
+    # The stdlib directory is before the minitest gem. Move stdlib to the end of
+    # the load path.
     $:.push($:.delete_at(stdlib_index))
   end
 end
