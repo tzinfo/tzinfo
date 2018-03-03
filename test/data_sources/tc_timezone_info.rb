@@ -14,6 +14,13 @@ module DataSources
     def test_identifier
       ti = TimezoneInfo.new('Test/Zone')
       assert_equal('Test/Zone', ti.identifier)
+    end
+
+    def test_identifier_frozen
+      identifier = 'Test/Zone'.dup
+      refute(identifier.frozen?)
+      ti = TimezoneInfo.new(identifier)
+      assert_same(identifier, ti.identifier)
       assert(ti.identifier.frozen?)
     end
 

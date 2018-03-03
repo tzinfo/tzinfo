@@ -7,11 +7,14 @@ include TZInfo
 module DataSources
   class TCConstantOffsetDataTimezoneInfo < Minitest::Test
     def test_initialize
-      o = TimezoneOffset.new(-17900, 0, :TESTLMT)
-      i = ConstantOffsetDataTimezoneInfo.new('Test/Zone', o)
+      offset = TimezoneOffset.new(-17900, 0, :TESTLMT)
+      identifier = 'Test/Zone'.dup
+      refute(identifier.frozen?)
+      i = ConstantOffsetDataTimezoneInfo.new(identifier, offset)
 
-      assert_equal('Test/Zone', i.identifier)
-      assert_same(o, i.constant_offset)
+      assert_same(identifier, i.identifier)
+      assert_same(offset, i.constant_offset)
+      assert(identifier.frozen?)
     end
 
     def test_initialize_nil_identifier

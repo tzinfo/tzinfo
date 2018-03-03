@@ -24,12 +24,26 @@ module DataSources
     def test_code
       ci = CountryInfo.new('ZZ', 'Zzz', [])
       assert_equal('ZZ', ci.code)
+    end
+
+    def test_code_frozen
+      code = 'ZZ'.dup
+      refute(code.frozen?)
+      ci = CountryInfo.new(code, 'Zzz', [])
+      assert_same(code, ci.code)
       assert(ci.code.frozen?)
     end
 
     def test_name
       ci = CountryInfo.new('ZZ', 'Zzz', [])
       assert_equal('Zzz', ci.name)
+    end
+
+    def test_name_frozen
+      name = 'Zzz'.dup
+      refute(name.frozen?)
+      ci = CountryInfo.new('ZZ', name, [])
+      assert_same(name, ci.name)
       assert(ci.name.frozen?)
     end
 

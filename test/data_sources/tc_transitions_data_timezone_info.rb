@@ -16,11 +16,14 @@ module DataSources
       t3 = TimezoneTransition.new(o2, o3, Time.utc(2001, 3,1,1,0,0).to_i)
 
       transitions = [t1, t2, t3]
+      identifier = 'Test/Zone'.dup
+      refute(identifier.frozen?)
 
-      i = TransitionsDataTimezoneInfo.new('Test/Zone', transitions)
+      i = TransitionsDataTimezoneInfo.new(identifier, transitions)
 
-      assert_equal('Test/Zone', i.identifier)
+      assert_same(identifier, i.identifier)
       assert_same(transitions, i.transitions)
+      assert_equal(true, i.identifier.frozen?)
       assert_equal(true, i.transitions.frozen?)
     end
 
