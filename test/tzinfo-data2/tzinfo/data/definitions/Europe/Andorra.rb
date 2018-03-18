@@ -12,10 +12,10 @@ module TZInfo
           include Format2::TimezoneDefinition
 
           timezone 'Europe/Andorra' do |tz|
-            tz.offset :o0, 364, 0, :LMT
-            tz.offset :o1, 0, 0, :WET
-            tz.offset :o2, 3600, 0, :CET
-            tz.offset :o3, 3600, 3600, :CEST
+            tz.offset :o0, 364, 0, 'LMT'
+            tz.offset :o1, 0, 0, 'WET'
+            tz.offset :o2, 3600, 0, 'CET'
+            tz.offset :o3, 3600, 3600, 'CEST'
 
             tz.transition :o1, -2177453164
             tz.transition :o2, -733881600

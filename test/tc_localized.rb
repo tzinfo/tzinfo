@@ -52,13 +52,13 @@ class TCLocalized < Minitest::Test
 
   def test_strftime_nil_format
     t = TestClass.new
-    t.period = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, :BST))
+    t.period = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, 'BST'))
     error = assert_raises(ArgumentError) { t.strftime(nil) }
     assert_match(/\bformat\b/, error.message)
   end
 
   def test_if_period
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, :BST))
+    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, 'BST'))
     t = TestClass.new
     t.period = p
     v = Object.new

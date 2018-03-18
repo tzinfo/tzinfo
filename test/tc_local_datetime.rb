@@ -12,8 +12,8 @@ class TCLocalDateTime < Minitest::Test
 
   def test_localize
     [LocalDateTime.new(2017,1,15,23,0,Rational(11,10),0), LocalDateTime.new(2017,1,15,23,0,Rational(11,10),Rational(1,24))].each do |ldt|
-      p1 = OffsetTimezonePeriod.new(TimezoneOffset.new(ldt.offset * 86400, 0, :TEST))
-      p2 = OffsetTimezonePeriod.new(TimezoneOffset.new(0, ldt.offset * 86400, :TEST))
+      p1 = OffsetTimezonePeriod.new(TimezoneOffset.new(ldt.offset * 86400, 0, 'TEST'))
+      p2 = OffsetTimezonePeriod.new(TimezoneOffset.new(0, ldt.offset * 86400, 'TEST'))
       assert_nil(ldt.period)
       assert_same(ldt, ldt.localize(p1))
       assert_same(p1, ldt.period)
@@ -24,12 +24,12 @@ class TCLocalDateTime < Minitest::Test
 
   def test_localize_offset_mismatch
     ldt1 = LocalDateTime.new(2017,1,15,23,0,Rational(11,10),0)
-    p1a = OffsetTimezonePeriod.new(TimezoneOffset.new(3600,    0, :TEST))
-    p1b = OffsetTimezonePeriod.new(TimezoneOffset.new(   0, 3600, :TEST))
+    p1a = OffsetTimezonePeriod.new(TimezoneOffset.new(3600,    0, 'TEST'))
+    p1b = OffsetTimezonePeriod.new(TimezoneOffset.new(   0, 3600, 'TEST'))
 
     ldt2 = LocalDateTime.new(2017,1,15,23,0,Rational(11,10),Rational(1,24))
-    p2a = OffsetTimezonePeriod.new(TimezoneOffset.new(3600, 3600, :TEST))
-    p2b = OffsetTimezonePeriod.new(TimezoneOffset.new(   0,    0, :TEST))
+    p2a = OffsetTimezonePeriod.new(TimezoneOffset.new(3600, 3600, 'TEST'))
+    p2b = OffsetTimezonePeriod.new(TimezoneOffset.new(   0,    0, 'TEST'))
 
     [[ldt1, [p1a, p1b]], [ldt2, [p2a, p2b]]].each do |ldt, periods|
       periods.each do |p|
@@ -46,7 +46,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_strftime
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
     assert_equal('23:00:01 TEST', ldt.strftime('%H:%M:%S %Z'))
     assert_equal('TEST', ldt.strftime('%Z'))
     assert_equal('%ZTEST', ldt.strftime('%%Z%Z'))
@@ -55,7 +55,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_strftime_handles_percent_in_abbreviation
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :'%H:%M:%S'))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, '%H:%M:%S'))
     assert_equal('%H:%M:%S', ldt.strftime('%Z'))
   end
 
@@ -67,25 +67,25 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_strftime_nil_format
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     error = assert_raises(ArgumentError) { ldt.strftime(nil) }
     assert_match(/\bformat\b/, error.message)
   end
 
   def test_to_date
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
     d = ldt.to_date
     assert_equal(Date, d.class)
     assert_equal(Date.new(2017,1,15), d)
   end
 
   def test_to_datetime
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
     assert_same(ldt, ldt.to_datetime)
   end
 
   def test_to_time
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(3600, 0, :TEST))
+    p = OffsetTimezonePeriod.new(TimezoneOffset.new(3600, 0, 'TEST'))
     ldt = localized_datetime(2017,1,15,23,0,Rational(11,10),p)
     t = ldt.to_time
     assert_kind_of(LocalTime, t)
@@ -106,27 +106,27 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_add
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
     assert_nil((ldt + 1).period)
   end
 
   def test_subtract
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
     assert_nil((ldt - 1).period)
   end
 
   def test_add_months
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
     assert_nil((ldt >> 1).period)
   end
 
   def test_subtract_months
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
     assert_nil((ldt << 1).period)
   end
 
   def test_compare
-    o = TimezoneOffset.new(0, 0, :TEST)
+    o = TimezoneOffset.new(0, 0, 'TEST')
     dt1 = DateTime.new(2017,1,15,23,0,1)
     dt2 = DateTime.new(2017,1,15,23,0,2)
     ldt1 = localized_datetime(2017,1,15,23,0,1,o)
@@ -146,7 +146,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_day_equals
-    o = TimezoneOffset.new(0, 0, :TEST)
+    o = TimezoneOffset.new(0, 0, 'TEST')
     dt1 = DateTime.new(2017,1,15,23,0,1)
     dt2 = DateTime.new(2017,1,16,23,0,1)
     ldt1 = localized_datetime(2017,1,15,23,0,1,o)
@@ -168,7 +168,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_downto_block
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     block_call_count = 0
 
     result = ldt.downto(Date.new(2017,1,14)) do |v|
@@ -181,7 +181,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_downto_enumerator
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     block_call_count = 0
 
     ldt.downto(Date.new(2017,1,14)).each do |v|
@@ -193,7 +193,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def new_start_wrapper_test(method, start)
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, :TEST))
+    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, 'TEST'))
     ldt = localized_datetime(2017,1,15,23,0,1,p)
     result = ldt.public_send(method)
     assert_equal(start, result.start)
@@ -217,7 +217,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_new_start
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, :TEST))
+    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, 'TEST'))
     ldt = localized_datetime(2017,1,15,23,0,1,p)
     result = ldt.new_start(Date::ENGLAND)
     assert_equal(Date::ENGLAND, result.start)
@@ -225,13 +225,13 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_next
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     assert_nil(ldt.next.period)
   end
 
   def next_prev_test(type, unit)
     dt = DateTime.new(2017,1,15,23,0,1)
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     method = "#{type}_#{unit}"
 
     no_args = ldt.public_send(method)
@@ -276,7 +276,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_step_block
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     block_call_count = 0
 
     result = ldt.step(Date.new(2017,1,17)) do |v|
@@ -289,7 +289,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_step_enumerator
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     block_call_count = 0
 
     ldt.step(Date.new(2017,1,17)).each do |v|
@@ -301,7 +301,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_step_non_default_block
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     block_call_count = 0
 
     result = ldt.step(Date.new(2017,1,14), -2) do |v|
@@ -314,7 +314,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_step_non_default_enumerator
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     block_call_count = 0
 
     ldt.step(Date.new(2017,1,14), -2).each do |v|
@@ -326,12 +326,12 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_succ
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     assert_nil(ldt.succ.period)
   end
 
   def test_upto_block
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     block_call_count = 0
 
     result = ldt.upto(Date.new(2017,1,17)) do |v|
@@ -344,7 +344,7 @@ class TCLocalDateTime < Minitest::Test
   end
 
   def test_upto_enumerator
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     block_call_count = 0
 
     ldt.upto(Date.new(2017,1,17)).each do |v|
@@ -359,7 +359,7 @@ class TCLocalDateTime < Minitest::Test
     # new_offset isn't formally documented, but is referenced in a code sample
     # in the description of the DateTime class.
     dt = DateTime.new(2017,1,15,23,0,1)
-    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, :TEST))
+    ldt = localized_datetime(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
 
     [0, Rational(1,24), '-01:00'].each do |o|
       result = ldt.new_offset(o)

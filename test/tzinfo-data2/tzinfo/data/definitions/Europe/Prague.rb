@@ -12,10 +12,10 @@ module TZInfo
           include Format2::TimezoneDefinition
 
           timezone 'Europe/Prague' do |tz|
-            tz.offset :o0, 3464, 0, :LMT
-            tz.offset :o1, 3464, 0, :PMT
-            tz.offset :o2, 3600, 0, :CET
-            tz.offset :o3, 3600, 3600, :CEST
+            tz.offset :o0, 3464, 0, 'LMT'
+            tz.offset :o1, 3464, 0, 'PMT'
+            tz.offset :o2, 3600, 0, 'CET'
+            tz.offset :o3, 3600, 3600, 'CEST'
 
             tz.transition :o1, -3786829064
             tz.transition :o2, -2469401864

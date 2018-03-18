@@ -12,9 +12,9 @@ module TZInfo
           include Format2::TimezoneDefinition
 
           timezone 'Australia/Melbourne' do |tz|
-            tz.offset :o0, 34792, 0, :LMT
-            tz.offset :o1, 36000, 0, :AEST
-            tz.offset :o2, 36000, 3600, :AEDT
+            tz.offset :o0, 34792, 0, 'LMT'
+            tz.offset :o1, 36000, 0, 'AEST'
+            tz.offset :o2, 36000, 3600, 'AEDT'
 
             tz.transition :o1, -2364111592
             tz.transition :o2, -1672567140

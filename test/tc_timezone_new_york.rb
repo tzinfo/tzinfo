@@ -34,22 +34,22 @@ class TCTimezoneNewYork < Minitest::Test
       assert_raises(PeriodNotFound) { tz.local_to_utc(h.time(2004, 4, 4,2,0,0)) }
       assert_raises(AmbiguousTime)  { tz.local_to_utc(h.time(2004,10,31,1,0,0)) }
 
-      assert_equal(:EST, tz.period_for(h.time(2004, 4, 4,6,59,59,0,0)).zone_identifier)
-      assert_equal(:EDT, tz.period_for(h.time(2004, 4, 4,7, 0, 0,0,0)).zone_identifier)
-      assert_equal(:EDT, tz.period_for(h.time(2004,10,31,5,59,59,0,0)).zone_identifier)
-      assert_equal(:EST, tz.period_for(h.time(2004,10,31,6, 0, 0,0,0)).zone_identifier)
+      assert_equal('EST', tz.period_for(h.time(2004, 4, 4,6,59,59,0,0)).zone_identifier)
+      assert_equal('EDT', tz.period_for(h.time(2004, 4, 4,7, 0, 0,0,0)).zone_identifier)
+      assert_equal('EDT', tz.period_for(h.time(2004,10,31,5,59,59,0,0)).zone_identifier)
+      assert_equal('EST', tz.period_for(h.time(2004,10,31,6, 0, 0,0,0)).zone_identifier)
 
-      assert_equal(:EST, tz.period_for_utc(h.time(2004, 4, 4,6,59,59)).zone_identifier)
-      assert_equal(:EDT, tz.period_for_utc(h.time(2004, 4, 4,7, 0, 0)).zone_identifier)
-      assert_equal(:EDT, tz.period_for_utc(h.time(2004,10,31,5,59,59)).zone_identifier)
-      assert_equal(:EST, tz.period_for_utc(h.time(2004,10,31,6, 0, 0)).zone_identifier)
+      assert_equal('EST', tz.period_for_utc(h.time(2004, 4, 4,6,59,59)).zone_identifier)
+      assert_equal('EDT', tz.period_for_utc(h.time(2004, 4, 4,7, 0, 0)).zone_identifier)
+      assert_equal('EDT', tz.period_for_utc(h.time(2004,10,31,5,59,59)).zone_identifier)
+      assert_equal('EST', tz.period_for_utc(h.time(2004,10,31,6, 0, 0)).zone_identifier)
 
-      assert_equal(:EST, tz.period_for_local(h.time(2004, 4, 4,1,59,59)).zone_identifier)
-      assert_equal(:EDT, tz.period_for_local(h.time(2004, 4, 4,3, 0, 0)).zone_identifier)
-      assert_equal(:EDT, tz.period_for_local(h.time(2004,10,31,1,59,59),  true).zone_identifier)
-      assert_equal(:EST, tz.period_for_local(h.time(2004,10,31,1,59,59), false).zone_identifier)
-      assert_equal(:EDT, tz.period_for_local(h.time(2004,10,31,1, 0, 0),  true).zone_identifier)
-      assert_equal(:EST, tz.period_for_local(h.time(2004,10,31,1, 0, 0), false).zone_identifier)
+      assert_equal('EST', tz.period_for_local(h.time(2004, 4, 4,1,59,59)).zone_identifier)
+      assert_equal('EDT', tz.period_for_local(h.time(2004, 4, 4,3, 0, 0)).zone_identifier)
+      assert_equal('EDT', tz.period_for_local(h.time(2004,10,31,1,59,59),  true).zone_identifier)
+      assert_equal('EST', tz.period_for_local(h.time(2004,10,31,1,59,59), false).zone_identifier)
+      assert_equal('EDT', tz.period_for_local(h.time(2004,10,31,1, 0, 0),  true).zone_identifier)
+      assert_equal('EST', tz.period_for_local(h.time(2004,10,31,1, 0, 0), false).zone_identifier)
 
       assert_equal(-18000, tz.period_for(h.time(2004, 4, 4,6,59,59,0,0)).utc_total_offset)
       assert_equal(-14400, tz.period_for(h.time(2004, 4, 4,7, 0, 0,0,0)).utc_total_offset)
@@ -71,14 +71,14 @@ class TCTimezoneNewYork < Minitest::Test
       transitions = tz.transitions_up_to(h.time(2005,1,1,0,0,0,0,0), h.time(2004,1,1,0,0,0,0,0))
       assert_equal(2, transitions.length)
       assert_equal_with_offset(Timestamp.for(Time.utc(2004,4,4,7,0,0)), transitions[0].at)
-      assert_equal(TimezoneOffset.new(-18000,    0, :EST), transitions[0].previous_offset)
-      assert_equal(TimezoneOffset.new(-18000, 3600, :EDT), transitions[0].offset)
+      assert_equal(TimezoneOffset.new(-18000,    0, 'EST'), transitions[0].previous_offset)
+      assert_equal(TimezoneOffset.new(-18000, 3600, 'EDT'), transitions[0].offset)
       assert_equal_with_offset(Timestamp.for(Time.utc(2004,10,31,6,0,0)), transitions[1].at)
-      assert_equal(TimezoneOffset.new(-18000, 3600, :EDT), transitions[1].previous_offset)
-      assert_equal(TimezoneOffset.new(-18000,    0, :EST), transitions[1].offset)
+      assert_equal(TimezoneOffset.new(-18000, 3600, 'EDT'), transitions[1].previous_offset)
+      assert_equal(TimezoneOffset.new(-18000,    0, 'EST'), transitions[1].offset)
 
       offsets = tz.offsets_up_to(h.time(2005,1,1,0,0,0,0,0), h.time(2004,1,1,0,0,0,0,0))
-      assert_array_same_items([TimezoneOffset.new(-18000, 0, :EST), TimezoneOffset.new(-18000, 3600, :EDT)], offsets)
+      assert_array_same_items([TimezoneOffset.new(-18000, 0, 'EST'), TimezoneOffset.new(-18000, 3600, 'EDT')], offsets)
     end
   end
 
@@ -111,22 +111,22 @@ class TCTimezoneNewYork < Minitest::Test
       assert_raises(PeriodNotFound) { tz.local_to_utc(h.time(1957, 4,28,2,0,0)) }
       assert_raises(AmbiguousTime)  { tz.local_to_utc(h.time(1957,10,27,1,0,0)) }
 
-      assert_equal(:EST, tz.period_for(h.time(1957, 4,28,6,59,59,0,0)).zone_identifier)
-      assert_equal(:EDT, tz.period_for(h.time(1957, 4,28,7, 0, 0,0,0)).zone_identifier)
-      assert_equal(:EDT, tz.period_for(h.time(1957,10,27,5,59,59,0,0)).zone_identifier)
-      assert_equal(:EST, tz.period_for(h.time(1957,10,27,6, 0, 0,0,0)).zone_identifier)
+      assert_equal('EST', tz.period_for(h.time(1957, 4,28,6,59,59,0,0)).zone_identifier)
+      assert_equal('EDT', tz.period_for(h.time(1957, 4,28,7, 0, 0,0,0)).zone_identifier)
+      assert_equal('EDT', tz.period_for(h.time(1957,10,27,5,59,59,0,0)).zone_identifier)
+      assert_equal('EST', tz.period_for(h.time(1957,10,27,6, 0, 0,0,0)).zone_identifier)
 
-      assert_equal(:EST, tz.period_for_utc(h.time(1957, 4,28,6,59,59)).zone_identifier)
-      assert_equal(:EDT, tz.period_for_utc(h.time(1957, 4,28,7, 0, 0)).zone_identifier)
-      assert_equal(:EDT, tz.period_for_utc(h.time(1957,10,27,5,59,59)).zone_identifier)
-      assert_equal(:EST, tz.period_for_utc(h.time(1957,10,27,6, 0, 0)).zone_identifier)
+      assert_equal('EST', tz.period_for_utc(h.time(1957, 4,28,6,59,59)).zone_identifier)
+      assert_equal('EDT', tz.period_for_utc(h.time(1957, 4,28,7, 0, 0)).zone_identifier)
+      assert_equal('EDT', tz.period_for_utc(h.time(1957,10,27,5,59,59)).zone_identifier)
+      assert_equal('EST', tz.period_for_utc(h.time(1957,10,27,6, 0, 0)).zone_identifier)
 
-      assert_equal(:EST, tz.period_for_local(h.time(1957, 4,28,1,59,59)).zone_identifier)
-      assert_equal(:EDT, tz.period_for_local(h.time(1957, 4,28,3, 0, 0)).zone_identifier)
-      assert_equal(:EDT, tz.period_for_local(h.time(1957,10,27,1,59,59),  true).zone_identifier)
-      assert_equal(:EST, tz.period_for_local(h.time(1957,10,27,1,59,59), false).zone_identifier)
-      assert_equal(:EDT, tz.period_for_local(h.time(1957,10,27,1, 0, 0),  true).zone_identifier)
-      assert_equal(:EST, tz.period_for_local(h.time(1957,10,27,1, 0, 0), false).zone_identifier)
+      assert_equal('EST', tz.period_for_local(h.time(1957, 4,28,1,59,59)).zone_identifier)
+      assert_equal('EDT', tz.period_for_local(h.time(1957, 4,28,3, 0, 0)).zone_identifier)
+      assert_equal('EDT', tz.period_for_local(h.time(1957,10,27,1,59,59),  true).zone_identifier)
+      assert_equal('EST', tz.period_for_local(h.time(1957,10,27,1,59,59), false).zone_identifier)
+      assert_equal('EDT', tz.period_for_local(h.time(1957,10,27,1, 0, 0),  true).zone_identifier)
+      assert_equal('EST', tz.period_for_local(h.time(1957,10,27,1, 0, 0), false).zone_identifier)
 
       assert_equal(-18000, tz.period_for(h.time(1957, 4,28,6,59,59,0,0)).utc_total_offset)
       assert_equal(-14400, tz.period_for(h.time(1957, 4,28,7, 0, 0,0,0)).utc_total_offset)
@@ -148,14 +148,14 @@ class TCTimezoneNewYork < Minitest::Test
       transitions = tz.transitions_up_to(h.time(1958,1,1,0,0,0,0,0), h.time(1957,1,1,0,0,0,0,0))
       assert_equal(2, transitions.length)
       assert_equal_with_offset(Timestamp.for(Time.utc(1957,4,28,7,0,0)), transitions[0].at)
-      assert_equal(TimezoneOffset.new(-18000,    0, :EST), transitions[0].previous_offset)
-      assert_equal(TimezoneOffset.new(-18000, 3600, :EDT), transitions[0].offset)
+      assert_equal(TimezoneOffset.new(-18000,    0, 'EST'), transitions[0].previous_offset)
+      assert_equal(TimezoneOffset.new(-18000, 3600, 'EDT'), transitions[0].offset)
       assert_equal_with_offset(Timestamp.for(Time.utc(1957,10,27,6,0,0)), transitions[1].at)
-      assert_equal(TimezoneOffset.new(-18000, 3600, :EDT), transitions[1].previous_offset)
-      assert_equal(TimezoneOffset.new(-18000,    0, :EST), transitions[1].offset)
+      assert_equal(TimezoneOffset.new(-18000, 3600, 'EDT'), transitions[1].previous_offset)
+      assert_equal(TimezoneOffset.new(-18000,    0, 'EST'), transitions[1].offset)
 
       offsets = tz.offsets_up_to(h.time(1958,1,1,0,0,0,0,0), h.time(1957,1,1,0,0,0,0,0))
-      assert_array_same_items([TimezoneOffset.new(-18000, 0, :EST), TimezoneOffset.new(-18000, 3600, :EDT)], offsets)
+      assert_array_same_items([TimezoneOffset.new(-18000, 0, 'EST'), TimezoneOffset.new(-18000, 3600, 'EDT')], offsets)
     end
   end
 

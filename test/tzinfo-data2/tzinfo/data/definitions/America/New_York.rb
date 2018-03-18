@@ -12,11 +12,11 @@ module TZInfo
           include Format2::TimezoneDefinition
 
           timezone 'America/New_York' do |tz|
-            tz.offset :o0, -17762, 0, :LMT
-            tz.offset :o1, -18000, 0, :EST
-            tz.offset :o2, -18000, 3600, :EDT
-            tz.offset :o3, -18000, 3600, :EWT
-            tz.offset :o4, -18000, 3600, :EPT
+            tz.offset :o0, -17762, 0, 'LMT'
+            tz.offset :o1, -18000, 0, 'EST'
+            tz.offset :o2, -18000, 3600, 'EDT'
+            tz.offset :o3, -18000, 3600, 'EWT'
+            tz.offset :o4, -18000, 3600, 'EPT'
 
             tz.transition :o1, -2717650800
             tz.transition :o2, -1633280400

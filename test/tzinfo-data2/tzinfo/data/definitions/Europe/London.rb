@@ -12,11 +12,11 @@ module TZInfo
           include Format2::TimezoneDefinition
 
           timezone 'Europe/London' do |tz|
-            tz.offset :o0, -75, 0, :LMT
-            tz.offset :o1, 0, 0, :GMT
-            tz.offset :o2, 0, 3600, :BST
-            tz.offset :o3, 0, 7200, :BDST
-            tz.offset :o4, 3600, 0, :BST
+            tz.offset :o0, -75, 0, 'LMT'
+            tz.offset :o1, 0, 0, 'GMT'
+            tz.offset :o2, 0, 3600, 'BST'
+            tz.offset :o3, 0, 7200, 'BDST'
+            tz.offset :o4, 3600, 0, 'BST'
 
             tz.transition :o1, -3852662325
             tz.transition :o2, -1691964000

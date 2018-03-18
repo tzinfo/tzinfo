@@ -12,13 +12,13 @@ module TZInfo
           include Format2::TimezoneDefinition
 
           timezone 'Europe/Paris' do |tz|
-            tz.offset :o0, 561, 0, :LMT
-            tz.offset :o1, 561, 0, :PMT
-            tz.offset :o2, 0, 0, :WET
-            tz.offset :o3, 0, 3600, :WEST
-            tz.offset :o4, 3600, 3600, :CEST
-            tz.offset :o5, 3600, 0, :CET
-            tz.offset :o6, 0, 7200, :WEMT
+            tz.offset :o0, 561, 0, 'LMT'
+            tz.offset :o1, 561, 0, 'PMT'
+            tz.offset :o2, 0, 0, 'WET'
+            tz.offset :o3, 0, 3600, 'WEST'
+            tz.offset :o4, 3600, 3600, 'CEST'
+            tz.offset :o5, 3600, 0, 'CET'
+            tz.offset :o6, 0, 7200, 'WEMT'
 
             tz.transition :o1, -2486678901
             tz.transition :o2, -1855958901

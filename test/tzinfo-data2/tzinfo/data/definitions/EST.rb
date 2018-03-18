@@ -11,7 +11,7 @@ module TZInfo
         include Format2::TimezoneDefinition
 
         timezone 'EST' do |tz|
-          tz.offset :o0, -18000, 0, :EST
+          tz.offset :o0, -18000, 0, 'EST'
 
         end
       end

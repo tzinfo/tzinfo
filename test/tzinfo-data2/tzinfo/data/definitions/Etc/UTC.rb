@@ -12,7 +12,7 @@ module TZInfo
           include Format2::TimezoneDefinition
 
           timezone 'Etc/UTC' do |tz|
-            tz.offset :o0, 0, 0, :UTC
+            tz.offset :o0, 0, 0, 'UTC'
 
           end
         end

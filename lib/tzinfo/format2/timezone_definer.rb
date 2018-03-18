@@ -37,8 +37,8 @@ module TZInfo
       #   seconds. This does not include daylight savings time.
       # @param std_offset [Integer] the daylight savings offset from the base
       #   offset in seconds. Typically either 0 or 3600.
-      # @param abbreviation [Symbol] an abbreviation for the offset, for
-      #   example, `:EST` or `:EDT`.
+      # @param abbreviation [String] an abbreviation for the offset, for
+      #   example, EST or EDT.
       # @raise [ArgumentError] if another offset has already been defined with
       #   the given id.
       def offset(id, utc_offset, std_offset, abbreviation)

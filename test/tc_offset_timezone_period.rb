@@ -7,7 +7,7 @@ include TZInfo
 class TCOffsetTimezonePeriod < Minitest::Test
 
   def test_initialize
-    o = TimezoneOffset.new(-7200, 3600, :SPECIAL)
+    o = TimezoneOffset.new(-7200, 3600, 'SPECIAL')
     p = OffsetTimezonePeriod.new(o)
     assert_same(o, p.offset)
   end
@@ -18,18 +18,18 @@ class TCOffsetTimezonePeriod < Minitest::Test
   end
 
   def test_start_transition
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(-7200, 3600, :SPECIAL))
+    p = OffsetTimezonePeriod.new(TimezoneOffset.new(-7200, 3600, 'SPECIAL'))
     assert_nil(p.start_transition)
   end
 
   def test_end_transition
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(-7200, 3600, :SPECIAL))
+    p = OffsetTimezonePeriod.new(TimezoneOffset.new(-7200, 3600, 'SPECIAL'))
     assert_nil(p.end_transition)
   end
 
   def test_equality
-    o1 = TimezoneOffset.new(0, 3600, :TEST)
-    o2 = TimezoneOffset.new(0, 0, :TEST)
+    o1 = TimezoneOffset.new(0, 3600, 'TEST')
+    o2 = TimezoneOffset.new(0, 0, 'TEST')
 
     p1 = OffsetTimezonePeriod.new(o1)
     p2 = OffsetTimezonePeriod.new(o1)
@@ -44,8 +44,8 @@ class TCOffsetTimezonePeriod < Minitest::Test
   end
 
   def test_eql
-    o1 = TimezoneOffset.new(0, 3600, :TEST)
-    o2 = TimezoneOffset.new(0, 0, :TEST)
+    o1 = TimezoneOffset.new(0, 3600, 'TEST')
+    o2 = TimezoneOffset.new(0, 0, 'TEST')
 
     p1 = OffsetTimezonePeriod.new(o1)
     p2 = OffsetTimezonePeriod.new(o1)
@@ -60,7 +60,7 @@ class TCOffsetTimezonePeriod < Minitest::Test
   end
 
   def test_hash
-    o = TimezoneOffset.new(0, 3600, :TEST)
+    o = TimezoneOffset.new(0, 3600, 'TEST')
     p = OffsetTimezonePeriod.new(o)
     assert_equal(o.hash, p.hash)
   end

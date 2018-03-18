@@ -7,9 +7,9 @@ include TZInfo
 module DataSources
   class TCTransitionsDataTimezoneInfo < Minitest::Test
     def test_initialize_transitions
-      o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
-      o3 = TimezoneOffset.new(-18000,    0, :TESTS)
+      o1 = TimezoneOffset.new(-17900,    0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000, 3600, 'TESTD')
+      o3 = TimezoneOffset.new(-18000,    0, 'TESTS')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 4,1,1,0,0).to_i)
       t2 = TimezoneTransition.new(o3, o2, Time.utc(2000,10,1,1,0,0).to_i)
@@ -33,8 +33,8 @@ module DataSources
     end
 
     def test_initialize_nil_identifier
-      o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000,    0, :TESTS)
+      o1 = TimezoneOffset.new(-17900,    0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000,    0, 'TESTS')
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,10,1,1,0,0).to_i)
       transitions = [t1]
 
@@ -48,10 +48,10 @@ module DataSources
     end
 
     def test_period_for
-      o1 = TimezoneOffset.new(-17900, 0,    :TESTLMT)
-      o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
-      o3 = TimezoneOffset.new(-18000, 0,    :TESTS)
-      o4 = TimezoneOffset.new(-21600, 3600, :TESTD)
+      o1 = TimezoneOffset.new(-17900, 0,    'TESTLMT')
+      o2 = TimezoneOffset.new(-18000, 3600, 'TESTD')
+      o3 = TimezoneOffset.new(-18000, 0,    'TESTS')
+      o4 = TimezoneOffset.new(-21600, 3600, 'TESTD')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 4,1,1,0,0).to_i)
       t2 = TimezoneTransition.new(o3, o2, Time.utc(2000,10,1,1,0,0).to_i)
@@ -88,8 +88,8 @@ module DataSources
     end
 
     def test_period_for_timestamp_with_zero_utc_offset
-      o1 = TimezoneOffset.new(-17900, 0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000, 0, :TEST)
+      o1 = TimezoneOffset.new(-17900, 0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000, 0, 'TEST')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,7,1,0,0,0).to_i)
 
@@ -99,8 +99,8 @@ module DataSources
     end
 
     def test_period_for_timestamp_with_non_zero_utc_offset
-      o1 = TimezoneOffset.new(-17900, 0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000, 0, :TEST)
+      o1 = TimezoneOffset.new(-17900, 0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000, 0, 'TEST')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,7,1,0,0,0).to_i)
 
@@ -111,8 +111,8 @@ module DataSources
     end
 
     def create_basic_info
-      o1 = TimezoneOffset.new(-17900, 0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000, 0, :TEST)
+      o1 = TimezoneOffset.new(-17900, 0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000, 0, 'TEST')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,7,1,0,0,0).to_i)
 
@@ -132,10 +132,10 @@ module DataSources
     end
 
     def test_periods_for_local
-      o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
-      o3 = TimezoneOffset.new(-18000,    0, :TESTS)
-      o4 = TimezoneOffset.new(-21600, 3600, :TESTD)
+      o1 = TimezoneOffset.new(-17900,    0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000, 3600, 'TESTD')
+      o3 = TimezoneOffset.new(-18000,    0, 'TESTS')
+      o4 = TimezoneOffset.new(-21600, 3600, 'TESTD')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 4,2,1,0,0).to_i)
       t2 = TimezoneTransition.new(o3, o2, Time.utc(2000,10,2,1,0,0).to_i)
@@ -185,10 +185,10 @@ module DataSources
     end
 
     def test_periods_for_local_warsaw
-      o1 = TimezoneOffset.new(5040,    0, :LMT)
-      o2 = TimezoneOffset.new(5040,    0, :WMT)
-      o3 = TimezoneOffset.new(3600,    0, :CET)
-      o4 = TimezoneOffset.new(3600, 3600, :CEST)
+      o1 = TimezoneOffset.new(5040,    0, 'LMT')
+      o2 = TimezoneOffset.new(5040,    0, 'WMT')
+      o3 = TimezoneOffset.new(3600,    0, 'CET')
+      o4 = TimezoneOffset.new(3600, 3600, 'CEST')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(1879,12,31,22,36,0).to_i)
       t2 = TimezoneTransition.new(o3, o2, Time.utc(1915, 8, 4,22,36,0).to_i)
@@ -201,8 +201,8 @@ module DataSources
     end
 
     def test_periods_for_local_single_transition
-      o1 = TimezoneOffset.new(-3600, 0, :TESTD)
-      o2 = TimezoneOffset.new(-3600, 0, :TESTS)
+      o1 = TimezoneOffset.new(-3600, 0, 'TESTD')
+      o2 = TimezoneOffset.new(-3600, 0, 'TESTS')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,7,1,0,0,0).to_i)
 
@@ -226,10 +226,10 @@ module DataSources
     end
 
     def test_transitions_up_to
-      o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
-      o3 = TimezoneOffset.new(-18000,    0, :TESTS)
-      o4 = TimezoneOffset.new(-21600, 3600, :TESTD)
+      o1 = TimezoneOffset.new(-17900,    0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000, 3600, 'TESTD')
+      o3 = TimezoneOffset.new(-18000,    0, 'TESTS')
+      o4 = TimezoneOffset.new(-21600, 3600, 'TESTD')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2010, 4,1,1,0,0).to_i)
       t2 = TimezoneTransition.new(o3, o2, Time.utc(2010,10,1,1,0,0).to_i)
@@ -258,9 +258,9 @@ module DataSources
     end
 
     def test_transitions_up_to_timestamp_with_zero_utc_offset
-      o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000,    0, :TESTS)
-      o3 = TimezoneOffset.new(-18000, 3600, :TESTD)
+      o1 = TimezoneOffset.new(-17900,    0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000,    0, 'TESTS')
+      o3 = TimezoneOffset.new(-18000, 3600, 'TESTD')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2009,12,31,23,59,59).to_i)
       t2 = TimezoneTransition.new(o3, o2, Time.utc(2010, 7, 1, 0, 0, 0).to_i)
@@ -272,9 +272,9 @@ module DataSources
     end
 
     def test_transitions_up_to_timestamp_with_non_zero_utc_offset
-      o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000,    0, :TESTS)
-      o3 = TimezoneOffset.new(-18000, 3600, :TESTD)
+      o1 = TimezoneOffset.new(-17900,    0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000,    0, 'TESTS')
+      o3 = TimezoneOffset.new(-18000, 3600, 'TESTD')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2009,12,31,23,59,59).to_i)
       t2 = TimezoneTransition.new(o3, o2, Time.utc(2010, 7, 1, 0, 0, 0).to_i)

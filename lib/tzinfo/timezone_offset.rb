@@ -45,23 +45,25 @@ module TZInfo
     # @return [Integer] the total offset from UTC in seconds.
     attr_reader :utc_total_offset
 
-    # The abbreviation that identifies this offset. For example `:GMT`
-    # (Greenwich Mean Time) or `:BST` (British Summer Time) for Europe/London.
+    # The abbreviation that identifies this offset. For example GMT
+    # (Greenwich Mean Time) or BST (British Summer Time) for Europe/London.
     #
-    # @return [Symbol] The abbreviation that identifies this offset.
+    # @return [String] The abbreviation that identifies this offset.
     attr_reader :abbreviation
 
     # Initializes a new {TimezoneOffset}.
     #
     # {TimezoneOffset} instances should not normally be constructed manually.
     #
+    # The passed in `abbreviation` instance will be frozen.
+    #
     # @param utc_offset [Integer] the base offset from UTC in seconds.
     # @param std_offset [Integer] the offset from standard time in seconds.
-    # @param abbreviation [Symbol] the abbreviation identifying the offset.
+    # @param abbreviation [String] the abbreviation identifying the offset.
     def initialize(utc_offset, std_offset, abbreviation)
       @utc_offset = utc_offset
       @std_offset = std_offset
-      @abbreviation = abbreviation
+      @abbreviation = abbreviation.freeze
 
       @utc_total_offset = @utc_offset + @std_offset
     end
@@ -104,7 +106,7 @@ module TZInfo
     # @return [String] the internal object state as a programmer-readable
     #   `String`.
     def inspect
-      "#<#{self.class}: @utc_offset=#{@utc_offset}, @std_offset=#{@std_offset}, @abbreviation=#{@abbreviation.inspect}>"
+      "#<#{self.class}: @utc_offset=#{@utc_offset}, @std_offset=#{@std_offset}, @abbreviation=#{@abbreviation}>"
     end
   end
 end

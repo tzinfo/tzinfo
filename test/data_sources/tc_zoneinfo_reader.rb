@@ -8,6 +8,9 @@ include TZInfo
 
 module DataSources
   class TCZoneinfoReader < Minitest::Test
+    MIN_FORMAT = 1
+    MAX_FORMAT = 3
+
     def convert_times_to_i(items, key = :at)
       items.each do |item|
         if item[key].kind_of?(Time)
@@ -152,9 +155,9 @@ module DataSources
     end
 
     def tzif_test(offsets, transitions, leaps = [], options = {}, &block)
-      min_format = options[:min_format] || 1
+      min_format = options[:min_format] || MIN_FORMAT
 
-      min_format.upto(3) do |format|
+      min_format.upto(MAX_FORMAT) do |format|
         write_tzif(format, offsets, transitions, leaps, options, &block)
       end
     end
@@ -176,10 +179,10 @@ module DataSources
         {at: Time.utc(1980, 10, 21), offset_index: 1},
         {at: Time.utc(2000, 12, 31), offset_index: 3}]
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST)
-      o2 = TimezoneOffset.new(3600, 3600, :XDT)
-      o3 = TimezoneOffset.new(   0,    0, :XNST)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST')
+      o2 = TimezoneOffset.new(3600, 3600, 'XDT')
+      o3 = TimezoneOffset.new(   0,    0, 'XNST')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(1971,  1,  2).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(1980,  4, 22).to_i)
@@ -204,10 +207,10 @@ module DataSources
         {at: Time.utc(1973,  4, 29, 3,  0, 0), offset_index: 1},
         {at: Time.utc(1992,  4,  1, 4, 30, 0), offset_index: 3}]
 
-      o0 = TimezoneOffset.new(-12492,    0, :LMT)
-      o1 = TimezoneOffset.new(-12000,    0, :XST)
-      o2 = TimezoneOffset.new(-12000, 3600, :XDT)
-      o3 = TimezoneOffset.new( -8400,    0, :XNST)
+      o0 = TimezoneOffset.new(-12492,    0, 'LMT')
+      o1 = TimezoneOffset.new(-12000,    0, 'XST')
+      o2 = TimezoneOffset.new(-12000, 3600, 'XDT')
+      o3 = TimezoneOffset.new( -8400,    0, 'XNST')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(1971,  7,  9, 3,  0, 0).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(1972, 10, 12, 3,  0, 0).to_i)
@@ -232,8 +235,8 @@ module DataSources
         {at: Time.utc(1980, 10, 21), offset_index: 2},
         {at: Time.utc(2000, 12, 31), offset_index: 3}]
 
-      o1 = TimezoneOffset.new(3542, 0, :LMT)
-      o2 = TimezoneOffset.new(3600, 0, :XST)
+      o1 = TimezoneOffset.new(3542, 0, 'LMT')
+      o2 = TimezoneOffset.new(3600, 0, 'XST')
       t0 = TimezoneTransition.new(o2, o1, Time.utc(1979, 1, 2).to_i)
 
       tzif_test(offsets, transitions) do |path, format|
@@ -243,7 +246,7 @@ module DataSources
 
     def test_read_no_transitions
       offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
-      o0 = TimezoneOffset.new(-12094, 0, :LT)
+      o0 = TimezoneOffset.new(-12094, 0, 'LT')
 
       tzif_test(offsets, []) do |path, format|
         assert_equal(o0, @reader.read(path))
@@ -255,7 +258,7 @@ module DataSources
         {gmtoff: -10800, isdst: true, abbrev: 'XDT'},
         {gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
-      o1 = TimezoneOffset.new(-12094, 0, :LT)
+      o1 = TimezoneOffset.new(-12094, 0, 'LT')
 
       tzif_test(offsets, []) do |path, format|
         assert_equal(o1, @reader.read(path))
@@ -264,7 +267,7 @@ module DataSources
 
     def test_read_no_transitions_dst_only
       offsets = [{gmtoff: -10800, isdst: true, abbrev: 'XDT'}]
-      o0 = TimezoneOffset.new(-14400, 3600, :XDT)
+      o0 = TimezoneOffset.new(-14400, 3600, 'XDT')
 
       tzif_test(offsets, []) do |path, format|
         assert_equal(o0, @reader.read(path))
@@ -280,8 +283,8 @@ module DataSources
         {at: Time.utc(1950, 1, 1), offset_index: 0},
         {at: Time.utc(2000, 1, 1), offset_index: 1}]
 
-      o0 = TimezoneOffset.new(3542, 0, :LMT)
-      o1 = TimezoneOffset.new(3600, 0, :XST)
+      o0 = TimezoneOffset.new(3542, 0, 'LMT')
+      o1 = TimezoneOffset.new(3600, 0, 'XST')
 
       t0 = TimezoneTransition.new(o0, o0, Time.utc(1950, 1, 1).to_i)
       t1 = TimezoneTransition.new(o1, o0, Time.utc(2000, 1, 1).to_i)
@@ -449,10 +452,10 @@ module DataSources
         {at: Time.utc(1970, 10, 21), offset_index: 1},
         {at: Time.utc(2000, 12, 31), offset_index: 3}]
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST)
-      o2 = TimezoneOffset.new(3600, 3600, :XDT)
-      o3 = TimezoneOffset.new(   0,    0, :XNST)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST')
+      o2 = TimezoneOffset.new(3600, 3600, 'XDT')
+      o3 = TimezoneOffset.new(   0,    0, 'XNST')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(1948,  1,  2).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(1969,  4, 22).to_i)
@@ -477,10 +480,10 @@ module DataSources
         {at: Time.utc(1970,  1,  1), offset_index: 1},
         {at: Time.utc(2000, 12, 31), offset_index: 3}]
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST)
-      o2 = TimezoneOffset.new(3600, 3600, :XDT)
-      o3 = TimezoneOffset.new(   0,    0, :XNST)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST')
+      o2 = TimezoneOffset.new(3600, 3600, 'XDT')
+      o3 = TimezoneOffset.new(   0,    0, 'XNST')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(1948,  1,  2).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(1969,  4, 22).to_i)
@@ -508,10 +511,10 @@ module DataSources
         {at: Time.utc(2003, 10, 21), offset_index: 1},
         {at: Time.utc(2040, 12, 31), offset_index: 3}]
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST)
-      o2 = TimezoneOffset.new(3600, 3600, :XDT)
-      o3 = TimezoneOffset.new(   0,    0, :XNST)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST')
+      o2 = TimezoneOffset.new(3600, 3600, 'XDT')
+      o3 = TimezoneOffset.new(   0,    0, 'XNST')
 
       t0    = TimezoneTransition.new(o1, o0, Time.utc(1850,  1,  2).to_i)
       t1_f1 = TimezoneTransition.new(o2, o0, Time.utc(2003,  4, 22).to_i)
@@ -541,9 +544,9 @@ module DataSources
         {at: Time.utc(2014, 5, 27), offset_index: 2},
         {at: 2**63 - 1,             offset_index: 0}]
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST)
-      o2 = TimezoneOffset.new(7200,    0, :XNST)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST')
+      o2 = TimezoneOffset.new(7200,    0, 'XNST')
 
       t0    = TimezoneTransition.new(o1, o0,                     -2**63)
       t1_f1 = TimezoneTransition.new(o2, o0, Time.utc(2014, 5, 27).to_i)
@@ -572,9 +575,9 @@ module DataSources
         {at: Time.utc(2014, 5, 27), offset_index: 2},
         {at: 2**31 - 1,             offset_index: 0}]
 
-      o0 = TimezoneOffset.new(3542, 0, :LMT)
-      o1 = TimezoneOffset.new(3600, 0, :XST)
-      o2 = TimezoneOffset.new(7200, 0, :XNST)
+      o0 = TimezoneOffset.new(3542, 0, 'LMT')
+      o1 = TimezoneOffset.new(3600, 0, 'XST')
+      o2 = TimezoneOffset.new(7200, 0, 'XNST')
 
       t0 = TimezoneTransition.new(o1, o0,                     -2**31)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2014, 5, 27).to_i)
@@ -601,10 +604,10 @@ module DataSources
         {at: Time.utc(2000, 3, 1), offset_index: 3},
         {at: Time.utc(2000, 4, 1), offset_index: 1}]
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST)
-      o2 = TimezoneOffset.new(3600, 3600, :XDT)
-      o3 = TimezoneOffset.new(3600, 7200, :XDDT)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST')
+      o2 = TimezoneOffset.new(3600, 3600, 'XDT')
+      o3 = TimezoneOffset.new(3600, 7200, 'XDDT')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000, 1, 1).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 2, 1).to_i)
@@ -630,9 +633,9 @@ module DataSources
         {at: Time.utc(2000, 5, 1), offset_index: 2},
         {at: Time.utc(2000, 6, 1), offset_index: 1}]
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST)
-      o2 = TimezoneOffset.new(3600, 7200, :XDDT)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST')
+      o2 = TimezoneOffset.new(3600, 7200, 'XDDT')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000, 4, 1).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 5, 1).to_i)
@@ -661,10 +664,10 @@ module DataSources
         {at: Time.utc(2000, 5, 1), offset_index: 3},
         {at: Time.utc(2000, 6, 1), offset_index: 1}]
 
-      o0 = TimezoneOffset.new(-10821,    0, :LMT)
-      o1 = TimezoneOffset.new(-10800,    0, :XST)
-      o2 = TimezoneOffset.new(-10800, 3600, :XDT)
-      o3 = TimezoneOffset.new(-10800, 7200, :XDDT)
+      o0 = TimezoneOffset.new(-10821,    0, 'LMT')
+      o1 = TimezoneOffset.new(-10800,    0, 'XST')
+      o2 = TimezoneOffset.new(-10800, 3600, 'XDT')
+      o3 = TimezoneOffset.new(-10800, 7200, 'XDDT')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000, 1, 1).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 2, 1).to_i)
@@ -693,10 +696,10 @@ module DataSources
         {at: Time.utc(2000, 2, 1), offset_index: 2},
         {at: Time.utc(2000, 3, 1), offset_index: 1}]
 
-      o0 = TimezoneOffset.new(3542, 0, :LMT)
-      o1 = TimezoneOffset.new(3600, 0, :XST)
-      o2 = TimezoneOffset.new(3600, 3600, :XDT)
-      o3 = TimezoneOffset.new(3600, 7200, :XDDT)
+      o0 = TimezoneOffset.new(3542, 0, 'LMT')
+      o1 = TimezoneOffset.new(3600, 0, 'XST')
+      o2 = TimezoneOffset.new(3600, 3600, 'XDT')
+      o3 = TimezoneOffset.new(3600, 7200, 'XDDT')
 
       t0 = TimezoneTransition.new(o3, o0, Time.utc(2000, 1, 1).to_i)
       t1 = TimezoneTransition.new(o2, o3, Time.utc(2000, 2, 1).to_i)
@@ -717,8 +720,8 @@ module DataSources
 
       transitions = [{at: Time.utc(2000, 1, 1), offset_index: 1}]
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3542, 3658, :XDT)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3542, 3658, 'XDT')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000, 1, 1).to_i)
 
@@ -735,7 +738,7 @@ module DataSources
 
       transitions = [{at: Time.utc(2000, 1, 1), offset_index: 0}]
 
-      o0 = TimezoneOffset.new(3600, 3600, :XDT)
+      o0 = TimezoneOffset.new(3600, 3600, 'XDT')
 
       t0 = TimezoneTransition.new(o0, o0, Time.utc(2000, 1, 1).to_i)
 
@@ -760,9 +763,9 @@ module DataSources
         {at: Time.utc(2000, 1, 1), offset_index: 1},
         {at: Time.utc(2000, 2, 1), offset_index: 2}]
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :YST)
-      o2 = TimezoneOffset.new(   0, 3600, :XDT)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'YST')
+      o2 = TimezoneOffset.new(   0, 3600, 'XDT')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000, 1, 1).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 2, 1).to_i)
@@ -792,11 +795,11 @@ module DataSources
         {at: Time.utc(2011, 12, 30, 10, 0, 0), offset_index: 3},
         {at: Time.utc(2012,  3, 31, 14, 0, 0), offset_index: 4}]
 
-      o0 = TimezoneOffset.new( 45184,    0, :LMT)
-      o1 = TimezoneOffset.new(-39600,    0, :'-11')
-      o2 = TimezoneOffset.new(-39600, 3600, :'-10')
-      o3 = TimezoneOffset.new( 46800, 3600, :'+14')
-      o4 = TimezoneOffset.new( 46800,    0, :'+13')
+      o0 = TimezoneOffset.new( 45184,    0, 'LMT')
+      o1 = TimezoneOffset.new(-39600,    0, '-11')
+      o2 = TimezoneOffset.new(-39600, 3600, '-10')
+      o3 = TimezoneOffset.new( 46800, 3600, '+14')
+      o4 = TimezoneOffset.new( 46800,    0, '+13')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2011,  4,  2, 14, 0, 0).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2011,  9, 24, 14, 0, 0).to_i)
@@ -835,11 +838,11 @@ module DataSources
       # XDT will be split and defined according to its surrounding standard time
       # offsets.
 
-      o0   = TimezoneOffset.new(3542,    0, :LMT)
-      o1   = TimezoneOffset.new(3600,    0, :XST1)
-      o2   = TimezoneOffset.new(7200,    0, :XST2)
-      o3_1 = TimezoneOffset.new(3600, 7200, :XDT)
-      o3_2 = TimezoneOffset.new(7200, 3600, :XDT)
+      o0   = TimezoneOffset.new(3542,    0, 'LMT')
+      o1   = TimezoneOffset.new(3600,    0, 'XST1')
+      o2   = TimezoneOffset.new(7200,    0, 'XST2')
+      o3_1 = TimezoneOffset.new(3600, 7200, 'XDT')
+      o3_2 = TimezoneOffset.new(7200, 3600, 'XDT')
 
       t0  = TimezoneTransition.new(o1,   o0,   Time.utc(2000,  1, 1).to_i)
       t1  = TimezoneTransition.new(o3_1, o1,   Time.utc(2000,  2, 1).to_i)
@@ -881,10 +884,10 @@ module DataSources
       # XDT should use the closest utc_offset (7200) (and not an equivalent
       # utc_offset of 3600 and std_offset of 7200).
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST1)
-      o2 = TimezoneOffset.new(7200,    0, :XST2)
-      o3 = TimezoneOffset.new(7200, 3600, :XDT)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST1')
+      o2 = TimezoneOffset.new(7200,    0, 'XST2')
+      o3 = TimezoneOffset.new(7200, 3600, 'XDT')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o3, o1, Time.utc(2000,  2, 1).to_i)
@@ -913,10 +916,10 @@ module DataSources
       # XDT should use the closest utc_offset (7200) (and not an equivalent
       # utc_offset of 3600 and std_offset of 7200).
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST1)
-      o2 = TimezoneOffset.new(7200,    0, :XST2)
-      o3 = TimezoneOffset.new(7200, 3600, :XDT)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST1')
+      o2 = TimezoneOffset.new(7200,    0, 'XST2')
+      o3 = TimezoneOffset.new(7200, 3600, 'XDT')
 
       t0 = TimezoneTransition.new(o2, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o3, o2, Time.utc(2000,  2, 1).to_i)
@@ -945,10 +948,10 @@ module DataSources
       # XDT will be based on the utc_offset of XST1 even though XST2 has an
       # equivalent (or greater) utc_total_offset.
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST1)
-      o2 = TimezoneOffset.new(7200,    0, :XST2)
-      o3 = TimezoneOffset.new(3600, 3600, :XDT)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST1')
+      o2 = TimezoneOffset.new(7200,    0, 'XST2')
+      o3 = TimezoneOffset.new(3600, 3600, 'XDT')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o3, o1, Time.utc(2000,  2, 1).to_i)
@@ -977,10 +980,10 @@ module DataSources
       # XDT will be based on the utc_offset of XST1 even though XST2 has an
       # equivalent (or greater) utc_total_offset.
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST1)
-      o2 = TimezoneOffset.new(7200,    0, :XST2)
-      o3 = TimezoneOffset.new(3600, 3600, :XDT)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST1')
+      o2 = TimezoneOffset.new(7200,    0, 'XST2')
+      o3 = TimezoneOffset.new(3600, 3600, 'XDT')
 
       t0 = TimezoneTransition.new(o2, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o3, o2, Time.utc(2000,  2, 1).to_i)
@@ -1008,9 +1011,9 @@ module DataSources
       # XDT will just assume an std_offset of +1 hour and calculate the utc_offset
       # from utc_total_offset - std_offset.
 
-      o0 = TimezoneOffset.new(7142,    0, :LMT)
-      o1 = TimezoneOffset.new(7200,    0, :XST)
-      o2 = TimezoneOffset.new(3600, 3600, :XDT)
+      o0 = TimezoneOffset.new(7142,    0, 'LMT')
+      o1 = TimezoneOffset.new(7200,    0, 'XST')
+      o2 = TimezoneOffset.new(3600, 3600, 'XDT')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,  2, 1).to_i)
@@ -1041,11 +1044,11 @@ module DataSources
       # Both XDT1 and XDT2 should both use the closest utc_offset (7200) (and not
       # an equivalent utc_offset of 3600 and std_offset of 7200).
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST1)
-      o2 = TimezoneOffset.new(7200,    0, :XST2)
-      o3 = TimezoneOffset.new(7200, 3600, :XDT1)
-      o4 = TimezoneOffset.new(7200, 3600, :XDT2)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST1')
+      o2 = TimezoneOffset.new(7200,    0, 'XST2')
+      o3 = TimezoneOffset.new(7200, 3600, 'XDT1')
+      o4 = TimezoneOffset.new(7200, 3600, 'XDT2')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o3, o1, Time.utc(2000,  2, 1).to_i)
@@ -1077,11 +1080,11 @@ module DataSources
       # Both XDT1 and XDT2 should both use the closest utc_offset (7200) (and not
       # an equivalent utc_offset of 3600 and std_offset of 7200).
 
-      o0 = TimezoneOffset.new(3542,    0, :LMT)
-      o1 = TimezoneOffset.new(3600,    0, :XST1)
-      o2 = TimezoneOffset.new(7200,    0, :XST2)
-      o3 = TimezoneOffset.new(7200, 3600, :XDT1)
-      o4 = TimezoneOffset.new(7200, 3600, :XDT2)
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST1')
+      o2 = TimezoneOffset.new(7200,    0, 'XST2')
+      o3 = TimezoneOffset.new(7200, 3600, 'XDT1')
+      o4 = TimezoneOffset.new(7200, 3600, 'XDT2')
 
       t0 = TimezoneTransition.new(o2, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o3, o2, Time.utc(2000,  2, 1).to_i)
@@ -1109,9 +1112,9 @@ module DataSources
         {at: Time.utc(2000,  4, 1), offset_index: 2},
         {at: Time.utc(2000,  5, 1), offset_index: 1}]
 
-      o0 = TimezoneOffset.new(-100,     0, :LMT)
-      o1 = TimezoneOffset.new(3600,     0, :XST)
-      o2 = TimezoneOffset.new(3600, -3600, :XWT)
+      o0 = TimezoneOffset.new(-100,     0, 'LMT')
+      o1 = TimezoneOffset.new(3600,     0, 'XST')
+      o2 = TimezoneOffset.new(3600, -3600, 'XWT')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,  2, 1).to_i)
@@ -1140,9 +1143,9 @@ module DataSources
         {at: Time.utc(2000,  4, 1), offset_index: 2},
         {at: Time.utc(2000,  5, 1), offset_index: 1}]
 
-      o0 = TimezoneOffset.new(-100,     0, :LMT)
-      o1 = TimezoneOffset.new(3600, -3600, :XWT)
-      o2 = TimezoneOffset.new(3600,     0, :XST)
+      o0 = TimezoneOffset.new(-100,     0, 'LMT')
+      o1 = TimezoneOffset.new(3600, -3600, 'XWT')
+      o2 = TimezoneOffset.new(3600,     0, 'XST')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,  2, 1).to_i)
@@ -1167,10 +1170,10 @@ module DataSources
         {at: Time.utc(2000,  2, 1), offset_index: 2},
         {at: Time.utc(2000,  3, 1), offset_index: 3}]
 
-      o0 = TimezoneOffset.new(-100,    0, :LMT)
-      o1 = TimezoneOffset.new(   0,    0, :XST)
-      o2 = TimezoneOffset.new(   0, 1800, :XDT)
-      o3 = TimezoneOffset.new(1800,    0, :XST)
+      o0 = TimezoneOffset.new(-100,    0, 'LMT')
+      o1 = TimezoneOffset.new(   0,    0, 'XST')
+      o2 = TimezoneOffset.new(   0, 1800, 'XDT')
+      o3 = TimezoneOffset.new(1800,    0, 'XST')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,  2, 1).to_i)
@@ -1193,10 +1196,10 @@ module DataSources
         {at: Time.utc(2000,  2, 1), offset_index: 2},
         {at: Time.utc(2000,  3, 1), offset_index: 3}]
 
-      o0 = TimezoneOffset.new(-100,    0, :LMT)
-      o1 = TimezoneOffset.new(1800,    0, :XST)
-      o2 = TimezoneOffset.new(   0, 1800, :XDT)
-      o3 = TimezoneOffset.new(   0,    0, :XST)
+      o0 = TimezoneOffset.new(-100,    0, 'LMT')
+      o1 = TimezoneOffset.new(1800,    0, 'XST')
+      o2 = TimezoneOffset.new(   0, 1800, 'XDT')
+      o3 = TimezoneOffset.new(   0,    0, 'XST')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2000,  1, 1).to_i)
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000,  2, 1).to_i)
@@ -1210,7 +1213,7 @@ module DataSources
     def test_read_untainted_in_safe_mode
       offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
-      o0 = TimezoneOffset.new(-12094, 0, :LT)
+      o0 = TimezoneOffset.new(-12094, 0, 'LT')
 
       tzif_test(offsets, []) do |path, format|
         # Temp file path is tainted with Ruby >= 2.3.0. Untaint for this test.
@@ -1246,8 +1249,8 @@ module DataSources
       transitions = [
         {at: Time.utc(1971, 1, 2), offset_index: 1}]
 
-      o0 = TimezoneOffset.new(3542, 0, :LMT)
-      o1 = TimezoneOffset.new(3600, 0, :"XST©")
+      o0 = TimezoneOffset.new(3542, 0, 'LMT')
+      o1 = TimezoneOffset.new(3600, 0, 'XST©')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(1971, 1, 2).to_i)
 
@@ -1266,13 +1269,32 @@ module DataSources
       transitions = [
         {at: Time.utc(2011, 12, 31, 13, 24, 26), offset_index: 1}]
 
-      o0 = TimezoneOffset.new(3542, 0, :LMT)
-      o1 = TimezoneOffset.new(3600, 0, :XST)
+      o0 = TimezoneOffset.new(3542, 0, 'LMT')
+      o1 = TimezoneOffset.new(3600, 0, 'XST')
 
       t0 = TimezoneTransition.new(o1, o0, Time.utc(2011, 12, 31, 13, 24, 26).to_i)
 
       tzif_test(offsets, transitions) do |path, format|
         assert_equal([t0], @reader.read(path))
+      end
+    end
+
+    def test_read_returns_same_abbreviation_instances
+      offsets = [{gmtoff: 3542, isdst: false, abbrev: 'LMT'}]
+
+      o = TimezoneOffset.new(3542, 0, 'LMT')
+
+      MIN_FORMAT.upto(MAX_FORMAT) do |format|
+        abbreviations = 2.times.collect do
+          write_tzif(format, offsets, []) do |path|
+            @reader.read(path).tap do |result|
+              assert_equal(o, result)
+            end
+          end.abbreviation
+        end
+
+        assert_same(abbreviations[0], abbreviations[1])
+        assert(abbreviations[0].frozen?)
       end
     end
   end

@@ -338,9 +338,9 @@ module DataSources
     end
 
     def test_load_timezone_info_transitions
-      o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000, 3600, :TESTD)
-      o3 = TimezoneOffset.new(-18000,    0, :TESTS)
+      o1 = TimezoneOffset.new(-17900,    0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000, 3600, 'TESTD')
+      o3 = TimezoneOffset.new(-18000,    0, 'TESTS')
 
       t1 = TimezoneTransition.new(o2, o1, Time.utc(2000, 4,1,1,0,0).to_i)
       t2 = TimezoneTransition.new(o3, o2, Time.utc(2000,10,1,1,0,0).to_i)
@@ -361,7 +361,7 @@ module DataSources
     end
 
     def test_load_timezone_info_constant_offset
-      offset = TimezoneOffset.new(-17900, 0, :TESTLMT)
+      offset = TimezoneOffset.new(-17900, 0, 'TESTLMT')
 
       reader_mock = Minitest::Mock.new
       reader_mock.expect(:read, offset, [File.join(ZONEINFO_DIR, 'Europe', 'London')])

@@ -15,9 +15,9 @@ module Format1
       d.transition 2016, 9, :o3, 1472688000
       d.transition 2016, 3, :o2, 1488326400
 
-      o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000, 3600, :TEST)
-      o3 = TimezoneOffset.new(-18000,    0, :TESTD)
+      o1 = TimezoneOffset.new(-17900,    0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000, 3600, 'TEST')
+      o3 = TimezoneOffset.new(-18000,    0, 'TESTD')
       t1 = TimezoneTransition.new(o2, o1, 1456790400)
       t2 = TimezoneTransition.new(o3, o2, 1472688000)
       t3 = TimezoneTransition.new(o2, o3, 1488326400)
@@ -38,9 +38,9 @@ module Format1
       d.transition 2016, 9, :o3, 1472688000, 212339448001, 86400
       d.transition 2016, 3, :o2, 1488326400, 212355086401, 86400
 
-      o1 = TimezoneOffset.new(-17900,    0, :TESTLMT)
-      o2 = TimezoneOffset.new(-18000, 3600, :TEST)
-      o3 = TimezoneOffset.new(-18000,    0, :TESTD)
+      o1 = TimezoneOffset.new(-17900,    0, 'TESTLMT')
+      o2 = TimezoneOffset.new(-18000, 3600, 'TEST')
+      o3 = TimezoneOffset.new(-18000,    0, 'TESTD')
       t1 = TimezoneTransition.new(o2, o1, 1456790400)
       t2 = TimezoneTransition.new(o3, o2, 1472688000)
       t3 = TimezoneTransition.new(o2, o3, 1488326400)
@@ -57,6 +57,17 @@ module Format1
 
       error = assert_raises(ArgumentError) { d.transition 2016, 3, :o1, 4914897, 2 }
       assert_match(/\bDateTime\b/, error.message)
+    end
+
+    def test_same_abbreviation_instances_used
+      d1 = TimezoneDefiner.new
+      d1.offset :o1, 3600, 0, :TESTLMT
+
+      d2 = TimezoneDefiner.new
+      d2.offset :o1, -3600, 0, :TESTLMT
+
+      assert_same(d1.first_offset.abbreviation, d2.first_offset.abbreviation)
+      assert(d1.first_offset.abbreviation.frozen?)
     end
   end
 end

@@ -76,10 +76,10 @@ module TZInfo
       @offset.std_offset
     end
 
-    # The abbreviation that identifies this offset. For example `:GMT`
-    # (Greenwich Mean Time) or `:BST` (British Summer Time) for Europe/London.
+    # The abbreviation that identifies this offset. For example GMT
+    # (Greenwich Mean Time) or BST (British Summer Time) for Europe/London.
     #
-    # @return [Symbol] The abbreviation that identifies this offset.
+    # @return [String] The abbreviation that identifies this offset.
     def abbreviation
       @offset.abbreviation
     end

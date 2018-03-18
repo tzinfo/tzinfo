@@ -12,13 +12,13 @@ module TZInfo
           include Format2::TimezoneDefinition
 
           timezone 'Europe/Amsterdam' do |tz|
-            tz.offset :o0, 1172, 0, :LMT
-            tz.offset :o1, 1172, 0, :AMT
-            tz.offset :o2, 1172, 3600, :NST
-            tz.offset :o3, 1200, 3600, :NEST
-            tz.offset :o4, 1200, 0, :NET
-            tz.offset :o5, 3600, 3600, :CEST
-            tz.offset :o6, 3600, 0, :CET
+            tz.offset :o0, 1172, 0, 'LMT'
+            tz.offset :o1, 1172, 0, 'AMT'
+            tz.offset :o2, 1172, 3600, 'NST'
+            tz.offset :o3, 1200, 3600, 'NEST'
+            tz.offset :o4, 1200, 0, 'NET'
+            tz.offset :o5, 3600, 3600, 'CEST'
+            tz.offset :o6, 3600, 0, 'CET'
 
             tz.transition :o1, -4260212372
             tz.transition :o2, -1693700372

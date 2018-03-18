@@ -33,9 +33,9 @@ module Format1
       assert_kind_of(DataSources::TransitionsDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone', ti.identifier)
 
-      o0 = TimezoneOffset.new(-75,    0, :LMT)
-      o1 = TimezoneOffset.new(  0,    0, :GMT)
-      o2 = TimezoneOffset.new(  0, 3600, :BST)
+      o0 = TimezoneOffset.new(-75,    0, 'LMT')
+      o1 = TimezoneOffset.new(  0,    0, 'GMT')
+      o2 = TimezoneOffset.new(  0, 3600, 'BST')
 
       t1 = TimezoneTransition.new(o1, o0, -3852662325)
       t2 = TimezoneTransition.new(o2, o1,  1459040400)
@@ -59,7 +59,7 @@ module Format1
       ti = m.get
       assert_kind_of(DataSources::ConstantOffsetDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone', ti.identifier)
-      assert_equal(TimezoneOffset.new(-75, 0, :LMT), ti.constant_offset)
+      assert_equal(TimezoneOffset.new(-75, 0, 'LMT'), ti.constant_offset)
     end
 
     def test_data_frozen_identifier
@@ -122,8 +122,8 @@ module Format1
       assert_kind_of(DataSources::TransitionsDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone2', ti.identifier)
 
-      o0 = TimezoneOffset.new(3525, 0, :LMT)
-      o1 = TimezoneOffset.new(3600, 0, :CET)
+      o0 = TimezoneOffset.new(3525, 0, 'LMT')
+      o1 = TimezoneOffset.new(3600, 0, 'CET')
 
       t1 = TimezoneTransition.new(o1, o0, -3852658875)
 
@@ -185,8 +185,8 @@ module Format1
       assert_kind_of(DataSources::TransitionsDataTimezoneInfo, ti)
       assert_equal('Test/Data/Zone2', ti.identifier)
 
-      o0 = TimezoneOffset.new(-75, 0, :LMT)
-      o1 = TimezoneOffset.new(  0, 0, :GMT)
+      o0 = TimezoneOffset.new(-75, 0, 'LMT')
+      o1 = TimezoneOffset.new(  0, 0, 'GMT')
 
       t1 = TimezoneTransition.new(o1, o0, -3852662325)
 
