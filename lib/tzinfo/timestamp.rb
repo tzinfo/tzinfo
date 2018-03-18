@@ -155,8 +155,9 @@ module TZInfo
       #
       # @param value [Integer] the number of seconds since 1970-01-01 00:00:00
       #   UTC ignoring leap seconds.
-      # @param sub_second [Numeric] either a `Rational` that is greater than or
-      #   equal to 0 and less than 1, or the `Integer` 0.
+      # @param sub_second [Numeric] the fractional part of the second as either
+      #   a `Rational` that is greater than or equal to 0 and less than 1, or
+      #   the `Integer` 0.
       # @raise [ArgumentError] if `value` is not an `Integer`.
       # @raise [ArgumentError] if `sub_second` is not a `Rational`, or the
       #   `Integer` 0.
@@ -175,8 +176,9 @@ module TZInfo
       #
       # @param value [Integer] the number of seconds since 1970-01-01 00:00:00
       #   UTC ignoring leap seconds.
-      # @param sub_second [Numeric] either a `Rational` that is greater than or
-      #   equal to 0 and less than 1, or the `Integer` 0.
+      # @param sub_second [Numeric] the fractional part of the second as either
+      #   a `Rational` that is greater than or equal to 0 and less than 1, or
+      #   the `Integer` 0.
       # @param utc_offset [Object] either `nil` for a {Timestamp} without a
       #   specified offset, an offset from UTC specified as an `Integer` number
       #   of seconds or the `Symbol` `:utc`).
@@ -284,8 +286,9 @@ module TZInfo
     #
     # @param value [Integer] the number of seconds since 1970-01-01 00:00:00 UTC
     #   ignoring leap seconds.
-    # @param sub_second [Numeric] either a `Rational` that is greater than or
-    #   equal to 0 and less than 1, or the `Integer` 0.
+    # @param sub_second [Numeric] the fractional part of the second as either a
+    #   `Rational` that is greater than or equal to 0 and less than 1, or
+    #   the `Integer` 0.
     # @param utc_offset [Object] either `nil` for a {Timestamp} without a
     #   specified offset, an offset from UTC specified as an `Integer` number of
     #   seconds or the `Symbol` `:utc`).
@@ -506,8 +509,9 @@ module TZInfo
     #
     # @param value [Integer] the number of seconds since 1970-01-01 00:00:00 UTC
     #   ignoring leap seconds.
-    # @param sub_second [Numeric] either a `Rational` that is greater than or
-    #   equal to 0 and less than 1, or the `Integer` 0.
+    # @param sub_second [Numeric] the fractional part of the second as either a
+    #   `Rational` that is greater than or equal to 0 and less than 1, or the
+    #   `Integer` 0.
     # @param utc_offset [Object] either `nil` for a {Timestamp} without a
     #   specified offset, an offset from UTC specified as an `Integer` number of
     #   seconds or the `Symbol` `:utc`).
