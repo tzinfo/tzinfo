@@ -877,7 +877,7 @@ module TZInfo
         c.timezone 'Pacific/Honolulu', 15341, 720, -18943, 120, 'Hawaii'
       end
       country 'UY', 'Uruguay' do |c|
-        c.timezone 'America/Montevideo', -2093, 60, -3371, 60
+        c.timezone 'America/Montevideo', -41891, 1200, -4497, 80
       end
       country 'UZ', 'Uzbekistan' do |c|
         c.timezone 'Asia/Samarkand', 119, 3, 334, 5, 'Uzbekistan (west)'

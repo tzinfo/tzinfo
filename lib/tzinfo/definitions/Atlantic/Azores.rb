@@ -17,7 +17,7 @@ module TZInfo
           tz.offset :o7, 0, 0, :WET
           
           tz.transition 1884, 1, :o1, 2601910697, 1080
-          tz.transition 1912, 1, :o2, 26129547859, 10800
+          tz.transition 1912, 1, :o2, 29032831, 12
           tz.transition 1916, 6, :o3, 58104781, 24
           tz.transition 1916, 11, :o2, 29054023, 12
           tz.transition 1917, 3, :o3, 58110925, 24
