@@ -129,6 +129,13 @@ Version 1.0.0 - 2-Jun-2013
   use other TimezonePeriod instance methods instead (issue #7655).
 
 
+Version 0.3.54 (tzdata v2018d) - 25-Mar-2018
+--------------------------------------------
+
+* Updated to tzdata version 2018d
+  (https://mm.icann.org/pipermail/tz-announce/2018-March/000049.html).
+
+
 Version 0.3.53 (tzdata v2017b) - 23-Mar-2017
 --------------------------------------------
 
