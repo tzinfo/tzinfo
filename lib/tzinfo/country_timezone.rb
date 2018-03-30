@@ -4,16 +4,20 @@ module TZInfo
     # @return [String] the identifier of the {Timezone} being described.
     attr_reader :identifier
 
-    # The latitude of this time zone in degrees. Note that depending on the data
-    # source, the position given by {#latitude} and {#longitude} may not be
-    # within the country.
+    # The latitude of this time zone in degrees. Positive numbers are degrees
+    # north and negative numbers are degrees south.
+    #
+    # Note that depending on the data source, the position given by {#latitude}
+    # and {#longitude} may not be within the country.
     #
     # @return [Rational] the latitude in degrees.
     attr_reader :latitude
 
-    # The longitude of this time zone in degrees. Note that depending on the
-    # data source, the position given by {#latitude} and {#longitude} may not be
-    # within the country.
+    # The longitude of this time zone in degrees. Positive numbers are degrees
+    # east and negative numbers are degrees west.
+    #
+    # Note that depending on the data source, the position given by {#latitude}
+    # and {#longitude} may not be within the country.
     #
     # @return [Rational] the longitude in degrees.
     attr_reader :longitude

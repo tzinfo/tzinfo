@@ -189,8 +189,8 @@ module TZInfo
         result
       end
 
-      # Creates a {Timestamp} for a given `Time`, optionally ignoring the
-      # offset.
+      # Creates a {Timestamp} that represents a given `Time`, optionally
+      # ignoring the offset.
       #
       # @param time [Time] a `Time`.
       # @param ignore_offset [Boolean] whether to ignore the offset of `time`.
@@ -213,8 +213,8 @@ module TZInfo
         new!(value, sub_second, utc_offset)
       end
 
-      # Creates a {Timestamp} for a given `DateTime`, optionally ignoring the
-      # offset.
+      # Creates a {Timestamp} that represents a given `DateTime`, optionally
+      # ignoring the offset.
       #
       # @param datetime [DateTime] a `DateTime`.
       # @param ignore_offset [Boolean] whether to ignore the offset of
@@ -236,10 +236,10 @@ module TZInfo
         new!(value, sub_second, utc_offset)
       end
 
-      # Returns a {Timestamp} for another {Timestamp}, optionally ignoring the
-      # offset. If the result would be identical to `value`, the same instance
-      # is returned. If the passed in value is an instance of a subclass of
-      # {Timestamp}, then a new {Timestamp} will always be returned.
+      # Returns a {Timestamp} that represents another {Timestamp}, optionally
+      # ignoring the offset. If the result would be identical to `value`, the
+      # same instance is returned. If the passed in value is an instance of a
+      # subclass of {Timestamp}, then a new {Timestamp} will always be returned.
       #
       # @param timestamp [Timestamp] a {Timestamp}.
       # @param ignore_offset [Boolean] whether to ignore the offset of
@@ -382,9 +382,9 @@ module TZInfo
 
     # Converts this {Timestamp} to a `DateTime`.
     #
-    # @return [DateTime] a DateTime representation of this {Timestamp}. If the UTC
-    #   offset of this {Timestamp} is not specified, a UTC `DateTime` will be
-    #   returned.
+    # @return [DateTime] a DateTime representation of this {Timestamp}. If the
+    #   UTC offset of this {Timestamp} is not specified, a UTC `DateTime` will
+    #   be returned.
     def to_datetime
       new_datetime
     end

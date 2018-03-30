@@ -424,7 +424,7 @@ module TZInfo
     # _Warning:_ There are local times that have no equivalent UTC times (for
     # example, during the transition from standard time to daylight savings
     # time). There are also local times that have more than one UTC equivalent
-    # (for example in the transition from daylight savings time to standard
+    # (for example, during the transition from daylight savings time to standard
     # time).
     #
     # In the first case (no equivalent UTC time), a {PeriodNotFound} exception
@@ -574,7 +574,7 @@ module TZInfo
     # _Warning:_ There are local times that have no equivalent UTC times (for
     # example, during the transition from standard time to daylight savings
     # time). There are also local times that have more than one UTC equivalent
-    # (for example in the transition from daylight savings time to standard
+    # (for example, during the transition from daylight savings time to standard
     # time).
     #
     # In the first case (no equivalent UTC time), a {PeriodNotFound} exception
@@ -650,8 +650,8 @@ module TZInfo
     # _Warning:_ There are time values that are not valid as local times in a
     # time zone (for example, during the transition from standard time to
     # daylight savings time). There are also time values that are ambiguous,
-    # occuring more than once with different offsets to UTC (for example in the
-    # transition from daylight savings time to standard time).
+    # occuring more than once with different offsets to UTC (for example, during
+    # the transition from daylight savings time to standard time).
     #
     # In the first case (an invalid local time), a {PeriodNotFound} exception
     # will be raised.
@@ -738,8 +738,8 @@ module TZInfo
     # _Warning:_ There are time values that are not valid as local times in a
     # time zone (for example, during the transition from standard time to
     # daylight savings time). There are also time values that are ambiguous,
-    # occuring more than once with different offsets to UTC (for example in the
-    # transition from daylight savings time to standard time).
+    # occuring more than once with different offsets to UTC (for example, during
+    # the transition from daylight savings time to standard time).
     #
     # In the first case (an invalid local time), a {PeriodNotFound} exception
     # will be raised.
@@ -826,8 +826,8 @@ module TZInfo
     # _Warning:_ There are time values that are not valid as local times in a
     # time zone (for example, during the transition from standard time to
     # daylight savings time). There are also time values that are ambiguous,
-    # occuring more than once with different offsets to UTC (for example in the
-    # transition from daylight savings time to standard time).
+    # occuring more than once with different offsets to UTC (for example, during
+    # the transition from daylight savings time to standard time).
     #
     # In the first case (an invalid local time), a {PeriodNotFound} exception
     # will be raised.
