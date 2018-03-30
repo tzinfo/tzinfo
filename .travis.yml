@@ -3,7 +3,7 @@ dist: trusty
 sudo: false
 before_install:
   - gem update --system
-  - gem update bundler
+  - gem install bundler
 before_script:
   - bundle update
 cache: bundler
