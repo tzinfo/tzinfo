@@ -3,8 +3,8 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'lib', 'tzinfo', 've
 Gem::Specification.new do |s|
   s.name = 'tzinfo'
   s.version = TZInfo::VERSION
-  s.summary = 'Daylight savings aware timezone library'
-  s.description = 'TZInfo provides daylight savings aware transformations between times in different time zones.'
+  s.summary = 'Time Zone Library'
+  s.description = 'TZInfo provides access to time zone data and allows times to be converted using time zone rules.'
   s.author = 'Philip Ross'
   s.email = 'phil.ross@gmail.com'
   s.homepage = 'https://tzinfo.github.io'
