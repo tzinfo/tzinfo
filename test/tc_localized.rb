@@ -35,15 +35,15 @@ class TCLocalized < Minitest::Test
   end
 
   def test_strftime
-    strftime_test('%H:%M:%S BST', '%H:%M:%S %Z', :BST)
-    strftime_test('BST', '%Z', :BST)
-    strftime_test('%%ZBST', '%%Z%Z', :BST)
-    strftime_test('BST BST', '%Z %Z', :BST)
-    strftime_test('BST %%Z %%BST %%%%Z %%%%BST', '%Z %%Z %%%Z %%%%Z %%%%%Z', :BST)
+    strftime_test('%H:%M:%S BST', '%H:%M:%S %Z', 'BST')
+    strftime_test('BST', '%Z', 'BST')
+    strftime_test('%%ZBST', '%%Z%Z', 'BST')
+    strftime_test('BST BST', '%Z %Z', 'BST')
+    strftime_test('BST %%Z %%BST %%%%Z %%%%BST', '%Z %%Z %%%Z %%%%Z %%%%%Z', 'BST')
   end
 
   def test_strftime_handles_percent_in_abbreviation
-    strftime_test('%%H:%%M:%%S', '%Z', :'%H:%M:%S')
+    strftime_test('%%H:%%M:%%S', '%Z', '%H:%M:%S')
   end
 
   def test_strftime_nil_period
