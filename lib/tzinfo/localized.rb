@@ -21,7 +21,7 @@ module TZInfo
       raise ArgumentError, 'format must be specified' unless format
 
       if_period do |p|
-        abbreviation = p.abbreviation.to_s.gsub(/%/, '%%')
+        abbreviation = p.abbreviation.gsub(/%/, '%%')
 
         format = format.gsub(/%(%*)Z/) do
           if $1.length.odd?

@@ -75,7 +75,7 @@ module TZInfo
     def to_a
       if_period(super) do |p,a|
         a[8] = p.dst?
-        a[9] = p.abbreviation.to_s
+        a[9] = p.abbreviation
         a
       end
     end
@@ -99,7 +99,7 @@ module TZInfo
     #   no such period.
     def zone
       p = period
-      p ? p.abbreviation.to_s : super
+      p ? p.abbreviation : super
     end
 
     # An overridden version of `Time#to_datetime` that, if there is an
