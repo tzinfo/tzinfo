@@ -89,11 +89,12 @@ tz.to_local(Time.utc(2018, 2, 1, 12, 30, 0))
 # => 2018-02-01 07:30:00 -0500
 tz.to_local(Time.utc(2018, 7, 1, 12, 30, 0))
 # => 2018-07-01 08:30:00 -0400
-tz.to_local(Time.new(2018, 7, 1, 13, 30, 0, 3600))
+tz.to_local(Time.new(2018, 7, 1, 13, 30, 0, '+01:00'))
 # => 2018-07-01 08:30:00 -0400
 ```
 
-Local times for the time zone can be constructed with `local_time`:
+Local times with the appropriate offset for the time zone can be constructed
+with `local_time`:
 
 ```ruby
 tz.local_time(2018, 2, 1, 7, 30, 0)
@@ -112,13 +113,14 @@ tz.local_time(2018, 7, 1, 8, 30, 0).utc
 # => 2018-07-01 12:30:00 UTC
 ```
 
-The `local_to_utc` method can also be used to convert a time to UTC, treating
-it as if it were a local time of the time zone and ignoring the offset:
+The `local_to_utc` method can also be used to convert a time object to UTC. The
+offset of the time is ignored - it is treated as if it were a local time for the
+time zone:
 
 ```ruby
 tz.local_to_utc(Time.utc(2018, 2, 1, 7, 30, 0))
 # => 2018-02-01 12:30:00 UTC
-tz.local_to_utc(Time.new(2018, 2, 1, 7, 30, 0, 3600))
+tz.local_to_utc(Time.new(2018, 2, 1, 7, 30, 0, '+01:00'))
 # => 2018-02-01 12:30:00 UTC
 ```
 
@@ -147,7 +149,7 @@ tz.to_local(Time.utc(2018, 7, 1, 12, 30, 0)).strftime('%Y-%m-%d %H:%M:%S %z %Z')
 ```
 
 The `period_for` method can be used to obtain information about the observed
-time zone information at a particular time as `TZInfo::TimezonePeriod` object:
+time zone information at a particular time as a `TZInfo::TimezonePeriod` object:
 
 ```ruby
 period = tz.period_for(Time.utc(2018, 7, 1, 12, 30, 0))
@@ -216,7 +218,7 @@ tz.to_local(TZInfo::Timestamp.create(2018, 7, 1, 12, 30, 0, 0, :utc))
 
 In addition to `local_time`, which returns `Time` instances, the
 `local_datetime` and `local_timestamp` methods can be used to construct local
-`DateTime` and `TZInfo::Timestamp` instances:
+`DateTime` and `TZInfo::Timestamp` instances with the appropriate offset:
 
 ```ruby
 tz.local_time(2018, 2, 1, 7, 30, 0)
@@ -230,10 +232,11 @@ tz.local_timestamp(2018, 2, 1, 7, 30, 0)
 The `local_to_utc`, `local_time`, `local_datetime` and `local_timestamp` methods
 may raise a `TZInfo::PeriodNotFound` or a `TZInfo::AmbiguousTime` exception.
 `TZInfo::PeriodNotFound` signals that there is no equivalent UTC time (for
-example, during the transition from standard time to daylight savings time).
-`TZInfo::AmbiguousTime` signals that there is more than one equivalent UTC time
-(for example, during the transition from daylight savings time to standard
-time):
+example, during the transition from standard time to daylight savings time when
+the clocks are moved forward and an hour is skipped). `TZInfo::AmbiguousTime`
+signals that there is more than one equivalent UTC time (for example, during the
+transition from daylight savings time to standard time where the clocks are
+moved back and an hour is repeated):
 
 ```ruby
 tz.local_time(2018, 3, 11, 2, 30, 0, 0)
@@ -276,8 +279,9 @@ tz.local_time(2018, 11, 4, 1, 30, 0, 0)
 # => 2018-11-04 01:30:00 -0500
 ```
 
-TZInfo also provides information about ISO 3166-1 countries and their associated
-time zones via the `TZInfo::Country` class.
+TZInfo also provides information about
+[ISO 3166-1](https://www.iso.org/iso-3166-country-codes.html) countries and
+their associated time zones via the `TZInfo::Country` class.
 
 A list of valid ISO 3166-1 (alpha-2) country codes can be obtained by calling
 `TZInfo::Country.all_codes`:
@@ -293,6 +297,8 @@ obtained with `TZInfo::Country.get`:
 ```ruby
 c = TZInfo::Country.get('US')
 # => #<TZInfo::Country: US>
+c.name
+# => "United States"
 ```
 
 The `zone_identifiers` method returns a list of the time zone identifiers used
@@ -319,12 +325,19 @@ country. A `TZInfo::Timezone` instance can be obtained from a
 `TZInfo::CountryTimezone` using the `timezone` method:
 
 ```ruby
-c.zone_info.first.timezone.to_local(Time.utc(2018, 2, 1, 12, 30, 0))
+zi.timezone.to_local(Time.utc(2018, 2, 1, 12, 30, 0))
 # => 2018-02-01 07:30:00 -0500
 ```
 
 For further detail, please refer to the API documentation for the
 `TZInfo::Timezone` and `TZInfo::Country` classes.
+
+
+Compatibility
+-------------
+
+TZInfo v2.0.0 requires a minimum of Ruby MRI 1.9.3, JRuby 1.7 (in 1.9 mode or
+later) or Rubinius 3.
 
 
 Thread-Safety
