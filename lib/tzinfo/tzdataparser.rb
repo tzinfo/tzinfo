@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2005-2017 Philip Ross
+# Copyright (c) 2005-2018 Philip Ross
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -227,7 +227,7 @@ module TZInfo
       def get_rules(ref)
         if ref == '-'
           @no_rules
-        elsif ref =~ /^[0-9]+:[0-9]+$/
+        elsif ref =~ /^-?[0-9]+:[0-9]+$/
           TZDataFixedOffsetRules.new(TZDataParser.parse_offset(ref))
         else
           rule_set = @rule_sets[ref]
