@@ -14,10 +14,10 @@ module TZInfo
             timezone 'America/Argentina/Buenos_Aires' do |tz|
               tz.offset :o0, -14028, 0, :LMT
               tz.offset :o1, -15408, 0, :CMT
-              tz.offset :o2, -14400, 0, :ART
-              tz.offset :o3, -14400, 3600, :ARST
-              tz.offset :o4, -10800, 0, :ART
-              tz.offset :o5, -10800, 3600, :ARST
+              tz.offset :o2, -14400, 0, :'-04'
+              tz.offset :o3, -14400, 3600, :'-03'
+              tz.offset :o4, -10800, 0, :'-03'
+              tz.offset :o5, -10800, 3600, :'-02'
               
               tz.transition 1894, 10, :o1, -2372097972, 17374555169, 7200
               tz.transition 1920, 5, :o2, -1567453392, 1453467407, 600

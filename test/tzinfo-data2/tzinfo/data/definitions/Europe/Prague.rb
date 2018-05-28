@@ -16,6 +16,7 @@ module TZInfo
             tz.offset :o1, 3464, 0, 'PMT'
             tz.offset :o2, 3600, 0, 'CET'
             tz.offset :o3, 3600, 3600, 'CEST'
+            tz.offset :o4, 3600, -3600, 'GMT'
 
             tz.transition :o1, -3786829064
             tz.transition :o2, -2469401864
@@ -30,11 +31,13 @@ module TZInfo
             tz.transition :o3, -844556400
             tz.transition :o2, -828226800
             tz.transition :o3, -812502000
-            tz.transition :o2, -798073200
-            tz.transition :o3, -780534000
-            tz.transition :o2, -761180400
+            tz.transition :o2, -796777200
+            tz.transition :o3, -781052400
+            tz.transition :o2, -765327600
             tz.transition :o3, -746578800
             tz.transition :o2, -733359600
+            tz.transition :o4, -728517600
+            tz.transition :o2, -721260000
             tz.transition :o3, -716425200
             tz.transition :o2, -701910000
             tz.transition :o3, -684975600
@@ -213,6 +216,14 @@ module TZInfo
             tz.transition :o2, 2960758800
             tz.transition :o3, 2974064400
             tz.transition :o2, 2992208400
+            tz.transition :o3, 3005514000
+            tz.transition :o2, 3023658000
+            tz.transition :o3, 3036963600
+            tz.transition :o2, 3055712400
+            tz.transition :o3, 3068413200
+            tz.transition :o2, 3087162000
+            tz.transition :o3, 3099862800
+            tz.transition :o2, 3118611600
           end
         end
       end
