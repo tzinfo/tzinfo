@@ -125,7 +125,7 @@
 
 ## Version 1.2.5 - 4-Feb-2018
 
-* Support recursively (deep) freezing Country and Timezone instances. #80.
+* Support recursively (deep) freezing `Country` and `Timezone` instances. #80.
 * Allow negative daylight savings time offsets to be derived when reading from
   zoneinfo files. The utc_offset and std_offset are now derived correctly for
   Europe/Dublin in the 2018a and 2018b releases of the Time Zone Database.
@@ -139,28 +139,29 @@
 
 ## Version 1.2.3 - 25-Mar-2017
 
-* Reduce the number of String objects allocated when loading zoneinfo files.
+* Reduce the number of `String` objects allocated when loading zoneinfo files.
   #54.
-* Make Timezone#friendly_identifier compatible with frozen string literals.
-* Improve the algorithm for deriving the utc_offset from zoneinfo files. This
+* Make `Timezone#friendly_identifier` compatible with frozen string literals.
+* Improve the algorithm for deriving the `utc_offset` from zoneinfo files. This
   now correctly handles Pacific/Apia switching from one side of the
   International Date Line to the other whilst observing daylight savings time.
   #66.
-* Fix an UnknownTimezone exception when calling transitions_up_to or
-  offsets_up_to on a TimezoneProxy instance obtained from Timezone.get_proxy.
+* Fix an `UnknownTimezone` exception when calling transitions_up_to or
+  offsets_up_to on a `TimezoneProxy` instance obtained from
+  `Timezone.get_proxy`.
 * Allow the Factory zone to be obtained from the Zoneinfo data source.
 * Ignore the /usr/share/zoneinfo/timeconfig symlink included in Slackware
   distributions. #64.
-* Fix Timezone#strftime handling of %Z expansion when %Z is prefixed with more
-  than one percent. #31.
-* Support expansion of %z, %:z, %::z and %:::z to the UTC offset of the time
-  zone in Timezone#strftime. #31 and #67.
+* Fix `Timezone#strftime` handling of `%Z` expansion when `%Z` is prefixed with
+  more than one percent. #31.
+* Support expansion of `%z`, `%:z`, `%::z` and `%:::z` to the UTC offset of the
+  time zone in `Timezone#strftime`. #31 and #67.
 
 
 ## Version 1.2.2 - 8-Aug-2014
 
-* Fix an error with duplicates being returned by Timezone#all_country_zones
-  and Timezone#all_country_zone_identifiers when used with tzinfo-data
+* Fix an error with duplicates being returned by `Timezone#all_country_zones`
+  and `Timezone#all_country_zone_identifiers` when used with tzinfo-data
   v1.2014.6 or later.
 * Use the zone1970.tab file for country timezone data if it is found in the
   zoneinfo directory (and fallback to zone.tab if not). zone1970.tab was added
@@ -181,30 +182,31 @@
 * Raise the minimum supported Ruby version to 1.8.7.
 * Support loading system zoneinfo data on FreeBSD, OpenBSD and Solaris.
   Resolves #15.
-* Add canonical_identifier and canonical_zone methods to Timezone. Resolves #16.
-* Add a link to a DataSourceNotFound help page in the TZInfo::DataSourceNotFound
-  exception message.
+* Add `canonical_identifier` and `canonical_zone` methods to `Timezone`.
+  Resolves #16.
+* Add a link to a `DataSourceNotFound` help page in the
+  `TZInfo::DataSourceNotFound` exception message.
 * Load iso3166.tab and zone.tab files as UTF-8.
-* Fix Timezone#local_to_utc returning local Time instances on systems using UTC
-  as the local time zone. Resolves #13.
-* Fix == methods raising an exception when passed an instance of a different
-  class by making <=> return nil if passed a non-comparable argument.
-* Eliminate "require 'rational'" warnings. Resolves #10.
+* Fix `Timezone#local_to_utc` returning local Time instances on systems using
+  UTC as the local time zone. Resolves #13.
+* Fix `==` methods raising an exception when passed an instance of a different
+  class by making `<=>` return `nil` if passed a non-comparable argument.
+* Eliminate `require 'rational'` warnings. Resolves #10.
 * Eliminate "assigned but unused variable - info" warnings. Resolves #11.
 * Switch to minitest v5 for unit tests. Resolves #18.
 
 
 ## Version 1.1.0 - 25-Sep-2013
 
-* TZInfo is now thread safe. ThreadSafe::Cache is now used instead of Hash
-  to cache Timezone and Country instances returned by Timezone.get and
-  Country.get. The tzinfo gem now depends on thread_safe ~> 0.1.
-* Added a transitions_up_to method to Timezone that returns a list of the times
-  where the UTC offset of the timezone changes.
-* Added an offsets_up_to method to Timezone that returns the set of offsets
+* TZInfo is now thread safe. `ThreadSafe::Cache` is now used instead of `Hash`
+  to cache `Timezone` and `Country` instances returned by `Timezone.get` and
+  `Country.get`. The tzinfo gem now depends on thread_safe ~> 0.1.
+* Added a `transitions_up_to` method to `Timezone` that returns a list of the
+  times where the UTC offset of the timezone changes.
+* Added an `offsets_up_to` method to `Timezone` that returns the set of offsets
   that have been observed in a defined timezone.
-* Fixed a "can't modify frozen String" error when loading a Timezone from a
-  zoneinfo file using an identifier String that is both tainted and frozen.
+* Fixed a "can't modify frozen String" error when loading a `Timezone` from a
+  zoneinfo file using an identifier `String` that is both tainted and frozen.
   Resolves #3.
 * Support TZif3 format zoneinfo files (now produced by zic from tzcode version
   2013e onwards).
@@ -236,13 +238,13 @@
 * Don't add the tzinfo lib directory to the search path when requiring 'tzinfo'.
   The tzinfo lib directory must now be in the search path before 'tzinfo' is
   required.
-* Add utc_start_time, utc_end_time, local_start_time and local_end_time instance
-  methods to TimezonePeriod. These return an identical value as the existing
-  utc_start, utc_end, local_start and local_end methods, but return Time
-  instances instead of DateTime.
-* Make the start_transition, end_transition and offset properties of
-  TimezonePeriod protected. To access properties of the period, callers should
-  use other TimezonePeriod instance methods instead (issue #7655).
+* Add `utc_start_time`, `utc_end_time`, `local_start_time` and `local_end_time`
+  instance methods to `TimezonePeriod`. These return an identical value as the
+  existing `utc_start`, `utc_end`, `local_start` and `local_end` methods, but
+  return `Time` instances instead of `DateTime`.
+* Make the `start_transition`, `end_transition` and `offset` properties of
+  `TimezonePeriod` protected. To access properties of the period, callers should
+  use other `TimezonePeriod` instance methods instead (issue #7655).
 
 
 ## Version 0.3.54 (tzdata v2018d) - 25-Mar-2018
@@ -359,10 +361,10 @@
 
 * Updated to tzdata version 2013a
   (https://mm.icann.org/pipermail/tz-announce/2013-March/000009.html).
-* Fix TimezoneTransitionInfo#eql? incorrectly returning false when running on
+* Fix `TimezoneTransitionInfo#eql?` incorrectly returning false when running on
   Ruby 2.0.
-* Change eql? and == implementations to test the class of the passed in object
-  instead of checking individual properties with 'respond_to?'.
+* Change `eql?` and `==` implementations to test the class of the passed in
+  object instead of checking individual properties with `respond_to?`.
 
 
 ## Version 0.3.35 (tzdata v2012i) - 4-Nov-2012
@@ -405,8 +407,8 @@
 
 * Updated to tzdata version 2011h
   (https://mm.icann.org/pipermail/tz/2011-June/008576.html).
-* Allow the default value of the local_to_utc and period_for_local dst
-  parameter to be specified globally with a Timezone.default_dst attribute.
+* Allow the default value of the `local_to_utc` and `period_for_local` `dst`
+  parameter to be specified globally with a `Timezone.default_dst` attribute.
   Thanks to Kurt Werle for the suggestion and patch.
 
 
@@ -459,14 +461,14 @@
 * Change invalid timezone check to exclude characters not used in timezone
   identifiers and avoid 'character class has duplicated range' warnings with
   Ruby 1.9.2.
-* Ruby 1.9.2 has deprecated "require 'rational'", but older versions of
+* Ruby 1.9.2 has deprecated `require 'rational'`, but older versions of
   Ruby need rational to be required. Require rational only when the Rational
   module has not already been loaded.
 * Remove circular requires (now a warning in Ruby 1.9.2). Instead of using
-  requires in each file for dependencies, tzinfo.rb now requires all tzinfo
+  requires in each file for dependencies, `tzinfo.rb` now requires all tzinfo
   files. If you were previously requiring files within the tzinfo directory
-  (e.g. require 'tzinfo/timezone'), then you will now have to
-  require 'tzinfo' instead.
+  (e.g. `require 'tzinfo/timezone'`), then you will now have to
+  `require 'tzinfo'` instead.
 
 
 ## Version 0.3.20 (tzdata v2010i) - 19-Apr-2010
@@ -522,7 +524,7 @@
 * Updated to tzdata version 2009f
   (https://mm.icann.org/pipermail/tz/2009-April/015544.html).
 * Untaint the timezone module filename after validation to allow use
-  with $SAFE == 1 (e.g. under mod_ruby). Thanks to Dmitry Borodaenko for
+  with `$SAFE == 1` (e.g. under mod_ruby). Thanks to Dmitry Borodaenko for
   the suggestion. Closes #25349.
 
 
@@ -536,8 +538,8 @@
 
 * Updated to tzdata version 2008g
   (https://mm.icann.org/pipermail/tz/2008-October/015139.html).
-* Support Ruby 1.9.0-5. Rational.new! has now been removed in Ruby 1.9.
-  Only use Rational.new! if it is available (it is preferable in Ruby 1.8
+* Support Ruby 1.9.0-5. `Rational.new!` has now been removed in Ruby 1.9.
+  Only use `Rational.new!` if it is available (it is preferable in Ruby 1.8
   for performance reasons). Thanks to Jeremy Kemper and Pratik Naik for
   reporting this. Closes #22312.
 * Apply a patch from Pratik Naik to replace assert calls that have been
@@ -555,8 +557,9 @@
 * Updated to tzdata version 2008c
   (https://mm.icann.org/pipermail/tz/2008-May/014956.html).
 * Support loading timezone data in the latest trunk versions of Ruby 1.9.
-  Rational.new! is now private, so call it using Rational.send :new! instead.
-  Thanks to Jeremy Kemper and Pratik Naik for spotting this. Closes #19184.
+  `Rational.new!` is now private, so call it using `Rational.send :new!`
+  instead. Thanks to Jeremy Kemper and Pratik Naik for spotting this. Closes
+  #19184.
 * Prevent warnings from being output when running Ruby with the -v or -w
   command line options. Thanks to Paul McMahon for the patch. Closes #19719.
 
@@ -565,9 +568,9 @@
 
 * Updated to tzdata version 2008b
   (https://mm.icann.org/pipermail/tz/2008-March/014910.html).
-* Support loading timezone data in Ruby 1.9.0. Use DateTime.new! if it is
-  available instead of DateTime.new0 when constructing transition times.
-  DateTime.new! was added in Ruby 1.8.6. DateTime.new0 was removed in
+* Support loading timezone data in Ruby 1.9.0. Use `DateTime.new!` if it is
+  available instead of `DateTime.new0` when constructing transition times.
+  `DateTime.new!` was added in Ruby 1.8.6. `DateTime.new0` was removed in
   Ruby 1.9.0. Thanks to Joshua Peek for reporting this. Closes #17606.
 * Modify some of the equality test cases to cope with the differences
   between Ruby 1.8.6 and Ruby 1.9.0.
@@ -624,33 +627,35 @@
 
 * New timezone data format. Timezone data now occupies less space on disk and
   takes less memory once loaded. #4142, #4144.
-* Timezone data is defined in modules rather than classes. Timezone instances
-  returned by Timezone.get are no longer instances of data classes, but are
-  instead instances of new DataTimezone and LinkedTimezone classes.
-* Timezone instances can now be used with Marshal.dump and Marshal.load. #4240.
-* Added a Timezone.get_proxy method that returns a TimezoneProxy object for a
-  given identifier.
+* Timezone data is defined in modules rather than classes. `Timezone` instances
+  returned by `Timezone.get` are no longer instances of data classes, but are
+  instead instances of new `DataTimezone` and `LinkedTimezone` classes.
+* `Timezone` instances can now be used with `Marshal.dump` and `Marshal.load`.
+  #4240.
+* Added a `Timezone.get_proxy` method that returns a `TimezoneProxy` object for
+  a given identifier.
 * Country index data is now defined in a single module that is independent
-  of the Country class implementation.
-* Country instances can now be used with Marshal.dump and Marshal.load. #4240.
-* Country has a new zone_info method that returns CountryTimezone objects
+  of the `Country` class implementation.
+* `Country` instances can now be used with `Marshal.dump` and `Marshal.load`.
+  #4240.
+* `Country` has a new `zone_info` method that returns `CountryTimezone` objects
   containing additional information (latitude, longitude and a description)
-  relating to each Timezone. #4140.
-* Timezones within a Country are now returned in an order that makes
+  relating to each `Timezone`. #4140.
+* Timezones within a `Country` are now returned in an order that makes
   geographic sense.
 * The zdumptest utility now checks local to utc conversions in addition to
   utc to local conversions.
-* eql? method defined on Country and Timezone that is equivalent to ==.
-* The == method of Timezone no longer raises an exception when passed an object
-  with no identifier method.
-* The == method of Country no longer raises an exception when passed an object
-  with no code method.
-* hash method defined on Country that returns the hash of the code.
-* hash method defined on Timezone that returns the hash of the identifier.
+* `eql?` method defined on `Country` and `Timezone` that is equivalent to `==`.
+* The `==` method of `Timezone` no longer raises an exception when passed an
+  object with no identifier method.
+* The `==` method of `Country` no longer raises an exception when passed an
+  object with no code method.
+* `hash` method defined on `Country` that returns the hash of the code.
+* `hash` method defined on `Timezone` that returns the hash of the identifier.
 * Miscellaneous API documentation corrections and improvements.
 * Timezone definition and indexes are now excluded from rdoc (the contents were
-  previously ignored with #:nodoc: anyway).
-* Removed no longer needed #:nodoc: directives from timezone data files (which
+  previously ignored with `#:nodoc:` anyway).
+* Removed no longer needed `#:nodoc:` directives from timezone data files (which
   are now excluded from the rdoc build).
 * Installation of the gem now causes rdoc API documentation to be generated.
   #4905.
@@ -658,15 +663,15 @@
   UTC and standard offsets separately rather than just the total offset to UTC.
   Fixes an incorrect abbreviation issue with Europe/London, Europe/Dublin and
   Pacific/Auckland.
-* Eliminated unnecessary .nil? calls to give a minor performance gain.
-* Timezone.all and Timezone.all_identifiers now return all the
+* Eliminated unnecessary `.nil?` calls to give a minor performance gain.
+* `Timezone.all` and `Timezone.all_identifiers` now return all the
   Timezones/identifiers rather than just those associated with countries. #4146.
-* Added all_data_zones, all_data_zone_identifiers, all_linked_zones and
-  all_linked_zone_identifiers class methods to Timezone.
-* Added a strftime method to Timezone that converts a time in UTC to local
-  time and then returns it formatted. %Z is replaced with the Timezone
+* Added `all_data_zones`, `all_data_zone_identifiers`, `all_linked_zones` and
+  `all_linked_zone_identifiers` class methods to `Timezone`.
+* Added a `strftime` method to Timezone that converts a time in UTC to local
+  time and then returns it formatted. `%Z` is replaced with the Timezone
   abbreviation for the given time (for example, EST or EDT). #4143.
-* Fix escaping of quotes in TZDataParser. This affected country names and
+* Fix escaping of quotes in `TZDataParser`. This affected country names and
   descriptions of timezones within countries.
 
 
@@ -686,42 +691,42 @@
 
 ## Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
 
-* Fix a performance issue caused in 0.2.0 with Timezone.local_to_utc.
-  Conversions performed on TimeOrDateTime instances passed to <=> are now
+* Fix a performance issue caused in 0.2.0 with `Timezone.local_to_utc`.
+  Conversions performed on `TimeOrDateTime` instances passed to `<=>` are now
   cached as originally intended. Thanks to Michael Smedberg for spotting this.
-* Fix a performance issue with the local_to_utc period search algorithm
+* Fix a performance issue with the `local_to_utc` period search algorithm
   originally implemented in 0.1.0. The condition that was supposed to cause
   the search to terminate when enough periods had been found was only being
   evaluated in a small subset of cases. Thanks to Michael Smedberg and
   Jamis Buck for reporting this.
-* Added abbreviation as an alias for TimezonePeriod.zone_identifier.
+* Added abbreviation as an alias for `TimezonePeriod.zone_identifier`.
 * Updated to tzdata version 2006d
   (https://mm.icann.org/pipermail/tz/2006-April/013517.html).
-* Ignore any offset in DateTimes passed in (as is already done for Times).
-  All of the following now refer to the same UTC time (15:40 on 17 April 2006).
-  Previously, the DateTime in the second line would have been interpreted
-  as 20:40.
+* Ignore any offset in `DateTime` instancess passed in (as is already done for
+  `Time` instances). All of the following now refer to the same UTC time (15:40 on 17 April 2006). Previously, the `DateTime` in the second line would have been interpreted as 20:40.
 
+    ```ruby
     tz.utc_to_local(DateTime.new(2006, 4, 17, 15, 40, 0))
     tz.utc_to_local(DateTime.new(2006, 4, 17, 15, 40, 0).new_offset(Rational(5, 24)))
     tz.utc_to_local(Time.utc(2006, 4, 17, 15, 40, 0))
     tz.utc_to_local(Time.local(2006, 4, 17, 15, 40, 0))
+    ```
 
 
 ## Version 0.2.0 (tzdata v2006c) - 3-Apr-2006
 
-* Use timestamps rather than DateTime objects in zone files for times between
-  1970 and 2037 (the range of Time).
-* Don't convert passed in Time objects to DateTime in most cases (provides
+* Use timestamps rather than `DateTime` objects in zone files for times between
+  1970 and 2037 (the range of `Time`).
+* Don't convert passed in `Time` objects to `DateTime` in most cases (provides
   a substantial performance improvement).
 * Allow integer timestamps (time in seconds since 1970-1-1) to be used as well
-  as Time and DateTime objects in all public methods that take times as
+  as `Time` and `DateTime` objects in all public methods that take times as
   parameters.
 * Tool to compare TZInfo conversions with output from zdump.
-* TZDataParser zone generation algorithm rewritten. Now based on the zic code.
+* `TZDataParser` zone generation algorithm rewritten. Now based on the zic code.
   TZInfo is now 100% compatible with zic/zdump output.
 * Riyadh Solar Time zones now included again (generation time has been reduced
-  with TZDataParser changes).
+  with `TZDataParser` changes).
 * Use binary mode when writing zone and country files to get Unix (\n) new
   lines.
 * Omit unnecessary quotes in zone identifier symbols.
@@ -737,13 +742,13 @@
   to use tzinfo gem when unpacked to vendor directory in rails.
 * Updated to tzdata version 2006a
   (https://mm.icann.org/pipermail/tz/2006-January/013311.html).
-* build_tz_classes rake task now handles running svn add and svn delete as new
+* `build_tz_classes` rake task now handles running svn add and svn delete as new
   timezones and countries are added and old ones are removed.
-* Return a better error when attempting to use a Timezone instance that was
-  constructed with Timezone.new(nil). This will occur when using Rails'
-  composed_of. When the timezone identifier in the database is null, attempting
-  to use the Timezone will now result in an UnknownTimezone exception rather
-  than a NameError.
+* Return a better error when attempting to use a `Timezone` instance that was
+  constructed with `Timezone.new(nil)`. This will occur when using Rails'
+  `composed_of`. When the timezone identifier in the database is null,
+  attempting to use the `Timezone` will now result in an `UnknownTimezone`
+  exception rather than a `NameError`.
 
 
 ## Version 0.1.1 (tzdata v2005q) - 18-Dec-2005
@@ -755,35 +760,35 @@
 
 ## Version 0.1.0 (tzdata v2005n) - 27-Nov-2005
 
-* period_for_local and local_to_utc now allow resolution of ambiguous
+* `period_for_local` and `local_to_utc` now allow resolution of ambiguous
   times (e.g. when switching from daylight savings to standard time).
   The behaviour of these methods when faced with an ambiguous local time
   has now changed. If you are using these methods you should check
   the documentation. Thanks to Cliff Matthews for suggesting this change.
-* Added require 'date' to timezone.rb (date isn't loaded by default in all
+* Added `require 'date'` to `timezone.rb` (date isn't loaded by default in all
   environments).
 * Use rake to build packages and documentation.
 * License file is now included in gem distribution.
 * Dates in definitions stored as Astronomical Julian Day numbers rather than
   as civil dates (improves performance creating DateTime instances).
-* Added options to TZDataParser to allow generation of specific zones and
+* Added options to `TZDataParser` to allow generation of specific zones and
   countries.
-* Moved TimezonePeriod class to timezone_period.rb.
-* New TimezonePeriodList class to store TimezonePeriods for a timezone and
-  perform searches for periods.
-* Timezones now defined using blocks. TimezonePeriods are only instantiated
-  when they are needed. Thanks to Jamis Buck for the suggestion.
-* Add options to TZDataParser to allow exclusion of specific zones and
+* Moved `TimezonePeriod` class to `timezone_period.rb`.
+* New `TimezonePeriodList` class to store `TimezonePeriod` instances for a
+  timezone and perform searches for periods.
+* Timezones now defined using blocks. `TimezonePeriod` instances are only
+  created when they are needed. Thanks to Jamis Buck for the suggestion.
+* Add options to `TZDataParser` to allow exclusion of specific zones and
   countries.
 * Exclude the Riyadh Solar Time zones. The rules are only for 1987 to 1989 and
   take a long time to generate and process. Riyadh Solar Time is no longer
   observed.
-* The last TimezonePeriod for each Timezone is now written out with an
+* The last `TimezonePeriod` for each `Timezone` is now written out with an
   unbounded rather than arbitrary end time.
-* Construct the Rational offset in TimezonePeriod once when the TimezonePeriod
-  is constructed rather than each time it is needed.
-* Timezone and Country now keep a cache of loaded instances to avoid running
-  require which can be slow on some platforms.
+* Construct the `Rational` offset in `TimezonePeriod` once when the
+  `TimezonePeriod` is constructed rather than each time it is needed.
+* `Timezone` and `Country` now keep a cache of loaded instances to avoid running
+  `require` which can be slow on some platforms.
 * Updated to tzdata version 2005n.
 
 
@@ -792,47 +797,53 @@
 * Removed debug output accidentally included in the previous release.
 * Fixed a bug in the generation of friendly zone identifiers (was inserting
   apostrophes into UTC, GMT, etc).
-* Fixed Country <=> operator (was comparing non-existent attribute)
-* Fixed Timezone.period_for_local error when period not found.
-* Added testcases for Timezone, TimezoneProxy, TimezonePeriod, Country and
-  some selected timezones.
+* Fixed `Country` `<=>` operator (was comparing non-existent attribute)
+* Fixed `Timezone.period_for_local` error when period not found.
+* Added testcases for `Timezone`, `TimezoneProxy`, `TimezonePeriod`, `Country`
+  and some selected timezones.
 
 
 ## Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
 
-* Reduced visibility of some methods added in Timezone#setup and Country#setup.
-* Added name method to Timezone (returns the identifier).
-* Added friendly_identifier method to Timezone. Returns a more friendly version
-  of the identifier.
-* Added to_s method to Timezone. Returns the friendly identifier.
-* Added == and <=> operators to Timezone (compares identifiers).
-* Timezone now includes Comparable.
-* Added to_s method to Country.
-* Added == and <=> operators to Country (compares ISO 3166 country codes).
-* Country now includes Comparable.
-* New TimezoneProxy class that behaves the same as a Timezone but doesn't
+* Reduced visibility of some methods added in `Timezone#setup` and
+  `Country#setup`.
+* Added `name` method to `Timezone` (returns the identifier).
+* Added `friendly_identifier` method to `Timezone`. Returns a more friendly
+  version of the identifier.
+* Added `to_s` method to `Timezone`. Returns the friendly identifier.
+* Added `==` and `<=>` operators to `Timezone` (compares identifiers).
+* `Timezone` now includes `Comparable`.
+* Added `to_s` method to `Country`.
+* Added `==` and `<=>` operators to `Country` (compares ISO 3166 country codes).
+* `Country` now includes `Comparable`.
+* New `TimezoneProxy` class that behaves the same as a `Timezone` but doesn't
   actually load in its definition until it is actually required.
-* Modified Timezone and Country methods that return Timezones to return
-  TimezoneProxy instances instead. This makes these methods much quicker.
+* Modified `Timezone` and `Country` methods that return `Timezone` instances to
+  return `TimezoneProxy` instances instead. This makes these methods much
+  quicker.
 
 In Ruby on Rails, you can now show a drop-down list of all timezones using the
 Rails time_zone_select helper method:
 
-  <%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %>
+```ruby
+<%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %>
+```
 
 
 ## Version 0.0.2 (tzdata v2005m) - 13-Sep-2005
 
-* Country and Timezone data is now loaded into class rather than instance
-  variables. This makes Timezone links more efficient and saves memory if
-  creating specific Timezone and Country classes directly.
-* TimezonePeriod zone_identifier is now defined as a symbol to save memory
+* `Country` and `Timezone` data is now loaded into class rather than instance
+  variables. This makes `Timezone` links more efficient and saves memory if
+  creating specific `Timezone` and `Country` classes directly.
+* `TimezonePeriod` `zone_identifier` is now defined as a symbol to save memory
   (was previously a string).
-* TimezonePeriod zone_identifiers that were previously '' are now :Unknown.
-* Timezones and Countries can now be returned using Timezone.new(identifier)
-  and Country.new(identifier). When passed an identifier, the new method
-  calls get to return an instance of the specified timezone or country.
-* Added new class methods to Timezone to return sets of zones and identifiers.
+* `TimezonePeriod` `zone_identifier`s that were previously `''` are now
+  `:Unknown`.
+* `Timezone` and `Country` instances can now be returned using
+  `Timezone.new(identifier)` and `Country.new(identifier)`. When passed an
+  identifier, the `new` method calls `get` to return an instance of the
+  specified timezone or country.
+* Added new class methods to `Timezone` to return sets of zones and identifiers.
 
 Thanks to Scott Barron of Lunchbox Software for the suggestions in his
 article about using TZInfo with Rails
