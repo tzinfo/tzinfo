@@ -1,5 +1,128 @@
 # Changes
 
+## Version 2.0.0-pre1 - Unreleased
+
+### Added
+
+* `to_local` and `period_for` instance methods have been added to
+  `TZInfo::Timezone`. These are similar to `utc_to_local` and `period_for_utc`,
+  but take the UTC offset of the time parameter into account.
+* A `TZInfo::Timestamp` class has been added. It can be used with
+  `TZInfo::Timezone` in place of a `Time` or `DateTime`.
+* `local_time`, `local_datetime` and `local_timestamp` instance methods have
+  been added to `TZInfo::Timezone`. These methods construct local `Time`,
+  `DateTime` and `TZInfo::Timestamp` instances with the correct UTC offset and
+  abbreviation for the time zone.
+* A `TZInfo::VERSION` constant has been added, indicating the TZInfo version
+  number.
+
+### Changed
+
+* The minimum supported Ruby versions are now Ruby MRI 1.9.3, JRuby 1.7 (in 1.9
+  or later mode) and Rubinius 3.
+* Local times are now returned using the correct UTC offset (instead of using
+  UTC). #49 and #52.
+* Local times are returned as instances of `LocalTime`, `LocalDateTime` or
+  `TZInfo::LocalTimestamp`. These classes subclass `Time`, `DateTime` and
+  `TZInfo::Timestamp` respectively. They allow information about the time zone
+  to be accessed, overriding the default behaviour of the base classes where
+  appropriate (for example, returning the zone abbreviation when using the `%Z`
+  directive with `strftime`).
+* The `transitions_up_to`, `offsets_up_to` and `strftime` instance methods of
+  `TZInfo::Timezone` now take the UTC offset of passed in values into account
+  instead of ignoring it (as was previously the case).
+* Methods of `TZInfo::Timezone` that accept time arguments no longer allow
+  `Integer` timestamp values. `Time`, `DateTime` or `TZInfo::Timestamp` values
+  must be used instead.
+* The `%:::z` format directive can now only be used with
+  `TZInfo::Timezone#strftime` if it is supported by `Time#strftime` on the
+  runtime platform.
+* Using `TZInfo::Timezone.new(identifier)` and `TZInfo::Country.new(code)` to
+  obtain a specific `TZInfo::Timezone` or `TZInfo::Country` will no longer work.
+  `TZInfo::Timezone.get(identifier)` and `TZInfo::Country.get(code)` should be
+  used instead.
+* The `TZInfo::TimezonePeriod` class has been split into two subclasses:
+  `TZInfo::OffsetTimezonePeriod` and `TZInfo::TransitionsTimezonePeriod`.
+  `TZInfo::OffsetTimezonePeriod` is returned for time zones that only have a
+  single offset. `TZInfo::TransitionsTimezonePeriod` is returned for periods
+  that start or end with a transition.
+* `TZInfo::TimezoneOffset#abbreviation`, `TZInfo::TimezonePeriod#abbreviation`
+  and `TZInfo::TimezonePeriod#zone_identifier` now return frozen `String`s
+  instead of `Symbol`s.
+* The requested identifier is included in `TZInfo::InvalidTimezoneIdentifier`
+  exception messages.
+* The requested country code is included in `TZInfo::InvalidCountryCode`
+  exception messages.
+* The full range of transitions is now loaded from zoneinfo files. Zoneinfo
+  files produced with version 2014c of the `zic` tool contain an initial
+  transition `2**63` seconds before the epoch. Zoneinfo files produced with
+  version 2014d or later of `zic` contain an initial transition `2**59` seconds
+  before the epoch. These transitions would previously have been ignored, but
+  are now returned in methods such as `TZInfo::Timezone#transitions_up_to`.
+* The `TZInfo::RubyDataSource` and `TZInfo::ZoneinfoDataSource` classes have
+  been moved into a new `TZInfo::DataSources` module. Code that is setting
+  `TZInfo::ZoneinfoDataSource.search_path` or
+  `TZInfo::ZoneinfoDataSource.alternate_iso3166_tab_search_path` will need to be
+  updated accordingly.
+* The `TZInfo::InvalidZoneinfoDirectory` and `TZInfo::ZoneinfoDirectoryNotFound`
+  exception classes raised by `TZInfo::DataSources::ZoneinfoDataSource` have
+  been moved into the `TZInfo::DataSources` module.
+* Setting the data source to `:ruby` or instantiating
+  `TZInfo::DataSources::RubyDataSource` will now immediately raise a
+  `TZInfo::DataSources::TZInfoDataNotFound` exception if `require 'tzinfo/data'`
+  fails. Previously, a failure would only occur later when accessing an index or
+  loading a timezone or country.
+* The `DEFAULT_SEARCH_PATH` and `DEFAULT_ALTERNATE_ISO3166_TAB_SEARCH_PATH`
+  constants of `TZInfo::DataSources::ZoneinfoDataSource` have been made private.
+* The `TZInfo::Country.data_source`,
+  `TZInfo::DataSource.create_default_data_source`,
+  `TZInfo::DataSources::ZoneinfoDataSource.process_search_path`,
+  `TZInfo::Timezone.get_proxies` and `TZInfo::Timezone.data_source` methods have
+  been made private.
+* The performance of loading zoneinfo files and the associated indexes has been
+  improved.
+* The dependency on `thread_safe` has been replaced with `concurrent-ruby`.
+* The Info classes used to return time zone and country information from
+  `TZInfo::DataSource` implementations have been moved into the
+  `TZInfo::DataSources` module.
+* The `TZInfo::TransitionDataTimezoneInfo` class has been removed and replaced
+  with `TZInfo::DataSources::TransitionsDataTimezoneInfo` and
+  `TZInfo::DataSources::ConstantOffsetDataTimezoneInfo`.
+  `TZInfo::DataSources::TransitionsDataTimezoneInfo` is constructed with an
+  `Array` of `TZInfo::TimezoneTransitions` representing times when the offset
+  changes. `TZInfo::DataSources::ConstantOffsetDataTimezoneInfo` is constructed
+  with a `TZInfo::TimezoneOffset` instance repsenting the offset constantly
+  observed in a time zone.
+* The `TZInfo::DataSource#timezone_identifiers` method should no longer be
+  overridden in custom data source implementations. The implementation in the
+  base class now calculates a result from
+  `TZInfo::DataSource#data_timezone_identifiers` and
+  `TZInfo::DataSource#linked_timezone_identifiers`.
+
+### Removed
+
+* The `TZInfo::TimeOrDateTime` class has been removed.
+* The `valid_for_utc?`, `utc_after_start?`, `utc_before_end?`,
+  `valid_for_local?`, `local_after_start?` and `local_before_end?` instance
+  methods of `TZInfo::TimezonePeriod` have been removed. Comparisons can be
+  performed with the results of the `starts_at`, `ends_at`, `local_starts_at`
+  and `local_ends_at` methods instead.
+* The `to_local` and `to_utc` instance methods of `TZInfo::TimezonePeriod` and
+  `TZInfo::TimezoneOffset` have been removed. Conversions should be performed
+  using the `TZInfo::Timezone` class instead.
+* The `TZInfo::TimezonePeriod#utc_total_offset_rational` method has been
+  removed. Equivalent information can be obtained using the
+  `TZInfo::TimezonePeriod#utc_total_offset` method.
+* The `datetime`, `time`, `local_end`, `local_end_time`, `local_start` and
+  `local_start_time` instance methods of `TZInfo::TimezoneTransition` have been
+  removed. The `at`, `local_end_at` and `local_start_at` methods should be used
+  instead and the result (a `TZInfo::Timestamp`) converted to either a
+  `DateTime` or `Time` by calling `to_datetime` or `to_time` on the result.
+* The `us_zones` and `us_zone_identifiers` class methods of `TZInfo::Timezone`
+  have been removed. `TZInfo::Country.get('US').zones` and
+  `TZInfo::Country.get('US').zone_identifiers` should be used instead.
+
+
 ## Version 1.2.5 - 4-Feb-2018
 
 * Support recursively (deep) freezing Country and Timezone instances. #80.
