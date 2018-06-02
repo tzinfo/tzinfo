@@ -246,6 +246,8 @@ class TCTimezone < Minitest::Test
   end
 
   def test_get_tainted_not_previously_loaded
+    skip_if_has_bug_14060
+
     safe_test do
       identifier = 'Europe/Andorra'.dup.taint
       assert(identifier.tainted?)
@@ -256,6 +258,8 @@ class TCTimezone < Minitest::Test
   end
 
   def test_get_tainted_and_frozen_not_previously_loaded
+    skip_if_has_bug_14060
+
     safe_test do
       tz = Timezone.get('Europe/Amsterdam'.dup.taint.freeze)
       assert_equal('Europe/Amsterdam', tz.identifier)
