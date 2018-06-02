@@ -96,6 +96,16 @@ module Kernel
       thread.join
     end
   end
+
+  def skip_if_has_bug_14060
+    # On Ruby 2.4.4 in safe mode, require will fail with a SecurityError for
+    # any file that has not previously been loaded, regardless of whether the
+    # file name is tainted.
+    # See https://bugs.ruby-lang.org/issues/14060#note-5.
+    if RUBY_ENGINE == 'ruby' && RUBY_VERSION == '2.4.4'
+      skip('Skipping test due to Ruby 2.4.4 being affected by Bug 14060 (see https://bugs.ruby-lang.org/issues/14060#note-5)')
+    end
+  end
   
   def assert_array_same_items(expected, actual, msg = nil)
     full_message = message(msg, '') { diff(expected, actual) }
