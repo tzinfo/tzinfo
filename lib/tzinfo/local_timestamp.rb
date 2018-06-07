@@ -22,14 +22,14 @@ module TZInfo
     #   `timestamp`.
     # @return [LocalTimestamp] a {LocalTimestamp} that has the same {value
     #   value} and {sub_second sub_second} as the `timestamp` parameter, a
-    #   {utc_offset utc_offset} equal to the {TimezonePeriod#utc_total_offset
-    #   utc_total_offset} of the `period` parameter and {period period} set to
+    #   {utc_offset utc_offset} equal to the {TimezonePeriod#current_utc_offset
+    #   current_utc_offset} of the `period` parameter and {period period} set to
     #   the `period` parameter.
     # @raise [ArgumentError] if `timestamp` or `period` is `nil`.
     def self.localize(timestamp, period)
       raise ArgumentError, 'timestamp must be specified' unless timestamp
       raise ArgumentError, 'period must be specified' unless period
-      new!(timestamp.value, timestamp.sub_second, period.utc_total_offset).localize(period)
+      new!(timestamp.value, timestamp.sub_second, period.current_utc_offset).localize(period)
     end
 
     # Sets the associated {TimezonePeriod} of this {LocalTimestamp}.
@@ -39,11 +39,11 @@ module TZInfo
     # @return [LocalTimestamp] `self`.
     # @raise [ArgumentError] if `period` is `nil`.
     # @raise [ArgumentError] if {utc? self.utc?} is `true`.
-    # @raise [ArgumentError] if `period.utc_total_offset` does not equal
+    # @raise [ArgumentError] if `period.current_utc_offset` does not equal
     #   `self.utc_offset`.
     def localize(period)
       raise ArgumentError, 'period must be specified' unless period
-      raise ArgumentError, 'period.utc_total_offset does not match self.utc_offset' if utc? || utc_offset != period.utc_total_offset
+      raise ArgumentError, 'period.current_utc_offset does not match self.utc_offset' if utc? || utc_offset != period.current_utc_offset
       @period = period
       self
     end

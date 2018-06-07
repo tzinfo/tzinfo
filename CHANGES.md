@@ -49,6 +49,10 @@
 * `TZInfo::TimezoneOffset#abbreviation`, `TZInfo::TimezonePeriod#abbreviation`
   and `TZInfo::TimezonePeriod#zone_identifier` now return frozen `String`s
   instead of `Symbol`s.
+* The `utc_offset` and `utc_total_offset` attributes of `TZInfo::TimezonePeriod`
+  and `TZInfo::TimezoneOffset` have been renamed `base_utc_offset` and
+  `current_utc_offset` respectively. The former names have been retained as
+  aliases.
 * The requested identifier is included in `TZInfo::InvalidTimezoneIdentifier`
   exception messages.
 * The requested country code is included in `TZInfo::InvalidCountryCode`
@@ -112,7 +116,7 @@
   using the `TZInfo::Timezone` class instead.
 * The `TZInfo::TimezonePeriod#utc_total_offset_rational` method has been
   removed. Equivalent information can be obtained using the
-  `TZInfo::TimezonePeriod#utc_total_offset` method.
+  `TZInfo::TimezonePeriod#current_utc_offset` method.
 * The `datetime`, `time`, `local_end`, `local_end_time`, `local_start` and
   `local_start_time` instance methods of `TZInfo::TimezoneTransition` have been
   removed. The `at`, `local_end_at` and `local_start_at` methods should be used

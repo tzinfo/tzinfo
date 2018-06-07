@@ -3,47 +3,49 @@
 module TZInfo
   # Represents an offset from UTC observed by a time zone.
   class TimezoneOffset
-    # Returns the base offset from UTC in seconds. This does not include any
-    # adjustment made for daylight savings time and will typically remain
-    # constant throughout the year.
+    # Returns the base offset from UTC in seconds (`current_utc_offset -
+    # std_offset`). This does not include any adjustment made for daylight
+    # savings time and will typically remain constant throughout the year.
     #
-    # To obtain the currently observed offset from UTC, including the effect
-    # of daylight savings time, use {utc_total_offset} instead.
+    # To obtain the currently observed offset from UTC, including the effect of
+    # daylight savings time, use {current_utc_offset} instead.
     #
-    # Note that zoneinfo files only include the value of {utc_total_offset} and
-    # a DST flag. When using {DataSources::ZoneinfoDataSource}, the {utc_offset}
-    # will be derived from changes to the UTC total offset and the DST flag. As
-    # a consequence, {utc_total_offset} will always be correct, but {utc_offset}
-    # may be inaccurate.
+    # If you require accurate {base_utc_offset} values, you should install the
+    # tzinfo-data gem and set {DataSources::RubyDataSource} as the {DataSource}.
+    # This is because zoneinfo files do not include the value of
+    # {base_utc_offset}. When using {DataSources::ZoneinfoDataSource}, the
+    # {base_utc_offset} will be derived from changes to the observed UTC offset
+    # and DST status.
     #
-    # If you require {utc_offset} to be accurate, install the tzinfo-data gem
-    # and set {DataSources::RubyDataSource} as the {DataSource}.
+    # If you require {base_utc_offset} to be accurate, install the tzinfo-data
+    # gem and set {DataSources::RubyDataSource} as the {DataSource}.
     #
     # @return [Integer] The base offset from UTC in seconds.
-    attr_reader :utc_offset
+    attr_reader :base_utc_offset
+    alias utc_offset base_utc_offset
 
-    # Returns the offset from the time zone's standard time in seconds. Zero
-    # when daylight savings time is not in effect. Non-zero (usually 3600 = 1
-    # hour) if daylight savings is being observed.
+    # Returns the offset from the time zone's standard time in seconds
+    # (`current_utc_offset - base_utc_offset`). Zero when daylight savings time
+    # is not in effect. Non-zero (usually 3600 = 1 hour) if daylight savings is
+    # being observed.
     #
-    # Note that zoneinfo files only include the value of {utc_total_offset} and
-    # a DST flag. When using {DataSources::ZoneinfoDataSource}, the {std_offset}
-    # will be derived from changes to the UTC total offset and the DST flag. As
-    # a consequence, {utc_total_offset} will always be correct, but {std_offset}
-    # may be inaccurate.
-    #
-    # If you require {std_offset} to be accurate, install the tzinfo-data gem
-    # and set {DataSources::RubyDataSource} as the {DataSource}.
+    # If you require accurate {std_offset} values, you should install the
+    # tzinfo-data gem and set {DataSources::RubyDataSource} as the {DataSource}.
+    # This is because zoneinfo files do not include the value of {std_offset}.
+    # When using {DataSources::ZoneinfoDataSource}, the {std_offset} will be
+    # derived from changes to the observed UTC offset and DST status.
     #
     # @return [Integer] the offset from the time zone's standard time in
     #   seconds.
     attr_reader :std_offset
 
-    # Returns the total offset from UTC in seconds (`utc_offset + std_offset`).
-    # This includes adjustments made for daylight savings time.
+    # Returns the currently observed offset from UTC in seconds
+    # (`base_utc_offset + std_offset`). This includes adjustments made for
+    # daylight savings time.
     #
-    # @return [Integer] the total offset from UTC in seconds.
-    attr_reader :utc_total_offset
+    # @return [Integer] the currently observed offset from UTC in seconds.
+    attr_reader :current_utc_offset
+    alias utc_total_offset current_utc_offset
 
     # The abbreviation that identifies this offset. For example GMT
     # (Greenwich Mean Time) or BST (British Summer Time) for Europe/London.
@@ -57,15 +59,15 @@ module TZInfo
     #
     # The passed in `abbreviation` instance will be frozen.
     #
-    # @param utc_offset [Integer] the base offset from UTC in seconds.
+    # @param base_utc_offset [Integer] the base offset from UTC in seconds.
     # @param std_offset [Integer] the offset from standard time in seconds.
     # @param abbreviation [String] the abbreviation identifying the offset.
-    def initialize(utc_offset, std_offset, abbreviation)
-      @utc_offset = utc_offset
+    def initialize(base_utc_offset, std_offset, abbreviation)
+      @base_utc_offset = base_utc_offset
       @std_offset = std_offset
       @abbreviation = abbreviation.freeze
 
-      @utc_total_offset = @utc_offset + @std_offset
+      @current_utc_offset = @base_utc_offset + @std_offset
     end
 
     # Determines if daylight savings is in effect (i.e. if {std_offset} is
@@ -84,7 +86,7 @@ module TZInfo
     #   otherwise `false`.
     def ==(toi)
       toi.kind_of?(TimezoneOffset) &&
-        utc_offset == toi.utc_offset && std_offset == toi.std_offset && abbreviation == toi.abbreviation
+        base_utc_offset == toi.base_utc_offset && std_offset == toi.std_offset && abbreviation == toi.abbreviation
     end
 
     # Determines if this {TimezoneOffset} is equal to another instance.
@@ -100,13 +102,13 @@ module TZInfo
     # @return [Integer] a hash based on {utc_offset}, {std_offset} and
     #   {abbreviation}.
     def hash
-      [@utc_offset, @std_offset, @abbreviation].hash
+      [@base_utc_offset, @std_offset, @abbreviation].hash
     end
 
     # @return [String] the internal object state as a programmer-readable
     #   `String`.
     def inspect
-      "#<#{self.class}: @utc_offset=#{@utc_offset}, @std_offset=#{@std_offset}, @abbreviation=#{@abbreviation}>"
+      "#<#{self.class}: @base_utc_offset=#{@base_utc_offset}, @std_offset=#{@std_offset}, @abbreviation=#{@abbreviation}>"
     end
   end
 end

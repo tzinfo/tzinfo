@@ -22,11 +22,11 @@ module TZInfo
     #   for the offset of this {LocalDateTime}.
     # @return [LocalDateTime] `self`.
     # @raise [ArgumentError] if `period` is `nil`.
-    # @raise [ArgumentError] if `period.utc_total_offset` does not equal
+    # @raise [ArgumentError] if `period.current_utc_offset` does not equal
     #   `self.offset * 86400`.
     def localize(period)
       raise ArgumentError, 'period must be specified' unless period
-      raise ArgumentError, 'period.utc_total_offset does not match self.utc_offset' if offset * 86400 != period.utc_total_offset
+      raise ArgumentError, 'period.current_utc_offset does not match self.utc_offset' if offset * 86400 != period.current_utc_offset
       @period = period
       self
     end

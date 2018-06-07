@@ -39,9 +39,11 @@ class TCTimezonePeriod < Minitest::Test
     assert_match(/\bend_transition\b/, error.message)
   end
 
-  def test_utc_offset
-    p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, 'TEST'))
-    assert_equal(-14400, p.utc_offset)
+  [:base_utc_offset, :utc_offset].each do |method|
+    define_method("test_#{method}") do
+      p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, 'TEST'))
+      assert_equal(-14400, p.public_send(method))
+    end
   end
 
   def test_std_offset
@@ -59,9 +61,11 @@ class TCTimezonePeriod < Minitest::Test
     assert_equal('TEST', p.zone_identifier)
   end
 
-  def test_utc_total_offset
-    p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, 'TEST'))
-    assert_equal(-10800, p.utc_total_offset)
+  [:current_utc_offset, :utc_total_offset].each do |method|
+    define_method("test_#{method}") do
+      p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, 'TEST'))
+      assert_equal(-10800, p.public_send(method))
+    end
   end
 
   def test_dst

@@ -638,7 +638,7 @@ module TZInfo
           period_for_local(ts, dst)
         end
 
-        ts.add_and_set_utc_offset(-period.utc_total_offset, :utc)
+        ts.add_and_set_utc_offset(-period.current_utc_offset, :utc)
       end
     end
 
@@ -905,7 +905,7 @@ module TZInfo
     def local_timestamp(year, month = 1, day = 1, hour = 0, minute = 0, second = 0, sub_second = 0, dst = Timezone.default_dst, &block)
       ts = Timestamp.create(year, month, day, hour, minute, second, sub_second)
       period = period_for_local(ts, dst, &block)
-      offset = period.utc_total_offset
+      offset = period.current_utc_offset
       LocalTimestamp.new(ts.value - offset, sub_second, offset).localize(period)
     end
 

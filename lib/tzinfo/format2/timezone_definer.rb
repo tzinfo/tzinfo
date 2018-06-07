@@ -33,7 +33,7 @@ module TZInfo
       #
       # @param id [Symbol] an arbitrary value used identify the offset in
       #   subsequent calls to transition. It must be unique.
-      # @param utc_offset [Integer] the base offset from UTC of the zone in
+      # @param base_utc_offset [Integer] the base offset from UTC of the zone in
       #   seconds. This does not include daylight savings time.
       # @param std_offset [Integer] the daylight savings offset from the base
       #   offset in seconds. Typically either 0 or 3600.
@@ -41,9 +41,9 @@ module TZInfo
       #   example, EST or EDT.
       # @raise [ArgumentError] if another offset has already been defined with
       #   the given id.
-      def offset(id, utc_offset, std_offset, abbreviation)
+      def offset(id, base_utc_offset, std_offset, abbreviation)
         raise ArgumentError, 'An offset has already been defined with the given id' if @offsets.has_key?(id)
-        offset = TimezoneOffset.new(utc_offset, std_offset, abbreviation)
+        offset = TimezoneOffset.new(base_utc_offset, std_offset, abbreviation)
         @offsets[id] = offset
         @previous_offset ||= offset
       end

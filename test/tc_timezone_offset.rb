@@ -6,12 +6,14 @@ include TZInfo
 
 class TCTimezoneOffset < Minitest::Test
 
-  def test_utc_offset
-    o1 = TimezoneOffset.new(18000, 0, 'TEST')
-    o2 = TimezoneOffset.new(-3600, 3600, 'TEST2')
+  [:base_utc_offset, :utc_offset].each do |method|
+    define_method("test_#{method}") do
+      o1 = TimezoneOffset.new(18000, 0, 'TEST')
+      o2 = TimezoneOffset.new(-3600, 3600, 'TEST2')
 
-    assert_equal(18000, o1.utc_offset)
-    assert_equal(-3600, o2.utc_offset)
+      assert_equal(18000, o1.public_send(method))
+      assert_equal(-3600, o2.public_send(method))
+    end
   end
 
   def test_std_offset
@@ -22,12 +24,14 @@ class TCTimezoneOffset < Minitest::Test
     assert_equal(3600, o2.std_offset)
   end
 
-  def test_utc_total_offset
-    o1 = TimezoneOffset.new(18000, 0, 'TEST')
-    o2 = TimezoneOffset.new(-3600, 3600, 'TEST2')
+  [:current_utc_offset, :utc_total_offset].each do |method|
+    define_method("test_#{method}") do
+      o1 = TimezoneOffset.new(18000, 0, 'TEST')
+      o2 = TimezoneOffset.new(-3600, 3600, 'TEST2')
 
-    assert_equal(18000, o1.utc_total_offset)
-    assert_equal(0, o2.utc_total_offset)
+      assert_equal(18000, o1.public_send(method))
+      assert_equal(0, o2.public_send(method))
+    end
   end
 
   def test_abbreviation
@@ -94,6 +98,6 @@ class TCTimezoneOffset < Minitest::Test
 
   def test_inspect
     o = TimezoneOffset.new(18000, 0, 'TEST')
-    assert_equal('#<TZInfo::TimezoneOffset: @utc_offset=18000, @std_offset=0, @abbreviation=TEST>', o.inspect)
+    assert_equal('#<TZInfo::TimezoneOffset: @base_utc_offset=18000, @std_offset=0, @abbreviation=TEST>', o.inspect)
   end
 end

@@ -90,7 +90,7 @@ module TZInfo
           start_transition = i > 0 ? @transitions[i - 1] : nil
           end_transition = @transitions[i]
           offset = start_transition ? start_transition.offset : end_transition.previous_offset
-          utc_timestamp_value = local_timestamp_value - offset.utc_total_offset
+          utc_timestamp_value = local_timestamp_value - offset.current_utc_offset
 
           # It is not necessary to compare the sub-seconds because a timestamp
           # is in the period if is >= the start transition (sub-seconds would

@@ -22,7 +22,7 @@ module TZInfo
     # @raise [ArgumentError] if `period` is `nil`.
     def localize(period)
       raise ArgumentError, 'period must be specified' unless period
-      localtime(period.utc_total_offset)
+      localtime(period.current_utc_offset)
       @period = period
       self
     end

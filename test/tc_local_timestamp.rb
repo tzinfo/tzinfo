@@ -12,7 +12,7 @@ class TCLocalTimestamp < Minitest::Test
 
   def localized_timestamp(year, month, day, hour, minute, second, tz_offset_or_period)
     period = tz_offset_or_period.kind_of?(TimezonePeriod) ? tz_offset_or_period : OffsetTimezonePeriod.new(tz_offset_or_period)
-    new_timestamp(year, month, day, hour, minute, second, period.utc_total_offset, LocalTimestamp).localize(period)
+    new_timestamp(year, month, day, hour, minute, second, period.current_utc_offset, LocalTimestamp).localize(period)
   end
 
   def test_class_localize

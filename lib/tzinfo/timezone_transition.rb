@@ -59,7 +59,7 @@ module TZInfo
     # @return [Timestamp] the local time when this transition causes the
     #   previous observance to end.
     def local_end_at
-      Timestamp.new(@timestamp_value, 0, @previous_offset.utc_total_offset)
+      Timestamp.new(@timestamp_value, 0, @previous_offset.current_utc_offset)
     end
 
     # Returns a {Timestamp} instance representing the local time when this
@@ -73,7 +73,7 @@ module TZInfo
     # @return [Timestamp] the local time when this transition causes the next
     #   observance to start.
     def local_start_at
-      Timestamp.new(@timestamp_value, 0, @offset.utc_total_offset)
+      Timestamp.new(@timestamp_value, 0, @offset.current_utc_offset)
     end
 
     # Determines if this {TimezoneTransition} is equal to another instance.

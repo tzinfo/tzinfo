@@ -7,7 +7,7 @@ include TZInfo
 class TCLocalTime < Minitest::Test
   def localized_time(year, month, day, hour, minute, second, tz_offset_or_period)
     period = tz_offset_or_period.kind_of?(TimezonePeriod) ? tz_offset_or_period : OffsetTimezonePeriod.new(tz_offset_or_period)
-    LocalTime.new(year, month, day, hour, minute, second, period.utc_total_offset).localize(period)
+    LocalTime.new(year, month, day, hour, minute, second, period.current_utc_offset).localize(period)
   end
 
   def assert_is_time_or_extended_time_with_nil_period(value)

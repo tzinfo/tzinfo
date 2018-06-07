@@ -36,39 +36,39 @@ module TZInfo
       raise_not_implemented(:end_transition)
     end
 
-    # Returns the base offset from UTC in seconds. This does not include any
-    # adjustment made for daylight savings time and will typically remain
-    # constant throughout the year.
+    # Returns the base offset from UTC in seconds (`current_utc_offset -
+    # std_offset`). This does not include any adjustment made for daylight
+    # savings time and will typically remain constant throughout the year.
     #
-    # To obtain the currently observed offset from UTC, including the effect
-    # of daylight savings time, use {utc_total_offset} instead.
+    # To obtain the currently observed offset from UTC, including the effect of
+    # daylight savings time, use {current_utc_offset} instead.
     #
-    # Note that zoneinfo files only include the value of {utc_total_offset} and
-    # a DST flag. When using {DataSources::ZoneinfoDataSource}, the {utc_offset}
-    # will be derived from changes to the UTC total offset and the DST flag. As
-    # a consequence, {utc_total_offset} will always be correct, but {utc_offset}
-    # may be inaccurate.
+    # If you require accurate {base_utc_offset} values, you should install the
+    # tzinfo-data gem and set {DataSources::RubyDataSource} as the {DataSource}.
+    # This is because zoneinfo files do not include the value of
+    # {base_utc_offset}. When using {DataSources::ZoneinfoDataSource}, the
+    # {base_utc_offset} will be derived from changes to the observed UTC offset
+    # and DST status.
     #
-    # If you require {utc_offset} to be accurate, install the tzinfo-data gem
-    # and set {DataSources::RubyDataSource} as the {DataSource}.
+    # If you require {base_utc_offset} to be accurate, install the tzinfo-data
+    # gem and set {DataSources::RubyDataSource} as the {DataSource}.
     #
     # @return [Integer] The base offset from UTC in seconds.
-    def utc_offset
-      @offset.utc_offset
+    def base_utc_offset
+      @offset.base_utc_offset
     end
+    alias utc_offset base_utc_offset
 
-    # Returns the offset from the time zone's standard time in seconds. Zero
-    # when daylight savings time is not in effect. Non-zero (usually 3600 = 1
-    # hour) if daylight savings is being observed.
+    # Returns the offset from the time zone's standard time in seconds
+    # (`current_utc_offset - base_utc_offset`). Zero when daylight savings time
+    # is not in effect. Non-zero (usually 3600 = 1 hour) if daylight savings is
+    # being observed.
     #
-    # Note that zoneinfo files only include the value of {utc_total_offset} and
-    # a DST flag. When using {DataSources::ZoneinfoDataSource}, the {std_offset}
-    # will be derived from changes to the UTC total offset and the DST flag. As
-    # a consequence, {utc_total_offset} will always be correct, but {std_offset}
-    # may be inaccurate.
-    #
-    # If you require {std_offset} to be accurate, install the tzinfo-data gem
-    # and set {DataSources::RubyDataSource} as the {DataSource}.
+    # If you require accurate {std_offset} values, you should install the
+    # tzinfo-data gem and set {DataSources::RubyDataSource} as the {DataSource}.
+    # This is because zoneinfo files do not include the value of {std_offset}.
+    # When using {DataSources::ZoneinfoDataSource}, the {std_offset} will be
+    # derived from changes to the observed UTC offset and DST status.
     #
     # @return [Integer] the offset from the time zone's standard time in
     #   seconds.
@@ -85,13 +85,15 @@ module TZInfo
     end
     alias zone_identifier abbreviation
 
-    # Returns the total offset from UTC in seconds (`utc_offset + std_offset`).
-    # This includes adjustments made for daylight savings time.
+    # Returns the currently observed offset from UTC in seconds
+    # (`base_utc_offset + std_offset`). This includes adjustments made for
+    # daylight savings time.
     #
-    # @return [Integer] the total offset from UTC in seconds.
-    def utc_total_offset
-      @offset.utc_total_offset
+    # @return [Integer] the currently observed offset from UTC in seconds.
+    def current_utc_offset
+      @offset.current_utc_offset
     end
+    alias utc_total_offset current_utc_offset
 
     # Determines if daylight savings is in effect (i.e. if {std_offset} is
     # non-zero).

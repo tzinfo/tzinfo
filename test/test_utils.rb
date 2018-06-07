@@ -106,7 +106,7 @@ module TestUtils
     end
 
     def local_time(period, year, month, day, hour, minute, second, sub_second = 0)
-      TZInfo::LocalTime.new(year, month, day, hour, minute, second + sub_second, period.utc_total_offset).localize(period)
+      TZInfo::LocalTime.new(year, month, day, hour, minute, second + sub_second, period.current_utc_offset).localize(period)
     end
   end
 
@@ -125,7 +125,7 @@ module TestUtils
     end
 
     def local_time(period, year, month, day, hour, minute, second, sub_second = 0)
-      TZInfo::LocalDateTime.new(year, month, day, hour, minute, second + sub_second, period.utc_total_offset.to_r / 86400).localize(period)
+      TZInfo::LocalDateTime.new(year, month, day, hour, minute, second + sub_second, period.current_utc_offset.to_r / 86400).localize(period)
     end
   end
 
@@ -143,7 +143,7 @@ module TestUtils
     end
 
     def local_time(period, year, month, day, hour, minute, second, sub_second = 0)
-      LocalTimestamp.create(year, month, day, hour, minute, second, sub_second, period.utc_total_offset).localize(period)
+      LocalTimestamp.create(year, month, day, hour, minute, second, sub_second, period.current_utc_offset).localize(period)
     end
   end
 
