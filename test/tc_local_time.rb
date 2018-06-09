@@ -10,7 +10,7 @@ class TCLocalTime < Minitest::Test
     LocalTime.new(year, month, day, hour, minute, second, period.current_utc_offset).localize(period)
   end
 
-  def assert_is_time_or_extended_time_with_nil_period(value)
+  def assert_is_time_or_local_time_with_nil_period(value)
     if value.kind_of?(LocalTime)
       assert_nil(value.period)
     else
@@ -91,14 +91,14 @@ class TCLocalTime < Minitest::Test
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
 
     # MRI returns Time. JRuby returns LocalTime.
-    assert_is_time_or_extended_time_with_nil_period(lt + 1)
+    assert_is_time_or_local_time_with_nil_period(lt + 1)
   end
 
   def test_subtract
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
 
     # MRI returns Time. JRuby returns LocalTime.
-    assert_is_time_or_extended_time_with_nil_period(lt - 1)
+    assert_is_time_or_local_time_with_nil_period(lt - 1)
   end
 
   def test_compare
@@ -159,21 +159,21 @@ class TCLocalTime < Minitest::Test
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
 
     # MRI returns LocalTime. JRuby returns Time.
-    assert_is_time_or_extended_time_with_nil_period(lt.getgm)
+    assert_is_time_or_local_time_with_nil_period(lt.getgm)
   end
 
   def test_getlocal
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
 
     # MRI returns LocalTime. JRuby returns Time.
-    assert_is_time_or_extended_time_with_nil_period(lt.getlocal(0))
+    assert_is_time_or_local_time_with_nil_period(lt.getlocal(0))
   end
 
   def test_getutc
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
 
     # MRI returns LocalTime. JRuby returns Time.
-    assert_is_time_or_extended_time_with_nil_period(lt.getutc)
+    assert_is_time_or_local_time_with_nil_period(lt.getutc)
   end
 
   def test_gmtime
@@ -259,7 +259,7 @@ class TCLocalTime < Minitest::Test
 
     # succ is obsolete and outputs a warning.
     without_warnings do
-      assert_is_time_or_extended_time_with_nil_period(lt.succ)
+      assert_is_time_or_local_time_with_nil_period(lt.succ)
     end
   end
 
