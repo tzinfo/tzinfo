@@ -120,7 +120,7 @@
 * The `datetime`, `time`, `local_end`, `local_end_time`, `local_start` and
   `local_start_time` instance methods of `TZInfo::TimezoneTransition` have been
   removed. The `at`, `local_end_at` and `local_start_at` methods should be used
-  instead and the result (a `TZInfo::Timestamp`) converted to either a
+  instead and the result (a `TZInfo::LocalTimestamp`) converted to either a
   `DateTime` or `Time` by calling `to_datetime` or `to_time` on the result.
 * The `us_zones` and `us_zone_identifiers` class methods of `TZInfo::Timezone`
   have been removed. `TZInfo::Country.get('US').zones` and

@@ -48,32 +48,32 @@ module TZInfo
       Timestamp.utc(@timestamp_value)
     end
 
-    # Returns a {Timestamp} instance representing the local time when this
+    # Returns a {LocalTimestamp} instance representing the local time when this
     # transition causes the previous observance to end (calculated from {at}
     # using {previous_offset}).
     #
     # To obtain the result as a `Time` or `DateTime`, call either
-    # {Timestamp#to_time to_time} or {Timestamp#to_datetime to_datetime} on the
-    # {Timestamp} instance that is returned.
+    # {LocalTimestamp#to_time to_time} or {LocalTimestamp#to_datetime
+    # to_datetime} on the {LocalTimestamp} instance that is returned.
     #
-    # @return [Timestamp] the local time when this transition causes the
+    # @return [LocalTimestamp] the local time when this transition causes the
     #   previous observance to end.
     def local_end_at
-      Timestamp.new(@timestamp_value, 0, @previous_offset.current_utc_offset)
+      LocalTimestamp.new(@timestamp_value, 0, @previous_offset.current_utc_offset).localize(@previous_offset)
     end
 
-    # Returns a {Timestamp} instance representing the local time when this
+    # Returns a {LocalTimestamp} instance representing the local time when this
     # transition causes the next observance to start (calculated from {at} using
     # {offset}).
     #
     # To obtain the result as a `Time` or `DateTime`, call either
-    # {Timestamp#to_time to_time} or {Timestamp#to_datetime to_datetime} on the
-    # {Timestamp} instance that is returned.
+    # {LocalTimestamp#to_time to_time} or {LocalTimestamp#to_datetime
+    # to_datetime} on the {LocalTimestamp} instance that is returned.
     #
-    # @return [Timestamp] the local time when this transition causes the next
-    #   observance to start.
+    # @return [LocalTimestamp] the local time when this transition causes the
+    #   next observance to start.
     def local_start_at
-      Timestamp.new(@timestamp_value, 0, @offset.current_utc_offset)
+      LocalTimestamp.new(@timestamp_value, 0, @offset.current_utc_offset).localize(@offset)
     end
 
     # Determines if this {TimezoneTransition} is equal to another instance.
