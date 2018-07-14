@@ -10,82 +10,81 @@ class TCLocalTimestamp < Minitest::Test
     klass.new(time.to_i, time.subsec, offset)
   end
 
-  def localized_timestamp(year, month, day, hour, minute, second, tz_offset_or_period)
-    period = tz_offset_or_period.kind_of?(TimezonePeriod) ? tz_offset_or_period : OffsetTimezonePeriod.new(tz_offset_or_period)
-    new_timestamp(year, month, day, hour, minute, second, period.current_utc_offset, LocalTimestamp).localize(period)
+  def localized_timestamp(year, month, day, hour, minute, second, tz_offset)
+    new_timestamp(year, month, day, hour, minute, second, tz_offset.current_utc_offset, LocalTimestamp).localize(tz_offset)
   end
 
   def test_class_localize
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(7200, 0, 'TEST'))
+    o = TimezoneOffset.new(7200, 0, 'TEST')
     [new_timestamp(2017,1,15,23,0,0,nil), new_timestamp(2017,1,15,23,0,0,:utc), new_timestamp(2017,1,15,23,0,0,0), new_timestamp(2017,1,15,23,0,Rational(11,10),0), new_timestamp(2017,1,15,23,0,Rational(11,10),3600)].each do |t|
-      lt = LocalTimestamp.localize(t, p)
+      lt = LocalTimestamp.localize(t, o)
       assert_kind_of(LocalTimestamp, lt)
       assert_equal(t.value, lt.value)
       assert_equal(t.sub_second, lt.sub_second)
       assert_equal(7200, lt.utc_offset)
-      assert_same(p, lt.period)
+      assert_same(o, lt.offset_info)
     end
   end
 
   def test_class_localize_timestamp_nil
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(7200, 0, 'TEST'))
-    error = assert_raises(ArgumentError) { LocalTimestamp.localize(nil, p) }
+    o = TimezoneOffset.new(7200, 0, 'TEST')
+    error = assert_raises(ArgumentError) { LocalTimestamp.localize(nil, o) }
     assert_match(/\btimestamp\b/, error.message)
   end
 
-  def test_class_localize_period_nil
+  def test_class_localize_offset_info_nil
     t = new_timestamp(2017,1,15,23,0,0,0)
     error = assert_raises(ArgumentError) { LocalTimestamp.localize(t, nil) }
-    assert_match(/\bperiod\b/, error.message)
+    assert_match(/\boffset_info\b/, error.message)
   end
 
   def test_localize
     [new_timestamp(2017,1,15,23,0,Rational(11,10),0,LocalTimestamp), new_timestamp(2017,1,15,23,0,Rational(11,10),3600,LocalTimestamp)].each do |lt|
-      p1 = OffsetTimezonePeriod.new(TimezoneOffset.new(lt.utc_offset, 0, 'TEST'))
-      p2 = OffsetTimezonePeriod.new(TimezoneOffset.new(0, lt.utc_offset, 'TEST'))
-      assert_nil(lt.period)
-      assert_same(lt, lt.localize(p1))
-      assert_same(p1, lt.period)
-      assert_same(lt, lt.localize(p2))
-      assert_same(p2, lt.period)
+      o1 = TimezoneOffset.new(lt.utc_offset, 0, 'TEST')
+      o2 = TimezoneOffset.new(0, lt.utc_offset, 'TEST')
+      assert_nil(lt.offset_info)
+      assert_same(lt, lt.localize(o1))
+      assert_same(o1, lt.offset_info)
+      assert_same(lt, lt.localize(o2))
+      assert_same(o2, lt.offset_info)
     end
   end
 
   def test_localize_utc
     lt = LocalTimestamp.create(2017,1,15,23,0,1,Rational(1,10),:utc)
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, 'TEST'))
-    error = assert_raises(ArgumentError) { lt.localize(p) }
+    o = TimezoneOffset.new(0, 0, 'TEST')
+    error = assert_raises(ArgumentError) { lt.localize(o) }
     assert_match(/\bmatch\b/, error.message)
   end
 
   def test_localize_unspecified_offset
     lt = LocalTimestamp.create(2017,1,15,23,0,1,Rational(1,10))
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, 'TEST'))
-    error = assert_raises(ArgumentError) { lt.localize(p) }
+    o = TimezoneOffset.new(0, 0, 'TEST')
+    error = assert_raises(ArgumentError) { lt.localize(o) }
     assert_match(/\bmatch\b/, error.message)
   end
 
   def test_localize_offset_mismatch
     lt1 = new_timestamp(2017,1,15,23,0,Rational(11,10),0,LocalTimestamp)
-    p1a = OffsetTimezonePeriod.new(TimezoneOffset.new(3600,    0, 'TEST'))
-    p1b = OffsetTimezonePeriod.new(TimezoneOffset.new(   0, 3600, 'TEST'))
+    o1a = TimezoneOffset.new(3600,    0, 'TEST')
+    o1b = TimezoneOffset.new(   0, 3600, 'TEST')
 
     lt2 = new_timestamp(2017,1,15,23,0,Rational(11,10),3600,LocalTimestamp)
-    p2a = OffsetTimezonePeriod.new(TimezoneOffset.new(3600, 3600, 'TEST'))
-    p2b = OffsetTimezonePeriod.new(TimezoneOffset.new(   0,    0, 'TEST'))
+    o2a = TimezoneOffset.new(3600, 3600, 'TEST')
+    o2b = TimezoneOffset.new(   0,    0, 'TEST')
 
-    [[lt1, [p1a, p1b]], [lt2, [p2a, p2b]]].each do |lt, periods|
-      periods.each do |p|
-        error = assert_raises(ArgumentError) { lt.localize(p) }
+    [[lt1, [o1a, o1b]], [lt2, [o2a, o2b]]].each do |lt, offsets|
+      offsets.each do |o|
+        error = assert_raises(ArgumentError) { lt.localize(o) }
         assert_match(/\bmatch\b/, error.message)
       end
     end
   end
 
-  def test_localize_nil_period
+  def test_localize_nil_offset_info
     lt = new_timestamp(2017,1,15,23,0,Rational(11,10),0,LocalTimestamp)
     error = assert_raises(ArgumentError) { lt.localize(nil) }
-    assert_match(/\bperiod\b/, error.message)
+    assert_match(/\boffset_info\b/, error.message)
   end
 
   def test_strftime
@@ -102,10 +101,10 @@ class TCLocalTimestamp < Minitest::Test
     assert_equal('%H:%M:%S', lt.strftime('%Z'))
   end
 
-  def test_strftime_nil_period
+  def test_strftime_nil_offset_info
     t = new_timestamp(2017,1,15,23,0,1,3600)
     lt = new_timestamp(2017,1,15,23,0,1,3600,LocalTimestamp)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
 
     # JRuby 1.7 returns '+01:00' instead of empty string.
     assert_equal(t.strftime('%Z'), lt.strftime('%Z'))
@@ -133,34 +132,34 @@ class TCLocalTimestamp < Minitest::Test
   end
 
   def test_to_time
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 3600, 'TEST'))
-    lt = localized_timestamp(2017,1,15,23,0,Rational(11,10),p)
+    o = TimezoneOffset.new(0, 3600, 'TEST')
+    lt = localized_timestamp(2017,1,15,23,0,Rational(11,10),o)
     t = lt.to_time
     assert_kind_of(LocalTime, t)
-    assert_same(p, t.period)
+    assert_same(o, t.offset_info)
     assert_equal_with_offset(Time.new(2017,1,15,23,0,Rational(11,10),3600), t)
   end
 
-  def test_to_time_nil_period
+  def test_to_time_nil_offset_info
     lt = new_timestamp(2017,1,15,23,0,Rational(11,10),3600,LocalTimestamp)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
     t = lt.to_time
     assert_equal(Time, t.class)
     assert_equal_with_offset(Time.new(2017,1,15,23,0,Rational(11,10),3600), t)
   end
 
   def test_to_datetime
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 3600, 'TEST'))
-    lt = localized_timestamp(2017,1,15,23,0,Rational(11,10),p)
+    o = TimezoneOffset.new(0, 3600, 'TEST')
+    lt = localized_timestamp(2017,1,15,23,0,Rational(11,10),o)
     dt = lt.to_datetime
     assert_kind_of(LocalDateTime, dt)
-    assert_same(p, dt.period)
+    assert_same(o, dt.offset_info)
     assert_equal_with_offset(DateTime.new(2017,1,15,23,0,Rational(11,10),Rational(1,24)), dt)
   end
 
-  def test_to_datetime_nil_period
+  def test_to_datetime_nil_offset_info
     lt = new_timestamp(2017,1,15,23,0,Rational(11,10),3600,LocalTimestamp)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
     dt = lt.to_datetime
     assert_equal(DateTime, dt.class)
     assert_equal_with_offset(DateTime.new(2017,1,15,23,0,Rational(11,10),Rational(1,24)), dt)
@@ -195,7 +194,7 @@ class TCLocalTimestamp < Minitest::Test
   def test_class_create_returns_local_timestamp
     lt = LocalTimestamp.create(2016, 10, 13, 1, 0, 0, 0, 3600)
     assert_kind_of(LocalTimestamp, lt)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
     assert_equal(1476316800, lt.value)
     assert_equal(0, lt.sub_second)
     assert_equal(3600, lt.utc_offset)
@@ -204,7 +203,7 @@ class TCLocalTimestamp < Minitest::Test
   def test_class_new_returns_local_timestamp
     lt = LocalTimestamp.new(1476316800, 0, 3600)
     assert_kind_of(LocalTimestamp, lt)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
     assert_equal(1476316800, lt.value)
     assert_equal(0, lt.sub_second)
     assert_equal(3600, lt.utc_offset)

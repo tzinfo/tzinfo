@@ -685,21 +685,21 @@ class TCTimezone < Minitest::Test
       TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
     time_types_test(:unspecified_offset) do |h|
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,0,:utc)).utc_to_local(h.time(2005,6,18,16,24,23,0)))
     end
 
     time_types_test(:utc) do |h|
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,0,:utc)).utc_to_local(h.time(2005,6,18,16,24,23,0,:utc)))
     end
 
     time_types_test do |h|
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,0,:utc)).utc_to_local(h.time(2005,6,18,16,24,23,0,0)))
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,0,:utc)).utc_to_local(h.time(2005,6,18,16,24,23,0,10800)))
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,Rational(567,1000)),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,17,24,23,Rational(567,1000)),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,Rational(567,1000),:utc)).utc_to_local(h.time(2005,6,18,16,24,23,Rational(567,1000),0)))
     end
   end
@@ -714,7 +714,7 @@ class TCTimezone < Minitest::Test
 
     time_types_test(:utc) do |h|
       # test that the result doesn't have utc? set to true
-      assert_equal_with_offset_and_period(h.local_time(period,2016,12,31,0,0,0,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o1,2016,12,31,0,0,0,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2016,12,31,0,0,0,0,:utc)).utc_to_local(h.time(2016,12,31,0,0,0,0,:utc)))
     end
   end
@@ -728,9 +728,9 @@ class TCTimezone < Minitest::Test
       TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
     time_types_test do |h|
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,0,:utc)).utc_to_local(
-          h.local_time(OffsetTimezonePeriod.new(TimezoneOffset.new(10800, 0, 'TEST')),2005,6,18,16,24,23,0)))
+          h.local_time(TimezoneOffset.new(10800, 0, 'TEST'),2005,6,18,16,24,23,0)))
     end
   end
 
@@ -757,16 +757,16 @@ class TCTimezone < Minitest::Test
       TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
     time_types_test(:utc) do |h|
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,0,:utc)).to_local(h.time(2005,6,18,16,24,23,0,:utc)))
     end
 
     time_types_test do |h|
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,17,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,0,h.expected_zero_offset)).to_local(h.time(2005,6,18,16,24,23,0,0)))
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,14,24,23,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,14,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,0,10800)).to_local(h.time(2005,6,18,16,24,23,0,10800)))
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,17,24,23,Rational(567,1000)),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,17,24,23,Rational(567,1000)),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,Rational(567,1000),h.expected_zero_offset)).to_local(h.time(2005,6,18,16,24,23,Rational(567,1000),0)))
     end
   end
@@ -781,7 +781,7 @@ class TCTimezone < Minitest::Test
 
     time_types_test(:utc) do |h|
       # test that the result doesn't have utc? set to true
-      assert_equal_with_offset_and_period(h.local_time(period,2016,12,31,0,0,0,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o1,2016,12,31,0,0,0,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2016,12,31,0,0,0,0,:utc)).to_local(h.time(2016,12,31,0,0,0,0,:utc)))
     end
   end
@@ -795,9 +795,9 @@ class TCTimezone < Minitest::Test
       TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
     time_types_test do |h|
-      assert_equal_with_offset_and_period(h.local_time(period,2005,6,18,14,24,23,0),
+      assert_equal_with_offset_and_offset_info(h.local_time(o2,2005,6,18,14,24,23,0),
         TestTimezone.new('Europe/London', period, [], Timestamp.create(2005,6,18,16,24,23,0,10800)).to_local(
-          h.local_time(OffsetTimezonePeriod.new(TimezoneOffset.new(10800, 0, 'TEST')),2005,6,18,16,24,23,0)))
+          h.local_time(TimezoneOffset.new(10800, 0, 'TEST'),2005,6,18,16,24,23,0)))
     end
   end
 
@@ -863,7 +863,7 @@ class TCTimezone < Minitest::Test
     time_types_test do |h|
       assert_equal_with_offset_and_class(h.time(2005,6,18,15,24,23,0,:utc),
         TestTimezone.new('Europe/London', nil, [period], Timestamp.create(2005,6,18,16,24,23,0)).local_to_utc(
-          h.local_time(OffsetTimezonePeriod.new(TimezoneOffset.new(10800,0,'TEST')),2005,6,18,16,24,23,0)))
+          h.local_time(TimezoneOffset.new(10800,0,'TEST'),2005,6,18,16,24,23,0)))
     end
   end
 
@@ -1104,9 +1104,9 @@ class TCTimezone < Minitest::Test
         TimezoneTransition.new(o2, o1, Time.utc(2005,3,27,2,0,0).to_i),
         TimezoneTransition.new(o1, o2, Time.utc(2005,10,30,1,0,0).to_i))
 
-      assert_equal_with_offset_and_class(h.local_time(period,2005,6,18,16,24,23,0),
+      assert_equal_with_offset_and_class(h.local_time(o2,2005,6,18,16,24,23,0),
         TestTimezone.new('Europe/London', nil, [period], Timestamp.create(2005,6,18,16,24,23,0)).public_send(method,2005,6,18,16,24,23,0))
-      assert_equal_with_offset_and_class(h.local_time(period,2005,6,18,16,24,23,Rational(567,1000)),
+      assert_equal_with_offset_and_class(h.local_time(o2,2005,6,18,16,24,23,Rational(567,1000)),
         TestTimezone.new('Europe/London', nil, [period], Timestamp.create(2005,6,18,16,24,23,Rational(567,1000))).public_send(method,2005,6,18,16,24,23,Rational(567,1000)))
     end
 
@@ -1151,11 +1151,11 @@ class TCTimezone < Minitest::Test
 
       tz = TestTimezone.new('America/New_York', nil, [p1, p2], ts)
 
-      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0))
-      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true))
-      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false))
+      assert_equal_with_offset_and_class(h.local_time(o2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0))
+      assert_equal_with_offset_and_class(h.local_time(o2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true))
+      assert_equal_with_offset_and_class(h.local_time(o1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false))
       assert_raises_ambiguous_time(ts) { tz.public_send(method,2004,10,31,1,30,0,0,nil) }
-      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0) {|periods| raise BlockCalled, 'should not be called' })
+      assert_equal_with_offset_and_class(h.local_time(o2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0) {|periods| raise BlockCalled, 'should not be called' })
     end
 
     define_method("test_#{method}_default_dst_set_false") do
@@ -1175,11 +1175,11 @@ class TCTimezone < Minitest::Test
 
       tz = TestTimezone.new('America/New_York', nil, [p1, p2], ts)
 
-      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0))
-      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false))
-      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true))
+      assert_equal_with_offset_and_class(h.local_time(o1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0))
+      assert_equal_with_offset_and_class(h.local_time(o1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false))
+      assert_equal_with_offset_and_class(h.local_time(o2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true))
       assert_raises_ambiguous_time(ts) { tz.public_send(method,2004,10,31,1,30,0,0,nil) }
-      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0) {|periods| raise BlockCalled, 'should not be called' })
+      assert_equal_with_offset_and_class(h.local_time(o1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0) {|periods| raise BlockCalled, 'should not be called' })
     end
 
     define_method("test_#{method}_default_dst_flag_resolved") do
@@ -1195,10 +1195,10 @@ class TCTimezone < Minitest::Test
 
       tz = TestTimezone.new('America/New_York', nil, [p1, p2], Timestamp.create(2004,10,31,1,30,0))
 
-      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true))
-      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false))
-      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true) {|periods| raise BlockCalled, 'should not be called' })
-      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false) {|periods| raise BlockCalled, 'should not be called' })
+      assert_equal_with_offset_and_class(h.local_time(o2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true))
+      assert_equal_with_offset_and_class(h.local_time(o1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false))
+      assert_equal_with_offset_and_class(h.local_time(o2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,true) {|periods| raise BlockCalled, 'should not be called' })
+      assert_equal_with_offset_and_class(h.local_time(o1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0,0,false) {|periods| raise BlockCalled, 'should not be called' })
     end
 
     define_method("test_#{method}_default_dst_block_called") do
@@ -1223,10 +1223,10 @@ class TCTimezone < Minitest::Test
         end
       end
 
-      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| periods.first })
-      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| periods.last })
-      assert_equal_with_offset_and_class(h.local_time(p1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| [periods.first] })
-      assert_equal_with_offset_and_class(h.local_time(p2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| [periods.last] })
+      assert_equal_with_offset_and_class(h.local_time(o2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| periods.first })
+      assert_equal_with_offset_and_class(h.local_time(o1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| periods.last })
+      assert_equal_with_offset_and_class(h.local_time(o2,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| [periods.first] })
+      assert_equal_with_offset_and_class(h.local_time(o1,2004,10,31,1,30,0,0), tz.public_send(method,2004,10,31,1,30,0) {|periods| [periods.last] })
     end
 
     define_method("test_#{method}_default_dst_cannot_resolve") do
@@ -1262,10 +1262,10 @@ class TCTimezone < Minitest::Test
         end
       end
 
-      assert_equal_with_offset_and_class(h.local_time(p1,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| periods.first})
-      assert_equal_with_offset_and_class(h.local_time(p2,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| periods.last})
-      assert_equal_with_offset_and_class(h.local_time(p1,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| [periods.first]})
-      assert_equal_with_offset_and_class(h.local_time(p2,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| [periods.last]})
+      assert_equal_with_offset_and_class(h.local_time(o1,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| periods.first})
+      assert_equal_with_offset_and_class(h.local_time(o2,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| periods.last})
+      assert_equal_with_offset_and_class(h.local_time(o1,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| [periods.first]})
+      assert_equal_with_offset_and_class(h.local_time(o2,1915,8,4,23,40,0,0), tz.public_send(method,1915,8,4,23,40,0) {|periods| [periods.last]})
     end
 
     define_method("test_#{method}_block_ambiguous") do
@@ -1291,11 +1291,12 @@ class TCTimezone < Minitest::Test
     end
 
     define_method("test_#{method}_invalid_days_for_specific_month") do
-      p = OffsetTimezonePeriod.new(TimezoneOffset.new(18000, 0, 'TEST'))
+      o = TimezoneOffset.new(18000, 0, 'TEST')
+      p = OffsetTimezonePeriod.new(o)
 
       [[2018,2,29],[2018,11,31]].each do |time_args|
         tz = TestTimezone.new('Test', nil, [p], Timestamp.create(*time_args))
-        assert_equal_with_offset_and_class(h.local_time(p,time_args[0],time_args[1]+1,1,0,0,0,0), tz.public_send(method,*time_args))
+        assert_equal_with_offset_and_class(h.local_time(o,time_args[0],time_args[1]+1,1,0,0,0,0), tz.public_send(method,*time_args))
       end
     end
 
@@ -1584,7 +1585,7 @@ class TCTimezone < Minitest::Test
     tz = TestTimezone.new('Europe/London', period, [], Timestamp.for(now))
 
     Time.stub(:now, now) do
-      assert_equal_with_offset_and_period(LocalTime.new(2005,6,18,17,24,23,3600).localize(period), tz.now)
+      assert_equal_with_offset_and_offset_info(LocalTime.new(2005,6,18,17,24,23,3600).localize(o2), tz.now)
     end
   end
 
@@ -1621,7 +1622,7 @@ class TCTimezone < Minitest::Test
       Time.stub(:now, now) do
         current = tz.public_send(method)
         assert_equal(2, current.length)
-        assert_equal_with_offset_and_period(LocalTime.new(2005,6,18,17,24,23,3600).localize(period), current.first)
+        assert_equal_with_offset_and_offset_info(LocalTime.new(2005,6,18,17,24,23,3600).localize(o2), current.first)
         assert_same(period, current.last)
       end
     end

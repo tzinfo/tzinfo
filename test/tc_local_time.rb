@@ -5,14 +5,13 @@ require_relative 'test_utils'
 include TZInfo
 
 class TCLocalTime < Minitest::Test
-  def localized_time(year, month, day, hour, minute, second, tz_offset_or_period)
-    period = tz_offset_or_period.kind_of?(TimezonePeriod) ? tz_offset_or_period : OffsetTimezonePeriod.new(tz_offset_or_period)
-    LocalTime.new(year, month, day, hour, minute, second, period.current_utc_offset).localize(period)
+  def localized_time(year, month, day, hour, minute, second, tz_offset)
+    LocalTime.new(year, month, day, hour, minute, second, tz_offset.current_utc_offset).localize(tz_offset)
   end
 
-  def assert_is_time_or_local_time_with_nil_period(value)
+  def assert_is_time_or_local_time_with_nil_offset_info(value)
     if value.kind_of?(LocalTime)
-      assert_nil(value.period)
+      assert_nil(value.offset_info)
     else
       assert_equal(Time, value.class)
     end
@@ -20,41 +19,41 @@ class TCLocalTime < Minitest::Test
 
   def test_localize_unchanged_offset
     [LocalTime.new(2017,1,15,23,0,Rational(11,10),0), LocalTime.new(2017,1,15,23,0,Rational(11,10),3600)].each do |lt|
-      p1 = OffsetTimezonePeriod.new(TimezoneOffset.new(lt.utc_offset, 0, 'TEST'))
-      p2 = OffsetTimezonePeriod.new(TimezoneOffset.new(0, lt.utc_offset, 'TEST'))
-      assert_nil(lt.period)
-      assert_same(lt, lt.localize(p1))
-      assert_same(p1, lt.period)
-      assert_same(lt, lt.localize(p2))
-      assert_same(p2, lt.period)
+      o1 = TimezoneOffset.new(lt.utc_offset, 0, 'TEST')
+      o2 = TimezoneOffset.new(0, lt.utc_offset, 'TEST')
+      assert_nil(lt.offset_info)
+      assert_same(lt, lt.localize(o1))
+      assert_same(o1, lt.offset_info)
+      assert_same(lt, lt.localize(o2))
+      assert_same(o2, lt.offset_info)
     end
   end
 
   def test_localize_set_offset
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(3600, 0, 'TEST'))
+    o = TimezoneOffset.new(3600, 0, 'TEST')
 
     [LocalTime.utc(2017,1,15,23,0,Rational(11,10)), LocalTime.new(2017,1,15,23,0,Rational(11,10),0), LocalTime.new(2017,1,15,22,0,Rational(11,10),-3600)].each do |lt|
-      assert_nil(lt.period)
-      assert_same(lt, lt.localize(p))
-      assert_same(p, lt.period)
+      assert_nil(lt.offset_info)
+      assert_same(lt, lt.localize(o))
+      assert_same(o, lt.offset_info)
       assert_equal_with_offset(Time.new(2017,1,16,0,0,Rational(11,10),3600), lt)
     end
   end
 
   def test_localize_utc
     lt = LocalTime.utc(2017,1,15,23,0,Rational(11,10))
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, 'TEST'))
+    o = TimezoneOffset.new(0, 0, 'TEST')
 
     assert_equal(true, lt.utc?)
-    assert_same(lt, lt.localize(p))
-    assert_same(p, lt.period)
+    assert_same(lt, lt.localize(o))
+    assert_same(o, lt.offset_info)
     assert_equal_with_offset(Time.new(2017,1,15,23,0,Rational(11,10),0), lt)
   end
 
-  def test_localize_nil_period
+  def test_localize_nil_offset_info
     lt = LocalTime.new(2017,1,15,23,0,Rational(11,10),0)
     error = assert_raises(ArgumentError) { lt.localize(nil) }
-    assert_match(/\bperiod\b/, error.message)
+    assert_match(/\boffset_info\b/, error.message)
   end
 
   def test_strftime
@@ -71,11 +70,11 @@ class TCLocalTime < Minitest::Test
     assert_equal('%H:%M:%S', lt.strftime('%Z'))
   end
 
-  def test_strftime_nil_period
+  def test_strftime_nil_offset_info
     # Will use Time#strftime's handling of the %Z directive.
     t = Time.new(2017,1,15,23,0,1,3600)
     lt = LocalTime.new(2017,1,15,23,0,1,3600)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
 
     # JRuby 1.7 returns '+01:00' instead of empty string.
     assert_equal(t.strftime('%Z'), lt.strftime('%Z'))
@@ -91,14 +90,14 @@ class TCLocalTime < Minitest::Test
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
 
     # MRI returns Time. JRuby returns LocalTime.
-    assert_is_time_or_local_time_with_nil_period(lt + 1)
+    assert_is_time_or_local_time_with_nil_offset_info(lt + 1)
   end
 
   def test_subtract
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
 
     # MRI returns Time. JRuby returns LocalTime.
-    assert_is_time_or_local_time_with_nil_period(lt - 1)
+    assert_is_time_or_local_time_with_nil_offset_info(lt - 1)
   end
 
   def test_compare
@@ -133,9 +132,9 @@ class TCLocalTime < Minitest::Test
     assert_equal(true,  lt4.dst?)
   end
 
-  def test_dst_nil_period
+  def test_dst_nil_offset_info
     lt = LocalTime.new(2017,1,15,23,0,1,3600)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
     assert_equal(false, lt.dst?)
   end
 
@@ -159,28 +158,28 @@ class TCLocalTime < Minitest::Test
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
 
     # MRI returns LocalTime. JRuby returns Time.
-    assert_is_time_or_local_time_with_nil_period(lt.getgm)
+    assert_is_time_or_local_time_with_nil_offset_info(lt.getgm)
   end
 
   def test_getlocal
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
 
     # MRI returns LocalTime. JRuby returns Time.
-    assert_is_time_or_local_time_with_nil_period(lt.getlocal(0))
+    assert_is_time_or_local_time_with_nil_offset_info(lt.getlocal(0))
   end
 
   def test_getutc
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
 
     # MRI returns LocalTime. JRuby returns Time.
-    assert_is_time_or_local_time_with_nil_period(lt.getutc)
+    assert_is_time_or_local_time_with_nil_offset_info(lt.getutc)
   end
 
   def test_gmtime
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(3600, 0, 'TEST'))
     assert_same(lt, lt.gmtime)
     assert_equal(true, lt.utc?)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
   end
 
   def test_isdst
@@ -195,35 +194,35 @@ class TCLocalTime < Minitest::Test
     assert_equal(true,  lt4.isdst)
   end
 
-  def test_isdst_nil_period
+  def test_isdst_nil_offset_info
     lt = LocalTime.new(2017,1,15,23,0,1,3600)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
     assert_equal(false, lt.isdst)
   end
 
   def test_localtime_without_offset
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     assert_same(lt, lt.localtime)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
   end
 
   def test_localtime_with_offset
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     assert_same(lt, lt.localtime(3600))
     assert_equal(3600, lt.utc_offset)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
   end
 
   def test_localtime_with_offset_unchanged
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(3600, 0, 'TEST'))
     assert_same(lt, lt.localtime(3600))
     assert_equal(3600, lt.utc_offset)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
   end
 
   def test_round
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(3600, 0, 'TEST'))
-    lt = localized_time(2017,1,15,23,0,Rational(111,100),p)
+    o = TimezoneOffset.new(3600, 0, 'TEST')
+    lt = localized_time(2017,1,15,23,0,Rational(111,100),o)
 
     r = lt.round
     r0 = lt.round(0)
@@ -231,7 +230,7 @@ class TCLocalTime < Minitest::Test
 
     [r, r0, r1].each do |result|
       assert_kind_of(LocalTime, result)
-      assert_same(p, result.period)
+      assert_same(o, result.offset_info)
     end
 
     assert_equal_with_offset(Time.new(2017,1,15,23,0,1,3600), r)
@@ -239,9 +238,9 @@ class TCLocalTime < Minitest::Test
     assert_equal_with_offset(Time.new(2017,1,15,23,0,Rational(11,10),3600), r1)
   end
 
-  def test_round_nil_period
+  def test_round_nil_offset_info
     lt = LocalTime.new(2017,1,15,23,0,Rational(111,100),3600)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
 
     r = lt.round
     r0 = lt.round(0)
@@ -259,7 +258,7 @@ class TCLocalTime < Minitest::Test
 
     # succ is obsolete and outputs a warning.
     without_warnings do
-      assert_is_time_or_local_time_with_nil_period(lt.succ)
+      assert_is_time_or_local_time_with_nil_offset_info(lt.succ)
     end
   end
 
@@ -275,10 +274,10 @@ class TCLocalTime < Minitest::Test
     assert_equal([1,0,23,15,1,2017,0,15,true, 'TEST'], lt4.to_a)
   end
 
-  def test_to_a_nil_period
+  def test_to_a_nil_offset_info
     t = Time.new(2017,1,15,23,0,1,3600)
     lt = LocalTime.new(2017,1,15,23,0,1,3600)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
 
     # For local times, the last element is nil on MRI and empty string on JRuby.
     # Compare with the actual Time#to_a output.
@@ -289,20 +288,20 @@ class TCLocalTime < Minitest::Test
     lt = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(3600, 0, 'TEST'))
     assert_same(lt, lt.utc)
     assert_equal(true, lt.utc?)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
   end
 
   def test_zone
     lt1 = localized_time(2017,1,15,23,0,1,TimezoneOffset.new(3600, 0, 'TEST'))
-    lt2 = LocalTime.utc(2017,1,15,23,0,1).localize(OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, 'GMT')))
+    lt2 = LocalTime.utc(2017,1,15,23,0,1).localize(TimezoneOffset.new(0, 0, 'GMT'))
     assert_equal('TEST', lt1.zone)
     assert_equal('GMT', lt2.zone)
   end
 
-  def test_zone_nil_period
+  def test_zone_nil_offset_info
     t = Time.new(2017,1,15,23,0,1,3600)
     lt = LocalTime.new(2017,1,15,23,0,1,3600)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
 
     # For local times, zone returns nil on MRI and empty string on JRuby.
     # Compare with the actual Time#zone output.
@@ -310,17 +309,17 @@ class TCLocalTime < Minitest::Test
   end
 
   def test_to_datetime
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(3600, 0, 'TEST'))
-    lt = localized_time(2017,1,15,23,0,Rational(11,10),p)
+    o = TimezoneOffset.new(3600, 0, 'TEST')
+    lt = localized_time(2017,1,15,23,0,Rational(11,10),o)
     d = lt.to_datetime
     assert_kind_of(LocalDateTime, d)
-    assert_same(p, d.period)
+    assert_same(o, d.offset_info)
     assert_equal_with_offset(DateTime.new(2017,1,15,23,0,Rational(11,10),Rational(1,24)), d)
   end
 
-  def test_to_datetime_nil_period
+  def test_to_datetime_nil_offset_info
     lt = LocalTime.new(2017,1,15,23,0,Rational(11,10),3600)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
     d = lt.to_datetime
     assert_equal(DateTime, d.class)
     assert_equal_with_offset(DateTime.new(2017,1,15,23,0,Rational(11,10),Rational(1,24)), d)
@@ -329,21 +328,21 @@ class TCLocalTime < Minitest::Test
   def test_class_at_returns_local_time
     lt = LocalTime.at(1484521201)
     assert_kind_of(LocalTime, lt)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
     assert_equal(1484521201, lt.to_i)
   end
 
   def test_class_new_returns_local_time
     lt = LocalTime.new(2017,1,15,23,0,1,0)
     assert_kind_of(LocalTime, lt)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
     assert_equal(1484521201, lt.to_i)
   end
 
   def test_class_utc_returns_local_time
     lt = LocalTime.utc(2017,1,15,23,0,1)
     assert_kind_of(LocalTime, lt)
-    assert_nil(lt.period)
+    assert_nil(lt.offset_info)
     assert_equal(1484521201, lt.to_i)
   end
 end

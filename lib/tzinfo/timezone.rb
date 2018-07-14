@@ -535,7 +535,7 @@ module TZInfo
       raise ArgumentError, 'time must be specified' unless time
 
       Timestamp.for(time) do |ts|
-        LocalTimestamp.localize(ts, period_for(ts))
+        LocalTimestamp.localize(ts, period_for(ts).offset)
       end
     end
 
@@ -904,9 +904,9 @@ module TZInfo
     #   ambiguity.
     def local_timestamp(year, month = 1, day = 1, hour = 0, minute = 0, second = 0, sub_second = 0, dst = Timezone.default_dst, &block)
       ts = Timestamp.create(year, month, day, hour, minute, second, sub_second)
-      period = period_for_local(ts, dst, &block)
-      offset = period.current_utc_offset
-      LocalTimestamp.new(ts.value - offset, sub_second, offset).localize(period)
+      timezone_offset = period_for_local(ts, dst, &block).offset
+      utc_offset = timezone_offset.current_utc_offset
+      LocalTimestamp.new(ts.value - utc_offset, sub_second, utc_offset).localize(timezone_offset)
     end
 
     # Returns the unique offsets used by the time zone up to a given time (`to`)
@@ -988,18 +988,18 @@ module TZInfo
     # an `Array`. The first element is the time as a {LocalTime}. The second
     # element is the period.
     #
-    # The current local time and {TimezonePeriod} can also be obtained as
-    # follows:
-    #
-    #     local_time = timezone.now
-    #     period = local_time.period
-    #
     # @return [Array] an `Array` containing the current {LocalTime} for the
     #   time zone as the first element and the current {TimezonePeriod} for the
     #   time zone as the second element.
     def current_period_and_time
-      local_time = now
-      [local_time, local_time.period]
+      period = nil
+
+      local_time = Timestamp.for(Time.now) do |ts|
+        period = period_for(ts)
+        LocalTimestamp.localize(ts, period.offset)
+      end
+
+      [local_time, period]
     end
     alias current_time_and_period current_period_and_time
 

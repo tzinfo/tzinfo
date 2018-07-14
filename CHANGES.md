@@ -24,10 +24,10 @@
   UTC). #49 and #52.
 * Local times are returned as instances of `LocalTime`, `LocalDateTime` or
   `TZInfo::LocalTimestamp`. These classes subclass `Time`, `DateTime` and
-  `TZInfo::Timestamp` respectively. They allow information about the time zone
-  to be accessed, overriding the default behaviour of the base classes where
-  appropriate (for example, returning the zone abbreviation when using the `%Z`
-  directive with `strftime`).
+  `TZInfo::Timestamp` respectively. They override the default behaviour of the
+  base classes to return information about the observed offset at the indicated
+  time. For example, the zone abbreviation is returned when using the `%Z`
+  directive with `strftime`.
 * The `transitions_up_to`, `offsets_up_to` and `strftime` instance methods of
   `TZInfo::Timezone` now take the UTC offset of passed in values into account
   instead of ignoring it (as was previously the case).

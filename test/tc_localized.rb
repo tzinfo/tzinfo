@@ -18,16 +18,16 @@ class TCLocalized < Minitest::Test
   class TestClass < TestBaseClass
     include Localized
 
-    attr_accessor :period
+    attr_accessor :offset_info
 
-    def if_period_test(value)
-      if_period(value) {|p,v| yield(p, v) }
+    def if_offset_info_test(value)
+      if_offset_info(value) {|p,v| yield(p, v) }
     end
   end
 
   def strftime_test(expected_super_format, format, abbreviation)
     t = TestClass.new
-    t.period = abbreviation ? OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, abbreviation)) : nil
+    t.offset_info = abbreviation ? TimezoneOffset.new(0, 0, abbreviation) : nil
     expected_result = 'super_result'
     t.strftime_result = expected_result
     assert_same(expected_result, t.strftime(format))
@@ -46,29 +46,29 @@ class TCLocalized < Minitest::Test
     strftime_test('%%H:%%M:%%S', '%Z', '%H:%M:%S')
   end
 
-  def test_strftime_nil_period
+  def test_strftime_nil_offset_info
     strftime_test('%Z', '%Z', nil)
   end
 
   def test_strftime_nil_format
     t = TestClass.new
-    t.period = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, 'BST'))
+    t.offset_info = TimezoneOffset.new(0, 0, 'BST')
     error = assert_raises(ArgumentError) { t.strftime(nil) }
     assert_match(/\bformat\b/, error.message)
   end
 
-  def test_if_period
-    p = OffsetTimezonePeriod.new(TimezoneOffset.new(0, 0, 'BST'))
+  def test_if_offset_info
+    o = TimezoneOffset.new(0, 0, 'BST')
     t = TestClass.new
-    t.period = p
+    t.offset_info = o
     v = Object.new
     r = Object.new
 
     block_called = 0
 
-    result = t.if_period_test(v) do |bp,bv|
+    result = t.if_offset_info_test(v) do |bo,bv|
       block_called += 1
-      assert_same(p, bp)
+      assert_same(o, bo)
       assert_same(v, bv)
       r
     end
@@ -77,11 +77,11 @@ class TCLocalized < Minitest::Test
     assert_equal(1, block_called)
   end
 
-  def test_if_period_nil_period
+  def test_if_offset_info_nil_offset_info
     t = TestClass.new
     v = Object.new
 
-    result = t.if_period_test(v) {|bp,bv| raise 'block called unexpectedly' }
+    result = t.if_offset_info_test(v) {|bo,bv| raise 'block called unexpectedly' }
     assert_same(result, v)
   end
 end

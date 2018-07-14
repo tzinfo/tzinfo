@@ -111,7 +111,7 @@ class TCTimezonePeriod < Minitest::Test
     dst = TimezoneOffset.new(-7200, 3600, 'TEST')
     p = TestTimezonePeriod.new(TimezoneTransition.new(dst, std, 1136073600), nil, dst)
 
-    assert_equal_with_offset_and_period(LocalTimestamp.new(1136073600, 0, -3600).localize(p), p.local_starts_at)
+    assert_equal_with_offset_and_offset_info(LocalTimestamp.new(1136073600, 0, -3600).localize(dst), p.local_starts_at)
   end
 
   def test_local_starts_at_unbounded
@@ -126,7 +126,7 @@ class TCTimezonePeriod < Minitest::Test
     dst = TimezoneOffset.new(-7200, 3600, 'TEST')
     p = TestTimezonePeriod.new(nil, TimezoneTransition.new(std, dst, 1136160000), dst)
 
-    assert_equal_with_offset_and_class(LocalTimestamp.new(1136160000, 0, -3600).localize(p), p.local_ends_at)
+    assert_equal_with_offset_and_class(LocalTimestamp.new(1136160000, 0, -3600).localize(dst), p.local_ends_at)
   end
 
   def test_local_ends_at_unbounded

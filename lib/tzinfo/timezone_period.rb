@@ -176,7 +176,7 @@ module TZInfo
     # @return [LocalTimestamp] a localized {Timestamp} representing when a
     #   transition occurs, or `nil` if `transition` is `nil`.
     def localized_timestamp(transition)
-      transition ? LocalTimestamp.localize(transition.at, self) : nil
+      transition ? LocalTimestamp.localize(transition.at, offset) : nil
     end
   end
 end

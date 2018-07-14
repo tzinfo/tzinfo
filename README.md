@@ -162,16 +162,6 @@ period.local_starts_at.to_time  # => 2018-03-11 03:00:00 -0400
 period.local_ends_at.to_time    # => 2018-11-04 02:00:00 -0400
 ```
 
-`TZInfo::TimezonePeriod` objects can also be obtained by calling the `period`
-method on returned local times:
-
-```ruby
-tz.to_local(Time.utc(2018, 7, 1, 12, 30, 0)).period
-# => #<TZInfo::TransitionsTimezonePeriod: ...>
-tz.local_time(2018, 7, 1, 8, 30, 0).period
-# => #<TZInfo::TransitionsTimezonePeriod: ...>
-```
-
 A list of transitions between periods where different rules are observed can be
 obtained with the `transitions_up_to` method. The result is returned as an
 `Array` of `TZInfo::TimzoneTransition` objects:
