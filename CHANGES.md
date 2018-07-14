@@ -93,10 +93,10 @@
   with `TZInfo::DataSources::TransitionsDataTimezoneInfo` and
   `TZInfo::DataSources::ConstantOffsetDataTimezoneInfo`.
   `TZInfo::DataSources::TransitionsDataTimezoneInfo` is constructed with an
-  `Array` of `TZInfo::TimezoneTransitions` representing times when the offset
-  changes. `TZInfo::DataSources::ConstantOffsetDataTimezoneInfo` is constructed
-  with a `TZInfo::TimezoneOffset` instance repsenting the offset constantly
-  observed in a time zone.
+  `Array` of `TZInfo::TimezoneTransition` instances representing times when the
+  offset changes. `TZInfo::DataSources::ConstantOffsetDataTimezoneInfo` is
+  constructed with a `TZInfo::TimezoneOffset` instance repsenting the offset
+  constantly observed in a time zone.
 * The `TZInfo::DataSource#timezone_identifiers` method should no longer be
   overridden in custom data source implementations. The implementation in the
   base class now calculates a result from
