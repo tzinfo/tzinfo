@@ -22,12 +22,12 @@
   or later mode) and Rubinius 3.
 * Local times are now returned using the correct UTC offset (instead of using
   UTC). #49 and #52.
-* Local times are returned as instances of `LocalTime`, `LocalDateTime` or
-  `TZInfo::LocalTimestamp`. These classes subclass `Time`, `DateTime` and
-  `TZInfo::Timestamp` respectively. They override the default behaviour of the
-  base classes to return information about the observed offset at the indicated
-  time. For example, the zone abbreviation is returned when using the `%Z`
-  directive with `strftime`.
+* Local times are returned as instances of `TimeWithOffset`,
+  `DateTimeWithOffset` or `TZInfo::TimestampWithOffset`. These classes subclass
+  `Time`, `DateTime` and `TZInfo::Timestamp` respectively. They override the
+  default behaviour of the base classes to return information about the observed
+  offset at the indicated time. For example, the zone abbreviation is returned
+  when using the `%Z` directive with `strftime`.
 * The `transitions_up_to`, `offsets_up_to` and `strftime` instance methods of
   `TZInfo::Timezone` now take the UTC offset of passed in values into account
   instead of ignoring it (as was previously the case).
@@ -120,7 +120,7 @@
 * The `datetime`, `time`, `local_end`, `local_end_time`, `local_start` and
   `local_start_time` instance methods of `TZInfo::TimezoneTransition` have been
   removed. The `at`, `local_end_at` and `local_start_at` methods should be used
-  instead and the result (a `TZInfo::LocalTimestamp`) converted to either a
+  instead and the result (a `TZInfo::TimestampWithOffset`) converted to either a
   `DateTime` or `Time` by calling `to_datetime` or `to_time` on the result.
 * The `us_zones` and `us_zone_identifiers` class methods of `TZInfo::Timezone`
   have been removed. `TZInfo::Country.get('US').zones` and

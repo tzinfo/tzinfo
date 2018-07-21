@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module TZInfo
-  # The {Localized} module is included in {LocalTime}, {LocalDateTime} and
-  # {LocalTimestamp}. It provides an override for the {strftime} method that
-  # handles expanding the `%Z` directive according to the
-  # {TimezoneOffset#abbreviation abbreviation} of the {TimezoneOffset}
+  # The {WithOffset} module is included in {TimeWithOffset},
+  # {DateTimeWithOffset} and {TimestampWithOffset}. It provides an override for
+  # the {strftime} method that handles expanding the `%Z` directive according to
+  # the {TimezoneOffset#abbreviation abbreviation} of the {TimezoneOffset}
   # associated with a local time.
-  module Localized
+  module WithOffset
     # Overrides the `Time`, `DateTime` or {Timestamp} version of `strftime`,
     # replacing `%Z` with the {TimezoneOffset#abbreviation abbreviation} of the
     # associated {TimezoneOffset}. If there is no associated offset, `%Z` is
@@ -20,7 +20,7 @@ module TZInfo
     def strftime(format)
       raise ArgumentError, 'format must be specified' unless format
 
-      if_offset_info do |o|
+      if_timezone_offset do |o|
         abbreviation = o.abbreviation.gsub(/%/, '%%')
 
         format = format.gsub(/%(%*)Z/) do
@@ -52,9 +52,9 @@ module TZInfo
     #   {TimezoneOffset}, otherwise the `result` parameter.
     #
     # @private
-    def if_offset_info(result = nil) #:nodoc:
-      o = offset_info
-      o ? yield(o, result) : result
+    def if_timezone_offset(result = nil) #:nodoc:
+      to = timezone_offset
+      to ? yield(to, result) : result
     end
   end
 end

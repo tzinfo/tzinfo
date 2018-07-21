@@ -132,27 +132,27 @@ module TZInfo
     # Returns the local start time of the period or `nil` if the start of the
     # period is unbounded.
     #
-    # The result is returned as a {LocalTimestamp}. To obtain the start time as
-    # a `Time` or `DateTime`, call either {LocalTimestamp#to_time to_time} or
-    # {LocalTimestamp#to_datetime to_datetime} on the result.
+    # The result is returned as a {TimestampWithOffset}. To obtain the start
+    # time as a `Time` or `DateTime`, call either {TimestampWithOffset#to_time
+    # to_time} or {TimestampWithOffset#to_datetime to_datetime} on the result.
     #
-    # @return [LocalTimestamp] The local start time of the period or `nil` if
-    #   the start of the period is unbounded.
+    # @return [TimestampWithOffset] The local start time of the period or `nil`
+    #   if the start of the period is unbounded.
     def local_starts_at
-      localized_timestamp(start_transition)
+      timestamp_with_offset(start_transition)
     end
 
     # Returns the local end time of the period or `nil` if the end of the period
     # is unbounded.
     #
-    # The result is returned as a {LocalTimestamp}. To obtain the end time as a
-    # `Time` or `DateTime`, call either {LocalTimestamp#to_time to_time} or
-    # {LocalTimestamp#to_datetime to_datetime} on the result.
+    # The result is returned as a {TimestampWithOffset}. To obtain the end time
+    # as a `Time` or `DateTime`, call either {TimestampWithOffset#to_time
+    # to_time} or {TimestampWithOffset#to_datetime to_datetime} on the result.
     #
-    # @return [LocalTimestamp] The local end time of the period or `nil` if the
-    #   end of the period is unbounded.
+    # @return [TimestampWithOffset] The local end time of the period or `nil` if
+    #   the end of the period is unbounded.
     def local_ends_at
-      localized_timestamp(end_transition)
+      timestamp_with_offset(end_transition)
     end
 
     private
@@ -173,10 +173,10 @@ module TZInfo
     end
 
     # @param transition [TimezoneTransition] a transition or `nil`.
-    # @return [LocalTimestamp] a localized {Timestamp} representing when a
-    #   transition occurs, or `nil` if `transition` is `nil`.
-    def localized_timestamp(transition)
-      transition ? LocalTimestamp.localize(transition.at, offset) : nil
+    # @return [TimestampWithOffset] a {Timestamp} representing when a transition
+    #   occurs with offset set to {#offset}, or `nil` if `transition` is `nil`.
+    def timestamp_with_offset(transition)
+      transition ? TimestampWithOffset.set_timezone_offset(transition.at, offset) : nil
     end
   end
 end

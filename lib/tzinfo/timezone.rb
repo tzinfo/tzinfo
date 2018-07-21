@@ -516,18 +516,18 @@ module TZInfo
 
     # Converts a time to the local time for the time zone.
     #
-    # The result will be of type {LocalTime} (if passed a `Time`),
-    # {LocalDateTime} (if passed a `DateTime`) or {LocalTimestamp} (if passed a
-    # {Timestamp}). {LocalTime}, {LocalDateTime} and {LocalTimestamp} are
-    # subclasses of `Time`, `DateTime` and {Timestamp} that provide additional
-    # information about the local result.
+    # The result will be of type {TimeWithOffset} (if passed a `Time`),
+    # {DateTimeWithOffset} (if passed a `DateTime`) or {TimestampWithOffset} (if
+    # passed a {Timestamp}). {TimeWithOffset}, {DateTimeWithOffset} and
+    # {TimestampWithOffset} are subclasses of `Time`, `DateTime` and {Timestamp}
+    # that provide additional information about the local result.
     #
     # Unlike {utc_to_local}, {to_local} takes the UTC offset of the given time
     # into consideration.
     #
     # @param time [Object] a `Time`, `DateTime` or {Timestamp}.
-    # @return [Object] the local equivalent of `time` as a {LocalTime},
-    #   {LocalDateTime} or {LocalTimestamp}.
+    # @return [Object] the local equivalent of `time` as a {TimeWithOffset},
+    #   {DateTimeWithOffset} or {TimestampWithOffset}.
     # @raise [ArgumentError] if `time` is `nil`.
     # @raise [ArgumentError] if `time` is a {Timestamp} that does not have a
     #   specified UTC offset.
@@ -535,25 +535,25 @@ module TZInfo
       raise ArgumentError, 'time must be specified' unless time
 
       Timestamp.for(time) do |ts|
-        LocalTimestamp.localize(ts, period_for(ts).offset)
+        TimestampWithOffset.set_timezone_offset(ts, period_for(ts).offset)
       end
     end
 
     # Converts a time in UTC to the local time for the time zone.
     #
-    # The result will be of type {LocalTime} (if passed a `Time`),
-    # {LocalDateTime} (if passed a `DateTime`) or {LocalTimestamp} (if passed a
-    # {Timestamp}). {LocalTime}, {LocalDateTime} and {LocalTimestamp} are
-    # subclasses of `Time`, `DateTime` and {Timestamp} that provide additional
-    # information about the local result.
+    # The result will be of type {TimeWithOffset} (if passed a `Time`),
+    # {DateTimeWithOffset} (if passed a `DateTime`) or {TimestampWithOffset} (if
+    # passed a {Timestamp}). {TimeWithOffset}, {DateTimeWithOffset} and
+    # {TimestampWithOffset} are subclasses of `Time`, `DateTime` and {Timestamp}
+    # that provide additional information about the local result.
     #
     # The UTC offset of the `utc_time` parameter is ignored (it is treated as a
     # UTC time). Use the {to_local} method instead if the the UTC offset of the
     # time needs to be taken into consideration.
     #
     # @param utc_time [Object] a `Time`, `DateTime` or {Timestamp}.
-    # @return [Object] the local equivalent of `utc_time` as a {LocalTime},
-    #   {LocalDateTime} or {LocalTimestamp}.
+    # @return [Object] the local equivalent of `utc_time` as a {TimeWithOffset},
+    #   {DateTimeWithOffset} or {TimestampWithOffset}.
     # @raise [ArgumentErrror] if `utc_time` is `nil`.
     def utc_to_local(utc_time)
       raise ArgumentError, 'utc_time must be specified' unless utc_time
@@ -645,7 +645,7 @@ module TZInfo
     # Creates a `Time` object based on the given (Gregorian calendar) date and
     # time parameters. The parameters are interpreted as a local time in the
     # time zone. The result has the appropriate `utc_offset`, `zone` and
-    # {LocalTime#period period}.
+    # {TimeWithOffset#timezone_offset timezone_offset}.
     #
     # _Warning:_ There are time values that are not valid as local times in a
     # time zone (for example, during the transition from standard time to
@@ -706,7 +706,7 @@ module TZInfo
     #   or an `Array` containing a chosen {TimezonePeriod}; to leave the
     #   ambiguity unresolved: an empty `Array`, an `Array` containing more than
     #   one {TimezonePeriod}, or `nil`.
-    # @return [LocalTime] a new `Time` object based on the given values,
+    # @return [TimeWithOffset] a new `Time` object based on the given values,
     #   interpreted as a local time in the time zone.
     # @raise [ArgumentError] if either of `year`, `month`, `day`, `hour`,
     #   `minute`, or `second` is not an `Integer`.
@@ -733,7 +733,7 @@ module TZInfo
     # Creates a `DateTime` object based on the given (Gregorian calendar) date
     # and time parameters. The parameters are interpreted as a local time in the
     # time zone. The result has the appropriate `offset` and
-    # {LocalDateTime#period period}.
+    # {DateTimeWithOffset#timezone_offset timezone_offset}.
     #
     # _Warning:_ There are time values that are not valid as local times in a
     # time zone (for example, during the transition from standard time to
@@ -794,8 +794,8 @@ module TZInfo
     #   or an `Array` containing a chosen {TimezonePeriod}; to leave the
     #   ambiguity unresolved: an empty `Array`, an `Array` containing more than
     #   one {TimezonePeriod}, or `nil`.
-    # @return [LocalDateTime] a new `DateTime` object based on the given values,
-    #   interpreted as a local time in the time zone.
+    # @return [DateTimeWithOffset] a new `DateTime` object based on the given
+    # values, interpreted as a local time in the time zone.
     # @raise [ArgumentError] if either of `year`, `month`, `day`, `hour`,
     #   `minute`, or `second` is not an `Integer`.
     # @raise [ArgumentError] if `sub_second` is not a `Rational`, or the
@@ -820,8 +820,8 @@ module TZInfo
 
     # Creates a {Timestamp} object based on the given (Gregorian calendar) date
     # and time parameters. The parameters are interpreted as a local time in the
-    # time zone. The result has the appropriate
-    # {Timestamp#utc_offset utc_offset} and {LocalTimestamp#period period}.
+    # time zone. The result has the appropriate {Timestamp#utc_offset
+    # utc_offset} and {TimestampWithOffset#timezone_offset timezone_offset}.
     #
     # _Warning:_ There are time values that are not valid as local times in a
     # time zone (for example, during the transition from standard time to
@@ -882,7 +882,7 @@ module TZInfo
     #   or an `Array` containing a chosen {TimezonePeriod}; to leave the
     #   ambiguity unresolved: an empty `Array`, an `Array` containing more than
     #   one {TimezonePeriod}, or `nil`.
-    # @return [LocalTimestamp] a new {Timestamp} object based on the given
+    # @return [TimestampWithOffset] a new {Timestamp} object based on the given
     #   values, interpreted as a local time in the time zone.
     # @raise [ArgumentError] if either of `year`, `month`, `day`, `hour`,
     #   `minute`, or `second` is not an `Integer`.
@@ -906,7 +906,7 @@ module TZInfo
       ts = Timestamp.create(year, month, day, hour, minute, second, sub_second)
       timezone_offset = period_for_local(ts, dst, &block).offset
       utc_offset = timezone_offset.current_utc_offset
-      LocalTimestamp.new(ts.value - utc_offset, sub_second, utc_offset).localize(timezone_offset)
+      TimestampWithOffset.new(ts.value - utc_offset, sub_second, utc_offset).set_timezone_offset(timezone_offset)
     end
 
     # Returns the unique offsets used by the time zone up to a given time (`to`)
@@ -974,7 +974,7 @@ module TZInfo
       canonical_zone.identifier
     end
 
-    # @return [LocalTime] the current local time in the time zone.
+    # @return [TimeWithOffset] the current local time in the time zone.
     def now
       to_local(Time.now)
     end
@@ -985,10 +985,10 @@ module TZInfo
     end
 
     # Returns the current local time and {TimezonePeriod} for the time zone as
-    # an `Array`. The first element is the time as a {LocalTime}. The second
-    # element is the period.
+    # an `Array`. The first element is the time as a {TimeWithOffset}. The
+    # second element is the period.
     #
-    # @return [Array] an `Array` containing the current {LocalTime} for the
+    # @return [Array] an `Array` containing the current {TimeWithOffset} for the
     #   time zone as the first element and the current {TimezonePeriod} for the
     #   time zone as the second element.
     def current_period_and_time
@@ -996,7 +996,7 @@ module TZInfo
 
       local_time = Timestamp.for(Time.now) do |ts|
         period = period_for(ts)
-        LocalTimestamp.localize(ts, period.offset)
+        TimestampWithOffset.set_timezone_offset(ts, period.offset)
       end
 
       [local_time, period]

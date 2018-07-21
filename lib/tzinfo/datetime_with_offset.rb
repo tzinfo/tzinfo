@@ -3,48 +3,49 @@
 require 'date'
 
 module TZInfo
-  # A subclass of `DateTime` used to represent local times. {LocalDateTime}
+  # A subclass of `DateTime` used to represent local times. {DateTimeWithOffset}
   # holds a reference to the related {TimezoneOffset} and overrides various
   # methods to return results appropriate for the {TimezoneOffset}. Certain
   # operations will clear the associated {TimezoneOffset}. Once the
-  # {TimezoneOffset} has been cleared, {LocalDateTime} behaves identically to
-  # `DateTime`.
-  class LocalDateTime < DateTime
-    include Localized
+  # {TimezoneOffset} has been cleared, {DateTimeWithOffset} behaves identically
+  # to `DateTime`.
+  class DateTimeWithOffset < DateTime
+    include WithOffset
 
     # @return [TimezoneOffset] the {TimezoneOffset} associated with this
     #   instance.
-    attr_reader :offset_info
+    attr_reader :timezone_offset
 
     # Sets the associated {TimezoneOffset}.
     #
-    # @param offset_info [TimezoneOffset] a {TimezoneOffset} valid at the time
-    #   and for the offset of this {LocalDateTime}.
-    # @return [LocalDateTime] `self`.
-    # @raise [ArgumentError] if `offset_info` is `nil`.
-    # @raise [ArgumentError] if `offset_info.current_utc_offset` does not
+    # @param timezone_offset [TimezoneOffset] a {TimezoneOffset} valid at the
+    #   time and for the offset of this {DateTimeWithOffset}.
+    # @return [DateTimeWithOffset] `self`.
+    # @raise [ArgumentError] if `timezone_offset` is `nil`.
+    # @raise [ArgumentError] if `timezone_offset.current_utc_offset` does not
     #   equal `self.offset * 86400`.
-    def localize(offset_info)
-      raise ArgumentError, 'offset_info must be specified' unless offset_info
-      raise ArgumentError, 'offset_info.current_utc_offset does not match self.utc_offset' if offset * 86400 != offset_info.current_utc_offset
-      @offset_info = offset_info
+    def set_timezone_offset(timezone_offset)
+      raise ArgumentError, 'timezone_offset must be specified' unless timezone_offset
+      raise ArgumentError, 'timezone_offset.current_utc_offset does not match self.utc_offset' if offset * 86400 != timezone_offset.current_utc_offset
+      @timezone_offset = timezone_offset
       self
     end
 
     # An overridden version of `DateTime#to_time` that, if there is an
-    # associated {TimezoneOffset}, returns a {LocalTime} with that offset.
+    # associated {TimezoneOffset}, returns a {DateTimeWithOffset} with that
+    # offset.
     #
-    # @return [Time] if there is an associated {TimezoneOffset}, a {LocalTime}
-    #   representation of this {LocalDateTime}, otherwise a `Time`
-    #   representation.
+    # @return [Time] if there is an associated {TimezoneOffset}, a
+    #   {TimeWithOffset} representation of this {DateTimeWithOffset}, otherwise
+    #   a `Time` representation.
     def to_time
-      if_offset_info(super) do |o,t|
+      if_timezone_offset(super) do |o,t|
         # Ruby 2.4.0 changed the behaviour of to_time so that it preserves the
         # offset instead of converting to the system local timezone.
         #
         # When self has an associated TimezonePeriod, this implementation will
         # preserve the offset on all versions of Ruby.
-        LocalTime.at(t.to_i, t.subsec * 1_000_000).localize(o)
+        TimeWithOffset.at(t.to_i, t.subsec * 1_000_000).set_timezone_offset(o)
       end
     end
 
@@ -52,10 +53,10 @@ module TZInfo
     # {TimezoneOffset} of the returned or yielded instances.
     def downto(min)
       if block_given?
-        super {|dt| yield dt.clear_offset_info }
+        super {|dt| yield dt.clear_timezone_offset }
       else
         enum = super
-        enum.each {|dt| dt.clear_offset_info }
+        enum.each {|dt| dt.clear_timezone_offset }
         enum
       end
     end
@@ -67,7 +68,7 @@ module TZInfo
     def england
       # super doesn't call #new_start on MRI, so each method has to be
       # individually overridden.
-      if_offset_info(super) {|o,dt| dt.localize(o) }
+      if_timezone_offset(super) {|o,dt| dt.set_timezone_offset(o) }
     end
 
     # An overridden version of `DateTime#gregorian` that preserves the
@@ -77,7 +78,7 @@ module TZInfo
     def gregorian
       # super doesn't call #new_start on MRI, so each method has to be
       # individually overridden.
-      if_offset_info(super) {|o,dt| dt.localize(o) }
+      if_timezone_offset(super) {|o,dt| dt.set_timezone_offset(o) }
     end
 
     # An overridden version of `DateTime#italy` that preserves the associated
@@ -87,7 +88,7 @@ module TZInfo
     def italy
       # super doesn't call #new_start on MRI, so each method has to be
       # individually overridden.
-      if_offset_info(super) {|o,dt| dt.localize(o) }
+      if_timezone_offset(super) {|o,dt| dt.set_timezone_offset(o) }
     end
 
     # An overridden version of `DateTime#julian` that preserves the associated
@@ -97,7 +98,7 @@ module TZInfo
     def julian
       # super doesn't call #new_start on MRI, so each method has to be
       # individually overridden.
-      if_offset_info(super) {|o,dt| dt.localize(o) }
+      if_timezone_offset(super) {|o,dt| dt.set_timezone_offset(o) }
     end
 
     # An overridden version of `DateTime#new_start` that preserves the
@@ -105,17 +106,17 @@ module TZInfo
     #
     # @return [DateTime]
     def new_start(start = Date::ITALY)
-      if_offset_info(super) {|o,dt| dt.localize(o) }
+      if_timezone_offset(super) {|o,dt| dt.set_timezone_offset(o) }
     end
 
     # An overridden version of `DateTime#step` that clears the associated
     # {TimezoneOffset} of the returned or yielded instances.
     def step(limit, step = 1)
       if block_given?
-        super {|dt| yield dt.clear_offset_info }
+        super {|dt| yield dt.clear_timezone_offset }
       else
         enum = super
-        enum.each {|dt| dt.clear_offset_info }
+        enum.each {|dt| dt.clear_timezone_offset }
         enum
       end
     end
@@ -124,10 +125,10 @@ module TZInfo
     # {TimezoneOffset} of the returned or yielded instances.
     def upto(max)
       if block_given?
-        super {|dt| yield dt.clear_offset_info }
+        super {|dt| yield dt.clear_timezone_offset }
       else
         enum = super
-        enum.each {|dt| dt.clear_offset_info }
+        enum.each {|dt| dt.clear_timezone_offset }
         enum
       end
     end
@@ -136,9 +137,9 @@ module TZInfo
 
     # Clears the associated {TimezoneOffset}.
     #
-    # @return [LocalDateTime] `self`.
-    def clear_offset_info
-      @offset_info = nil
+    # @return [DateTimeWithOffset] `self`.
+    def clear_timezone_offset
+      @timezone_offset = nil
       self
     end
   end

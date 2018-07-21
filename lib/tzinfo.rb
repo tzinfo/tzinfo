@@ -8,10 +8,10 @@ require_relative 'tzinfo/version'
 
 require_relative 'tzinfo/timestamp'
 
-require_relative 'tzinfo/localized'
-require_relative 'tzinfo/local_datetime'
-require_relative 'tzinfo/local_time'
-require_relative 'tzinfo/local_timestamp'
+require_relative 'tzinfo/with_offset'
+require_relative 'tzinfo/datetime_with_offset'
+require_relative 'tzinfo/time_with_offset'
+require_relative 'tzinfo/timestamp_with_offset'
 
 require_relative 'tzinfo/timezone_offset'
 require_relative 'tzinfo/timezone_transition'

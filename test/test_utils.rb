@@ -105,8 +105,8 @@ module TestUtils
       end
     end
 
-    def local_time(period, year, month, day, hour, minute, second, sub_second = 0)
-      TZInfo::LocalTime.new(year, month, day, hour, minute, second + sub_second, period.current_utc_offset).localize(period)
+    def time_with_offset(period, year, month, day, hour, minute, second, sub_second = 0)
+      TZInfo::TimeWithOffset.new(year, month, day, hour, minute, second + sub_second, period.current_utc_offset).set_timezone_offset(period)
     end
   end
 
@@ -124,8 +124,8 @@ module TestUtils
       DateTime.new(year, month, day, hour, minute, second + sub_second, utc_offset.to_r / 86400)
     end
 
-    def local_time(offset, year, month, day, hour, minute, second, sub_second = 0)
-      TZInfo::LocalDateTime.new(year, month, day, hour, minute, second + sub_second, offset.current_utc_offset.to_r / 86400).localize(offset)
+    def time_with_offset(offset, year, month, day, hour, minute, second, sub_second = 0)
+      TZInfo::DateTimeWithOffset.new(year, month, day, hour, minute, second + sub_second, offset.current_utc_offset.to_r / 86400).set_timezone_offset(offset)
     end
   end
 
@@ -142,8 +142,8 @@ module TestUtils
       Timestamp.create(year, month, day, hour, minute, second, sub_second, utc_offset)
     end
 
-    def local_time(offset, year, month, day, hour, minute, second, sub_second = 0)
-      LocalTimestamp.create(year, month, day, hour, minute, second, sub_second, offset.current_utc_offset).localize(offset)
+    def time_with_offset(offset, year, month, day, hour, minute, second, sub_second = 0)
+      TimestampWithOffset.create(year, month, day, hour, minute, second, sub_second, offset.current_utc_offset).set_timezone_offset(offset)
     end
   end
 
@@ -345,12 +345,13 @@ module TestUtils
       end
     end
 
-    # Asserts that LocalTime, LocalDateTime or LocalTimestamp instances are
-    # equal and that their associated TimezoneOffsets are also equal.
-    def assert_equal_with_offset_and_offset_info(expected, actual)
+    # Asserts that TimeWithOffset, DateTimeWithOffset or TimestampWithOffset
+    # instances are equal and that their associated TimezoneOffsets are also
+    # equal.
+    def assert_equal_with_offset_and_timezone_offset(expected, actual)
       assert_equal_with_offset(expected, actual)
-      assert_kind_of(TimezoneOffset, actual.offset_info)
-      assert_equal(expected.offset_info, actual.offset_info)
+      assert_kind_of(TimezoneOffset, actual.timezone_offset)
+      assert_equal(expected.timezone_offset, actual.timezone_offset)
     end
 
     # Asserts that Time, DateTime or Timestamp instances are equal and that

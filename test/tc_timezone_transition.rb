@@ -43,9 +43,9 @@ class TCTimezoneTransition < Minitest::Test
     t3 = TimezoneTransition.new(TimezoneOffset.new(-3600, 3600, 'TDT'),
       TimezoneOffset.new(-3600, 0, 'TST'), 1148949080)
 
-    assert_equal_with_offset_and_offset_info(LocalTimestamp.new(1148949080, 0,  3600).localize(t1.previous_offset), t1.local_end_at)
-    assert_equal_with_offset_and_offset_info(LocalTimestamp.new(1148949080, 0, 10800).localize(t2.previous_offset), t2.local_end_at)
-    assert_equal_with_offset_and_offset_info(LocalTimestamp.new(1148949080, 0, -3600).localize(t3.previous_offset), t3.local_end_at)
+    assert_equal_with_offset_and_timezone_offset(TimestampWithOffset.new(1148949080, 0,  3600).set_timezone_offset(t1.previous_offset), t1.local_end_at)
+    assert_equal_with_offset_and_timezone_offset(TimestampWithOffset.new(1148949080, 0, 10800).set_timezone_offset(t2.previous_offset), t2.local_end_at)
+    assert_equal_with_offset_and_timezone_offset(TimestampWithOffset.new(1148949080, 0, -3600).set_timezone_offset(t3.previous_offset), t3.local_end_at)
   end
 
   def test_local_start_at
@@ -56,9 +56,9 @@ class TCTimezoneTransition < Minitest::Test
     t3 = TimezoneTransition.new(TimezoneOffset.new(-3600, 3600, 'TDT'),
       TimezoneOffset.new(-3600, 0, 'TST'), 1148949080)
 
-    assert_equal_with_offset_and_offset_info(LocalTimestamp.new(1148949080, 0, 7200).localize(t1.offset), t1.local_start_at)
-    assert_equal_with_offset_and_offset_info(LocalTimestamp.new(1148949080, 0, 7200).localize(t2.offset), t2.local_start_at)
-    assert_equal_with_offset_and_offset_info(LocalTimestamp.new(1148949080, 0,    0).localize(t3.offset), t3.local_start_at)
+    assert_equal_with_offset_and_timezone_offset(TimestampWithOffset.new(1148949080, 0, 7200).set_timezone_offset(t1.offset), t1.local_start_at)
+    assert_equal_with_offset_and_timezone_offset(TimestampWithOffset.new(1148949080, 0, 7200).set_timezone_offset(t2.offset), t2.local_start_at)
+    assert_equal_with_offset_and_timezone_offset(TimestampWithOffset.new(1148949080, 0,    0).set_timezone_offset(t3.offset), t3.local_start_at)
   end
 
   def test_equality

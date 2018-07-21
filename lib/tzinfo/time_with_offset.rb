@@ -1,29 +1,29 @@
 # frozen_string_literal: true
 
 module TZInfo
-  # A subclass of `Time` used to represent local times. {LocalTime} holds a
+  # A subclass of `Time` used to represent local times. {TimeWithOffset} holds a
   # reference to the related {TimezoneOffset} and overrides various methods to
   # return results appropriate for the {TimezoneOffset}. Certain operations will
   # clear the associated {TimezoneOffset}. Once the {TimezoneOffset} has been
-  # cleared, {LocalTime} behaves identically to `Time`.
-  class LocalTime < Time
-    include Localized
+  # cleared, {TimeWithOffset} behaves identically to `Time`.
+  class TimeWithOffset < Time
+    include WithOffset
 
     # @return [TimezoneOffset] the {TimezoneOffset} associated with this
     #   instance.
-    attr_reader :offset_info
+    attr_reader :timezone_offset
 
-    # Marks this {LocalTime} as a local time with the UTC offset of a given
+    # Marks this {TimeWithOffset} as a local time with the UTC offset of a given
     # {TimezoneOffset} and sets the associated {TimezoneOffset}.
     #
-    # @param offset_info [TimezoneOffset] the {TimezoneOffset} to use to set the
-    #   offset of this {LocalTime}.
-    # @return [LocalTime] `self`.
-    # @raise [ArgumentError] if `offset_info` is `nil`.
-    def localize(offset_info)
-      raise ArgumentError, 'offset_info must be specified' unless offset_info
-      localtime(offset_info.current_utc_offset)
-      @offset_info = offset_info
+    # @param timezone_offset [TimezoneOffset] the {TimezoneOffset} to use to set
+    #   the offset of this {TimeWithOffset}.
+    # @return [TimeWithOffset] `self`.
+    # @raise [ArgumentError] if `timezone_offset` is `nil`.
+    def set_timezone_offset(timezone_offset)
+      raise ArgumentError, 'timezone_offset must be specified' unless timezone_offset
+      localtime(timezone_offset.current_utc_offset)
+      @timezone_offset = timezone_offset
       self
     end
 
@@ -34,46 +34,46 @@ module TZInfo
     # @return [Boolean] `true` if daylight savings time is being observed,
     #   otherwise `false`.
     def dst?
-      o = offset_info
-      o ? o.dst? : super
+      to = timezone_offset
+      to ? to.dst? : super
     end
     alias isdst dst?
 
     # An overridden version of `Time#gmtime` that clears the associated
     # {TimezoneOffset}.
     #
-    # @return [LocalTime] `self`.
+    # @return [TimeWithOffset] `self`.
     def gmtime
       super
-      @offset_info = nil
+      @timezone_offset = nil
       self
     end
 
     # An overridden version of `Time#localtime` that clears the associated
     # {TimezoneOffset}.
     #
-    # @return [LocalTime] `self`.
+    # @return [TimeWithOffset] `self`.
     def localtime(*args)
       super
-      @offset_info = nil
+      @timezone_offset = nil
       self
     end
 
     # An overridden version of `Time#round` that, if there is an associated
-    # {TimezoneOffset}, returns a {LocalTime} preserving that period.
+    # {TimezoneOffset}, returns a {TimeWithOffset} preserving that period.
     #
     # @return [Time] the rounded time.
     def round(ndigits = 0)
-      if_offset_info(super) {|o,t| self.class.at(t.to_i, t.subsec * 1_000_000).localize(o) }
+      if_timezone_offset(super) {|o,t| self.class.at(t.to_i, t.subsec * 1_000_000).set_timezone_offset(o) }
     end
 
     # An overridden version of `Time#to_a`. The `isdst` (index 8) and `zone`
     # (index 9) elements of the array are set according to the associated
     # {TimezoneOffset}.
     #
-    # @return [Array] an `Array` representation of the {LocalTime}.
+    # @return [Array] an `Array` representation of the {TimeWithOffset}.
     def to_a
-      if_offset_info(super) do |o,a|
+      if_timezone_offset(super) do |o,a|
         a[8] = o.dst?
         a[9] = o.abbreviation
         a
@@ -83,10 +83,10 @@ module TZInfo
     # An overridden version of `Time#utc` that clears the associated
     # {TimezoneOffset}.
     #
-    # @return [LocalTime] `self`.
+    # @return [TimeWithOffset] `self`.
     def utc
       super
-      @offset_info = nil
+      @timezone_offset = nil
       self
     end
 
@@ -98,22 +98,23 @@ module TZInfo
     #   associated {TimezoneOffset}, or the result from `Time#zone` if there is
     #   no such period.
     def zone
-      o = offset_info
-      o ? o.abbreviation : super
+      to = timezone_offset
+      to ? to.abbreviation : super
     end
 
     # An overridden version of `Time#to_datetime` that, if there is an
-    # associated {TimezoneOffset}, returns a {LocalDateTime} with that period.
+    # associated {TimezoneOffset}, returns a {DateTimeWithOffset} with that
+    # period.
     #
     # @return [DateTime] if there is an associated {TimezoneOffset}, a
-    #   {LocalDateTime} representation of this {LocalTime}, otherwise a `Time`
-    #   representation.
+    #   {DateTimeWithOffset} representation of this {TimeWithOffset}, otherwise
+    #   a `Time` representation.
     def to_datetime
-      if_offset_info(super) do |o,dt|
+      if_timezone_offset(super) do |o,dt|
         offset = dt.offset
-        result = LocalDateTime.jd(dt.jd + dt.day_fraction - offset)
+        result = DateTimeWithOffset.jd(dt.jd + dt.day_fraction - offset)
         result = result.new_offset(offset) unless offset == 0
-        result.localize(o)
+        result.set_timezone_offset(o)
       end
     end
   end

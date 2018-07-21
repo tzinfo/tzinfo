@@ -260,7 +260,8 @@ module TZInfo
 
         unless timestamp.instance_of?(Timestamp)
           # timestamp is identical in value, sub_second and utc_offset but is a
-          # subclass (i.e. LocalTimestamp). Return a new Timestamp instance.
+          # subclass (i.e. TimestampWithOffset). Return a new Timestamp
+          # instance.
           return new!(timestamp.value, timestamp.sub_second, timestamp.utc? ? :utc : timestamp.utc_offset)
         end
 

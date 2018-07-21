@@ -4,7 +4,7 @@ require_relative 'test_utils'
 
 include TZInfo
 
-class TCLocalized < Minitest::Test
+class TCWithOffset < Minitest::Test
   class TestBaseClass
     attr_reader :format
     attr_accessor :strftime_result
@@ -16,18 +16,18 @@ class TCLocalized < Minitest::Test
   end
 
   class TestClass < TestBaseClass
-    include Localized
+    include WithOffset
 
-    attr_accessor :offset_info
+    attr_accessor :timezone_offset
 
-    def if_offset_info_test(value)
-      if_offset_info(value) {|p,v| yield(p, v) }
+    def if_timezone_offset_test(value)
+      if_timezone_offset(value) {|p,v| yield(p, v) }
     end
   end
 
   def strftime_test(expected_super_format, format, abbreviation)
     t = TestClass.new
-    t.offset_info = abbreviation ? TimezoneOffset.new(0, 0, abbreviation) : nil
+    t.timezone_offset = abbreviation ? TimezoneOffset.new(0, 0, abbreviation) : nil
     expected_result = 'super_result'
     t.strftime_result = expected_result
     assert_same(expected_result, t.strftime(format))
@@ -46,27 +46,27 @@ class TCLocalized < Minitest::Test
     strftime_test('%%H:%%M:%%S', '%Z', '%H:%M:%S')
   end
 
-  def test_strftime_nil_offset_info
+  def test_strftime_nil_timezone_offset
     strftime_test('%Z', '%Z', nil)
   end
 
   def test_strftime_nil_format
     t = TestClass.new
-    t.offset_info = TimezoneOffset.new(0, 0, 'BST')
+    t.timezone_offset = TimezoneOffset.new(0, 0, 'BST')
     error = assert_raises(ArgumentError) { t.strftime(nil) }
     assert_match(/\bformat\b/, error.message)
   end
 
-  def test_if_offset_info
+  def test_if_timezone_offset
     o = TimezoneOffset.new(0, 0, 'BST')
     t = TestClass.new
-    t.offset_info = o
+    t.timezone_offset = o
     v = Object.new
     r = Object.new
 
     block_called = 0
 
-    result = t.if_offset_info_test(v) do |bo,bv|
+    result = t.if_timezone_offset_test(v) do |bo,bv|
       block_called += 1
       assert_same(o, bo)
       assert_same(v, bv)
@@ -77,11 +77,11 @@ class TCLocalized < Minitest::Test
     assert_equal(1, block_called)
   end
 
-  def test_if_offset_info_nil_offset_info
+  def test_if_timezone_offset_nil_timezone_offset
     t = TestClass.new
     v = Object.new
 
-    result = t.if_offset_info_test(v) {|bo,bv| raise 'block called unexpectedly' }
+    result = t.if_timezone_offset_test(v) {|bo,bv| raise 'block called unexpectedly' }
     assert_same(result, v)
   end
 end

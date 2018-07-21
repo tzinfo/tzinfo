@@ -192,18 +192,18 @@ offsets.map {|o| [o.current_utc_offset, o.abbreviation] }
 ```
 
 All `TZInfo::Timezone` methods that accept a time as a parameter can be used
-with either instances of `Time`, `DateTime` or `TZInfo::Timestamp`. Methods
-that also return times will return an object with a matching type (actually
-a `TZInfo::LocalTime`, `TZInfo::LocalDateTime` or `TZInfo::LocalTimestamp`
-when returning a local time):
+with either instances of `Time`, `DateTime` or `TZInfo::Timestamp`. Methods that
+also return times will return an object with a matching type (actually a
+`TZInfo::TimeWithOffset`, `TZInfo::DateTimeWithOffset` or
+`TZInfo::TimestampWithOffset` when returning a local time):
 
 ```ruby
 tz.to_local(Time.utc(2018, 7, 1, 12, 30, 0))
 # => 2018-07-01 08:30:00 -0400
 tz.to_local(DateTime.new(2018, 7, 1, 12, 30, 0))
-# => #<TZInfo::LocalDateTime: 2018-07-01T08:30:00-04:00 ((2458301j,45000s,0n),-14400s,2299161j)>
+# => #<TZInfo::DateTimeWithOffset: 2018-07-01T08:30:00-04:00 ((2458301j,45000s,0n),-14400s,2299161j)>
 tz.to_local(TZInfo::Timestamp.create(2018, 7, 1, 12, 30, 0, 0, :utc))
-# => #<TZInfo::LocalTimestamp: @value=1530448200, @sub_second=0, @utc_offset=-14400, @utc=false>
+# => #<TZInfo::TimestampWithOffset: @value=1530448200, @sub_second=0, @utc_offset=-14400, @utc=false>
 ```
 
 In addition to `local_time`, which returns `Time` instances, the
@@ -214,9 +214,9 @@ In addition to `local_time`, which returns `Time` instances, the
 tz.local_time(2018, 2, 1, 7, 30, 0)
 # => 2018-02-01 07:30:00 -0500
 tz.local_datetime(2018, 2, 1, 7, 30, 0)
-# => #<TZInfo::LocalDateTime: 2018-02-01T07:30:00-05:00 ((2458151j,45000s,0n),-18000s,2299161j)>
+# => #<TZInfo::DateTimeWithOffset: 2018-02-01T07:30:00-05:00 ((2458151j,45000s,0n),-18000s,2299161j)>
 tz.local_timestamp(2018, 2, 1, 7, 30, 0)
-# => #<TZInfo::LocalTimestamp: @value=1517488200, @sub_second=0, @utc_offset=-18000, @utc=false>
+# => #<TZInfo::TimestampWithOffset: @value=1517488200, @sub_second=0, @utc_offset=-18000, @utc=false>
 ```
 
 The `local_to_utc`, `local_time`, `local_datetime` and `local_timestamp` methods

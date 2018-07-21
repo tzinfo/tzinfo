@@ -48,32 +48,32 @@ module TZInfo
       Timestamp.utc(@timestamp_value)
     end
 
-    # Returns a {LocalTimestamp} instance representing the local time when this
-    # transition causes the previous observance to end (calculated from {at}
-    # using {previous_offset}).
+    # Returns a {TimestampWithOffset} instance representing the local time when
+    # this transition causes the previous observance to end (calculated from
+    # {at} using {previous_offset}).
     #
     # To obtain the result as a `Time` or `DateTime`, call either
-    # {LocalTimestamp#to_time to_time} or {LocalTimestamp#to_datetime
-    # to_datetime} on the {LocalTimestamp} instance that is returned.
+    # {TimestampWithOffset#to_time to_time} or {TimestampWithOffset#to_datetime
+    # to_datetime} on the {TimestampWithOffset} instance that is returned.
     #
-    # @return [LocalTimestamp] the local time when this transition causes the
-    #   previous observance to end.
+    # @return [TimestampWithOffset] the local time when this transition causes
+    #   the previous observance to end.
     def local_end_at
-      LocalTimestamp.new(@timestamp_value, 0, @previous_offset.current_utc_offset).localize(@previous_offset)
+      TimestampWithOffset.new(@timestamp_value, 0, @previous_offset.current_utc_offset).set_timezone_offset(@previous_offset)
     end
 
-    # Returns a {LocalTimestamp} instance representing the local time when this
-    # transition causes the next observance to start (calculated from {at} using
-    # {offset}).
+    # Returns a {TimestampWithOffset} instance representing the local time when
+    # this transition causes the next observance to start (calculated from {at}
+    # using {offset}).
     #
     # To obtain the result as a `Time` or `DateTime`, call either
-    # {LocalTimestamp#to_time to_time} or {LocalTimestamp#to_datetime
-    # to_datetime} on the {LocalTimestamp} instance that is returned.
+    # {TimestampWithOffset#to_time to_time} or {TimestampWithOffset#to_datetime
+    # to_datetime} on the {TimestampWithOffset} instance that is returned.
     #
-    # @return [LocalTimestamp] the local time when this transition causes the
-    #   next observance to start.
+    # @return [TimestampWithOffset] the local time when this transition causes
+    #   the next observance to start.
     def local_start_at
-      LocalTimestamp.new(@timestamp_value, 0, @offset.current_utc_offset).localize(@offset)
+      TimestampWithOffset.new(@timestamp_value, 0, @offset.current_utc_offset).set_timezone_offset(@offset)
     end
 
     # Determines if this {TimezoneTransition} is equal to another instance.
