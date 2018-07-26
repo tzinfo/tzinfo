@@ -93,11 +93,22 @@ class TCTimeWithOffset < Minitest::Test
     assert_is_time_or_time_with_offset_with_nil_timezone_offset(two + 1)
   end
 
-  def test_subtract
+  def test_subtract_seconds
     two = time_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
 
     # MRI returns Time. JRuby returns TimeWithOffset.
     assert_is_time_or_time_with_offset_with_nil_timezone_offset(two - 1)
+  end
+
+  def test_subtract_time
+    two = time_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
+    assert_equal(1, two - Time.utc(2017,1,15,22,0,0))
+  end
+
+  def test_subtract_time_with_offset
+    two1 = time_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
+    two2 = time_with_offset(2017,1,15,23,0,0,TimezoneOffset.new(0, 3600, 'TEST'))
+    assert_equal(1, two1 - two2)
   end
 
   def test_compare

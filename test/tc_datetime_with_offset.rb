@@ -109,9 +109,20 @@ class TCDateTimeWithOffset < Minitest::Test
     assert_nil((dtwo + 1).timezone_offset)
   end
 
-  def test_subtract
+  def test_subtract_seconds
     dtwo = datetime_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
     assert_nil((dtwo - 1).timezone_offset)
+  end
+
+  def test_subtract_datetime
+    dtwo = datetime_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
+    assert_equal(dtwo - DateTime.new(2017,1,15,22,0,0), Rational(1, 86400))
+  end
+
+  def test_subtract_datetime_with_offset
+    dtwo1 = datetime_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
+    dtwo2 = datetime_with_offset(2017,1,15,23,0,0,TimezoneOffset.new(0, 3600, 'TEST'))
+    assert_equal(dtwo1 - dtwo2, Rational(1, 86400))
   end
 
   def test_add_months
