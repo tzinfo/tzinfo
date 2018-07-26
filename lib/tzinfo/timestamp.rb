@@ -315,30 +315,6 @@ module TZInfo
       @utc
     end
 
-    # Adds a number of seconds to the {Timestamp} value.
-    #
-    # @param seconds [Integer] the number of seconds to be added.
-    # @return [Timestamp] the result of adding `seconds` to the {Timestamp}
-    #   value as a new {Timestamp} instance with the same UTC offset.
-    # @raise [ArgumentError] if `seconds` is not an `Integer`.
-    def +(seconds)
-      raise ArgumentError, 'seconds must be an Integer' unless seconds.kind_of?(Integer)
-      return self if seconds == 0
-      Timestamp.send(:new!, @value + seconds, @sub_second, @utc ? :utc : @utc_offset)
-    end
-
-    # Subtracts a number of seconds from the {Timestamp} value.
-    #
-    # @param seconds [Integer] the number of seconds to be subtracted.
-    # @return [Timestamp] the result of subtracting `seconds` from the
-    #   {Timestamp} value as a new {Timestamp} instance with the same UTC
-    #   offset.
-    # @raise [ArgumentError] if `seconds` is not an `Integer`.
-    def -(seconds)
-      raise ArgumentError, 'seconds must be an Integer' unless seconds.kind_of?(Integer)
-      self + (-seconds)
-    end
-
     # Adds a number of seconds to the {Timestamp} value, setting the UTC offset
     # of the result.
     #

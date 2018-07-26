@@ -946,7 +946,7 @@ module TZInfo
         else
           # to is exclusive, so this can't be used with period_for. However, any
           # time earlier than to can be used. Subtract 1 hour.
-          period = period_for(to_timestamp - 3600)
+          period = period_for(to_timestamp.add_and_set_utc_offset(-3600, :utc))
         end
 
         [period.offset]

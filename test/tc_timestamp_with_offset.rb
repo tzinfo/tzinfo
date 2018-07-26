@@ -116,16 +116,6 @@ class TCTimestampWithOffset < Minitest::Test
     assert_match(/\bformat\b/, error.message)
   end
 
-  def test_add
-    two = timestamp_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
-    assert_equal(Timestamp, (two + 1).class)
-  end
-
-  def test_subtract
-    two = timestamp_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'TEST'))
-    assert_equal(Timestamp, (two - 1).class)
-  end
-
   def test_utc
     two = timestamp_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
     assert_equal(Timestamp, two.utc.class)
