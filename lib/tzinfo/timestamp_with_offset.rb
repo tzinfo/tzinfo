@@ -5,7 +5,8 @@ module TZInfo
   # {TimestampWithOffset} holds a reference to the related {TimezoneOffset} and
   # overrides various methods to return results appropriate for the
   # {TimezoneOffset}. Certain operations will clear the associated
-  # {TimezoneOffset}. Once the {TimezoneOffset} has been cleared,
+  # {TimezoneOffset} (if the {TimezoneOffset} would not necessarily be valid for
+  # the result). Once the {TimezoneOffset} has been cleared,
   # {TimestampWithOffset} behaves identically to {Timestamp}.
   class TimestampWithOffset < Timestamp
     include WithOffset

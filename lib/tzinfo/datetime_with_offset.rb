@@ -6,9 +6,15 @@ module TZInfo
   # A subclass of `DateTime` used to represent local times. {DateTimeWithOffset}
   # holds a reference to the related {TimezoneOffset} and overrides various
   # methods to return results appropriate for the {TimezoneOffset}. Certain
-  # operations will clear the associated {TimezoneOffset}. Once the
+  # operations will clear the associated {TimezoneOffset} (if the
+  # {TimezoneOffset} would not necessarily be valid for the result). Once the
   # {TimezoneOffset} has been cleared, {DateTimeWithOffset} behaves identically
   # to `DateTime`.
+  #
+  # Arithmetic performed on {DateTimeWithOffset} instances is _not_ time
+  # zone-aware. Regardless of whether transitions in the time zone are crossed,
+  # results of arithmetic operations will always maintain the same offset from
+  # UTC (`offset`). The associated {TimezoneOffset} will aways be cleared.
   class DateTimeWithOffset < DateTime
     include WithOffset
 

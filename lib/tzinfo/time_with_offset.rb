@@ -4,8 +4,14 @@ module TZInfo
   # A subclass of `Time` used to represent local times. {TimeWithOffset} holds a
   # reference to the related {TimezoneOffset} and overrides various methods to
   # return results appropriate for the {TimezoneOffset}. Certain operations will
-  # clear the associated {TimezoneOffset}. Once the {TimezoneOffset} has been
+  # clear the associated {TimezoneOffset} (if the {TimezoneOffset} would not
+  # necessarily be valid for the result). Once the {TimezoneOffset} has been
   # cleared, {TimeWithOffset} behaves identically to `Time`.
+  #
+  # Arithmetic performed on {TimeWithOffset} instances is _not_ time zone-aware.
+  # Regardless of whether transitions in the time zone are crossed, results of
+  # arithmetic operations will always maintain the same offset from UTC
+  # (`utc_offset`). The associated {TimezoneOffset} will aways be cleared.
   class TimeWithOffset < Time
     include WithOffset
 
