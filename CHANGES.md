@@ -191,7 +191,7 @@
 * Add a link to a `DataSourceNotFound` help page in the
   `TZInfo::DataSourceNotFound` exception message.
 * Load iso3166.tab and zone.tab files as UTF-8.
-* Fix `Timezone#local_to_utc` returning local Time instances on systems using
+* Fix `Timezone#local_to_utc` returning local `Time` instances on systems using
   UTC as the local time zone. Resolves #13.
 * Fix `==` methods raising an exception when passed an instance of a different
   class by making `<=>` return `nil` if passed a non-comparable argument.
@@ -669,11 +669,12 @@
   Pacific/Auckland.
 * Eliminated unnecessary `.nil?` calls to give a minor performance gain.
 * `Timezone.all` and `Timezone.all_identifiers` now return all the
-  Timezones/identifiers rather than just those associated with countries. #4146.
+  `Timezone` instances/identifiers rather than just those associated with
+  countries. #4146.
 * Added `all_data_zones`, `all_data_zone_identifiers`, `all_linked_zones` and
   `all_linked_zone_identifiers` class methods to `Timezone`.
-* Added a `strftime` method to Timezone that converts a time in UTC to local
-  time and then returns it formatted. `%Z` is replaced with the Timezone
+* Added a `strftime` method to `Timezone` that converts a time in UTC to local
+  time and then returns it formatted. `%Z` is replaced with the timezone
   abbreviation for the given time (for example, EST or EDT). #4143.
 * Fix escaping of quotes in `TZDataParser`. This affected country names and
   descriptions of timezones within countries.
@@ -774,7 +775,7 @@
 * Use rake to build packages and documentation.
 * License file is now included in gem distribution.
 * Dates in definitions stored as Astronomical Julian Day numbers rather than
-  as civil dates (improves performance creating DateTime instances).
+  as civil dates (improves performance creating `DateTime` instances).
 * Added options to `TZDataParser` to allow generation of specific zones and
   countries.
 * Moved `TimezonePeriod` class to `timezone_period.rb`.
@@ -827,7 +828,7 @@
   quicker.
 
 In Ruby on Rails, you can now show a drop-down list of all timezones using the
-Rails time_zone_select helper method:
+Rails `time_zone_select` helper method:
 
 ```ruby
 <%= time_zone_select 'user', 'time_zone', TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %>
