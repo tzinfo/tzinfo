@@ -991,7 +991,7 @@ module TZInfo
     # @return [Array] an `Array` containing the current {TimeWithOffset} for the
     #   time zone as the first element and the current {TimezonePeriod} for the
     #   time zone as the second element.
-    def current_period_and_time
+    def current_time_and_period
       period = nil
 
       local_time = Timestamp.for(Time.now) do |ts|
@@ -1001,7 +1001,7 @@ module TZInfo
 
       [local_time, period]
     end
-    alias current_time_and_period current_period_and_time
+    alias current_period_and_time current_time_and_period
 
     # Converts a time to local time for the time zone and returns a `String`
     # representation of the local time according to the given format.
