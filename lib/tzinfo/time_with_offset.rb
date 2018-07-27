@@ -66,7 +66,7 @@ module TZInfo
     end
 
     # An overridden version of `Time#round` that, if there is an associated
-    # {TimezoneOffset}, returns a {TimeWithOffset} preserving that period.
+    # {TimezoneOffset}, returns a {TimeWithOffset} preserving that offset.
     #
     # @return [Time] the rounded time.
     def round(ndigits = 0)
@@ -98,11 +98,11 @@ module TZInfo
 
     # An overridden version of `Time#zone` that, if there is an associated
     # {TimezoneOffset}, returns the {TimezoneOffset#abbreviation abbreviation}
-    # of that period.
+    # of that offset.
     #
     # @return [String] the {TimezoneOffset#abbreviation abbreviation} of the
     #   associated {TimezoneOffset}, or the result from `Time#zone` if there is
-    #   no such period.
+    #   no such offset.
     def zone
       to = timezone_offset
       to ? to.abbreviation : super
@@ -110,7 +110,7 @@ module TZInfo
 
     # An overridden version of `Time#to_datetime` that, if there is an
     # associated {TimezoneOffset}, returns a {DateTimeWithOffset} with that
-    # period.
+    # offset.
     #
     # @return [DateTime] if there is an associated {TimezoneOffset}, a
     #   {DateTimeWithOffset} representation of this {TimeWithOffset}, otherwise

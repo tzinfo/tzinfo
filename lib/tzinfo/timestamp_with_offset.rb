@@ -27,7 +27,7 @@ module TZInfo
     #   {TimezoneOffset#current_utc_offset current_utc_offset} of the
     #   `timezone_offset` parameter and {timezone_offset timezone_offset} set to
     #   the `timezone_offset` parameter.
-    # @raise [ArgumentError] if `timestamp` or `period` is `nil`.
+    # @raise [ArgumentError] if `timestamp` or `timezone_offset` is `nil`.
     def self.set_timezone_offset(timestamp, timezone_offset)
       raise ArgumentError, 'timestamp must be specified' unless timestamp
       raise ArgumentError, 'timezone_offset must be specified' unless timezone_offset
@@ -41,7 +41,7 @@ module TZInfo
     # @return [TimestampWithOffset] `self`.
     # @raise [ArgumentError] if `timezone_offset` is `nil`.
     # @raise [ArgumentError] if {utc? self.utc?} is `true`.
-    # @raise [ArgumentError] if `period.current_utc_offset` does not equal
+    # @raise [ArgumentError] if `timezone_offset.current_utc_offset` does not equal
     #   `self.utc_offset`.
     def set_timezone_offset(timezone_offset)
       raise ArgumentError, 'timezone_offset must be specified' unless timezone_offset
