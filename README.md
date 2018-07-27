@@ -60,8 +60,9 @@ of `TZInfo::Timezone`) and convert a time in UTC to local New York time:
     local = tz.utc_to_local(Time.utc(2005,8,29,15,35,0))
 
 Note that the local Time returned will have a UTC timezone (`local.zone` will 
-return `"UTC"`). This is because the Ruby Time class only supports two timezones: 
-UTC and the current system local timezone.
+return `"UTC"`). This is because the Time class in older (but still supported by
+TZInfo) versions of Ruby can only handle two timezones: UTC and the system local
+timezone.
   
 To convert from a local time to UTC, the `local_to_utc` method can be used as
 follows:
