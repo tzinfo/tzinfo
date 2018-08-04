@@ -56,6 +56,10 @@ install:
   - if %RUBY_PLATFORM%==jruby 7z x vendor\jruby-bin-%JRUBY_VERSION%.zip -ovendor -y
   - if %RUBY_PLATFORM%==jruby set PATH=C:\projects\tzinfo\vendor\jruby-%JRUBY_VERSION%\bin;%PATH%
   - if %RUBY_PLATFORM%==jruby gem install bundler
+  - if v%RUBY_VERSION%==v193 appveyor DownloadFile https://github.com/philr/rubyinstaller/releases/download/1.9.3-p551-openssl-tls-1.1-1.2/ruby-1.9.3-p551-i386-mingw32.7z -FileName vendor\ruby-1.9.3-p551-i386-mingw32.7z
+  - if v%RUBY_VERSION%==v193 7z e vendor\ruby-1.9.3-p551-i386-mingw32.7z -ovendor ruby-1.9.3-p551-i386-mingw32\bin\libeay32.dll ruby-1.9.3-p551-i386-mingw32\bin\ssleay32.dll ruby-1.9.3-p551-i386-mingw32\lib\ruby\1.9.1\i386-mingw32\openssl.so
+  - if v%RUBY_VERSION%==v193 copy /Y vendor\*eay32.dll c:\Ruby193\bin
+  - if v%RUBY_VERSION%==v193 copy /Y vendor\openssl.so c:\Ruby193\lib\ruby\1.9.1\i386-mingw32
   - if %RUBY_PLATFORM%==ruby set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - bundle config --local path vendor/bundle
   - bundle update
