@@ -176,43 +176,45 @@ module TestUtils
       # JRuby and Rubinius don't support SAFE levels.
       available = !%w(jruby rbx).include?(RUBY_ENGINE)
 
-      if available || options[:unavailable] != :skip
-        thread = Thread.new do
-          orig_diff = Minitest::Assertions.diff
+      if !available && options[:unavailable] == :skip
+        skip('JRuby and Rubinius don\'t support SAFE levels')
+      end
 
-          if available
-            orig_safe = $SAFE
-            $SAFE = options[:level] || 1
-          end
+      thread = Thread.new do
+        orig_diff = Minitest::Assertions.diff
+
+        if available
+          orig_safe = $SAFE
+          $SAFE = options[:level] || 1
+        end
+        begin
+          # Disable the use of external diff tools during safe mode tests (since
+          # safe mode will prevent their use). The initial value is retrieved
+          # before activating safe mode because the first time
+          # Minitest::Assertions.diff is called, it will attempt to find a diff
+          # tool. Finding the diff tool will also fail in safe mode.
+          Minitest::Assertions.diff = nil
           begin
-            # Disable the use of external diff tools during safe mode tests (since
-            # safe mode will prevent their use). The initial value is retrieved
-            # before activating safe mode because the first time
-            # Minitest::Assertions.diff is called, it will attempt to find a diff
-            # tool. Finding the diff tool will also fail in safe mode.
-            Minitest::Assertions.diff = nil
-            begin
-              yield
-            ensure
-              Minitest::Assertions.diff = orig_diff
-            end
+            yield
           ensure
-            if available
-              # On Ruby < 2.6, setting $SAFE affects only the current thread
-              # and the $SAFE level cannot be downgraded. Catch and ignore the
-              # SecurityError.
-              # On Ruby >= 2.6, setting $SAFE is global, and the $SAFE level
-              # can be downgraded. Restore $SAFE back to the original level.
-              begin
-                $SAFE = orig_safe
-              rescue SecurityError
-              end
+            Minitest::Assertions.diff = orig_diff
+          end
+        ensure
+          if available
+            # On Ruby < 2.6, setting $SAFE affects only the current thread
+            # and the $SAFE level cannot be downgraded. Catch and ignore the
+            # SecurityError.
+            # On Ruby >= 2.6, setting $SAFE is global, and the $SAFE level
+            # can be downgraded. Restore $SAFE back to the original level.
+            begin
+              $SAFE = orig_safe
+            rescue SecurityError
             end
           end
         end
-
-        thread.join
       end
+
+      thread.join
     end
 
     def skip_if_has_bug_14060

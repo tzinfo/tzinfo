@@ -580,8 +580,8 @@ module DataSources
             FileUtils.ln_s(outside_file, file)
           rescue NotImplementedError, Errno::EACCES
             # Symlinks not supported on this platform, or permission denied
-            # (administrative rights are required on Windows). Skip test.
-            return
+            # (administrative rights are required on some versions of Windows).
+            skip('Symlinks are not supported on this platform, or permission was denied creating a symlink')
           end
 
           data_source = ZoneinfoDataSource.new(dir)
@@ -609,8 +609,8 @@ module DataSources
           FileUtils.ln_s(File.join(File.expand_path(dir), 'EST'), link)
         rescue NotImplementedError, Errno::EACCES
           # Symlinks not supported on this platform, or permission denied
-          # (administrative rights are required on Windows). Skip test.
-          return
+          # (administrative rights are required on some versions of Windows).
+          skip('Symlinks are not supported on this platform, or permission was denied creating a symlink')
         end
 
         data_source = ZoneinfoDataSource.new(dir)
@@ -640,8 +640,8 @@ module DataSources
           FileUtils.ln_s('../outside', link)
         rescue NotImplementedError, Errno::EACCES
           # Symlinks not supported on this platform, or permission denied
-          # (administrative rights are required on Windows). Skip test.
-          return
+          # (administrative rights are required on some versions of Windows).
+          skip('Symlinks are not supported on this platform, or permission was denied creating a symlink')
         end
 
         subdir = File.join(dir, 'Subdir')
@@ -681,8 +681,8 @@ module DataSources
           FileUtils.ln_s('../Subdir/EST', subdir_link)
         rescue NotImplementedError, Errno::EACCES
           # Symlinks not supported on this platform, or permission denied
-          # (administrative rights are required on Windows). Skip test.
-          return
+          # (administrative rights are required on some versions of Windows).
+          skip('Symlinks are not supported on this platform, or permission was denied creating a symlink')
         end
 
         subdir_link2 = File.join(subdir, 'Link2')
