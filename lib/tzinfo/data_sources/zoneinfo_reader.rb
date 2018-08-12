@@ -22,7 +22,7 @@ module TZInfo
       # @return [Object] either a {TimezoneOffset} or an `Array` of
       #   {TimezoneTransition}s.
       # @raise [SecurityError] if safe mode is enabled and `file_path` is
-      # tainted.
+      #   tainted.
       # @raise [InvalidZoneinfoFile] if `file_path`` does not refer to a valid
       #   zoneinfo file.
       def read(file_path)
