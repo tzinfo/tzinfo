@@ -28,9 +28,23 @@ module TZInfo
         super
 
         begin
-          require_data
+          require('tzinfo/data')
         rescue LoadError
           raise TZInfoDataNotFound, "The tzinfo-data gem could not be found (require 'tzinfo/data' failed)."
+        end
+
+        if TZInfo::Data.const_defined?(:LOCATION)
+          # Format 2
+          @base_path = File.join(TZInfo::Data::LOCATION, 'tzinfo', 'data')
+        else
+          # Format 1
+          data_file = File.join('', 'tzinfo', 'data.rb')
+          path = $".reverse_each.detect {|p| p.end_with?(data_file) }
+          if path
+            @base_path = File.join(File.dirname(path), 'data')
+          else
+            @base_path = 'tzinfo/data'
+          end
         end
 
         require_index('timezones')
@@ -108,7 +122,7 @@ module TZInfo
       #
       # @param file [Array<String>] a relative path to a file to be required.
       def require_data(*file)
-        require File.join('tzinfo', 'data', *file)
+        require(File.join(@base_path, *file))
       end
     end
   end

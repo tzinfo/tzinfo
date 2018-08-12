@@ -258,5 +258,31 @@ module DataSources
     def test_inspect
       assert_equal('#<TZInfo::DataSources::RubyDataSource>', @data_source.inspect)
     end
+
+    def test_tzinfo_data_not_found_in_loaded_features
+      code = <<-EOF
+        def require(name)
+          result = super
+          if name == 'tzinfo/data'
+            $".delete_if {|p| p.end_with?(File.join('', 'tzinfo', 'data.rb')) }
+          end
+          result
+        end
+
+        begin
+          $:.unshift('#{TZINFO_TEST_DATA_DIR}')
+          ds = TZInfo::DataSources::RubyDataSource.new
+          c = ds.get_country_info('GB')
+          puts c.code
+          tz = ds.get_timezone_info('Europe/London')
+          puts tz.identifier
+        rescue Exception => e
+          puts e.class
+          puts e.message
+        end
+      EOF
+
+      assert_sub_process_returns(['GB', 'Europe/London'], code)
+    end
   end
 end
