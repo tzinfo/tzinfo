@@ -5,69 +5,69 @@ cache:
 
 environment:
   matrix:
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 193
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 200
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 200-x64
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 21
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 21-x64
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 22
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 22-x64
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 23
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 23-x64
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 24
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 24-x64
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 25
 
-    - RUBY_PLATFORM: ruby
+    - RUBY_ENGINE: ruby
       RUBY_VERSION: 25-x64
 
-    - RUBY_PLATFORM: jruby
+    - RUBY_ENGINE: jruby
       JRUBY_VERSION: 1.7.27
 
-    - RUBY_PLATFORM: jruby
+    - RUBY_ENGINE: jruby
       JRUBY_VERSION: 9.1.16.0
 
 install:
   - if not exist vendor mkdir vendor
-  - if %RUBY_PLATFORM%==jruby appveyor DownloadFile https://s3.amazonaws.com/jruby.org/downloads/%JRUBY_VERSION%/jruby-bin-%JRUBY_VERSION%.zip -FileName vendor\jruby-bin-%JRUBY_VERSION%.zip
-  - if %RUBY_PLATFORM%==jruby 7z x vendor\jruby-bin-%JRUBY_VERSION%.zip -ovendor -y
-  - if %RUBY_PLATFORM%==jruby set PATH=C:\projects\tzinfo\vendor\jruby-%JRUBY_VERSION%\bin;%PATH%
-  - if %RUBY_PLATFORM%==jruby gem install bundler
+  - if %RUBY_ENGINE%==jruby appveyor DownloadFile https://s3.amazonaws.com/jruby.org/downloads/%JRUBY_VERSION%/jruby-bin-%JRUBY_VERSION%.zip -FileName vendor\jruby-bin-%JRUBY_VERSION%.zip
+  - if %RUBY_ENGINE%==jruby 7z x vendor\jruby-bin-%JRUBY_VERSION%.zip -ovendor -y
+  - if %RUBY_ENGINE%==jruby set PATH=C:\projects\tzinfo\vendor\jruby-%JRUBY_VERSION%\bin;%PATH%
+  - if %RUBY_ENGINE%==jruby gem install bundler
   - if v%RUBY_VERSION%==v193 appveyor DownloadFile https://github.com/philr/rubyinstaller/releases/download/1.9.3-p551-openssl-tls-1.1-1.2/ruby-1.9.3-p551-i386-mingw32.7z -FileName vendor\ruby-1.9.3-p551-i386-mingw32.7z
   - if v%RUBY_VERSION%==v193 7z e vendor\ruby-1.9.3-p551-i386-mingw32.7z -ovendor ruby-1.9.3-p551-i386-mingw32\bin\libeay32.dll ruby-1.9.3-p551-i386-mingw32\bin\ssleay32.dll ruby-1.9.3-p551-i386-mingw32\lib\ruby\1.9.1\i386-mingw32\openssl.so
   - if v%RUBY_VERSION%==v193 copy /Y vendor\*eay32.dll c:\Ruby193\bin
   - if v%RUBY_VERSION%==v193 copy /Y vendor\openssl.so c:\Ruby193\lib\ruby\1.9.1\i386-mingw32
-  - if %RUBY_PLATFORM%==ruby set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
+  - if %RUBY_ENGINE%==ruby set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - bundle config --local path vendor/bundle
   - bundle update
 
 build: off
 
 before_test:
-  - "%RUBY_PLATFORM% -v"
+  - "%RUBY_ENGINE% -v"
   - gem -v
   - bundle -v
 
