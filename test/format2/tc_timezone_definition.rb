@@ -66,7 +66,7 @@ module Format2
       m = Module.new
       m.send(:include, TimezoneDefinition)
 
-      m.send(:timezone, 'Test/Data/Zone') {|tz| tz.offset :o0, 0, 0, :UTC }
+      m.send(:timezone, 'Test/Data/Zone') {|tz| tz.offset :o0, 0, 0, 'UTC' }
 
       ti = m.get
       assert(ti.identifier.frozen?)
