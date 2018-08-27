@@ -91,6 +91,17 @@ module TZInfo
       # @return [bool] `string` if it is frozen, otherwise a frozen, possibly
       #   pre-existing copy of `string`.
       def dedupe(string)
+        # String#-@ on Ruby 2.6 will dedupe a frozen non-literal String. Ruby
+        # 2.5 will just return frozen strings.
+        #
+        # The pooled implementation can't tell the difference between frozen
+        # literals and frozen non-literals, so must always return frozen String
+        # instances to avoid doing unncessary work when loading format 2
+        # TZInfo::Data modules.
+        #
+        # For compatibility with the pooled implementation, just return frozen
+        # string instances (acting like Ruby 2.5).
+        return string if string.frozen?
         -string
       end
     end
