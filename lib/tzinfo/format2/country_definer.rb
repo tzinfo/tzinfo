@@ -30,7 +30,8 @@ module TZInfo
       # @overload timezone(reference)
       #   Defines a time zone of a country as a reference to a pre-defined
       #   shared time zone.
-      #   @param reference [Symbol] a reference for a pre-defined shared time zone.
+      #   @param reference [Symbol] a reference for a pre-defined shared time
+      #     zone.
       # @overload timezone(identifier, latitude_numerator, latitude_denominator, longitude_numerator, longitude_denominator, description)
       #   Defines a (non-shared) time zone of a country. The latitude and
       #   longitude are given as the numerator and denominator of a `Rational`.
@@ -38,7 +39,8 @@ module TZInfo
       #   @param latitude_numerator [Integer] the numerator of the latitude.
       #   @param latitude_denominator [Integer] the denominator of the latitude.
       #   @param longitude_numerator [Integer] the numerator of the longitude.
-      #   @param longitude_denominator [Integer] the denominator of the longitude.
+      #   @param longitude_denominator [Integer] the denominator of the
+      #     longitude.
       #   @param description [String] an optional description for the time zone.
       def timezone(identifier_or_reference, latitude_numerator = nil,
                   latitude_denominator = nil, longitude_numerator = nil,
