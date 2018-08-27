@@ -48,7 +48,10 @@ environment:
       JRUBY_VERSION: 1.7.27
 
     - RUBY_ENGINE: jruby
-      JRUBY_VERSION: 9.1.16.0
+      JRUBY_VERSION: 9.1.17.0
+
+    - RUBY_ENGINE: jruby
+      JRUBY_VERSION: 9.2.0.0
 
 install:
   - if not exist vendor mkdir vendor
