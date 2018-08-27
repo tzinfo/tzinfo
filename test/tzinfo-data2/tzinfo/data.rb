@@ -7,4 +7,4 @@ module TZInfo
   end
 end
 
-require 'tzinfo/data/version'
+require_relative 'data/version'
