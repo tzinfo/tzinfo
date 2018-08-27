@@ -8,7 +8,7 @@ module TZInfo
     class CountryDefiner < Format2::CountryDefiner #:nodoc:
       # Initializes a new {CountryDefiner}.
       def initialize(identifier_deduper, description_deduper)
-        super({}, identifier_deduper, description_deduper)
+        super(nil, identifier_deduper, description_deduper)
       end
     end
   end
