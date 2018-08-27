@@ -58,4 +58,5 @@ module TZInfo
   #
   # @private
   CountryIndexDefinition = Format1::CountryIndexDefinition #:nodoc:
+  private_constant :CountryIndexDefinition
 end

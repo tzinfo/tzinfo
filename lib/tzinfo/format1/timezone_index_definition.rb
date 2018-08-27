@@ -71,4 +71,5 @@ module TZInfo
   #
   # @private
   TimezoneIndexDefinition = Format1::TimezoneIndexDefinition #:nodoc:
+  private_constant :TimezoneIndexDefinition
 end

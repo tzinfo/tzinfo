@@ -4,4 +4,5 @@ module TZInfo
   # @private
   module Format1 #:nodoc:
   end
+  private_constant :Format1
 end

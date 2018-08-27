@@ -33,4 +33,5 @@ module TZInfo
   #
   # @private
   TimezoneDefinition = Format1::TimezoneDefinition #:nodoc:
+  private_constant :TimezoneDefinition
 end
