@@ -56,6 +56,11 @@ unless defined? TZINFO_TEST_DATA_DIR
   $:.unshift(TZINFO_TEST_DATA_DIR) unless $:.include?(TZINFO_TEST_DATA_DIR)
 end
 
+def nil.freeze
+  warn('nil is being frozen')
+  super
+end
+
 require 'minitest/autorun'
 require 'tzinfo'
 require 'date'

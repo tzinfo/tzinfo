@@ -27,8 +27,13 @@ class TCCountryTimezone < Minitest::Test
   end
 
   def test_nil_description
+    nil_frozen = nil.frozen?
     ct = CountryTimezone.new('Europe/London', Rational(2059, 40), Rational(-5, 16), nil)
     assert_nil(ct.description)
+
+    # nil is frozen by default from Ruby 2.2.0. Check that CountryTimezone.new
+    # didn't freeze nil on earlier Ruby versions.
+    assert_equal(nil_frozen, nil.frozen?)
   end
 
   def test_description

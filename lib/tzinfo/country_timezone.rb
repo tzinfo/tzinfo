@@ -43,7 +43,7 @@ module TZInfo
       @identifier = identifier.freeze
       @latitude = latitude
       @longitude = longitude
-      @description = description.freeze
+      @description = description && description.freeze
     end
 
     # Returns the associated {Timezone}.
