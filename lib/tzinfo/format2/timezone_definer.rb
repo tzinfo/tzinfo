@@ -13,7 +13,11 @@ module TZInfo
       attr_reader :transitions
 
       # Initializes a new TimezoneDefiner.
-      def initialize
+      #
+      # @param string_deduper [StringDeduper] a {StringDeduper} instance to use
+      #   when deduping abbreviations.
+      def initialize(string_deduper)
+        @string_deduper = string_deduper
         @offsets = {}
         @transitions = []
       end
@@ -43,6 +47,11 @@ module TZInfo
       #   the given id.
       def offset(id, base_utc_offset, std_offset, abbreviation)
         raise ArgumentError, 'An offset has already been defined with the given id' if @offsets.has_key?(id)
+
+        # Dedupe non-frozen literals from format 1 on all Ruby versions and
+        # format 2 on Ruby < 2.3 (without frozen_string_literal support).
+        abbreviation = @string_deduper.dedupe(abbreviation)
+
         offset = TimezoneOffset.new(base_utc_offset, std_offset, abbreviation)
         @offsets[id] = offset
         @previous_offset ||= offset

@@ -50,7 +50,7 @@ module TZInfo
         #
         # @param identifier [String] the time zone identifier.
         def timezone(identifier)
-          identifier.freeze
+          identifier = StringDeduper.global.dedupe(identifier)
           @timezones << identifier
           @data_timezones << identifier
         end
@@ -59,7 +59,7 @@ module TZInfo
         #
         # @param identifier [String] the time zone identifier.
         def linked_timezone(identifier)
-          identifier.freeze
+          identifier = StringDeduper.global.dedupe(identifier)
           @timezones << identifier
           @linked_timezones << identifier
         end

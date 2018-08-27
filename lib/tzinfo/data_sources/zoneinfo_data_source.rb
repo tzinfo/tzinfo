@@ -232,7 +232,7 @@ module TZInfo
         @timezone_identifiers = load_timezone_identifiers.freeze
         @countries = load_countries(iso3166_tab_path, zone_tab_path).freeze
         @country_codes = @countries.keys.sort!.freeze
-        @zoneinfo_reader = ZoneinfoReader.new
+        @zoneinfo_reader = ZoneinfoReader.new(ConcurrentStringDeduper.new)
       end
 
       # Returns a frozen `Array` of all the available time zone identifiers. The
@@ -491,19 +491,21 @@ module TZInfo
           end
         end
 
+        string_deduper = StringDeduper.new
         primary_zones = {}
         secondary_zones = {}
 
         zone_tab.each do |codes, zone_identifier, latitude, longitude, column4, column5|
           description = file_is_5_column ? column5 : column4
+          description = string_deduper.dedupe(description) if description
 
           # Lookup the identifier in the timezone index, so that the same
           # String instance can be used (saving memory).
           begin
             zone_identifier = validate_timezone_identifier(zone_identifier)
           rescue InvalidTimezoneIdentifier
-            # zone_identifier is not valid, use the String instance from
-            # zone.tab.
+            # zone_identifier is not valid, dedupe and allow anyway.
+            zone_identifier = string_deduper.dedupe(zone_identifier)
           end
 
           country_timezone = CountryTimezone.new(zone_identifier, latitude, longitude, description)

@@ -10,8 +10,11 @@ module TZInfo
     # Reads compiled zoneinfo TZif (\0, 2 or 3) files.
     class ZoneinfoReader #:nodoc:
       # Initializes a new {ZoneinfoReader}.
-      def initialize
-        @abbreviations = Hash.new {|h, k| h[k] = k }
+      #
+      # @param string_deduper [StringDeduper] a {StringDeduper} instance to use
+      #   when deduping abbreviations.
+      def initialize(string_deduper)
+        @string_deduper = string_deduper
       end
 
       # Reads a zoneinfo structure from the given path. Returns either a
@@ -249,7 +252,7 @@ module TZInfo
           abbrev_end = abbrev.index("\0", abbrev_start)
           raise InvalidZoneinfoFile, "Missing abbreviation null terminator in file '#{file.path}'." unless abbrev_end
 
-          abbr = @abbreviations[abbrev[abbrev_start...abbrev_end].force_encoding(Encoding::UTF_8).untaint.freeze]
+          abbr = @string_deduper.dedupe(abbrev[abbrev_start...abbrev_end].force_encoding(Encoding::UTF_8).untaint)
 
           TimezoneOffset.new(base_utc_offset, std_offset, abbr)
         end

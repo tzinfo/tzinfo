@@ -13,7 +13,11 @@ module TZInfo
       attr_reader :linked_timezones
 
       # Initializes a new TimezoneDefiner.
-      def initialize
+      #
+      # @param string_deduper [StringDeduper] a {StringDeduper} instance to use
+      #   when deduping identifiers.
+      def initialize(string_deduper)
+        @string_deduper = string_deduper
         @data_timezones = []
         @linked_timezones = []
       end
@@ -22,14 +26,18 @@ module TZInfo
       #
       # @param identifier [String] the time zone identifier.
       def data_timezone(identifier)
-        @data_timezones << identifier.freeze
+        # Dedupe non-frozen literals from format 1 on all Ruby versions and
+        # format 2 on Ruby < 2.3 (without frozen_string_literal support).
+        @data_timezones << @string_deduper.dedupe(identifier)
       end
 
       # Adds a linked time zone to the index.
       #
       # @param identifier [String] the time zone identifier.
       def linked_timezone(identifier)
-        @linked_timezones << identifier.freeze
+        # Dedupe non-frozen literals from format 1 on all Ruby versions and
+        # format 2 on Ruby < 2.3 (without frozen_string_literal support).
+        @linked_timezones << @string_deduper.dedupe(identifier)
       end
     end
   end

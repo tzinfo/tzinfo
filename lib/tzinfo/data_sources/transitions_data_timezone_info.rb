@@ -154,11 +154,11 @@ module TZInfo
         # @return [Integer] the index of the earliest transition safisfying
         #   the condition or `nil` if there are no such transitions.
         #
-        # :nocov_no_bsearch_index:
+        # :nocov_no_array_bsearch_index:
         def find_minimum_transition(&block)
           @transitions.bsearch_index(&block)
         end
-        # :nocov_no_bsearch_index:
+        # :nocov_no_array_bsearch_index:
       else
         # Performs a binary search on {transitions} to find the index of the
         # earliest transition satisfying a condition.
@@ -174,7 +174,7 @@ module TZInfo
         # @return [Integer] the index of the earliest transition safisfying
         #   the condition or `nil` if there are no such transitions.
         #
-        # :nocov_bsearch_index:
+        # :nocov_array_bsearch_index:
         def find_minimum_transition
           # A Ruby implementation of the find-minimum mode of Array#bsearch_index.
           low = 0
@@ -193,7 +193,7 @@ module TZInfo
 
           satisfied ? low : nil
         end
-        # :nocov_bsearch_index:
+        # :nocov_array_bsearch_index:
       end
 
       # Determines if a transition occurs at or after a given {Timestamp},

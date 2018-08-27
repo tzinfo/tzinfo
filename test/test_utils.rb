@@ -19,9 +19,23 @@ end
 COVERAGE_ENABLED = ENV['TEST_COVERAGE'] == '1'
 
 if COVERAGE_ENABLED && defined?(COVERAGE_TYPE)
-  COVERAGE_NOCOV_TOKEN = 'nocov' + [[[], :bsearch], [[], :bsearch_index]].map do |object, method|
-    "(#{object.respond_to?(method) ? '' : '_no'}_#{method})?"
-  end.join
+  string_unary_minus_does_dedupe = if '0'.respond_to?(:-@)
+    s1 = -('0'.dup)
+    s2 = -('0'.dup)
+    s1.object_id == s2.object_id
+  else
+    false
+  end
+
+  feature_support = [['deduping_string_unary_minus', string_unary_minus_does_dedupe]].map do |feature, available|
+    "#{available ? '' : 'no_'}#{feature}"
+  end
+
+  method_support = [[[], :bsearch], [[], :bsearch_index], ['', :-@]].map do |object, method|
+    "#{object.respond_to?(method) ? '' : 'no_'}#{Regexp.escape(object.class.name.downcase)}_#{Regexp.escape(method)}"
+  end
+
+  COVERAGE_NOCOV_TOKEN = "nocov_(#{(feature_support + method_support).join('|')})"
 
   require 'simplecov'
 

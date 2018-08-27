@@ -42,7 +42,7 @@ module TZInfo
         # @yieldparam definer [TimezoneIndexDefiner] a {TimezoneIndexDefiner}
         #   instance that should be used to define the index.
         def timezone_index
-          definer = TimezoneIndexDefiner.new
+          definer = TimezoneIndexDefiner.new(StringDeduper.global)
           yield definer
           @data_timezones = definer.data_timezones.sort!.freeze
           @linked_timezones = definer.linked_timezones.sort!.freeze

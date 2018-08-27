@@ -6,6 +6,8 @@ end
 
 require_relative 'tzinfo/version'
 
+require_relative 'tzinfo/string_deduper'
+
 require_relative 'tzinfo/timestamp'
 
 require_relative 'tzinfo/with_offset'

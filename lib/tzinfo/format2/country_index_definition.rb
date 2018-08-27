@@ -34,7 +34,7 @@ module TZInfo
         # @yieldparam definer [CountryIndexDefiner] a {CountryIndexDefiner}
         #   instance that should be used to define the index.
         def country_index
-          definer = CountryIndexDefiner.new
+          definer = CountryIndexDefiner.new(StringDeduper.global, StringDeduper.new)
           yield definer
           @countries = definer.countries.freeze
         end

@@ -335,13 +335,13 @@ module TZInfo
       # @return [String] the `String` instance representing `identifier` from
       #   {timezone_identifiers} if found, or `nil` if not found.
       #
-      # :nocov_no_bsearch:
+      # :nocov_no_array_bsearch:
       def find_timezone_identifier(identifier)
         return nil unless identifier.kind_of?(String)
         result = timezone_identifiers.bsearch {|i| i >= identifier }
         result == identifier ? result : nil
       end
-      # :nocov_no_bsearch:
+      # :nocov_no_array_bsearch:
     else
       # If the given `identifier` is contained within the {timezone_identifiers}
       # `Array`, the `String` instance representing that identifier from
@@ -351,7 +351,7 @@ module TZInfo
       # @return [String] the `String` instance representing `identifier` from
       #   {timezone_identifiers} if found, or `nil` if not found.
       #
-      # :nocov_bsearch:
+      # :nocov_array_bsearch:
       def find_timezone_identifier(identifier)
         return nil unless identifier.kind_of?(String)
 
@@ -375,7 +375,7 @@ module TZInfo
 
         nil
       end
-      # :nocov_bsearch:
+      # :nocov_array_bsearch:
     end
   end
 end

@@ -92,5 +92,21 @@ module Format2
       assert_equal('Four', country_fr.name)
       assert_equal([], country_fr.zones)
     end
+
+    def test_global_and_local_string_dedupers_used_for_country_index_definer
+      block_called = 0
+
+      m = Module.new
+      m.send(:include, CountryIndexDefinition)
+
+      m.send(:country_index) do |i|
+        assert_kind_of(CountryIndexDefiner, i)
+        assert_same(StringDeduper.global, i.instance_variable_get(:@identifier_deduper))
+        assert_same(StringDeduper, i.instance_variable_get(:@description_deduper).class)
+        block_called += 1
+      end
+
+      assert_equal(1, block_called)
+    end
   end
 end

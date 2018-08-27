@@ -6,27 +6,29 @@ include TZInfo
 
 module Format2
   class TCCountryIndexDefiner < Minitest::Test
+    def setup
+      @identifier_deduper = StringDeduper.new
+      @description_deduper = StringDeduper.new
+      @definer = CountryIndexDefiner.new(@identifier_deduper, @description_deduper)
+    end
+
 
     def test_none
-      d = CountryIndexDefiner.new
-
-      countries = d.countries
+      countries = @definer.countries
       assert_equal({}, countries)
     end
 
     def test_multiple
-      d = CountryIndexDefiner.new
+      @definer.timezone(:t1, 'Test/Zone/Shared1', -1, -2, -3, -4)
+      @definer.timezone(:t2, 'Test/Zone/Shared2', 1, 2, 3, 4, 'Shared 2')
 
-      d.timezone(:t1, 'Test/Zone/Shared1', -1, -2, -3, -4)
-      d.timezone(:t2, 'Test/Zone/Shared2', 1, 2, 3, 4, 'Shared 2')
-
-      d.country('ZZ', 'Country One') do |c|
+      @definer.country('ZZ', 'Country One') do |c|
         assert_kind_of(CountryDefiner, c)
         c.timezone :t1
         c.timezone 'Test/Zone/1', 3, 2, 41, 20
       end
 
-      d.country('AA', 'Aland') do |c|
+      @definer.country('AA', 'Aland') do |c|
         assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/3', 71, 30, 358, 15, 'Zone 3'
         c.timezone 'Test/Zone/2', 41, 20, 211, 30
@@ -34,12 +36,12 @@ module Format2
         c.timezone :t2
       end
 
-      d.country('TE', 'Three')
+      @definer.country('TE', 'Three')
 
-      d.country('FR', 'Four') do |c|
+      @definer.country('FR', 'Four') do |c|
       end
 
-      countries = d.countries
+      countries = @definer.countries
       assert_equal(%w(ZZ AA TE FR), countries.keys)
 
       country_zz = countries['ZZ']
@@ -76,19 +78,17 @@ module Format2
     end
 
     def test_redefined_country
-      d = CountryIndexDefiner.new
-
-      d.country('TT', 'Test1') do |c|
+      @definer.country('TT', 'Test1') do |c|
         assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/1', 1, 2, 3, 4, 'Zone 1'
       end
 
-      d.country('TT', 'Test2') do |c|
+      @definer.country('TT', 'Test2') do |c|
         assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/2', 5, 6, 7, 8, 'Zone 2'
       end
 
-      countries = d.countries
+      countries = @definer.countries
       assert_equal(%w(TT), countries.keys)
 
       country_tt = countries['TT']
@@ -99,17 +99,15 @@ module Format2
     end
 
     def test_redefined_shared_timezone
-      d = CountryIndexDefiner.new
+      @definer.timezone(:t1, 'Test/Zone/Shared1', -1, -2, -3, -4)
+      @definer.timezone(:t1, 'Test/Zone/Shared2', 1, 2, 3, 4, 'Shared 2')
 
-      d.timezone(:t1, 'Test/Zone/Shared1', -1, -2, -3, -4)
-      d.timezone(:t1, 'Test/Zone/Shared2', 1, 2, 3, 4, 'Shared 2')
-
-      d.country('TT', 'Test1') do |c|
+      @definer.country('TT', 'Test1') do |c|
         assert_kind_of(CountryDefiner, c)
         c.timezone(:t1)
       end
 
-      countries = d.countries
+      countries = @definer.countries
       assert_equal(%w(TT), countries.keys)
 
       country_tt = countries['TT']
@@ -120,17 +118,15 @@ module Format2
     end
 
     def test_strings_frozen
-      d = CountryIndexDefiner.new
+      @definer.timezone(:t1, 'Test/Zone/Shared1', 1, 2, 3, 4, 'Shared 1')
 
-      d.timezone(:t1, 'Test/Zone/Shared1', 1, 2, 3, 4, 'Shared 1')
-
-      d.country('TT', 'Test') do |c|
+      @definer.country('TT', 'Test') do |c|
         assert_kind_of(CountryDefiner, c)
         c.timezone 'Test/Zone/1', 1, 2, 3, 4, 'Zone One'
         c.timezone :t1
       end
 
-      countries = d.countries
+      countries = @definer.countries
       assert(countries.keys.all?(&:frozen?))
       country_tt = countries['TT']
       assert(country_tt.code.frozen?)
@@ -141,6 +137,54 @@ module Format2
       zone1 = country_tt.zones[1]
       assert(zone1.identifier.frozen?)
       assert(zone1.description.frozen?)
+    end
+
+    def test_strings_deduped
+      @definer.timezone(:t1, 'Test/Zone/Shared1', 1, 2, 3, 4, 'Shared 1')
+      @definer.timezone(:t2, 'Test/Zone/Shared2', 1, 2, 3, 4, 'Shared 2')
+
+      # There will never be a country defined with either a duplicate code or
+      # a duplicate name.
+
+      @definer.country('TT', 'Test') do |c|
+        c.timezone :t1
+        c.timezone 'Test/Zone/Shared2', 5, 6, 7, 8, 'Shared 2'
+      end
+
+      @definer.country('TU', 'Test 2') do |c|
+        c.timezone 'Test/Zone/Shared1', 9, 10, 11, 12, 'Shared 1'
+        c.timezone :t2
+      end
+
+      countries = @definer.countries
+      country_tt = countries['TT']
+      country_tu = countries['TU']
+
+      assert_same(country_tt.zones[0].identifier, country_tu.zones[0].identifier)
+      assert_same(country_tt.zones[0].description, country_tu.zones[0].description)
+
+      assert_same(country_tt.zones[1].identifier, country_tu.zones[1].identifier)
+      assert_same(country_tt.zones[1].description, country_tu.zones[1].description)
+
+      assert_same(@identifier_deduper.dedupe('Test/Zone/Shared1'), country_tt.zones[0].identifier)
+      assert_same(@identifier_deduper.dedupe('Test/Zone/Shared2'), country_tt.zones[1].identifier)
+
+      assert_same(@description_deduper.dedupe('Shared 1'), country_tt.zones[0].description)
+      assert_same(@description_deduper.dedupe('Shared 2'), country_tt.zones[1].description)
+    end
+
+    def test_identifier_and_description_string_dedupers_used_for_country_definer
+      block_called = 0
+
+      @definer.country('TT', 'Test') do |c|
+        block_called += 1
+        assert_kind_of(CountryDefiner, c)
+        assert_same(@identifier_deduper, c.instance_variable_get(:@identifier_deduper))
+        assert_same(@description_deduper, c.instance_variable_get(:@description_deduper))
+        c.timezone 'Test/Zone/1', 1, 2, 3, 4, 'One'
+      end
+
+      assert_equal(1, block_called)
     end
   end
 end

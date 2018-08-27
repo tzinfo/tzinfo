@@ -163,7 +163,7 @@ module DataSources
     end
 
     def setup
-      @reader = ZoneinfoReader.new
+      @reader = ZoneinfoReader.new(StringDeduper.new)
     end
 
     def test_read
@@ -1279,22 +1279,15 @@ module DataSources
       end
     end
 
-    def test_read_returns_same_abbreviation_instances
-      offsets = [{gmtoff: 3542, isdst: false, abbrev: 'LMT'}]
+    def test_read_returns_deduped_strings
+      offsets = [{gmtoff: 3542, isdst: false, abbrev: 'ZIDDSMT'}]
 
-      o = TimezoneOffset.new(3542, 0, 'LMT')
-
-      MIN_FORMAT.upto(MAX_FORMAT) do |format|
+      tzif_test(offsets, []) do |path, format|
         abbreviations = 2.times.collect do
-          write_tzif(format, offsets, []) do |path|
-            @reader.read(path).tap do |result|
-              assert_equal(o, result)
-            end
-          end.abbreviation
+          @reader.read(path).abbreviation
         end
 
         assert_same(abbreviations[0], abbreviations[1])
-        assert(abbreviations[0].frozen?)
       end
     end
   end

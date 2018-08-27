@@ -11,7 +11,14 @@ module TZInfo
       attr_reader :countries
 
       # Initializes a new {CountryIndexDefiner}.
-      def initialize
+      #
+      # @param identifier_deduper [StringDeduper] a {StringDeduper} instance to
+      #   use when deduping time zone identifiers.
+      # @param description_deduper [StringDeduper] a {StringDeduper} instance to
+      #   use when deduping time zone descriptions.
+      def initialize(identifier_deduper, description_deduper)
+        @identifier_deduper = identifier_deduper
+        @description_deduper = description_deduper
         @shared_timezones = {}
         @countries = {}
       end
@@ -29,9 +36,11 @@ module TZInfo
       # @param description [String] an optional description for the time zone.
       def timezone(reference, identifier, latitude_numerator, latitude_denominator,
                     longitude_numerator, longitude_denominator, description = nil)
-        @shared_timezones[reference] = CountryTimezone.new(identifier,
+        # Dedupe non-frozen literals from format 1 on all Ruby versions and
+        # format 2 on Ruby < 2.3 (without frozen_string_literal support).
+        @shared_timezones[reference] = CountryTimezone.new(@identifier_deduper.dedupe(identifier),
           Rational(latitude_numerator, latitude_denominator),
-          Rational(longitude_numerator, longitude_denominator), description)
+          Rational(longitude_numerator, longitude_denominator), description && @description_deduper.dedupe(description))
       end
 
       # Defines a country.
@@ -44,7 +53,7 @@ module TZInfo
       #   instance that should be used to specify the time zones of the country.
       def country(code, name)
         timezones = if block_given?
-          definer = CountryDefiner.new(@shared_timezones)
+          definer = CountryDefiner.new(@shared_timezones, @identifier_deduper, @description_deduper)
           yield definer
           definer.timezones
         else

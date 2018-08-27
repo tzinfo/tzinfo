@@ -85,6 +85,8 @@
   been made private.
 * The performance of loading zoneinfo files and the associated indexes has been
   improved.
+* Memory use has been decreased by deduplicating `String` instances when loading
+  country and time zone data.
 * The dependency on `thread_safe` has been replaced with `concurrent-ruby`.
 * The Info classes used to return time zone and country information from
   `TZInfo::DataSource` implementations have been moved into the

@@ -16,8 +16,14 @@ module TZInfo
       # @param shared_timezones [Hash<Symbol, CountryTimezone>] a `Hash`
       #   containing time zones shared by more than one country, keyed by a
       #   unique reference.
-      def initialize(shared_timezones)
+      # @param identifier_deduper [StringDeduper] a {StringDeduper} instance to
+      #   use when deduping time zone identifiers.
+      # @param description_deduper [StringDeduper] a {StringDeduper} instance to
+      #   use when deduping time zone descriptions.
+      def initialize(shared_timezones, identifier_deduper, description_deduper)
         @shared_timezones = shared_timezones
+        @identifier_deduper = identifier_deduper
+        @description_deduper = description_deduper
         @timezones = []
       end
 
@@ -41,9 +47,13 @@ module TZInfo
           unless latitude_denominator && longitude_numerator && longitude_denominator
             raise ArgumentError, 'Either just a reference should be supplied, or the identifier, latitude and longitude must all be specified'
           end
-          @timezones << CountryTimezone.new(identifier_or_reference,
+
+          # Dedupe non-frozen literals from format 1 on all Ruby versions and
+          # format 2 on Ruby < 2.3 (without frozen_string_literal support).
+
+          @timezones << CountryTimezone.new(@identifier_deduper.dedupe(identifier_or_reference),
             Rational(latitude_numerator, latitude_denominator),
-            Rational(longitude_numerator, longitude_denominator), description)
+            Rational(longitude_numerator, longitude_denominator), description && @description_deduper.dedupe(description))
         else
           shared_timezone = @shared_timezones[identifier_or_reference]
           raise ArgumentError, "Unknown shared timezone: #{identifier_or_reference}" unless shared_timezone

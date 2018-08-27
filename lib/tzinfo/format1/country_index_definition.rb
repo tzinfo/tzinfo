@@ -25,6 +25,7 @@ module TZInfo
         #   of all the countries that have been defined in the index keyed by
         #   their codes.
         def countries
+          @description_deduper = nil
           @countries.freeze
         end
 
@@ -37,8 +38,10 @@ module TZInfo
         # @yield [definer] (optional) to obtain the time zones for the country.
         # @yieldparam definer [CountryDefiner] a {CountryDefiner} instance.
         def country(code, name)
+          @description_deduper ||= StringDeduper.new
+
           zones = if block_given?
-            definer = CountryDefiner.new
+            definer = CountryDefiner.new(StringDeduper.global, @description_deduper)
             yield definer
             definer.timezones
           else

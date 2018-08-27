@@ -1322,6 +1322,37 @@ module DataSources
       assert_equal("#<TZInfo::DataSources::ZoneinfoDataSource: #{ZONEINFO_DIR}>", @data_source.inspect)
     end
 
+    def test_strings_deduped
+      Dir.mktmpdir('tzinfo_test') do |dir|
+        File.open(File.join(dir, 'iso3166.tab'), 'w', external_encoding: Encoding::UTF_8) do |iso3166|
+          iso3166.puts("FC\tFake Country")
+          iso3166.puts("OC\tOther Country")
+        end
+
+        File.open(File.join(dir, 'zone.tab'), 'w', external_encoding: Encoding::UTF_8) do |zone|
+          zone.puts("FC\t+513030-0000731\tFake/One\tDescription of onex")
+          zone.puts("OC\t+513030-0000731\tFake/One\tDescription of onex")
+          zone.puts("OC,FC\t+513030-0000731\tFake/Two\tDescription of two")
+        end
+
+        fake_dir = File.join(dir, 'Fake')
+        FileUtils.mkdir(fake_dir)
+        FileUtils.touch(File.join(fake_dir, 'Two'))
+
+        data_source = ZoneinfoDataSource.new(dir)
+
+        fc = data_source.send(:load_country_info, 'FC')
+        oc = data_source.send(:load_country_info, 'OC')
+
+        assert_same(fc.zones[0].identifier, oc.zones[0].identifier)
+        assert_same(fc.zones[0].description, oc.zones[0].description)
+        assert_same(fc.zones[1].identifier, oc.zones[1].identifier)
+        assert_same(fc.zones[1].description, oc.zones[1].description)
+
+        assert_same(data_source.timezone_identifiers[0], fc.zones[1].identifier)
+      end
+    end
+
     private
 
     def assert_raises_directory_not_found(&block)

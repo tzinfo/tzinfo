@@ -96,9 +96,9 @@ module Format1
       m = Module.new
       m.send(:include, CountryIndexDefinition)
 
-      m.send(:country, 'TT', 'Test') do |c|
+      m.send(:country, 'TT'.dup, 'Test'.dup) do |c|
         assert_kind_of(CountryDefiner, c)
-        c.timezone 'Test/Zone/1', 1, 2, 3, 4, 'Zone One'
+        c.timezone 'Test/Zone/1'.dup, 1, 2, 3, 4, 'Zone One'.dup
       end
 
       countries = m.countries
@@ -109,6 +109,68 @@ module Format1
       zone = country.zones.first
       assert(zone.identifier.frozen?)
       assert(zone.description.frozen?)
+    end
+
+    def test_strings_deduped
+      m = Module.new
+      m.send(:include, CountryIndexDefinition)
+
+      # There will never be a country defined with either a duplicate code or
+      # a duplicate name.
+
+      m.send(:country, 'TT', 'Test') do |c|
+        c.timezone 'Test/Zone/Shared1'.dup, 1, 2, 3, 4, 'Shared 1'.dup
+        c.timezone 'Test/Zone/Shared2'.dup, 5, 6, 7, 8, 'Shared 2'.dup
+      end
+
+      m.send(:country, 'TU', 'Test 2') do |c|
+        c.timezone 'Test/Zone/Shared1'.dup, 9, 10, 11, 12, 'Shared 1'.dup
+        c.timezone 'Test/Zone/Shared2'.dup, 1, 2, 3, 4, 'Shared 2'.dup
+      end
+
+      countries = m.countries
+
+      country_tt = countries['TT']
+      country_tu = countries['TU']
+
+      assert_same(country_tt.zones[0].identifier, country_tu.zones[0].identifier)
+      assert_same(country_tt.zones[0].description, country_tu.zones[0].description)
+
+      assert_same(country_tt.zones[1].identifier, country_tu.zones[1].identifier)
+      assert_same(country_tt.zones[1].description, country_tu.zones[1].description)
+
+      # The time zone identifier is required to have been deduped globally
+      # because it will be referenced separately by the time zone module.
+      # The descriptions are only referenced in the index, so can be handled
+      # locally.
+      sd = StringDeduper.global
+      assert_same(sd.dedupe('Test/Zone/Shared1'.dup), country_tt.zones[0].identifier)
+      assert_same(sd.dedupe('Test/Zone/Shared2'.dup), country_tt.zones[1].identifier)
+    end
+
+    def test_global_and_local_string_dedupers_used_for_country_definer
+      block_called = 0
+      description_deduper = nil
+
+      m = Module.new
+      m.send(:include, CountryIndexDefinition)
+
+      m.send(:country, 'TT', 'Test') do |c|
+        assert_kind_of(CountryDefiner, c)
+        assert_same(StringDeduper.global, c.instance_variable_get(:@identifier_deduper))
+        description_deduper = c.instance_variable_get(:@description_deduper)
+        assert_same(StringDeduper, description_deduper.class)
+        block_called += 1
+      end
+
+      assert_equal(1, block_called)
+
+      m.send(:country, 'TU', 'Test 2') do |c|
+        assert_same(description_deduper, c.instance_variable_get(:@description_deduper))
+        block_called += 1
+      end
+
+      assert_equal(2, block_called)
     end
 
     def test_tzinfo_module_alias

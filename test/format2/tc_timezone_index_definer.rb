@@ -6,47 +6,58 @@ include TZInfo
 
 module Format2
   class TCTimezoneIndexDefiner < Minitest::Test
-    def test_mixed
-      d = TimezoneIndexDefiner.new
-      d.data_timezone 'Test/One'
-      d.data_timezone 'Test/Two'
-      d.linked_timezone 'Test/Three'
-      d.data_timezone 'Another/Zone'
-      d.linked_timezone 'And/Yet/Another'
+    def setup
+      @string_deduper = StringDeduper.new
+      @definer = TimezoneIndexDefiner.new(@string_deduper)
+    end
 
-      assert_array_same_items(['Another/Zone', 'Test/One', 'Test/Two'], d.data_timezones)
-      assert_array_same_items(['And/Yet/Another', 'Test/Three'], d.linked_timezones)
-      assert(d.data_timezones.all?(&:frozen?))
-      assert(d.linked_timezones.all?(&:frozen?))
+    def test_mixed
+      @definer.data_timezone 'Test/One'
+      @definer.data_timezone 'Test/Two'
+      @definer.linked_timezone 'Test/Three'
+      @definer.data_timezone 'Another/Zone'
+      @definer.linked_timezone 'And/Yet/Another'
+
+      assert_array_same_items(['Another/Zone', 'Test/One', 'Test/Two'], @definer.data_timezones)
+      assert_array_same_items(['And/Yet/Another', 'Test/Three'], @definer.linked_timezones)
+      assert(@definer.data_timezones.all?(&:frozen?))
+      assert(@definer.linked_timezones.all?(&:frozen?))
     end
 
     def test_data_only
-      d = TimezoneIndexDefiner.new
-      d.data_timezone 'Test/A/One'
-      d.data_timezone 'Test/A/Two'
-      d.data_timezone 'Test/A/Three'
+      @definer.data_timezone 'Test/A/One'
+      @definer.data_timezone 'Test/A/Two'
+      @definer.data_timezone 'Test/A/Three'
 
-      assert_array_same_items(['Test/A/One', 'Test/A/Two', 'Test/A/Three'], d.data_timezones)
-      assert_equal([], d.linked_timezones)
-      assert(d.data_timezones.all?(&:frozen?))
+      assert_array_same_items(['Test/A/One', 'Test/A/Two', 'Test/A/Three'], @definer.data_timezones)
+      assert_equal([], @definer.linked_timezones)
+      assert(@definer.data_timezones.all?(&:frozen?))
     end
 
     def test_linked_only
-      d = TimezoneIndexDefiner.new
-      d.linked_timezone 'Test/B/One'
-      d.linked_timezone 'Test/B/Two'
-      d.linked_timezone 'Test/B/Three'
+      @definer.linked_timezone 'Test/B/One'
+      @definer.linked_timezone 'Test/B/Two'
+      @definer.linked_timezone 'Test/B/Three'
 
-      assert_equal([], d.data_timezones)
-      assert_array_same_items(['Test/B/One', 'Test/B/Three', 'Test/B/Two'], d.linked_timezones)
-      assert(d.linked_timezones.all?(&:frozen?))
+      assert_equal([], @definer.data_timezones)
+      assert_array_same_items(['Test/B/One', 'Test/B/Three', 'Test/B/Two'], @definer.linked_timezones)
+      assert(@definer.linked_timezones.all?(&:frozen?))
     end
 
     def test_none
-      d = TimezoneIndexDefiner.new
+      assert_equal([], @definer.data_timezones)
+      assert_equal([], @definer.linked_timezones)
+    end
 
-      assert_equal([], d.data_timezones)
-      assert_equal([], d.linked_timezones)
+    def test_strings_deduped
+      identifier = @string_deduper.dedupe('Test/A/One')
+      linked_identifer = @string_deduper.dedupe('Test/B/One')
+
+      @definer.data_timezone 'Test/A/One'
+      @definer.linked_timezone 'Test/B/One'
+
+      assert_same(identifier, @definer.data_timezones.first)
+      assert_same(linked_identifer, @definer.linked_timezones.first)
     end
   end
 end

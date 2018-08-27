@@ -111,5 +111,15 @@ module Format2
       assert(linked_timezones.frozen?)
       assert_same(linked_timezones, m.linked_timezones)
     end
+
+    def test_global_string_deduper_used_for_definer
+      m = Module.new
+      m.send(:include, TimezoneIndexDefinition)
+
+      m.send(:timezone_index) do |i|
+        assert_kind_of(TimezoneIndexDefiner, i)
+        assert_same(StringDeduper.global, i.instance_variable_get(:@string_deduper))
+      end
+    end
   end
 end
