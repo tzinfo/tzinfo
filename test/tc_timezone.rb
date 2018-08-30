@@ -1260,6 +1260,7 @@ class TCTimezone < Minitest::Test
     assert_equal('BST BST', tz.strftime('%Z %Z', dt))
     assert_equal('BST %Z %BST %%Z %%BST', tz.strftime('%Z %%Z %%%Z %%%%Z %%%%%Z', dt))
     assert_equal('+0100 +01:00 +01:00:00 +01 %::::z', tz.strftime('%z %:z %::z %:::z %::::z', dt))
+    assert_equal('1153001522 %s %1153001522', tz.strftime('%s %%s %%%s', dt))
   end
   
   def test_strftime_time
@@ -1271,6 +1272,7 @@ class TCTimezone < Minitest::Test
     assert_equal('BST BST', tz.strftime('%Z %Z', t))
     assert_equal('BST %Z %BST %%Z %%BST', tz.strftime('%Z %%Z %%%Z %%%%Z %%%%%Z', t))
     assert_equal('+0100 +01:00 +01:00:00 +01 %::::z', tz.strftime('%z %:z %::z %:::z %::::z', t))
+    assert_equal('1153001522 %s %1153001522', tz.strftime('%s %%s %%%s', t))
   end
   
   def test_strftime_int
@@ -1282,6 +1284,7 @@ class TCTimezone < Minitest::Test
     assert_equal('BST BST', tz.strftime('%Z %Z', i))
     assert_equal('BST %Z %BST %%Z %%BST', tz.strftime('%Z %%Z %%%Z %%%%Z %%%%%Z', i))
     assert_equal('+0100 +01:00 +01:00:00 +01 %::::z', tz.strftime('%z %:z %::z %:::z %::::z', i))
+    assert_equal('1153001522 %s %1153001522', tz.strftime('%s %%s %%%s', i))
   end
   
   def test_get_missing_data_source
