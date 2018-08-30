@@ -571,7 +571,7 @@ module TZInfo
     # version 2.0.0, %z will be passed to Time#strftime and DateTime#strftime
     # instead. Some of the formatting options may cease to be available
     # depending on the version of Ruby in use (for example, %:::z is only
-    # supported by Time#strftime from MRI version 2.0.0 onwards.)
+    # supported by Time#strftime from MRI version 2.0.0 onwards).
     def strftime(format, utc = Time.now.utc)      
       utc = TimeOrDateTime.wrap(utc)
       period = period_for_utc(utc)
