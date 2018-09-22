@@ -17,6 +17,12 @@ module TZInfo
     #
     #     TZInfo::DataSource.set(:ruby)
     class RubyDataSource < DataSource
+      # (see DataSource#data_timezone_identifiers)
+      attr_reader :data_timezone_identifiers
+
+      # (see DataSource#linked_timezone_identifiers)
+      attr_reader :linked_timezone_identifiers
+
       # (see DataSource#country_codes)
       attr_reader :country_codes
 
@@ -49,17 +55,11 @@ module TZInfo
 
         require_index('timezones')
         require_index('countries')
-        @country_codes = Data::Indexes::Countries.countries.keys.sort!.freeze
-      end
 
-      # (see DataSource#data_timezone_identifiers)
-      def data_timezone_identifiers
-        Data::Indexes::Timezones.data_timezones
-      end
-
-      # (see DataSource#linked_timezone_identifiers)
-      def linked_timezone_identifiers
-        Data::Indexes::Timezones.linked_timezones
+        @data_timezone_identifiers = Data::Indexes::Timezones.data_timezones
+        @linked_timezone_identifiers = Data::Indexes::Timezones.linked_timezones
+        @countries = Data::Indexes::Countries.countries
+        @country_codes = @countries.keys.sort!.freeze
       end
 
       # (see DataSource#to_s)
@@ -96,7 +96,7 @@ module TZInfo
 
       # (see DataSource#load_country_info)
       def load_country_info(code)
-        info = Data::Indexes::Countries.countries[code]
+        info = @countries[code]
         raise InvalidCountryCode, "Invalid country code: #{code.nil? ? 'nil' : code}" unless info
         info
       end
