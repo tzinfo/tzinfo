@@ -1318,6 +1318,10 @@ module DataSources
       end
     end
 
+    def test_to_s
+      assert_equal("Zoneinfo DataSource: #{ZONEINFO_DIR}", @data_source.to_s)
+    end
+
     def test_inspect
       assert_equal("#<TZInfo::DataSources::ZoneinfoDataSource: #{ZONEINFO_DIR}>", @data_source.inspect)
     end
