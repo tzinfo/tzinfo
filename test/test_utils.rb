@@ -289,7 +289,7 @@ module TestUtils
 
       @@assert_sub_process_returns_count += 1
 
-      IO.popen("\"#{ruby}\"#{args}", 'r+') do |process|
+      IO.popen("\"#{ruby}\"#{args} 2>&1", 'r+') do |process|
         load_path.each do |p|
           process.puts("$:.unshift('#{p.gsub("'", "\\\\'")}')")
         end
