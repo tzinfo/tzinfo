@@ -320,6 +320,11 @@ module TestUtils
 
         actual_lines = process.readlines
         actual_lines = actual_lines.collect(&:chomp)
+
+        if RUBY_ENGINE == 'jruby' && ENV['_JAVA_OPTIONS'] && actual_lines.first == "Picked up _JAVA_OPTIONS: #{ENV['_JAVA_OPTIONS']}"
+          actual_lines.shift
+        end
+
         assert_equal(expected_lines, actual_lines)
       end
     end
