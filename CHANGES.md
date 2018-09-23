@@ -104,6 +104,9 @@
   base class now calculates a result from
   `TZInfo::DataSource#data_timezone_identifiers` and
   `TZInfo::DataSource#linked_timezone_identifiers`.
+* The results of the `TZInfo::DataSources::RubyDataSource` `to_s` and `inspect`
+  methods now include the time zone database and tzinfo-data versions.
+
 
 ### Removed
 

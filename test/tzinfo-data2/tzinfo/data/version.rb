@@ -1,7 +1,7 @@
 module TZInfo
   module Data
     # TZInfo::Data version number.
-    VERSION = '1.2018.5'
+    VERSION = '2.2018.5.test'
 
     # TZInfo::Data version information.
     module Version

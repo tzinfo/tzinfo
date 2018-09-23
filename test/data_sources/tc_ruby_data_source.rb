@@ -255,8 +255,43 @@ module DataSources
       assert_same(codes, @data_source.country_codes)
     end
 
+    def test_to_s
+      assert_equal("Ruby DataSource: tzdb v2018e, tzinfo-data v#{defined?(TZINFO_TEST_DATA_FORMAT) ? TZINFO_TEST_DATA_FORMAT : 2}.2018.5.test", @data_source.to_s)
+    end
+
     def test_inspect
-      assert_equal('#<TZInfo::DataSources::RubyDataSource>', @data_source.inspect)
+      assert_equal("#<TZInfo::DataSources::RubyDataSource: tzdb v2018e, tzinfo-data v#{defined?(TZINFO_TEST_DATA_FORMAT) ? TZINFO_TEST_DATA_FORMAT : 2}.2018.5.test>", @data_source.inspect)
+    end
+
+    if defined?(TZINFO_TEST_DATA_FORMAT) && TZINFO_TEST_DATA_FORMAT == 1
+      # The TZInfo::Data::VERSION and TZInfo::Data::Version::STRING constants
+      # are only available from v1.2014.8 onwards.
+
+      def test_to_s_no_tzinfo_data_version
+        code = <<-EOF
+          $:.unshift('#{TZINFO_TEST_DATA_DIR}')
+          require 'tzinfo/data'
+          TZInfo::Data.send(:remove_const, :VERSION)
+          TZInfo::Data::Version.send(:remove_const, :STRING)
+          ds = TZInfo::DataSources::RubyDataSource.new
+          puts ds.to_s
+        EOF
+
+        assert_sub_process_returns(['Ruby DataSource: tzdb v2018e'], code)
+      end
+
+      def test_inspect_no_tzinfo_data_version
+        code = <<-EOF
+          $:.unshift('#{TZINFO_TEST_DATA_DIR}')
+          require 'tzinfo/data'
+          TZInfo::Data.send(:remove_const, :VERSION)
+          TZInfo::Data::Version.send(:remove_const, :STRING)
+          ds = TZInfo::DataSources::RubyDataSource.new
+          puts ds.inspect
+        EOF
+
+        assert_sub_process_returns(['#<TZInfo::DataSources::RubyDataSource: tzdb v2018e>'], code)
+      end
     end
 
     def test_tzinfo_data_not_found_in_loaded_features

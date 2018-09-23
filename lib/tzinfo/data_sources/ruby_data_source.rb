@@ -64,7 +64,12 @@ module TZInfo
 
       # (see DataSource#to_s)
       def to_s
-        "Ruby DataSource"
+        "Ruby DataSource: #{version_info}"
+      end
+
+      # (see DataSource#inspect)
+      def inspect
+        "#<TZInfo::DataSources::RubyDataSource: #{version_info}>"
       end
 
       protected
@@ -123,6 +128,14 @@ module TZInfo
       # @param file [Array<String>] a relative path to a file to be required.
       def require_data(*file)
         require(File.join(@base_path, *file))
+      end
+
+      # @return [String] a `String` containing TZInfo::Data version infomation
+      #   for inclusion in the #to_s and #inspect output.
+      def version_info
+        # The TZInfo::Data::VERSION constant is only available from v1.2014.8
+        # onwards.
+        "tzdb v#{TZInfo::Data::Version::TZDATA}#{TZInfo::Data.const_defined?(:VERSION) ? ", tzinfo-data v#{TZInfo::Data::VERSION}" : ''}"
       end
     end
   end
