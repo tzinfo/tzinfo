@@ -1804,6 +1804,15 @@ class TCTimezone < Minitest::Test
     assert_equal('#<TCTimezone::TestTimezone: Europe/London>', tz.inspect)
   end
 
+  def test_abbreviation
+    tz = Timezone.get('Europe/London')
+    assert_equal('GMT', tz.abbr(Time.utc(2017,1,15,15,50,0)))
+    assert_equal('BST', tz.abbr(Time.utc(2017,7,15,15,50,0)))
+    tz = Timezone.get('America/New_York')
+    assert_equal('EST', tz.abbr(Time.utc(2017,1,15,15,50,0)))
+    assert_equal('EDT', tz.abbr(Time.utc(2017,7,15,15,50,0)))
+  end
+
   private
 
   def assert_raises_unknown_timezone(&block)
