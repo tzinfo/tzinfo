@@ -1805,12 +1805,32 @@ class TCTimezone < Minitest::Test
   end
 
   def test_abbreviation
+    time_types_test do |h|
+      tz = Timezone.get('Europe/London')
+      assert_equal('GMT', tz.abbr(h.time(2017,1,15,15,50,0,0,:utc)))
+      assert_equal('GMT', tz.abbr(h.time(2017,1,15,15,50,0,0,0)))
+      assert_equal('BST', tz.abbr(h.time(2017,7,15,16,50,0,0,3600)))
+      tz = Timezone.get('America/New_York')
+      assert_equal('EST', tz.abbr(h.time(2017,1,15,15,50,0,0,:utc)))
+      assert_equal('EST', tz.abbr(h.time(2017,1,15,15,50,0,0,0)))
+      assert_equal('EDT', tz.abbr(h.time(2017,7,15,16,50,0,0,3600)))
+    end
+  end
+
+  def test_abbr_unspecified_offset
     tz = Timezone.get('Europe/London')
-    assert_equal('GMT', tz.abbr(Time.utc(2017,1,15,15,50,0)))
-    assert_equal('BST', tz.abbr(Time.utc(2017,7,15,15,50,0)))
-    tz = Timezone.get('America/New_York')
-    assert_equal('EST', tz.abbr(Time.utc(2017,1,15,15,50,0)))
-    assert_equal('EDT', tz.abbr(Time.utc(2017,7,15,15,50,0)))
+
+    time_types_test(:unspecified_offset) do |h|
+      t = h.time(2006, 7, 15, 22, 12, 2, 0, nil)
+      error = assert_raises(ArgumentError) { tz.abbr(t) }
+      assert_match(/\btime\b/, error.message)
+    end
+  end
+
+  def test_abbr_nil
+    tz = Timezone.get('Europe/London')
+    error = assert_raises(ArgumentError) { tz.abbr(nil) }
+    assert_match(/\btime\b/, error.message)
   end
 
   private
