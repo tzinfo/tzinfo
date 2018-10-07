@@ -1026,6 +1026,16 @@ module TZInfo
       to_local(time).strftime(format)
     end
 
+    # @param time [Object] a `Time`, `DateTime` or `Timestamp`.
+    # @return [String] the abbreviation of this {Timezone} at the given time.
+    # @raise [ArgumentError] if `time` is `nil`.
+    # @raise [ArgumentError] if `time` is a {Timestamp} with an unspecified UTC
+    #   offset.
+    def abbreviation(time = Time.now)
+      period_for(time).abbreviation
+    end
+    alias abbr abbreviation
+
     # Compares this {Timezone} with another based on the {identifier}.
     #
     # @param tz [Object] an `Object` to compare this {Timezone} with.

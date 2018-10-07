@@ -34,20 +34,22 @@ class TCTimezoneOffset < Minitest::Test
     end
   end
 
-  def test_abbreviation
-    o1 = TimezoneOffset.new(18000, 0, 'TEST')
-    o2 = TimezoneOffset.new(-3600, 3600, 'TEST2')
+  %w(abbreviation abbr).each do |method|
+    define_method("test_#{method}") do
+      o1 = TimezoneOffset.new(18000, 0, 'TEST')
+      o2 = TimezoneOffset.new(-3600, 3600, 'TEST2')
 
-    assert_equal('TEST', o1.abbreviation)
-    assert_equal('TEST2', o2.abbreviation)
-  end
+      assert_equal('TEST', o1.public_send(method))
+      assert_equal('TEST2', o2.public_send(method))
+    end
 
-  def test_abbreviation_frozen
-    abbreviation = 'TEST'.dup
-    refute(abbreviation.frozen?)
-    o = TimezoneOffset.new(18000, 0, abbreviation)
-    assert_same(abbreviation, o.abbreviation)
-    assert(o.abbreviation.frozen?)
+    define_method("test_#{method}_frozen") do
+      abbreviation = 'TEST'.dup
+      refute(abbreviation.frozen?)
+      o = TimezoneOffset.new(18000, 0, abbreviation)
+      assert_same(abbreviation, o.public_send(method))
+      assert(o.public_send(method).frozen?)
+    end
   end
 
   def test_dst

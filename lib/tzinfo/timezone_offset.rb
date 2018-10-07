@@ -52,6 +52,7 @@ module TZInfo
     #
     # @return [String] The abbreviation that identifies this offset.
     attr_reader :abbreviation
+    alias abbr abbreviation
 
     # Initializes a new {TimezoneOffset}.
     #
