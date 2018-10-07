@@ -21,14 +21,14 @@ module TZInfo
       raise ArgumentError, 'format must be specified' unless format
 
       if_timezone_offset do |o|
-        abbreviation = o.abbreviation.gsub(/%/, '%%')
+        abbreviation = nil
 
         format = format.gsub(/%(%*)Z/) do
           if $1.length.odd?
             # Return %%Z so the real strftime treats it as a literal %Z too.
             "#$1%Z"
           else
-            "#$1#{abbreviation}"
+            "#$1#{abbreviation ||= o.abbreviation.gsub(/%/, '%%')}"
           end
         end
       end
