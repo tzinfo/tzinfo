@@ -83,6 +83,7 @@ module TZInfo
     def abbreviation
       @offset.abbreviation
     end
+    alias abbr abbreviation
     alias zone_identifier abbreviation
 
     # Returns the currently observed offset from UTC in seconds

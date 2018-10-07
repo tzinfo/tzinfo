@@ -51,9 +51,11 @@ class TCTimezonePeriod < Minitest::Test
     assert_equal(3600, p.std_offset)
   end
 
-  def test_abbreviation
-    p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, 'TEST'))
-    assert_equal('TEST', p.abbreviation)
+  %w(abbreviation abbr).each do |method|
+    define_method("test_#{method}") do
+      p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, 'TEST'))
+      assert_equal('TEST', p.public_send(method))
+    end
   end
 
   def test_zone_identifier
