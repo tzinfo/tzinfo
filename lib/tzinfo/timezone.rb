@@ -1031,9 +1031,10 @@ module TZInfo
     # @raise [ArgumentError] if `time` is `nil`.
     # @raise [ArgumentError] if `time` is a {Timestamp} with an unspecified UTC
     #   offset.
-    def abbr(time = Time.now)
+    def abbreviation(time = Time.now)
       period_for(time).abbreviation
     end
+    alias abbr abbreviation
 
     # Compares this {Timezone} with another based on the {identifier}.
     #

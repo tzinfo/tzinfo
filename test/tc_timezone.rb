@@ -1804,33 +1804,35 @@ class TCTimezone < Minitest::Test
     assert_equal('#<TCTimezone::TestTimezone: Europe/London>', tz.inspect)
   end
 
-  def test_abbreviation
-    time_types_test do |h|
-      tz = Timezone.get('Europe/London')
-      assert_equal('GMT', tz.abbr(h.time(2017,1,15,15,50,0,0,:utc)))
-      assert_equal('GMT', tz.abbr(h.time(2017,1,15,15,50,0,0,0)))
-      assert_equal('BST', tz.abbr(h.time(2017,7,15,16,50,0,0,3600)))
-      tz = Timezone.get('America/New_York')
-      assert_equal('EST', tz.abbr(h.time(2017,1,15,15,50,0,0,:utc)))
-      assert_equal('EST', tz.abbr(h.time(2017,1,15,15,50,0,0,0)))
-      assert_equal('EDT', tz.abbr(h.time(2017,7,15,16,50,0,0,3600)))
+  %w(abbreviation abbr).each do |method|
+    define_method("test_#{method}") do
+      time_types_test do |h|
+        tz = Timezone.get('Europe/London')
+        assert_equal('GMT', tz.public_send(method, h.time(2017,1,15,15,50,0,0,:utc)))
+        assert_equal('GMT', tz.public_send(method, h.time(2017,1,15,15,50,0,0,0)))
+        assert_equal('BST', tz.public_send(method, h.time(2017,7,15,16,50,0,0,3600)))
+        tz = Timezone.get('America/New_York')
+        assert_equal('EST', tz.public_send(method, h.time(2017,1,15,15,50,0,0,:utc)))
+        assert_equal('EST', tz.public_send(method, h.time(2017,1,15,15,50,0,0,0)))
+        assert_equal('EDT', tz.public_send(method, h.time(2017,7,15,16,50,0,0,3600)))
+      end
     end
-  end
 
-  def test_abbr_unspecified_offset
-    tz = Timezone.get('Europe/London')
+    define_method("test_#{method}_unspecified_offset") do
+      tz = Timezone.get('Europe/London')
 
-    time_types_test(:unspecified_offset) do |h|
-      t = h.time(2006, 7, 15, 22, 12, 2, 0, nil)
-      error = assert_raises(ArgumentError) { tz.abbr(t) }
+      time_types_test(:unspecified_offset) do |h|
+        t = h.time(2006, 7, 15, 22, 12, 2, 0, nil)
+        error = assert_raises(ArgumentError) { tz.public_send(method, t) }
+        assert_match(/\btime\b/, error.message)
+      end
+    end
+
+    define_method("test_#{method}_nil") do
+      tz = Timezone.get('Europe/London')
+      error = assert_raises(ArgumentError) { tz.public_send(method, nil) }
       assert_match(/\btime\b/, error.message)
     end
-  end
-
-  def test_abbr_nil
-    tz = Timezone.get('Europe/London')
-    error = assert_raises(ArgumentError) { tz.abbr(nil) }
-    assert_match(/\btime\b/, error.message)
   end
 
   private
