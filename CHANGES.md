@@ -7,6 +7,8 @@
 * `to_local` and `period_for` instance methods have been added to
   `TZInfo::Timezone`. These are similar to `utc_to_local` and `period_for_utc`,
   but take the UTC offset of the time parameter into account.
+* An `abbreviation` instance method has been added to `TZInfo::Timezone`. This
+  returns the abbreviation used by the time zone at a specified time.
 * A `TZInfo::Timestamp` class has been added. It can be used with
   `TZInfo::Timezone` in place of a `Time` or `DateTime`.
 * `local_time`, `local_datetime` and `local_timestamp` instance methods have
