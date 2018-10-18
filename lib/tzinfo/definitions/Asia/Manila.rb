@@ -9,9 +9,9 @@ module TZInfo
         timezone 'Asia/Manila' do |tz|
           tz.offset :o0, -57360, 0, :LMT
           tz.offset :o1, 29040, 0, :LMT
-          tz.offset :o2, 28800, 0, :'+08'
-          tz.offset :o3, 28800, 3600, :'+09'
-          tz.offset :o4, 32400, 0, :'+09'
+          tz.offset :o2, 28800, 0, :PST
+          tz.offset :o3, 28800, 3600, :PDT
+          tz.offset :o4, 32400, 0, :JST
           
           tz.transition 1844, 12, :o1, 862175579, 360
           tz.transition 1899, 5, :o2, 869322659, 360

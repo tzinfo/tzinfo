@@ -544,7 +544,7 @@ module TZInfo
         c.timezone 'Asia/Choibalsan', 721, 15, 229, 2, 'Dornod, Sukhbaatar'
       end
       country 'MO', 'Macau' do |c|
-        c.timezone 'Asia/Macau', 667, 30, 1363, 12
+        c.timezone 'Asia/Macau', 7991, 360, 2725, 24
       end
       country 'MP', 'Northern Mariana Islands' do |c|
         c.timezone 'Pacific/Saipan', 76, 5, 583, 4
