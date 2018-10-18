@@ -993,8 +993,8 @@ module TZInfo
     end
   end
   
-  # A tz data time definition - an hour, minute, second and reference. Reference
-  # is either :utc, :standard or :wall_clock.
+  # A tz data time definition - a sign (1 or -1), hour, minute, second and
+  # reference (:utc, :standard or :wall_clock).
   #
   # @private
   class TZDataTime #:nodoc:
@@ -1004,15 +1004,16 @@ module TZInfo
     attr_reader :ref
     
     def initialize(spec)
-      raise "Invalid time: #{spec}" if spec !~ /^([0-9]+)(:([0-9]+)(:([0-9]+))?)?([wguzs])?$/
+      raise "Invalid time: #{spec}" if spec !~ /^(-?)([0-9]+)(:([0-9]+)(:([0-9]+))?)?([wguzs])?$/
       
-      @hour = $1.to_i
-      @minute = $3.nil? ? 0 : $3.to_i
-      @second = $5.nil? ? 0 : $5.to_i
+      @sign = $1 == '-' ? -1 : 1
+      @hour = $2.to_i
+      @minute = $4.nil? ? 0 : $4.to_i
+      @second = $6.nil? ? 0 : $6.to_i
       
-      if $6 == 's'
+      if $7 == 's'
         @ref = :standard
-      elsif $6 == 'g' || $6 == 'u' || $6 == 'z'
+      elsif $7 == 'g' || $7 == 'u' || $7 == 'z'
         @ref = :utc
       else
         @ref = :wall_clock
@@ -1021,7 +1022,12 @@ module TZInfo
     
     # Converts the time to UTC given a utc_offset and std_offset.
     def to_utc(utc_offset, std_offset, year, month, day)      
-      result = DateTime.new(year, month, day, @hour, @minute, @second)
+      result = if @hour > 24 || @hour == 24 && (@minute > 0 || @second > 0) || @sign != 1
+        DateTime.new(year, month, day, 0, 0, 0) + Rational(@sign * (@second + (@minute + @hour * 60) * 60), 86400)
+      else
+        DateTime.new(year, month, day, @hour, @minute, @second)
+      end
+
       offset = 0
       offset = offset + utc_offset if @ref == :standard || @ref == :wall_clock            
       offset = offset + std_offset if @ref == :wall_clock       
