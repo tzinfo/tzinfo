@@ -610,8 +610,15 @@ class TCTimestamp < Minitest::Test
 
     assert_equal(1, block_called)
 
-    expected_class = args[0].class
-    expected_class = Timestamp if expected_class == TestTimestampSubclass
+    expected_class = case args[0]
+    when TestTimestampSubclass
+      Timestamp
+    when TestUtils::TimeLike
+      Time
+    else
+      args[0].class
+    end
+
     assert_kind_of(expected_class, block_result)
   end
 
@@ -951,6 +958,155 @@ class TCTimestamp < Minitest::Test
     end
   end
 
+  def test_for_time_like_ignore_offset
+    for_test(TestUtils::TimeLike.new(1476316800, 0), :ignore) do |t|
+      assert_equal(1476316800, t.value)
+      assert_nil(t.utc_offset)
+      assert_nil(t.utc?)
+    end
+  end
+
+  def test_for_time_like_treat_offset_as_utc
+    for_test(TestUtils::TimeLike.new(1476316800, 0), :treat_as_utc) do |t|
+      assert_equal(1476316800, t.value)
+      assert_equal(0, t.utc_offset)
+      assert_equal(true, t.utc?)
+    end
+  end
+
+  def test_for_time_like_preserve_offset
+    for_test(TestUtils::TimeLike.new(1476316800, 0), :preserve) do |t|
+      assert_equal(1476316800, t.value)
+      assert_equal(0, t.utc_offset)
+      assert_equal(false, t.utc?)
+    end
+  end
+
+  def test_for_time_like_preserve_offset_by_default
+    for_test(TestUtils::TimeLike.new(1476316800, 0)) do |t|
+      assert_equal(1476316800, t.value)
+      assert_equal(0, t.utc_offset)
+      assert_equal(false, t.utc?)
+    end
+  end
+
+  def test_for_time_like_zero_sub_second
+    for_test(TestUtils::TimeLike.new(1476316801, 0)) do |t|
+      assert_equal(1476316801, t.value)
+      assert_equal(0, t.sub_second)
+    end
+  end
+
+  def test_for_time_like_rational_sub_second
+    for_test(TestUtils::TimeLike.new(1476316801, Rational(1,10))) do |t|
+      assert_equal(1476316801, t.value)
+      assert_equal(Rational(1,10), t.sub_second)
+    end
+  end
+
+  def test_for_time_like_float_sub_second
+    for_test(TestUtils::TimeLike.new(1476316801, 0.1)) do |t|
+      assert_equal(1476316801, t.value)
+      assert_kind_of(Rational, t.sub_second)
+      assert_equal(0.1.to_r, t.sub_second)
+    end
+  end
+
+  def test_for_time_like_nil_sub_second
+    for_test(TestUtils::TimeLike.new(1476316801, nil)) do |t|
+      assert_equal(1476316801, t.value)
+      assert_equal(0, t.sub_second)
+    end
+  end
+
+  def test_for_time_like_with_offset_ignore_offset_with_zero_offset
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, 0), :ignore) do |t|
+      assert_equal(1476316800, t.value)
+      assert_nil(t.utc_offset)
+      assert_nil(t.utc?)
+    end
+  end
+
+  def test_for_time_like_with_offset_ignore_offset_with_offset
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, 3600), :ignore) do |t|
+      assert_equal(1476320400, t.value)
+      assert_nil(t.utc_offset)
+      assert_nil(t.utc?)
+    end
+  end
+
+  def test_for_time_like_with_offset_treat_offset_as_utc_with_zero_offset
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, 0), :treat_as_utc) do |t|
+      assert_equal(1476316800, t.value)
+      assert_equal(0, t.utc_offset)
+      assert_equal(true, t.utc?)
+    end
+  end
+
+  def test_for_time_like_with_offset_treat_offset_as_utc_with_offset
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, 3600), :treat_as_utc) do |t|
+      assert_equal(1476320400, t.value)
+      assert_equal(0, t.utc_offset)
+      assert_equal(true, t.utc?)
+    end
+  end
+
+  def test_for_time_like_with_offset_preserve_offset_zero_offset
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, 0), :preserve) do |t|
+      assert_equal(1476316800, t.value)
+      assert_equal(0, t.utc_offset)
+      assert_equal(false, t.utc?)
+    end
+  end
+
+  def test_for_time_like_with_offset_preserve_offset_with_offset
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, 3600), :preserve) do |t|
+      assert_equal(1476316800, t.value)
+      assert_equal(3600, t.utc_offset)
+      assert_equal(false, t.utc?)
+    end
+  end
+
+  def test_for_time_like_with_offset_preserve_offset_by_default_with_offset
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, 3600)) do |t|
+      assert_equal(1476316800, t.value)
+      assert_equal(3600, t.utc_offset)
+      assert_equal(false, t.utc?)
+    end
+  end
+
+  def test_for_time_like_with_offset_preserve_float_offset
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, 3600.1), :preserve) do |t|
+      assert_equal(1476316800, t.value)
+      assert_kind_of(Integer, t.utc_offset)
+      assert_equal(3600, t.utc_offset)
+    end
+  end
+
+  def test_for_time_like_with_offset_preserve_nil_offset
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, nil), :preserve) do |t|
+      assert_equal(1476316800, t.value)
+      assert_kind_of(Integer, t.utc_offset)
+      assert_equal(0, t.utc_offset)
+    end
+  end
+
+  def test_for_time_like_with_offset_treat_float_offset_as_utc
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, 3600.1), :treat_as_utc) do |t|
+      assert_kind_of(Integer, t.value)
+      assert_equal(1476320400, t.value)
+      assert_equal(0, t.utc_offset)
+    end
+  end
+
+  def test_for_time_like_with_offset_treat_nil_offset_as_utc
+    for_test(TestUtils::TimeLikeWithOffset.new(1476316800, 0, nil), :treat_as_utc) do |t|
+      assert_kind_of(Integer, t.value)
+      assert_equal(1476316800, t.value)
+      assert_equal(0, t.utc_offset)
+    end
+  end
+
   def for_raises_test(exception, message, *args)
     error = assert_raises(exception) { Timestamp.for(*args) }
     assert_equal(message, error.message)
@@ -976,20 +1132,36 @@ class TCTimestamp < Minitest::Test
     for_raises_test(ArgumentError, 'offset must be :preserve, :ignore or :treat_as_utc', Time.utc(2016,10,13,0,0,0), :invalid)
   end
 
+  def test_for_time_like_to_i_returns_nil
+    for_raises_test(ArgumentError, 'value must be an Integer', TestUtils::TimeLike.new(nil, 0))
+  end
+
+  def test_for_time_like_to_i_returns_non_integer
+    for_raises_test(ArgumentError, 'value must be an Integer', TestUtils::TimeLike.new(1476316800.1, 0))
+  end
+
+  def test_for_time_like_subsec_out_of_range
+    [Rational(-1, 10), 1].each do |subsec|
+      for_raises_test(RangeError, 'sub_second must be >= 0 and < 1', TestUtils::TimeLike.new(1476316800, subsec))
+    end
+  end
+
   def test_for_block_result_timestamp
     block_result = Timestamp.new(1476316801)
     assert_same(block_result, Timestamp.for(Timestamp.new(1476316800)) {|t| block_result })
   end
 
-  def test_for_block_result_to_time
-    assert_equal_with_offset(Time.utc(2016,10,13,0,0,1),                     Timestamp.for(Time.utc(2016,10,13,0,0,0)) { Timestamp.new(1476316801) })
-    assert_equal_with_offset(Time.utc(2016,10,13,0,0,1,Rational(100_000,1)), Timestamp.for(Time.utc(2016,10,13,0,0,0)) { Timestamp.new(1476316801, Rational(1,10)) })
-    assert_equal_with_offset(Time.utc(2016,10,13,0,0,1),                     Timestamp.for(Time.utc(2016,10,13,0,0,0)) { Timestamp.new(1476316801, 0, :utc) })
-    assert_equal_with_offset(Time.utc(2016,10,13,0,0,1,Rational(100_000,1)), Timestamp.for(Time.utc(2016,10,13,0,0,0)) { Timestamp.new(1476316801, Rational(1,10), :utc) })
-    assert_equal_with_offset(Time.new(2016,10,13,0,0,1,0),                   Timestamp.for(Time.utc(2016,10,13,0,0,0)) { Timestamp.new(1476316801, 0, 0) })
-    assert_equal_with_offset(Time.new(2016,10,13,0,0,1+Rational(1,10),0),    Timestamp.for(Time.utc(2016,10,13,0,0,0)) { Timestamp.new(1476316801, Rational(1,10), 0) })
-    assert_equal_with_offset(Time.new(2016,10,13,1,0,1,3600),                Timestamp.for(Time.utc(2016,10,13,0,0,0)) { Timestamp.new(1476316801, 0, 3600) })
-    assert_equal_with_offset(Time.new(2016,10,13,1,0,Rational(11,10),3600),  Timestamp.for(Time.utc(2016,10,13,0,0,0)) { Timestamp.new(1476316801, Rational(1,10), 3600) })
+  [[:time, Time.utc(2016,10,13,0,0,0)], [:time_like, TestUtils::TimeLike.new(1476316800, 0)], [:time_like_with_offset, TestUtils::TimeLikeWithOffset.new(1476316800, 0, 3600)]].each do |type, input|
+    define_method("test_for_block_result_to_time_for_#{type}") do
+      assert_equal_with_offset(Time.utc(2016,10,13,0,0,1),                     Timestamp.for(input) { Timestamp.new(1476316801) })
+      assert_equal_with_offset(Time.utc(2016,10,13,0,0,1,Rational(100_000,1)), Timestamp.for(input) { Timestamp.new(1476316801, Rational(1,10)) })
+      assert_equal_with_offset(Time.utc(2016,10,13,0,0,1),                     Timestamp.for(input) { Timestamp.new(1476316801, 0, :utc) })
+      assert_equal_with_offset(Time.utc(2016,10,13,0,0,1,Rational(100_000,1)), Timestamp.for(input) { Timestamp.new(1476316801, Rational(1,10), :utc) })
+      assert_equal_with_offset(Time.new(2016,10,13,0,0,1,0),                   Timestamp.for(input) { Timestamp.new(1476316801, 0, 0) })
+      assert_equal_with_offset(Time.new(2016,10,13,0,0,1+Rational(1,10),0),    Timestamp.for(input) { Timestamp.new(1476316801, Rational(1,10), 0) })
+      assert_equal_with_offset(Time.new(2016,10,13,1,0,1,3600),                Timestamp.for(input) { Timestamp.new(1476316801, 0, 3600) })
+      assert_equal_with_offset(Time.new(2016,10,13,1,0,Rational(11,10),3600),  Timestamp.for(input) { Timestamp.new(1476316801, Rational(1,10), 3600) })
+    end
   end
 
   def test_for_block_result_to_datetime

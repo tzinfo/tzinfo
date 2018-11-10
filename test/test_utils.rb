@@ -96,6 +96,32 @@ module TestUtils
   # is zero.
   TIME_SUPPORTS_DISTINCT_UTC = !Time.new(2017,1,1,0,0,0,0).utc?
 
+  # Test class to simulate Ruby 2.6's internal Time::TM.
+  # Timestamp.for will accept objects that have value, subsec and optionally
+  # utc_offset methods and return Time results.
+  class TimeLike
+    attr_reader :subsec
+
+    def initialize(value, subsec)
+      @value = value
+      @subsec = subsec
+    end
+
+    def to_i
+      @value
+    end
+  end
+
+  # An extended version of TimeLike that adds a utc_offset attribute.
+  class TimeLikeWithOffset < TimeLike
+    attr_reader :utc_offset
+
+    def initialize(value, subsec, utc_offset)
+      super(value, subsec)
+      @utc_offset = utc_offset
+    end
+  end
+
   class TimeTypesHelper
     def supports?(feature)
       self.class.supports?(feature)
@@ -107,9 +133,19 @@ module TestUtils
     end
   end
 
-  class TimeTypesTimeHelper < TimeTypesHelper
+  class TimeTypesOutputHelper < TimeTypesHelper
     def self.supports?(feature)
-      (feature == :distinct_utc && TIME_SUPPORTS_DISTINCT_UTC) || feature == :utc
+      feature == :output || feature == :offset
+    end
+
+    def output_time(*args)
+      time(*args)
+    end
+  end
+
+  class TimeTypesTimeHelper < TimeTypesOutputHelper
+    def self.supports?(feature)
+      super(feature) || (feature == :distinct_utc && TIME_SUPPORTS_DISTINCT_UTC) || feature == :utc
     end
 
     def type
@@ -129,11 +165,7 @@ module TestUtils
     end
   end
 
-  class TimeTypesDateTimeHelper < TimeTypesHelper
-    def self.supports?(feature)
-      false
-    end
-
+  class TimeTypesDateTimeHelper < TimeTypesOutputHelper
     def type
       :datetime
     end
@@ -148,9 +180,9 @@ module TestUtils
     end
   end
 
-  class TimeTypesTimestampHelper < TimeTypesHelper
+  class TimeTypesTimestampHelper < TimeTypesOutputHelper
     def self.supports?(feature)
-      feature == :distinct_utc || feature == :unspecified_offset || feature == :utc
+      super(feature) || feature == :distinct_utc || feature == :unspecified_offset || feature == :utc
     end
 
     def type
@@ -163,6 +195,50 @@ module TestUtils
 
     def time_with_offset(offset, year, month, day, hour, minute, second, sub_second = 0)
       TimestampWithOffset.create(year, month, day, hour, minute, second, sub_second, offset.current_utc_offset).set_timezone_offset(offset)
+    end
+  end
+
+  class TimeTypesBaseTimeLikeHelper < TimeTypesHelper
+    def initialize
+      @time_helper = TimeTypesTimeHelper.new
+    end
+
+    def output_time(*args)
+      @time_helper.time(*args)
+    end
+
+    def time_with_offset(*args)
+      @time_helper.time_with_offset(*args)
+    end
+  end
+
+  class TimeTypesTimeLikeHelper < TimeTypesBaseTimeLikeHelper
+    def self.supports?(feature)
+      false
+    end
+
+    def type
+      :time_like
+    end
+
+    def time(year, month, day, hour, minute, second, sub_second = 0, utc_offset = 0)
+      raise 'TimeLike does not support non-zero/non-UTC offsets' unless utc_offset == 0 || utc_offset == :utc
+      TimeLike.new(Time.utc(year, month, day, hour, minute, second).to_i, sub_second)
+    end
+  end
+
+  class TimeTypesTimeLikeWithOffsetHelper < TimeTypesBaseTimeLikeHelper
+    def self.supports?(feature)
+      feature == :offset
+    end
+
+    def type
+      :time_like_with_offset
+    end
+
+    def time(year, month, day, hour, minute, second, sub_second = 0, utc_offset = 0)
+      utc_offset = 0 if utc_offset == :utc
+      TimeLikeWithOffset.new(Time.new(year, month, day, hour, minute, second, utc_offset).to_i, sub_second, utc_offset)
     end
   end
 
@@ -251,7 +327,13 @@ module TestUtils
       # restricted by requiring features (:distinct_utc, :unspecified_offset or
       # :utc).
       def time_types_helpers(*required_features)
-        [TestUtils::TimeTypesTimeHelper, TestUtils::TimeTypesDateTimeHelper, TestUtils::TimeTypesTimestampHelper].each do |helper_class|
+        [
+          TestUtils::TimeTypesTimeHelper,
+          TestUtils::TimeTypesDateTimeHelper,
+          TestUtils::TimeTypesTimestampHelper,
+          TestUtils::TimeTypesTimeLikeHelper,
+          TestUtils::TimeTypesTimeLikeWithOffsetHelper
+        ].each do |helper_class|
           if required_features.all? {|f| helper_class.supports?(f) }
             yield helper_class.new
           end

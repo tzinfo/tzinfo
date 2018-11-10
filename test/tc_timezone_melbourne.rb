@@ -13,23 +13,23 @@ class TCTimezoneMelbourne < Minitest::Test
 
     tz = Timezone.get('Australia/Melbourne')
 
-    time_types_test do |h|
-      assert_equal_with_offset(h.time(2004, 3,28,2,59,59,0,39600), tz.to_local(h.time(2004, 3,27,15,59,59,0,0)))
-      assert_equal_with_offset(h.time(2004, 3,28,2, 0, 0,0,36000), tz.to_local(h.time(2004, 3,27,16, 0, 0,0,0)))
-      assert_equal_with_offset(h.time(2004,10,31,1,59,59,0,36000), tz.to_local(h.time(2004,10,30,15,59,59,0,0)))
-      assert_equal_with_offset(h.time(2004,10,31,3, 0, 0,0,39600), tz.to_local(h.time(2004,10,30,16, 0, 0,0,0)))
+    time_types_test(:offset) do |h|
+      assert_equal_with_offset(h.output_time(2004, 3,28,2,59,59,0,39600), tz.to_local(h.time(2004, 3,27,15,59,59,0,0)))
+      assert_equal_with_offset(h.output_time(2004, 3,28,2, 0, 0,0,36000), tz.to_local(h.time(2004, 3,27,16, 0, 0,0,0)))
+      assert_equal_with_offset(h.output_time(2004,10,31,1,59,59,0,36000), tz.to_local(h.time(2004,10,30,15,59,59,0,0)))
+      assert_equal_with_offset(h.output_time(2004,10,31,3, 0, 0,0,39600), tz.to_local(h.time(2004,10,30,16, 0, 0,0,0)))
 
-      assert_equal_with_offset(h.time(2004, 3,28,2,59,59,0,39600), tz.utc_to_local(h.time(2004, 3,27,15,59,59)))
-      assert_equal_with_offset(h.time(2004, 3,28,2, 0, 0,0,36000), tz.utc_to_local(h.time(2004, 3,27,16, 0, 0)))
-      assert_equal_with_offset(h.time(2004,10,31,1,59,59,0,36000), tz.utc_to_local(h.time(2004,10,30,15,59,59)))
-      assert_equal_with_offset(h.time(2004,10,31,3, 0, 0,0,39600), tz.utc_to_local(h.time(2004,10,30,16, 0, 0)))
+      assert_equal_with_offset(h.output_time(2004, 3,28,2,59,59,0,39600), tz.utc_to_local(h.time(2004, 3,27,15,59,59)))
+      assert_equal_with_offset(h.output_time(2004, 3,28,2, 0, 0,0,36000), tz.utc_to_local(h.time(2004, 3,27,16, 0, 0)))
+      assert_equal_with_offset(h.output_time(2004,10,31,1,59,59,0,36000), tz.utc_to_local(h.time(2004,10,30,15,59,59)))
+      assert_equal_with_offset(h.output_time(2004,10,31,3, 0, 0,0,39600), tz.utc_to_local(h.time(2004,10,30,16, 0, 0)))
 
-      assert_equal_with_offset(h.time(2004, 3,27,15,59,59,0,:utc), tz.local_to_utc(h.time(2004, 3,28,2,59,59),  true))
-      assert_equal_with_offset(h.time(2004, 3,27,16,59,59,0,:utc), tz.local_to_utc(h.time(2004, 3,28,2,59,59), false))
-      assert_equal_with_offset(h.time(2004, 3,27,15, 0, 0,0,:utc), tz.local_to_utc(h.time(2004, 3,28,2, 0, 0),  true))
-      assert_equal_with_offset(h.time(2004, 3,27,16, 0, 0,0,:utc), tz.local_to_utc(h.time(2004, 3,28,2, 0, 0), false))
-      assert_equal_with_offset(h.time(2004,10,30,15,59,59,0,:utc), tz.local_to_utc(h.time(2004,10,31,1,59,59)))
-      assert_equal_with_offset(h.time(2004,10,30,16, 0, 0,0,:utc), tz.local_to_utc(h.time(2004,10,31,3, 0, 0)))
+      assert_equal_with_offset(h.output_time(2004, 3,27,15,59,59,0,:utc), tz.local_to_utc(h.time(2004, 3,28,2,59,59),  true))
+      assert_equal_with_offset(h.output_time(2004, 3,27,16,59,59,0,:utc), tz.local_to_utc(h.time(2004, 3,28,2,59,59), false))
+      assert_equal_with_offset(h.output_time(2004, 3,27,15, 0, 0,0,:utc), tz.local_to_utc(h.time(2004, 3,28,2, 0, 0),  true))
+      assert_equal_with_offset(h.output_time(2004, 3,27,16, 0, 0,0,:utc), tz.local_to_utc(h.time(2004, 3,28,2, 0, 0), false))
+      assert_equal_with_offset(h.output_time(2004,10,30,15,59,59,0,:utc), tz.local_to_utc(h.time(2004,10,31,1,59,59)))
+      assert_equal_with_offset(h.output_time(2004,10,30,16, 0, 0,0,:utc), tz.local_to_utc(h.time(2004,10,31,3, 0, 0)))
 
       assert_raises(PeriodNotFound) { tz.local_to_utc(h.time(2004,10,31,2,0,0)) }
       assert_raises(AmbiguousTime)  { tz.local_to_utc(h.time(2004, 3,28,2,0,0)) }
@@ -90,23 +90,23 @@ class TCTimezoneMelbourne < Minitest::Test
 
     tz = Timezone.get('Australia/Melbourne')
 
-    time_types_test do |h|
-      assert_equal_with_offset(h.time(1942,3,29,1,59,59,0,39600), tz.to_local(h.time(1942,3,28,14,59,59,0,0)))
-      assert_equal_with_offset(h.time(1942,3,29,1, 0, 0,0,36000), tz.to_local(h.time(1942,3,28,15, 0, 0,0,0)))
-      assert_equal_with_offset(h.time(1942,9,27,1,59,59,0,36000), tz.to_local(h.time(1942,9,26,15,59,59,0,0)))
-      assert_equal_with_offset(h.time(1942,9,27,3, 0, 0,0,39600), tz.to_local(h.time(1942,9,26,16, 0, 0,0,0)))
+    time_types_test(:offset) do |h|
+      assert_equal_with_offset(h.output_time(1942,3,29,1,59,59,0,39600), tz.to_local(h.time(1942,3,28,14,59,59,0,0)))
+      assert_equal_with_offset(h.output_time(1942,3,29,1, 0, 0,0,36000), tz.to_local(h.time(1942,3,28,15, 0, 0,0,0)))
+      assert_equal_with_offset(h.output_time(1942,9,27,1,59,59,0,36000), tz.to_local(h.time(1942,9,26,15,59,59,0,0)))
+      assert_equal_with_offset(h.output_time(1942,9,27,3, 0, 0,0,39600), tz.to_local(h.time(1942,9,26,16, 0, 0,0,0)))
 
-      assert_equal_with_offset(h.time(1942,3,29,1,59,59,0,39600), tz.utc_to_local(h.time(1942,3,28,14,59,59)))
-      assert_equal_with_offset(h.time(1942,3,29,1, 0, 0,0,36000), tz.utc_to_local(h.time(1942,3,28,15, 0, 0)))
-      assert_equal_with_offset(h.time(1942,9,27,1,59,59,0,36000), tz.utc_to_local(h.time(1942,9,26,15,59,59)))
-      assert_equal_with_offset(h.time(1942,9,27,3, 0, 0,0,39600), tz.utc_to_local(h.time(1942,9,26,16, 0, 0)))
+      assert_equal_with_offset(h.output_time(1942,3,29,1,59,59,0,39600), tz.utc_to_local(h.time(1942,3,28,14,59,59)))
+      assert_equal_with_offset(h.output_time(1942,3,29,1, 0, 0,0,36000), tz.utc_to_local(h.time(1942,3,28,15, 0, 0)))
+      assert_equal_with_offset(h.output_time(1942,9,27,1,59,59,0,36000), tz.utc_to_local(h.time(1942,9,26,15,59,59)))
+      assert_equal_with_offset(h.output_time(1942,9,27,3, 0, 0,0,39600), tz.utc_to_local(h.time(1942,9,26,16, 0, 0)))
 
-      assert_equal_with_offset(h.time(1942,3,28,14,59,59,0,:utc), tz.local_to_utc(h.time(1942,3,29,1,59,59),  true))
-      assert_equal_with_offset(h.time(1942,3,28,15,59,59,0,:utc), tz.local_to_utc(h.time(1942,3,29,1,59,59), false))
-      assert_equal_with_offset(h.time(1942,3,28,14, 0, 0,0,:utc), tz.local_to_utc(h.time(1942,3,29,1, 0, 0),  true))
-      assert_equal_with_offset(h.time(1942,3,28,15, 0, 0,0,:utc), tz.local_to_utc(h.time(1942,3,29,1, 0, 0), false))
-      assert_equal_with_offset(h.time(1942,9,26,15,59,59,0,:utc), tz.local_to_utc(h.time(1942,9,27,1,59,59)))
-      assert_equal_with_offset(h.time(1942,9,26,16, 0, 0,0,:utc), tz.local_to_utc(h.time(1942,9,27,3, 0, 0)))
+      assert_equal_with_offset(h.output_time(1942,3,28,14,59,59,0,:utc), tz.local_to_utc(h.time(1942,3,29,1,59,59),  true))
+      assert_equal_with_offset(h.output_time(1942,3,28,15,59,59,0,:utc), tz.local_to_utc(h.time(1942,3,29,1,59,59), false))
+      assert_equal_with_offset(h.output_time(1942,3,28,14, 0, 0,0,:utc), tz.local_to_utc(h.time(1942,3,29,1, 0, 0),  true))
+      assert_equal_with_offset(h.output_time(1942,3,28,15, 0, 0,0,:utc), tz.local_to_utc(h.time(1942,3,29,1, 0, 0), false))
+      assert_equal_with_offset(h.output_time(1942,9,26,15,59,59,0,:utc), tz.local_to_utc(h.time(1942,9,27,1,59,59)))
+      assert_equal_with_offset(h.output_time(1942,9,26,16, 0, 0,0,:utc), tz.local_to_utc(h.time(1942,9,27,3, 0, 0)))
 
       assert_raises(PeriodNotFound) { tz.local_to_utc(h.time(1942,9,27,2,0,0)) }
       assert_raises(AmbiguousTime)  { tz.local_to_utc(h.time(1942,3,29,1,0,0)) }
@@ -165,10 +165,10 @@ class TCTimezoneMelbourne < Minitest::Test
 
     tz = Timezone.get('Australia/Melbourne')
 
-    time_types_test do |h|
-      assert_equal_with_offset(h.time(1970,1,1,10,0,0,0,36000),     tz.to_local(h.time(1970,1,1, 0,0,0,0,0)))
-      assert_equal_with_offset(h.time(1970,1,1,10,0,0,0,36000), tz.utc_to_local(h.time(1970,1,1, 0,0,0)))
-      assert_equal_with_offset(h.time(1970,1,1, 0,0,0,0, :utc), tz.local_to_utc(h.time(1970,1,1,10,0,0)))
+    time_types_test(:offset) do |h|
+      assert_equal_with_offset(h.output_time(1970,1,1,10,0,0,0,36000),     tz.to_local(h.time(1970,1,1, 0,0,0,0,0)))
+      assert_equal_with_offset(h.output_time(1970,1,1,10,0,0,0,36000), tz.utc_to_local(h.time(1970,1,1, 0,0,0)))
+      assert_equal_with_offset(h.output_time(1970,1,1, 0,0,0,0, :utc), tz.local_to_utc(h.time(1970,1,1,10,0,0)))
     end
   end
 end

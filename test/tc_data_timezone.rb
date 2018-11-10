@@ -82,7 +82,7 @@ class TCDataTimezone < Minitest::Test
   end
 
   def test_period_for_offset
-    time_types_test do |h|
+    time_types_test(:offset) do |h|
       # Don't need actual TimezonePeriods. DataTimezone isn't supposed to do
       # anything with them apart from return them.
       period = Object.new
@@ -164,7 +164,7 @@ class TCDataTimezone < Minitest::Test
   end
 
   def test_periods_for_local_with_offset
-    time_types_test do |h|
+    time_types_test(:offset) do |h|
       # Don't need actual TimezonePeriods. DataTimezone isn't supposed to do
       # anything with them apart from return them.
       periods = [Object.new, Object.new]
@@ -232,7 +232,7 @@ class TCDataTimezone < Minitest::Test
   end
 
   def test_transitions_up_to_offset
-    time_types_test do |h|
+    time_types_test(:offset) do |h|
       # Don't need actual TimezoneTransition instances. DataTimezone isn't
       # supposed to do anything with them apart from return them.
       transitions = [Object.new, Object.new]

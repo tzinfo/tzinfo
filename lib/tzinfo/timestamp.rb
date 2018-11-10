@@ -123,6 +123,7 @@ module TZInfo
             raise ArgumentError, 'offset must be :preserve, :ignore or :treat_as_utc'
         end
 
+        time_like = false
         timestamp = case value
           when Time
             for_time(value, ignore_offset, target_utc_offset)
@@ -131,7 +132,9 @@ module TZInfo
           when Timestamp
             for_timestamp(value, ignore_offset, target_utc_offset)
           else
-            raise ArgumentError, "#{value.class} values are not supported"
+            raise ArgumentError, "#{value.class} values are not supported" unless is_time_like?(value)
+            time_like = true
+            for_time_like(value, ignore_offset, target_utc_offset)
         end
 
         if block_given?
@@ -143,8 +146,8 @@ module TZInfo
               result.to_time
             when DateTime
               result.to_datetime
-            else # Timestamp
-              result
+            else # A Time-like value or a Timestamp
+              time_like ? result.to_time : result
           end
         else
           timestamp
@@ -266,6 +269,41 @@ module TZInfo
         end
 
         timestamp
+      end
+
+      # Determines if an object is like a `Time` (for the purposes of converting
+      # to a {Timestamp} with {for}), responding to `to_i` and `subsec`.
+      #
+      # @param value [Object] an object to test.
+      # @return [Boolean] `true` if the object is `Time`-like, otherwise
+      #   `false`.
+      def is_time_like?(value)
+        value.respond_to?(:to_i) && value.respond_to?(:subsec)
+      end
+
+      # Creates a {Timestamp} that represents a given `Time`-like object,
+      # optionally ignoring the offset (if the `time_like` responds to
+      # `utc_offset`).
+      #
+      # @param time_like [Object] a `Time`-like object.
+      # @param ignore_offset [Boolean] whether to ignore the offset of `time`.
+      # @param target_utc_offset [Object] if `ignore_offset` is `true`, the UTC
+      #   offset of the result (`:utc`, `nil` or an `Integer`).
+      # @return [Timestamp] the {Timestamp} representation of `time_like`.
+      def for_time_like(time_like, ignore_offset, target_utc_offset)
+        value = time_like.to_i
+        sub_second = time_like.subsec.to_r
+
+        if ignore_offset
+          utc_offset = target_utc_offset
+          value += time_like.utc_offset.to_i if time_like.respond_to?(:utc_offset)
+        elsif time_like.respond_to?(:utc_offset)
+          utc_offset = time_like.utc_offset.to_i
+        else
+          utc_offset = 0
+        end
+
+        new(value, sub_second, utc_offset)
       end
     end
 

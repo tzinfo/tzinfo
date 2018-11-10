@@ -35,7 +35,8 @@
   instead of ignoring it (as was previously the case).
 * Methods of `TZInfo::Timezone` that accept time arguments no longer allow
   `Integer` timestamp values. `Time`, `DateTime` or `TZInfo::Timestamp` values
-  must be used instead.
+  or objects that respond to `to_i`, `subsec` and optionally `utc_offset` must
+  be used instead.
 * The `%:::z` format directive can now only be used with
   `TZInfo::Timezone#strftime` if it is supported by `Time#strftime` on the
   runtime platform.

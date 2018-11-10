@@ -192,10 +192,14 @@ offsets.map {|o| [o.current_utc_offset, o.abbreviation] }
 ```
 
 All `TZInfo::Timezone` methods that accept a time as a parameter can be used
-with either instances of `Time`, `DateTime` or `TZInfo::Timestamp`. Methods that
-also return times will return an object with a matching type (actually a
+with either instances of `Time`, `DateTime` or `TZInfo::Timestamp`. Arbitrary
+`Time`-like objects that respond to both `to_i` and `subsec` and optionally
+`utc_offset` will be treated as if they are instances of `Time`.
+
+`TZInfo::Timezone` methods that both accept and return times will return an
+object with a type matching that of the parameter (actually a
 `TZInfo::TimeWithOffset`, `TZInfo::DateTimeWithOffset` or
-`TZInfo::TimestampWithOffset` when returning a local time):
+`TZInfo::TimestampWithOffset` subclass when returning a local time):
 
 ```ruby
 tz.to_local(Time.utc(2018, 7, 1, 12, 30, 0))

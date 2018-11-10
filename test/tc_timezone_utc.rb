@@ -8,15 +8,15 @@ class TCTimezoneUTC < Minitest::Test
   def test_2004
     tz = Timezone.get('UTC')
 
-    time_types_test do |h|
-      assert_equal_with_offset(h.time(2004, 1, 1, 0, 0, 0,0,0), tz.to_local(h.time(2004, 1, 1, 0, 0, 0,0,0)))
-      assert_equal_with_offset(h.time(2004,12,31,23,59,59,0,0), tz.to_local(h.time(2004,12,31,23,59,59,0,0)))
+    time_types_test(:offset) do |h|
+      assert_equal_with_offset(h.output_time(2004, 1, 1, 0, 0, 0,0,0), tz.to_local(h.time(2004, 1, 1, 0, 0, 0,0,0)))
+      assert_equal_with_offset(h.output_time(2004,12,31,23,59,59,0,0), tz.to_local(h.time(2004,12,31,23,59,59,0,0)))
 
-      assert_equal_with_offset(h.time(2004, 1, 1, 0, 0, 0,0,0), tz.utc_to_local(h.time(2004, 1, 1, 0, 0, 0)))
-      assert_equal_with_offset(h.time(2004,12,31,23,59,59,0,0), tz.utc_to_local(h.time(2004,12,31,23,59,59)))
+      assert_equal_with_offset(h.output_time(2004, 1, 1, 0, 0, 0,0,0), tz.utc_to_local(h.time(2004, 1, 1, 0, 0, 0)))
+      assert_equal_with_offset(h.output_time(2004,12,31,23,59,59,0,0), tz.utc_to_local(h.time(2004,12,31,23,59,59)))
 
-      assert_equal_with_offset(h.time(2004, 1, 1, 0, 0, 0,0,:utc), tz.local_to_utc(h.time(2004, 1, 1, 0, 0, 0)))
-      assert_equal_with_offset(h.time(2004,12,31,23,59,59,0,:utc), tz.local_to_utc(h.time(2004,12,31,23,59,59)))
+      assert_equal_with_offset(h.output_time(2004, 1, 1, 0, 0, 0,0,:utc), tz.local_to_utc(h.time(2004, 1, 1, 0, 0, 0)))
+      assert_equal_with_offset(h.output_time(2004,12,31,23,59,59,0,:utc), tz.local_to_utc(h.time(2004,12,31,23,59,59)))
 
       assert_equal('UTC', tz.period_for(h.time(2004, 1, 1, 0, 0, 0,0,0)).zone_identifier)
       assert_equal('UTC', tz.period_for(h.time(2004,12,31,23,59,59,0,0)).zone_identifier)

@@ -59,6 +59,10 @@ module TZInfo
   # next. The {Timezone} class has methods that allow the periods, offsets and
   # transitions of a time zone to be interrogated.
   #
+  # All methods that take `Time` objects as parameters can be used with
+  # arbitrary `Time`-like objects that respond to both `to_i` and `subsec` and
+  # optionally `utc_offset`.
+  #
   # The {Timezone} class is thread-safe. It is safe to use class and instance
   # methods of {Timezone} in concurrently executing threads. Instances of
   # {Timezone} can be shared across thread boundaries.
@@ -480,6 +484,7 @@ module TZInfo
     #   the `dst` parameter or block did not resolve the ambiguity.
     def period_for_local(local_time, dst = Timezone.default_dst)
       raise ArgumentError, 'local_time must be specified' unless local_time
+      local_time = Timestamp.for(local_time, :ignore)
       results = periods_for_local(local_time)
 
       if results.empty?
