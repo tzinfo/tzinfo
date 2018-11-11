@@ -113,8 +113,6 @@ module DataSources
     end
 
     def test_load_timezone_info_tainted
-      skip_if_has_bug_14060
-
       safe_test do
         identifier = 'Europe/Amsterdam'.dup.taint
         assert(identifier.tainted?)
@@ -125,8 +123,6 @@ module DataSources
     end
 
     def test_load_timezone_info_tainted_and_frozen
-      skip_if_has_bug_14060
-
       safe_test do
         info = @data_source.send(:load_timezone_info, 'Europe/Amsterdam'.dup.taint.freeze)
         assert_equal('Europe/Amsterdam', info.identifier)
