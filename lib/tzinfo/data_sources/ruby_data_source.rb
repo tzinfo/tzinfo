@@ -110,8 +110,8 @@ module TZInfo
 
       # Requires a zone definition by its identifier (split on /).
       #
-      # @param identifier [String] a time zone identifier. This must have
-      #   already been validated.
+      # @param identifier [Array<string>] the component parts of a time zone
+      #   identifier (split on /). This must have already been validated.
       def require_definition(identifier)
         require_data(*(['definitions'] + identifier))
       end
