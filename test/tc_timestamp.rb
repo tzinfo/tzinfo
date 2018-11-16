@@ -80,8 +80,8 @@ class TCTimestamp < Minitest::Test
     assert_equal('sub_second must be >= 0 and < 1', error.message)
   end
 
-  def test_initialize_sub_second_greater_than_one
-    error = assert_raises(RangeError) { Timestamp.new(1476316800, Rational(11, 10)) }
+  def test_initialize_sub_second_greater_than_or_equal_to_one
+    error = assert_raises(RangeError) { Timestamp.new(1476316800, Rational(1, 1)) }
     assert_equal('sub_second must be >= 0 and < 1', error.message)
   end
 
@@ -581,7 +581,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_create_sub_second_out_of_range
-    [Rational(-1, 10), Rational(11, 10)].each do |sub_second|
+    [Rational(-1, 10), Rational(1, 1)].each do |sub_second|
       error = assert_raises(RangeError) { Timestamp.create(2018, 1, 1, 0, 0, 0, sub_second) }
       assert_equal('sub_second must be >= 0 and < 1', error.message)
     end
@@ -1256,8 +1256,8 @@ class TCTimestamp < Minitest::Test
     assert_equal('sub_second must be >= 0 and < 1', error.message)
   end
 
-  def test_class_utc_sub_second_greater_than_one
-    error = assert_raises(RangeError) { Timestamp.utc(1476316800, Rational(11, 10)) }
+  def test_class_utc_sub_second_greater_than_or_equal_to_one
+    error = assert_raises(RangeError) { Timestamp.utc(1476316800, Rational(1, 1)) }
     assert_equal('sub_second must be >= 0 and < 1', error.message)
   end
 end
