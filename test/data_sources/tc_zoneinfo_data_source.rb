@@ -934,6 +934,11 @@ module DataSources
     end
 
     def test_timezone_identifiers_excludes_those_that_cannot_be_utf8_encoded
+      file_expand_path = ->(path) do
+        raise "Unexpected path: #{path}" unless path == '/test'
+        path
+      end
+
       file_directory = ->(path) do
         path == '/test'
       end
@@ -954,15 +959,17 @@ module DataSources
         block.call('Zone3'.dup.force_encoding(Encoding::UTF_16)) # Invalid, can't be converted.
       end
 
-      File.stub(:directory?, file_directory) do
-        File.stub(:file?, file_file) do
-          File.stub(:read, file_read) do
-            Dir.stub(:foreach, dir_foreach) do
-              data_source = ZoneinfoDataSource.new('/test')
-              all = data_source.timezone_identifiers
-              assert_equal(1, all.length)
-              assert_equal('Zone2', all[0])
-              assert_equal(Encoding::UTF_8, all[0].encoding)
+      File.stub(:expand_path, file_expand_path) do
+        File.stub(:directory?, file_directory) do
+          File.stub(:file?, file_file) do
+            File.stub(:read, file_read) do
+              Dir.stub(:foreach, dir_foreach) do
+                data_source = ZoneinfoDataSource.new('/test')
+                all = data_source.timezone_identifiers
+                assert_equal(1, all.length)
+                assert_equal('Zone2', all[0])
+                assert_equal(Encoding::UTF_8, all[0].encoding)
+              end
             end
           end
         end
