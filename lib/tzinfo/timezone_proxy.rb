@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module TZInfo
 
   # A proxy class standing in for a {Timezone} with a given identifier.

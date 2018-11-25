@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module TZInfo
   # Information about a time zone used by a {Country}.
   class CountryTimezone

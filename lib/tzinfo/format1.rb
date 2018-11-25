@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module TZInfo
   # Modules and classes used by the format 1 version of TZInfo::Data.
   #

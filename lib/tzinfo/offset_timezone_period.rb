@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module TZInfo
   # Represents the infinite period of time in a time zone that constantly
   # observes the same offset from UTC (has an unbounded start and end).

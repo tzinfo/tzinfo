@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module TZInfo
   module DataSources
     # Represents a time zone that is defined as a link to or alias of another

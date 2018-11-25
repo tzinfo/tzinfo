@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module TZInfo
   module Format1
     # Instances of {Format1::CountryDefiner} are yielded to the format 1 version

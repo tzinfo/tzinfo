@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # frozen_string_literal: true
 
 raise 'Tests must be run with bundler, e.g. bundle exec rake test' unless defined?(Bundler)

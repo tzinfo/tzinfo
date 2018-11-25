@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module TZInfo
   module Format2
     # {Format2::TimezoneDefinition} is included into format 2 time zone

@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module TZInfo
   module Format2
     # Instances of {TimezoneIndexDefiner} are yielded by

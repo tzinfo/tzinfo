@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module TZInfo
   module Format2
     # The format 2 timezone index file includes {TimezoneIndexDefinition}, which

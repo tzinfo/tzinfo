@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module TZInfo
   module Format1
     # The format 1 TZInfo::Data time zone index file includes
