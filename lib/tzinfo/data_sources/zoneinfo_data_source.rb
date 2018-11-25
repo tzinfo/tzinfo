@@ -395,8 +395,8 @@ module TZInfo
         # src is a directory containing the tzdata source included on Solaris.
         # timeconfig is a symlink included on Slackware.
 
-        enum_timezones(nil, ['+VERSION', 'leapseconds', 'localtime', 'posix', 'posixrules', 'right', 'src', 'timeconfig']) do |identifier|
-          index << identifier.freeze
+        enum_timezones([], ['+VERSION', 'leapseconds', 'localtime', 'posix', 'posixrules', 'right', 'src', 'timeconfig']) do |identifier|
+          index << identifier.join('/').freeze
         end
 
         index.sort!
@@ -410,7 +410,7 @@ module TZInfo
       #   the block.
       # @yieldparam path [String] the path of a time zone file.
       def enum_timezones(dir, exclude = [], &block)
-        Dir.foreach(dir ? File.join(@zoneinfo_dir, dir) : @zoneinfo_dir) do |entry|
+        Dir.foreach(File.join(@zoneinfo_dir, *dir)) do |entry|
           begin
             entry.encode!(Encoding::UTF_8)
           rescue EncodingError
@@ -419,8 +419,8 @@ module TZInfo
 
           unless entry =~ /\./ || exclude.include?(entry)
             entry.untaint
-            path = dir ? File.join(dir, entry) : entry
-            full_path = File.join(@zoneinfo_dir, path)
+            path = dir + [entry]
+            full_path = File.join(@zoneinfo_dir, *path)
 
             if File.directory?(full_path)
               enum_timezones(path, [], &block)

@@ -976,6 +976,31 @@ module DataSources
       end
     end
 
+    def test_timezone_identifiers_are_utf8_when_file_join_returns_non_utf8
+      file_join = ->(*paths) do
+        if paths.length == 2 && paths[0] == 'Test' && paths[1] == 'Zone'
+          'Test/Zone'.encode(Encoding::ISO_8859_1)
+        else
+          File.__minitest_stub__join(*paths)
+        end
+      end
+
+      Dir.mktmpdir('tzinfo_test') do |dir|
+        FileUtils.touch(File.join(dir, 'zone.tab'))
+        FileUtils.touch(File.join(dir, 'iso3166.tab'))
+        test_path = File.join(dir, 'Test')
+        FileUtils.mkdir(test_path)
+        zone_path = File.join(test_path, 'Zone')
+        FileUtils.touch(zone_path)
+
+        File.stub(:join, file_join) do
+          data_source = ZoneinfoDataSource.new(dir)
+          assert_equal(['Test/Zone'], data_source.timezone_identifiers)
+          assert_equal(Encoding::UTF_8, data_source.timezone_identifiers[0].encoding)
+        end
+      end
+    end
+
     def test_timezone_identifiers_ignored_plus_version_file
       # Mac OS X includes a file named +VERSION containing the tzdata version.
 
