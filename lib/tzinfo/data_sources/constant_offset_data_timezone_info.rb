@@ -10,7 +10,7 @@ module TZInfo
 
       # Initializes a new {ConstantOffsetDataTimezoneInfo}.
       #
-      # The passed in `identifer` instance will be frozen. A reference to the
+      # The passed in `identifier` instance will be frozen. A reference to the
       # passed in {TimezoneOffset} will be retained.
       #
       # @param identifier [String] the identifier of the time zone.

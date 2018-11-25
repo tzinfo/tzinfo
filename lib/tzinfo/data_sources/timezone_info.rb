@@ -10,7 +10,7 @@ module TZInfo
       # @return [String] the identifier of the time zone.
       attr_reader :identifier
 
-      # Initializes a new TimezoneInfo. The passed in `identifer` instance will
+      # Initializes a new TimezoneInfo. The passed in `identifier` instance will
       # be frozen.
       #
       # @param identifier [String] the identifier of the time zone.

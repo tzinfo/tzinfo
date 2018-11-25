@@ -12,7 +12,7 @@ module TZInfo
 
       # Initializes a new {TransitionsDataTimezoneInfo}.
       #
-      # The passed in `identifer` instance will be frozen. A reference to the
+      # The passed in `identifier` instance will be frozen. A reference to the
       # passed in `Array` will be retained.
       #
       # The `transitions` `Array` must be sorted in order of ascending

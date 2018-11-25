@@ -87,7 +87,7 @@ module Format1
 
     def test_strings_deduped
       identifier = StringDeduper.global.dedupe('Test/A/One'.dup)
-      linked_identifer = StringDeduper.global.dedupe('Test/B/One'.dup)
+      linked_identifier = StringDeduper.global.dedupe('Test/B/One'.dup)
 
       m = Module.new
       m.send(:include, TimezoneIndexDefinition)
@@ -95,7 +95,7 @@ module Format1
       m.send(:linked_timezone, 'Test/B/One'.dup)
 
       assert_same(identifier, m.data_timezones.first)
-      assert_same(linked_identifer, m.linked_timezones.first)
+      assert_same(linked_identifier, m.linked_timezones.first)
     end
 
     def test_tzinfo_module_alias

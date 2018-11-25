@@ -65,7 +65,7 @@ module TZInfo
     end
 
     # Tests if the given object is equal to the current instance (has the same
-    # identifer, latitude, longitude and description).
+    # identifier, latitude, longitude and description).
     #
     # @param ct [Object] the object to be compared.
     # @return [TrueClass] `true` if `ct` is equal to the current instance.
@@ -76,7 +76,7 @@ module TZInfo
     end
 
     # Tests if the given object is equal to the current instance (has the same
-    # identifer, latitude, longitude and description).
+    # identifier, latitude, longitude and description).
     #
     # @param ct [Object] the object to be compared.
     # @return [Boolean] `true` if `ct` is equal to the current instance.

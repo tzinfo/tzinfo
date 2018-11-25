@@ -52,13 +52,13 @@ module Format2
 
     def test_strings_deduped
       identifier = @string_deduper.dedupe('Test/A/One')
-      linked_identifer = @string_deduper.dedupe('Test/B/One')
+      linked_identifier = @string_deduper.dedupe('Test/B/One')
 
       @definer.data_timezone 'Test/A/One'
       @definer.linked_timezone 'Test/B/One'
 
       assert_same(identifier, @definer.data_timezones.first)
-      assert_same(linked_identifer, @definer.linked_timezones.first)
+      assert_same(linked_identifier, @definer.linked_timezones.first)
     end
   end
 end

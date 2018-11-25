@@ -460,7 +460,7 @@ module TZInfo
         # codes, as used in zone1970.tab (introduced in tzdata 2014f).
         #
         # The first country code in the comma-separated list is the country that
-        # contains the city the zone identifer is based on. The first country
+        # contains the city the zone identifier is based on. The first country
         # code on each line is considered to be primary with the others
         # secondary.
         #
