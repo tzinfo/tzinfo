@@ -144,7 +144,7 @@ module TZInfo
         # Performs a binary search on {transitions} to find the index of the
         # earliest transition satisfying a condition.
         #
-        # @yield transition the caller will be yielded to to test the search
+        # @yield [transition] the caller will be yielded to to test the search
         #   condition.
         # @yieldparam transition [TimezoneTransition] a {TimezoneTransition}
         #   instance from {transitions}.
@@ -164,7 +164,7 @@ module TZInfo
         # Performs a binary search on {transitions} to find the index of the
         # earliest transition satisfying a condition.
         #
-        # @yield transition the caller will be yielded to to test the search
+        # @yield [transition] the caller will be yielded to to test the search
         #   condition.
         # @yieldparam transition [TimezoneTransition] a {TimezoneTransition}
         #   instance from {transitions}.
