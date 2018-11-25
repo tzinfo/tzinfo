@@ -56,6 +56,9 @@
   and `TZInfo::TimezoneOffset` have been renamed `base_utc_offset` and
   `current_utc_offset` respectively. The former names have been retained as
   aliases.
+* `TZInfo::Timezone.get`, `TZInfo::Timezone.get_proxy` and `TZInfo::Country.get`
+  can now be used with strings having any encoding. Previously, only encodings
+  that are directly comparable with UTF-8 were supported.
 * The requested identifier is included in `TZInfo::InvalidTimezoneIdentifier`
   exception messages.
 * The requested country code is included in `TZInfo::InvalidCountryCode`

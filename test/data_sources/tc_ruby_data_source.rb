@@ -47,27 +47,31 @@ module DataSources
       assert_match(/\bNowhere\/Special\b/, error.message)
     end
 
-    def test_load_timezone_info_in_index_but_file_does_not_exist
-      error = assert_raises(InvalidTimezoneIdentifier) do
-        @data_source.send(:load_timezone_info, 'Europe/Berlin')
+    test_encodings('UTF-8', 'UTF-16').each do |encoding|
+      define_method("test_load_timezone_info_in_index_but_file_does_not_exist_with_#{encoding.to_method}_encoded_identifier") do
+        error = assert_raises(InvalidTimezoneIdentifier) do
+          @data_source.send(:load_timezone_info, 'Europe/Berlin'.encode(encoding.name))
+        end
+
+        assert_match(/\bEurope\/Berlin\b/, error.message)
+        assert_equal(Encoding::UTF_8, error.message.encoding)
+        assert_kind_of(LoadError, error.cause) if error.respond_to?(:cause)
       end
 
-      assert_match(/\bEurope\/Berlin\b/, error.message)
-      assert_kind_of(LoadError, error.cause) if error.respond_to?(:cause)
-    end
+      define_method("test_load_timezone_info_module_names_do_not_match_zone_with_#{encoding.to_method}_encoded_identifier") do
+        def @data_source.validate_timezone_identifier(identifier)
+          identifier = identifier.encode(Encoding::UTF_8)
+          raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'Invalid/Incorrect_Module'
+          'Invalid/Incorrect_Module'.freeze
+        end
 
-    def test_load_timezone_info_module_names_do_not_match_zone
-      def @data_source.validate_timezone_identifier(identifier)
-        raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'Invalid/Incorrect_Module'
-        'Invalid/Incorrect_Module'.freeze
+        error = assert_raises(InvalidTimezoneIdentifier) do
+          @data_source.send(:load_timezone_info, 'Invalid/Incorrect_Module'.encode(encoding.name))
+        end
+
+        assert_match(/\bInvalid\/Incorrect_Module\b/, error.message)
+        assert_kind_of(NameError, error.cause) if error.respond_to?(:cause)
       end
-
-      error = assert_raises(InvalidTimezoneIdentifier) do
-        @data_source.send(:load_timezone_info, 'Invalid/Incorrect_Module')
-      end
-
-      assert_match(/\bInvalid\/Incorrect_Module\b/, error.message)
-      assert_kind_of(NameError, error.cause) if error.respond_to?(:cause)
     end
 
     def test_load_timezone_info_invalid
@@ -145,6 +149,14 @@ module DataSources
     def test_get_timezone_info
       info = @data_source.get_timezone_info('Europe/London')
       assert_equal('Europe/London', info.identifier)
+    end
+
+    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |encoding|
+      define_method("test_load_timezone_info_with_#{encoding.to_method}_encoded_identifier") do
+        identifier = 'Europe/London'.encode(encoding.name).freeze
+        info = @data_source.send(:load_timezone_info, identifier)
+        assert_equal('Europe/London', info.identifier)
+      end
     end
 
     def test_timezone_identifiers
@@ -238,6 +250,14 @@ module DataSources
       assert(info.zones.map(&:description).all?(&:frozen?))
     end
 
+    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |encoding|
+      define_method("test_load_country_info_with_#{encoding.to_method}_encoded_code") do
+        code = 'GB'.encode(encoding.name).freeze
+        info = @data_source.send(:load_country_info, code)
+        assert_equal('GB', info.code)
+      end
+    end
+
     def test_get_country_info
       info = @data_source.get_country_info('GB')
       assert_equal('GB', info.code)
@@ -310,6 +330,7 @@ module DataSources
         rescue Exception => e
           puts e.class
           puts e.message
+          puts e.backtrace
         end
       EOF
 

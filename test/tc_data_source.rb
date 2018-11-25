@@ -66,15 +66,23 @@ class TCDataSource < Minitest::Test
   class ValidateTimezoneIdentifierTestDataSource < DataSource
     attr_reader :data_timezone_identifiers
     attr_reader :linked_timezone_identifiers
+    attr_reader :timezone_identifier_encoding
 
-    def initialize(data_timezone_identifiers, linked_timezone_identifiers)
+    def initialize(data_timezone_identifiers, linked_timezone_identifiers, timezone_identifier_encoding = Encoding::UTF_8)
       super()
       @data_timezone_identifiers = data_timezone_identifiers.sort.freeze
       @linked_timezone_identifiers = linked_timezone_identifiers.sort.freeze
+      @timezone_identifier_encoding = timezone_identifier_encoding
     end
 
     def call_validate_timezone_identifier(identifier)
       validate_timezone_identifier(identifier)
+    end
+  end
+
+  class LookupCountryInfoTestDataSource < DataSource
+    def call_lookup_country_info(hash, code, encoding = Encoding::UTF_8)
+      lookup_country_info(hash, code, encoding)
     end
   end
 
@@ -446,5 +454,98 @@ class TCDataSource < Minitest::Test
 
     error = assert_raises(InvalidTimezoneIdentifier) { ds.call_validate_timezone_identifier(false) }
     assert_match(/\bfalse\b/, error.message)
+  end
+
+  test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |identifier_encoding|
+    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |index_encoding|
+      define_method("test_validate_timezone_identifier_with_#{index_encoding.to_method}_encoded_index_and_#{identifier_encoding.to_method}_encoded_identifier") do
+        data_identifiers = ['Test/One'.encode(index_encoding.name).freeze]
+        ds = ValidateTimezoneIdentifierTestDataSource.new(data_identifiers, [], index_encoding.find)
+        assert_same(data_identifiers[0], ds.call_validate_timezone_identifier('Test/One'.encode(identifier_encoding.name).freeze))
+      end
+    end
+
+
+    define_method("test_validate_timezone_identifier_with_invalid_#{identifier_encoding.to_method}_encoded_identifier") do
+      data_identifiers = ['Test/One'.freeze]
+      linked_identifiers = ['Test/Two'.freeze]
+      ds = ValidateTimezoneIdentifierTestDataSource.new(data_identifiers, linked_identifiers)
+
+      encoded_identifier = 'Test/Invalid'.encode(identifier_encoding.name).freeze
+      error = assert_raises(InvalidTimezoneIdentifier) { ds.call_validate_timezone_identifier(encoded_identifier) }
+      assert_match(/\bTest\/Invalid\b/, error.message)
+      assert_equal(Encoding::UTF_8, error.message.encoding)
+    end
+  end
+
+  def test_lookup_country_info
+    ds = LookupCountryInfoTestDataSource.new
+    hash = {'GB' => Object.new}
+    info = ds.call_lookup_country_info(hash, 'GB')
+    assert_same(hash['GB'], info)
+  end
+
+  def test_lookup_country_info_not_exist
+    ds = LookupCountryInfoTestDataSource.new
+    hash = {'GB' => Object.new}
+
+    error = assert_raises(InvalidCountryCode) do
+      ds.call_lookup_country_info(hash, 'ZZ')
+    end
+
+    assert_match(/\bZZ\b/, error.message)
+  end
+
+  def test_lookup_country_info_nil
+    ds = LookupCountryInfoTestDataSource.new
+    hash = {'GB' => Object.new}
+
+    error = assert_raises(InvalidCountryCode) do
+      ds.call_lookup_country_info(hash, nil)
+    end
+
+    assert_match(/\bnil\b/, error.message)
+  end
+
+  def test_lookup_country_info_false
+    ds = LookupCountryInfoTestDataSource.new
+    hash = {'GB' => Object.new}
+
+    error = assert_raises(InvalidCountryCode) do
+      ds.call_lookup_country_info(hash, false)
+    end
+
+    assert_match(/\bfalse\b/, error.message)
+  end
+
+  def test_lookup_country_info_case
+    ds = LookupCountryInfoTestDataSource.new
+    hash = {'GB' => Object.new}
+
+    error = assert_raises(InvalidCountryCode) do
+      ds.call_lookup_country_info(hash, 'gb')
+    end
+
+    assert_match(/\bgb\b/, error.message)
+  end
+
+  test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |code_encoding|
+    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |index_encoding|
+      define_method("test_lookup_country_info_with_#{index_encoding.to_method}_encoded_index_and_#{code_encoding.to_method}_encoded_identifier") do
+        ds = LookupCountryInfoTestDataSource.new
+        info = Object.new
+        hash = {'GB'.encode(index_encoding).freeze => info}
+        assert_same(info, ds.call_lookup_country_info(hash, 'GB'.encode(code_encoding.name).freeze, index_encoding.find))
+      end
+    end
+
+    define_method("test_lookup_country_info_with_invalid_#{code_encoding.to_method}_encoded_identifier") do
+      ds = LookupCountryInfoTestDataSource.new
+      hash = {}
+
+      error = assert_raises(InvalidCountryCode) { ds.call_lookup_country_info(hash, 'ZZ'.encode(code_encoding.name).freeze) }
+      assert_match(/\bZZ\b/, error.message)
+      assert_equal(Encoding::UTF_8, error.message.encoding)
+    end
   end
 end

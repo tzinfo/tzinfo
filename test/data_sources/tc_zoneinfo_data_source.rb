@@ -399,57 +399,64 @@ module DataSources
       assert_match(/\bNowhere\/Special\b/, error.message)
     end
 
-    def test_load_timezone_info_file_does_not_exist
-      # Override the index so that an attempt is made to load the file.
-      def @data_source.validate_timezone_identifier(identifier)
-        raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'Nowhere/Special'
-        'Nowhere/Special'.freeze
+    test_encodings('UTF-8', 'UTF-16').each do |encoding|
+      define_method("test_load_timezone_info_file_does_not_exist_with_#{encoding.to_method}_encoded_identifier") do
+        # Override the index so that an attempt is made to load the file.
+        def @data_source.validate_timezone_identifier(identifier)
+          identifier = identifier.encode(Encoding::UTF_8)
+          raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'Nowhere/Special'
+          'Nowhere/Special'.freeze
+        end
+
+        error = assert_raises(InvalidTimezoneIdentifier) do
+          @data_source.send(:load_timezone_info, 'Nowhere/Special'.encode(encoding.name))
+        end
+
+        assert_match(/\bNowhere\/Special\b/, error.message)
+        assert_equal(Encoding::UTF_8, error.message.encoding)
+        assert_kind_of(Errno::ENOENT, error.cause) if error.respond_to?(:cause)
       end
 
-      error = assert_raises(InvalidTimezoneIdentifier) do
-        @data_source.send(:load_timezone_info, 'Nowhere/Special')
+      define_method("test_load_timezone_info_path_component_not_dir_with_#{encoding.to_method}_encoded_identifier") do
+        # Override the index so that an attempt is made to load the file.
+        def @data_source.validate_timezone_identifier(identifier)
+          identifier = identifier.encode(Encoding::UTF_8)
+          raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'UTC/File'
+          'UTC/File'.freeze
+        end
+
+        error = assert_raises(InvalidTimezoneIdentifier) do
+          @data_source.send(:load_timezone_info, 'UTC/File'.encode(encoding.name))
+        end
+
+        assert_match(/\bUTC\/File\b/, error.message)
+        assert_equal(Encoding::UTF_8, error.message.encoding)
+
+        # The cause is usually Errno::ENOTDIR. On Windows it is Errno::ENOENT
+        # instead.
+        if error.respond_to?(:cause)
+          expected_cause = get_expected_file_open_and_read_cause(File.join(ZONEINFO_DIR, 'UTC', 'File'))
+          assert_kind_of(expected_cause, error.cause)
+        end
       end
 
-      assert_match(/\bNowhere\/Special\b/, error.message)
-      assert_kind_of(Errno::ENOENT, error.cause) if error.respond_to?(:cause)
-    end
+      define_method("test_load_timezone_info_name_to_long_with_#{encoding.to_method}_encoded_identifier") do
+        # Override the read method to raise Errno::ENAMETOOLONG and check that
+        # this is handled correctly.
 
-    def test_load_timezone_info_path_component_not_dir
-      # Override the index so that an attempt is made to load the file.
-      def @data_source.validate_timezone_identifier(identifier)
-        raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'UTC/File'
-        'UTC/File'.freeze
+        zoneinfo_reader = @data_source.instance_variable_get(:@zoneinfo_reader)
+        def zoneinfo_reader.read(file_path)
+          raise Errno::ENAMETOOLONG, 'Test'
+        end
+
+        error = assert_raises(InvalidTimezoneIdentifier) do
+          @data_source.send(:load_timezone_info, 'Europe/London'.encode(encoding.name))
+        end
+
+        assert_match(/\bEurope\/London\b/, error.message)
+        assert_equal(Encoding::UTF_8, error.message.encoding)
+        assert_kind_of(Errno::ENAMETOOLONG, error.cause) if error.respond_to?(:cause)
       end
-
-      error = assert_raises(InvalidTimezoneIdentifier) do
-        @data_source.send(:load_timezone_info, 'UTC/File')
-      end
-
-      assert_match(/\bUTC\/File\b/, error.message)
-
-      # The cause is usually Errno::ENOTDIR. On Windows it is Errno::ENOENT
-      # instead.
-      if error.respond_to?(:cause)
-        expected_cause = get_expected_file_open_and_read_cause(File.join(ZONEINFO_DIR, 'UTC', 'File'))
-        assert_kind_of(expected_cause, error.cause)
-      end
-    end
-
-    def test_load_timezone_info_name_to_long
-      # Override the read method to raise Errno::ENAMETOOLONG and check that
-      # this is handled correctly.
-
-      zoneinfo_reader = @data_source.instance_variable_get(:@zoneinfo_reader)
-      def zoneinfo_reader.read(file_path)
-        raise Errno::ENAMETOOLONG, 'Test'
-      end
-
-      error = assert_raises(InvalidTimezoneIdentifier) do
-        @data_source.send(:load_timezone_info, 'Europe/London')
-      end
-
-      assert_match(/\bEurope\/London\b/, error.message)
-      assert_kind_of(Errno::ENAMETOOLONG, error.cause) if error.respond_to?(:cause)
     end
 
     def test_load_timezone_info_invalid
@@ -484,29 +491,32 @@ module DataSources
       assert_match(/\beurope\/london/, error.message)
     end
 
-    def test_load_timezone_info_permission_denied
-      Dir.mktmpdir('tzinfo_test') do |dir|
-        FileUtils.touch(File.join(dir, 'zone.tab'))
-        FileUtils.touch(File.join(dir, 'iso3166.tab'))
+    test_encodings('UTF-8', 'UTF-16').each do |encoding|
+      define_method("test_load_timezone_info_permission_denied_with_#{encoding.to_method}_encoded_identifier") do
+        Dir.mktmpdir('tzinfo_test') do |dir|
+          FileUtils.touch(File.join(dir, 'zone.tab'))
+          FileUtils.touch(File.join(dir, 'iso3166.tab'))
 
-        file = File.join(dir, 'UTC')
-        FileUtils.touch(file)
-        FileUtils.chmod(0200, file)
+          file = File.join(dir, 'UTC')
+          FileUtils.touch(file)
+          FileUtils.chmod(0200, file)
 
-        if File.stat(file).mode & 0400 == 0400
-          # chmod failed to remove read permissions. Assume this is Windows and
-          # try setting permissions with icacls instead.
-          `icacls "#{file}" /deny Everyone:R`
+          if File.stat(file).mode & 0400 == 0400
+            # chmod failed to remove read permissions. Assume this is Windows and
+            # try setting permissions with icacls instead.
+            `icacls "#{file}" /deny Everyone:R`
+          end
+
+          data_source = ZoneinfoDataSource.new(dir)
+
+          error = assert_raises(InvalidTimezoneIdentifier) do
+            data_source.send(:load_timezone_info, 'UTC'.encode(encoding.name))
+          end
+
+          assert_match(/\bUTC\b/, error.message)
+          assert_equal(Encoding::UTF_8, error.message.encoding)
+          assert_kind_of(Errno::EACCES, error.cause) if error.respond_to?(:cause)
         end
-
-        data_source = ZoneinfoDataSource.new(dir)
-
-        error = assert_raises(InvalidTimezoneIdentifier) do
-          data_source.send(:load_timezone_info, 'UTC')
-        end
-
-        assert_match(/\bUTC\b/, error.message)
-        assert_kind_of(Errno::EACCES, error.cause) if error.respond_to?(:cause)
       end
     end
 
@@ -528,39 +538,43 @@ module DataSources
       end
     end
 
-    def test_load_timezone_info_file_is_directory
-      Dir.mktmpdir('tzinfo_test') do |dir|
-        FileUtils.touch(File.join(dir, 'zone.tab'))
-        FileUtils.touch(File.join(dir, 'iso3166.tab'))
+    test_encodings('UTF-8', 'UTF-16').each do |encoding|
+      define_method("test_load_timezone_info_file_is_directory_with_#{encoding.to_method}_encoded_identifier") do
+        Dir.mktmpdir('tzinfo_test') do |dir|
+          FileUtils.touch(File.join(dir, 'zone.tab'))
+          FileUtils.touch(File.join(dir, 'iso3166.tab'))
 
-        subdir = File.join(dir, 'Subdir')
-        FileUtils.mkdir(subdir)
+          subdir = File.join(dir, 'Subdir')
+          FileUtils.mkdir(subdir)
 
-        data_source = ZoneinfoDataSource.new(dir)
+          data_source = ZoneinfoDataSource.new(dir)
 
-        # Override the index so that an attempt is made to load the file.
-        def data_source.validate_timezone_identifier(identifier)
-          raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'Subdir'
-          'Subdir'.freeze
-        end
+          # Override the index so that an attempt is made to load the file.
+          def data_source.validate_timezone_identifier(identifier)
+            identifier = identifier.encode(Encoding::UTF_8)
+            raise "Unexpected identifier passed to validate_timezone_identifier: #{identifier}" unless identifier == 'Subdir'
+            'Subdir'.freeze
+          end
 
-        error = assert_raises(InvalidTimezoneIdentifier) do
-          data_source.send(:load_timezone_info, 'Subdir')
-        end
+          error = assert_raises(InvalidTimezoneIdentifier) do
+            data_source.send(:load_timezone_info, 'Subdir'.encode(encoding.name))
+          end
 
-        assert_match(/\bSubdir\b/, error.message)
+          assert_match(/\bSubdir\b/, error.message)
+          assert_equal(Encoding::UTF_8, error.message.encoding)
 
-        if error.respond_to?(:cause)
-          # Errno::EISDIR is normally raised either when attempting to read or
-          # when opening the file (Windows). However, JRuby on Windows 9.1.14.0
-          # raises Errno::EACCES instead.
-          #
-          # Once https://github.com/jruby/jruby/pull/4818 has been fixed/merged,
-          # this can be changed to:
-          #
-          # assert_kind_of(Errno::EISDIR, error.cause)
-          expected_cause = get_expected_file_open_and_read_cause(File.join(dir, 'Subdir'))
-          assert_kind_of(expected_cause, error.cause)
+          if error.respond_to?(:cause)
+            # Errno::EISDIR is normally raised either when attempting to read or
+            # when opening the file (Windows). However, JRuby on Windows 9.1.14.0
+            # raises Errno::EACCES instead.
+            #
+            # Once https://github.com/jruby/jruby/pull/4818 has been fixed/merged,
+            # this can be changed to:
+            #
+            # assert_kind_of(Errno::EISDIR, error.cause)
+            expected_cause = get_expected_file_open_and_read_cause(File.join(dir, 'Subdir'))
+            assert_kind_of(expected_cause, error.cause)
+          end
         end
       end
     end
@@ -714,48 +728,52 @@ module DataSources
       end
     end
 
-    def test_load_timezone_info_invalid_file
-      Dir.mktmpdir('tzinfo_test') do |dir|
-        FileUtils.touch(File.join(dir, 'zone.tab'))
-        FileUtils.touch(File.join(dir, 'iso3166.tab'))
+    test_encodings('UTF-8', 'UTF-16').each do |encoding|
+      define_method("test_load_timezone_info_invalid_file_with_#{encoding.to_method}_encoded_identifier") do
+        Dir.mktmpdir('tzinfo_test') do |dir|
+          FileUtils.touch(File.join(dir, 'zone.tab'))
+          FileUtils.touch(File.join(dir, 'iso3166.tab'))
 
-        File.open(File.join(dir, 'Zone'), 'wb') do |file|
-          file.write('NotAValidTZifFile')
-        end
-
-        data_source = ZoneinfoDataSource.new(dir)
-
-        error = assert_raises(InvalidTimezoneIdentifier) do
-          data_source.send(:load_timezone_info, 'Zone')
-        end
-
-        assert_match(/\bZone\b/, error.message)
-      end
-    end
-
-    def test_load_timezone_info_invalid_file_2
-      Dir.mktmpdir('tzinfo_test') do |dir|
-        FileUtils.touch(File.join(dir, 'zone.tab'))
-        FileUtils.touch(File.join(dir, 'iso3166.tab'))
-
-        zone = File.join(dir, 'Zone')
-
-        File.open(File.join(@data_source.zoneinfo_dir, 'EST')) do |src|
-          # Change header to TZif1 (which is not a valid header).
-          File.open(zone, 'wb') do |dest|
-            dest.write('TZif1')
-            src.pos = 5
-            FileUtils.copy_stream(src, dest)
+          File.open(File.join(dir, 'Zone'), 'wb') do |file|
+            file.write('NotAValidTZifFile')
           end
+
+          data_source = ZoneinfoDataSource.new(dir)
+
+          error = assert_raises(InvalidTimezoneIdentifier) do
+            data_source.send(:load_timezone_info, 'Zone'.encode(encoding.name))
+          end
+
+          assert_match(/\bZone\b/, error.message)
+          assert_equal(Encoding::UTF_8, error.message.encoding)
         end
+      end
 
-        data_source = ZoneinfoDataSource.new(dir)
+      define_method("test_load_timezone_info_invalid_file_2_with_#{encoding.to_method}_encoded_identifier") do
+        Dir.mktmpdir('tzinfo_test') do |dir|
+          FileUtils.touch(File.join(dir, 'zone.tab'))
+          FileUtils.touch(File.join(dir, 'iso3166.tab'))
 
-        error = assert_raises(InvalidTimezoneIdentifier) do
-          data_source.send(:load_timezone_info, 'Zone')
+          zone = File.join(dir, 'Zone')
+
+          File.open(File.join(@data_source.zoneinfo_dir, 'EST')) do |src|
+            # Change header to TZif1 (which is not a valid header).
+            File.open(zone, 'wb') do |dest|
+              dest.write('TZif1')
+              src.pos = 5
+              FileUtils.copy_stream(src, dest)
+            end
+          end
+
+          data_source = ZoneinfoDataSource.new(dir)
+
+          error = assert_raises(InvalidTimezoneIdentifier) do
+            data_source.send(:load_timezone_info, 'Zone'.encode(encoding.name))
+          end
+
+          assert_match(/\bZone\b/, error.message)
+          assert_equal(Encoding::UTF_8, error.message.encoding)
         end
-
-        assert_match(/\bZone\b/, error.message)
       end
     end
 
@@ -804,6 +822,14 @@ module DataSources
       assert(!identifier.frozen?)
     end
 
+    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |encoding|
+      define_method("test_load_timezone_info_with_#{encoding.to_method}_encoded_identifier") do
+        identifier = 'Europe/London'.encode(encoding.name).freeze
+        info = @data_source.send(:load_timezone_info, identifier)
+        assert_equal('Europe/London', info.identifier)
+      end
+    end
+
     def test_get_timezone_info
       info = @data_source.get_timezone_info('Europe/London')
       assert_equal('Europe/London', info.identifier)
@@ -836,6 +862,7 @@ module DataSources
       assert_equal(expected, all)
       assert(all.frozen?)
       assert(all.all?(&:frozen?))
+      assert(all.all? {|s| s.encoding == Encoding::UTF_8})
       assert_same(all, @data_source.timezone_identifiers)
     end
 
@@ -846,6 +873,7 @@ module DataSources
       assert_equal(expected, all_data)
       assert(all_data.frozen?)
       assert(all_data.all?(&:frozen?))
+      assert(all_data.all? {|s| s.encoding == Encoding::UTF_8})
       assert_same(all_data, @data_source.data_timezone_identifiers)
     end
 
@@ -854,6 +882,91 @@ module DataSources
       assert_kind_of(Array, all_linked)
       assert_equal([], all_linked)
       assert(all_linked.frozen?)
+    end
+
+    ['UTF-8', 'ISO-8859-1', nil].each do |encoding|
+      define_method("test_timezone_identifiers_loaded_as_utf_8_when_internal_encoding_is_#{encoding ? encoding.downcase.gsub('-', '_') : 'nil'}") do
+        Dir.mktmpdir('tzinfo_test') do |dir|
+          FileUtils.touch(File.join(dir, 'zone.tab'))
+          FileUtils.touch(File.join(dir, 'iso3166.tab'))
+
+          subdir = File.join(dir, 'Subdir')
+          FileUtils.mkdir(subdir)
+          FileUtils.touch(File.join(subdir, 'Zone'))
+
+          orig_verbose = $VERBOSE
+          orig_default_internal_encoding = Encoding.default_internal
+
+          begin
+            $VERBOSE = nil
+            Encoding.default_internal = encoding
+
+            data_source = ZoneinfoDataSource.new(dir)
+            all = data_source.timezone_identifiers
+            assert_equal(1, all.length)
+            assert_equal('Subdir/Zone', all[0])
+            assert_equal(Encoding::UTF_8, all[0].encoding)
+          ensure
+            Encoding.default_internal = orig_default_internal_encoding
+            $VERBOSE = orig_verbose
+          end
+        end
+      end
+    end
+
+    ['UTF-8', 'ISO-8859-1'].each do |encoding|
+      define_method("test_timezone_identifiers_loaded_when_zoneinfo_dir_encoded_as_#{encoding.downcase.gsub('-', '_')}") do
+        Dir.mktmpdir('tzinfo_test') do |dir|
+          FileUtils.touch(File.join(dir, 'zone.tab'))
+          FileUtils.touch(File.join(dir, 'iso3166.tab'))
+
+          subdir = File.join(dir, 'Subdir')
+          FileUtils.mkdir(subdir)
+          FileUtils.touch(File.join(subdir, 'Zone'))
+
+          data_source = ZoneinfoDataSource.new(dir.encode(encoding))
+          all = data_source.timezone_identifiers
+          assert_equal(1, all.length)
+          assert_equal('Subdir/Zone', all[0])
+          assert_equal(Encoding::UTF_8, all[0].encoding)
+        end
+      end
+    end
+
+    def test_timezone_identifiers_excludes_those_that_cannot_be_utf8_encoded
+      file_directory = ->(path) do
+        path == '/test'
+      end
+
+      file_file = ->(path) do
+        path =~ /\A\/test\/((iso3166|zone).tab|Zone[123])\z/
+      end
+
+      file_read = ->(path, options = {}) do
+        raise "Unexpected path: #{path}" unless path == '/test/iso3166.tab' || path == '/test/zone.tab'
+        ''
+      end
+
+      dir_foreach = ->(path, &block) do
+        raise "Unexpected path: #{path}" unless path == '/test'
+        block.call('Zone1'.dup.force_encoding(Encoding::UTF_16)) # Invalid, can't be converted.
+        block.call('Zone2'.dup)
+        block.call('Zone3'.dup.force_encoding(Encoding::UTF_16)) # Invalid, can't be converted.
+      end
+
+      File.stub(:directory?, file_directory) do
+        File.stub(:file?, file_file) do
+          File.stub(:read, file_read) do
+            Dir.stub(:foreach, dir_foreach) do
+              data_source = ZoneinfoDataSource.new('/test')
+              all = data_source.timezone_identifiers
+              assert_equal(1, all.length)
+              assert_equal('Zone2', all[0])
+              assert_equal(Encoding::UTF_8, all[0].encoding)
+            end
+          end
+        end
+      end
     end
 
     def test_timezone_identifiers_ignored_plus_version_file
@@ -1268,6 +1381,14 @@ module DataSources
         assert_equal('UT', info.code)
         assert_equal('Unicode Test ✓', info.name)
         assert_equal([CountryTimezone.new('Unicode✓/One', Rational(6181, 120), Rational(-451, 3600), 'Unicode Description ✓')], info.zones)
+      end
+    end
+
+    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |encoding|
+      define_method("test_load_country_info_with_#{encoding.to_method}_encoded_code") do
+        code = 'GB'.encode(encoding.name).freeze
+        info = @data_source.send(:load_country_info, code)
+        assert_equal('GB', info.code)
       end
     end
 

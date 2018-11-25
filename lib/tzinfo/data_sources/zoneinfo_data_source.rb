@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # frozen_string_literal: true
 
 module TZInfo
@@ -282,9 +283,9 @@ module TZInfo
         zoneinfo = begin
           @zoneinfo_reader.read(path)
         rescue Errno::EACCES, InvalidZoneinfoFile => e
-          raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
+          raise InvalidTimezoneIdentifier, "#{e.message.encode(Encoding::UTF_8)} (loading #{valid_identifier})"
         rescue Errno::EISDIR, Errno::ENAMETOOLONG, Errno::ENOENT, Errno::ENOTDIR
-          raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier}"
+          raise InvalidTimezoneIdentifier, "Invalid identifier: #{valid_identifier}"
         end
 
         if zoneinfo.kind_of?(TimezoneOffset)
@@ -296,9 +297,7 @@ module TZInfo
 
       # (see DataSource#load_country_info)
       def load_country_info(code)
-        info = @countries[code]
-        raise InvalidCountryCode, "Invalid country code: #{code.nil? ? 'nil' : code}" unless info
-        info
+        lookup_country_info(@countries, code)
       end
 
       private
@@ -412,6 +411,12 @@ module TZInfo
       # @yieldparam path [String] the path of a time zone file.
       def enum_timezones(dir, exclude = [], &block)
         Dir.foreach(dir ? File.join(@zoneinfo_dir, dir) : @zoneinfo_dir) do |entry|
+          begin
+            entry.encode!(Encoding::UTF_8)
+          rescue EncodingError
+            next
+          end
+
           unless entry =~ /\./ || exclude.include?(entry)
             entry.untaint
             path = dir ? File.join(dir, entry) : entry

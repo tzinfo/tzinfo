@@ -13,31 +13,33 @@ class TCCountry < Minitest::Test
     DataSource.set(@orig_data_source)
   end
 
-  def test_get_valid
-    c = Country.get('GB')
+  test_encodings('ISO-8859-1', 'UTF-8', 'UTF-16').each do |encoding|
+    define_method("test_get_valid_with_#{encoding.to_method}_encoded_code") do
+      c = Country.get('GB'.encode(encoding.name))
 
-    assert c
-    assert_equal('GB', c.code)
-  end
+      refute_nil(c)
+      assert_equal('GB', c.code)
+    end
 
-  def test_get_not_exist
-    error = assert_raises(InvalidCountryCode) { Country.get('ZZ') }
-    assert_match(/\bZZ\b/, error.message)
-  end
+    define_method("test_get_not_exist_with_#{encoding.to_method}_encoded_code") do
+      error = assert_raises(InvalidCountryCode) { Country.get('ZZ'.encode(encoding.name)) }
+      assert_match(/\bZZ\b/, error.message)
+    end
 
-  def test_get_invalid
-    error = assert_raises(InvalidCountryCode) { Country.get('../Countries/GB') }
-    assert_match(/\W\.\.\/Countries\/GB\b/, error.message)
+    define_method("test_get_invalid_with_#{encoding.to_method}_encoded_code") do
+      error = assert_raises(InvalidCountryCode) { Country.get('../Countries/GB'.encode(encoding.name)) }
+      assert_match(/\W\.\.\/Countries\/GB\b/, error.message)
+    end
+
+    define_method("test_get_case_with_#{encoding.to_method}_encoded_code") do
+      error = assert_raises(InvalidCountryCode) { Country.get('gb'.encode(encoding.name)) }
+      assert_match(/\bgb\b/, error.message)
+    end
   end
 
   def test_get_nil
     error = assert_raises(InvalidCountryCode) { Country.get(nil) }
     assert_match(/\bnil\b/, error.message)
-  end
-
-  def test_get_case
-    error = assert_raises(InvalidCountryCode) { Country.get('gb') }
-    assert_match(/\bgb\b/, error.message)
   end
 
   def test_get_tainted_loaded

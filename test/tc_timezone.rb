@@ -158,41 +158,49 @@ class TCTimezone < Minitest::Test
     assert_equal(true, Timezone.default_dst)
   end
 
-  def test_get_valid_1
-    tz = Timezone.get('Europe/London')
+  test_encodings('ISO-8859-1', 'UTF-8', 'UTF-16').each do |encoding|
+    define_method("test_get_valid_data_with_#{encoding.to_method}_encoded_identifier") do
+      tz = Timezone.get('Europe/London'.encode(encoding.name))
 
-    assert_kind_of(DataTimezone, tz)
-    assert_equal('Europe/London', tz.identifier)
-  end
-
-  def test_get_valid_2
-    tz = Timezone.get('UTC')
-
-    # ZoneinfoDataSource doesn't return DataSources::LinkedTimezoneInfo for any timezone.
-    if DataSource.get.get_timezone_info('UTC').kind_of?(DataSources::LinkedTimezoneInfo)
-      assert_kind_of(LinkedTimezone, tz)
-    else
       assert_kind_of(DataTimezone, tz)
+      assert_equal('Europe/London', tz.identifier)
     end
 
-    assert_equal('UTC', tz.identifier)
-  end
+    define_method("test_get_valid_linked_with_#{encoding.to_method}_encoded_identifier") do
+      tz = Timezone.get('UTC'.encode(encoding.name))
 
-  def test_get_valid_3
-    tz = Timezone.get('America/Argentina/Buenos_Aires')
+      # ZoneinfoDataSource doesn't return DataSources::LinkedTimezoneInfo for any timezone.
+      if DataSource.get.get_timezone_info('UTC').kind_of?(DataSources::LinkedTimezoneInfo)
+        assert_kind_of(LinkedTimezone, tz)
+      else
+        assert_kind_of(DataTimezone, tz)
+      end
 
-    assert_kind_of(DataTimezone, tz)
-    assert_equal('America/Argentina/Buenos_Aires', tz.identifier)
-  end
+      assert_equal('UTC', tz.identifier)
+    end
 
-  def test_get_not_exist
-    error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get('Nowhere/Special') }
-    assert_match(/\bNowhere\/Special/, error.message)
-  end
+    define_method("test_get_valid_three_levels_with_#{encoding.to_method}_encoded_identifier") do
+      tz = Timezone.get('America/Argentina/Buenos_Aires'.encode(encoding.name))
 
-  def test_get_invalid
-    error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get('../Definitions/UTC') }
-    assert_match(/\W\.\.\/Definitions\/UTC\b/, error.message)
+      assert_kind_of(DataTimezone, tz)
+      assert_equal('America/Argentina/Buenos_Aires', tz.identifier)
+    end
+
+    define_method("test_get_not_exist_with_#{encoding.to_method}_encoded_identifier") do
+      error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get('Nowhere/Special'.encode(encoding.name)) }
+      assert_match(/\bNowhere\/Special/, error.message)
+    end
+
+    define_method("test_get_invalid_with_#{encoding.to_method}_encoded_identifier") do
+      error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get('../Definitions/UTC'.encode(encoding.name)) }
+      assert_match(/\W\.\.\/Definitions\/UTC\b/, error.message)
+    end
+
+    define_method("test_get_case_with_#{encoding.to_method}_encoded_identifier") do
+      Timezone.get('Europe/Prague')
+      error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get('Europe/prague'.encode(encoding.name)) }
+      assert_match(/\bEurope\/prague\b/, error.message)
+    end
   end
 
   def test_get_nil
@@ -200,28 +208,27 @@ class TCTimezone < Minitest::Test
     assert_match(/\bnil\b/, error.message)
   end
 
-  def test_get_case
-    Timezone.get('Europe/Prague')
-    error = assert_raises(InvalidTimezoneIdentifier) { Timezone.get('Europe/prague') }
-    assert_match(/\bEurope\/prague\b/, error.message)
-  end
+  test_encodings('ISO-8859-1', 'UTF-8', 'UTF-16').each do |encoding|
+    define_method("test_get_proxy_valid_with_#{encoding.to_method}_encoded_identifier") do
+      identifier = 'Europe/London'.encode(encoding.name)
+      proxy = Timezone.get_proxy(identifier)
+      assert_kind_of(TimezoneProxy, proxy)
+      assert_same(identifier, proxy.identifier)
+    end
 
-  def test_get_proxy_valid
-    proxy = Timezone.get_proxy('Europe/London')
-    assert_kind_of(TimezoneProxy, proxy)
-    assert_equal('Europe/London', proxy.identifier)
-  end
+    define_method("test_get_proxy_not_exist_with_#{encoding.to_method}_encoded_identifier") do
+      identifier = 'Not/There'.encode(encoding.name)
+      proxy = Timezone.get_proxy(identifier)
+      assert_kind_of(TimezoneProxy, proxy)
+      assert_same(identifier, proxy.identifier)
+    end
 
-  def test_get_proxy_not_exist
-    proxy = Timezone.get_proxy('Not/There')
-    assert_kind_of(TimezoneProxy, proxy)
-    assert_equal('Not/There', proxy.identifier)
-  end
-
-  def test_get_proxy_invalid
-    proxy = Timezone.get_proxy('../Invalid/Identifier')
-    assert_kind_of(TimezoneProxy, proxy)
-    assert_equal('../Invalid/Identifier', proxy.identifier)
+    define_method("test_get_proxy_invalid_with_#{encoding.to_method}_encoded_identifier") do
+      identifier = '../Invalid/Identifier'.encode(encoding.name)
+      proxy = Timezone.get_proxy(identifier)
+      assert_kind_of(TimezoneProxy, proxy)
+      assert_same(identifier, proxy.identifier)
+    end
   end
 
   def test_get_tainted_loaded
@@ -382,6 +389,14 @@ class TCTimezone < Minitest::Test
     assert_equal('', TestTimezone.new('').friendly_identifier(true))
     assert_equal('', TestTimezone.new('').friendly_identifier(false))
     assert_equal('', TestTimezone.new('').friendly_identifier)
+  end
+
+  test_encodings('ISO-8859-1', 'UTF-8', 'UTF-16').each do |encoding|
+    define_method("test_friendly_identifier_with_#{encoding.to_method}_encoded_identifier") do
+      tz = TestTimezone.new('Europe/Paris'.encode(encoding.name).freeze)
+      assert_equal('Paris', tz.friendly_identifier(true))
+      assert_equal('Europe - Paris', tz.friendly_identifier(false))
+    end
   end
 
   def test_friendly_identifier_non_binary_encoding

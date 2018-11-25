@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # frozen_string_literal: true
 
 module TZInfo
@@ -86,24 +87,22 @@ module TZInfo
       #   identifier is invalid.
       def load_timezone_info(identifier)
         valid_identifier = validate_timezone_identifier(identifier)
-        valid_identifier = valid_identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__').split('/')
+        split_identifier = valid_identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__').split('/')
 
         begin
-          require_definition(valid_identifier)
+          require_definition(split_identifier)
 
           m = Data::Definitions
-          valid_identifier.each {|part| m = m.const_get(part) }
+          split_identifier.each {|part| m = m.const_get(part) }
           m.get
         rescue LoadError, NameError => e
-          raise InvalidTimezoneIdentifier, "#{e.message} (loading #{identifier})"
+          raise InvalidTimezoneIdentifier, "#{e.message.encode(Encoding::UTF_8)} (loading #{valid_identifier})"
         end
       end
 
       # (see DataSource#load_country_info)
       def load_country_info(code)
-        info = @countries[code]
-        raise InvalidCountryCode, "Invalid country code: #{code.nil? ? 'nil' : code}" unless info
-        info
+        lookup_country_info(@countries, code)
       end
 
       private

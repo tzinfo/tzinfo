@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # frozen_string_literal: true
 
 require 'set'
@@ -268,7 +269,9 @@ module TZInfo
     #   (typically a region name) should be omitted.
     # @return [String] the modified identifier.
     def friendly_identifier(skip_first_part = false)
-      parts = identifier.split('/')
+      id = identifier
+      id = id.encode(Encoding::UTF_8) unless id.encoding.ascii_compatible?
+      parts = id.split('/')
       if parts.empty?
         # shouldn't happen
         identifier

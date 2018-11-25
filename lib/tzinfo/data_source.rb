@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # frozen_string_literal: true
 
 require 'concurrent/map'
@@ -283,6 +284,12 @@ module TZInfo
       raise_invalid_data_source('load_country_info')
     end
 
+    # @return [Encoding] The `Encoding` used by the `String` instances returned
+    #   by {data_timezone_identifiers} and {linked_timezone_identifiers}.
+    def timezone_identifier_encoding
+      Encoding::UTF_8
+    end
+
     # Checks that the given identifier is a valid time zone identifier (can be
     # found in the {timezone_identifiers} `Array`). If the identifier is valid,
     # the `String` instance representing that identifier from
@@ -295,9 +302,32 @@ module TZInfo
     # @raise [InvalidTimezoneIdentifier] if `identifier` was not found in
     #   {timezone_identifiers}.
     def validate_timezone_identifier(identifier)
-      valid_identifier = find_timezone_identifier(identifier)
-      raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier.nil? ? 'nil' : identifier}" unless valid_identifier
-      valid_identifier
+      raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier.nil? ? 'nil' : identifier}" unless identifier.kind_of?(String)
+
+      valid_identifier = try_with_encoding(identifier, timezone_identifier_encoding) {|id| find_timezone_identifier(id) }
+      return valid_identifier if valid_identifier
+
+      raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier.encode(Encoding::UTF_8)}"
+    end
+
+    # Looks up a given code in the given hash of code to {CountryInfo} mappings.
+    # If the code is found the {CountryInfo} is returned. Otherwise an
+    # {InvalidCountryCode} exception is raised.
+    #
+    # @param hash [String, CountryInfo] a mapping from ISO 3166-1 alpha-2
+    #   country codes to {CountryInfo} instances.
+    # @param code [String] a country code to lookup.
+    # @param encoding [Encoding] the encoding used for the country codes in
+    #   `hash`.
+    # @return [CountryInfo] the {CountryInfo} instance corresponding to `code`.
+    # @raise [InvalidCountryCode] if `code` was not found in `hash`.
+    def lookup_country_info(hash, code, encoding = Encoding::UTF_8)
+      raise InvalidCountryCode, "Invalid country code: #{code.nil? ? 'nil' : code}" unless code.kind_of?(String)
+
+      info = try_with_encoding(code, encoding) {|c| hash[c] }
+      return info if info
+
+      raise InvalidCountryCode, "Invalid country code: #{code.encode(Encoding::UTF_8)}"
     end
 
     private
@@ -337,7 +367,7 @@ module TZInfo
       #
       # :nocov_no_array_bsearch:
       def find_timezone_identifier(identifier)
-        return nil unless identifier.kind_of?(String)
+
         result = timezone_identifiers.bsearch {|i| i >= identifier }
         result == identifier ? result : nil
       end
@@ -353,8 +383,6 @@ module TZInfo
       #
       # :nocov_array_bsearch:
       def find_timezone_identifier(identifier)
-        return nil unless identifier.kind_of?(String)
-
         identifiers = timezone_identifiers
         low = 0
         high = identifiers.length
@@ -376,6 +404,30 @@ module TZInfo
         nil
       end
       # :nocov_array_bsearch:
+    end
+
+    # Tries an operation using `string` directly. If the operation fails, the
+    # string is copied and encoded with `encoding` and the operation is tried
+    # again.
+    #
+    # @param string [String] The `String` to perform the operation on.
+    # @param encoding [Encoding] The `Encoding` to use if the initial attempt
+    #   fails.
+    # @yield [s] the caller will be yielded to once or twice to attempt the
+    #   operation.
+    # @yieldparam s [String] either `string` or an encoded copy of `string`.
+    # @yieldreturn [Object] The result of the operation. Must be truthy if
+    #   successful.
+    # @result [Object] the result of the or `nil` if the first attempt fails
+    #   and `string` is already encoded with `encoding`.
+    def try_with_encoding(string, encoding)
+      result = yield string
+      return result if result
+
+      unless encoding == string.encoding
+        string = string.encode(encoding)
+        yield string
+      end
     end
   end
 end

@@ -90,6 +90,23 @@ module TestUtils
     end
   end
 
+  # A helper class used to define test methods for different encodings.
+  class TestEncoding
+    attr_reader :name
+
+    def initialize(name)
+      @name = name
+    end
+
+    def find
+      Encoding.find(@name)
+    end
+
+    def to_method
+      @name.downcase.gsub('-', '_')
+    end
+  end
+
   # With MRI and Rubinius, a Time constructed with a zero offset will have
   # Time#utc? == false. utc? only returns true for Times explicitly initialized
   # as UTC (e.g with Time.utc). JRuby's Time#utc? returns true when the offset
@@ -328,6 +345,11 @@ module TestUtils
             yield helper_class.new
           end
         end
+      end
+
+      # Gets instances of TestEncoding for the given names.
+      def test_encodings(*names)
+        names.map {|n| TestEncoding.new(n) }
       end
     end
   end
