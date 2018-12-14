@@ -404,11 +404,14 @@ module TZInfo
 
       # Recursively enumerate a directory of time zones.
       #
-      # @param dir [String] the directory to enumerate.
-      # @param exclude [String] file names to exclude when scanning `dir`.
+      # @param dir [Array<String>] the directory to enumerate as an `Array` of
+      #   path components.
+      # @param exclude [Array<String>] file names to exclude when scanning
+      #   `dir`.
       # @yield [path] the path of each time zone file found is passed to
       #   the block.
-      # @yieldparam path [String] the path of a time zone file.
+      # @yieldparam path [Array<String>] the path of a time zone file as an
+      #   `Array` of path components.
       def enum_timezones(dir, exclude = [], &block)
         Dir.foreach(File.join(@zoneinfo_dir, *dir)) do |entry|
           begin
