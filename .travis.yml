@@ -21,7 +21,9 @@ rvm:
   - jruby-9.2.3.0
   - jruby-head
   - rbx-3.107
+  - truffleruby-1.0.0-rc10
 matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head
+    - rvm: truffleruby-1.0.0-rc10
