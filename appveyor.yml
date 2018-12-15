@@ -4,6 +4,8 @@ cache:
   - vendor/bundle
 
 environment:
+  TESTOPTS: --verbose
+
   matrix:
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 193

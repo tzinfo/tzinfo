@@ -6,6 +6,9 @@ before_install:
 before_script:
   - bundle update
 cache: bundler
+env:
+  global:
+    - TESTOPTS=--verbose
 rvm:
   - 1.9.3-p551
   - 2.0.0-p648
