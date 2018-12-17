@@ -327,6 +327,44 @@ For further detail, please refer to the API documentation for the
 `TZInfo::Timezone` and `TZInfo::Country` classes.
 
 
+Time Zone Selection
+-------------------
+
+The Time Zone Database maintainers recommend that time zone identifiers are not
+made visibile to end-users (see [Names of timezones](https://data.iana.org/time-zones/theory.html#naming)).
+
+Time zones can be selected via country instead. Call `TZInfo::Country.all` to
+obtain a list of `TZInfo::Country` objects, each with a unique `code` and
+a `name` that can be used for display purposes.
+
+Most countries have a single time zone. When choosing such a country, the time
+zone can be inferred and selected automatically.
+
+```ruby
+croatia = TZInfo::Country.get('HR')
+# => #<TZInfo::Country: HR>
+croatia.zone_info.length
+# => 1
+croatia.zone_info[0].identifier
+# => "Europe/Belgrade"
+```
+
+Some countries have multiple time zones. The `zone_info` method can be used
+to obtain a list of user-friendly descriptions of the available options:
+
+```ruby
+australia = TZInfo::Country.get('AU')
+# => #<TZInfo::Country: AU>
+australia.zone_info.length
+# => 13
+australia.zone_info.map {|i| [i.identifier, i.description] }
+# => [["Australia/Lord_Howe", "Lord Howe Island"],
+#     ["Antarctica/Macquarie", "Macquarie Island"],
+#     ...
+#     ["Australia/Eucla", "Western Australia (Eucla)"]]
+```
+
+
 Compatibility
 -------------
 
