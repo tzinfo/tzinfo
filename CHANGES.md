@@ -265,49 +265,49 @@
 ## Version 0.3.54 (tzdata v2018d) - 25-Mar-2018
 
 * Updated to tzdata version 2018d
-  (https://mm.icann.org/pipermail/tz-announce/2018-March/000049.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2018-March/000049.html>).
 
 
 ## Version 0.3.53 (tzdata v2017b) - 23-Mar-2017
 
 * Updated to tzdata version 2017b
-  (https://mm.icann.org/pipermail/tz-announce/2017-March/000046.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2017-March/000046.html>).
 
 
 ## Version 0.3.52 (tzdata v2016h) - 28-Oct-2016
 
 * Updated to tzdata version 2016h
-  (https://mm.icann.org/pipermail/tz-announce/2016-October/000042.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2016-October/000042.html>).
 
 
 ## Version 0.3.51 (tzdata v2016f) - 5-Jul-2016
 
 * Updated to tzdata version 2016f
-  (https://mm.icann.org/pipermail/tz-announce/2016-July/000040.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2016-July/000040.html>).
 
 
 ## Version 0.3.50 (tzdata v2016e) - 14-Jun-2016
 
 * Updated to tzdata version 2016e
-  (https://mm.icann.org/pipermail/tz-announce/2016-June/000039.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2016-June/000039.html>).
 
 
 ## Version 0.3.49 (tzdata v2016d) - 18-Apr-2016
 
 * Updated to tzdata version 2016d
-  (https://mm.icann.org/pipermail/tz-announce/2016-April/000038.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2016-April/000038.html>).
 
 
 ## Version 0.3.48 (tzdata v2016c) - 23-Mar-2016
 
 * Updated to tzdata version 2016c
-  (https://mm.icann.org/pipermail/tz-announce/2016-March/000037.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2016-March/000037.html>).
 
 
 ## Version 0.3.47 (tzdata v2016b) - 15-Mar-2016
 
 * Updated to tzdata version 2016b
-  (https://mm.icann.org/pipermail/tz-announce/2016-March/000036.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2016-March/000036.html>).
 
 
 ## Version 0.3.46 (tzdata v2015g) - 2-Dec-2015
@@ -321,61 +321,61 @@
 ## Version 0.3.45 (tzdata v2015g) - 3-Oct-2015
 
 * Updated to tzdata version 2015g
-  (https://mm.icann.org/pipermail/tz-announce/2015-October/000034.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2015-October/000034.html>).
 
 
 ## Version 0.3.44 (tzdata v2015d) - 24-Apr-2015
 
 * Updated to tzdata version 2015d
-  (https://mm.icann.org/pipermail/tz-announce/2015-April/000031.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2015-April/000031.html>).
 
 
 ## Version 0.3.43 (tzdata v2015a) - 31-Jan-2015
 
 * Updated to tzdata version 2015a
-  (https://mm.icann.org/pipermail/tz-announce/2015-January/000028.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2015-January/000028.html>).
 
 
 ## Version 0.3.42 (tzdata v2014i) - 23-Oct-2014
 
 * Updated to tzdata version 2014i
-  (https://mm.icann.org/pipermail/tz-announce/2014-October/000026.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2014-October/000026.html>).
 
 
 ## Version 0.3.41 (tzdata v2014f) - 8-Aug-2014
 
 * Updated to tzdata version 2014f
-  (https://mm.icann.org/pipermail/tz-announce/2014-August/000023.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2014-August/000023.html>).
 
 
 ## Version 0.3.40 (tzdata v2014e) - 10-Jul-2014
 
 * Updated to tzdata version 2014e
-  (https://mm.icann.org/pipermail/tz-announce/2014-June/000022.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2014-June/000022.html>).
 
 
 ## Version 0.3.39 (tzdata v2014a) - 9-Mar-2014
 
 * Updated to tzdata version 2014a
-  (https://mm.icann.org/pipermail/tz-announce/2014-March/000018.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2014-March/000018.html>).
 
 
 ## Version 0.3.38 (tzdata v2013g) - 8-Oct-2013
 
 * Updated to tzdata version 2013g
-  (https://mm.icann.org/pipermail/tz-announce/2013-October/000015.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2013-October/000015.html>).
 
 
 ## Version 0.3.37 (tzdata v2013b) - 11-Mar-2013
 
 * Updated to tzdata version 2013b
-  (https://mm.icann.org/pipermail/tz-announce/2013-March/000010.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2013-March/000010.html>).
 
 
 ## Version 0.3.36 (tzdata v2013a) - 3-Mar-2013
 
 * Updated to tzdata version 2013a
-  (https://mm.icann.org/pipermail/tz-announce/2013-March/000009.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2013-March/000009.html>).
 * Fix `TimezoneTransitionInfo#eql?` incorrectly returning false when running on
   Ruby 2.0.
 * Change `eql?` and `==` implementations to test the class of the passed in
@@ -385,43 +385,43 @@
 ## Version 0.3.35 (tzdata v2012i) - 4-Nov-2012
 
 * Updated to tzdata version 2012i
-  (https://mm.icann.org/pipermail/tz-announce/2012-November/000007.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2012-November/000007.html>).
 
 
 ## Version 0.3.34 (tzdata v2012h) - 27-Oct-2012
 
 * Updated to tzdata version 2012h
-  (https://mm.icann.org/pipermail/tz-announce/2012-October/000006.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2012-October/000006.html>).
 
 
 ## Version 0.3.33 (tzdata v2012c) - 8-Apr-2012
 
 * Updated to tzdata version 2012c
-  (https://mm.icann.org/pipermail/tz/2012-April/017627.html).
+  (<https://mm.icann.org/pipermail/tz/2012-April/017627.html>).
 
 
 ## Version 0.3.32 (tzdata v2012b) - 4-Mar-2012
 
 * Updated to tzdata version 2012b
-  (https://mm.icann.org/pipermail/tz/2012-March/017524.html).
+  (<https://mm.icann.org/pipermail/tz/2012-March/017524.html>).
 
 
 ## Version 0.3.31 (tzdata v2011n) - 6-Nov-2011
 
 * Updated to tzdata version 2011n
-  (https://mm.icann.org/pipermail/tz/2011-October/017201.html).
+  (<https://mm.icann.org/pipermail/tz/2011-October/017201.html>).
 
 
 ## Version 0.3.30 (tzdata v2011k) - 29-Sep-2011
 
 * Updated to tzdata version 2011k
-  (https://mm.icann.org/pipermail/tz/2011-September/008889.html).
+  (<https://mm.icann.org/pipermail/tz/2011-September/008889.html>).
 
 
 ## Version 0.3.29 (tzdata v2011h) - 27-Jun-2011
 
 * Updated to tzdata version 2011h
-  (https://mm.icann.org/pipermail/tz/2011-June/008576.html).
+  (<https://mm.icann.org/pipermail/tz/2011-June/008576.html>).
 * Allow the default value of the `local_to_utc` and `period_for_local` `dst`
   parameter to be specified globally with a `Timezone.default_dst` attribute.
   Thanks to Kurt Werle for the suggestion and patch.
@@ -437,31 +437,31 @@
 ## Version 0.3.27 (tzdata v2011g) - 26-Apr-2011
 
 * Updated to tzdata version 2011g
-  (https://mm.icann.org/pipermail/tz/2011-April/016875.html).
+  (<https://mm.icann.org/pipermail/tz/2011-April/016875.html>).
 
 
 ## Version 0.3.26 (tzdata v2011e) - 2-Apr-2011
 
 * Updated to tzdata version 2011e
-  (https://mm.icann.org/pipermail/tz/2011-April/016809.html).
+  (<https://mm.icann.org/pipermail/tz/2011-April/016809.html>).
 
 
 ## Version 0.3.25 (tzdata v2011d) - 14-Mar-2011
 
 * Updated to tzdata version 2011d
-  (https://mm.icann.org/pipermail/tz/2011-March/016746.html).
+  (<https://mm.icann.org/pipermail/tz/2011-March/016746.html>).
 
 
 ## Version 0.3.24 (tzdata v2010o) - 15-Jan-2011
 
 * Updated to tzdata version 2010o
-  (https://mm.icann.org/pipermail/tz/2010-November/016517.html).
+  (<https://mm.icann.org/pipermail/tz/2010-November/016517.html>).
 
 
 ## Version 0.3.23 (tzdata v2010l) - 19-Aug-2010
 
 * Updated to tzdata version 2010l
-  (https://mm.icann.org/pipermail/tz/2010-August/016360.html).
+  (<https://mm.icann.org/pipermail/tz/2010-August/016360.html>).
 
 
 ## Version 0.3.22 (tzdata v2010j) - 29-May-2010
@@ -472,7 +472,7 @@
 ## Version 0.3.21 (tzdata v2010j) - 28-May-2010
 
 * Updated to tzdata version 2010j
-  (https://mm.icann.org/pipermail/tz/2010-May/016211.html).
+  (<https://mm.icann.org/pipermail/tz/2010-May/016211.html>).
 * Change invalid timezone check to exclude characters not used in timezone
   identifiers and avoid 'character class has duplicated range' warnings with
   Ruby 1.9.2.
@@ -489,25 +489,25 @@
 ## Version 0.3.20 (tzdata v2010i) - 19-Apr-2010
 
 * Updated to tzdata version 2010i
-  (https://mm.icann.org/pipermail/tz/2010-April/016184.html).
+  (<https://mm.icann.org/pipermail/tz/2010-April/016184.html>).
 
 
 ## Version 0.3.19 (tzdata v2010h) - 5-Apr-2010
 
 * Updated to tzdata version 2010h
-  (https://mm.icann.org/pipermail/tz/2010-April/016161.html).
+  (<https://mm.icann.org/pipermail/tz/2010-April/016161.html>).
 
 
 ## Version 0.3.18 (tzdata v2010g) - 29-Mar-2010
 
 * Updated to tzdata version 2010g
-  (https://mm.icann.org/pipermail/tz/2010-March/016140.html).
+  (<https://mm.icann.org/pipermail/tz/2010-March/016140.html>).
 
 
 ## Version 0.3.17 (tzdata v2010e) - 8-Mar-2010
 
 * Updated to tzdata version 2010e
-  (https://mm.icann.org/pipermail/tz/2010-March/016088.html).
+  (<https://mm.icann.org/pipermail/tz/2010-March/016088.html>).
 
 
 ## Version 0.3.16 (tzdata v2009u) - 5-Jan-2010
@@ -515,13 +515,13 @@
 * Support the use of '-' to denote '0' as an offset in the tz data files.
   Used for the first time in the SAVE field in tzdata v2009u.
 * Updated to tzdata version 2009u
-  (https://mm.icann.org/pipermail/tz/2009-December/016001.html).
+  (<https://mm.icann.org/pipermail/tz/2009-December/016001.html>).
 
 
 ## Version 0.3.15 (tzdata v2009p) - 26-Oct-2009
 
 * Updated to tzdata version 2009p
-  (https://mm.icann.org/pipermail/tz/2009-October/015889.html).
+  (<https://mm.icann.org/pipermail/tz/2009-October/015889.html>).
 * Added a description to the gem spec.
 * List test files in test_files instead of files in the gem spec.
 
@@ -529,7 +529,7 @@
 ## Version 0.3.14 (tzdata v2009l) - 19-Aug-2009
 
 * Updated to tzdata version 2009l
-  (https://mm.icann.org/pipermail/tz/2009-August/015729.html).
+  (<https://mm.icann.org/pipermail/tz/2009-August/015729.html>).
 * Include current directory in load path to allow running tests on
   Ruby 1.9.2, which doesn't include it by default any more.
 
@@ -537,7 +537,7 @@
 ## Version 0.3.13 (tzdata v2009f) - 15-Apr-2009
 
 * Updated to tzdata version 2009f
-  (https://mm.icann.org/pipermail/tz/2009-April/015544.html).
+  (<https://mm.icann.org/pipermail/tz/2009-April/015544.html>).
 * Untaint the timezone module filename after validation to allow use
   with `$SAFE == 1` (e.g. under mod_ruby). Thanks to Dmitry Borodaenko for
   the suggestion. Closes #25349.
@@ -546,13 +546,13 @@
 ## Version 0.3.12 (tzdata v2008i) - 12-Nov-2008
 
 * Updated to tzdata version 2008i
-  (https://mm.icann.org/pipermail/tz/2008-October/015260.html).
+  (<https://mm.icann.org/pipermail/tz/2008-October/015260.html>).
 
 
 ## Version 0.3.11 (tzdata v2008g) - 7-Oct-2008
 
 * Updated to tzdata version 2008g
-  (https://mm.icann.org/pipermail/tz/2008-October/015139.html).
+  (<https://mm.icann.org/pipermail/tz/2008-October/015139.html>).
 * Support Ruby 1.9.0-5. `Rational.new!` has now been removed in Ruby 1.9.
   Only use `Rational.new!` if it is available (it is preferable in Ruby 1.8
   for performance reasons). Thanks to Jeremy Kemper and Pratik Naik for
@@ -564,13 +564,13 @@
 ## Version 0.3.10 (tzdata v2008f) - 16-Sep-2008
 
 * Updated to tzdata version 2008f
-  (https://mm.icann.org/pipermail/tz/2008-September/015090.html).
+  (<https://mm.icann.org/pipermail/tz/2008-September/015090.html>).
 
 
 ## Version 0.3.9 (tzdata v2008c) - 27-May-2008
 
 * Updated to tzdata version 2008c
-  (https://mm.icann.org/pipermail/tz/2008-May/014956.html).
+  (<https://mm.icann.org/pipermail/tz/2008-May/014956.html>).
 * Support loading timezone data in the latest trunk versions of Ruby 1.9.
   `Rational.new!` is now private, so call it using `Rational.send :new!`
   instead. Thanks to Jeremy Kemper and Pratik Naik for spotting this. Closes
@@ -582,7 +582,7 @@
 ## Version 0.3.8 (tzdata v2008b) - 24-Mar-2008
 
 * Updated to tzdata version 2008b
-  (https://mm.icann.org/pipermail/tz/2008-March/014910.html).
+  (<https://mm.icann.org/pipermail/tz/2008-March/014910.html>).
 * Support loading timezone data in Ruby 1.9.0. Use `DateTime.new!` if it is
   available instead of `DateTime.new0` when constructing transition times.
   `DateTime.new!` was added in Ruby 1.8.6. `DateTime.new0` was removed in
@@ -594,38 +594,38 @@
 ## Version 0.3.7 (tzdata v2008a) - 10-Mar-2008
 
 * Updated to tzdata version 2008a
-  (https://mm.icann.org/pipermail/tz/2008-March/014851.html).
+  (<https://mm.icann.org/pipermail/tz/2008-March/014851.html>).
 
 
 ## Version 0.3.6 (tzdata v2007k) - 1-Jan-2008
 
 * Updated to tzdata version 2007k
-  (https://mm.icann.org/pipermail/tz/2007-December/014765.html).
+  (<https://mm.icann.org/pipermail/tz/2007-December/014765.html>).
 * Removed deprecated RubyGems autorequire option.
 
 
 ## Version 0.3.5 (tzdata v2007h) - 1-Oct-2007
 
 * Updated to tzdata version 2007h
-  (https://mm.icann.org/pipermail/tz/2007-October/014585.html).
+  (<https://mm.icann.org/pipermail/tz/2007-October/014585.html>).
 
 
 ## Version 0.3.4 (tzdata v2007g) - 21-Aug-2007
 
 * Updated to tzdata version 2007g
-  (https://mm.icann.org/pipermail/tz/2007-August/014499.html).
+  (<https://mm.icann.org/pipermail/tz/2007-August/014499.html>).
 
 
 ## Version 0.3.3 (tzdata v2006p) - 27-Nov-2006
 
 * Updated to tzdata version 2006p
-  (https://mm.icann.org/pipermail/tz/2006-November/013999.html).
+  (<https://mm.icann.org/pipermail/tz/2006-November/013999.html>).
 
 
 ## Version 0.3.2 (tzdata v2006n) - 11-Oct-2006
 
 * Updated to tzdata version 2006n
-  (https://mm.icann.org/pipermail/tz/2006-October/013911.html). Note that this
+  (<https://mm.icann.org/pipermail/tz/2006-October/013911.html>). Note that this
   release of tzdata removes the country Serbia and Montenegro (CS) and replaces
   it with separate Serbia (RS) and Montenegro (ME) entries.
 
@@ -635,7 +635,7 @@
 * Remove colon from case statements to avoid warning in Ruby 1.8.5. #5198.
 * Use temporary variable to avoid dynamic string warning from rdoc.
 * Updated to tzdata version 2006j
-  (https://mm.icann.org/pipermail/tz/2006-August/013767.html).
+  (<https://mm.icann.org/pipermail/tz/2006-August/013767.html>).
 
 
 ## Version 0.3.0 (tzdata v2006g) - 17-Jul-2006
@@ -702,7 +702,7 @@
   zone identifier.
 * The zdumptestall utility now exits if not supplied with enough parameters.
 * Updated to tzdata version 2006g
-  (https://mm.icann.org/pipermail/tz/2006-May/013590.html).
+  (<https://mm.icann.org/pipermail/tz/2006-May/013590.html>).
 
 
 ## Version 0.2.1 (tzdata v2006d) - 17-Apr-2006
@@ -717,7 +717,7 @@
   Jamis Buck for reporting this.
 * Added abbreviation as an alias for `TimezonePeriod.zone_identifier`.
 * Updated to tzdata version 2006d
-  (https://mm.icann.org/pipermail/tz/2006-April/013517.html).
+  (<https://mm.icann.org/pipermail/tz/2006-April/013517.html>).
 * Ignore any offset in `DateTime` instancess passed in (as is already done for
   `Time` instances). All of the following now refer to the same UTC time (15:40 on 17 April 2006). Previously, the `DateTime` in the second line would have been interpreted as 20:40.
 
@@ -749,7 +749,7 @@
 * Omit the final transition to DST if there is a prior transition in the last
   year processed to standard time.
 * Updated to tzdata version 2006c
-  (https://mm.icann.org/pipermail/tz/2006-April/013500.html).
+  (<https://mm.icann.org/pipermail/tz/2006-April/013500.html>).
 
 
 ## Version 0.1.2 (tzdata v2006a) - 5-Feb-2006
@@ -757,7 +757,7 @@
 * Add lib directory to the load path when tzinfo is required. Makes it easier
   to use tzinfo gem when unpacked to vendor directory in rails.
 * Updated to tzdata version 2006a
-  (https://mm.icann.org/pipermail/tz/2006-January/013311.html).
+  (<https://mm.icann.org/pipermail/tz/2006-January/013311.html>).
 * `build_tz_classes` rake task now handles running svn add and svn delete as new
   timezones and countries are added and old ones are removed.
 * Return a better error when attempting to use a `Timezone` instance that was
@@ -863,7 +863,7 @@ Rails `time_zone_select` helper method:
 
 Thanks to Scott Barron of Lunchbox Software for the suggestions in his
 article about using TZInfo with Rails
-(https://web.archive.org/web/20060425190845/http://lunchroom.lunchboxsoftware.com/pages/tzinfo_rails)
+(<https://web.archive.org/web/20060425190845/http://lunchroom.lunchboxsoftware.com/pages/tzinfo_rails>)
 
 
 ## Version 0.0.1 (tzdata v2005m) - 29-Aug-2005
