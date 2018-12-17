@@ -333,9 +333,10 @@ Time Zone Selection
 The Time Zone Database maintainers recommend that time zone identifiers are not
 made visibile to end-users (see [Names of timezones](https://data.iana.org/time-zones/theory.html#naming)).
 
-Time zones can be selected via country instead. Call `TZInfo::Country.all` to
-obtain a list of `TZInfo::Country` objects, each with a unique `code` and
-a `name` that can be used for display purposes.
+Instead of displaying a list of time zone identifiers, time zones can be
+selected by the user's country. Call `TZInfo::Country.all` to obtain a list of
+`TZInfo::Country` objects, each with a unique `code` and a `name` that can be
+used for display purposes.
 
 Most countries have a single time zone. When choosing such a country, the time
 zone can be inferred and selected automatically.
