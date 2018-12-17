@@ -366,5 +366,8 @@ Source code for TZInfo is available on
 Issue Tracker
 -------------
 
-Please post any bugs, issues, feature requests or questions to the
+Please post any bugs, issues, feature requests or questions about TZInfo to the
 [GitHub issue tracker](https://github.com/tzinfo/tzinfo/issues).
+
+Issues with the underlying time zone data should be raised on the
+[Time Zone Database Discussion mailing list](https://mm.icann.org/mailman/listinfo/tz).
