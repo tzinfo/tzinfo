@@ -7,11 +7,10 @@ module TZInfo
     #
     # @private
     class TimezoneIndexDefiner #:nodoc:
-      # @return [Array<String>] Returns the identifiers of all data time zones.
+      # @return [Array<String>] the identifiers of all data time zones.
       attr_reader :data_timezones
 
-      # @return [Array<String>] Returns the identifiers of all linked time
-      #   zones.
+      # @return [Array<String>] the identifiers of all linked time zones.
       attr_reader :linked_timezones
 
       # Initializes a new TimezoneDefiner.

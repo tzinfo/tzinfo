@@ -10,7 +10,7 @@ module TZInfo
   # @private
   class StringDeduper #:nodoc:
     class << self
-      # @return [StringDeduper] A globally available singleton instance of
+      # @return [StringDeduper] a globally available singleton instance of
       #   {StringDeduper}. This instance is safe for use in concurrently
       #   executing threads.
       attr_reader :global

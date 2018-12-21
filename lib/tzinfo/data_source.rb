@@ -284,7 +284,7 @@ module TZInfo
       raise_invalid_data_source('load_country_info')
     end
 
-    # @return [Encoding] The `Encoding` used by the `String` instances returned
+    # @return [Encoding] the `Encoding` used by the `String` instances returned
     #   by {data_timezone_identifiers} and {linked_timezone_identifiers}.
     def timezone_identifier_encoding
       Encoding::UTF_8
@@ -310,16 +310,18 @@ module TZInfo
       raise InvalidTimezoneIdentifier, "Invalid identifier: #{identifier.encode(Encoding::UTF_8)}"
     end
 
-    # Looks up a given code in the given hash of code to {CountryInfo} mappings.
-    # If the code is found the {CountryInfo} is returned. Otherwise an
-    # {InvalidCountryCode} exception is raised.
+    # Looks up a given code in the given hash of code to
+    # {DataSources::CountryInfo} mappings. If the code is found the
+    # {DataSources::CountryInfo} is returned. Otherwise an {InvalidCountryCode}
+    # exception is raised.
     #
-    # @param hash [String, CountryInfo] a mapping from ISO 3166-1 alpha-2
-    #   country codes to {CountryInfo} instances.
+    # @param hash [String, DataSources::CountryInfo] a mapping from ISO 3166-1
+    #   alpha-2 country codes to {DataSources::CountryInfo} instances.
     # @param code [String] a country code to lookup.
     # @param encoding [Encoding] the encoding used for the country codes in
     #   `hash`.
-    # @return [CountryInfo] the {CountryInfo} instance corresponding to `code`.
+    # @return [DataSources::CountryInfo] the {DataSources::CountryInfo} instance
+    #   corresponding to `code`.
     # @raise [InvalidCountryCode] if `code` was not found in `hash`.
     def lookup_country_info(hash, code, encoding = Encoding::UTF_8)
       raise InvalidCountryCode, "Invalid country code: #{code.nil? ? 'nil' : code}" unless code.kind_of?(String)
@@ -418,8 +420,8 @@ module TZInfo
     # @yieldparam s [String] either `string` or an encoded copy of `string`.
     # @yieldreturn [Object] The result of the operation. Must be truthy if
     #   successful.
-    # @result [Object] the result of the or `nil` if the first attempt fails
-    #   and `string` is already encoded with `encoding`.
+    # @return [Object] the result of the operation or `nil` if the first attempt
+    # fails and `string` is already encoded with `encoding`.
     def try_with_encoding(string, encoding)
       result = yield string
       return result if result

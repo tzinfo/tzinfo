@@ -313,7 +313,7 @@ module TZInfo
     #   seconds long).
     attr_reader :value
 
-    # @return [Numeric] The fraction of a second elapsed since timestamp as
+    # @return [Numeric] the fraction of a second elapsed since timestamp as
     #   either a `Rational` or the `Integer` 0. Always greater than or equal to
     #   0 and less than 1.
     attr_reader :sub_second
@@ -502,7 +502,7 @@ module TZInfo
     # offset.
     #
     # @param offset [Integer] the offset to add to the value.
-    # @return [String] The value and sub-seconds.
+    # @return [String] the value and sub-seconds.
     def value_and_sub_second_to_s(offset = 0)
       "#{@value + offset}#{sub_second_to_s}"
     end

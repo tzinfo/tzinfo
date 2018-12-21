@@ -50,7 +50,7 @@ module TZInfo
     # {base_utc_offset} has to be derived from changes to the observed UTC
     # offset and DST status since it is not included in zoneinfo files.
     #
-    # @return [Integer] The base offset from UTC in seconds.
+    # @return [Integer] the base offset from UTC in seconds.
     def base_utc_offset
       @offset.base_utc_offset
     end
@@ -76,7 +76,7 @@ module TZInfo
     # The abbreviation that identifies this offset. For example GMT
     # (Greenwich Mean Time) or BST (British Summer Time) for Europe/London.
     #
-    # @return [String] The abbreviation that identifies this offset.
+    # @return [String] the abbreviation that identifies this offset.
     def abbreviation
       @offset.abbreviation
     end
@@ -108,7 +108,7 @@ module TZInfo
     # `Time` or `DateTime`, call either {Timestamp#to_time to_time} or
     # {Timestamp#to_datetime to_datetime} on the result.
     #
-    # @return [Timestamp] The UTC start time of the period or `nil` if the start
+    # @return [Timestamp] the UTC start time of the period or `nil` if the start
     #   of the period is unbounded.
     def starts_at
       timestamp(start_transition)
@@ -121,7 +121,7 @@ module TZInfo
     # `Time` or `DateTime`, call either {Timestamp#to_time to_time} or
     # {Timestamp#to_datetime to_datetime} on the result.
     #
-    # @return [Timestamp] The UTC end time of the period or `nil` if the end of
+    # @return [Timestamp] the UTC end time of the period or `nil` if the end of
     #   the period is unbounded.
     def ends_at
       timestamp(end_transition)
@@ -134,7 +134,7 @@ module TZInfo
     # time as a `Time` or `DateTime`, call either {TimestampWithOffset#to_time
     # to_time} or {TimestampWithOffset#to_datetime to_datetime} on the result.
     #
-    # @return [TimestampWithOffset] The local start time of the period or `nil`
+    # @return [TimestampWithOffset] the local start time of the period or `nil`
     #   if the start of the period is unbounded.
     def local_starts_at
       timestamp_with_offset(start_transition)
@@ -147,7 +147,7 @@ module TZInfo
     # as a `Time` or `DateTime`, call either {TimestampWithOffset#to_time
     # to_time} or {TimestampWithOffset#to_datetime to_datetime} on the result.
     #
-    # @return [TimestampWithOffset] The local end time of the period or `nil` if
+    # @return [TimestampWithOffset] the local end time of the period or `nil` if
     #   the end of the period is unbounded.
     def local_ends_at
       timestamp_with_offset(end_transition)

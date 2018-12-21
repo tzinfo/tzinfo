@@ -26,7 +26,7 @@ module TZInfo
         "#<#{self.class}: #@identifier>"
       end
 
-      # @return [Timezone] A new {Timezone} instance for the time zone
+      # @return [Timezone] a new {Timezone} instance for the time zone
       #   represented by this {TimezoneInfo}.
       def create_timezone
         raise_not_implemented('create_timezone')

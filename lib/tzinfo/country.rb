@@ -33,7 +33,7 @@ module TZInfo
       # 3166-1 alpha-2 codes.
       #
       # @param code [String] An ISO 3166-1 alpha-2 code.
-      # @return [Country] A {Country} instance representing the ISO-3166-1
+      # @return [Country] a {Country} instance representing the ISO-3166-1
       #   country identified by the `code` parameter.
       # @raise [InvalidCountryCode] If {code} is not a valid ISO 3166-1 alpha-2
       #   code it couldn't be found.

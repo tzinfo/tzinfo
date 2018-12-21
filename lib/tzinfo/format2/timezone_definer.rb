@@ -9,7 +9,7 @@ module TZInfo
     #
     # @private
     class TimezoneDefiner #:nodoc:
-      # @return [Array<TimezoneTransition>] The defined transitions of the time
+      # @return [Array<TimezoneTransition>] the defined transitions of the time
       #   zone.
       attr_reader :transitions
 

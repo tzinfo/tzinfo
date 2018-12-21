@@ -71,7 +71,7 @@ module TZInfo
         raise_not_implemented('transitions_up_to')
       end
 
-      # @return [DataTimezone] A new {DataTimezone} instance for the time zone
+      # @return [DataTimezone] a new {DataTimezone} instance for the time zone
       #   represented by this {DataTimezoneInfo}.
       def create_timezone
         DataTimezone.new(self)

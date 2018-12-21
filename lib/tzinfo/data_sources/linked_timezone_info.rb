@@ -23,7 +23,7 @@ module TZInfo
         @link_to_identifier = link_to_identifier.freeze
       end
 
-      # @return [LinkedTimezone] A new {LinkedTimezone} instance for the time
+      # @return [LinkedTimezone] a new {LinkedTimezone} instance for the time
       #   zone represented by this {LinkedTimezoneInfo}.
       def create_timezone
         LinkedTimezone.new(self)

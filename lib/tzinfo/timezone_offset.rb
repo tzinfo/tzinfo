@@ -17,7 +17,7 @@ module TZInfo
     # {base_utc_offset} has to be derived from changes to the observed UTC
     # offset and DST status since it is not included in zoneinfo files.
     #
-    # @return [Integer] The base offset from UTC in seconds.
+    # @return [Integer] the base offset from UTC in seconds.
     attr_reader :base_utc_offset
     alias utc_offset base_utc_offset
 
@@ -47,7 +47,7 @@ module TZInfo
     # The abbreviation that identifies this offset. For example GMT
     # (Greenwich Mean Time) or BST (British Summer Time) for Europe/London.
     #
-    # @return [String] The abbreviation that identifies this offset.
+    # @return [String] the abbreviation that identifies this offset.
     attr_reader :abbreviation
     alias abbr abbreviation
 
