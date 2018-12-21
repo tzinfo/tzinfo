@@ -13,13 +13,9 @@ module TZInfo
     #
     # If you require accurate {base_utc_offset} values, you should install the
     # tzinfo-data gem and set {DataSources::RubyDataSource} as the {DataSource}.
-    # This is because zoneinfo files do not include the value of
-    # {base_utc_offset}. When using {DataSources::ZoneinfoDataSource}, the
-    # {base_utc_offset} will be derived from changes to the observed UTC offset
-    # and DST status.
-    #
-    # If you require {base_utc_offset} to be accurate, install the tzinfo-data
-    # gem and set {DataSources::RubyDataSource} as the {DataSource}.
+    # When using {DataSources::ZoneinfoDataSource}, the value of
+    # {base_utc_offset} has to be derived from changes to the observed UTC
+    # offset and DST status since it is not included in zoneinfo files.
     #
     # @return [Integer] The base offset from UTC in seconds.
     attr_reader :base_utc_offset
@@ -32,9 +28,9 @@ module TZInfo
     #
     # If you require accurate {std_offset} values, you should install the
     # tzinfo-data gem and set {DataSources::RubyDataSource} as the {DataSource}.
-    # This is because zoneinfo files do not include the value of {std_offset}.
-    # When using {DataSources::ZoneinfoDataSource}, the {std_offset} will be
-    # derived from changes to the observed UTC offset and DST status.
+    # When using {DataSources::ZoneinfoDataSource}, the value of {std_offset}
+    # has to be derived from changes to the observed UTC offset and DST status
+    # since it is not included in zoneinfo files.
     #
     # @return [Integer] the offset from the time zone's standard time in
     #   seconds.
