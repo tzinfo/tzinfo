@@ -6,6 +6,29 @@ require_relative 'test_utils'
 include TZInfo
 
 class TCTimezone < Minitest::Test
+  class << self
+    private
+
+    def time_with_unspecified_offset_test(method)
+      define_method("test_#{method}_time_with_unspecified_offset") do
+        tz = Timezone.get('Europe/London')
+
+        time_types_test(:unspecified_offset) do |h|
+          t = h.time(2006, 7, 15, 22, 12, 2, 0, nil)
+          error = assert_raises(ArgumentError) { tz.public_send(method, t) }
+          assert_equal('time must have a specified utc_offset', error.message)
+        end
+      end
+    end
+
+    def nil_time_test(method)
+      define_method("test_#{method}_nil_time") do
+        tz = Timezone.get('Europe/London')
+        error = assert_raises(ArgumentError) { tz.public_send(method, nil) }
+        assert_equal('time must be specified', error.message)
+      end
+    end
+  end
 
   class BlockCalled < StandardError
   end
@@ -827,20 +850,8 @@ class TCTimezone < Minitest::Test
     end
   end
 
-  def test_to_local_unspecified_offset
-    tz = Timezone.get('Europe/London')
-
-    time_types_test(:unspecified_offset) do |h|
-      error = assert_raises(ArgumentError) { tz.to_local(h.time(2005,6,18,16,24,23)) }
-      assert_match(/\btime\b/, error.message)
-    end
-  end
-
-  def test_to_local_nil
-    tz = Timezone.get('Europe/London')
-    error = assert_raises(ArgumentError) { tz.to_local(nil) }
-    assert_match(/\btime\b/, error.message)
-  end
+  time_with_unspecified_offset_test(:to_local)
+  nil_time_test(:to_local)
 
   def test_to_local_unsupported
     tz = Timezone.get('Europe/London')
@@ -1838,37 +1849,82 @@ class TCTimezone < Minitest::Test
 
   %w(abbreviation abbr).each do |method|
     define_method("test_#{method}") do
-      tz1 = Timezone.get('Europe/London')
-      tz2 = Timezone.get('America/New_York')
+      tz = Timezone.get('America/New_York')
 
       time_types_test do |h|
-        assert_equal('GMT', tz1.public_send(method, h.time(2017,1,15,15,50,0,0,:utc)))
-        assert_equal('GMT', tz1.public_send(method, h.time(2017,1,15,15,50,0,0,0)))
-        assert_equal('EST', tz2.public_send(method, h.time(2017,1,15,15,50,0,0,:utc)))
-        assert_equal('EST', tz2.public_send(method, h.time(2017,1,15,15,50,0,0,0)))
+        assert_equal('EST', tz.public_send(method, h.time(2017,1,1,0,0,0,0,:utc)))
+        assert_equal('EST', tz.public_send(method, h.time(2017,1,1,0,0,0,0,0)))
+        assert_equal('EDT', tz.public_send(method, h.time(2017,7,1,0,0,0,0,:utc)))
+        assert_equal('EDT', tz.public_send(method, h.time(2017,7,1,0,0,0,0,0)))
       end
 
       time_types_test(:offset) do |h|
-        assert_equal('BST', tz1.public_send(method, h.time(2017,7,15,16,50,0,0,3600)))
-        assert_equal('EDT', tz2.public_send(method, h.time(2017,7,15,16,50,0,0,3600)))
+        assert_equal('EST', tz.public_send(method, h.time(2016,12,31,19,0,0,0,-18000)))
+        assert_equal('EDT', tz.public_send(method, h.time(2017, 6,30,20,0,0,0,-14400)))
       end
     end
 
-    define_method("test_#{method}_unspecified_offset") do
-      tz = Timezone.get('Europe/London')
+    time_with_unspecified_offset_test(method)
+    nil_time_test(method)
+  end
 
-      time_types_test(:unspecified_offset) do |h|
-        t = h.time(2006, 7, 15, 22, 12, 2, 0, nil)
-        error = assert_raises(ArgumentError) { tz.public_send(method, t) }
-        assert_match(/\btime\b/, error.message)
+  def test_dst?
+    tz = Timezone.get('America/New_York')
+
+    time_types_test do |h|
+      assert_equal(false, tz.dst?(h.time(2017,1,1,0,0,0,0,:utc)))
+      assert_equal(false, tz.dst?(h.time(2017,1,1,0,0,0,0,0)))
+      assert_equal(true,  tz.dst?(h.time(2017,7,1,0,0,0,0,:utc)))
+      assert_equal(true,  tz.dst?(h.time(2017,7,1,0,0,0,0,0)))
+    end
+
+    time_types_test(:offset) do |h|
+      assert_equal(false, tz.dst?(h.time(2016,12,31,19,0,0,0,-18000)))
+      assert_equal(true,  tz.dst?(h.time(2017, 6,30,20,0,0,0,-14400)))
+    end
+  end
+
+  time_with_unspecified_offset_test(:dst?)
+  nil_time_test(:dst?)
+
+  def test_base_utc_offset
+    tz = Timezone.get('America/New_York')
+
+    time_types_test do |h|
+      assert_equal(-18000, tz.base_utc_offset(h.time(2017,1,1,0,0,0,0,:utc)))
+      assert_equal(-18000, tz.base_utc_offset(h.time(2017,1,1,0,0,0,0,0)))
+      assert_equal(-18000, tz.base_utc_offset(h.time(2017,7,1,0,0,0,0,:utc)))
+      assert_equal(-18000, tz.base_utc_offset(h.time(2017,7,1,0,0,0,0,0)))
+    end
+
+    time_types_test(:offset) do |h|
+      assert_equal(-18000, tz.base_utc_offset(h.time(2016,12,31,19,0,0,0,-18000)))
+      assert_equal(-18000, tz.base_utc_offset(h.time(2017, 6,30,20,0,0,0,-14400)))
+    end
+  end
+
+  time_with_unspecified_offset_test(:base_utc_offset)
+  nil_time_test(:base_utc_offset)
+
+  %w(observed_utc_offset utc_offset).each do |method|
+    define_method("test_#{method}") do
+      tz = Timezone.get('America/New_York')
+
+      time_types_test do |h|
+        assert_equal(-18000, tz.public_send(method, h.time(2017,1,1,0,0,0,0,:utc)))
+        assert_equal(-18000, tz.public_send(method, h.time(2017,1,1,0,0,0,0,0)))
+        assert_equal(-14400, tz.public_send(method, h.time(2017,7,1,0,0,0,0,:utc)))
+        assert_equal(-14400, tz.public_send(method, h.time(2017,7,1,0,0,0,0,0)))
+      end
+
+      time_types_test(:offset) do |h|
+        assert_equal(-18000, tz.public_send(method, h.time(2016,12,31,19,0,0,0,-18000)))
+        assert_equal(-14400, tz.public_send(method, h.time(2017, 6,30,20,0,0,0,-14400)))
       end
     end
 
-    define_method("test_#{method}_nil") do
-      tz = Timezone.get('Europe/London')
-      error = assert_raises(ArgumentError) { tz.public_send(method, nil) }
-      assert_match(/\btime\b/, error.message)
-    end
+    time_with_unspecified_offset_test(method)
+    nil_time_test(method)
   end
 
   private

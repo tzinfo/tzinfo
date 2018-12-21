@@ -1044,6 +1044,52 @@ module TZInfo
     end
     alias abbr abbreviation
 
+    # @param time [Object] a `Time`, `DateTime` or `Timestamp`.
+    # @return [Boolean] whether daylight savings time is in effect at the given
+    #   time.
+    # @raise [ArgumentError] if `time` is `nil`.
+    # @raise [ArgumentError] if `time` is a {Timestamp} with an unspecified UTC
+    #   offset.
+    def dst?(time = Time.now)
+      period_for(time).dst?
+    end
+
+    # Returns the base offset from UTC in seconds at the given time. This does
+    # not include any adjustment made for daylight savings time and will
+    # typically remain constant throughout the year.
+    #
+    # To obtain the observed offset from UTC, including the effect of daylight
+    # savings time, use {observed_utc_offset} instead.
+    #
+    # If you require accurate {base_utc_offset} values, you should install the
+    # tzinfo-data gem and set {DataSources::RubyDataSource} as the {DataSource}.
+    # When using {DataSources::ZoneinfoDataSource}, the value of
+    # {base_utc_offset} has to be derived from changes to the observed UTC
+    # offset and DST status since it is not included in zoneinfo files.
+    #
+    # @param time [Object] a `Time`, `DateTime` or `Timestamp`.
+    # @return [Integer] the base offset from UTC in seconds at the given time.
+    # @raise [ArgumentError] if `time` is `nil`.
+    # @raise [ArgumentError] if `time` is a {Timestamp} with an unspecified UTC
+    #   offset.
+    def base_utc_offset(time = Time.now)
+      period_for(time).base_utc_offset
+    end
+
+    # Returns the observed offset from UTC in seconds at the given time. This
+    # includes adjustments made for daylight savings time.
+    #
+    # @param time [Object] a `Time`, `DateTime` or `Timestamp`.
+    # @return [Integer] the observed offset from UTC in seconds at the given
+    #   time.
+    # @raise [ArgumentError] if `time` is `nil`.
+    # @raise [ArgumentError] if `time` is a {Timestamp} with an unspecified UTC
+    #   offset.
+    def observed_utc_offset(time = Time.now)
+      period_for(time).current_utc_offset
+    end
+    alias utc_offset observed_utc_offset
+
     # Compares this {Timezone} with another based on the {identifier}.
     #
     # @param tz [Object] an `Object` to compare this {Timezone} with.
