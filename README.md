@@ -155,7 +155,7 @@ time zone information at a particular time as a `TZInfo::TimezonePeriod` object:
 period = tz.period_for(Time.utc(2018, 7, 1, 12, 30, 0))
 period.base_utc_offset          # => -18000
 period.std_offset               # => 3600
-period.current_utc_offset       # => -14400
+period.observed_utc_offset      # => -14400
 period.abbreviation             # => "EDT"
 period.dst?                     # => true
 period.local_starts_at.to_time  # => 2018-03-11 03:00:00 -0400
@@ -169,7 +169,7 @@ obtained with the `transitions_up_to` method. The result is returned as an
 ```ruby
 transitions = tz.transitions_up_to(Time.utc(2019, 1, 1), Time.utc(2017, 1, 1))
 transitions.map do |t|
-  [t.local_end_at.to_time, t.offset.current_utc_offset, t.offset.abbreviation]
+  [t.local_end_at.to_time, t.offset.observed_utc_offset, t.offset.abbreviation]
 end
 # => [[2017-03-12 02:00:00 -0500, -14400, "EDT"],
 #     [2017-11-05 02:00:00 -0400, -18000, "EST"],
@@ -183,7 +183,7 @@ A list of the unique offsets used by a time zone can be obtained with the
 
 ```ruby
 offsets = tz.offsets_up_to(Time.utc(2019, 1, 1))
-offsets.map {|o| [o.current_utc_offset, o.abbreviation] }
+offsets.map {|o| [o.observed_utc_offset, o.abbreviation] }
 # => [[-17762, "LMT"],
 #     [-18000, "EST"],
 #     [-14400, "EDT"],

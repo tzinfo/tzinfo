@@ -12,7 +12,7 @@ class TCTimestampWithOffset < Minitest::Test
   end
 
   def timestamp_with_offset(year, month, day, hour, minute, second, tz_offset)
-    new_timestamp(year, month, day, hour, minute, second, tz_offset.current_utc_offset, TimestampWithOffset).set_timezone_offset(tz_offset)
+    new_timestamp(year, month, day, hour, minute, second, tz_offset.observed_utc_offset, TimestampWithOffset).set_timezone_offset(tz_offset)
   end
 
   def test_class_set_timezone_offset

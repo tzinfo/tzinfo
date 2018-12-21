@@ -37,12 +37,12 @@ module TZInfo
       raise_not_implemented(:end_transition)
     end
 
-    # Returns the base offset from UTC in seconds (`current_utc_offset -
+    # Returns the base offset from UTC in seconds (`observed_utc_offset -
     # std_offset`). This does not include any adjustment made for daylight
     # savings time and will typically remain constant throughout the year.
     #
     # To obtain the currently observed offset from UTC, including the effect of
-    # daylight savings time, use {current_utc_offset} instead.
+    # daylight savings time, use {observed_utc_offset} instead.
     #
     # If you require accurate {base_utc_offset} values, you should install the
     # tzinfo-data gem and set {DataSources::RubyDataSource} as the {DataSource}.
@@ -57,7 +57,7 @@ module TZInfo
     alias utc_offset base_utc_offset
 
     # Returns the offset from the time zone's standard time in seconds
-    # (`current_utc_offset - base_utc_offset`). Zero when daylight savings time
+    # (`observed_utc_offset - base_utc_offset`). Zero when daylight savings time
     # is not in effect. Non-zero (usually 3600 = 1 hour) if daylight savings is
     # being observed.
     #
@@ -83,15 +83,14 @@ module TZInfo
     alias abbr abbreviation
     alias zone_identifier abbreviation
 
-    # Returns the currently observed offset from UTC in seconds
-    # (`base_utc_offset + std_offset`). This includes adjustments made for
-    # daylight savings time.
+    # Returns the observed offset from UTC in seconds (`base_utc_offset +
+    # std_offset`). This includes adjustments made for daylight savings time.
     #
-    # @return [Integer] the currently observed offset from UTC in seconds.
-    def current_utc_offset
-      @offset.current_utc_offset
+    # @return [Integer] the observed offset from UTC in seconds.
+    def observed_utc_offset
+      @offset.observed_utc_offset
     end
-    alias utc_total_offset current_utc_offset
+    alias utc_total_offset observed_utc_offset
 
     # Determines if daylight savings is in effect (i.e. if {std_offset} is
     # non-zero).

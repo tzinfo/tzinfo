@@ -646,7 +646,7 @@ module TZInfo
           period_for_local(ts, dst)
         end
 
-        ts.add_and_set_utc_offset(-period.current_utc_offset, :utc)
+        ts.add_and_set_utc_offset(-period.observed_utc_offset, :utc)
       end
     end
 
@@ -913,7 +913,7 @@ module TZInfo
     def local_timestamp(year, month = 1, day = 1, hour = 0, minute = 0, second = 0, sub_second = 0, dst = Timezone.default_dst, &block)
       ts = Timestamp.create(year, month, day, hour, minute, second, sub_second)
       timezone_offset = period_for_local(ts, dst, &block).offset
-      utc_offset = timezone_offset.current_utc_offset
+      utc_offset = timezone_offset.observed_utc_offset
       TimestampWithOffset.new(ts.value - utc_offset, sub_second, utc_offset).set_timezone_offset(timezone_offset)
     end
 
@@ -1086,7 +1086,7 @@ module TZInfo
     # @raise [ArgumentError] if `time` is a {Timestamp} with an unspecified UTC
     #   offset.
     def observed_utc_offset(time = Time.now)
-      period_for(time).current_utc_offset
+      period_for(time).observed_utc_offset
     end
     alias utc_offset observed_utc_offset
 

@@ -25,7 +25,7 @@ class TCTimezoneOffset < Minitest::Test
     assert_equal(3600, o2.std_offset)
   end
 
-  [:current_utc_offset, :utc_total_offset].each do |method|
+  [:observed_utc_offset, :utc_total_offset].each do |method|
     define_method("test_#{method}") do
       o1 = TimezoneOffset.new(18000, 0, 'TEST')
       o2 = TimezoneOffset.new(-3600, 3600, 'TEST2')

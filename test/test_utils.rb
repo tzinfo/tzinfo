@@ -179,7 +179,7 @@ module TestUtils
     end
 
     def time_with_offset(period, year, month, day, hour, minute, second, sub_second = 0)
-      TZInfo::TimeWithOffset.new(year, month, day, hour, minute, second + sub_second, period.current_utc_offset).set_timezone_offset(period)
+      TZInfo::TimeWithOffset.new(year, month, day, hour, minute, second + sub_second, period.observed_utc_offset).set_timezone_offset(period)
     end
   end
 
@@ -194,7 +194,7 @@ module TestUtils
     end
 
     def time_with_offset(offset, year, month, day, hour, minute, second, sub_second = 0)
-      TZInfo::DateTimeWithOffset.new(year, month, day, hour, minute, second + sub_second, offset.current_utc_offset.to_r / 86400).set_timezone_offset(offset)
+      TZInfo::DateTimeWithOffset.new(year, month, day, hour, minute, second + sub_second, offset.observed_utc_offset.to_r / 86400).set_timezone_offset(offset)
     end
   end
 
@@ -212,7 +212,7 @@ module TestUtils
     end
 
     def time_with_offset(offset, year, month, day, hour, minute, second, sub_second = 0)
-      TimestampWithOffset.create(year, month, day, hour, minute, second, sub_second, offset.current_utc_offset).set_timezone_offset(offset)
+      TimestampWithOffset.create(year, month, day, hour, minute, second, sub_second, offset.observed_utc_offset).set_timezone_offset(offset)
     end
   end
 

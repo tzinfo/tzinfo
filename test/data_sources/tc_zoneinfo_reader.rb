@@ -930,7 +930,7 @@ module DataSources
       end
     end
 
-    def test_read_offset_does_not_use_equal_current_utc_offset_equal_after
+    def test_read_offset_does_not_use_equal_observed_utc_offset_equal_after
       # The zoneinfo files don't include the offset from standard time, so this
       # has to be derived by looking at changes in the total UTC offset.
 
@@ -946,7 +946,7 @@ module DataSources
         {at: Time.utc(2000,  3, 1), offset_index: 2}]
 
       # XDT will be based on the utc_offset of XST1 even though XST2 has an
-      # equivalent (or greater) current_utc_offset.
+      # equivalent (or greater) observed_utc_offset.
 
       o0 = TimezoneOffset.new(3542,    0, 'LMT')
       o1 = TimezoneOffset.new(3600,    0, 'XST1')
@@ -962,7 +962,7 @@ module DataSources
       end
     end
 
-    def test_read_offset_does_not_use_equal_current_utc_offset_equal_before
+    def test_read_offset_does_not_use_equal_observed_utc_offset_equal_before
       # The zoneinfo files don't include the offset from standard time, so this
       # has to be derived by looking at changes in the total UTC offset.
 
@@ -978,7 +978,7 @@ module DataSources
         {at: Time.utc(2000,  3, 1), offset_index: 1}]
 
       # XDT will be based on the utc_offset of XST1 even though XST2 has an
-      # equivalent (or greater) current_utc_offset.
+      # equivalent (or greater) observed_utc_offset.
 
       o0 = TimezoneOffset.new(3542,    0, 'LMT')
       o1 = TimezoneOffset.new(3600,    0, 'XST1')
@@ -994,7 +994,7 @@ module DataSources
       end
     end
 
-    def test_read_offset_both_adjacent_non_dst_equal_current_utc_offset
+    def test_read_offset_both_adjacent_non_dst_equal_observed_utc_offset
       # The zoneinfo files don't include the offset from standard time, so this
       # has to be derived by looking at changes in the total UTC offset.
 
@@ -1009,7 +1009,7 @@ module DataSources
         {at: Time.utc(2000,  3, 1), offset_index: 1}]
 
       # XDT will just assume an std_offset of +1 hour and calculate the utc_offset
-      # from current_utc_offset - std_offset.
+      # from observed_utc_offset - std_offset.
 
       o0 = TimezoneOffset.new(7142,    0, 'LMT')
       o1 = TimezoneOffset.new(7200,    0, 'XST')

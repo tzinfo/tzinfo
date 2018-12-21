@@ -25,14 +25,14 @@ module TZInfo
     # @return [TimestampWithOffset] a {TimestampWithOffset} that has the same
     #   {value value} and {sub_second sub_second} as the `timestamp` parameter,
     #   a {utc_offset utc_offset} equal to the
-    #   {TimezoneOffset#current_utc_offset current_utc_offset} of the
+    #   {TimezoneOffset#observed_utc_offset observed_utc_offset} of the
     #   `timezone_offset` parameter and {timezone_offset timezone_offset} set to
     #   the `timezone_offset` parameter.
     # @raise [ArgumentError] if `timestamp` or `timezone_offset` is `nil`.
     def self.set_timezone_offset(timestamp, timezone_offset)
       raise ArgumentError, 'timestamp must be specified' unless timestamp
       raise ArgumentError, 'timezone_offset must be specified' unless timezone_offset
-      new!(timestamp.value, timestamp.sub_second, timezone_offset.current_utc_offset).set_timezone_offset(timezone_offset)
+      new!(timestamp.value, timestamp.sub_second, timezone_offset.observed_utc_offset).set_timezone_offset(timezone_offset)
     end
 
     # Sets the associated {TimezoneOffset} of this {TimestampWithOffset}.
@@ -42,11 +42,11 @@ module TZInfo
     # @return [TimestampWithOffset] `self`.
     # @raise [ArgumentError] if `timezone_offset` is `nil`.
     # @raise [ArgumentError] if {utc? self.utc?} is `true`.
-    # @raise [ArgumentError] if `timezone_offset.current_utc_offset` does not equal
+    # @raise [ArgumentError] if `timezone_offset.observed_utc_offset` does not equal
     #   `self.utc_offset`.
     def set_timezone_offset(timezone_offset)
       raise ArgumentError, 'timezone_offset must be specified' unless timezone_offset
-      raise ArgumentError, 'timezone_offset.current_utc_offset does not match self.utc_offset' if utc? || utc_offset != timezone_offset.current_utc_offset
+      raise ArgumentError, 'timezone_offset.observed_utc_offset does not match self.utc_offset' if utc? || utc_offset != timezone_offset.observed_utc_offset
       @timezone_offset = timezone_offset
       self
     end

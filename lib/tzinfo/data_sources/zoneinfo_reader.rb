@@ -98,23 +98,23 @@ module TZInfo
           if offset[:is_dst]
             transition[:base_utc_offset_from_next] = base_utc_offset_from_next if base_utc_offset_from_next
           else
-            base_utc_offset_from_next = offset[:current_utc_offset]
+            base_utc_offset_from_next = offset[:observed_utc_offset]
           end
         end
 
-        base_utc_offset_from_previous = first_non_dst_offset_index ? offsets[first_non_dst_offset_index][:current_utc_offset] : nil
+        base_utc_offset_from_previous = first_non_dst_offset_index ? offsets[first_non_dst_offset_index][:observed_utc_offset] : nil
         defined_offsets = {}
 
         transitions.each do |transition|
           offset_index = transition[:offset]
           offset = offsets[offset_index]
-          current_utc_offset = offset[:current_utc_offset]
+          observed_utc_offset = offset[:observed_utc_offset]
 
           if offset[:is_dst]
             base_utc_offset_from_next = transition[:base_utc_offset_from_next]
 
-            difference_to_previous = (current_utc_offset - (base_utc_offset_from_previous || current_utc_offset)).abs
-            difference_to_next = (current_utc_offset - (base_utc_offset_from_next || current_utc_offset)).abs
+            difference_to_previous = (observed_utc_offset - (base_utc_offset_from_previous || observed_utc_offset)).abs
+            difference_to_next = (observed_utc_offset - (base_utc_offset_from_next || observed_utc_offset)).abs
 
             base_utc_offset = if difference_to_previous == 3600
               base_utc_offset_from_previous
@@ -128,7 +128,7 @@ module TZInfo
               base_utc_offset_from_next
             else
               # No difference, assume a 1 hour offset from standard time.
-              current_utc_offset - 3600
+              observed_utc_offset - 3600
             end
 
             if !offset[:base_utc_offset]
@@ -152,7 +152,7 @@ module TZInfo
               transition[:offset] = offset_index
             end
           else
-            base_utc_offset_from_previous = current_utc_offset
+            base_utc_offset_from_previous = observed_utc_offset
           end
         end
 
@@ -220,7 +220,7 @@ module TZInfo
           gmtoff, isdst, abbrind = check_read(file, 6).unpack('NCC'.freeze)
           gmtoff = make_signed_int32(gmtoff)
           isdst = isdst == 1
-          {current_utc_offset: gmtoff, is_dst: isdst, abbr_index: abbrind}
+          {observed_utc_offset: gmtoff, is_dst: isdst, abbr_index: abbrind}
         end
 
         abbrev = check_read(file, charcnt)
@@ -229,21 +229,21 @@ module TZInfo
         first_offset_index = derive_offsets(transitions, offsets)
 
         offsets = offsets.map do |o|
-          current_utc_offset = o[:current_utc_offset]
+          observed_utc_offset = o[:observed_utc_offset]
           base_utc_offset = o[:base_utc_offset]
 
           if base_utc_offset
             # DST offset with base_utc_offset derived by derive_offsets.
-            std_offset = current_utc_offset - base_utc_offset
+            std_offset = observed_utc_offset - base_utc_offset
           elsif o[:is_dst]
             # DST offset unreferenced by a transition (offset in use before the
             # first transition). No derived base UTC offset, so assume 1 hour
             # DST.
-            base_utc_offset = current_utc_offset - 3600
+            base_utc_offset = observed_utc_offset - 3600
             std_offset = 3600
           else
             # Non-DST offset.
-            base_utc_offset = current_utc_offset
+            base_utc_offset = observed_utc_offset
             std_offset = 0
           end
 

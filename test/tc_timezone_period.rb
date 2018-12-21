@@ -64,7 +64,7 @@ class TCTimezonePeriod < Minitest::Test
     assert_equal('TEST', p.zone_identifier)
   end
 
-  [:current_utc_offset, :utc_total_offset].each do |method|
+  [:observed_utc_offset, :utc_total_offset].each do |method|
     define_method("test_#{method}") do
       p = TimezonePeriod.new(TimezoneOffset.new(-14400, 3600, 'TEST'))
       assert_equal(-10800, p.public_send(method))

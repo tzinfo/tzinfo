@@ -28,14 +28,14 @@ class TCTimezoneUTC < Minitest::Test
       assert_equal('UTC', tz.period_for_local(h.time(2004, 1, 1, 0, 0, 0)).zone_identifier)
       assert_equal('UTC', tz.period_for_local(h.time(2004,12,31,23,59,59)).zone_identifier)
 
-      assert_equal(0, tz.period_for(h.time(2004, 1, 1, 0, 0, 0,0,0)).current_utc_offset)
-      assert_equal(0, tz.period_for(h.time(2004,12,31,23,59,59,0,0)).current_utc_offset)
+      assert_equal(0, tz.period_for(h.time(2004, 1, 1, 0, 0, 0,0,0)).observed_utc_offset)
+      assert_equal(0, tz.period_for(h.time(2004,12,31,23,59,59,0,0)).observed_utc_offset)
 
-      assert_equal(0, tz.period_for_utc(h.time(2004, 1, 1, 0, 0, 0)).current_utc_offset)
-      assert_equal(0, tz.period_for_utc(h.time(2004,12,31,23,59,59)).current_utc_offset)
+      assert_equal(0, tz.period_for_utc(h.time(2004, 1, 1, 0, 0, 0)).observed_utc_offset)
+      assert_equal(0, tz.period_for_utc(h.time(2004,12,31,23,59,59)).observed_utc_offset)
 
-      assert_equal(0, tz.period_for_local(h.time(2004, 1, 1, 0, 0, 0)).current_utc_offset)
-      assert_equal(0, tz.period_for_local(h.time(2004,12,31,23,59,59)).current_utc_offset)
+      assert_equal(0, tz.period_for_local(h.time(2004, 1, 1, 0, 0, 0)).observed_utc_offset)
+      assert_equal(0, tz.period_for_local(h.time(2004,12,31,23,59,59)).observed_utc_offset)
 
       transitions = tz.transitions_up_to(h.time(2005,1,1,0,0,0,0,0), h.time(2004,1,1,0,0,0,0,0))
       assert_equal(0, transitions.length)

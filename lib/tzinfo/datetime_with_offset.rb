@@ -29,11 +29,11 @@ module TZInfo
     #   time and for the offset of this {DateTimeWithOffset}.
     # @return [DateTimeWithOffset] `self`.
     # @raise [ArgumentError] if `timezone_offset` is `nil`.
-    # @raise [ArgumentError] if `timezone_offset.current_utc_offset` does not
+    # @raise [ArgumentError] if `timezone_offset.observed_utc_offset` does not
     #   equal `self.offset * 86400`.
     def set_timezone_offset(timezone_offset)
       raise ArgumentError, 'timezone_offset must be specified' unless timezone_offset
-      raise ArgumentError, 'timezone_offset.current_utc_offset does not match self.utc_offset' if offset * 86400 != timezone_offset.current_utc_offset
+      raise ArgumentError, 'timezone_offset.observed_utc_offset does not match self.utc_offset' if offset * 86400 != timezone_offset.observed_utc_offset
       @timezone_offset = timezone_offset
       self
     end

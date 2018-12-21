@@ -7,7 +7,7 @@ include TZInfo
 
 class TCTimeWithOffset < Minitest::Test
   def time_with_offset(year, month, day, hour, minute, second, tz_offset)
-    TimeWithOffset.new(year, month, day, hour, minute, second, tz_offset.current_utc_offset).set_timezone_offset(tz_offset)
+    TimeWithOffset.new(year, month, day, hour, minute, second, tz_offset.observed_utc_offset).set_timezone_offset(tz_offset)
   end
 
   def assert_is_time_or_time_with_offset_with_nil_timezone_offset(value)
