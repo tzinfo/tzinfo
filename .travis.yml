@@ -1,8 +1,8 @@
 language: ruby
 dist: trusty
 before_install:
-  - gem update --system
-  - gem install bundler
+  - if [[ $TRAVIS_RUBY_VERSION =~ ^(1|2\.[012]|jruby-1)\. ]]; then gem install 'rubygems-update: ~> 2.7' --no-document --conservative && update_rubygems; else gem update --system --conservative; fi
+  - gem install bundler --conservative
 before_script:
   - bundle update
 cache: bundler
