@@ -386,7 +386,7 @@ Documentation
 -------------
 
 API documentation for TZInfo is available on
-[RubyDoc.info](http://rubydoc.info/gems/tzinfo/).
+[RubyDoc.info](https://www.rubydoc.info/gems/tzinfo/).
 
 
 License
