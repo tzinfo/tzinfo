@@ -17,6 +17,11 @@
   been added to `TZInfo::Timezone`. These methods construct local `Time`,
   `DateTime` and `TZInfo::Timestamp` instances with the correct UTC offset and
   abbreviation for the time zone.
+* Support for a (yet to be released) version 2 of tzinfo-data has been added, in
+  addition to support for version 1. The new version will remove the `DateTime`
+  parameters (which are no longer needed) from transition times, reduce memory
+  consumption and improve the efficiency of loading timezone and country
+  indexes.
 * A `TZInfo::VERSION` constant has been added, indicating the TZInfo version
   number.
 
