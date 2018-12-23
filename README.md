@@ -1,5 +1,4 @@
-TZInfo - Ruby Time Zone Library
-===============================
+# TZInfo - Ruby Time Zone Library
 
 [![Gem Version](https://badge.fury.io/rb/tzinfo.svg)](https://badge.fury.io/rb/tzinfo) [![Travis CI Build Status](https://travis-ci.org/tzinfo/tzinfo.svg?branch=master)](https://travis-ci.org/tzinfo/tzinfo) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/btinuu4g8sdachj3/branch/master?svg=true)](https://ci.appveyor.com/project/philr/tzinfo/branch/master)
 
@@ -7,8 +6,7 @@ TZInfo - Ruby Time Zone Library
 time zone data and allows times to be converted using time zone rules.
 
 
-Data Sources
-------------
+## Data Sources
 
 TZInfo requires a source of time zone data. There are two options:
 
@@ -35,8 +33,7 @@ Custom data sources can also be used. See the `TZInfo::DataSource.set`
 documentation for further details.
 
 
-Installation
-------------
+## Installation
 
 The TZInfo gem can be installed by running `gem install tzinfo` or by adding
 to `gem 'tzinfo'` to your `Gemfile` and running `bundle install`.
@@ -46,8 +43,7 @@ installed by running `gem install tzinfo-data` or by adding `gem 'tzinfo-data'`
 to your `Gemfile`.
 
 
-IANA Time Zone Database
------------------------
+## IANA Time Zone Database
 
 The data returned and used by TZInfo is sourced from the
 [IANA Time Zone Database](http://www.iana.org/time-zones). The
@@ -55,8 +51,7 @@ The data returned and used by TZInfo is sourced from the
 document gives details of how the data is organized and managed.
 
 
-Example Usage
--------------
+## Example Usage
 
 To use TZInfo, it must first be required with:
 
@@ -327,8 +322,7 @@ For further detail, please refer to the API documentation for the
 `TZInfo::Timezone` and `TZInfo::Country` classes.
 
 
-Time Zone Selection
--------------------
+## Time Zone Selection
 
 The Time Zone Database maintainers recommend that time zone identifiers are not
 made visibile to end-users (see [Names of timezones](https://data.iana.org/time-zones/theory.html#naming)).
@@ -366,15 +360,13 @@ australia.zone_info.map {|i| [i.identifier, i.description] }
 ```
 
 
-Compatibility
--------------
+## Compatibility
 
 TZInfo v2.0.0 requires a minimum of Ruby MRI 1.9.3, JRuby 1.7 (in 1.9 mode or
 later) or Rubinius 3.
 
 
-Thread-Safety
--------------
+## Thread-Safety
 
 The `TZInfo::Country` and `TZInfo::Timezone` classes are thread-safe. It is safe
 to use class and instance methods of `TZInfo::Country` and `TZInfo::Timezone` in
@@ -382,28 +374,24 @@ concurrently executing threads. Instances of both classes can be shared across
 thread boundaries.
 
 
-Documentation
--------------
+## Documentation
 
 API documentation for TZInfo is available on
 [RubyDoc.info](https://www.rubydoc.info/gems/tzinfo/).
 
 
-License
--------
+## License
 
 TZInfo is released under the MIT license, see LICENSE for details.
 
 
-Source Code
------------
+## Source Code
 
 Source code for TZInfo is available on
 [GitHub](https://github.com/tzinfo/tzinfo).
 
 
-Issue Tracker
--------------
+## Issue Tracker
 
 Please post any bugs, issues, feature requests or questions about TZInfo to the
 [GitHub issue tracker](https://github.com/tzinfo/tzinfo/issues).
