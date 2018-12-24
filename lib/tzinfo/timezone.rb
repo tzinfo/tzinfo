@@ -68,6 +68,12 @@ module TZInfo
   # methods of {Timezone} in concurrently executing threads. Instances of
   # {Timezone} can be shared across thread boundaries.
   #
+  # The IANA Time Zone Database maintainers recommend that time zone identifiers
+  # are not made visible to end-users (see [Names of
+  # timezones](https://data.iana.org/time-zones/theory.html#naming)). The
+  # {Country} class can be used to obtain lists of time zones by country,
+  # including user-friendly descriptions and approximate locations.
+  #
   # @abstract The {get} method returns an instance of either {DataTimezone} or
   #   {LinkedTimezone}. The {get_proxy} method and other methods returning
   #   collections of time zones return instances of {TimezoneProxy}.

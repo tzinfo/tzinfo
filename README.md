@@ -325,7 +325,8 @@ For further detail, please refer to the API documentation for the
 ## Time Zone Selection
 
 The Time Zone Database maintainers recommend that time zone identifiers are not
-made visibile to end-users (see [Names of timezones](https://data.iana.org/time-zones/theory.html#naming)).
+made visible to end-users (see [Names of
+timezones](https://data.iana.org/time-zones/theory.html#naming)).
 
 Instead of displaying a list of time zone identifiers, time zones can be
 selected by the user's country. Call `TZInfo::Country.all` to obtain a list of
@@ -358,6 +359,11 @@ australia.zone_info.map {|i| [i.identifier, i.description] }
 #     ...
 #     ["Australia/Eucla", "Western Australia (Eucla)"]]
 ```
+
+Please note that country information available through TZInfo is intended as an
+aid to help users select a time zone data appropriate for their practical needs.
+It is not intended to take or endorse any position on legal or territorial
+claims.
 
 
 ## Compatibility

@@ -8,7 +8,7 @@ module TZInfo
   end
 
   # The {Country} class represents an ISO 3166-1 country. It can be used to
-  # obtain a list of time zones obbserved by a country. For example:
+  # obtain a list of time zones observed by a country. For example:
   #
   #     united_states = Country.get('US')
   #     united_states.zone_identifiers
