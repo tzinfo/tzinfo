@@ -84,8 +84,8 @@ module TZInfo
       #   transition.
       def derive_offsets(transitions, offsets)
         # The first non-DST offset (if there is one) is the offset observed
-        # before the first transition. Fallback to the first DST offset if there
-        # are no non-DST offsets.
+        # before the first transition. Fall back to the first DST offset if
+        # there are no non-DST offsets.
         first_non_dst_offset_index = offsets.index {|o| !o[:is_dst] }
         first_offset_index = first_non_dst_offset_index || 0
         return first_offset_index if transitions.empty?

@@ -49,7 +49,7 @@ module TZInfo
       # @raise [ArgumentError] if `offset_id` does not reference a defined
       #   offset.
       # @raise [ArgumentError] if `timestamp_value` is not greater than the
-      #   `timestamp_value` of the previously defined transtion.
+      #   `timestamp_value` of the previously defined transition.
       # @raise [ArgumentError] if `datetime_numerator` is specified, but
       #   `datetime_denominator` is not. In older versions of TZInfo, it was
       #   possible to define a transition with the `DateTime` numerator as the

@@ -5,17 +5,17 @@ module TZInfo
   module DataSources
     # An {InvalidZoneinfoDirectory} exception is raised if {ZoneinfoDataSource}
     # is initialized with a specific zoneinfo path that is not a valid zoneinfo
-    # directory. A valid zoneinfo directory is one that contains timezone files,
-    # a country code index file named iso3166.tab and a timezone index file
-    # named zone1970.tab or zone.tab.
+    # directory. A valid zoneinfo directory is one that contains time zone
+    # files, a country code index file named iso3166.tab and a time zone index
+    # file named zone1970.tab or zone.tab.
     class InvalidZoneinfoDirectory < StandardError
     end
 
     # A {ZoneinfoDirectoryNotFound} exception is raised if no valid zoneinfo
     # directory could be found when checking the paths listed in
     # {ZoneinfoDataSource.search_path}. A valid zoneinfo directory is one that
-    # contains timezone files, a country code index file named iso3166.tab and a
-    # timezone index file named zone1970.tab or zone.tab.
+    # contains time zone files, a country code index file named iso3166.tab and
+    # a time zone index file named zone1970.tab or zone.tab.
     class ZoneinfoDirectoryNotFound < StandardError
     end
 
@@ -306,7 +306,7 @@ module TZInfo
       # and zone1970.tab or zone.tab files if valid. If the directory is not
       # valid, returns `nil`.
       #
-      # The path to the iso3166.tab file may be overriden by passing in a path.
+      # The path to the iso3166.tab file may be overridden by passing in a path.
       # This is treated as either absolute or relative to the current working
       # directory.
       #

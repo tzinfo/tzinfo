@@ -70,7 +70,7 @@ module TZInfo
       # @raise [ArgumentError] if `offset_id` does not reference a defined
       #   offset.
       # @raise [ArgumentError] if `timestamp_value` is not greater than the
-      #   `timestamp_value` of the previously defined transtion.
+      #   `timestamp_value` of the previously defined transition.
       def transition(offset_id, timestamp_value)
         offset = @offsets[offset_id]
         raise ArgumentError, 'offset_id has not been defined' unless offset

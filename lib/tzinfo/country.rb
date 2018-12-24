@@ -55,7 +55,7 @@ module TZInfo
 
       private
 
-      # @return [DataSouce] the current DataSource.
+      # @return [DataSource] the current DataSource.
       def data_source
         DataSource.get
       end

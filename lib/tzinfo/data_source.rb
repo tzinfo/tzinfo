@@ -32,7 +32,7 @@ module TZInfo
     # @private
     @@instance = nil
 
-    # Mutex used to ensure the default data source is only created once.
+    # A `Mutex` used to ensure the default data source is only created once.
     #
     # @private
     @@default_mutex = Mutex.new
@@ -46,7 +46,7 @@ module TZInfo
         # This is done at the first request rather than when TZInfo is loaded to
         # avoid unnecessary attempts to find a suitable DataSource.
         #
-        # A Mutex is used to ensure that only a single default instance is
+        # A `Mutex` is used to ensure that only a single default instance is
         # created (this avoiding the possibility of retaining two copies of the
         # same data in memory).
 
@@ -66,7 +66,7 @@ module TZInfo
       # * `:ruby` - read data from the Ruby modules included in the TZInfo::Data
       #   library (tzinfo-data gem).
       # * `:zoneinfo` - read data from the zoneinfo files included with most
-      #   Unix-like operating sytems (e.g. in /usr/share/zoneinfo).
+      #   Unix-like operating systems (e.g. in /usr/share/zoneinfo).
       #
       # To set TZInfo to use one of the standard data source types, call
       # `TZInfo::DataSource.set`` in one of the following ways:

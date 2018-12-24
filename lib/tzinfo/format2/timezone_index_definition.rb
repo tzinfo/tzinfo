@@ -2,8 +2,8 @@
 
 module TZInfo
   module Format2
-    # The format 2 timezone index file includes {TimezoneIndexDefinition}, which
-    # provides the {TimezoneIndexDefinition::ClassMethods#timezone_index
+    # The format 2 time zone index file includes {TimezoneIndexDefinition},
+    # which provides the {TimezoneIndexDefinition::ClassMethods#timezone_index
     # timezone_index} method used to define the index.
     #
     # @private
@@ -28,12 +28,12 @@ module TZInfo
       # @private
       module ClassMethods #:nodoc:
         # @return [Array<String>] a frozen `Array` containing the identifiers of
-        #   all data timezones. Identifiers are sorted according to
+        #   all data time zones. Identifiers are sorted according to
         #   `String#<=>`.
         attr_reader :data_timezones
 
         # @return [Array<String>] a frozen `Array` containing the identifiers of
-        #   all linked timezones. Identifiers are sorted according to
+        #   all linked time zones. Identifiers are sorted according to
         #   `String#<=>`.
         attr_reader :linked_timezones
 

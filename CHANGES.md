@@ -10,7 +10,7 @@
 * `abbreviation`, `dst?`, `base_utc_offset` and `observed_utc_offset` instance
   methods have been added to `TZInfo::Timezone`, returning the abbreviation,
   whether daylight savings time is in effect and the UTC offset of the time zone
-  at a specfied time.
+  at a specified time.
 * A `TZInfo::Timestamp` class has been added. It can be used with
   `TZInfo::Timezone` in place of a `Time` or `DateTime`.
 * `local_time`, `local_datetime` and `local_timestamp` instance methods have
@@ -106,7 +106,7 @@
   `TZInfo::DataSources::TransitionsDataTimezoneInfo` is constructed with an
   `Array` of `TZInfo::TimezoneTransition` instances representing times when the
   offset changes. `TZInfo::DataSources::ConstantOffsetDataTimezoneInfo` is
-  constructed with a `TZInfo::TimezoneOffset` instance repsenting the offset
+  constructed with a `TZInfo::TimezoneOffset` instance representing the offset
   constantly observed in a time zone.
 * The `TZInfo::DataSource#timezone_identifiers` method should no longer be
   overridden in custom data source implementations. The implementation in the
@@ -663,7 +663,7 @@
 * `Country` has a new `zone_info` method that returns `CountryTimezone` objects
   containing additional information (latitude, longitude and a description)
   relating to each `Timezone`. #4140.
-* Timezones within a `Country` are now returned in an order that makes
+* Time zones within a `Country` are now returned in an order that makes
   geographic sense.
 * The zdumptest utility now checks local to utc conversions in addition to
   utc to local conversions.
@@ -695,7 +695,7 @@
   time and then returns it formatted. `%Z` is replaced with the timezone
   abbreviation for the given time (for example, EST or EDT). #4143.
 * Fix escaping of quotes in `TZDataParser`. This affected country names and
-  descriptions of timezones within countries.
+  descriptions of time zones within countries.
 
 
 ## Version 0.2.2 (tzdata v2006g) - 17-May-2006
@@ -725,7 +725,7 @@
 * Added abbreviation as an alias for `TimezonePeriod.zone_identifier`.
 * Updated to tzdata version 2006d
   (<https://mm.icann.org/pipermail/tz/2006-April/013517.html>).
-* Ignore any offset in `DateTime` instancess passed in (as is already done for
+* Ignore any offset in `DateTime` instances passed in (as is already done for
   `Time` instances). All of the following now refer to the same UTC time (15:40 on 17 April 2006). Previously, the `DateTime` in the second line would have been interpreted as 20:40.
 
     ```ruby
@@ -766,7 +766,7 @@
 * Updated to tzdata version 2006a
   (<https://mm.icann.org/pipermail/tz/2006-January/013311.html>).
 * `build_tz_classes` rake task now handles running svn add and svn delete as new
-  timezones and countries are added and old ones are removed.
+  time zones and countries are added and old ones are removed.
 * Return a better error when attempting to use a `Timezone` instance that was
   constructed with `Timezone.new(nil)`. This will occur when using Rails'
   `composed_of`. When the timezone identifier in the database is null,
@@ -776,7 +776,7 @@
 
 ## Version 0.1.1 (tzdata v2005q) - 18-Dec-2005
 
-* Timezones that are defined by a single unbounded period (e.g. UTC) now
+* Time zones that are defined by a single unbounded period (e.g. UTC) now
   work again.
 * Updated to tzdata version 2005q.
 
@@ -799,7 +799,7 @@
 * Moved `TimezonePeriod` class to `timezone_period.rb`.
 * New `TimezonePeriodList` class to store `TimezonePeriod` instances for a
   timezone and perform searches for periods.
-* Timezones now defined using blocks. `TimezonePeriod` instances are only
+* Time zones are now defined using blocks. `TimezonePeriod` instances are only
   created when they are needed. Thanks to Jamis Buck for the suggestion.
 * Add options to `TZDataParser` to allow exclusion of specific zones and
   countries.
@@ -822,8 +822,8 @@
   apostrophes into UTC, GMT, etc).
 * Fixed `Country` `<=>` operator (was comparing non-existent attribute)
 * Fixed `Timezone.period_for_local` error when period not found.
-* Added testcases for `Timezone`, `TimezoneProxy`, `TimezonePeriod`, `Country`
-  and some selected timezones.
+* Added test cases for `Timezone`, `TimezoneProxy`, `TimezonePeriod`, `Country`
+  and some selected time zones.
 
 
 ## Version 0.0.3 (tzdata v2005m) - 17-Sep-2005
@@ -845,7 +845,7 @@
   return `TimezoneProxy` instances instead. This makes these methods much
   quicker.
 
-In Ruby on Rails, you can now show a drop-down list of all timezones using the
+In Ruby on Rails, you can now show a drop-down list of all time zones using the
 Rails `time_zone_select` helper method:
 
 ```ruby

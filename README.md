@@ -159,7 +159,7 @@ period.local_ends_at.to_time    # => 2018-11-04 02:00:00 -0400
 
 A list of transitions between periods where different rules are observed can be
 obtained with the `transitions_up_to` method. The result is returned as an
-`Array` of `TZInfo::TimzoneTransition` objects:
+`Array` of `TZInfo::TimezoneTransition` objects:
 
 ```ruby
 transitions = tz.transitions_up_to(Time.utc(2019, 1, 1), Time.utc(2017, 1, 1))
