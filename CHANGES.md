@@ -6,7 +6,7 @@
 
 * `to_local` and `period_for` instance methods have been added to
   `TZInfo::Timezone`. These are similar to `utc_to_local` and `period_for_utc`,
-  but take the UTC offset of the time parameter into account.
+  but take the UTC offset of the given time into account.
 * `abbreviation`, `dst?`, `base_utc_offset` and `observed_utc_offset` instance
   methods have been added to `TZInfo::Timezone`, returning the abbreviation,
   whether daylight savings time is in effect and the UTC offset of the time zone
@@ -18,10 +18,9 @@
   `DateTime` and `TZInfo::Timestamp` instances with the correct UTC offset and
   abbreviation for the time zone.
 * Support for a (yet to be released) version 2 of tzinfo-data has been added, in
-  addition to support for version 1. The new version will remove the `DateTime`
-  parameters (which are no longer needed) from transition times, reduce memory
-  consumption and improve the efficiency of loading timezone and country
-  indexes.
+  addition to support for version 1. The new version will remove the (no longer
+  needed) `DateTime` parameters from transition times, reduce memory consumption
+  and improve the efficiency of loading timezone and country indexes.
 * A `TZInfo::VERSION` constant has been added, indicating the TZInfo version
   number.
 
@@ -38,23 +37,16 @@
   offset at the indicated time. For example, the zone abbreviation is returned
   when using the `%Z` directive with `strftime`.
 * The `transitions_up_to`, `offsets_up_to` and `strftime` instance methods of
-  `TZInfo::Timezone` now take the UTC offset of passed in values into account
-  instead of ignoring it (as was previously the case).
-* The `%:::z` format directive can now only be used with
-  `TZInfo::Timezone#strftime` if it is supported by `Time#strftime` on the
-  runtime platform.
-* Using `TZInfo::Timezone.new(identifier)` and `TZInfo::Country.new(code)` to
-  obtain a specific `TZInfo::Timezone` or `TZInfo::Country` will no longer work.
-  `TZInfo::Timezone.get(identifier)` and `TZInfo::Country.get(code)` should be
-  used instead.
+  `TZInfo::Timezone` now take the UTC offsets of given times into account
+  (instead of ignoring them as was previously the case).
 * The `TZInfo::TimezonePeriod` class has been split into two subclasses:
   `TZInfo::OffsetTimezonePeriod` and `TZInfo::TransitionsTimezonePeriod`.
   `TZInfo::OffsetTimezonePeriod` is returned for time zones that only have a
   single offset. `TZInfo::TransitionsTimezonePeriod` is returned for periods
   that start or end with a transition.
 * `TZInfo::TimezoneOffset#abbreviation`, `TZInfo::TimezonePeriod#abbreviation`
-  and `TZInfo::TimezonePeriod#zone_identifier` now return frozen `String`s
-  instead of `Symbol`s.
+  and `TZInfo::TimezonePeriod#zone_identifier` now return frozen `String`
+  instances instead of instances of `Symbol`.
 * The `utc_offset` and `utc_total_offset` attributes of `TZInfo::TimezonePeriod`
   and `TZInfo::TimezoneOffset` have been renamed `base_utc_offset` and
   `observed_utc_offset` respectively. The former names have been retained as
@@ -96,7 +88,8 @@
   improved.
 * Memory use has been decreased by deduplicating `String` instances when loading
   country and time zone data.
-* The dependency on `thread_safe` has been replaced with `concurrent-ruby`.
+* The dependency on the deprecated thread_safe gem as been removed and replaced
+  by concurrent-ruby.
 * The Info classes used to return time zone and country information from
   `TZInfo::DataSource` implementations have been moved into the
   `TZInfo::DataSources` module.
@@ -123,6 +116,13 @@
   `Integer` timestamp values. `Time`, `DateTime` or `TZInfo::Timestamp` values
   or objects that respond to `to_i`, `subsec` and optionally `utc_offset` must
   be used instead.
+* The `%:::z` format directive can now only be used with
+  `TZInfo::Timezone#strftime` if it is supported by `Time#strftime` on the
+  runtime platform.
+* Using `TZInfo::Timezone.new(identifier)` and `TZInfo::Country.new(code)` to
+  obtain a specific `TZInfo::Timezone` or `TZInfo::Country` will no longer work.
+  `TZInfo::Timezone.get(identifier)` and `TZInfo::Country.get(code)` should be
+  used instead.
 * The `TZInfo::TimeOrDateTime` class has been removed.
 * The `valid_for_utc?`, `utc_after_start?`, `utc_before_end?`,
   `valid_for_local?`, `local_after_start?` and `local_before_end?` instance
