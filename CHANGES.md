@@ -1,6 +1,6 @@
 # Changes
 
-## Version 2.0.0-pre1 - Unreleased
+## Version 2.0.0 - 26-Dec-2018
 
 ### Added
 
