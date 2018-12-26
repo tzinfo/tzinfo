@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 require_relative 'test_utils'
-require 'concurrent/map'
+require 'concurrent'
 
 include TZInfo
 

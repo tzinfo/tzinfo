@@ -1,7 +1,7 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
-require 'concurrent/map'
+require 'concurrent'
 
 module TZInfo
   # Maintains a pool of `String` instances. The {#dedupe} method will return
