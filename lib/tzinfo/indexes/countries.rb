@@ -469,6 +469,7 @@ module TZInfo
       country 'KZ', 'Kazakhstan' do |c|
         c.timezone 'Asia/Almaty', 173, 4, 1539, 20, 'Kazakhstan (most areas)'
         c.timezone 'Asia/Qyzylorda', 224, 5, 982, 15, 'Qyzylorda/Kyzylorda/Kzyl-Orda'
+        c.timezone 'Asia/Qostanay', 266, 5, 3817, 60, 'Qostanay/Kostanay/Kustanay'
         c.timezone 'Asia/Aqtobe', 3017, 60, 343, 6, 'Aqtobe/Aktobe'
         c.timezone 'Asia/Aqtau', 2671, 60, 754, 15, 'Mangghystau/Mankistau'
         c.timezone 'Asia/Atyrau', 2827, 60, 779, 15, 'Atyrau/Atirau/Gur\'yev'
@@ -694,9 +695,9 @@ module TZInfo
         c.timezone 'Europe/Kaliningrad', 3283, 60, 41, 2, 'MSK-01 - Kaliningrad'
         c.timezone 'Europe/Moscow', 66907, 1200, 8464, 225, 'MSK+00 - Moscow area'
         c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'MSK+00 - Crimea'
-        c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'MSK+00 - Volgograd'
         c.timezone 'Europe/Kirov', 293, 5, 993, 20, 'MSK+00 - Kirov'
         c.timezone 'Europe/Astrakhan', 927, 20, 961, 20, 'MSK+01 - Astrakhan'
+        c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'MSK+01 - Volgograd'
         c.timezone 'Europe/Saratov', 1547, 30, 1381, 30, 'MSK+01 - Saratov'
         c.timezone 'Europe/Ulyanovsk', 163, 3, 242, 5, 'MSK+01 - Ulyanovsk'
         c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'MSK+01 - Samara, Udmurtia'

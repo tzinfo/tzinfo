@@ -11,6 +11,7 @@ module TZInfo
           tz.offset :o1, 0, 0, :'+00'
           tz.offset :o2, 0, 3600, :'+01'
           tz.offset :o3, 3600, 0, :'+01'
+          tz.offset :o4, 3600, -3600, :'+00'
           
           tz.transition 1913, 10, :o1, 10454687371, 4320
           tz.transition 1939, 9, :o2, 4859037, 2
@@ -66,7 +67,47 @@ module TZInfo
           tz.transition 2018, 3, :o2, 1521943200
           tz.transition 2018, 5, :o1, 1526176800
           tz.transition 2018, 6, :o2, 1529200800
-          tz.transition 2018, 10, :o3, 1540594800
+          tz.transition 2018, 10, :o3, 1540692000
+          tz.transition 2019, 5, :o4, 1557021600
+          tz.transition 2019, 6, :o3, 1560045600
+          tz.transition 2020, 4, :o4, 1587261600
+          tz.transition 2020, 5, :o3, 1590285600
+          tz.transition 2021, 4, :o4, 1618106400
+          tz.transition 2021, 5, :o3, 1621130400
+          tz.transition 2022, 3, :o4, 1648346400
+          tz.transition 2022, 5, :o3, 1651975200
+          tz.transition 2023, 3, :o4, 1679191200
+          tz.transition 2023, 4, :o3, 1682215200
+          tz.transition 2024, 3, :o4, 1710036000
+          tz.transition 2024, 4, :o3, 1713060000
+          tz.transition 2025, 2, :o4, 1740276000
+          tz.transition 2025, 4, :o3, 1743904800
+          tz.transition 2026, 2, :o4, 1771120800
+          tz.transition 2026, 3, :o3, 1774144800
+          tz.transition 2027, 2, :o4, 1801965600
+          tz.transition 2027, 3, :o3, 1804989600
+          tz.transition 2028, 1, :o4, 1832205600
+          tz.transition 2028, 2, :o3, 1835229600
+          tz.transition 2029, 1, :o4, 1863050400
+          tz.transition 2029, 2, :o3, 1866074400
+          tz.transition 2029, 12, :o4, 1893290400
+          tz.transition 2030, 2, :o3, 1896919200
+          tz.transition 2030, 12, :o4, 1924135200
+          tz.transition 2031, 1, :o3, 1927159200
+          tz.transition 2031, 12, :o4, 1954980000
+          tz.transition 2032, 1, :o3, 1958004000
+          tz.transition 2032, 11, :o4, 1985220000
+          tz.transition 2033, 1, :o3, 1988848800
+          tz.transition 2033, 11, :o4, 2016064800
+          tz.transition 2033, 12, :o3, 2019088800
+          tz.transition 2034, 11, :o4, 2046304800
+          tz.transition 2034, 12, :o3, 2049933600
+          tz.transition 2035, 10, :o4, 2077149600
+          tz.transition 2035, 12, :o3, 2080173600
+          tz.transition 2036, 10, :o4, 2107994400
+          tz.transition 2036, 11, :o3, 2111018400
+          tz.transition 2037, 10, :o4, 2138234400
+          tz.transition 2037, 11, :o3, 2141863200
         end
       end
     end

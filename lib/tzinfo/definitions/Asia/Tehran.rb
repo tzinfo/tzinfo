@@ -114,32 +114,32 @@ module TZInfo
           tz.transition 2036, 9, :o2, 2105551800
           tz.transition 2037, 3, :o5, 2121193800
           tz.transition 2037, 9, :o2, 2137087800
-          tz.transition 2038, 3, :o5, 118344161, 48
-          tz.transition 2038, 9, :o2, 39450997, 16
-          tz.transition 2039, 3, :o5, 118361681, 48
-          tz.transition 2039, 9, :o2, 39456837, 16
+          tz.transition 2038, 3, :o5, 118344209, 48
+          tz.transition 2038, 9, :o2, 39451013, 16
+          tz.transition 2039, 3, :o5, 118361729, 48
+          tz.transition 2039, 9, :o2, 39456853, 16
           tz.transition 2040, 3, :o5, 118379249, 48
           tz.transition 2040, 9, :o2, 39462693, 16
           tz.transition 2041, 3, :o5, 118396769, 48
           tz.transition 2041, 9, :o2, 39468533, 16
-          tz.transition 2042, 3, :o5, 118414289, 48
-          tz.transition 2042, 9, :o2, 39474373, 16
-          tz.transition 2043, 3, :o5, 118431809, 48
-          tz.transition 2043, 9, :o2, 39480213, 16
+          tz.transition 2042, 3, :o5, 118414337, 48
+          tz.transition 2042, 9, :o2, 39474389, 16
+          tz.transition 2043, 3, :o5, 118431857, 48
+          tz.transition 2043, 9, :o2, 39480229, 16
           tz.transition 2044, 3, :o5, 118449377, 48
           tz.transition 2044, 9, :o2, 39486069, 16
           tz.transition 2045, 3, :o5, 118466897, 48
           tz.transition 2045, 9, :o2, 39491909, 16
-          tz.transition 2046, 3, :o5, 118484417, 48
-          tz.transition 2046, 9, :o2, 39497749, 16
-          tz.transition 2047, 3, :o5, 118501937, 48
-          tz.transition 2047, 9, :o2, 39503589, 16
+          tz.transition 2046, 3, :o5, 118484465, 48
+          tz.transition 2046, 9, :o2, 39497765, 16
+          tz.transition 2047, 3, :o5, 118501985, 48
+          tz.transition 2047, 9, :o2, 39503605, 16
           tz.transition 2048, 3, :o5, 118519505, 48
           tz.transition 2048, 9, :o2, 39509445, 16
           tz.transition 2049, 3, :o5, 118537025, 48
           tz.transition 2049, 9, :o2, 39515285, 16
-          tz.transition 2050, 3, :o5, 118554545, 48
-          tz.transition 2050, 9, :o2, 39521125, 16
+          tz.transition 2050, 3, :o5, 118554593, 48
+          tz.transition 2050, 9, :o2, 39521141, 16
         end
       end
     end

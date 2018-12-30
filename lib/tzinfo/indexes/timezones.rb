@@ -306,6 +306,7 @@ module TZInfo
       timezone 'Asia/Pontianak'
       timezone 'Asia/Pyongyang'
       timezone 'Asia/Qatar'
+      timezone 'Asia/Qostanay'
       timezone 'Asia/Qyzylorda'
       linked_timezone 'Asia/Rangoon'
       timezone 'Asia/Riyadh'
