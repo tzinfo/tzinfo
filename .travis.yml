@@ -1,8 +1,10 @@
 language: ruby
 dist: trusty
 before_install:
-  - if [[ $TRAVIS_RUBY_VERSION =~ ^(1|2\.[012]|jruby-1)\. ]]; then gem install rubygems-update --version '~> 2.7' --no-document --conservative && update_rubygems; else gem update --system --conservative; fi
-  - gem install bundler --conservative
+  - if [[ $TRAVIS_RUBY_VERSION =~ ^(1|2\.[012]|jruby-1)\. ]]; then gem install rubygems-update --version '~> 2.7' --no-document && update_rubygems; elif [[ ! $TRAVIS_RUBY_VERSION =~ ^truffleruby- ]]; then gem update --system; fi
+  - gem --version
+  - if [[ $TRAVIS_RUBY_VERSION =~ ^(1|2\.[012]|jruby-1)\. ]]; then gem install bundler --version '~> 1.17'; else gem install bundler; fi
+  - bundle --version
 before_script:
   - bundle update
 cache: bundler
