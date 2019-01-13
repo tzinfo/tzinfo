@@ -57,8 +57,8 @@ environment:
 
 install:
   - if not exist vendor mkdir vendor
-  - if %RUBY_ENGINE%==jruby appveyor DownloadFile https://s3.amazonaws.com/jruby.org/downloads/%JRUBY_VERSION%/jruby-bin-%JRUBY_VERSION%.zip -FileName vendor\jruby-bin-%JRUBY_VERSION%.zip
-  - if %RUBY_ENGINE%==jruby 7z x vendor\jruby-bin-%JRUBY_VERSION%.zip -ovendor -y
+  - if %RUBY_ENGINE%==jruby appveyor DownloadFile https://repo1.maven.org/maven2/org/jruby/jruby-dist/%JRUBY_VERSION%/jruby-dist-%JRUBY_VERSION%-bin.zip -FileName vendor\jruby-dist-%JRUBY_VERSION%-bin.zip
+  - if %RUBY_ENGINE%==jruby 7z x vendor\jruby-dist-%JRUBY_VERSION%-bin.zip -ovendor -y
   - if %RUBY_ENGINE%==jruby set PATH=C:\projects\tzinfo\vendor\jruby-%JRUBY_VERSION%\bin;%PATH%
   - if %RUBY_ENGINE%==jruby if "%JRUBY_VERSION:~0,2%"=="1." gem install bundler --version "~> 1.17"
   - if %RUBY_ENGINE%==jruby if not "%JRUBY_VERSION:~0,2%"=="1." gem install bundler
