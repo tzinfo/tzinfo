@@ -60,7 +60,8 @@ install:
   - if %RUBY_ENGINE%==jruby appveyor DownloadFile https://s3.amazonaws.com/jruby.org/downloads/%JRUBY_VERSION%/jruby-bin-%JRUBY_VERSION%.zip -FileName vendor\jruby-bin-%JRUBY_VERSION%.zip
   - if %RUBY_ENGINE%==jruby 7z x vendor\jruby-bin-%JRUBY_VERSION%.zip -ovendor -y
   - if %RUBY_ENGINE%==jruby set PATH=C:\projects\tzinfo\vendor\jruby-%JRUBY_VERSION%\bin;%PATH%
-  - if %RUBY_ENGINE%==jruby gem install bundler
+  - if %RUBY_ENGINE%==jruby if "%JRUBY_VERSION:~0,2%"=="1." gem install bundler --version "~> 1.17"
+  - if %RUBY_ENGINE%==jruby if not "%JRUBY_VERSION:~0,2%"=="1." gem install bundler
   - if v%RUBY_VERSION%==v193 appveyor DownloadFile https://github.com/philr/rubyinstaller/releases/download/1.9.3-p551-openssl-tls-1.1-1.2/ruby-1.9.3-p551-i386-mingw32.7z -FileName vendor\ruby-1.9.3-p551-i386-mingw32.7z
   - if v%RUBY_VERSION%==v193 7z e vendor\ruby-1.9.3-p551-i386-mingw32.7z -ovendor ruby-1.9.3-p551-i386-mingw32\bin\libeay32.dll ruby-1.9.3-p551-i386-mingw32\bin\ssleay32.dll ruby-1.9.3-p551-i386-mingw32\lib\ruby\1.9.1\i386-mingw32\openssl.so
   - if v%RUBY_VERSION%==v193 copy /Y vendor\*eay32.dll c:\Ruby193\bin
