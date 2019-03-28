@@ -8,17 +8,17 @@ then
   exit 1
 fi
 
-zoneinfo=$1
-zdump=$2
+zoneinfo=`realpath "$1"`
+zdump="$2"
 
-pushd $zoneinfo > /dev/null
-find . ! -name leapseconds ! -name localtime ! -name posixrules ! -name tzdata.zi ! -name '*.tab' -type f -print | sed -e 's/^\.\///' | sort |
+cut_start=$((${#zoneinfo} + 2))
+
+find "$zoneinfo" ! -name leapseconds ! -name localtime ! -name posixrules ! -name tzdata.zi ! -name '*.tab' -type f -printf '%P\n' | sort |
 {
-  popd > /dev/null
-
   while read zone
   do
     echo "Testing zone $zone"
-    $zdump -c ${MAXYEAR} -v $zone | ./zdumptest.rb
+    path="$zoneinfo/$zone"
+    "$zdump" -c $MAXYEAR -v "$path" | cut -c $cut_start- | ./zdumptest.rb
   done
 }
