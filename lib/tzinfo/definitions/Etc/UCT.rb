@@ -6,10 +6,7 @@ module TZInfo
       module UCT
         include TimezoneDefinition
         
-        timezone 'Etc/UCT' do |tz|
-          tz.offset :o0, 0, 0, :UCT
-          
-        end
+        linked_timezone 'Etc/UCT', 'Etc/UTC'
       end
     end
   end

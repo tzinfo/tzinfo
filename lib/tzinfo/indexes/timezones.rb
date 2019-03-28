@@ -425,7 +425,7 @@ module TZInfo
       timezone 'Etc/GMT-9'
       linked_timezone 'Etc/GMT0'
       linked_timezone 'Etc/Greenwich'
-      timezone 'Etc/UCT'
+      linked_timezone 'Etc/UCT'
       timezone 'Etc/UTC'
       linked_timezone 'Etc/Universal'
       linked_timezone 'Etc/Zulu'

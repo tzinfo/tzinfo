@@ -530,7 +530,7 @@ module TZInfo
         c.timezone 'Pacific/Majuro', 143, 20, 856, 5, 'Marshall Islands (most areas)'
         c.timezone 'Pacific/Kwajalein', 109, 12, 502, 3, 'Kwajalein'
       end
-      country 'MK', 'Macedonia' do |c|
+      country 'MK', 'North Macedonia' do |c|
         c.timezone 'Europe/Skopje', 2519, 60, 643, 30
       end
       country 'ML', 'Mali' do |c|
@@ -783,7 +783,7 @@ module TZInfo
       country 'SY', 'Syria' do |c|
         c.timezone 'Asia/Damascus', 67, 2, 363, 10
       end
-      country 'SZ', 'Swaziland' do |c|
+      country 'SZ', 'Eswatini (Swaziland)' do |c|
         c.timezone 'Africa/Mbabane', -263, 10, 311, 10
       end
       country 'TC', 'Turks & Caicos Is' do |c|

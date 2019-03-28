@@ -50,6 +50,10 @@ module TZInfo
           tz.transition 1974, 10, :o2, 150843600
           tz.transition 1975, 4, :o3, 167176800
           tz.transition 1975, 8, :o2, 178664400
+          tz.transition 1980, 8, :o3, 334015200
+          tz.transition 1980, 9, :o2, 337644000
+          tz.transition 1984, 5, :o3, 452556000
+          tz.transition 1984, 8, :o2, 462232800
           tz.transition 1985, 4, :o3, 482277600
           tz.transition 1985, 9, :o2, 495579600
           tz.transition 1986, 5, :o3, 516751200
