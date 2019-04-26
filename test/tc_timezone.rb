@@ -1700,6 +1700,12 @@ class TCTimezone < Minitest::Test
     assert_equal('America/New_York'.hash, TestTimezone.new('America/New_York').hash)
   end
 
+  define_method("test_=~_operator_matches_against_identifier") do
+    tz = TestTimezone.new('Europe/London')
+    assert_equal(0, tz  =~ /Europe\/London/)
+    assert_nil(tz =~ /America\/NewYork/)
+  end
+
   def test_marshal_data
     tz = Timezone.get('Europe/London')
     marshalled_tz = Marshal.load(Marshal.dump(tz))
