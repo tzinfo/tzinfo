@@ -1119,12 +1119,14 @@ module TZInfo
       identifier.hash
     end
 
-    # @param regex [Regex] a `Regex` to match against the identifier of this
-    #  {Timezone}.
-    # @return [Integer, nil] `Integer` offset of the match on the identifier,
-    # otherwise `nil` if there is no match.
-    def =~(regex)
-      regex =~ identifier
+    # Matches `regexp` against the {identifier} of this {Timezone}.
+    #
+    # @param regexp [Regexp] a `Regexp` to match against the {identifier} of
+    #   this {Timezone}.
+    # @return [Integer] the position the match starts, or `nil` if there is no
+    #   match.
+    def =~(regexp)
+      regexp =~ identifier
     end
 
     # Returns a serialized representation of this {Timezone}. This method is

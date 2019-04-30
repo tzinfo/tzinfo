@@ -1702,8 +1702,13 @@ class TCTimezone < Minitest::Test
 
   define_method("test_=~_operator_matches_against_identifier") do
     tz = TestTimezone.new('Europe/London')
-    assert_equal(0, tz  =~ /Europe\/London/)
-    assert_nil(tz =~ /America\/NewYork/)
+    assert_equal(0, tz  =~ /\AEurope\/London\z/)
+    assert_equal(6, tz  =~ /\/London/)
+  end
+
+  define_method("test_=~_operator_returns_nil_when_regexp_does_not_match") do
+    tz = TestTimezone.new('Europe/London')
+    assert_nil(tz  =~ /America\/New_York/)
   end
 
   def test_marshal_data
