@@ -176,6 +176,16 @@ module TZInfo
       code.hash
     end
 
+    # Matches `regexp` against the {code} of this {Country}.
+    #
+    # @param regexp [Regexp] a `Regexp` to match against the {code} of
+    #   this {Country}.
+    # @return [Integer] the position the match starts, or `nil` if there is no
+    #   match.
+    def =~(regexp)
+      regexp =~ code
+    end
+
     # Returns a serialized representation of this {Country}. This method is
     # called when using `Marshal.dump` with an instance of {Country}.
     #

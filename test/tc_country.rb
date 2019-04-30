@@ -166,6 +166,17 @@ class TCCountry < Minitest::Test
     assert_equal('US'.hash, Country.get('US').hash)
   end
 
+  define_method("test_=~_operator_matches_against_code") do
+    c = Country.get('GB')
+    assert_equal(0, c =~ /\AGB\z/)
+    assert_equal(1, c =~ /B/)
+  end
+
+  define_method("test_=~_operator_returns_nil_when_regexp_does_not_match") do
+    c = Country.get('GB')
+    assert_nil(c =~ /US/)
+  end
+
   def test_marshal
     c = Country.get('US')
     marshalled_c = Marshal.load(Marshal.dump(c))
