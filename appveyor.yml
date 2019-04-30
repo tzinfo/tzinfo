@@ -9,6 +9,7 @@ environment:
   matrix:
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 193
+      SSL_CERT_FILE: C:\Ruby193\lib\ruby\1.9.1\rubygems\ssl_certs\ca-bundle.pem
 
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 200
@@ -63,9 +64,10 @@ install:
   - if %RUBY_ENGINE%==jruby if "%JRUBY_VERSION:~0,2%"=="1." gem install bundler --version "~> 1.17"
   - if %RUBY_ENGINE%==jruby if not "%JRUBY_VERSION:~0,2%"=="1." gem install bundler
   - if v%RUBY_VERSION%==v193 appveyor DownloadFile https://github.com/philr/rubyinstaller/releases/download/1.9.3-p551-openssl-tls-1.1-1.2/ruby-1.9.3-p551-i386-mingw32.7z -FileName vendor\ruby-1.9.3-p551-i386-mingw32.7z
-  - if v%RUBY_VERSION%==v193 7z e vendor\ruby-1.9.3-p551-i386-mingw32.7z -ovendor ruby-1.9.3-p551-i386-mingw32\bin\libeay32.dll ruby-1.9.3-p551-i386-mingw32\bin\ssleay32.dll ruby-1.9.3-p551-i386-mingw32\lib\ruby\1.9.1\i386-mingw32\openssl.so
-  - if v%RUBY_VERSION%==v193 copy /Y vendor\*eay32.dll c:\Ruby193\bin
-  - if v%RUBY_VERSION%==v193 copy /Y vendor\openssl.so c:\Ruby193\lib\ruby\1.9.1\i386-mingw32
+  - if v%RUBY_VERSION%==v193 7z e vendor\ruby-1.9.3-p551-i386-mingw32.7z -ovendor ruby-1.9.3-p551-i386-mingw32\bin\libeay32.dll ruby-1.9.3-p551-i386-mingw32\bin\ssleay32.dll ruby-1.9.3-p551-i386-mingw32\lib\ruby\1.9.1\i386-mingw32\openssl.so ruby-1.9.3-p551-i386-mingw32\lib\ruby\1.9.1\rubygems\ssl_certs\ca-bundle.pem
+  - if v%RUBY_VERSION%==v193 copy /Y vendor\*eay32.dll C:\Ruby193\bin
+  - if v%RUBY_VERSION%==v193 copy /Y vendor\openssl.so C:\Ruby193\lib\ruby\1.9.1\i386-mingw32
+  - if v%RUBY_VERSION%==v193 copy /Y vendor\ca-bundle.pem C:\Ruby193\lib\ruby\1.9.1\rubygems\ssl_certs
   - if %RUBY_ENGINE%==ruby set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - bundle config --local path vendor/bundle
   - bundle update
