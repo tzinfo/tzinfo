@@ -483,8 +483,9 @@ module TZInfo
     end
     
     def at_utc_time(year, utc_offset, std_offset)
+      absolute = @on_day.to_absolute(year, @in_month)
       @at_time.to_utc(utc_offset, std_offset,
-        year, @in_month, @on_day.to_absolute(year, @in_month))
+        absolute.year, absolute.month, absolute.day)
     end
     
     private
@@ -1036,7 +1037,8 @@ module TZInfo
   end
     
   # A tz data day of the month reference. Can either be an absolute day,
-  # a last week day or a week day >= or <= than a specific day of month.
+  # a last week day or a week day >= or <= than a specific day of month. Can
+  # result in a day in the neighbouring month.
   #
   # @private
   class TZDataDayOfMonth #:nodoc:
@@ -1062,30 +1064,23 @@ module TZInfo
       end
     end
     
-    # Returns the absolute day of month for the given year and month.
+    # Returns the absolute date for the given year and month.
     def to_absolute(year, month)
       case @type
         when :last
           last_day_in_month = (Date.new(year, month, 1) >> 1) - 1          
           offset = last_day_in_month.wday - @day_of_week
           offset = offset + 7 if offset < 0
-          (last_day_in_month - offset).day
+          last_day_in_month - offset
         when :comparison
           pivot = Date.new(year, month, @day_of_month)         
           offset = @day_of_week - pivot.wday
           offset = -offset if @operator == :less_equal
           offset = offset + 7 if offset < 0
           offset = -offset if @operator == :less_equal          
-          result = pivot + offset
-          if result.month != pivot.month
-            puts self.inspect
-            puts year
-            puts month
-          end
-          raise 'No suitable date found' if result.month != pivot.month
-          result.day          
+          pivot + offset
         else #absolute
-          @day_of_month
+          Date.new(year, month, @day_of_month)
       end
     end
     
@@ -1143,7 +1138,8 @@ module TZInfo
     
     # Converts the reference to a UTC DateTime.
     def to_utc(utc_offset, std_offset)
-      @time.to_utc(utc_offset, std_offset, @year, @month, @day.to_absolute(@year, @month))            
+      absolute = @day.to_absolute(@year, @month)
+      @time.to_utc(utc_offset, std_offset, absolute.year, absolute.month, absolute.day)
     end
   end
   
