@@ -14,24 +14,24 @@ module TZInfo
           tz.offset :o4, 32400, 0, :JST
           
           tz.transition 1904, 10, :o1, 58002797, 24
-          tz.transition 1941, 6, :o2, 38882565, 16
+          tz.transition 1941, 6, :o2, 58323847, 24
           tz.transition 1941, 9, :o3, 58326439, 24
           tz.transition 1941, 12, :o4, 116656951, 48
-          tz.transition 1945, 9, :o1, 19453713, 8
-          tz.transition 1946, 4, :o2, 38910885, 16
-          tz.transition 1946, 11, :o1, 116743453, 48
+          tz.transition 1945, 11, :o1, 58362653, 24
+          tz.transition 1946, 4, :o2, 14591587, 6
+          tz.transition 1946, 11, :o1, 38914485, 16
           tz.transition 1947, 4, :o2, 38916613, 16
-          tz.transition 1947, 12, :o1, 116762365, 48
+          tz.transition 1947, 11, :o1, 38920309, 16
           tz.transition 1948, 5, :o2, 38922773, 16
-          tz.transition 1948, 10, :o1, 116777053, 48
+          tz.transition 1948, 10, :o1, 38925685, 16
           tz.transition 1949, 4, :o2, 38928149, 16
-          tz.transition 1949, 10, :o1, 116794525, 48
+          tz.transition 1949, 10, :o1, 38931509, 16
           tz.transition 1950, 4, :o2, 38933973, 16
-          tz.transition 1950, 10, :o1, 116811997, 48
+          tz.transition 1950, 10, :o1, 38937333, 16
           tz.transition 1951, 3, :o2, 38939797, 16
-          tz.transition 1951, 10, :o1, 116829469, 48
+          tz.transition 1951, 10, :o1, 38943157, 16
           tz.transition 1952, 4, :o2, 38945733, 16
-          tz.transition 1952, 11, :o1, 116847277, 48
+          tz.transition 1952, 11, :o1, 38949093, 16
           tz.transition 1953, 4, :o2, 38951557, 16
           tz.transition 1953, 10, :o1, 116864749, 48
           tz.transition 1954, 3, :o2, 38957157, 16

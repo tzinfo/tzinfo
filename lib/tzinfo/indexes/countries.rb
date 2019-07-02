@@ -694,7 +694,6 @@ module TZInfo
       country 'RU', 'Russia' do |c|
         c.timezone 'Europe/Kaliningrad', 3283, 60, 41, 2, 'MSK-01 - Kaliningrad'
         c.timezone 'Europe/Moscow', 66907, 1200, 8464, 225, 'MSK+00 - Moscow area'
-        c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'MSK+00 - Crimea'
         c.timezone 'Europe/Kirov', 293, 5, 993, 20, 'MSK+00 - Kirov'
         c.timezone 'Europe/Astrakhan', 927, 20, 961, 20, 'MSK+01 - Astrakhan'
         c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'MSK+01 - Volgograd'
@@ -835,6 +834,7 @@ module TZInfo
         c.timezone 'Africa/Dar_es_Salaam', -34, 5, 2357, 60
       end
       country 'UA', 'Ukraine' do |c|
+        c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'MSK+00 - Crimea'
         c.timezone 'Europe/Kiev', 1513, 30, 1831, 60, 'Ukraine (most areas)'
         c.timezone 'Europe/Uzhgorod', 2917, 60, 223, 10, 'Ruthenia'
         c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozh\'ye/Zaporizhia; Lugansk/Luhansk (east)'
