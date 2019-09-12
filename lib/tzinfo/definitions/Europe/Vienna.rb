@@ -29,7 +29,7 @@ module TZInfo
           tz.transition 1945, 4, :o2, 58357141, 24
           tz.transition 1945, 4, :o1, 58357381, 24
           tz.transition 1946, 4, :o2, 58366189, 24
-          tz.transition 1946, 10, :o1, 58370389, 24
+          tz.transition 1946, 10, :o1, 58370413, 24
           tz.transition 1947, 4, :o2, 58374757, 24
           tz.transition 1947, 10, :o1, 58379125, 24
           tz.transition 1948, 4, :o2, 58383829, 24

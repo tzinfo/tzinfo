@@ -10,7 +10,7 @@ module TZInfo
           tz.offset :o0, 27402, 0, :LMT
           tz.offset :o1, 28800, 0, :HKT
           tz.offset :o2, 28800, 3600, :HKST
-          tz.offset :o3, 30600, 0, :HKT
+          tz.offset :o3, 28800, 1800, :HKWT
           tz.offset :o4, 32400, 0, :JST
           
           tz.transition 1904, 10, :o1, 58002797, 24
