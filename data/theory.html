@@ -15,12 +15,13 @@
     <ul>
       <li><a href="#scope">Scope of the <code><abbr>tz</abbr></code>
 	  database</a></li>
-      <li><a href="#naming">Names of timezones</a></li>
+      <li><a href="#naming">Timezone identifiers</a></li>
       <li><a href="#abbreviations">Time zone abbreviations</a></li>
       <li><a href="#accuracy">Accuracy of the <code><abbr>tz</abbr></code>
 	  database</a></li>
       <li><a href="#functions">Time and date functions</a></li>
       <li><a href="#stability">Interface stability</a></li>
+      <li><a href="#leapsec">Leap seconds</a></li>
       <li><a href="#calendar">Calendrical issues</a></li>
       <li><a href="#planets">Time and time zones on other planets</a></li>
     </ul>
@@ -88,7 +89,7 @@ href="https://en.wikipedia.org/wiki/POSIX">POSIX</a>, an international
 standard for <a
 href="https://en.wikipedia.org/wiki/Unix">UNIX</a>-like systems.
 As of this writing, the current edition of POSIX is: <a
-href="http://pubs.opengroup.org/onlinepubs/9699919799/"> The Open
+href="https://pubs.opengroup.org/onlinepubs/9699919799/"> The Open
 Group Base Specifications Issue 7</a>, IEEE Std 1003.1-2017, 2018
 Edition.
 Because the database's scope encompasses real-world changes to civil
@@ -98,8 +99,9 @@ A <code><abbr>tz</abbr></code> timezone corresponds to a ruleset that can
 have more than two changes per year, these changes need not merely
 flip back and forth between two alternatives, and the rules themselves
 can change at times.
-Whether and when a timezone changes its
-clock, and even the timezone's notional base offset from UTC, are variable.
+Whether and when a timezone changes its clock,
+and even the timezone's notional base offset from <abbr>UTC</abbr>,
+are variable.
 It does not always make sense to talk about a timezone's
 "base offset", which is not necessarily a single number.
 </p>
@@ -107,9 +109,9 @@ It does not always make sense to talk about a timezone's
 </section>
 
 <section>
-  <h2 id="naming">Names of timezones</h2>
+  <h2 id="naming">Timezone identifiers</h2>
 <p>
-Each timezone has a unique name.
+Each timezone has a name that uniquely identifies the timezone.
 Inexperienced users are not expected to select these names unaided.
 Distributors should provide documentation and/or a simple selection
 interface that explains each name via a map or via descriptive text like
@@ -142,10 +144,12 @@ among the following goals:
   </li>
   <li>
     Be robust in the presence of political changes.
-    For example, names of countries are ordinarily not used, to avoid
+    For example, names are typically not tied to countries, to avoid
     incompatibilities when countries change their name (e.g.,
-    Zaire&rarr;Congo) or when locations change countries (e.g., Hong
+    Swaziland&rarr;Eswatini) or when locations change countries (e.g., Hong
     Kong from UK colony to China).
+    There is no requirement that every country or national
+    capital must have a timezone name.
   </li>
   <li>
     Be portable to a wide variety of implementations.
@@ -184,7 +188,7 @@ in decreasing order of importance:
     href="https://en.wikipedia.org/wiki/ASCII">ASCII</a> letters,
     '<code>.</code>', '<code>-</code>' and '<code>_</code>'.
     Do not use digits, as that might create an ambiguity with <a
-    href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html#tag_08_03">POSIX
+    href="https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html#tag_08_03">POSIX
     <code>TZ</code> strings</a>.
     A file name component must not exceed 14 characters or start with
     '<code>-</code>'.
@@ -215,17 +219,16 @@ in decreasing order of importance:
     do not need locations, since local time is not defined there.
   </li>
   <li>
-    There should typically be at least one name for each <a
-    href="https://en.wikipedia.org/wiki/ISO_3166-1"><abbr
-    title="International Organization for Standardization">ISO</abbr>
-    3166-1</a> officially assigned two-letter code for an inhabited
-    country or territory.
-  </li>
-  <li>
     If all the clocks in a timezone have agreed since 1970,
     do not bother to include more than one timezone
     even if some of the clocks disagreed before 1970.
     Otherwise these tables would become annoyingly large.
+  </li>
+  <li>
+    If boundaries between regions are fluid, such as during a war or
+    insurrection, do not bother to create a new timezone merely
+    because of yet another boundary change. This helps prevent table
+    bloat and simplifies maintenance.
   </li>
   <li>
     If a name is ambiguous, use a less ambiguous alternative;
@@ -299,29 +302,23 @@ in decreasing order of importance:
 </ul>
 
 <p>
-The file '<code>zone1970.tab</code>' lists geographical locations used
-to name timezones.
-It is intended to be an exhaustive list of names for geographic
-regions as described above; this is a subset of the timezones in the data.
-Although a '<code>zone1970.tab</code>' location's
-<a href="https://en.wikipedia.org/wiki/Longitude">longitude</a>
-corresponds to
-its <a href="https://en.wikipedia.org/wiki/Local_mean_time">local mean
-time (<abbr>LMT</abbr>)</a> offset with one hour for every 15&deg;
-east longitude, this relationship is not exact.
+Guidelines have evolved with time, and names following old versions of
+these guidelines might not follow the current version. When guidelines
+have changed, old names continue to be supported. Guideline changes
+have included the following:
 </p>
 
-<p>
-Older versions of this package used a different naming scheme,
-and these older names are still supported.
+<ul>
+<li>
+Older versions of this package used a different naming scheme.
 See the file '<code>backward</code>' for most of these older names
 (e.g., '<code>US/Eastern</code>' instead of '<code>America/New_York</code>').
 The other old-fashioned names still supported are
 '<code>WET</code>', '<code>CET</code>', '<code>MET</code>', and
 '<code>EET</code>' (see the file '<code>europe</code>').
-</p>
+</li>
 
-<p>
+<li>
 Older versions of this package defined legacy names that are
 incompatible with the first guideline of location names, but which are
 still supported.
@@ -332,6 +329,31 @@ Also, the file '<code>backward</code>' defines the legacy names
 and the file '<code>northamerica</code>' defines the legacy names
 '<code>EST5EDT</code>', '<code>CST6CDT</code>',
 '<code>MST7MDT</code>', and '<code>PST8PDT</code>'.
+</li>
+
+<li>
+Older versions of these guidelines said that
+there should typically be at least one name for each <a
+href="https://en.wikipedia.org/wiki/ISO_3166-1"><abbr
+title="International Organization for Standardization">ISO</abbr>
+3166-1</a> officially assigned two-letter code for an inhabited
+country or territory.
+This old guideline has been dropped, as it was not needed to handle
+timestamps correctly and it increased maintenance burden.
+</li>
+</ul>
+
+<p>
+The file '<code>zone1970.tab</code>' lists geographical locations used
+to name timezones.
+It is intended to be an exhaustive list of names for geographic
+regions as described above; this is a subset of the timezones in the data.
+Although a '<code>zone1970.tab</code>' location's
+<a href="https://en.wikipedia.org/wiki/Longitude">longitude</a>
+corresponds to
+its <a href="https://en.wikipedia.org/wiki/Local_mean_time">local mean
+time (<abbr>LMT</abbr>)</a> offset with one hour for every 15&deg;
+east longitude, this relationship is not exact.
 </p>
 
 <p>
@@ -359,8 +381,8 @@ in decreasing order of importance:
     special meaning to the
     <a href="https://en.wikipedia.org/wiki/Unix_shell">UNIX shell</a>
     and cause commands like
-    '<code><a href="http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#set">set</a>
-    `<a href="http://pubs.opengroup.org/onlinepubs/9699919799/utilities/date.html">date</a>`</code>'
+    '<code><a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#set">set</a>
+    `<a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/date.html">date</a>`</code>'
     to have unexpected effects.
     Previous editions of this guideline required upper-case letters, but the
     Congressman who introduced
@@ -406,9 +428,9 @@ in decreasing order of importance:
       EAT East Africa,
       EST/EDT/EWT/EPT/EDDT Eastern [North America],
       EET/EEST Eastern European,
-      GST Guam,
+      GST/GDT Guam,
       HST/HDT/HWT/HPT Hawaii,
-      HKT/HKST Hong Kong,
+      HKT/HKST/HKWT Hong Kong,
       IST India,
       IST/GMT Irish,
       IST/IDT/IDDT Israel,
@@ -935,7 +957,7 @@ an older <code>zic</code>.
   </li>
   <li>
     In POSIX, there is no tamper-proof way for a process to learn the
-    system's best idea of local wall clock.
+    system's best idea of local (wall clock) time.
     This is important for applications that an administrator wants
     used only at certain times &ndash; without regard to whether the
     user has fiddled the
@@ -952,7 +974,8 @@ an older <code>zic</code>.
     that do not fit into the POSIX model.
   </li>
   <li>
-    POSIX requires that systems ignore leap seconds.
+    POSIX requires that <code>time_t</code> clock counts exclude leap
+    seconds.
   </li>
   <li>
     The <code><abbr>tz</abbr></code> code attempts to support all the
@@ -983,7 +1006,9 @@ an older <code>zic</code>.
     constrained to be a string containing abbreviations
     and numeric data as described <a href="#POSIX">above</a>.
     The file's format is <dfn><abbr>TZif</abbr></dfn>,
-    a timezone information format that contains binary data.
+    a timezone information format that contains binary data; see
+    <a href="https://tools.ietf.org/html/8536">Internet
+    <abbr>RFC</abbr> 8536</a>.
     The daylight saving time rules to be used for a
     particular timezone are encoded in the
     <abbr>TZif</abbr> file; the format of the file allows <abbr>US</abbr>,
@@ -1030,14 +1055,14 @@ an older <code>zic</code>.
   </li>
   <li>
     A function <code>tzsetwall</code> has been added to arrange for the
-    system's best approximation to local wall clock time to be delivered
+    system's best approximation to local (wall clock) time to be delivered
     by subsequent calls to <code>localtime</code>.
-    Source code for portable applications that "must" run on local wall
-    clock time should call <code>tzsetwall</code>;
+    Source code for portable applications that "must" run on local
+    time should call <code>tzsetwall</code>;
     if such code is moved to "old" systems that do not
     provide <code>tzsetwall</code>, you will not be able to generate an
     executable program.
-    (These functions also arrange for local wall clock time to
+    (These functions also arrange for local time to
     be used if <code>tzset</code> is called &ndash; directly or
     indirectly &ndash; and there is no <code>TZ</code> environment
     variable; portable applications should not, however, rely on this
@@ -1050,7 +1075,8 @@ an older <code>zic</code>.
     where <code>time_t</code> is signed.
   </li>
   <li>
-    These functions can account for leap seconds, thanks to Bradley White.
+    These functions can account for leap seconds;
+    see <a href="#leapsec">Leap seconds</a> below.
   </li>
 </ul>
 
@@ -1166,7 +1192,7 @@ The <code><abbr>tz</abbr></code> code and data supply the following interfaces:
 <ul>
   <li>
     A set of timezone names as per
-      "<a href="#naming">Names of timezones</a>" above.
+      "<a href="#naming">Timezone identifiers</a>" above.
   </li>
   <li>
     Library functions described in "<a href="#functions">Time and date
@@ -1213,6 +1239,80 @@ For example, users should not rely on particular <abbr>UT</abbr>
 offsets or abbreviations for timestamps, as data entries are often
 based on guesswork and these guesses may be corrected or improved.
 </p>
+
+<p>
+Timezone boundaries are not part of the stable interface.
+For example, even though the <samp>Asia/Bangkok</samp> timezone
+currently includes Chang Mai, Hanoi, and Phnom Penh, this is not part
+of the stable interface and the timezone can split at any time.
+If a calendar application records a future event in some location other
+than Bangkok by putting "<samp>Asia/Bangkok</samp>" in the event's record,
+the application should be robust in the presence of timezone splits
+between now and the future time.
+</p>
+</section>
+
+<section>
+  <h2 id="leapsec">Leap seconds</h2>
+<p>
+The <code><abbr>tz</abbr></code> code and data can account for leap seconds,
+thanks to code contributed by Bradley White.
+However, the leap second support of this package is rarely used directly
+because POSIX requires leap seconds to be excluded and many
+software packages would mishandle leap seconds if they were present.
+Instead, leap seconds are more commonly handled by occasionally adjusting
+the operating system kernel clock as described in
+<a href="tz-link.html#precision">Precision timekeeping</a>,
+and this package by default installs a <samp>leapseconds</samp> file
+commonly used by
+<a href="http://www.ntp.org"><abbr title="Network Time Protocol">NTP</abbr></a>
+software that adjusts the kernel clock.
+However, kernel-clock twiddling approximates UTC only roughly,
+and systems needing more-precise UTC can use this package's leap
+second support directly.
+</p>
+
+<p>
+The directly-supported mechanism assumes that <code>time_t</code>
+counts of seconds since the POSIX epoch normally include leap seconds,
+as opposed to POSIX <code>time_t</code> counts which exclude leap seconds.
+This modified timescale is converted to <abbr>UTC</abbr>
+at the same point that time zone and DST adjustments are applied &ndash;
+namely, at calls to <code>localtime</code> and analogous functions &ndash;
+and the process is driven by leap second information
+stored in alternate versions of the <abbr>TZif</abbr> files.
+Because a leap second adjustment may be needed even
+if no time zone correction is desired,
+calls to <code>gmtime</code>-like functions
+also need to consult a <abbr>TZif</abbr> file,
+conventionally named <samp><abbr>GMT</abbr></samp>,
+to see whether leap second corrections are needed.
+To convert an application's <code>time_t</code> timestamps to or from
+POSIX <code>time_t</code> timestamps (for use when, say,
+embedding or interpreting timestamps in portable
+<a href="https://en.wikipedia.org/wiki/Tar_(computing)"><code>tar</code></a>
+files),
+the application can call the utility functions
+<code>time2posix</code> and <code>posix2time</code>
+included with this package.
+</p>
+
+<p>
+If the POSIX-compatible <abbr>TZif</abbr> file set is installed
+in a directory whose basename is <samp>zoneinfo</samp>, the
+leap-second-aware file set is by default installed in a separate
+directory <samp>zoneinfo-leaps</samp>.
+Although each process can have its own time zone by setting
+its <code>TZ</code> environment variable, there is no support for some
+processes being leap-second aware while other processes are
+POSIX-compatible; the leap-second choice is system-wide.
+So if you configure your kernel to count leap seconds, you should also
+discard <samp>zoneinfo</samp> and rename <samp>zoneinfo-leaps</samp>
+to <samp>zoneinfo</samp>.
+Alternatively, you can install just one set of <abbr>TZif</abbr> files
+in the first place; see the <code>REDO</code> variable in this package's
+<a href="https://en.wikipedia.org/wiki/Makefile">makefile</a>.
+</p>
 </section>
 
 <section>
@@ -1238,7 +1338,7 @@ Some people's work schedules
 use <a href="https://en.wikipedia.org/wiki/Timekeeping_on_Mars">Mars time</a>.
 Jet Propulsion Laboratory (JPL) coordinators kept Mars time on
 and off during the
-<a href="https://en.wikipedia.org/wiki/Mars_Pathfinder#End_of_mission">Mars
+<a href="https://en.wikipedia.org/wiki/Mars_Pathfinder">Mars
 Pathfinder</a> mission.
 Some of their family members also adapted to Mars time.
 Dozens of special Mars watches were built for JPL workers who kept
@@ -1261,8 +1361,7 @@ meridian</a> of Mars goes through the center of the crater
 honor of the British astronomer who built the Greenwich telescope that
 defines Earth's prime meridian.
 Mean solar time on the Mars prime meridian is
-called <a href="https://en.wikipedia.org/wiki/Mars_Coordinated_Time">Mars
-Coordinated Time (<abbr>MTC</abbr>)</a>.
+called Mars Coordinated Time (<abbr>MTC</abbr>).
 </p>
 
 <p>
@@ -1322,11 +1421,11 @@ Sources for time on other planets:
     Michael Allison and Robert Schmunk,
     "<a href="https://www.giss.nasa.gov/tools/mars24/help/notes.html">Technical
       Notes on Mars Solar Time as Adopted by the Mars24 Sunclock</a>"
-    (2015-06-30).
+    (2018-12-13).
   </li>
   <li>
     Jia-Rui Chong,
-    "<a href="http://articles.latimes.com/2004/jan/14/science/sci-marstime14">Workdays
+    "<a href="https://www.latimes.com/archives/la-xpm-2004-jan-14-sci-marstime14-story.html">Workdays
     Fit for a Martian</a>", <cite>Los Angeles Times</cite>
     (2004-01-14), pp A1, A20&ndash;A21.
   </li>

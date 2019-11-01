@@ -1,14 +1,320 @@
 News for the tz database
 
-Release 2018g - 2018-10-26 22:22:45 -0700
+Release 2019c - 2019-09-11 08:59:48 -0700
 
   Briefly:
-    Morocco switches to permanent +01 on 2018-10-27.
+    Fiji observes DST from 2019-11-10 to 2020-01-12.
+    Norfolk Island starts observing Australian-style DST.
 
   Changes to future timestamps
 
-    Morocco switches from +00/+01 to permanent +01 effective 2018-10-27,
-    so its clocks will not fall back on 2018-10-28 as previously scheduled.
+    Fiji's next DST transitions will be 2019-11-10 and 2020-01-12
+    instead of 2019-11-03 and 2020-01-19.  (Thanks to Raymond Kumar.)
+    Adjust future guesses accordingly.
+
+    Norfolk Island will observe Australian-style DST starting in
+    spring 2019.  The first transition is on 2019-10-06.  (Thanks to
+    Kyle Czech and Michael Deckers.)
+
+  Changes to past timestamps
+
+    Many corrections to time in Turkey from 1940 through 1985.
+    (Thanks to Oya Vulaş via Alois Treindl, and to Kıvanç Yazan.)
+
+    The Norfolk Island 1975-03-02 transition was at 02:00 standard
+    time, not 02:00 DST.  (Thanks to Michael Deckers.)
+
+    South Korea observed DST from 1948 through 1951.  Although this
+    info was supposed to appear in release 2014j, a typo inadvertently
+    suppressed the change.  (Thanks to Alois Treindl.)
+
+    Detroit observed DST in 1967 and 1968 following the US DST rules,
+    except that its 1967 DST began on June 14 at 00:01.  (Thanks to
+    Alois Treindl for pointing out that the old data entries were
+    probably wrong.)
+
+    Fix several errors in pre-1970 transitions in Perry County, IN.
+    (Thanks to Alois Triendl for pointing out the 1967/9 errors.)
+
+    Edmonton did not observe DST in 1967 or 1969.  In 1946 Vancouver
+    ended DST on 09-29 not 10-13, and Vienna ended DST on 10-07 not
+    10-06.  In 1945 Königsberg (now Kaliningrad) switched from +01/+02
+    to +02/+03 on 04-10 not 01-01, and its +02/+03 is abbreviated
+    EET/EEST, not CET/CEST.  (Thanks to Alois Triendl.)  In 1946
+    Königsberg switched to +03 on 04-07 not 01-01.
+
+    In 1946 Louisville switched from CST to CDT on 04-28 at 00:01, not
+    01-01 at 00:00.  (Thanks to Alois Treindl and Michael Deckers.)
+    Also, it switched from CST to CDT on 1950-04-30, not 1947-04-27.
+
+    The 1892-05-01 transition in Brussels was at 00:17:30, not at noon.
+    (Thanks to Michael Deckers.)
+
+  Changes to past time zone abbreviations and DST flags
+
+    Hong Kong Winter Time, observed from 1941-10-01 to 1941-12-25,
+    is now flagged as DST and is abbreviated HKWT not HKT.
+
+  Changes to code
+
+    leapseconds.awk now relies only on its input data, rather than
+    also relying on its comments.  (Inspired by code from Dennis
+    Ferguson and Chris Woodbury.)
+
+    The code now defends against CRLFs in leap-seconds.list.
+    (Thanks to Brian Inglis and Chris Woodbury.)
+
+  Changes to documentation and commentary
+
+    theory.html discusses leap seconds.  (Thanks to Steve Summit.)
+
+    Nashville's newspapers dueled about the time of day in the 1950s.
+    (Thanks to John Seigenthaler.)
+
+    Liechtenstein observed Swiss DST in 1941/2.
+    (Thanks to Alois Treindl.)
+
+
+Release 2019b - 2019-07-01 00:09:53 -0700
+
+  Briefly:
+    Brazil no longer observes DST.
+    'zic -b slim' outputs smaller TZif files; please try it out.
+    Palestine's 2019 spring-forward transition was on 03-29, not 03-30.
+
+  Changes to future timestamps
+
+    Brazil has canceled DST and will stay on standard time indefinitely.
+    (Thanks to Steffen Thorsen, Marcus Diniz, and Daniel Soares de
+    Oliveira.)
+
+    Predictions for Morocco now go through 2087 instead of 2037, to
+    work around a problem on newlib when using TZif files output by
+    zic 2019a or earlier.  (Problem reported by David Gauchard.)
+
+  Changes to past and future timestamps
+
+    Palestine's 2019 spring transition was 03-29 at 00:00, not 03-30
+    at 01:00.  (Thanks to Sharef Mustafa and Even Scharning.)  Guess
+    future transitions to be March's last Friday at 00:00.
+
+  Changes to past timestamps
+
+    Hong Kong's 1941-06-15 spring-forward transition was at 03:00, not
+    03:30.  Its 1945 transition from JST to HKT was on 11-18 at 02:00,
+    not 09-15 at 00:00.  In 1946 its spring-forward transition was on
+    04-21 at 00:00, not the previous day at 03:30.  From 1946 through
+    1952 its fall-back transitions occurred at 04:30, not at 03:30.
+    In 1947 its fall-back transition was on 11-30, not 12-30.
+    (Thanks to P Chan.)
+
+  Changes to past time zone abbreviations
+
+    Italy's 1866 transition to Rome Mean Time was on December 12, not
+    September 22.  This affects only the time zone abbreviation for
+    Europe/Rome between those dates.  (Thanks to Stephen Trainor and
+    Luigi Rosa.)
+
+  Changes affecting metadata only
+
+    Add info about the Crimea situation in zone1970.tab and zone.tab.
+    (Problem reported by Serhii Demediuk.)
+
+  Changes to code
+
+    zic's new -b option supports a way to control data bloat and to
+    test for year-2038 bugs in software that reads TZif files.
+    'zic -b fat' and 'zic -b slim' generate larger and smaller output;
+    for example, changing from fat to slim shrinks the Europe/London
+    file from 3648 to 1599 bytes, saving about 56%.  Fat and slim
+    files represent the same set of timestamps and use the same TZif
+    format as documented in tzfile(5) and in Internet RFC 8536.
+    Fat format attempts to work around bugs or incompatibilities in
+    older software, notably software that mishandles 64-bit TZif data
+    or uses obsolete TZ strings like "EET-2EEST" that lack DST rules.
+    Slim format is more efficient and does not work around 64-bit bugs
+    or obsolete TZ strings.  Currently zic defaults to fat format
+    unless you compile with -DZIC_BLOAT_DEFAULT=\"slim\"; this
+    out-of-the-box default is intended to change in future releases
+    as the buggy software often mishandles timestamps anyway.
+
+    zic no longer treats a set of rules ending in 2037 specially.
+    Previously, zic assumed that such a ruleset meant that future
+    timestamps could not be predicted, and therefore omitted a
+    POSIX-like TZ string in the TZif output.  The old behavior is no
+    longer needed for current tzdata, and caused problems with newlib
+    when used with older tzdata (reported by David Gauchard).
+
+    zic no longer generates some artifact transitions.  For example,
+    Europe/London no longer has a no-op transition in January 1996.
+
+  Changes to build procedure
+
+    tzdata.zi now assumes zic 2017c or later.  This shrinks tzdata.zi
+    by a percent or so.
+
+  Changes to documentation and commentary
+
+    The Makefile now documents the POSIXRULES macro as being obsolete,
+    and similarly, zic's -p POSIXRULES option is now documented as
+    being obsolete.  Although the POSIXRULES feature still exists and
+    works as before, in practice it is rarely used for its intended
+    purpose, and it does not work either in the default reference
+    implementation (for timestamps after 2037) or in common
+    implementations such as GNU/Linux (for contemporary timestamps).
+    Since POSIXRULES was designed primarily as a temporary transition
+    facility for System V platforms that died off decades ago, it is
+    being decommissioned rather than institutionalized.
+
+    New info on Bonin Islands and Marcus (thanks to Wakaba and Phake Nick).
+
+
+Release 2019a - 2019-03-25 22:01:33 -0700
+
+  Briefly:
+    Palestine "springs forward" on 2019-03-30 instead of 2019-03-23.
+    Metlakatla "fell back" to rejoin Alaska Time on 2019-01-20 at 02:00.
+
+  Changes to past and future timestamps
+
+    Palestine will not start DST until 2019-03-30, instead of 2019-03-23 as
+    previously predicted.  Adjust our prediction by guessing that spring
+    transitions will be between 24 and 30 March, which matches recent practice
+    since 2016.  (Thanks to Even Scharning and Tim Parenti.)
+
+    Metlakatla ended its observance of Pacific standard time,
+    rejoining Alaska Time, on 2019-01-20 at 02:00.  (Thanks to Ryan
+    Stanley and Tim Parenti.)
+
+  Changes to past timestamps
+
+    Israel observed DST in 1980 (08-02/09-13) and 1984 (05-05/08-25).
+    (Thanks to Alois Treindl and Isaac Starkman.)
+
+  Changes to time zone abbreviations
+
+    Etc/UCT is now a backward-compatibility link to Etc/UTC, instead
+    of being a separate zone that generates the abbreviation "UCT",
+    which nowadays is typically a typo.  (Problem reported by Isiah
+    Meadows.)
+
+  Changes to code
+
+    zic now has an -r option to limit the time range of output data.
+    For example, 'zic -r @1000000000' limits the output data to
+    timestamps starting 1000000000 seconds after the Epoch.
+    This helps shrink output size and can be useful for applications
+    not needing the full timestamp history, such as TZDIST truncation;
+    see Internet RFC 8536 section 5.1.  (Inspired by a feature request
+    from Christopher Wong, helped along by bug reports from Wong and
+    from Tim Parenti.)
+
+  Changes to documentation
+
+    Mention Internet RFC 8536 (February 2019), which documents TZif.
+
+    tz-link.html now cites tzdata-meta
+    <https://tzdata-meta.timtimeonline.com/>.
+
+
+Release 2018i - 2018-12-30 11:05:43 -0800
+
+  Briefly:
+    São Tomé and Príncipe switches from +01 to +00 on 2019-01-01.
+
+  Changes to future timestamps
+
+    Due to a change in government, São Tomé and Príncipe switches back
+    from +01 to +00 on 2019-01-01 at 02:00.  (Thanks to Vadim
+    Nasardinov and Michael Deckers.)
+
+
+Release 2018h - 2018-12-23 17:59:32 -0800
+
+  Briefly:
+    Qyzylorda, Kazakhstan moved from +06 to +05 on 2018-12-21.
+    New zone Asia/Qostanay because Qostanay, Kazakhstan didn't move.
+    Metlakatla, Alaska observes PST this winter only.
+    Guess Morocco will continue to adjust clocks around Ramadan.
+    Add predictions for Iran from 2038 through 2090.
+
+  Changes to future timestamps
+
+    Guess that Morocco will continue to fall back just before and
+    spring forward just after Ramadan, the practice since 2012.
+    (Thanks to Maamar Abdelkader.)  This means Morocco will observe
+    negative DST during Ramadan in main and vanguard formats, and in
+    rearguard format it stays in the +00 timezone and observes
+    ordinary DST in all months other than Ramadan.  As before, extend
+    this guesswork to the year 2037.  As a consequence, Morocco is
+    scheduled to observe three DST transitions in some Gregorian years
+    (e.g., 2033) due to the mismatch between the Gregorian and Islamic
+    calendars.
+
+    The table of exact transitions for Iranian DST has been extended.
+    It formerly cut off before the year 2038 in a nod to 32-bit time_t.
+    It now cuts off before 2091 as there is doubt about how the Persian
+    calendar will treat 2091.  This change predicts DST transitions in
+    2038-9, 2042-3, and 2046-7 to occur one day later than previously
+    predicted.  As before, post-cutoff transitions are approximated.
+
+  Changes to past and future timestamps
+
+    Qyzylorda (aka Kyzylorda) oblast in Kazakhstan moved from +06 to
+    +05 on 2018-12-21.  This is a zone split as Qostanay (aka
+    Kostanay) did not switch, so create a zone Asia/Qostanay.
+
+    Metlakatla moved from Alaska to Pacific standard time on 2018-11-04.
+    It did not change clocks that day and remains on -08 this winter.
+    (Thanks to Ryan Stanley.)  It will revert to the usual Alaska
+    rules next spring, so this change affects only timestamps
+    from 2018-11-04 through 2019-03-10.
+
+  Change to past timestamps
+
+    Kwajalein's 1993-08-20 transition from -12 to +12 was at 24:00,
+    not 00:00.  I transcribed the time incorrectly from Shanks.
+    (Thanks to Phake Nick.)
+
+    Nauru's 1979 transition was on 02-10 at 02:00, not 05-01 at 00:00.
+    (Thanks to Phake Nick.)
+
+    Guam observed DST irregularly from 1959 through 1977.
+    (Thanks to Phake Nick.)
+
+    Hong Kong observed DST in 1941 starting 06-15 (not 04-01), then on
+    10-01 changed standard time to +08:30 (not +08).  Its transition
+    back to +08 after WWII was on 1945-09-15, not the previous day.
+    Its 1904-10-30 change took effect at 01:00 +08 (not 00:00 LMT).
+    (Thanks to Phake Nick, Steve Allen, and Joseph Myers.)  Also,
+    its 1952 fallback was on 11-02 (not 10-25).
+
+    This release contains many changes to timestamps before 1946 due
+    to Japanese possession or occupation of Pacific/Chuuk,
+    Pacific/Guam, Pacific/Kosrae, Pacific/Kwajalein, Pacific/Majuro,
+    Pacific/Nauru, Pacific/Palau, and Pacific/Pohnpei.
+    (Thanks to Phake Nick.)
+
+    Assume that the Spanish East Indies was like the Philippines and
+    observed American time until the end of 1844.  This affects
+    Pacific/Chuuk, Pacific/Kosrae, Pacific/Palau, and Pacific/Pohnpei.
+
+  Changes to past tm_isdst flags
+
+    For the recent Morocco change, the tm_isdst flag should be 1 from
+    2018-10-27 00:00 to 2018-10-28 03:00.  (Thanks to Michael Deckers.)
+    Give a URL to the official decree.  (Thanks to Matt Johnson.)
+
+
+Release 2018g - 2018-10-26 22:22:45 -0700
+
+  Briefly:
+    Morocco switches to permanent +01 on 2018-10-28.
+
+  Changes to future timestamps
+
+    Morocco switches from +00/+01 to permanent +01 effective 2018-10-28,
+    so its clocks will not fall back as previously scheduled.
     (Thanks to Mohamed Essedik Najd and Brian Inglis.)
 
   Changes to code
@@ -119,7 +425,7 @@ Release 2018f - 2018-10-18 00:14:18 -0700
     localtime.c no longer ignores TZif POSIX-style TZ strings that
     specify only standard time.  Instead, these TZ strings now
     override the default time type for timestamps after the last
-    transition (or for all time stamps if there are no transitions),
+    transition (or for all timestamps if there are no transitions),
     just as DST strings specifying DST have always done.
 
     leapseconds.awk now outputs "#updated" and "#expires" comments,
@@ -311,8 +617,9 @@ Release 2018d - 2018-03-22 07:05:46 -0700
       downstream parsers do not support it.
 
     * The build procedure constructs three files vanguard.zi, main.zi,
-      and rearguard.zi, one for each format.  The files represent the
-      same data as closely as the formats allow.  These three files
+      and rearguard.zi, one for each format.  Although the files
+      represent essentially the same data, they may have minor
+      discrepancies that users are not likely to notice.  The files
       are intended for downstream data consumers and are not
       installed.  Zoneinfo parsers that do not support negative SAVE values
       should start using rearguard.zi, so that they will be unaffected
@@ -343,7 +650,7 @@ Release 2018d - 2018-03-22 07:05:46 -0700
     The code is a bit more portable to MS-Windows.  Installers can
     compile with -DRESERVE_STD_EXT_IDS on MS-Windows platforms that
     reserve identifiers like 'localtime'.  (Thanks to Manuela
-    Friedrich).
+    Friedrich.)
 
   Changes to documentation and commentary
 
@@ -2138,7 +2445,7 @@ Release 2014f - 2014-08-05 17:42:36 -0700
     warlord Jin Shuren in the data.
 
     Commentary about the coverage of each Russian zone has been standardized.
-    (Thanks to Tim Parenti).
+    (Thanks to Tim Parenti.)
 
     There is new commentary about contemporary timekeeping in Ethiopia.
 
@@ -2586,7 +2893,7 @@ Release 2013e - 2013-09-19 23:50:04 -0700
 
     Change the UT offset of Bern Mean Time from 0:29:44 to 0:29:46.
     This affects Europe/Zurich timestamps from 1853 to 1894.  (Thanks
-    to Alois Treindl).
+    to Alois Treindl.)
 
     Change the date of the circa-1850 Zurich transition from 1849-09-12
     to 1853-07-16, overriding Shanks with data from Messerli about
@@ -2896,7 +3203,7 @@ Release 2013a - 2013-02-27 09:20:35 -0800
     (Thanks to Arthur David Olson.)
 
     Improve the commentary about which districts observe what times
-    in Russia.  (Thanks to Oscar van Vlijmen and Arthur David Olson).
+    in Russia.  (Thanks to Oscar van Vlijmen and Arthur David Olson.)
 
     Add web page links to tz.js.
 
