@@ -1210,34 +1210,6 @@ module DataSources
       end
     end
 
-    def test_read_untainted_in_safe_mode
-      offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
-
-      o0 = TimezoneOffset.new(-12094, 0, 'LT')
-
-      tzif_test(offsets, []) do |path, format|
-        # Temp file path is tainted with Ruby >= 2.3.0. Untaint for this test.
-        path.untaint
-
-        safe_test do
-          assert_equal(o0, @reader.read(path))
-        end
-      end
-    end
-
-    def test_read_tainted_in_safe_mode
-      offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
-
-      tzif_test(offsets, []) do |path, format|
-        # Temp file path is only tainted with Ruby >= 2.3.0. Taint for this test.
-        path.taint
-
-        safe_test(unavailable: :skip) do
-          assert_raises(SecurityError) { @reader.read(path) }
-        end
-      end
-    end
-
     def test_read_encoding
       # tzfile.5 doesn't specify an encoding, but the source data is in ASCII.
       # ZoneinfoTimezoneInfo will load as UTF-8 (a superset of ASCII).

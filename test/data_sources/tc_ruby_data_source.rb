@@ -117,19 +117,9 @@ module DataSources
       assert_equal('Etc/GMT-1', info.identifier)
     end
 
-    def test_load_timezone_info_tainted
+    def test_load_timezone_info_frozen
       safe_test do
-        identifier = 'Europe/Amsterdam'.dup.taint
-        assert(identifier.tainted?)
-        info = @data_source.send(:load_timezone_info, identifier)
-        assert_equal('Europe/Amsterdam', info.identifier)
-        assert(identifier.tainted?)
-      end
-    end
-
-    def test_load_timezone_info_tainted_and_frozen
-      safe_test do
-        info = @data_source.send(:load_timezone_info, 'Europe/Amsterdam'.dup.taint.freeze)
+        info = @data_source.send(:load_timezone_info, 'Europe/Amsterdam'.dup.freeze)
         assert_equal('Europe/Amsterdam', info.identifier)
       end
     end
@@ -226,19 +216,9 @@ module DataSources
       assert_match(/\bgb\b/, error.message)
     end
 
-    def test_load_country_info_tainted
+    def test_load_country_info_frozen
       safe_test do
-        code = 'NL'.dup.taint
-        assert(code.tainted?)
-        info = @data_source.send(:load_country_info, code)
-        assert_equal('NL', info.code)
-        assert(code.tainted?)
-      end
-    end
-
-    def test_load_country_info_tainted_and_frozen
-      safe_test do
-        info = @data_source.send(:load_country_info, 'NL'.dup.taint.freeze)
+        info = @data_source.send(:load_country_info, 'NL'.dup.freeze)
         assert_equal('NL', info.code)
       end
     end

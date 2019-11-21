@@ -421,7 +421,6 @@ module TZInfo
           end
 
           unless entry =~ /\./ || exclude.include?(entry)
-            entry.untaint
             path = dir + [entry]
             full_path = File.join(@zoneinfo_dir, *path)
 

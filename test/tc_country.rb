@@ -43,40 +43,18 @@ class TCCountry < Minitest::Test
     assert_match(/\bnil\b/, error.message)
   end
 
-  def test_get_tainted_loaded
+  def test_get_frozen_loaded
     Country.get('GB')
 
     safe_test do
-      code = 'GB'.dup.taint
-      assert(code.tainted?)
-      country = Country.get(code)
-      assert_equal('GB', country.code)
-      assert(code.tainted?)
-    end
-  end
-
-  def test_get_tainted_and_frozen_loaded
-    Country.get('GB')
-
-    safe_test do
-      country = Country.get('GB'.dup.taint.freeze)
+      country = Country.get('GB'.dup.freeze)
       assert_equal('GB', country.code)
     end
   end
 
-  def test_get_tainted_not_previously_loaded
+  def test_get_frozen_not_previously_loaded
     safe_test do
-      code = 'GB'.dup.taint
-      assert(code.tainted?)
-      country = Country.get(code)
-      assert_equal('GB', country.code)
-      assert(code.tainted?)
-    end
-  end
-
-  def test_get_tainted_and_frozen_not_previously_loaded
-    safe_test do
-      country = Country.get('GB'.dup.taint.freeze)
+      country = Country.get('GB'.dup.freeze)
       assert_equal('GB', country.code)
     end
   end

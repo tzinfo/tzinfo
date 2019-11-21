@@ -10,7 +10,7 @@ include TZInfo
 
 module DataSources
   class TCZoneinfoDataSource < Minitest::Test
-    ZONEINFO_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', 'zoneinfo')).untaint
+    ZONEINFO_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', 'zoneinfo'))
 
     def setup
       @orig_search_path = ZoneinfoDataSource.search_path.clone
@@ -777,36 +777,11 @@ module DataSources
       end
     end
 
-    def test_load_timezone_info_tainted
+    def test_load_timezone_info_frozen
       safe_test do
-        identifier = 'Europe/Amsterdam'.dup.taint
-        assert(identifier.tainted?)
-        info = @data_source.send(:load_timezone_info, identifier)
-        assert_equal('Europe/Amsterdam', info.identifier)
-        assert(identifier.tainted?)
-      end
-    end
-
-    def test_load_timezone_info_tainted_and_frozen
-      safe_test do
-        info = @data_source.send(:load_timezone_info, 'Europe/Amsterdam'.dup.taint.freeze)
+        info = @data_source.send(:load_timezone_info, 'Europe/Amsterdam'.dup.freeze)
         assert_equal('Europe/Amsterdam', info.identifier)
       end
-    end
-
-    def test_load_timezone_info_tainted_zoneinfo_dir_safe_mode
-      safe_test(unavailable: :skip) do
-        assert_raises(SecurityError) do
-          ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
-        end
-      end
-    end
-
-    def test_load_timezone_info_tainted_zoneinfo_dir
-      data_source = ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
-      info = data_source.send(:load_timezone_info, 'Europe/London')
-      assert_kind_of(TransitionsDataTimezoneInfo, info)
-      assert_equal('Europe/London', info.identifier)
     end
 
     def test_load_timezone_info_returned_identifier_frozen
@@ -839,7 +814,6 @@ module DataSources
       entries = Dir.glob(File.join(directory, '**', '*'))
 
       entries = entries.select do |file|
-        file.untaint
         File.file?(file)
       end
 
@@ -1117,16 +1091,6 @@ module DataSources
       end
 
       assert_match(/\bgb\b/, error.message)
-    end
-
-    def test_load_country_info_tainted
-      safe_test do
-        code = 'NL'.dup.taint
-        assert(code.tainted?)
-        info = @data_source.send(:load_country_info, code)
-        assert_equal('NL', info.code)
-        assert(code.tainted?)
-      end
     end
 
     def test_load_country_info_returned_strings_frozen

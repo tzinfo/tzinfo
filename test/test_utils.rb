@@ -49,7 +49,7 @@ if COVERAGE_ENABLED && defined?(COVERAGE_TYPE)
   end
 end
 
-TESTS_DIR = File.expand_path(File.dirname(__FILE__)).untaint
+TESTS_DIR = File.expand_path(File.dirname(__FILE__))
 TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
 
 unless defined? TZINFO_TEST_DATA_DIR
@@ -286,8 +286,8 @@ module TestUtils
 
     # Runs a test with safe mode enabled ($SAFE = 1).
     def safe_test(options = {})
-      # JRuby, Rubinius and TruffleRuby don't support SAFE levels.
-      available = !%w(jruby rbx truffleruby).include?(RUBY_ENGINE)
+      # Ruby >= 2.7, JRuby, Rubinius and TruffleRuby don't support SAFE levels.
+      available = !%w(ruby jruby rbx truffleruby).include?(RUBY_ENGINE)
 
       if !available && options[:unavailable] == :skip
         skip('JRuby, Rubinius and TruffleRuby don\'t support SAFE levels')

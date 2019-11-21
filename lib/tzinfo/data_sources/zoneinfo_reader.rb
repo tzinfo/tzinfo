@@ -253,7 +253,7 @@ module TZInfo
           abbrev_end = abbrev.index("\0", abbrev_start)
           raise InvalidZoneinfoFile, "Missing abbreviation null terminator in file '#{file.path}'." unless abbrev_end
 
-          abbr = @string_deduper.dedupe(abbrev[abbrev_start...abbrev_end].force_encoding(Encoding::UTF_8).untaint)
+          abbr = @string_deduper.dedupe(abbrev[abbrev_start...abbrev_end].force_encoding(Encoding::UTF_8))
 
           TimezoneOffset.new(base_utc_offset, std_offset, abbr)
         end
