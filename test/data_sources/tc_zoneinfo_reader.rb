@@ -1216,10 +1216,10 @@ module DataSources
       o0 = TimezoneOffset.new(-12094, 0, 'LT')
 
       tzif_test(offsets, []) do |path, format|
-        # Temp file path is tainted with Ruby >= 2.3.0. Untaint for this test.
-        path.untaint
-
         safe_test do
+          # Temp file path is tainted with Ruby >= 2.3.0. Untaint for this test.
+          path.untaint
+
           assert_equal(o0, @reader.read(path))
         end
       end
@@ -1229,10 +1229,10 @@ module DataSources
       offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
       tzif_test(offsets, []) do |path, format|
-        # Temp file path is only tainted with Ruby >= 2.3.0. Taint for this test.
-        path.taint
-
         safe_test(unavailable: :skip) do
+          # Temp file path is only tainted with Ruby >= 2.3.0. Taint for this test.
+          path.taint
+
           assert_raises(SecurityError) { @reader.read(path) }
         end
       end

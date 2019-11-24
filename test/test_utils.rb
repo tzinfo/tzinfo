@@ -289,8 +289,8 @@ module TestUtils
       # JRuby, Rubinius and TruffleRuby don't support SAFE levels.
       available = !%w(jruby rbx truffleruby).include?(RUBY_ENGINE)
 
-      if !available && options[:unavailable] == :skip
-        skip('JRuby, Rubinius and TruffleRuby don\'t support SAFE levels')
+      if !available && options[:unavailable] == :skip || RUBY_ENGINE == 'ruby' && RUBY_VERSION >= '2.7'
+        skip('Ruby >= 2.7, JRuby, Rubinius and TruffleRuby don\'t support SAFE levels')
       end
 
       thread = Thread.new do

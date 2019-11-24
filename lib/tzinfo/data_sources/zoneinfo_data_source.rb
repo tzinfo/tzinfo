@@ -1,6 +1,11 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
+if RUBY_ENGINE == 'ruby' && RUBY_VERSION >= '2.7'
+  require 'tzinfo/untaint_ext'
+  using TZInfo::UntaintExt
+end
+
 module TZInfo
   module DataSources
     # An {InvalidZoneinfoDirectory} exception is raised if {ZoneinfoDataSource}
