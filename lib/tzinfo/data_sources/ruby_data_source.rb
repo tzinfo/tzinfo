@@ -48,7 +48,7 @@ module TZInfo
           data_file = File.join('', 'tzinfo', 'data.rb')
           path = $".reverse_each.detect {|p| p.end_with?(data_file) }
           if path
-            @base_path = File.join(File.dirname(path), 'data')
+            @base_path = File.join(File.dirname(path), 'data').untaint
           else
             @base_path = 'tzinfo/data'
           end
