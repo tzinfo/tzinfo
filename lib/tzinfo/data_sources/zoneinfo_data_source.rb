@@ -2,6 +2,8 @@
 # frozen_string_literal: true
 
 module TZInfo
+  using UntaintExt if TZInfo.const_defined?(:UntaintExt)
+
   module DataSources
     # An {InvalidZoneinfoDirectory} exception is raised if {ZoneinfoDataSource}
     # is initialized with a specific zoneinfo path that is not a valid zoneinfo

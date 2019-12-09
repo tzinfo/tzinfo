@@ -7,6 +7,8 @@ end
 
 require_relative 'tzinfo/version'
 
+require_relative 'tzinfo/untaint_ext' if RUBY_VERSION >= '2.7'
+
 require_relative 'tzinfo/string_deduper'
 
 require_relative 'tzinfo/timestamp'

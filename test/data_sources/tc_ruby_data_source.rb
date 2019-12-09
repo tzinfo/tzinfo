@@ -3,6 +3,8 @@
 
 require_relative '../test_utils'
 
+using TestUtils::TaintExt if TestUtils.const_defined?(:TaintExt)
+
 include TZInfo
 
 module DataSources
@@ -118,7 +120,7 @@ module DataSources
     end
 
     def test_load_timezone_info_tainted
-      safe_test do
+      safe_test(unavailable: :skip) do
         identifier = 'Europe/Amsterdam'.dup.taint
         assert(identifier.tainted?)
         info = @data_source.send(:load_timezone_info, identifier)
@@ -227,7 +229,7 @@ module DataSources
     end
 
     def test_load_country_info_tainted
-      safe_test do
+      safe_test(unavailable: :skip) do
         code = 'NL'.dup.taint
         assert(code.tainted?)
         info = @data_source.send(:load_country_info, code)

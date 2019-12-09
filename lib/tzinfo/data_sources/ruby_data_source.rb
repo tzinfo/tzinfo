@@ -2,6 +2,8 @@
 # frozen_string_literal: true
 
 module TZInfo
+  using UntaintExt if TZInfo.const_defined?(:UntaintExt)
+
   module DataSources
     # A {TZInfoDataNotFound} exception is raised if the tzinfo-data gem could
     # not be found (i.e. `require 'tzinfo/data'` failed) when selecting the Ruby
