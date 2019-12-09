@@ -47,6 +47,12 @@ environment:
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 25-x64
 
+    - RUBY_ENGINE: ruby
+      RUBY_VERSION: 26
+
+    - RUBY_ENGINE: ruby
+      RUBY_VERSION: 26-x64
+
     - RUBY_ENGINE: jruby
       JRUBY_VERSION: 1.7.27
 
@@ -54,7 +60,7 @@ environment:
       JRUBY_VERSION: 9.1.17.0
 
     - RUBY_ENGINE: jruby
-      JRUBY_VERSION: 9.2.5.0
+      JRUBY_VERSION: 9.2.9.0
 
 install:
   - if not exist vendor mkdir vendor

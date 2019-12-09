@@ -17,18 +17,19 @@ rvm:
   - 2.1.10
   - 2.2.10
   - 2.3.8
-  - 2.4.5
-  - 2.5.3
-  - 2.6.0
+  - 2.4.9
+  - 2.5.7
+  - 2.6.5
+  - 2.7.0-preview3
   - ruby-head
   - jruby-1.7.27
   - jruby-9.1.17.0
-  - jruby-9.2.5.0
+  - jruby-9.2.9.0
   - jruby-head
   - rbx-3.107
-  - truffleruby-1.0.0-rc10
+  - truffleruby-19.3.0
 matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head
-    - rvm: truffleruby-1.0.0-rc10
+    - rvm: truffleruby-19.3.0
