@@ -286,10 +286,10 @@ module TestUtils
 
     # Runs a test with safe mode enabled ($SAFE = 1).
     def safe_test(options = {})
-      # JRuby, Rubinius and TruffleRuby don't support SAFE levels.
-      available = !%w(jruby rbx truffleruby).include?(RUBY_ENGINE)
+      # Ruby >= 2.7, JRuby, Rubinius and TruffleRuby don't support SAFE levels.
+      available = RUBY_VERSION < '2.7' && !%w(jruby rbx truffleruby).include?(RUBY_ENGINE)
 
-      if !available && options[:unavailable] == :skip || RUBY_ENGINE == 'ruby' && RUBY_VERSION >= '2.7'
+      if !available && options[:unavailable] == :skip
         skip('Ruby >= 2.7, JRuby, Rubinius and TruffleRuby don\'t support SAFE levels')
       end
 

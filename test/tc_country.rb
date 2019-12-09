@@ -46,7 +46,7 @@ class TCCountry < Minitest::Test
   def test_get_tainted_loaded
     Country.get('GB')
 
-    safe_test do
+    safe_test(unavailable: :skip) do
       code = 'GB'.dup.taint
       assert(code.tainted?)
       country = Country.get(code)
@@ -65,7 +65,7 @@ class TCCountry < Minitest::Test
   end
 
   def test_get_tainted_not_previously_loaded
-    safe_test do
+    safe_test(unavailable: :skip) do
       code = 'GB'.dup.taint
       assert(code.tainted?)
       country = Country.get(code)

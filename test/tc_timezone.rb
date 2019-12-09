@@ -258,7 +258,7 @@ class TCTimezone < Minitest::Test
   def test_get_tainted_loaded
     Timezone.get('Europe/Andorra')
 
-    safe_test do
+    safe_test(unavailable: :skip) do
       identifier = 'Europe/Andorra'.dup.taint
       assert(identifier.tainted?)
       tz = Timezone.get(identifier)
@@ -277,7 +277,7 @@ class TCTimezone < Minitest::Test
   end
 
   def test_get_tainted_not_previously_loaded
-    safe_test do
+    safe_test(unavailable: :skip) do
       identifier = 'Europe/Andorra'.dup.taint
       assert(identifier.tainted?)
       tz = Timezone.get(identifier)
