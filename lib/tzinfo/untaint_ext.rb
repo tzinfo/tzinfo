@@ -2,6 +2,11 @@
 # frozen_string_literal: true
 
 module TZInfo
+  # Object#untaint is deprecated in Ruby >= 2.7 and will be removed in 3.0.
+  # UntaintExt adds a refinement to make Object#untaint a no-op and avoid the
+  # warning.
+  #
+  # @private
   module UntaintExt # :nodoc:
     refine Object do
       def untaint
@@ -9,4 +14,5 @@ module TZInfo
       end
     end
   end
+  private_constant :UntaintExt
 end
