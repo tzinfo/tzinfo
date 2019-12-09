@@ -1,4 +1,5 @@
 # encoding: UTF-8
+# frozen_string_literal: true
 
 require_relative 'test_utils'
 require 'concurrent'
@@ -23,7 +24,7 @@ class TCStringDeduper < Minitest::Test
   def test_global_uses_unary_minus_when_available
     global = StringDeduper.global
 
-    if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.5.0')
+    if RUBY_VERSION >= '2.5'
       assert_kind_of(UnaryMinusGlobalStringDeduper, global)
     else
       assert_kind_of(StringDeduper, global)

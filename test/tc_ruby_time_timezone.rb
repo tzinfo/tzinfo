@@ -51,7 +51,7 @@ class TCRubyTimeTimezone < Minitest::Test
   private
 
   def can_create_time_with_time_zone?
-    unless Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.6.0')
+    unless RUBY_VERSION >= '2.6'
       skip("Cannot create Time with a time zone with Ruby #{RUBY_VERSION}")
       false
     end
