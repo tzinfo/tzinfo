@@ -8,6 +8,9 @@ require 'tmpdir'
 
 include TZInfo
 
+using TestUtils::TaintExt if TestUtils.const_defined?(:TaintExt)
+using UntaintExt if TZInfo.const_defined?(:UntaintExt)
+
 module DataSources
   class TCZoneinfoDataSource < Minitest::Test
     ZONEINFO_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', 'zoneinfo')).untaint

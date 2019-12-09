@@ -49,7 +49,9 @@ if COVERAGE_ENABLED && defined?(COVERAGE_TYPE)
   end
 end
 
-TESTS_DIR = File.expand_path(File.dirname(__FILE__)).untaint
+tests_dir = File.expand_path(File.dirname(__FILE__))
+tests_dir.untaint if RUBY_VERSION < '2.7'
+TESTS_DIR = tests_dir
 TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
 
 unless defined? TZINFO_TEST_DATA_DIR
@@ -480,6 +482,17 @@ module TestUtils
     def assert_equal_with_offset_and_class(expected, actual)
       assert_equal_with_offset(expected, actual)
       assert_equal(expected.class, actual.class)
+    end
+  end
+
+  # Taint is deprecated in Ruby 2.7 and outputs a warning. Silence the warning.
+  if RUBY_VERSION >= '2.7'
+    module TaintExt
+      refine Object do
+        def taint
+          self
+        end
+      end
     end
   end
 end

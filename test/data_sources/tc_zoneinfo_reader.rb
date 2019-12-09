@@ -6,6 +6,8 @@ require 'tempfile'
 
 include TZInfo
 
+using UntaintExt if TZInfo.const_defined?(:UntaintExt)
+
 module DataSources
   class TCZoneinfoReader < Minitest::Test
     MIN_FORMAT = 1

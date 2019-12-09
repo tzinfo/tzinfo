@@ -5,6 +5,8 @@ require_relative 'test_utils'
 
 include TZInfo
 
+using TestUtils::TaintExt if TestUtils.const_defined?(:TaintExt)
+
 class TCTimezone < Minitest::Test
   class << self
     private

@@ -1,4 +1,4 @@
-require File.join(File.expand_path(File.dirname(__FILE__)), 'lib', 'tzinfo', 'version').untaint
+require File.join(File.expand_path(File.dirname(__FILE__)), 'lib', 'tzinfo', 'version')
 
 Gem::Specification.new do |s|
   s.name = 'tzinfo'

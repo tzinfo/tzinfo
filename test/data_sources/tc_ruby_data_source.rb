@@ -3,6 +3,8 @@
 
 require_relative '../test_utils'
 
+using TestUtils::TaintExt if TestUtils.const_defined?(:TaintExt)
+
 include TZInfo
 
 module DataSources
