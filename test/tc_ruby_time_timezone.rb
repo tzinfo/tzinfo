@@ -38,7 +38,7 @@ class TCRubyTimeTimezone < Minitest::Test
     assert_equal(Time.utc(2018, 6, 1, 4, 0, 0), dst_time.getutc)
   end
 
-  def test_at_time_with_time_zone_paris
+  def test_time_at_with_time_zone_paris
     check_can_create_time_with_time_zone
 
     tz = Timezone.get('Europe/Paris')
@@ -64,7 +64,7 @@ class TCRubyTimeTimezone < Minitest::Test
     assert_equal(0, dst_time.sec)
   end
 
-  def test_at_time_with_time_zone_new_york
+  def test_time_at_with_time_zone_new_york
     check_can_create_time_with_time_zone
 
     if RUBY_ENGINE == 'ruby' && RUBY_VERSION < '2.7' && [0].pack('J').bytesize <= 4
