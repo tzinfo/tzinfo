@@ -138,8 +138,11 @@ module TZInfo
         File.open(file_name, mode, &block)
       end
     else
-      def self.open_file(file_name, mode, opts, &block)
-        File.open(file_name, mode, opts, &block)
+      class << self
+        def open_file(file_name, mode, opts, &block)
+          ::File.open(file_name, mode, opts, &block)
+        end
+        ruby2_keywords :open_file if respond_to?(:ruby2_keywords, true)
       end
     end
   end
