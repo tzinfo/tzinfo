@@ -1,4 +1,7 @@
-TESTS_DIR = File.expand_path(File.dirname(__FILE__))
+test_dir = File.expand_path(File.dirname(__FILE__))
+test_dir.untaint if RUBY_VERSION <= '2.7'
+TESTS_DIR = test_dir
+
 TZINFO_LIB_DIR = File.expand_path(File.join(TESTS_DIR, '..', 'lib'))
 TZINFO_TEST_DATA_DIR = File.join(TESTS_DIR, 'tzinfo-data')
 TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
