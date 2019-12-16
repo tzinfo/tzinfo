@@ -197,7 +197,7 @@ module TZInfo
           # Untaint path rather than identifier. We don't want to modify 
           # identifier. identifier may also be frozen and therefore cannot be
           # untainted.
-          path.untaint
+          path.untaint if TAINT_SUPPORT
           
           begin
             ZoneinfoTimezoneInfo.new(identifier, path)
@@ -364,7 +364,7 @@ module TZInfo
     def enum_timezones(dir, exclude = [], &block)
       Dir.foreach(dir ? File.join(@zoneinfo_dir, dir) : @zoneinfo_dir) do |entry|
         unless entry =~ /\./ || exclude.include?(entry)
-          entry.untaint
+          entry.untaint if TAINT_SUPPORT
           path = dir ? File.join(dir, entry) : entry
           full_path = File.join(@zoneinfo_dir, path)
  

@@ -1,4 +1,4 @@
-TESTS_DIR = File.expand_path(File.dirname(__FILE__)).untaint
+TESTS_DIR = File.expand_path(File.dirname(__FILE__))
 TZINFO_LIB_DIR = File.expand_path(File.join(TESTS_DIR, '..', 'lib'))
 TZINFO_TEST_DATA_DIR = File.join(TESTS_DIR, 'tzinfo-data')
 TZINFO_TEST_ZONEINFO_DIR = File.join(TESTS_DIR, 'zoneinfo')
@@ -56,7 +56,7 @@ module Kernel
   
   def safe_test(options = {})
     # JRuby and Rubinus don't support SAFE levels.
-    available = !(defined?(RUBY_ENGINE) && %w(jruby rbx).include?(RUBY_ENGINE))
+    available = !(defined?(RUBY_ENGINE) && %w(jruby rbx).include?(RUBY_ENGINE)) && RUBY_VERSION < '2.7'
    
     if available || options[:unavailable] != :skip
       thread = Thread.new do

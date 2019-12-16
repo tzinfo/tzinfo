@@ -160,7 +160,7 @@ module TZInfo
           std_offset = 0
         end
 
-        offset index, utc_offset, std_offset, offset[:abbr].untaint.to_sym
+        offset index, utc_offset, std_offset, offset[:abbr].to_sym
       end
       
       # Parses a zoneinfo file and intializes the DataTimezoneInfo structures.

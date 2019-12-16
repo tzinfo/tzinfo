@@ -26,7 +26,7 @@ module TZInfo
       # Untaint identifier after it has been reassigned to a new string. We
       # don't want to modify the original identifier. identifier may also be 
       # frozen and therefore cannot be untainted.
-      identifier.untaint
+      identifier.untaint if TAINT_SUPPORT
       
       identifier = identifier.split('/')
       begin

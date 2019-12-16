@@ -1,5 +1,6 @@
 # Top level module for TZInfo.
 module TZInfo
+  TAINT_SUPPORT = RUBY_VERSION <= '2.7'
 end
 
 require 'tzinfo/ruby_core_support'
