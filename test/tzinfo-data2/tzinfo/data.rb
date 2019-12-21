@@ -5,7 +5,14 @@ module TZInfo
   # Top level module for TZInfo::Data.
   module Data
     location = File.dirname(File.dirname(__FILE__))
-    location.untaint if RUBY_VERSION < '2.7'
+
+    old_verbose = $VERBOSE
+    $VERBOSE = false
+    begin
+      location.untaint if location.respond_to?(:untaint)
+    ensure
+      $VERBOSE = old_verbose
+    end
 
     # The directory containing the TZInfo::Data files.
     LOCATION = location.freeze

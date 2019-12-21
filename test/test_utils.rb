@@ -485,8 +485,9 @@ module TestUtils
     end
   end
 
-  # Taint is deprecated in Ruby 2.7 and outputs a warning. Silence the warning.
-  if RUBY_VERSION >= '2.7'
+  # Taint is a deprecated no-op in Ruby 2.7 and outputs a warning. It will be
+  # removed in 3.0. Silence the warning or supply a replacement.
+  if TZInfo.const_defined?(:UntaintExt)
     module TaintExt
       refine Object do
         def taint
