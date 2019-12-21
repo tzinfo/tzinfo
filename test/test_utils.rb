@@ -418,6 +418,15 @@ module TestUtils
         actual_lines = process.readlines
         actual_lines = actual_lines.collect(&:chomp)
 
+        # Ignore warnings from RubyGems >= 3.1.0 that cause test failures with
+        # JRuby 9.2.9.0:
+        # https://travis-ci.org/tzinfo/tzinfo/jobs/628170481#L2437
+        actual_lines = actual_lines.reject do |l|
+          l.start_with?('Gem::Specification#rubyforge_project= called from') ||
+            l.start_with?('NOTE: Gem::Specification#rubyforge_project= is deprecated with no replacement.') ||
+            l.end_with?('warning: constant Gem::ConfigMap is deprecated')
+        end
+
         if RUBY_ENGINE == 'jruby' && ENV['_JAVA_OPTIONS'] && actual_lines.first == "Picked up _JAVA_OPTIONS: #{ENV['_JAVA_OPTIONS']}"
           actual_lines.shift
         end
