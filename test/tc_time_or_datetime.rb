@@ -4,6 +4,12 @@ require 'rational' unless defined?(Rational)
 include TZInfo
 
 class TCTimeOrDateTime < Minitest::Test
+  # Ruby 1.8.7 (built with GCC 8.3.0 on Ubuntu 19.04) fails to perform DateTime
+  # arithmetic operations correctly when sub-seconds are used. Detect this and
+  # disable the affected tests.
+  DATETIME_SUBSECOND_ARITHMETIC_IS_BROKEN = (DateTime.new(2019, 12, 22, 15, 0, Rational(1, 1000)) + Rational(1, 86400)).strftime('%Q') != '1577026801001'
+  puts "DateTime sub-second arithmetic is broken on this platform" if DATETIME_SUBSECOND_ARITHMETIC_IS_BROKEN
+
   def test_initialize_time
     assert_nothing_raised do
       TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000))
@@ -500,12 +506,12 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) + 1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) + 1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) + 1).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) + 1).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) + 1).to_orig) unless DATETIME_SUBSECOND_ARITHMETIC_IS_BROKEN
     assert_equal(1143214324, (TimeOrDateTime.new(1143214323) + 1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) + (-1)).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) + (-1)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) + (-1)).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) + (-1)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) + (-1)).to_orig) unless DATETIME_SUBSECOND_ARITHMETIC_IS_BROKEN
     assert_equal(1143214322, (TimeOrDateTime.new(1143214323) + (-1)).to_orig)
   end
   
@@ -518,12 +524,12 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) - 1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) - 1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - 1).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - 1).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - 1).to_orig) unless DATETIME_SUBSECOND_ARITHMETIC_IS_BROKEN
     assert_equal(1143214322, (TimeOrDateTime.new(1143214323) - 1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), (TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)) - (-1)).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)) - (-1)).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - (-1)).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), (TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))) - (-1)).to_orig) unless DATETIME_SUBSECOND_ARITHMETIC_IS_BROKEN
     assert_equal(1143214324, (TimeOrDateTime.new(1143214323) - (-1)).to_orig)
   end
   
@@ -536,12 +542,12 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).add_with_convert(1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 4, 721000), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).add_with_convert(1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).add_with_convert(1).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).add_with_convert(1).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 4 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).add_with_convert(1).to_orig) unless DATETIME_SUBSECOND_ARITHMETIC_IS_BROKEN
     assert_equal(1143214324, TimeOrDateTime.new(1143214323).add_with_convert(1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).add_with_convert(-1).to_orig)
     assert_equal(Time.utc(2006, 3, 24, 15, 32, 2, 721000), TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3, 721000)).add_with_convert(-1).to_orig)
     assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).add_with_convert(-1).to_orig)
-    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).add_with_convert(-1).to_orig)
+    assert_equal(DateTime.new(2006, 3, 24, 15, 32, 2 + Rational(721, 1000)), TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3 + Rational(721, 1000))).add_with_convert(-1).to_orig) unless DATETIME_SUBSECOND_ARITHMETIC_IS_BROKEN
     assert_equal(1143214322, TimeOrDateTime.new(1143214323).add_with_convert(-1).to_orig)
     
     if RubyCoreSupport.time_supports_negative

@@ -359,7 +359,17 @@ class TCTransitionDataTimezoneInfo < Minitest::Test
     assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,Rational(DATETIME_RESOLUTION,1000000))))
     assert_equal([t1,t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,0)))
     assert_equal([t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,1)))
-    assert_equal([t2,t3,t4,t5], dti.transitions_up_to(DateTime.new(2011,10,1,1,0,1), DateTime.new(2010,4,1,1,0,Rational(DATETIME_RESOLUTION,1000000))))
+
+    # Ruby 1.8.7 (built with GCC 8.3.0 on Ubuntu 19.04) fails to perform
+    # DateTime comparisons correctly when sub-seconds are used.
+    to = DateTime.new(2011,10,1,1,0,1)
+    from = DateTime.new(2010,4,1,1,0,Rational(DATETIME_RESOLUTION,1000000))
+    if to > from
+      assert_equal([t2,t3,t4,t5], dti.transitions_up_to(to, from))
+    else
+      puts "This platform does not consider the DateTime #{to.strftime('%Y-%m-%d %H:%m:%S.%N')} to be later than the DateTime #{from.strftime('%Y-%m-%d %H:%m:%S.%N')}"
+    end
+
     assert_equal([t5], dti.transitions_up_to(DateTime.new(2015,1,1,0,0,0), DateTime.new(2011,10,1,1,0,0)))
     assert_equal([], dti.transitions_up_to(DateTime.new(2015,1,1,0,0,0), DateTime.new(2011,10,1,1,0,1)))
   end
