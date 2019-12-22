@@ -6,9 +6,6 @@ module TZInfo
   #
   #   TZInfo::DataSource.set(:ruby)
   class RubyDataSource < DataSource
-    # Base path for require.
-    REQUIRE_PATH = File.join('tzinfo', 'data', 'definitions')
-    
     # Whether the timezone index has been loaded yet.
     @@timezone_index_loaded = false
     
