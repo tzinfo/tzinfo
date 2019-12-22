@@ -7,6 +7,22 @@ class TCRubyDataSource < Minitest::Test
     @data_source = RubyDataSource.new
   end
   
+  def test_initialize_not_found
+    # A failure to load tzinfo/data in initialize will not cause an exception.
+    # Attempts to load data files will subsequently fail.
+    code = <<-EOF
+      begin
+        ds = TZInfo::RubyDataSource.new
+        puts 'Initialized'
+        ds.load_timezone_info('Europe/London')
+      rescue Exception => e
+        puts e.class
+      end
+    EOF
+
+    assert_sub_process_returns(['Initialized', 'TZInfo::InvalidTimezoneIdentifier'], code)
+  end
+
   def test_load_timezone_info_data
     info = @data_source.load_timezone_info('Europe/London')
     assert_kind_of(DataTimezoneInfo, info)
