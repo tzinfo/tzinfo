@@ -1,4 +1,6 @@
 module TZInfo
+  using RubyCoreSupport::UntaintExt if RubyCoreSupport.const_defined?(:UntaintExt)
+
   # An InvalidZoneinfoDirectory exception is raised if the DataSource is
   # set to a specific zoneinfo path, which is not a valid zoneinfo directory
   # (i.e. a directory containing index files named iso3166.tab and zone.tab

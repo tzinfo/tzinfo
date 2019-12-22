@@ -7,6 +7,9 @@ require 'tmpdir'
 
 include TZInfo
 
+using RubyCoreSupport::UntaintExt if RubyCoreSupport.const_defined?(:UntaintExt)
+using TaintExt if Module.const_defined?(:TaintExt)
+
 class TCZoneinfoDataSource < Minitest::Test
   ZONEINFO_DIR = File.join(File.expand_path(File.dirname(__FILE__)), 'zoneinfo').untaint
   
@@ -653,7 +656,7 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_load_timezone_info_tainted
-    safe_test do
+    safe_test(:unavailable => :skip) do
       identifier = 'Europe/Amsterdam'.dup.taint
       assert(identifier.tainted?)
       info = @data_source.load_timezone_info(identifier)
@@ -840,7 +843,7 @@ class TCZoneinfoDataSource < Minitest::Test
   end
   
   def test_load_country_info_tainted
-    safe_test do
+    safe_test(:unavailable => :skip) do
       code = 'NL'.dup.taint
       assert(code.tainted?)
       info = @data_source.load_country_info(code)

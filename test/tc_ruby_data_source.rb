@@ -2,6 +2,8 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
+using TaintExt if Module.const_defined?(:TaintExt)
+
 class TCRubyDataSource < Minitest::Test
   def setup
     @data_source = RubyDataSource.new
@@ -73,7 +75,7 @@ class TCRubyDataSource < Minitest::Test
   def test_load_timezone_info_tainted
     skip_if_has_bug_14060
 
-    safe_test do
+    safe_test(:unavailable => :skip) do
       identifier = 'Europe/Amsterdam'.dup.taint
       assert(identifier.tainted?)
       info = @data_source.load_timezone_info(identifier)
@@ -139,7 +141,7 @@ class TCRubyDataSource < Minitest::Test
   end
   
   def test_load_country_info_tainted
-    safe_test do
+    safe_test(:unavailable => :skip) do
       code = 'NL'.dup.taint
       assert(code.tainted?)
       info = @data_source.load_country_info(code)

@@ -1,4 +1,6 @@
 module TZInfo
+  using RubyCoreSupport::UntaintExt if RubyCoreSupport.const_defined?(:UntaintExt)
+
   # A DataSource that loads data from the set of Ruby modules included in the
   # TZInfo::Data library (tzinfo-data gem).
   #

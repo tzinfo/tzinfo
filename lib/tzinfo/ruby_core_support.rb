@@ -142,5 +142,26 @@ module TZInfo
         File.open(file_name, mode, opts, &block)
       end
     end
+
+
+    # Object#untaint is a deprecated no-op in Ruby >= 2.7 and will be removed in
+    # 3.0. Add a refinement to either silence the warning, or supply the method
+    # if needed.
+    old_verbose = $VERBOSE
+    $VERBOSE = false
+    begin
+      o = Object.new
+      if [:taint, :untaint, :tainted?].none? {|m| o.respond_to?(m) } || !o.taint.tainted?
+        module UntaintExt
+          refine Object do
+            def untaint
+              self
+            end
+          end
+        end
+      end
+    ensure
+      $VERBOSE = old_verbose
+    end
   end
 end

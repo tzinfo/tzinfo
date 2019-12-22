@@ -2,6 +2,8 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
+using TaintExt if Module.const_defined?(:TaintExt)
+
 class TCTimezone < Minitest::Test
 
   class BlockCalled < StandardError
@@ -242,7 +244,7 @@ class TCTimezone < Minitest::Test
   def test_get_tainted_loaded
     Timezone.get('Europe/Andorra')
   
-    safe_test do
+    safe_test(:unavailable => :skip) do
       identifier = 'Europe/Andorra'.dup.taint
       assert(identifier.tainted?)
       tz = Timezone.get(identifier)
@@ -263,7 +265,7 @@ class TCTimezone < Minitest::Test
   def test_get_tainted_not_previously_loaded
     skip_if_has_bug_14060
 
-    safe_test do
+    safe_test(:unavailable => :skip) do
       identifier = 'Europe/Andorra'.dup.taint
       assert(identifier.tainted?)
       tz = Timezone.get(identifier)

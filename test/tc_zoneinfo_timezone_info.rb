@@ -5,6 +5,8 @@ require 'tempfile'
 
 include TZInfo
 
+using RubyCoreSupport::UntaintExt if RubyCoreSupport.const_defined?(:UntaintExt)
+
 class TCZoneinfoTimezoneInfo < Minitest::Test
 
   begin
