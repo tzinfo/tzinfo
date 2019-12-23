@@ -69,8 +69,6 @@ install:
   - if %RUBY_ENGINE%==jruby appveyor DownloadFile https://repo1.maven.org/maven2/org/jruby/jruby-dist/%JRUBY_VERSION%/jruby-dist-%JRUBY_VERSION%-bin.zip -FileName vendor\jruby-dist-%JRUBY_VERSION%-bin.zip
   - if %RUBY_ENGINE%==jruby 7z x vendor\jruby-dist-%JRUBY_VERSION%-bin.zip -ovendor -y
   - if %RUBY_ENGINE%==jruby set PATH=C:\projects\tzinfo\vendor\jruby-%JRUBY_VERSION%\bin;%PATH%
-  - if %RUBY_ENGINE%==jruby if "%JRUBY_VERSION:~0,2%"=="1." gem install rubygems-update --version '~> 2.7' --no-document
-  - if %RUBY_ENGINE%==jruby if "%JRUBY_VERSION:~0,2%"=="1." update_rubygems
   - if %RUBY_ENGINE%==jruby if "%JRUBY_VERSION:~0,2%"=="1." gem install bundler --version "~> 1.17"
   - if %RUBY_ENGINE%==jruby if not "%JRUBY_VERSION:~0,2%"=="1." gem install bundler
   - if v%RUBY_VERSION%==v193 appveyor DownloadFile https://github.com/philr/rubyinstaller/releases/download/1.9.3-p551-openssl-tls-1.1-1.2/ruby-1.9.3-p551-i386-mingw32.7z -FileName vendor\ruby-1.9.3-p551-i386-mingw32.7z
