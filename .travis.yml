@@ -9,6 +9,9 @@ before_install:
 before_script:
   - bundle update
 cache: bundler
+env:
+  global:
+    - TESTOPTS=--verbose
 rvm:
   - 1.8.7-head
   - 1.9.2-p330
