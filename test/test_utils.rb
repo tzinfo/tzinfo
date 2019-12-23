@@ -494,8 +494,8 @@ module TestUtils
     end
   end
 
-  # Taint is a deprecated no-op in Ruby 2.7 and outputs a warning. It will be
-  # removed in 3.0. Silence the warning or supply a replacement.
+  # Object#taint is a deprecated no-op in Ruby 2.7 and outputs a warning. It
+  # will be removed in 3.0. Silence the warning or supply a replacement.
   if TZInfo.const_defined?(:UntaintExt)
     module TaintExt
       refine Object do
