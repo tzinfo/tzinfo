@@ -1,5 +1,11 @@
 module TZInfo
-  using RubyCoreSupport::UntaintExt if RubyCoreSupport.const_defined?(:UntaintExt)
+  # Use send as a workaround for an issue on JRuby 9.2.9.0 where using the
+  # refinement causes calls to RubyCoreSupport.file_open to fail to pass the
+  # block parameter.
+  #
+  # https://travis-ci.org/tzinfo/tzinfo/jobs/628812051#L1931
+  # https://github.com/jruby/jruby/issues/6009
+  send(:using, TZInfo::RubyCoreSupport::UntaintExt) if TZInfo::RubyCoreSupport.const_defined?(:UntaintExt)
 
   # An InvalidZoneinfoDirectory exception is raised if the DataSource is
   # set to a specific zoneinfo path, which is not a valid zoneinfo directory
