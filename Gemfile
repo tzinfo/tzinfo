@@ -7,5 +7,5 @@ group :test do
 
   # Exclude Minitest v5.12.0. It is only compatible with Ruby >= 2.0.0, but does
   # not specify a minimum Ruby version.
-  gem 'minitest', ['>= 5.11.3', '< 6', '!= 5.12.0']
+  gem 'minitest', ['~> 5.11', '!= 5.12.0']
 end
