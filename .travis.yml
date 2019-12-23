@@ -2,9 +2,9 @@ language: ruby
 dist: trusty
 sudo: false
 before_install:
-  - if [[ $TRAVIS_RUBY_VERSION =~ ^(1|2\.[012]|jruby-1)\. ]]; then gem install rubygems-update --version '~> 2.7' --no-document && update_rubygems; else gem update --system; fi
+  - if [[ $TRAVIS_RUBY_VERSION =~ ^((1|2\.[012]|jruby-1)\.|ree$) ]]; then gem install rubygems-update --version '~> 2.7' --no-document && update_rubygems; else gem update --system; fi
   - gem --version
-  - if [[ $TRAVIS_RUBY_VERSION =~ ^(1|2\.[012]|jruby-1)\. ]]; then gem install bundler --version '~> 1.17'; else gem install bundler; fi
+  - if [[ $TRAVIS_RUBY_VERSION =~ ^((1|2\.[012]|jruby-1)\.|ree$) ]]; then gem install bundler --version '~> 1.17'; else gem install bundler; fi
   - bundle --version
 before_script:
   - bundle update
