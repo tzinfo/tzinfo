@@ -1,5 +1,16 @@
 # Changes
 
+## Version 2.0.1 - 24-Dec-2019
+
+* Fixed "SecurityError: Insecure operation - require" exceptions when loading
+  data with recent Ruby releases in safe mode. #100.
+* Fixed warnings when running on Ruby 2.7. #109.
+* Add a `TZInfo::Timezone#=~` method that performs a regex match on the time
+  zone identifier. #99.
+* Add a `TZInfo::Country#=~` method that performs a regex match on the country
+  code.
+
+
 ## Version 2.0.0 - 26-Dec-2018
 
 ### Added
