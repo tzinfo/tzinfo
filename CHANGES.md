@@ -1,3 +1,14 @@
+Version 1.2.6 - 24-Dec-2019
+---------------------------
+
+* Timezone#strftime('%s', time) will now return the correct number of seconds
+  since the epoch. #91.
+* Removed the unused TZInfo::RubyDataSource::REQUIRE_PATH constant.
+* Fixed "SecurityError: Insecure operation - require" exceptions when loading
+  data with recent Ruby releases in safe mode.
+* Fixed warnings when running on Ruby 2.7. #106 and #111.
+
+
 Version 1.2.5 - 4-Feb-2018
 --------------------------
 
