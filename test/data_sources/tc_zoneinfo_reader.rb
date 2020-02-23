@@ -6,7 +6,9 @@ require 'tempfile'
 
 include TZInfo
 
-using UntaintExt if TZInfo.const_defined?(:UntaintExt)
+# Use send as a workaround for erroneous 'wrong number of arguments' errors with
+# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
+send(:using, UntaintExt) if TZInfo.const_defined?(:UntaintExt)
 
 module DataSources
   class TCZoneinfoReader < Minitest::Test

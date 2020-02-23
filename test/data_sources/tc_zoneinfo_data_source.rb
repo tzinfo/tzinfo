@@ -8,8 +8,10 @@ require 'tmpdir'
 
 include TZInfo
 
-using TestUtils::TaintExt if TestUtils.const_defined?(:TaintExt)
-using UntaintExt if TZInfo.const_defined?(:UntaintExt)
+# Use send as a workaround for erroneous 'wrong number of arguments' errors with
+# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
+send(:using, TestUtils::TaintExt) if TestUtils.const_defined?(:TaintExt)
+send(:using, UntaintExt) if TZInfo.const_defined?(:UntaintExt)
 
 module DataSources
   class TCZoneinfoDataSource < Minitest::Test
@@ -543,6 +545,8 @@ module DataSources
 
     test_encodings('UTF-8', 'UTF-16').each do |encoding|
       define_method("test_load_timezone_info_file_is_directory_with_#{encoding.to_method}_encoded_identifier") do
+        skip('JRuby 9.0.5.0 hangs when attempting to read a directory') if RUBY_ENGINE == 'jruby' && JRUBY_VERSION.start_with?('9.0.')
+
         Dir.mktmpdir('tzinfo_test') do |dir|
           FileUtils.touch(File.join(dir, 'zone.tab'))
           FileUtils.touch(File.join(dir, 'iso3166.tab'))
