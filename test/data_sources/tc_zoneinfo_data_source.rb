@@ -423,6 +423,8 @@ module DataSources
       end
 
       define_method("test_load_timezone_info_path_component_not_dir_with_#{encoding.to_method}_encoded_identifier") do
+        skip('JRuby 9.0.5.0 raises an unhandled Java IOException when encountering a path component that is not a directory') if RUBY_ENGINE == 'jruby' && JRUBY_VERSION.start_with?('9.0.')
+
         # Override the index so that an attempt is made to load the file.
         def @data_source.validate_timezone_identifier(identifier)
           identifier = identifier.encode(Encoding::UTF_8)
