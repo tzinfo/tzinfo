@@ -2,7 +2,9 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-using TaintExt if Module.const_defined?(:TaintExt)
+# Use send as a workaround for erroneous 'wrong number of arguments' errors with
+# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
+send(:using, TaintExt) if Module.const_defined?(:TaintExt)
 
 class TCRubyDataSource < Minitest::Test
   def setup

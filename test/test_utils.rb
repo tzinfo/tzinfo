@@ -116,6 +116,10 @@ module Kernel
   end
   
   def assert_sub_process_returns(expected_lines, code, extra_load_path = [], required = ['tzinfo'])
+    if RUBY_ENGINE == 'jruby' && JRUBY_VERSION.start_with?('9.0.') && RbConfig::CONFIG['host_os'] =~ /mswin/
+      skip('JRuby 9.0 on Windows cannot handle writing to the IO instance returned by popen')
+    end
+
     ruby = File.join(RbConfig::CONFIG['bindir'], 
       RbConfig::CONFIG['ruby_install_name'] + RbConfig::CONFIG['EXEEXT'])
       
