@@ -156,8 +156,7 @@ module TZInfo
     # Object#untaint is a deprecated no-op in Ruby >= 2.7 and will be removed in
     # 3.2. Add a refinement to either silence the warning, or supply the method
     # if needed.
-    o = Object.new
-    if [:taint, :untaint, :tainted?].none? {|m| o.respond_to?(m) } || RUBY_VERSION =~ /\A(\d+)\.(\d+)(?:\.|\z)/ && ($1 == '2' && $2.to_i >= 7 || $1.to_i >= 3)
+    if !Object.new.respond_to?(:untaint) || RUBY_VERSION =~ /\A(\d+)\.(\d+)(?:\.|\z)/ && ($1 == '2' && $2.to_i >= 7 || $1.to_i >= 3)
       module UntaintExt
         refine Object do
           def untaint
