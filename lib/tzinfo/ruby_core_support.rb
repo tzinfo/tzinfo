@@ -157,7 +157,7 @@ module TZInfo
     # 3.0. Add a refinement to either silence the warning, or supply the method
     # if needed.
     o = Object.new
-    if [:taint, :untaint, :tainted?].none? {|m| o.respond_to?(m) } || RUBY_VERSION >= '2.7'
+    if [:taint, :untaint, :tainted?].none? {|m| o.respond_to?(m) } || RUBY_VERSION =~ /\A(\d+)\.(\d+)(?:\.|\z)/ && ($1 == '2' && $2.to_i >= 7 || $1.to_i >= 3)
       module UntaintExt
         refine Object do
           def untaint
