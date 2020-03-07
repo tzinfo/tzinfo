@@ -6,7 +6,7 @@ module TZInfo
   module Data
     location = File.dirname(File.dirname(__FILE__))
 
-    if location.respond_to?(:untaint) && RUBY_VERSION < '2.7'
+    if location.respond_to?(:untaint) && RUBY_VERSION =~ /\A(\d+)\.(\d+)(?:\.|\z)/ && ($1 == '2' && $2.to_i < 7 || $1.to_i <= 1)
       location.untaint
     end
 
