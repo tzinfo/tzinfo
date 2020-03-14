@@ -7,6 +7,7 @@ before_install:
   - bundle --version
 before_script:
   - bundle update
+  - if [[ $TRAVIS_RUBY_VERSION =~ ^jruby- ]]; then echo "JRUBY_OPTS=$JRUBY_OPTS"; echo "JAVA_OPTS=$JAVA_OPTS"; fi
 cache: bundler
 env:
   global:
