@@ -1,13 +1,14 @@
 language: ruby
 dist: trusty
 before_install:
+  - if [[ $TRAVIS_RUBY_VERSION =~ ^jruby- && ! $TRAVIS_RUBY_VERSION =~ ^jruby-(1|9\.[01]\.) ]]; then export JRUBY_OPTS=`echo "$JRUBY_OPTS" | sed -E -e 's/--((no)?client|server)//g'`; fi
+  - if [[ $TRAVIS_RUBY_VERSION =~ ^jruby- ]]; then echo "JRUBY_OPTS=$JRUBY_OPTS"; fi
   - if [[ $TRAVIS_RUBY_VERSION =~ ^(1|2\.[012]|jruby-(1|9\.0))\. ]]; then gem install rubygems-update --version '~> 2.7' --no-document && update_rubygems; elif [[ ! $TRAVIS_RUBY_VERSION =~ ^truffleruby- ]]; then gem update --system --no-document; fi
   - gem --version
   - if [[ $TRAVIS_RUBY_VERSION =~ ^(1|2\.[012]|jruby-(1|9\.0))\. ]]; then gem install bundler --version '~> 1.17' --no-document; else gem install bundler --no-document; fi
   - bundle --version
 before_script:
   - bundle update
-  - if [[ $TRAVIS_RUBY_VERSION =~ ^jruby- ]]; then echo "JRUBY_OPTS=$JRUBY_OPTS"; echo "JAVA_OPTS=$JAVA_OPTS"; fi
 cache: bundler
 env:
   global:
