@@ -27,7 +27,7 @@ rvm:
   - jruby-1.7.27
   - jruby-9.0.5.0
   - jruby-9.1.17.0
-  - jruby-9.2.10.0
+  - jruby-9.2.11.0
   - jruby-head
   - rbx-3.107
   - truffleruby-20.0.0
