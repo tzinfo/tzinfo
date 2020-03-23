@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.description = 'TZInfo provides daylight savings aware transformations between times in different time zones.'
   s.author = 'Philip Ross'
   s.email = 'phil.ross@gmail.com'
-  s.homepage = 'http://tzinfo.github.io'
+  s.homepage = 'https://tzinfo.github.io'
   s.license = 'MIT' 
   s.files = %w(CHANGES.md LICENSE Rakefile README.md tzinfo.gemspec .yardopts) +
             Dir['lib/**/*.rb'].delete_if {|f| f.include?('.svn')} +

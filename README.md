@@ -1,9 +1,9 @@
 TZInfo - Ruby Timezone Library
 ==============================
 
-[![Gem Version](https://badge.fury.io/rb/tzinfo.svg)](http://badge.fury.io/rb/tzinfo) [![Build Status](https://travis-ci.org/tzinfo/tzinfo.svg?branch=master)](https://travis-ci.org/tzinfo/tzinfo)
+[![Gem Version](https://badge.fury.io/rb/tzinfo.svg)](https://badge.fury.io/rb/tzinfo) [![Build Status](https://travis-ci.org/tzinfo/tzinfo.svg?branch=master)](https://travis-ci.org/tzinfo/tzinfo)
 
-[TZInfo](http://tzinfo.github.io) provides daylight savings aware 
+[TZInfo](https://tzinfo.github.io) provides daylight savings aware
 transformations between times in different timezones.
 
 
@@ -13,10 +13,10 @@ Data Sources
 TZInfo requires a source of timezone data. There are two built-in options:
 
 1. The TZInfo::Data library (the tzinfo-data gem). TZInfo::Data contains a set 
-   of Ruby modules that are generated from the [IANA Time Zone Database](http://www.iana.org/time-zones).
+   of Ruby modules that are generated from the [IANA Time Zone Database](https://www.iana.org/time-zones).
 2. A zoneinfo directory. Most Unix-like systems include a zoneinfo directory 
    containing timezone definitions. These are also generated from the 
-   [IANA Time Zone Database](http://www.iana.org/time-zones).
+   [IANA Time Zone Database](https://www.iana.org/time-zones).
 
 By default, TZInfo::Data will be used. If TZInfo::Data is not available (i.e. 
 if `require 'tzinfo/data'` fails), then TZInfo will search for a zoneinfo
@@ -25,7 +25,7 @@ directory instead (using the search path specified by
 
 If no data source can be found, a `TZInfo::DataSourceNotFound` exception will be
 raised when TZInfo is used. Further information is available 
-[in the wiki](http://tzinfo.github.io/datasourcenotfound) to help with 
+[in the wiki](https://tzinfo.github.io/datasourcenotfound) to help with
 resolving `TZInfo::DataSourceNotFound` errors.
 
 The default data source selection can be overridden using 
@@ -130,7 +130,7 @@ thread boundaries.
 Documentation
 -------------
 
-API documentation for TZInfo is available on [RubyDoc.info](http://rubydoc.info/gems/tzinfo/frames).
+API documentation for TZInfo is available on [RubyDoc.info](https://rubydoc.info/gems/tzinfo/frames).
 
 
 License
