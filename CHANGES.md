@@ -1,13 +1,19 @@
 # Changes
 
+## Version 2.0.2 - 2-Apr-2020
+
+* Fixed 'wrong number of arguments' errors running on JRuby 9.0. #114.
+* Fixed warnings when running on Ruby 2.8. #113.
+
+
 ## Version 2.0.1 - 24-Dec-2019
 
 * Fixed "SecurityError: Insecure operation - require" exceptions when loading
   data with recent Ruby releases in safe mode. #100.
 * Fixed warnings when running on Ruby 2.7. #109.
-* Add a `TZInfo::Timezone#=~` method that performs a regex match on the time
+* Added a `TZInfo::Timezone#=~` method that performs a regex match on the time
   zone identifier. #99.
-* Add a `TZInfo::Country#=~` method that performs a regex match on the country
+* Added a `TZInfo::Country#=~` method that performs a regex match on the country
   code.
 
 
