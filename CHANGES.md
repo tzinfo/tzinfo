@@ -2,7 +2,7 @@
 
 ## Version 2.0.2 - 2-Apr-2020
 
-* Fixed 'wrong number of arguments' errors running on JRuby 9.0. #114.
+* Fixed 'wrong number of arguments' errors when running on JRuby 9.0. #114.
 * Fixed warnings when running on Ruby 2.8. #113.
 
 
@@ -164,8 +164,8 @@
 
 ## Version 1.2.7 - 2-Apr-2020
 
-* Fix 'wrong number of arguments' errors running on JRuby 9.0. #114.
-* Fix warnings when running on Ruby 2.8. #112.
+* Fixed 'wrong number of arguments' errors when running on JRuby 9.0. #114.
+* Fixed warnings when running on Ruby 2.8. #112.
 
 
 ## Version 1.2.6 - 24-Dec-2019
