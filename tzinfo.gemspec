@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.author = 'Philip Ross'
   s.email = 'phil.ross@gmail.com'
   s.homepage = 'https://tzinfo.github.io'
+  s.metadata['changelog_uri'] = 'https://github.com/tzinfo/tzinfo/blob/master/CHANGES.md' if s.respond_to?(:metadata)
   s.license = 'MIT'
   s.files = %w(CHANGES.md LICENSE README.md .yardopts) + Dir['lib/**/*.rb']
   s.platform = Gem::Platform::RUBY
