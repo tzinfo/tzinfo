@@ -188,8 +188,8 @@ module TZInfo
         c.timezone 'America/Dawson_Creek', 1793, 30, -3607, 30, 'MST - BC (Dawson Cr, Ft St John)'
         c.timezone 'America/Fort_Nelson', 294, 5, -1227, 10, 'MST - BC (Ft Nelson)'
         c.timezone 'America/Vancouver', 739, 15, -7387, 60, 'Pacific - BC (most areas)'
-        c.timezone 'America/Whitehorse', 3643, 60, -2701, 20, 'Pacific - Yukon (south)'
-        c.timezone 'America/Dawson', 961, 15, -1673, 12, 'Pacific - Yukon (north)'
+        c.timezone 'America/Whitehorse', 3643, 60, -2701, 20, 'Pacific - Yukon (east)'
+        c.timezone 'America/Dawson', 961, 15, -1673, 12, 'Pacific - Yukon (west)'
       end
       country 'CC', 'Cocos (Keeling) Islands' do |c|
         c.timezone 'Indian/Cocos', -73, 6, 1163, 12
@@ -338,7 +338,7 @@ module TZInfo
         c.timezone 'Europe/Gibraltar', 542, 15, -107, 20
       end
       country 'GL', 'Greenland' do |c|
-        c.timezone 'America/Godthab', 3851, 60, -776, 15, 'Greenland (most areas)'
+        c.timezone 'America/Nuuk', 3851, 60, -776, 15, 'Greenland (most areas)'
         c.timezone 'America/Danmarkshavn', 2303, 30, -56, 3, 'National Park (east coast)'
         c.timezone 'America/Scoresbysund', 4229, 60, -659, 30, 'Scoresbysund/Ittoqqortoormiit'
         c.timezone 'America/Thule', 2297, 30, -4127, 60, 'Thule/Pituffik'
@@ -834,10 +834,10 @@ module TZInfo
         c.timezone 'Africa/Dar_es_Salaam', -34, 5, 2357, 60
       end
       country 'UA', 'Ukraine' do |c|
-        c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'MSK+00 - Crimea'
+        c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'Crimea'
         c.timezone 'Europe/Kiev', 1513, 30, 1831, 60, 'Ukraine (most areas)'
-        c.timezone 'Europe/Uzhgorod', 2917, 60, 223, 10, 'Ruthenia'
-        c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozh\'ye/Zaporizhia; Lugansk/Luhansk (east)'
+        c.timezone 'Europe/Uzhgorod', 2917, 60, 223, 10, 'Transcarpathia'
+        c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozhye and east Lugansk'
       end
       country 'UG', 'Uganda' do |c|
         c.timezone 'Africa/Kampala', 19, 60, 389, 12
