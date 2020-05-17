@@ -302,6 +302,24 @@
   use other `TimezonePeriod` instance methods instead (issue #7655).
 
 
+## Version 0.3.57 (tzdata v2020a) - 17-May-2020
+
+* Updated to tzdata version 2020a
+  (<https://mm.icann.org/pipermail/tz-announce/2020-April/000058.html>).
+
+
+## Version 0.3.56 (tzdata v2019c) - 1-Nov-2019
+
+* Updated to tzdata version 2019c
+  (<https://mm.icann.org/pipermail/tz-announce/2019-September/000057.html>).
+
+
+## Version 0.3.55 (tzdata v2018g) - 27-Oct-2018
+
+* Updated to tzdata version 2018g
+  (<https://mm.icann.org/pipermail/tz-announce/2018-October/000052.html>).
+
+
 ## Version 0.3.54 (tzdata v2018d) - 25-Mar-2018
 
 * Updated to tzdata version 2018d
