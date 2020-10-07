@@ -15,8 +15,8 @@ module TZInfo
           tz.offset :o5, 3600, 0, :CET
           tz.offset :o6, 3600, 3600, :CEST
           
-          tz.transition 1891, 3, :o1, 52095019957, 21600
-          tz.transition 1911, 3, :o2, 69670267013, 28800
+          tz.transition 1892, 5, :o1, 52104610357, 21600
+          tz.transition 1911, 3, :o2, 69670785413, 28800
           tz.transition 1916, 6, :o3, 58104707, 24
           tz.transition 1916, 10, :o2, 58107323, 24
           tz.transition 1917, 3, :o3, 58111499, 24

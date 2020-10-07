@@ -593,7 +593,6 @@ module TZInfo
       linked_timezone 'US/Michigan'
       linked_timezone 'US/Mountain'
       linked_timezone 'US/Pacific'
-      linked_timezone 'US/Pacific-New'
       linked_timezone 'US/Samoa'
       linked_timezone 'UTC'
       linked_timezone 'Universal'

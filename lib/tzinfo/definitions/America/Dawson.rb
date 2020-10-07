@@ -108,7 +108,8 @@ module TZInfo
           tz.transition 2018, 11, :o6, 1541322000
           tz.transition 2019, 3, :o7, 1552212000
           tz.transition 2019, 11, :o6, 1572771600
-          tz.transition 2020, 3, :o8, 1583661600
+          tz.transition 2020, 3, :o7, 1583661600
+          tz.transition 2020, 11, :o8, 1604214000
         end
       end
     end
