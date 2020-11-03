@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # This file contains data derived from the IANA Time Zone Database
-# (http://www.iana.org/time-zones).
+# (https://www.iana.org/time-zones).
 
 module TZInfo
   module Data
@@ -20,8 +20,8 @@ module TZInfo
             tz.offset :o5, 3600, 0, 'CET'
             tz.offset :o6, 0, 7200, 'WEMT'
 
-            tz.transition :o1, -2486678901
-            tz.transition :o2, -1855958901
+            tz.transition :o1, -2486592561
+            tz.transition :o2, -1855958961
             tz.transition :o3, -1689814800
             tz.transition :o2, -1680397200
             tz.transition :o3, -1665363600
@@ -266,6 +266,10 @@ module TZInfo
             tz.transition :o5, 3087162000
             tz.transition :o4, 3099862800
             tz.transition :o5, 3118611600
+            tz.transition :o4, 3131917200
+            tz.transition :o5, 3150061200
+            tz.transition :o4, 3163366800
+            tz.transition :o5, 3181510800
           end
         end
       end

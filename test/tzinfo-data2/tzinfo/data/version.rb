@@ -3,7 +3,7 @@
 module TZInfo
   module Data
     # TZInfo::Data version number.
-    VERSION = '2.2018.5.test'
+    VERSION = '2.2020.4.test'
 
     # TZInfo::Data version information.
     module Version
@@ -13,9 +13,9 @@ module TZInfo
       # TZInfo::Data version number.
       STRING = VERSION
 
-      # The version of the {IANA Time Zone Database}[http://www.iana.org/time-zones]
+      # The version of the {IANA Time Zone Database}[https://www.iana.org/time-zones]
       # used to generate this version of TZInfo::Data.
-      TZDATA = '2018e'
+      TZDATA = '2020d'
     end
   end
 end

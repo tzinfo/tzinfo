@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # This file contains data derived from the IANA Time Zone Database
-# (http://www.iana.org/time-zones).
+# (https://www.iana.org/time-zones).
 
 module TZInfo
   module Data
@@ -219,8 +219,8 @@ module TZInfo
             c.timezone 'America/Dawson_Creek', 1793, 30, -3607, 30, 'MST - BC (Dawson Cr, Ft St John)'
             c.timezone 'America/Fort_Nelson', 294, 5, -1227, 10, 'MST - BC (Ft Nelson)'
             c.timezone 'America/Vancouver', 739, 15, -7387, 60, 'Pacific - BC (most areas)'
-            c.timezone 'America/Whitehorse', 3643, 60, -2701, 20, 'Pacific - Yukon (south)'
-            c.timezone 'America/Dawson', 961, 15, -1673, 12, 'Pacific - Yukon (north)'
+            c.timezone 'America/Whitehorse', 3643, 60, -2701, 20, 'Pacific - Yukon (east)'
+            c.timezone 'America/Dawson', 961, 15, -1673, 12, 'Pacific - Yukon (west)'
           end
           i.country 'CC', 'Cocos (Keeling) Islands' do |c|
             c.timezone 'Indian/Cocos', -73, 6, 1163, 12
@@ -369,7 +369,7 @@ module TZInfo
             c.timezone 'Europe/Gibraltar', 542, 15, -107, 20
           end
           i.country 'GL', 'Greenland' do |c|
-            c.timezone 'America/Godthab', 3851, 60, -776, 15, 'Greenland (most areas)'
+            c.timezone 'America/Nuuk', 3851, 60, -776, 15, 'Greenland (most areas)'
             c.timezone 'America/Danmarkshavn', 2303, 30, -56, 3, 'National Park (east coast)'
             c.timezone 'America/Scoresbysund', 4229, 60, -659, 30, 'Scoresbysund/Ittoqqortoormiit'
             c.timezone 'America/Thule', 2297, 30, -4127, 60, 'Thule/Pituffik'
@@ -500,6 +500,7 @@ module TZInfo
           i.country 'KZ', 'Kazakhstan' do |c|
             c.timezone 'Asia/Almaty', 173, 4, 1539, 20, 'Kazakhstan (most areas)'
             c.timezone 'Asia/Qyzylorda', 224, 5, 982, 15, 'Qyzylorda/Kyzylorda/Kzyl-Orda'
+            c.timezone 'Asia/Qostanay', 266, 5, 3817, 60, 'Qostanay/Kostanay/Kustanay'
             c.timezone 'Asia/Aqtobe', 3017, 60, 343, 6, 'Aqtöbe/Aktobe'
             c.timezone 'Asia/Aqtau', 2671, 60, 754, 15, 'Mangghystaū/Mankistau'
             c.timezone 'Asia/Atyrau', 2827, 60, 779, 15, 'Atyraū/Atirau/Gur\'yev'
@@ -560,7 +561,7 @@ module TZInfo
             c.timezone 'Pacific/Majuro', 143, 20, 856, 5, 'Marshall Islands (most areas)'
             c.timezone 'Pacific/Kwajalein', 109, 12, 502, 3, 'Kwajalein'
           end
-          i.country 'MK', 'Macedonia' do |c|
+          i.country 'MK', 'North Macedonia' do |c|
             c.timezone :t13
           end
           i.country 'ML', 'Mali' do |c|
@@ -575,7 +576,7 @@ module TZInfo
             c.timezone 'Asia/Choibalsan', 721, 15, 229, 2, 'Dornod, Sükhbaatar'
           end
           i.country 'MO', 'Macau' do |c|
-            c.timezone 'Asia/Macau', 667, 30, 1363, 12
+            c.timezone 'Asia/Macau', 7991, 360, 2725, 24
           end
           i.country 'MP', 'Northern Mariana Islands' do |c|
             c.timezone :t22
@@ -724,10 +725,10 @@ module TZInfo
           i.country 'RU', 'Russia' do |c|
             c.timezone 'Europe/Kaliningrad', 3283, 60, 41, 2, 'MSK-01 - Kaliningrad'
             c.timezone 'Europe/Moscow', 66907, 1200, 8464, 225, 'MSK+00 - Moscow area'
-            c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'MSK+00 - Crimea'
-            c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'MSK+00 - Volgograd'
+            c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'Crimea'
             c.timezone 'Europe/Kirov', 293, 5, 993, 20, 'MSK+00 - Kirov'
             c.timezone 'Europe/Astrakhan', 927, 20, 961, 20, 'MSK+01 - Astrakhan'
+            c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'MSK+01 - Volgograd'
             c.timezone 'Europe/Saratov', 1547, 30, 1381, 30, 'MSK+01 - Saratov'
             c.timezone 'Europe/Ulyanovsk', 163, 3, 242, 5, 'MSK+01 - Ulyanovsk'
             c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'MSK+01 - Samara, Udmurtia'
@@ -813,7 +814,7 @@ module TZInfo
           i.country 'SY', 'Syria' do |c|
             c.timezone 'Asia/Damascus', 67, 2, 363, 10
           end
-          i.country 'SZ', 'Swaziland' do |c|
+          i.country 'SZ', 'Eswatini (Swaziland)' do |c|
             c.timezone :t2
           end
           i.country 'TC', 'Turks & Caicos Is' do |c|
@@ -867,8 +868,9 @@ module TZInfo
           end
           i.country 'UA', 'Ukraine' do |c|
             c.timezone 'Europe/Kiev', 1513, 30, 1831, 60, 'Ukraine (most areas)'
-            c.timezone 'Europe/Uzhgorod', 2917, 60, 223, 10, 'Ruthenia'
-            c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozh\'ye/Zaporizhia; Lugansk/Luhansk (east)'
+            c.timezone 'Europe/Uzhgorod', 2917, 60, 223, 10, 'Transcarpathia'
+            c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozhye and east Lugansk'
+            c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'Crimea'
           end
           i.country 'UG', 'Uganda' do |c|
             c.timezone :t5

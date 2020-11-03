@@ -390,9 +390,9 @@ module DataSources
       info = @data_source.send(:load_timezone_info, 'UTC')
 
       # On platforms that don't support symlinks, 'UTC' will be created as a copy.
-      # Either way, a TransitionsDataTimezoneInfo should be returned.
+      # Either way, a ConstantOffsetDataTimezoneInfo should be returned.
 
-      assert_kind_of(TransitionsDataTimezoneInfo, info)
+      assert_kind_of(ConstantOffsetDataTimezoneInfo, info)
       assert_equal('UTC', info.identifier)
     end
 
@@ -610,7 +610,7 @@ module DataSources
           data_source = ZoneinfoDataSource.new(dir)
 
           info = data_source.send(:load_timezone_info, 'EST')
-          assert_kind_of(TransitionsDataTimezoneInfo, info)
+          assert_kind_of(ConstantOffsetDataTimezoneInfo, info)
           assert_equal('EST', info.identifier)
 
           # JRuby 9.1.14.0 on Windows (running elevated) fails to clean up symlinks.
@@ -639,7 +639,7 @@ module DataSources
         data_source = ZoneinfoDataSource.new(dir)
 
         info = data_source.send(:load_timezone_info, 'Link')
-        assert_kind_of(TransitionsDataTimezoneInfo, info)
+        assert_kind_of(ConstantOffsetDataTimezoneInfo, info)
         assert_equal('Link', info.identifier)
 
         # JRuby 9.1.14.0 on Windows (running elevated) fails to clean up symlinks.
@@ -675,11 +675,11 @@ module DataSources
         data_source = ZoneinfoDataSource.new(dir)
 
         info = data_source.send(:load_timezone_info, 'Link')
-        assert_kind_of(TransitionsDataTimezoneInfo, info)
+        assert_kind_of(ConstantOffsetDataTimezoneInfo, info)
         assert_equal('Link', info.identifier)
 
         info = data_source.send(:load_timezone_info, 'Subdir/Link')
-        assert_kind_of(TransitionsDataTimezoneInfo, info)
+        assert_kind_of(ConstantOffsetDataTimezoneInfo, info)
         assert_equal('Subdir/Link', info.identifier)
 
         # JRuby 9.1.14.0 on Windows (running elevated) fails to clean up symlinks.
@@ -719,15 +719,15 @@ module DataSources
         data_source = ZoneinfoDataSource.new(dir)
 
         info = data_source.send(:load_timezone_info, 'Subdir/Link')
-        assert_kind_of(TransitionsDataTimezoneInfo, info)
+        assert_kind_of(ConstantOffsetDataTimezoneInfo, info)
         assert_equal('Subdir/Link', info.identifier)
 
         info = data_source.send(:load_timezone_info, 'Subdir/Link2')
-        assert_kind_of(TransitionsDataTimezoneInfo, info)
+        assert_kind_of(ConstantOffsetDataTimezoneInfo, info)
         assert_equal('Subdir/Link2', info.identifier)
 
         info = data_source.send(:load_timezone_info, 'Subdir2/Link')
-        assert_kind_of(TransitionsDataTimezoneInfo, info)
+        assert_kind_of(ConstantOffsetDataTimezoneInfo, info)
         assert_equal('Subdir2/Link', info.identifier)
 
         # JRuby 9.1.14.0 on Windows (running elevated) fails to clean up symlinks.

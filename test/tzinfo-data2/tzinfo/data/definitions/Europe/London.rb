@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # This file contains data derived from the IANA Time Zone Database
-# (http://www.iana.org/time-zones).
+# (https://www.iana.org/time-zones).
 
 module TZInfo
   module Data
@@ -322,6 +322,10 @@ module TZInfo
             tz.transition :o1, 3087162000
             tz.transition :o2, 3099862800
             tz.transition :o1, 3118611600
+            tz.transition :o2, 3131917200
+            tz.transition :o1, 3150061200
+            tz.transition :o2, 3163366800
+            tz.transition :o1, 3181510800
           end
         end
       end

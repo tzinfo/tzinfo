@@ -277,11 +277,11 @@ module DataSources
     end
 
     def test_to_s
-      assert_equal("Ruby DataSource: tzdb v2018e, tzinfo-data v#{defined?(TZINFO_TEST_DATA_FORMAT) ? TZINFO_TEST_DATA_FORMAT : 2}.2018.5.test", @data_source.to_s)
+      assert_equal("Ruby DataSource: tzdb v2020d, tzinfo-data v#{defined?(TZINFO_TEST_DATA_FORMAT) ? TZINFO_TEST_DATA_FORMAT : 2}.2020.4.test", @data_source.to_s)
     end
 
     def test_inspect
-      assert_equal("#<TZInfo::DataSources::RubyDataSource: tzdb v2018e, tzinfo-data v#{defined?(TZINFO_TEST_DATA_FORMAT) ? TZINFO_TEST_DATA_FORMAT : 2}.2018.5.test>", @data_source.inspect)
+      assert_equal("#<TZInfo::DataSources::RubyDataSource: tzdb v2020d, tzinfo-data v#{defined?(TZINFO_TEST_DATA_FORMAT) ? TZINFO_TEST_DATA_FORMAT : 2}.2020.4.test>", @data_source.inspect)
     end
 
     if defined?(TZINFO_TEST_DATA_FORMAT) && TZINFO_TEST_DATA_FORMAT == 1
@@ -298,7 +298,7 @@ module DataSources
           puts ds.to_s
         EOF
 
-        assert_sub_process_returns(['Ruby DataSource: tzdb v2018e'], code)
+        assert_sub_process_returns(['Ruby DataSource: tzdb v2020d'], code)
       end
 
       def test_inspect_no_tzinfo_data_version
@@ -311,7 +311,7 @@ module DataSources
           puts ds.inspect
         EOF
 
-        assert_sub_process_returns(['#<TZInfo::DataSources::RubyDataSource: tzdb v2018e>'], code)
+        assert_sub_process_returns(['#<TZInfo::DataSources::RubyDataSource: tzdb v2020d>'], code)
       end
     end
 

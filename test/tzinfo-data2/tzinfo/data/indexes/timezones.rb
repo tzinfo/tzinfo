@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # This file contains data derived from the IANA Time Zone Database
-# (http://www.iana.org/time-zones).
+# (https://www.iana.org/time-zones).
 
 module TZInfo
   module Data
@@ -126,7 +126,7 @@ module TZInfo
           i.linked_timezone 'America/Fort_Wayne'
           i.data_timezone 'America/Fortaleza'
           i.data_timezone 'America/Glace_Bay'
-          i.data_timezone 'America/Godthab'
+          i.linked_timezone 'America/Godthab'
           i.data_timezone 'America/Goose_Bay'
           i.data_timezone 'America/Grand_Turk'
           i.linked_timezone 'America/Grenada'
@@ -186,6 +186,7 @@ module TZInfo
           i.data_timezone 'America/North_Dakota/Beulah'
           i.data_timezone 'America/North_Dakota/Center'
           i.data_timezone 'America/North_Dakota/New_Salem'
+          i.data_timezone 'America/Nuuk'
           i.data_timezone 'America/Ojinaga'
           i.data_timezone 'America/Panama'
           i.data_timezone 'America/Pangnirtung'
@@ -312,6 +313,7 @@ module TZInfo
           i.data_timezone 'Asia/Pontianak'
           i.data_timezone 'Asia/Pyongyang'
           i.data_timezone 'Asia/Qatar'
+          i.data_timezone 'Asia/Qostanay'
           i.data_timezone 'Asia/Qyzylorda'
           i.linked_timezone 'Asia/Rangoon'
           i.data_timezone 'Asia/Riyadh'
@@ -430,7 +432,7 @@ module TZInfo
           i.data_timezone 'Etc/GMT-9'
           i.linked_timezone 'Etc/GMT0'
           i.linked_timezone 'Etc/Greenwich'
-          i.data_timezone 'Etc/UCT'
+          i.linked_timezone 'Etc/UCT'
           i.data_timezone 'Etc/UTC'
           i.linked_timezone 'Etc/Universal'
           i.linked_timezone 'Etc/Zulu'
@@ -597,7 +599,6 @@ module TZInfo
           i.linked_timezone 'US/Michigan'
           i.linked_timezone 'US/Mountain'
           i.linked_timezone 'US/Pacific'
-          i.linked_timezone 'US/Pacific-New'
           i.linked_timezone 'US/Samoa'
           i.linked_timezone 'UTC'
           i.linked_timezone 'Universal'
