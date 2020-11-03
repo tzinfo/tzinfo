@@ -1488,7 +1488,7 @@ module DataSources
       assert_equal("#<TZInfo::DataSources::ZoneinfoDataSource: #{ZONEINFO_DIR}>", @data_source.inspect)
     end
 
-    def test_strings_deduped
+    def test_country_info_strings_deduped
       Dir.mktmpdir('tzinfo_test') do |dir|
         File.open(File.join(dir, 'iso3166.tab'), 'w', external_encoding: Encoding::UTF_8) do |iso3166|
           iso3166.puts("FC\tFake Country")
@@ -1516,6 +1516,14 @@ module DataSources
         assert_same(fc.zones[1].description, oc.zones[1].description)
 
         assert_same(data_source.timezone_identifiers[0], fc.zones[1].identifier)
+      end
+
+      def test_timezone_abbreviations_deduped
+        london = @data_source.load_timezone_info('Europe/London').transitions[0].previous_offset
+        new_york = @data_source.load_timezone_info('America/New_York').transitions[0].previous_offset
+
+        assert_equal('LMT', london)
+        assert_same(london, new_york)
       end
     end
 

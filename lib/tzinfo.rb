@@ -25,6 +25,8 @@ require_relative 'tzinfo/timestamp_with_offset'
 
 require_relative 'tzinfo/timezone_offset'
 require_relative 'tzinfo/timezone_transition'
+require_relative 'tzinfo/transition_rule'
+require_relative 'tzinfo/annual_rules'
 
 require_relative 'tzinfo/data_sources'
 require_relative 'tzinfo/data_sources/timezone_info'
@@ -35,6 +37,7 @@ require_relative 'tzinfo/data_sources/transitions_data_timezone_info'
 
 require_relative 'tzinfo/data_sources/country_info'
 
+require_relative 'tzinfo/data_sources/posix_time_zone_parser'
 require_relative 'tzinfo/data_sources/zoneinfo_reader'
 
 require_relative 'tzinfo/data_source'

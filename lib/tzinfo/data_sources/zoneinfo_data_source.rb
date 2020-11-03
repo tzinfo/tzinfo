@@ -237,7 +237,10 @@ module TZInfo
         @timezone_identifiers = load_timezone_identifiers.freeze
         @countries = load_countries(iso3166_tab_path, zone_tab_path).freeze
         @country_codes = @countries.keys.sort!.freeze
-        @zoneinfo_reader = ZoneinfoReader.new(ConcurrentStringDeduper.new)
+
+        string_deduper = ConcurrentStringDeduper.new
+        posix_tz_parser = PosixTimeZoneParser.new(string_deduper)
+        @zoneinfo_reader = ZoneinfoReader.new(posix_tz_parser, string_deduper)
       end
 
       # Returns a frozen `Array` of all the available time zone identifiers. The
