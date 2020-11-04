@@ -192,6 +192,7 @@ module TZInfo
       @zoneinfo_dir = File.expand_path(@zoneinfo_dir).freeze
       @timezone_index = load_timezone_index.freeze
       @country_index = load_country_index(iso3166_tab_path, zone_tab_path).freeze
+      @posix_tz_parser = PosixTimeZoneParser.new
     end
     
     # Returns a TimezoneInfo instance for a given identifier. 
@@ -208,7 +209,7 @@ module TZInfo
           path.untaint
           
           begin
-            ZoneinfoTimezoneInfo.new(identifier, path)
+            ZoneinfoTimezoneInfo.new(identifier, path, @posix_tz_parser)
           rescue InvalidZoneinfoFile => e
             raise InvalidTimezoneIdentifier, e.message
           end

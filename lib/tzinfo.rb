@@ -10,6 +10,8 @@ require 'tzinfo/timezone_definition'
 
 require 'tzinfo/timezone_offset'
 require 'tzinfo/timezone_transition'
+require 'tzinfo/transition_rule'
+require 'tzinfo/annual_rules'
 require 'tzinfo/timezone_transition_definition'
 
 require 'tzinfo/timezone_index_definition'
@@ -22,6 +24,7 @@ require 'tzinfo/zoneinfo_timezone_info'
 
 require 'tzinfo/data_source'
 require 'tzinfo/ruby_data_source'
+require 'tzinfo/posix_time_zone_parser'
 require 'tzinfo/zoneinfo_data_source'
 
 require 'tzinfo/timezone_period'

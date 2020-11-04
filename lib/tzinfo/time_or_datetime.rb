@@ -160,6 +160,17 @@ module TZInfo
       end
     end
     alias :day :mday
+
+    # Returns the day of the week (0..6 for Sunday to Saturday).
+    def wday
+      if @time
+        @time.wday
+      elsif @datetime
+        @datetime.wday
+      else
+        to_time.wday
+      end
+    end
     
     # Returns the hour of the day (0..23).
     def hour

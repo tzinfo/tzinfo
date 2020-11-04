@@ -249,6 +249,20 @@ class TCTimeOrDateTime < Minitest::Test
     assert_equal(24, TimeOrDateTime.new(DateTime.new(2006, 3, 24, 15, 32, 3)).day)
     assert_equal(24, TimeOrDateTime.new(1143214323).day)
   end
+
+  19.upto(25).each_with_index do |mday,i|
+    define_method "test_wday_time_#{i}" do
+      assert_equal(i, TimeOrDateTime.new(Time.utc(2006, 3, mday)).wday)
+    end
+
+    define_method "test_wday_datetime_#{i}" do
+      assert_equal(i, TimeOrDateTime.new(DateTime.new(2006, 3, mday)).wday)
+    end
+
+    define_method "test_wday_timestamp_#{i}" do
+      assert_equal(i, TimeOrDateTime.new(Time.utc(2006, 3, mday).to_i).wday)
+    end
+  end
   
   def test_hour
     assert_equal(15, TimeOrDateTime.new(Time.utc(2006, 3, 24, 15, 32, 3)).hour)

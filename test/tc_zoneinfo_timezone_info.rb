@@ -10,6 +10,15 @@ include TZInfo
 send(:using, RubyCoreSupport::UntaintExt) if RubyCoreSupport.const_defined?(:UntaintExt)
 
 class TCZoneinfoTimezoneInfo < Minitest::Test
+  class FakePosixTimeZoneParser
+    def initialize(&block)
+      @on_parse = block
+    end
+
+    def parse(tz_string)
+      @on_parse.call(tz_string)
+    end
+  end
 
   begin
     Time.at(-2147483649)
@@ -27,6 +36,16 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     SUPPORTS_NEGATIVE = false
   end
 
+  def setup
+    @expect_tz_string = nil
+    @tz_parse_result = nil
+    @posix_tz_parser = FakePosixTimeZoneParser.new do |tz_string|
+      raise "Unexpected tz_string passed to PosixTimeZoneParser: #{tz_string}" unless tz_string == @expect_tz_string
+      raise InvalidPosixTimeZone, 'FakePosixTimeZoneParser Failure.' if @tz_parse_result == :fail
+      @tz_parse_result
+    end
+  end
+
   def assert_period(abbreviation, utc_offset, std_offset, dst, start_at, end_at, info)    
     if start_at
       period = info.period_for_utc(start_at)
@@ -36,24 +55,24 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       # no transitions, pick the epoch
       period = info.period_for_utc(Time.utc(1970, 1, 1))
     end
-    
-    assert_equal(abbreviation, period.abbreviation)
-    assert_equal(utc_offset, period.utc_offset)
-    assert_equal(std_offset, period.std_offset)
-    assert_equal(dst, period.dst?)
-    
+
+    assert_equal(abbreviation, period.abbreviation, 'abbreviation')
+    assert_equal(utc_offset, period.utc_offset, 'utc_offset')
+    assert_equal(std_offset, period.std_offset, 'std_offset')
+    assert_equal(dst, period.dst?, 'dst')
+
     if start_at
-      refute_nil(period.utc_start_time)
-      assert_equal(start_at, period.utc_start_time)
+      refute_nil(period.utc_start_time, 'utc_start_time')
+      assert_equal(start_at, period.utc_start_time, 'utc_start_time')
     else
-      assert_nil(period.utc_start_time)
+      assert_nil(period.utc_start_time, 'utc_start_time')
     end
     
     if end_at
-      refute_nil(period.utc_end_time)
-      assert_equal(end_at, period.utc_end_time)
+      refute_nil(period.utc_end_time, 'utc_end_time')
+      assert_equal(end_at, period.utc_end_time, 'utc_end_time')
     else
-      assert_nil(period.utc_end_time)
+      assert_nil(period.utc_end_time, 'utc_end_time')
     end
   end
   
@@ -81,13 +100,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     pack_int64_network_order(values.collect {|value| value < 0 ? value + 0x10000000000000000 : value})
   end
   
-  def write_tzif(format, offsets, transitions, leaps = [], options = {})
+  def write_tzif(format, offsets, transitions, tz_string, leaps, options = {})
     
     # Options for testing malformed zoneinfo files.
     magic = options[:magic]
     section2_magic = options[:section2_magic]
     abbrev_separator = options[:abbrev_separator] || "\0"
     abbrev_offset_base = options[:abbrev_offset_base] || 0
+    omit_tz_string_start_new_line = options[:omit_tz_string_start_new_line]
+    omit_tz_string_end_new_line = options[:omit_tz_string_end_new_line]
       
     unless magic
       if format == 1
@@ -191,20 +212,37 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
         end
         
         # Empty POSIX timezone string
-        file.write("\n\n")
+        file.write("\n") unless omit_tz_string_start_new_line
+        tz_string = tz_string.encode(Encoding::UTF_8) if tz_string.respond_to?(:encode)
+        file.write(tz_string)
+        file.write("\n") unless omit_tz_string_end_new_line
       end
       
       file.flush
       
-      yield file.path, format
+      yield file.path
     end
   end
   
-  def tzif_test(offsets, transitions, leaps = [], options = {}, &block)
-    min_format = options[:min_format] || 1
+  def tzif_test(offsets, transitions, options = {}, &block)
+    rules = options[:rules]
+    tz_string = options[:tz_string] || (rules ? "TEST_TZ_STRING_#{rand(1000000)}" : '')
+    leaps = options[:leaps] || []
+    min_format = options[:min_format] || (tz_string.empty? ? 1 : 2)
     
     min_format.upto(3) do |format|
-      write_tzif(format, offsets, transitions, leaps, options, &block)
+      write_tzif(format, offsets, transitions, tz_string, leaps, options) do |path|
+        if format >= 2
+          @tz_parse_result = rules
+          @expect_tz_string = tz_string
+        end
+        begin
+          yield path, format
+        ensure
+          @tz_parse_result = nil
+          @expect_tz_string = nil
+        end
+      end
     end
   end
   
@@ -222,7 +260,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/One', path, @posix_tz_parser)
       assert_equal('Zone/One', info.identifier)
       
       assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1971,  1,  2), info)
@@ -247,7 +285,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(1992,  4,  1, 4, 30, 0), :offset_index => 3}]
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/One', path, @posix_tz_parser)
       assert_equal('Zone/One', info.identifier)
       
       assert_period(:LMT, -12492,    0, false,                              nil, Time.utc(1971,  7,  9, 3,  0, 0), info)
@@ -272,7 +310,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
   
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/Two', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/Two', path, @posix_tz_parser)
       assert_equal('Zone/Two', info.identifier)
       
       assert_period(:LMT, 3542, 0, false, nil, Time.utc(1979, 1, 2), info)      
@@ -283,7 +321,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
         
     tzif_test(offsets, []) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/three', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/three', path, @posix_tz_parser)
       assert_equal('Zone/three', info.identifier)
       
       assert_period(:LT, -12094, 0, false, nil, nil, info)
@@ -296,7 +334,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
     tzif_test(offsets, transitions) do |path, format|
       assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone', path)
+        ZoneinfoTimezoneInfo.new('Zone', path, @posix_tz_parser)
       end
     end
   end
@@ -307,7 +345,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
         
     tzif_test(offsets, transitions) do |path, format|
       assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone', path)
+        ZoneinfoTimezoneInfo.new('Zone', path, @posix_tz_parser)
       end
     end
   end
@@ -316,9 +354,9 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     offsets = [{:gmtoff => -0, :isdst => false, :abbrev => 'LMT'}]
     leaps = [{:at => Time.utc(1972,6,30,23,59,60), :seconds => 1}]
         
-    tzif_test(offsets, [], leaps) do |path, format|
+    tzif_test(offsets, [], :leaps => leaps) do |path, format|
       assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone', path)
+        ZoneinfoTimezoneInfo.new('Zone', path, @posix_tz_parser)
       end
     end
   end
@@ -327,41 +365,36 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     ['TZif4', 'tzif2', '12345'].each do |magic|    
       offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
           
-      tzif_test(offsets, [], [], :magic => magic) do |path, format|        
+      tzif_test(offsets, [], :magic => magic) do |path, format|
         assert_raises(InvalidZoneinfoFile) do
-          ZoneinfoTimezoneInfo.new('Zone2', path)
+          ZoneinfoTimezoneInfo.new('Zone2', path, @posix_tz_parser)
         end
       end
     end
   end
   
-  # These tests can only be run if the platform supports 64-bit Times. When
-  # 64-bit support is unavailable, the second section will not be read, so no 
-  # error will be raised.
-  if SUPPORTS_64BIT
-    def test_load_invalid_section2_magic
-      ['TZif4', 'tzif2', '12345'].each do |section2_magic|    
-        offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
-            
-        tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|        
-          assert_raises(InvalidZoneinfoFile) do
-            ZoneinfoTimezoneInfo.new('Zone4', path)
-          end
+  def test_load_invalid_section2_magic
+    ['TZif4', 'tzif2', '12345'].each do |section2_magic|
+      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+
+      tzif_test(offsets, [], :min_format => 2, :section2_magic => section2_magic) do |path, format|
+        assert_raises(InvalidZoneinfoFile) do
+          ZoneinfoTimezoneInfo.new('Zone4', path, @posix_tz_parser)
         end
       end
     end
+  end
+
+  def test_load_mismatched_section2_magic
+    minus_one = Proc.new {|f| f == 2 ? "TZif\0" : "TZif#{f - 1}" }
+    plus_one = Proc.new {|f| "TZif#{f + 1}" }
     
-    def test_load_mismatched_section2_magic
-      minus_one = Proc.new {|f| f == 2 ? "TZif\0" : "TZif#{f - 1}" }
-      plus_one = Proc.new {|f| "TZif#{f + 1}" }
-      
-      [minus_one, plus_one].each do |section2_magic|    
-        offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
-            
-        tzif_test(offsets, [], [], :min_format => 2, :section2_magic => section2_magic) do |path, format|        
-          assert_raises(InvalidZoneinfoFile) do
-            ZoneinfoTimezoneInfo.new('Zone5', path)
-          end
+    [minus_one, plus_one].each do |section2_magic|
+      offsets = [{:gmtoff => -12094, :isdst => false, :abbrev => 'LT'}]
+
+      tzif_test(offsets, [], :min_format => 2, :section2_magic => section2_magic) do |path, format|
+        assert_raises(InvalidZoneinfoFile) do
+          ZoneinfoTimezoneInfo.new('Zone5', path, @posix_tz_parser)
         end
       end
     end
@@ -373,7 +406,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       file.flush
       
       assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone3', file.path)
+        ZoneinfoTimezoneInfo.new('Zone3', file.path, @posix_tz_parser)
       end
     end
   end
@@ -386,9 +419,9 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     transitions = [
       {:at => Time.utc(2000, 1, 1), :offset_index => 1}]
             
-    tzif_test(offsets, transitions, [], :abbrev_separator => '^') do |path, format|
+    tzif_test(offsets, transitions, :abbrev_separator => '^') do |path, format|
       assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone', path)
+        ZoneinfoTimezoneInfo.new('Zone', path, @posix_tz_parser)
       end
     end
   end
@@ -401,9 +434,9 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     transitions = [
       {:at => Time.utc(2000, 1, 1), :offset_index => 1}]
             
-    tzif_test(offsets, transitions, [], :abbrev_offset_base => 8) do |path, format|
+    tzif_test(offsets, transitions, :abbrev_offset_base => 8) do |path, format|
       assert_raises(InvalidZoneinfoFile) do
-        ZoneinfoTimezoneInfo.new('Zone', path)
+        ZoneinfoTimezoneInfo.new('Zone', path, @posix_tz_parser)
       end
     end
   end
@@ -428,7 +461,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/Negative', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/Negative', path, @posix_tz_parser)
       assert_equal('Zone/Negative', info.identifier)
       
       if SUPPORTS_NEGATIVE
@@ -459,7 +492,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000, 12, 31), :offset_index => 3}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/Negative', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/Negative', path, @posix_tz_parser)
       assert_equal('Zone/Negative', info.identifier)
 
       if SUPPORTS_NEGATIVE
@@ -476,13 +509,15 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   end
 
   def test_load_64bit
-    # Some platforms support 64-bit Times, others only 32-bit. The TZif version
-    # 2 and later format contains both 32-bit and 64-bit times.
+    # The TZif version2 and later format contains both 32-bit and 64-bit
+    # sections. The 64-bit section is always used. 
+    #
+    # Negative transitions before the supported range are moved to the start of
+    # the supported range.
+    #
+    # Transitions after 2**31 - 1 are discarded if 64-bit times aren't
+    # supported.
     
-    # Where 64-bit is supported and a TZif 2 or later file is provided, the 
-    # 64-bit times should be used, otherwise the 32-bit information should be 
-    # used.
-  
     offsets = [
       {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
       {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
@@ -496,27 +531,35 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at =>             2240524800, :offset_index => 3}] # Time.utc(2040, 12, 31)
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/SixtyFour', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/SixtyFour', path, @posix_tz_parser)
       assert_equal('Zone/SixtyFour', info.identifier)
   
-      if SUPPORTS_64BIT && format >= 2
-        assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(1850,  1,  2), info)
+      if SUPPORTS_64BIT && SUPPORTS_NEGATIVE && format >= 2
+        assert_period(:LMT,  3542,    0, false, nil,                    Time.utc(1850,  1,  2), info)
         assert_period(:XST,  3600,    0, false, Time.utc(1850,  1,  2), Time.utc(2003,  4, 22), info)
         assert_period(:XDT,  3600, 3600,  true, Time.utc(2003,  4, 22), Time.utc(2003, 10, 21), info)
         assert_period(:XST,  3600,    0, false, Time.utc(2003, 10, 21), Time.utc(2040, 12, 31), info)
-        assert_period(:XNST,    0,    0, false, Time.utc(2040, 12, 31),                    nil, info)
-      else
-        assert_period(:LMT,  3542,    0, false,                    nil, Time.utc(2003,  4, 22), info)
+        assert_period(:XNST,    0,    0, false, Time.utc(2040, 12, 31), nil,                    info)
+      elsif format < 2
+        assert_period(:LMT,  3542,    0, false, nil,                    Time.utc(2003,  4, 22), info)
         assert_period(:XDT,  3600, 3600,  true, Time.utc(2003,  4, 22), Time.utc(2003, 10, 21), info)
-        assert_period(:XST,  3600,    0, false, Time.utc(2003, 10, 21),                    nil, info)
+        assert_period(:XST,  3600,    0, false, Time.utc(2003, 10, 21), nil,                    info)
+      else
+        min_supported = SUPPORTS_NEGATIVE ? -2**31 : 0
+        assert_period(:LMT,  3542,    0, false, nil,                        Time.at(min_supported).utc, info)
+        assert_period(:XST,  3600,    0, false, Time.at(min_supported).utc, Time.utc(2003,  4, 22),     info)
+        assert_period(:XDT,  3600, 3600,  true, Time.utc(2003,  4, 22),     Time.utc(2003, 10, 21),     info)
+        assert_period(:XST,  3600,    0, false, Time.utc(2003, 10, 21),     nil,                        info)
       end
     end
   end
   
   def test_load_64bit_range
     # The full range of 64 bit timestamps is not currently supported because of
-    # the way transitions are indexed. Transitions outside the supported range
-    # will be ignored.
+    # the way transitions are indexed. The last transition before the earliest
+    # supported time will be moved to that time if there isn't already a
+    # transition at that time. Transitions after the latest supported time are
+    # ignored.
 
     offsets = [
       {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
@@ -529,7 +572,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => 2**63 - 1,             :offset_index => 0}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/SixtyFourRange', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/SixtyFourRange', path, @posix_tz_parser)
       assert_equal('Zone/SixtyFourRange', info.identifier)
 
       if SUPPORTS_64BIT && format >= 2
@@ -540,10 +583,65 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
         #assert_period(:LMT,  3542, 0, false, Time.at(2**63 - 1).utc, nil,                    info)
 
         # Without full range support, the following periods will be defined:
+        assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(1700, 1, 1),  info)
+        assert_period(:XST,  3600, 0, false, Time.utc(1700, 1, 1),  Time.utc(2014, 5, 27), info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
+      elsif format < 2
         assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(2014, 5, 27), info)
         assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
       else
+        min_supported = SUPPORTS_NEGATIVE ? -2**31 : 0
+        assert_period(:LMT,  3542, 0, false, nil,                        Time.at(min_supported).utc, info)
+        assert_period(:XST,  3600, 0, false, Time.at(min_supported).utc, Time.utc(2014, 5, 27),      info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),      nil,                        info)
+      end
+    end
+  end
+
+  def test_load_64bit_range_transition_at_earliest_supported
+    # The full range of 64 bit timestamps is not currently supported because of
+    # the way transitions are indexed. The last transition before the earliest
+    # supported time will be moved to that time if there isn't already a
+    # transition at that time. Transitions after the latest supported time are
+    # ignored.
+
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 3600, :isdst => false, :abbrev => 'XST2'},
+      {:gmtoff => 7200, :isdst => false, :abbrev => 'XNST'}]
+
+    transitions = [
+      {:at => -2**63,                :offset_index => 1},
+      {:at => -8520336000,           :offset_index => 2}, # Time.utc(1700, 1, 1).to_i
+      {:at => Time.utc(2014, 5, 27), :offset_index => 3},
+      {:at => 2**63 - 1,             :offset_index => 0}]
+
+    tzif_test(offsets, transitions) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Zone/SixtyFourRange', path, @posix_tz_parser)
+      assert_equal('Zone/SixtyFourRange', info.identifier)
+
+      if SUPPORTS_64BIT && format >= 2
+        # When the full range is supported, the following periods will be defined:
+        #assert_period(:LMT,  3542, 0, false, nil,                    Time.at(-2**63).utc,    info)
+        #assert_period(:XST,  3600, 0, false, Time.at(-2**63).utc,    Time.utc(2014, 5, 27),  info)
+        #assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**63 - 1).utc, info)
+        #assert_period(:LMT,  3542, 0, false, Time.at(2**63 - 1).utc, nil,                    info)
+
+        # Without full range support, the following periods will be defined:
+        assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(1700, 1, 1),  info)
+        assert_period(:XST2, 3600, 0, false, Time.utc(1700, 1, 1),  Time.utc(2014, 5, 27), info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
+      elsif format < 2
         assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(2014, 5, 27), info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
+      elsif SUPPORTS_NEGATIVE
+        assert_period(:LMT,  3542, 0, false, nil,                   Time.at(-2**31).utc,   info)
+        assert_period(:XST,  3600, 0, false, Time.at(-2**31).utc,   Time.utc(2014, 5, 27), info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
+      else
+        assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(1970, 1,  1), info)
+        assert_period(:XST2, 3600, 0, false, Time.utc(1970, 1, 1),  Time.utc(2014, 5, 27), info)
         assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
       end
     end
@@ -551,8 +649,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
 
   def test_load_supported_64bit_range
     # The full range of 64 bit timestamps is not currently supported because of
-    # the way transitions are indexed. Transitions outside the supported range
-    # will be ignored.
+    # the way transitions are indexed.
 
     min_timestamp = -8520336000 # Time.utc(1700, 1, 1).to_i
     max_timestamp = 16725225600 # Time.utc(2500, 1, 1).to_i
@@ -568,7 +665,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => max_timestamp - 1,     :offset_index => 0}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/SupportedSixtyFourRange', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/SupportedSixtyFourRange', path, @posix_tz_parser)
       assert_equal('Zone/SupportedSixtyFourRange', info.identifier)
 
       if SUPPORTS_64BIT && format >= 2
@@ -576,9 +673,14 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
         assert_period(:XST,  3600, 0, false, Time.at(min_timestamp).utc,     Time.utc(2014, 5, 27),          info)
         assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),          Time.at(max_timestamp - 1).utc, info)
         assert_period(:LMT,  3542, 0, false, Time.at(max_timestamp - 1).utc, nil,                            info)
-      else
+      elsif format < 2
         assert_period(:LMT,  3542, 0, false, nil,                   Time.utc(2014, 5, 27), info)
         assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27), nil,                   info)
+      else
+        min_supported = SUPPORTS_NEGATIVE ? -2**31 : 0
+        assert_period(:LMT,  3542, 0, false, nil,                        Time.at(min_supported).utc, info)
+        assert_period(:XST,  3600, 0, false, Time.at(min_supported).utc, Time.utc(2014, 5, 27),      info)
+        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),      nil,                        info)
       end
     end
   end
@@ -595,19 +697,14 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => 2**31 - 1,             :offset_index => 0}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/ThirtyTwoRange', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/ThirtyTwoRange', path, @posix_tz_parser)
       assert_equal('Zone/ThirtyTwoRange', info.identifier)
 
-      if SUPPORTS_NEGATIVE
-        assert_period(:LMT,  3542, 0, false, nil,                    Time.at(-2**31).utc,    info)
-        assert_period(:XST,  3600, 0, false, Time.at(-2**31).utc,    Time.utc(2014, 5, 27),  info)
-        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**31 - 1).utc, info)
-        assert_period(:LMT,  3542, 0, false, Time.at(2**31 - 1).utc, nil,                    info)
-      else
-        assert_period(:XST,  3600, 0, false, Time.utc(1970, 1, 1),   Time.utc(2014, 5, 27),  info)
-        assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),  Time.at(2**31 - 1).utc, info)
-        assert_period(:LMT,  3542, 0, false, Time.at(2**31 - 1).utc, nil,                    info)
-      end
+      min_supported = SUPPORTS_NEGATIVE ? -2**31 : 0
+      assert_period(:LMT,  3542, 0, false, nil,                        Time.at(min_supported).utc, info)
+      assert_period(:XST,  3600, 0, false, Time.at(min_supported).utc, Time.utc(2014, 5, 27),      info)
+      assert_period(:XNST, 7200, 0, false, Time.utc(2014, 5, 27),      Time.at(2**31 - 1),         info)
+      assert_period(:LMT,  3542, 0, false, Time.at(2**31 - 1).utc,     nil,                        info)
     end
   end
 
@@ -628,7 +725,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000, 4, 1), :offset_index => 1}]
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path, @posix_tz_parser)
       assert_equal('Zone/DoubleDaylight', info.identifier)
   
       assert_period(:LMT,  3542,    0, false,                  nil, Time.utc(2000, 1, 1), info)
@@ -645,7 +742,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
   
     offsets = [
       {:gmtoff =>  3542, :isdst => false, :abbrev => 'LMT'},
-      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST'},      
+      {:gmtoff =>  3600, :isdst => false, :abbrev => 'XST'},
       {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDDT'}]
       
     transitions = [
@@ -654,7 +751,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000, 6, 1), :offset_index => 1}]
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path, @posix_tz_parser)
       assert_equal('Zone/DoubleDaylight', info.identifier)
   
       assert_period(:LMT,  3542,    0, false,                  nil, Time.utc(2000, 4, 1), info)
@@ -683,7 +780,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000, 6, 1), :offset_index => 1}]
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path, @posix_tz_parser)
       assert_equal('Zone/DoubleDaylight', info.identifier)
   
       assert_period(:LMT,  -10821,    0, false,                  nil, Time.utc(2000, 1, 1), info)
@@ -712,7 +809,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000, 3, 1), :offset_index => 1}]
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path, @posix_tz_parser)
       assert_equal('Zone/DoubleDaylight', info.identifier)
   
       assert_period(:LMT,  3542,    0, false,                  nil, Time.utc(2000, 1, 1), info)
@@ -733,7 +830,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     transitions = [{:at => Time.utc(2000, 1, 1), :offset_index => 1}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/OnlyDST', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/OnlyDST', path, @posix_tz_parser)
       assert_equal('Zone/OnlyDST', info.identifier)
 
       assert_period(:LMT, 3542,    0, false,                  nil, Time.utc(2000, 1, 1), info)
@@ -750,7 +847,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     transitions = [{:at => Time.utc(2000, 1, 1), :offset_index => 0}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/OnlyDST', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/OnlyDST', path, @posix_tz_parser)
       assert_equal('Zone/OnlyDST', info.identifier)
 
       assert_period(:XDT, 3600, 3600, true,                  nil, Time.utc(2000, 1, 1), info)
@@ -775,7 +872,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000, 2, 1), :offset_index => 2}]
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/DoubleDaylight', path, @posix_tz_parser)
       assert_equal('Zone/DoubleDaylight', info.identifier)
   
       assert_period(:LMT,  3542,    0, false,                  nil, Time.utc(2000, 1, 1), info)
@@ -805,7 +902,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2012,  3, 31, 14, 0, 0), :offset_index => 4}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Test/Pacific/Apia', path)
+      info = ZoneinfoTimezoneInfo.new('Test/Pacific/Apia', path, @posix_tz_parser)
       assert_equal('Test/Pacific/Apia', info.identifier)
 
       assert_period(  :LMT,  45184,    0, false,                              nil, Time.utc(2011,  4,  2, 14, 0, 0), info)
@@ -844,7 +941,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # offsets.
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/SplitUtcOffset', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/SplitUtcOffset', path, @posix_tz_parser)
       assert_equal('Zone/SplitUtcOffset', info.identifier)
 
       assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
@@ -886,7 +983,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # utc_offset of 3600 and std_offset of 7200).
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/MinimumUtcOffset', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/MinimumUtcOffset', path, @posix_tz_parser)
       assert_equal('Zone/MinimumUtcOffset', info.identifier)
 
       assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
@@ -915,7 +1012,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # utc_offset of 3600 and std_offset of 7200).
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/MinimumUtcOffset', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/MinimumUtcOffset', path, @posix_tz_parser)
       assert_equal('Zone/MinimumUtcOffset', info.identifier)
 
       assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
@@ -944,7 +1041,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # equivalent (or greater) utc_total_offset.
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetEqual', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetEqual', path, @posix_tz_parser)
       assert_equal('Zone/UtcOffsetEqual', info.identifier)
 
       assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
@@ -973,7 +1070,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # equivalent (or greater) utc_total_offset.
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetEqual', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetEqual', path, @posix_tz_parser)
       assert_equal('Zone/UtcOffsetEqual', info.identifier)
 
       assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
@@ -1001,7 +1098,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # from utc_total_offset - std_offset.
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/AdjacentEqual', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/AdjacentEqual', path, @posix_tz_parser)
       assert_equal('Zone/AdjacentEqual', info.identifier)
 
       assert_period(:LMT, 7142,    0, false,                   nil, Time.utc(2000,  1, 1), info)
@@ -1032,7 +1129,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # an equivalent utc_offset of 3600 and std_offset of 7200).
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetPreserved', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetPreserved', path, @posix_tz_parser)
       assert_equal('Zone/UtcOffsetPreserved', info.identifier)
 
       assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
@@ -1064,7 +1161,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     # an equivalent utc_offset of 3600 and std_offset of 7200).
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetPreserved', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/UtcOffsetPreserved', path, @posix_tz_parser)
       assert_equal('Zone/UtcOffsetPreserved', info.identifier)
 
       assert_period( :LMT, 3542,    0, false,                   nil, Time.utc(2000,  1, 1), info)
@@ -1092,7 +1189,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000,  5, 1), :offset_index => 1}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/NegativeStdOffsetDst', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/NegativeStdOffsetDst', path, @posix_tz_parser)
       assert_equal('Zone/NegativeStdOffsetDst', info.identifier)
 
       assert_period(:LMT, -100,     0, false,                  nil, Time.utc(2000, 1, 1), info)
@@ -1121,7 +1218,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000,  5, 1), :offset_index => 1}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/NegativeStdOffsetDstInitialDst', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/NegativeStdOffsetDstInitialDst', path, @posix_tz_parser)
       assert_equal('Zone/NegativeStdOffsetDstInitialDst', info.identifier)
 
       assert_period(:LMT, -100,     0, false,                  nil, Time.utc(2000, 1, 1), info)
@@ -1146,7 +1243,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000,  3, 1), :offset_index => 3}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/BaseOffsetMovesToDstNotHour', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/BaseOffsetMovesToDstNotHour', path, @posix_tz_parser)
       assert_equal('Zone/BaseOffsetMovesToDstNotHour', info.identifier)
 
       assert_period(:LMT, -100,     0, false,                  nil, Time.utc(2000, 1, 1), info)
@@ -1169,7 +1266,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2000,  3, 1), :offset_index => 3}]
 
     tzif_test(offsets, transitions) do |path, format|
-      info = ZoneinfoTimezoneInfo.new('Zone/BaseOffsetMovesFromDstNotHour', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/BaseOffsetMovesFromDstNotHour', path, @posix_tz_parser)
       assert_equal('Zone/BaseOffsetMovesFromDstNotHour', info.identifier)
 
       assert_period(:LMT, -100,     0, false,                  nil, Time.utc(2000, 1, 1), info)
@@ -1187,7 +1284,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       path.untaint
       
       safe_test do        
-        info = ZoneinfoTimezoneInfo.new('Zone/three', path)
+        info = ZoneinfoTimezoneInfo.new('Zone/three', path, @posix_tz_parser)
         assert_equal('Zone/three', info.identifier)
         
         assert_period(:LT, -12094, 0, false, nil, nil, info)
@@ -1207,7 +1304,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(1971,  1,  2), :offset_index => 1}]
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/One', path, @posix_tz_parser)
       assert_equal('Zone/One', info.identifier)
       
       assert_period(:LMT,     3542,    0, false,                    nil, Time.utc(1971,  1,  2), info)
@@ -1226,11 +1323,753 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       {:at => Time.utc(2011, 12, 31, 13, 24, 26), :offset_index => 1}]
   
     tzif_test(offsets, transitions) do |path, format|     
-      info = ZoneinfoTimezoneInfo.new('Zone/One', path)
+      info = ZoneinfoTimezoneInfo.new('Zone/One', path, @posix_tz_parser)
       assert_equal('Zone/One', info.identifier)
       
       assert_period(:LMT, 3542, 0, false,                                nil, Time.utc(2011, 12, 31, 13, 24, 26), info)
       assert_period(:XST, 3600, 0, false, Time.utc(2011, 12, 31, 13, 24, 26),                                nil, info)
+    end
+  end
+
+  def test_load_invalid_tz_string
+    offsets = [{:gmtoff => 0, :isdst => false, :abbrev => 'UTC'}]
+
+    tzif_test(offsets, [], :rules => :fail) do |path, format|
+      error = assert_raises(InvalidZoneinfoFile) { ZoneinfoTimezoneInfo.new('Invalid/String', path, @posix_tz_parser) }
+      assert_equal("Failed to parse POSIX-style TZ string in file '#{path}': FakePosixTimeZoneParser Failure.", error.message)
+    end
+  end
+
+  def test_load_tz_string_missing_start_newline
+    offsets = [{:gmtoff => 0, :isdst => false, :abbrev => 'UTC'}]
+    rules = TimezoneOffset.new(0, 0, 'UTC')
+
+    tzif_test(offsets, [], :rules => rules, :omit_tz_string_start_new_line => true) do |path, format|
+      error = assert_raises(InvalidZoneinfoFile) { ZoneinfoTimezoneInfo.new('Missing/Start', path, @posix_tz_parser) }
+      assert_equal("Expected newline starting POSIX-style TZ string in file '#{path}'.", error.message)
+    end
+  end
+
+  def test_load_tz_string_missing_end_newline
+    offsets = [{:gmtoff => 0, :isdst => false, :abbrev => 'UTC'}]
+    rules = TimezoneOffset.new(0, 0, 'UTC')
+
+    tzif_test(offsets, [], :rules => rules, :omit_tz_string_end_new_line => true) do |path, format|
+      error = assert_raises(InvalidZoneinfoFile) { ZoneinfoTimezoneInfo.new('Missing/End', path, @posix_tz_parser) }
+      assert_equal("Expected newline ending POSIX-style TZ string in file '#{path}'.", error.message)
+    end
+  end
+
+  [
+    [false, 1, 0, 'TEST'],
+    [false, 0, 1, 'TEST'],
+    [false, 0, 0, 'TEST2'],
+    [false, -1, 1, 'TEST'],
+    [true, 0, 0, 'TEST']
+  ].each do |(isdst, base_utc_offset, std_offset, abbreviation)|
+    define_method "test_load_tz_string_does_not_match_#{isdst ? 'dst' : 'std'}_constant_offset_#{base_utc_offset}_#{std_offset}_#{abbreviation}" do
+      offsets = [{:gmtoff => 0, :isdst => isdst, :abbrev => 'TEST'}]
+      rules = TimezoneOffset.new(base_utc_offset, std_offset, abbreviation)
+
+      tzif_test(offsets, [], :rules => rules) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { ZoneinfoTimezoneInfo.new('Offset/Mismatch', path, @posix_tz_parser) }
+        assert_equal("Constant offset POSIX-style TZ string does not match constant offset in file '#{path}'.", error.message)
+      end
+    end
+  end
+
+  [
+    [3601, 'XST'],
+    [3600, 'YST']
+  ].each do |(base_utc_offset, abbreviation)|
+    define_method "test_load_tz_string_does_not_match_final_std_transition_offset_#{base_utc_offset}_#{abbreviation}" do
+      offsets = [
+        {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+        {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
+        {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}
+      ]
+
+      transitions = [
+        {:at => Time.utc(1971,  1,  2, 2, 0, 0) - 3542, :offset_index => 1},
+        {:at => Time.utc(1981,  4, 10, 2, 0, 0) - 3600, :offset_index => 2},
+        {:at => Time.utc(1981, 10, 27, 2, 0, 0) - 7200, :offset_index => 1}
+      ]
+
+      rules = AnnualRules.new(
+        TimezoneOffset.new(base_utc_offset, 0, abbreviation),
+        TimezoneOffset.new(3600, 3600, 'XDT'),
+        JulianDayOfYearTransitionRule.new(100, 7200),
+        JulianDayOfYearTransitionRule.new(300, 7200)
+      )
+
+      tzif_test(offsets, transitions, :rules => rules) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { ZoneinfoTimezoneInfo.new('Offset/Mismatch', path, @posix_tz_parser) }
+        assert_equal("The first offset indicated by the POSIX-style TZ string did not match the final defined offset in file '#{path}'.", error.message)
+      end
+    end
+  end
+
+  [
+    [3601, 0, 'XST'],
+    [3600, 1, 'XST'],
+    [3600, 0, 'YST']
+  ].each do |(base_utc_offset, std_offset, abbreviation)|
+    define_method "test_load_tz_string_does_not_match_final_dst_transition_offset_#{base_utc_offset}_#{std_offset}_#{abbreviation}" do
+      offsets = [
+        {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+        {:gmtoff => 3600, :isdst => false, :abbrev => 'XST'},
+        {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}
+      ]
+
+      transitions = [
+        {:at => Time.utc(1971,  1,  2, 2, 0, 0) - 3542, :offset_index => 1},
+        {:at => Time.utc(1981,  4, 10, 2, 0, 0) - 3600, :offset_index => 2}
+      ]
+
+      rules = AnnualRules.new(
+        TimezoneOffset.new(3600, 0, 'XST'),
+        TimezoneOffset.new(base_utc_offset, std_offset, abbreviation),
+        JulianDayOfYearTransitionRule.new(100, 7200),
+        JulianDayOfYearTransitionRule.new(300, 7200)
+      )
+
+      tzif_test(offsets, transitions, :rules => rules) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { ZoneinfoTimezoneInfo.new('Offset/Mismatch', path, @posix_tz_parser) }
+        assert_equal("The first offset indicated by the POSIX-style TZ string did not match the final defined offset in file '#{path}'.", error.message)
+      end
+    end
+  end
+
+  [
+    [3600, 0],
+    [3600, 3600],
+    [10800, -3600]
+  ].each do |(base_utc_offset, std_offset)|
+    rules = TimezoneOffset.new(base_utc_offset, std_offset, 'TEST')
+
+    define_method "test_load_tz_string_uses_constant_offset_with_no_transitions_#{base_utc_offset}_#{std_offset}" do
+      offsets = [{:gmtoff => base_utc_offset + std_offset, :isdst => std_offset != 0, :abbrev => 'TEST'}]
+
+      tzif_test(offsets, [], :rules => rules) do |path, format|
+        info = ZoneinfoTimezoneInfo.new('Constant/Offset', path, @posix_tz_parser)
+        assert_equal('Constant/Offset', info.identifier)
+        assert_period(:TEST, base_utc_offset, std_offset, std_offset != 0, nil, nil, info)
+      end
+    end
+
+    define_method "test_load_tz_string_uses_constant_offset_after_last_transition_#{base_utc_offset}_#{std_offset}" do
+      offsets = [
+        {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+        {:gmtoff => base_utc_offset + std_offset, :isdst => std_offset != 0, :abbrev => 'TEST'}
+      ]
+
+      transitions = [
+        {:at => Time.utc(1971, 1, 2, 2, 0, 0) - 3542, :offset_index => 1}
+      ]
+
+      t0 = Time.utc(1971, 1, 2, 2, 0, 0) - 3542
+
+      tzif_test(offsets, transitions, :rules => rules) do |path, format|
+        info = ZoneinfoTimezoneInfo.new('Constant/After', path, @posix_tz_parser)
+        assert_equal('Constant/After', info.identifier)
+        assert_period(:LMT,             3542,          0, false,           nil, t0,  info)
+        assert_period(:TEST, base_utc_offset, std_offset, std_offset != 0, t0,  nil, info)
+      end
+    end
+  end
+
+  def test_load_tz_string_uses_rules_to_generate_all_transitions_when_none_defined
+    offsets = [{:gmtoff => 7200, :isdst => false, :abbrev => 'XST'}]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200, 0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(300, 7200)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, [], :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('All/Rules', path, @posix_tz_parser)
+      assert_equal('All/Rules', info.identifier)
+
+      assert_period(:XST, 7200, 0, false, nil, Time.utc(1970, 4, 10, 1, 0, 0) - 7200, info)
+
+      1970.upto(generate_up_to - 1).each do |year|
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XST, 7200,    0, false, Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+      end
+
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+    end
+  end
+
+  def test_load_tz_string_uses_rules_to_generate_all_transitions_when_none_defined_omitting_first_if_matches_first_offset
+    offsets = [{:gmtoff => 10800, :isdst => true, :abbrev => 'XDT'}]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200, 0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(300, 7200)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, [], :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('All/Rules', path, @posix_tz_parser)
+      assert_equal('All/Rules', info.identifier)
+
+      assert_period(:XDT, 7200, 3600, true,  nil,                                     Time.utc(1970, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(1970, 10, 27, 2, 0, 0) - 10800, Time.utc(1971,  4, 10, 1, 0, 0) -  7200, info)
+
+      1971.upto(generate_up_to - 1).each do |year|
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XST, 7200,    0, false, Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+      end
+
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+    end
+  end
+
+  def test_load_tz_string_uses_rules_to_generate_all_transitions_when_none_defined_with_previous_offset_of_first_matching_first_offset
+    offsets = [{:gmtoff => 7142, :isdst => false, :abbrev => 'LMT'}]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200, 0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(300, 7200)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, [], :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('All/Rules', path, @posix_tz_parser)
+      assert_equal('All/Rules', info.identifier)
+
+      assert_period(:LMT, 7142, 0, false, nil, Time.utc(1970, 4, 10, 1, 0, 0) - 7200, info)
+
+      1970.upto(generate_up_to - 1).each do |year|
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XST, 7200,    0, false, Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+      end
+
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+    end
+  end
+
+  def test_load_tz_string_uses_rules_to_generate_all_transitions_when_none_defined_correcting_initial_offset
+    offsets = [{:gmtoff => 10800, :isdst => true, :abbrev => 'XDDT'}]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(3600, 0, 'XST'),
+      TimezoneOffset.new(3600, 7200, 'XDDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(300, 7200)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, [], :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('All/Rules', path, @posix_tz_parser)
+      assert_equal('All/Rules', info.identifier)
+
+      assert_period(:XDDT, 3600, 7200, true,  nil,                                     Time.utc(1970, 10, 27, 2, 0, 0) - 10800, info) # would be :XDT, 7200, 3600 otherwise
+      assert_period(:XST,  3600,    0, false, Time.utc(1970, 10, 27, 2, 0, 0) - 10800, Time.utc(1971,  4, 10, 1, 0, 0) -  3600, info)
+
+      1971.upto(generate_up_to - 1).each do |year|
+        assert_period(:XDDT, 3600, 7200, true,  Time.utc(year,  4, 10, 1, 0, 0) -  3600, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XST,  3600,    0, false, Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  3600, info)
+      end
+
+      assert_period(:XDDT, 3600, 7200, true,  Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  3600, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST,  3600,    0, false, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+    end
+  end
+
+  def test_load_tz_string_extends_transitions_starting_from_std_to_dst_following_year
+    offsets = [
+      {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+    ]
+
+    transitions = [
+      {:at => Time.utc(1971,  1,  2, 2, 0, 0) -  7142, :offset_index => 1},
+      {:at => Time.utc(1981,  4, 10, 1, 0, 0) -  7200, :offset_index => 2},
+      {:at => Time.utc(1981, 10, 27, 2, 0, 0) - 10800, :offset_index => 1}
+    ]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200, 0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(300, 7200)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('From/Rules', path, @posix_tz_parser)
+      assert_equal('From/Rules', info.identifier)
+
+      assert_period(:LMT, 7142, 0, false, nil,                                  Time.utc(1971, 1,  2, 2, 0, 0) - 7142, info)
+      assert_period(:XST, 7200, 0, false, Time.utc(1971, 1, 2, 2, 0, 0) - 7142, Time.utc(1981, 4, 10, 1, 0, 0) - 7200, info)
+
+      1981.upto(generate_up_to - 1).each do |year|
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XST, 7200,    0, false, Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+      end
+
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+    end
+  end
+
+  def test_load_tz_string_extends_transitions_starting_from_dst_to_std_same_year
+    offsets = [
+      {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+    ]
+
+    transitions = [
+      {:at => Time.utc(1971,  1,  2, 2, 0, 0) -  7142, :offset_index => 1},
+      {:at => Time.utc(1981,  4, 10, 1, 0, 0) -  7200, :offset_index => 2},
+      {:at => Time.utc(1981, 10, 27, 2, 0, 0) - 10800, :offset_index => 1},
+      {:at => Time.utc(1982,  4, 10, 1, 0, 0) -  7200, :offset_index => 2}
+    ]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200, 0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(300, 7200)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('From/Rules', path, @posix_tz_parser)
+      assert_equal('From/Rules', info.identifier)
+
+      assert_period(:LMT, 7142, 0, false, nil,                                  Time.utc(1971, 1,  2, 2, 0, 0) - 7142, info)
+      assert_period(:XST, 7200, 0, false, Time.utc(1971, 1, 2, 2, 0, 0) - 7142, Time.utc(1981, 4, 10, 1, 0, 0) - 7200, info)
+
+      1981.upto(generate_up_to - 1).each do |year|
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XST, 7200,    0, false, Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+      end
+
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+    end
+  end
+
+  def test_load_tz_string_extends_transitions_starting_from_dst_to_std_following_year
+    offsets = [
+      {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+    ]
+
+    transitions = [
+      {:at => Time.utc(1971,  1,  2, 1, 0, 0) -  7142, :offset_index => 1},
+      {:at => Time.utc(1981, 10, 27, 1, 0, 0) -  7200, :offset_index => 2},
+      {:at => Time.utc(1982,  4, 10, 2, 0, 0) - 10800, :offset_index => 1},
+      {:at => Time.utc(1982, 10, 27, 1, 0, 0) -  7200, :offset_index => 2}
+    ]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200,    0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(300, 3600),
+      JulianDayOfYearTransitionRule.new(100, 7200)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('From/Rules', path, @posix_tz_parser)
+      assert_equal('From/Rules', info.identifier)
+
+      assert_period(:LMT, 7142,    0, false, nil,                                    Time.utc(1971,  1,  2, 1, 0, 0) - 7142, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(1971,  1,  2, 1, 0, 0) - 7142, Time.utc(1981, 10, 27, 1, 0, 0) - 7200, info)
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(1981, 10, 27, 1, 0, 0) - 7200, Time.utc(1982,  4, 10, 2, 0, 0) - 10800, info)
+
+      1982.upto(generate_up_to - 1).each do |year|
+        assert_period(:XST, 7200,    0, false, Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+      end
+
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+    end
+  end
+
+  def test_load_tz_string_extends_transitions_starting_from_std_to_dst_same_year
+    offsets = [
+      {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+    ]
+
+    transitions = [
+      {:at => Time.utc(1971,  1,  2, 1, 0, 0) -  7142, :offset_index => 1},
+      {:at => Time.utc(1981, 10, 27, 1, 0, 0) -  7200, :offset_index => 2},
+      {:at => Time.utc(1982,  4, 10, 2, 0, 0) - 10800, :offset_index => 1},
+      {:at => Time.utc(1982, 10, 27, 1, 0, 0) -  7200, :offset_index => 2},
+      {:at => Time.utc(1983,  4, 10, 2, 0, 0) - 10800, :offset_index => 1}
+    ]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200,    0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(300, 3600),
+      JulianDayOfYearTransitionRule.new(100, 7200)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('From/Rules', path, @posix_tz_parser)
+      assert_equal('From/Rules', info.identifier)
+
+      assert_period(:LMT, 7142,    0, false, nil,                                    Time.utc(1971,  1,  2, 1, 0, 0) - 7142, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(1971,  1,  2, 1, 0, 0) - 7142, Time.utc(1981, 10, 27, 1, 0, 0) - 7200, info)
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(1981, 10, 27, 1, 0, 0) - 7200, Time.utc(1982,  4, 10, 2, 0, 0) - 10800, info)
+
+      1982.upto(generate_up_to - 1).each do |year|
+        assert_period(:XST, 7200,    0, false, Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+      end
+
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+    end
+  end
+
+  def test_load_tz_string_extends_transitions_negative_dst
+    offsets = [
+      {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  7200, :isdst => true,  :abbrev => 'XDT'},
+      {:gmtoff => 10800, :isdst => false, :abbrev => 'XST'}
+    ]
+
+    transitions = [
+      {:at => Time.utc(1971,  1,  2, 2, 0, 0) -  7142, :offset_index => 1},
+      {:at => Time.utc(1981,  4, 10, 1, 0, 0) -  7200, :offset_index => 2},
+      {:at => Time.utc(1981, 10, 27, 2, 0, 0) - 10800, :offset_index => 1}
+    ]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(10800,     0, 'XST'),
+      TimezoneOffset.new(10800, -3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(300, 7200),
+      JulianDayOfYearTransitionRule.new(100, 3600)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('From/Rules', path, @posix_tz_parser)
+      assert_equal('From/Rules', info.identifier)
+
+      assert_period(:LMT, 7142,      0, false, nil,                                     Time.utc(1971,  1,  2, 2, 0, 0) -  7142, info)
+      assert_period(:XDT, 10800, -3600, true,  Time.utc(1971,  1,  2, 2, 0, 0) -  7142, Time.utc(1981,  4, 10, 1, 0, 0) -  7200, info)
+
+      1981.upto(generate_up_to - 1).each do |year|
+        assert_period(:XST, 10800,     0, false, Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XDT, 10800, -3600, true,  Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+      end
+
+      assert_period(:XST, 10800,     0, false, Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XDT, 10800, -3600, true,  Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+    end
+  end
+
+  def test_load_tz_string_extends_single_transition_in_final_year
+    offsets = [
+      {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+    ]
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    transitions = [
+      {:at => Time.utc(              1971,  1,  2, 2, 0, 0) -  7142, :offset_index => 1},
+      {:at => Time.utc(generate_up_to - 1,  4, 10, 1, 0, 0) -  7200, :offset_index => 2},
+      {:at => Time.utc(generate_up_to - 1, 10, 27, 2, 0, 0) - 10800, :offset_index => 1},
+      {:at => Time.utc(generate_up_to,      4, 10, 1, 0, 0) -  7200, :offset_index => 2}
+    ]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200, 0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(300, 7200)
+    )
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Final/Year', path, @posix_tz_parser)
+      assert_equal('Final/Year', info.identifier)
+
+      assert_period(:LMT, 7142,    0, false, nil,                                                   Time.utc(              1971,  1,  2, 2, 0, 0) -  7142, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(              1971,  1,  2, 2, 0, 0) -  7142, Time.utc(generate_up_to - 1,  4, 10, 1, 0, 0) -  7200, info)
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to - 1,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to - 1, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to - 1, 10, 27, 2, 0, 0) - 10800, Time.utc(generate_up_to,      4, 10, 1, 0, 0) -  7200, info)
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to,      4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to,     10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to,     10, 27, 2, 0, 0) - 10800, nil,                                                   info)
+    end
+  end
+
+  def test_load_tz_string_adds_nothing_if_transitions_up_to_final_year
+    offsets = [
+      {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+    ]
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    transitions = [
+      {:at => Time.utc(          1971,  1,  2, 2, 0, 0) -  7142, :offset_index => 1},
+      {:at => Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, :offset_index => 2},
+      {:at => Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, :offset_index => 1},
+    ]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200, 0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(300, 7200)
+    )
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Final/Year', path, @posix_tz_parser)
+      assert_equal('Final/Year', info.identifier)
+
+      assert_period(:LMT, 7142,    0, false, nil,                                                   Time.utc(          1971,  1,  2, 2, 0, 0) -  7142, info)
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to,      4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to,     10, 27, 2, 0, 0) - 10800, nil,                                                   info)
+    end
+  end
+
+  def test_load_tz_string_corrects_offset_of_final_transition
+    offsets = [
+      {:gmtoff => 3542, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff => 7200, :isdst => true,  :abbrev => 'XDT'}]
+
+    transitions = [{:at => Time.utc(2000, 4, 10, 1, 0, 0) - 3542, :offset_index => 1}]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(3600,    0, 'XST'),
+      TimezoneOffset.new(3600, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(300, 7200)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Correct/Final', path, @posix_tz_parser)
+      assert_equal('Correct/Final', info.identifier)
+
+      assert_period(:LMT, 3542,    0, false, nil,                                    Time.utc(2000,  4, 10, 1, 0, 0) - 3542, info)
+      assert_period(:XDT, 3600, 3600, true,  Time.utc(2000,  4, 10, 1, 0, 0) - 3542, Time.utc(2000, 10, 27, 2, 0, 0) - 7200, info) # would be :XDT, 3542, 3658 without tz_string
+      assert_period(:XST, 3600,    0, false, Time.utc(2000, 10, 27, 2, 0, 0) - 7200, Time.utc(2001,  4, 10, 1, 0, 0) - 3600, info)
+
+      2001.upto(generate_up_to - 1).each do |year|
+        assert_period(:XDT, 3600, 3600, true,  Time.utc(year,  4, 10, 1, 0, 0) - 3600, Time.utc(year,     10, 27, 2, 0, 0) - 7200, info)
+        assert_period(:XST, 3600,    0, false, Time.utc(year, 10, 27, 2, 0, 0) - 7200, Time.utc(year + 1,  4, 10, 1, 0, 0) - 3600, info)
+      end
+
+      assert_period(:XDT, 3600, 3600, true,  Time.utc(generate_up_to,  4, 10, 1, 0, 0) - 3600, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 7200, info)
+      assert_period(:XST, 3600,    0, false, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 7200, nil,                                              info)
+    end
+  end
+
+  def test_load_tz_string_specifies_transition_to_offset_of_final_transition_same_year
+    offsets = [
+      {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+    ]
+
+    transitions = [
+      {:at => Time.utc(1971,  1,  2, 2, 0, 0) -  7142, :offset_index => 1},
+      {:at => Time.utc(1981,  4, 10, 1, 0, 0) -  7200, :offset_index => 2},
+      {:at => Time.utc(1981, 10, 27, 2, 0, 0) - 10800, :offset_index => 1},
+      {:at => Time.utc(1982,  4, 10, 1, 0, 0) -  7200, :offset_index => 2}
+    ]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200, 0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(101, 3600),
+      JulianDayOfYearTransitionRule.new(300, 7200)
+    )
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      error = assert_raises(InvalidZoneinfoFile) { ZoneinfoTimezoneInfo.new('Invalid/Offset', path, @posix_tz_parser) }
+      assert_equal("The first offset indicated by the POSIX-style TZ string did not match the final defined offset in file '#{path}'.", error.message)
+    end
+  end
+
+  def test_load_tz_string_specifies_transition_to_offset_of_final_transition_following_year
+    offsets = [
+      {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+    ]
+
+    transitions = [
+      {:at => Time.utc(1971,  1,  2, 2, 0, 0) - 7142, :offset_index => 1},
+      {:at => Time.utc(1981, 10, 27, 2, 0, 0) - 7200, :offset_index => 2}
+    ]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200, 0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(299, 7200)
+    )
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      error = assert_raises(InvalidZoneinfoFile) { ZoneinfoTimezoneInfo.new('Invalid/Offset', path, @posix_tz_parser) }
+      assert_equal("The first offset indicated by the POSIX-style TZ string did not match the final defined offset in file '#{path}'.", error.message)
+    end
+  end
+
+  unless SUPPORTS_64BIT
+    def test_generate_up_to_limited_to_2037_with_no_64_bit_support
+      assert_equal(2037, ZoneinfoTimezoneInfo::GENERATE_UP_TO)
+    end
+
+    def test_load_tz_string_does_not_generate_if_transition_after_32_bit_range_with_no_64_bit_support
+      offsets = [
+        {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+        {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+        {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+      ]
+
+      transitions = [
+        {:at => Time.utc(1971, 1, 2, 2, 0, 0) -  7142, :offset_index => 1},
+        {:at =>                    2154474000 -  7200, :offset_index => 2}, # Time.utc(2038,  4, 10, 1, 0, 0).to_i
+        {:at =>                    2171757600 - 10800, :offset_index => 1}  # Time.utc(2038, 10, 27, 2, 0, 0).to_i
+      ]
+
+      rules = AnnualRules.new(
+        TimezoneOffset.new(7200, 0, 'XST'),
+        TimezoneOffset.new(7200, 3600, 'XDT'),
+        JulianDayOfYearTransitionRule.new(100, 3600),
+        JulianDayOfYearTransitionRule.new(300, 7200)
+      )
+
+      tzif_test(offsets, transitions, :rules => rules) do |path, format|
+        info = ZoneinfoTimezoneInfo.new('From/Rules', path, @posix_tz_parser)
+        assert_equal('From/Rules', info.identifier)
+
+        assert_period(:LMT, 7142, 0, false, nil,                                  Time.utc(1971, 1, 2, 2, 0, 0) - 7142, info)
+        assert_period(:XST, 7200, 0, false, Time.utc(1971, 1, 2, 2, 0, 0) - 7142, nil,                                  info)
+      end
+    end
+  end
+
+  if SUPPORTS_NEGATIVE
+    def test_load_tz_string_generates_from_last_transition_if_before_1970_and_supports_negative
+      offsets = [
+        {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+        {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+        {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+      ]
+
+      transitions = [
+        {:at => Time.utc(1961,  1,  2, 2, 0, 0) -  7142, :offset_index => 1},
+        {:at => Time.utc(1962,  4, 10, 1, 0, 0) -  7200, :offset_index => 2},
+        {:at => Time.utc(1962, 10, 27, 2, 0, 0) - 10800, :offset_index => 1}
+      ]
+
+      rules = AnnualRules.new(
+        TimezoneOffset.new(7200, 0, 'XST'),
+        TimezoneOffset.new(7200, 3600, 'XDT'),
+        JulianDayOfYearTransitionRule.new(100, 3600),
+        JulianDayOfYearTransitionRule.new(300, 7200)
+      )
+
+      generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+      tzif_test(offsets, transitions, :rules => rules) do |path, format|
+        info = ZoneinfoTimezoneInfo.new('Pre/1970', path, @posix_tz_parser)
+        assert_equal('Pre/1970', info.identifier)
+
+        assert_period(:LMT, 7142, 0, false, nil,                                  Time.utc(1961, 1,  2, 2, 0, 0) - 7142, info)
+        assert_period(:XST, 7200, 0, false, Time.utc(1961, 1, 2, 2, 0, 0) - 7142, Time.utc(1962, 4, 10, 1, 0, 0) - 7200, info)
+
+        1962.upto(generate_up_to - 1).each do |year|
+          assert_period(:XDT, 7200, 3600, true,  Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+          assert_period(:XST, 7200,    0, false, Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+        end
+
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+      end
+    end
+  else
+    def test_load_tz_string_generates_from_1970_if_last_transition_before_1970_and_does_not_support_negative
+      offsets = [
+        {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+        {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+        {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+      ]
+
+      transitions = [
+        {:at => -283903200 -  7142, :offset_index => 1}, # Time.utc(1961,  1,  2, 2, 0, 0)
+        {:at => -243903600 -  7200, :offset_index => 2}, # Time.utc(1962,  4, 10, 1, 0, 0)
+        {:at => -226620000 - 10800, :offset_index => 1}  # Time.utc(1962, 10, 27, 2, 0, 0)
+      ]
+
+      rules = AnnualRules.new(
+        TimezoneOffset.new(7200, 0, 'XST'),
+        TimezoneOffset.new(7200, 3600, 'XDT'),
+        JulianDayOfYearTransitionRule.new(100, 3600),
+        JulianDayOfYearTransitionRule.new(300, 7200)
+      )
+
+      generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+      tzif_test(offsets, transitions, :rules => rules) do |path, format|
+        info = ZoneinfoTimezoneInfo.new('Pre/1970', path, @posix_tz_parser)
+        assert_equal('Pre/1970', info.identifier)
+
+        assert_period(:LMT, 7142, 0, false, nil,                  Time.utc(1970, 1, 1),                    info)
+        assert_period(:XST, 7200, 0, false, Time.utc(1970, 1, 1), Time.utc(1970,  4, 10, 1, 0, 0) -  7200, info)
+
+        1970.upto(generate_up_to - 1).each do |year|
+          assert_period(:XDT, 7200, 3600, true,  Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 27, 2, 0, 0) - 10800, info)
+          assert_period(:XST, 7200,    0, false, Time.utc(year, 10, 27, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+        end
+
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, info)
+        assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil,                                               info)
+      end
+    end
+  end
+
+  def test_load_tz_string_as_utf8
+    offsets = [{:gmtoff => 3600, :isdst => false, :abbrev => 'áccént'}]
+    rules = TimezoneOffset.new(3600, 0, 'áccént')
+
+    tzif_test(offsets, [], :tz_string => '<áccént>1', :rules => rules) do |path, format|
+      # FakePosixTimeZoneParser will test that the tz_string matches.
+      info = ZoneinfoTimezoneInfo.new('Test/Utf8', path, @posix_tz_parser)
+      assert_period(:'áccént', 3600, 0, false, nil, nil, info)
     end
   end
 end
