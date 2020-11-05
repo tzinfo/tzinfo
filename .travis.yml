@@ -22,16 +22,16 @@ rvm:
   - 2.4.10
   - 2.5.8
   - 2.6.6
-  - 2.7.1
+  - 2.7.2
   - ruby-head
   - jruby-1.7.27
   - jruby-9.0.5.0
   - jruby-9.1.17.0
-  - jruby-9.2.11.1
+  - jruby-9.2.13.0
   - jruby-head
-  - truffleruby-20.0.0
+  - truffleruby-20.2.0
 matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head
-    - rvm: truffleruby-20.0.0
+    - rvm: truffleruby-20.2.0
