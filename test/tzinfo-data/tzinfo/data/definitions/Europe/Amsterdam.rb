@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 # This file contains data derived from the IANA Time Zone Database
-# (http://www.iana.org/time-zones).
+# (https://www.iana.org/time-zones).
 
 module TZInfo
   module Data
@@ -14,8 +14,8 @@ module TZInfo
             tz.offset :o0, 1172, 0, :LMT
             tz.offset :o1, 1172, 0, :AMT
             tz.offset :o2, 1172, 3600, :NST
-            tz.offset :o3, 1200, 3600, :NEST
-            tz.offset :o4, 1200, 0, :NET
+            tz.offset :o3, 1200, 3600, :'+0120'
+            tz.offset :o4, 1200, 0, :'+0020'
             tz.offset :o5, 3600, 3600, :CEST
             tz.offset :o6, 3600, 0, :CET
             
@@ -253,6 +253,18 @@ module TZInfo
             tz.transition 2063, 10, :o6, 2960758800, 59396533, 24
             tz.transition 2064, 3, :o5, 2974064400, 59400229, 24
             tz.transition 2064, 10, :o6, 2992208400, 59405269, 24
+            tz.transition 2065, 3, :o5, 3005514000, 59408965, 24
+            tz.transition 2065, 10, :o6, 3023658000, 59414005, 24
+            tz.transition 2066, 3, :o5, 3036963600, 59417701, 24
+            tz.transition 2066, 10, :o6, 3055712400, 59422909, 24
+            tz.transition 2067, 3, :o5, 3068413200, 59426437, 24
+            tz.transition 2067, 10, :o6, 3087162000, 59431645, 24
+            tz.transition 2068, 3, :o5, 3099862800, 59435173, 24
+            tz.transition 2068, 10, :o6, 3118611600, 59440381, 24
+            tz.transition 2069, 3, :o5, 3131917200, 59444077, 24
+            tz.transition 2069, 10, :o6, 3150061200, 59449117, 24
+            tz.transition 2070, 3, :o5, 3163366800, 59452813, 24
+            tz.transition 2070, 10, :o6, 3181510800, 59457853, 24
           end
         end
       end
