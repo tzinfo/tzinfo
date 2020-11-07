@@ -177,6 +177,15 @@ class TCTimeWithOffset < Minitest::Test
     two = time_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
 
     # MRI returns TimeWithOffset. JRuby returns Time.
+    assert_is_time_or_time_with_offset_with_nil_timezone_offset(two.getlocal)
+  end
+
+  def test_getlocal_0
+    two = time_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 0, 'TEST'))
+
+    # MRI and JRuby >= 9.3 returns TimeWithOffset. JRuby < 9.3 returns Time.
+    local = two.getlocal(0)
+    assert_equal(0, local.utc_offset)
     assert_is_time_or_time_with_offset_with_nil_timezone_offset(two.getlocal(0))
   end
 

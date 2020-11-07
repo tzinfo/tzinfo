@@ -46,6 +46,22 @@ module TZInfo
     end
     alias isdst dst?
 
+    # An overridden version of `Time#getlocal` that clears the associated
+    # {TimezoneOffset} if the base implementation of `getlocal` returns a
+    # {TimeWithOffset}.
+    #
+    # @return [Time] a representation of the {TimeWithOffset} using either the
+    #   local time zone or the given offset.
+    def getlocal(*args)
+      # JRuby < 9.3 returns a Time in all cases.
+      # JRuby >= 9.3 returns a Time when called with no arguments and a
+      # TimeWithOffset with a timezone_offset assigned when called with an
+      # offset argument.
+      result = super
+      result.clear_timezone_offset if result.kind_of?(TimeWithOffset)
+      result
+    end
+
     # An overridden version of `Time#gmtime` that clears the associated
     # {TimezoneOffset}.
     #
@@ -123,6 +139,16 @@ module TZInfo
         result = result.new_offset(offset) unless offset == 0
         result.set_timezone_offset(o)
       end
+    end
+
+    protected
+
+    # Clears the associated {TimezoneOffset}.
+    #
+    # @return [TimeWithOffset] `self`.
+    def clear_timezone_offset
+      @timezone_offset = nil
+      self
     end
   end
 end
