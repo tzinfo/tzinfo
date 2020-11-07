@@ -1,5 +1,4 @@
 language: ruby
-dist: trusty
 before_install:
   - if [[ $TRAVIS_RUBY_VERSION =~ ^jruby- && ! $TRAVIS_RUBY_VERSION =~ ^jruby-(1|9\.[01]\.) ]]; then export JRUBY_OPTS=`echo "$JRUBY_OPTS" | sed -E -e 's/--((no)?client|server)//g'`; fi
   - if [[ $TRAVIS_RUBY_VERSION =~ ^jruby- ]]; then echo "JRUBY_OPTS=$JRUBY_OPTS"; fi
@@ -13,24 +12,40 @@ cache: bundler
 env:
   global:
     - TESTOPTS=--verbose
-rvm:
-  - 1.9.3-p551
-  - 2.0.0-p648
-  - 2.1.10
-  - 2.2.10
-  - 2.3.8
-  - 2.4.10
-  - 2.5.8
-  - 2.6.6
-  - 2.7.2
-  - ruby-head
-  - jruby-1.7.27
-  - jruby-9.0.5.0
-  - jruby-9.1.17.0
-  - jruby-9.2.13.0
-  - jruby-head
-  - truffleruby-20.2.0
-matrix:
+jobs:
+  include:
+    - rvm: 1.9.3-p551
+      dist: trusty
+    - rvm: 2.0.0-p648
+      dist: trusty
+    - rvm: 2.1.10
+      dist: trusty
+    - rvm: 2.2.10
+      dist: trusty
+    - rvm: 2.3.8
+      dist: bionic
+    - rvm: 2.4.10
+      dist: focal
+    - rvm: 2.5.8
+      dist: focal
+    - rvm: 2.6.6
+      dist: focal
+    - rvm: 2.7.2
+      dist: focal
+    - rvm: ruby-head
+      dist: focal
+    - rvm: jruby-1.7.27
+      dist: trusty
+    - rvm: jruby-9.0.5.0
+      dist: trusty
+    - rvm: jruby-9.1.17.0
+      dist: focal
+    - rvm: jruby-9.2.13.0
+      dist: focal
+    - rvm: jruby-head
+      dist: focal
+    - rvm: truffleruby-20.2.0
+      dist: focal
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head
