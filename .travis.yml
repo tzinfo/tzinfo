@@ -1,6 +1,5 @@
 language: ruby
 dist: trusty
-sudo: false
 before_install:
   - if [[ $TRAVIS_RUBY_VERSION =~ ^jruby- && ! $TRAVIS_RUBY_VERSION =~ ^jruby-(1|9\.[01]\.) ]]; then export JRUBY_OPTS=`echo "$JRUBY_OPTS" | sed -E -e 's/--((no)?client|server)//g'`; fi
   - if [[ $TRAVIS_RUBY_VERSION =~ ^jruby- ]]; then echo "JRUBY_OPTS=$JRUBY_OPTS"; fi
