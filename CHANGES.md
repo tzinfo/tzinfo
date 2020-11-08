@@ -162,6 +162,16 @@
   `TZInfo::Country.get('US').zone_identifiers` should be used instead.
 
 
+## Version 1.2.8 - 8-Nov-2020
+
+* Added support for handling "slim" format zoneinfo files that are produced by
+  default by zic version 2020b and later. The POSIX-style TZ string is now used
+  calculate DST transition times after the final defined transition in the file.
+  The 64-bit section is now always used regardless of whether Time has support
+  for 64-bit times. #120.
+* Rubinius is no longer supported.
+
+
 ## Version 1.2.7 - 2-Apr-2020
 
 * Fixed 'wrong number of arguments' errors when running on JRuby 9.0. #114.
@@ -300,6 +310,12 @@
 * Make the `start_transition`, `end_transition` and `offset` properties of
   `TimezonePeriod` protected. To access properties of the period, callers should
   use other `TimezonePeriod` instance methods instead (issue #7655).
+
+
+## Version 0.3.58 (tzdata v2020d) - 8-Nov-2020
+
+* Updated to tzdata version 2020d
+  (https://mm.icann.org/pipermail/tz-announce/2020-October/000062.html).
 
 
 ## Version 0.3.57 (tzdata v2020a) - 17-May-2020
