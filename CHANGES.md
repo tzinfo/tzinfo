@@ -1,6 +1,6 @@
 # Changes
 
-# Version 2.0.3 - 8-Nov-2020
+## Version 2.0.3 - 8-Nov-2020
 
 * Added support for handling "slim" format zoneinfo files that are produced by
   default by zic version 2020b and later. The POSIX-style TZ string is now used
