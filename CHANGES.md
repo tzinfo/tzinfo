@@ -5,7 +5,7 @@ Version 1.2.8 - 8-Nov-2020
   default by zic version 2020b and later. The POSIX-style TZ string is now used
   calculate DST transition times after the final defined transition in the file.
   The 64-bit section is now always used regardless of whether Time has support
-  for 64-bit times.
+  for 64-bit times. #120.
 * Rubinius is no longer supported.
 
 
