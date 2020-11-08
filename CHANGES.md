@@ -1,5 +1,17 @@
 # Changes
 
+# Version 2.0.3 - 8-Nov-2020
+
+* Added support for handling "slim" format zoneinfo files that are produced by
+  default by zic version 2020b and later. The POSIX-style TZ string is now used
+  calculate DST transition times after the final defined transition in the file.
+  #120.
+* Fixed `TimeWithOffset#getlocal` returning a `TimeWithOffset` with the
+  `timezone_offset` still assigned when called with an offset argument on JRuby
+  9.3.
+* Rubinius is no longer supported.
+
+
 ## Version 2.0.2 - 2-Apr-2020
 
 * Fixed 'wrong number of arguments' errors when running on JRuby 9.0. #114.
