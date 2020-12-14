@@ -1895,7 +1895,18 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
     end
   end
 
-  def test_load_tz_string_specifies_transition_to_offset_of_final_transition_same_year
+  def test_load_tz_string_specifies_transition_to_offset_of_final_transition_same_year_skip_dst_start
+    # TZInfo v1.2.8 considered this to be an error. However, this is a valid
+    # situation with Africa/Casablanca in 2018e.
+    #
+    # The last defined transitions are:
+    #   At 2037-03-29 02:00Z change to WEST UTC+1
+    #   At 2037-10-04 02:00Z change to WET  UTC+0
+    #
+    # The rules define the end of DST to be at 03:00 local time on the last
+    # Sunday of October (2037-10-31). This later transition needs to be
+    # ignored.
+
     offsets = [
       {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
       {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
@@ -1916,9 +1927,76 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
       JulianDayOfYearTransitionRule.new(300, 7200)
     )
 
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
     tzif_test(offsets, transitions, :rules => rules) do |path, format|
-      error = assert_raises(InvalidZoneinfoFile) { ZoneinfoTimezoneInfo.new('Invalid/Offset', path, @posix_tz_parser) }
-      assert_equal("The first offset indicated by the POSIX-style TZ string did not match the final defined offset in file '#{path}'.", error.message)
+      info = ZoneinfoTimezoneInfo.new('Ignore/Std', path, @posix_tz_parser)
+      assert_equal('Ignore/Std', info.identifier)
+
+      assert_period(:LMT, 7142,    0, false, nil,                                     Time.utc(1971,  1,  2, 2, 0, 0) -  7142, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(1971,  1,  2, 2, 0, 0) -  7142, Time.utc(1981,  4, 10, 1, 0, 0) -  7200, info)
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(1981,  4, 10, 1, 0, 0) -  7200, Time.utc(1981, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(1981, 10, 27, 2, 0, 0) - 10800, Time.utc(1982,  4, 10, 1, 0, 0) -  7200, info)
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(1982,  4, 10, 1, 0, 0) -  7200, Time.utc(1982, 10, 27, 2, 0, 0) - 10800, info)
+
+      1983.upto(generate_up_to).each do |year|
+        assert_period(:XST, 7200,    0, false, Time.utc(year - 1, 10, 27, 2, 0, 0) - 10800, Time.utc(year,  4, 11, 1, 0, 0) -  7200, info)
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(year,      4, 11, 1, 0, 0) -  7200, Time.utc(year, 10, 27, 2, 0, 0) - 10800, info)
+      end
+
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to, 10, 27, 2, 0, 0) - 10800, nil, info)
+    end
+  end
+
+  def test_load_tz_string_specifies_transition_to_offset_of_final_transition_same_year_skip_dst_end
+    # TZInfo v1.2.8 considered this to be an error. However, this is a valid
+    # situation with Africa/Casablanca in 2018e.
+    #
+    # The last defined transitions are:
+    #   At 2037-03-29 02:00Z change to WEST UTC+1
+    #   At 2037-10-04 02:00Z change to WET  UTC+0
+    #
+    # The rules define the end of DST to be at 03:00 local time on the last
+    # Sunday of October (2037-10-31). This later transition needs to be
+    # ignored.
+
+    offsets = [
+      {:gmtoff =>  7142, :isdst => false, :abbrev => 'LMT'},
+      {:gmtoff =>  7200, :isdst => false, :abbrev => 'XST'},
+      {:gmtoff => 10800, :isdst => true,  :abbrev => 'XDT'}
+    ]
+
+    transitions = [
+      {:at => Time.utc(1971,  1,  2, 2, 0, 0) -  7142, :offset_index => 1},
+      {:at => Time.utc(1981,  4, 10, 1, 0, 0) -  7200, :offset_index => 2},
+      {:at => Time.utc(1981, 10, 27, 2, 0, 0) - 10800, :offset_index => 1}
+    ]
+
+    rules = AnnualRules.new(
+      TimezoneOffset.new(7200, 0, 'XST'),
+      TimezoneOffset.new(7200, 3600, 'XDT'),
+      JulianDayOfYearTransitionRule.new(100, 3600),
+      JulianDayOfYearTransitionRule.new(301, 7200)
+    )
+
+    generate_up_to = ZoneinfoTimezoneInfo::GENERATE_UP_TO
+
+    tzif_test(offsets, transitions, :rules => rules) do |path, format|
+      info = ZoneinfoTimezoneInfo.new('Ignore/Std', path, @posix_tz_parser)
+      assert_equal('Ignore/Std', info.identifier)
+
+      assert_period(:LMT, 7142,    0, false, nil,                                     Time.utc(1971,  1,  2, 2, 0, 0) -  7142, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(1971,  1,  2, 2, 0, 0) -  7142, Time.utc(1981,  4, 10, 1, 0, 0) -  7200, info)
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(1981,  4, 10, 1, 0, 0) -  7200, Time.utc(1981, 10, 27, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(1981, 10, 27, 2, 0, 0) - 10800, Time.utc(1982,  4, 10, 1, 0, 0) -  7200, info)
+
+      1982.upto(generate_up_to - 1).each do |year|
+        assert_period(:XDT, 7200, 3600, true,  Time.utc(year,  4, 10, 1, 0, 0) -  7200, Time.utc(year,     10, 28, 2, 0, 0) - 10800, info)
+        assert_period(:XST, 7200,    0, false, Time.utc(year, 10, 28, 2, 0, 0) - 10800, Time.utc(year + 1,  4, 10, 1, 0, 0) -  7200, info)
+      end
+
+      assert_period(:XDT, 7200, 3600, true,  Time.utc(generate_up_to,  4, 10, 1, 0, 0) -  7200, Time.utc(generate_up_to, 10, 28, 2, 0, 0) - 10800, info)
+      assert_period(:XST, 7200,    0, false, Time.utc(generate_up_to, 10, 28, 2, 0, 0) - 10800, nil,                                               info)
     end
   end
 

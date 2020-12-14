@@ -313,8 +313,13 @@ module TZInfo
           last_year = (Time.at(last_defined[:at]).utc + previous_offset[:utc_total_offset]).year
 
           if last_year <= GENERATE_UP_TO
-            generated = rules.transitions(last_year).find_all {|t| t.at > last_defined[:at] } +
-              (last_year + 1).upto(GENERATE_UP_TO).map {|y| rules.transitions(y) }.flatten
+            last_defined_offset = offsets[last_defined[:offset]]
+
+            generated = rules.transitions(last_year).find_all do |t|
+              t.at > last_defined[:at] && !offset_matches_rule?(last_defined_offset, t.offset)
+            end
+
+            generated += (last_year + 1).upto(GENERATE_UP_TO).map {|y| rules.transitions(y) }.flatten
 
             unless generated.empty?
               transitions[-1] = validate_and_fix_last_defined_transition_offset(file, offsets, last_defined, generated[0].previous_offset)
