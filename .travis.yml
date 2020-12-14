@@ -46,7 +46,7 @@ jobs:
       dist: trusty
     - rvm: jruby-9.1.17.0
       dist: focal
-    - rvm: jruby-9.2.13.0
+    - rvm: jruby-9.2.14.0
       dist: focal
     - rvm: jruby-head
       dist: focal
