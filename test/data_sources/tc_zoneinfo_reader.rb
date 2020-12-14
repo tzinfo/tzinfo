@@ -1898,7 +1898,18 @@ module DataSources
       end
     end
 
-    def test_read_tz_string_specifies_transition_to_offset_of_final_transition_same_year
+    def test_read_tz_string_specifies_transition_to_offset_of_final_transition_same_year_skip_dst_start
+      # TZInfo v2.0.3 considered this to be an error. However, this is a valid
+      # situation with Africa/Casablanca in 2018e.
+      #
+      # The last defined transitions are:
+      #   At 2037-03-29 02:00Z change to WEST UTC+1
+      #   At 2037-10-04 02:00Z change to WET  UTC+0
+      #
+      # The rules define the end of DST to be at 03:00 local time on the last
+      # Sunday of October (2037-10-31). This later transition needs to be
+      # ignored.
+
       offsets = [
         {gmtoff:  7142, isdst: false, abbrev: 'LMT'},
         {gmtoff:  7200, isdst: false, abbrev: 'XST'},
@@ -1919,9 +1930,76 @@ module DataSources
         JulianDayOfYearTransitionRule.new(300, 7200)
       )
 
+      o0 = TimezoneOffset.new(7142,    0, 'LMT')
+      o1 = TimezoneOffset.new(7200,    0, 'XST')
+      o2 = TimezoneOffset.new(7200, 3600, 'XDT')
+
+      t0 = TimezoneTransition.new(o1, o0, Time.new(1971,  1,  2, 2, 0, 0,  7142).to_i)
+      t1 = TimezoneTransition.new(o2, o1, Time.new(1981,  4, 10, 1, 0, 0,  7200).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.new(1981, 10, 27, 2, 0, 0, 10800).to_i)
+      t3 = TimezoneTransition.new(o2, o1, Time.new(1982,  4, 10, 1, 0, 0,  7200).to_i)
+      t4 = TimezoneTransition.new(o1, o2, Time.new(1982, 10, 27, 2, 0, 0, 10800).to_i)
+      tn = 1983.upto(ZoneinfoReader.const_get(:GENERATE_UP_TO)).flat_map do |year|
+        [
+          TimezoneTransition.new(o2, o1, Time.new(year,  4, 11, 1, 0, 0,  7200).to_i),
+          TimezoneTransition.new(o1, o2, Time.new(year, 10, 27, 2, 0, 0, 10800).to_i)
+        ]
+      end
+      t = [t0, t1, t2, t3, t4] + tn
+
       tzif_test(offsets, transitions, rules: rules) do |path, format|
-        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
-        assert_equal("The first offset indicated by the POSIX-style TZ string did not match the final defined offset in file '#{path}'.", error.message)
+        assert_equal(t, @reader.read(path))
+      end
+    end
+
+    def test_read_tz_string_specifies_transition_to_offset_of_final_transition_same_year_skip_dst_end
+      # TZInfo v2.0.3 considered this to be an error. However, this is a valid
+      # situation with Africa/Casablanca in 2018e.
+      #
+      # The last defined transitions are:
+      #   At 2037-03-29 02:00Z change to WEST UTC+1
+      #   At 2037-10-04 02:00Z change to WET  UTC+0
+      #
+      # The rules define the end of DST to be at 03:00 local time on the last
+      # Sunday of October (2037-10-31). This later transition needs to be
+      # ignored.
+
+      offsets = [
+        {gmtoff:  7142, isdst: false, abbrev: 'LMT'},
+        {gmtoff:  7200, isdst: false, abbrev: 'XST'},
+        {gmtoff: 10800, isdst: true,  abbrev: 'XDT'}
+      ]
+
+      transitions = [
+        {at: Time.new(1971,  1,  2, 2, 0, 0,  7142), offset_index: 1},
+        {at: Time.new(1981,  4, 10, 1, 0, 0,  7200), offset_index: 2},
+        {at: Time.new(1981, 10, 27, 2, 0, 0, 10800), offset_index: 1}
+      ]
+
+      rules = AnnualRules.new(
+        TimezoneOffset.new(7200, 0, 'XST'),
+        TimezoneOffset.new(7200, 3600, 'XDT'),
+        JulianDayOfYearTransitionRule.new(100, 3600),
+        JulianDayOfYearTransitionRule.new(301, 7200)
+      )
+
+      o0 = TimezoneOffset.new(7142,    0, 'LMT')
+      o1 = TimezoneOffset.new(7200,    0, 'XST')
+      o2 = TimezoneOffset.new(7200, 3600, 'XDT')
+
+      t0 = TimezoneTransition.new(o1, o0, Time.new(1971,  1,  2, 2, 0, 0,  7142).to_i)
+      t1 = TimezoneTransition.new(o2, o1, Time.new(1981,  4, 10, 1, 0, 0,  7200).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.new(1981, 10, 27, 2, 0, 0, 10800).to_i)
+      tn = 1982.upto(ZoneinfoReader.const_get(:GENERATE_UP_TO)).flat_map do |year|
+        [
+          TimezoneTransition.new(o2, o1, Time.new(year,  4, 10, 1, 0, 0,  7200).to_i),
+          TimezoneTransition.new(o1, o2, Time.new(year, 10, 28, 2, 0, 0, 10800).to_i)
+        ]
+      end
+      t = [t0, t1, t2] + tn
+
+      tzif_test(offsets, transitions, rules: rules) do |path, format|
+        assert_equal(t, @reader.read(path))
       end
     end
 
