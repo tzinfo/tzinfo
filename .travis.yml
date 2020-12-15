@@ -48,5 +48,6 @@ jobs:
       dist: focal
   allow_failures:
     - rvm: ruby-head
+    - rvm: jruby-9.0.5.0
     - rvm: jruby-head
     - rvm: truffleruby-20.3.0
