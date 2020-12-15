@@ -275,6 +275,8 @@ class TCTimeWithOffset < Minitest::Test
   end
 
   def test_succ
+    skip('Time#succ is not supported') unless Time.new.respond_to?(:succ)
+
     two = time_with_offset(2017,1,15,23,0,1,TimezoneOffset.new(0, 3600, 'BST'))
 
     # succ is obsolete and outputs a warning.
