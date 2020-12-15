@@ -66,10 +66,6 @@ environment:
       JRUBY_BUNDLER_VERSION: "~> 1.17"
 
     - RUBY_ENGINE: jruby
-      JRUBY_VERSION: 9.0.5.0
-      JRUBY_BUNDLER_VERSION: "~> 1.17"
-
-    - RUBY_ENGINE: jruby
       JRUBY_VERSION: 9.1.17.0
 
     - RUBY_ENGINE: jruby
