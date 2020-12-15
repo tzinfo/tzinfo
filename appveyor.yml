@@ -13,27 +13,35 @@ environment:
 
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 200
+      UPDATE_SSL_CA_CERT: 1
 
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 200-x64
+      UPDATE_SSL_CA_CERT: 1
 
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 21
+      UPDATE_SSL_CA_CERT: 1
 
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 21-x64
+      UPDATE_SSL_CA_CERT: 1
 
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 22
+      UPDATE_SSL_CA_CERT: 1
 
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 22-x64
+      UPDATE_SSL_CA_CERT: 1
 
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 23
+      UPDATE_SSL_CA_CERT: 1
 
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 23-x64
+      UPDATE_SSL_CA_CERT: 1
 
     - RUBY_ENGINE: ruby
       RUBY_VERSION: 24
@@ -79,6 +87,8 @@ install:
   - if v%RUBY_VERSION%==v193 copy /Y vendor\*eay32.dll C:\Ruby193\bin
   - if v%RUBY_VERSION%==v193 copy /Y vendor\openssl.so C:\Ruby193\lib\ruby\1.9.1\i386-mingw32
   - if v%RUBY_VERSION%==v193 copy /Y vendor\ca-bundle.pem C:\Ruby193\lib\ruby\1.9.1\rubygems\ssl_certs
+  - if b%UPDATE_SSL_CA_CERT%==b1 appveyor DownloadFile https://github.com/rubygems/rubygems/raw/v3.2.1/lib/rubygems/ssl_certs/rubygems.org/GlobalSignRootCA_R3.pem -FileName vendor\GlobalSignRootCA_R3.pem
+  - if b%UPDATE_SSL_CA_CERT%==b1 set SSL_CERT_FILE=C:\projects\tzinfo\vendor\GlobalSignRootCA_R3.pem
   - if %RUBY_ENGINE%==ruby set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - bundle config --local path vendor/bundle
   - bundle update
