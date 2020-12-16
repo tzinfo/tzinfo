@@ -174,6 +174,14 @@
   `TZInfo::Country.get('US').zone_identifiers` should be used instead.
 
 
+## Version 1.2.9 - 16-Dec-2020
+
+* Fixed an incorrect InvalidTimezoneIdentifier exception raised when loading a
+  zoneinfo file that includes rules specifying an additional transition to the
+  final defined offset (for example, Africa/Casablanca in version 2018e of the
+  Time Zone Database). #123.
+
+
 ## Version 1.2.8 - 8-Nov-2020
 
 * Added support for handling "slim" format zoneinfo files that are produced by
