@@ -340,10 +340,16 @@
   use other `TimezonePeriod` instance methods instead (issue #7655).
 
 
+## Version 0.3.59 (tzdata v2020e) - 24-Dec-2020
+
+* Updated to tzdata version 2020e
+  (<https://mm.icann.org/pipermail/tz-announce/2020-December/000063.html>).
+
+
 ## Version 0.3.58 (tzdata v2020d) - 8-Nov-2020
 
 * Updated to tzdata version 2020d
-  (https://mm.icann.org/pipermail/tz-announce/2020-October/000062.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2020-October/000062.html>).
 
 
 ## Version 0.3.57 (tzdata v2020a) - 17-May-2020
