@@ -64,8 +64,7 @@ module TZInfo
       country 'AU', 'Australia' do |c|
         c.timezone 'Australia/Lord_Howe', -631, 20, 1909, 12, 'Lord Howe Island'
         c.timezone 'Antarctica/Macquarie', -109, 2, 3179, 20, 'Macquarie Island'
-        c.timezone 'Australia/Hobart', -2573, 60, 8839, 60, 'Tasmania (most areas)'
-        c.timezone 'Australia/Currie', -599, 15, 2158, 15, 'Tasmania (King Island)'
+        c.timezone 'Australia/Hobart', -2573, 60, 8839, 60, 'Tasmania'
         c.timezone 'Australia/Melbourne', -2269, 60, 4349, 30, 'Victoria'
         c.timezone 'Australia/Sydney', -508, 15, 9073, 60, 'New South Wales (most areas)'
         c.timezone 'Australia/Broken_Hill', -639, 20, 2829, 20, 'New South Wales (Yancowinna)'
@@ -187,9 +186,9 @@ module TZInfo
         c.timezone 'America/Creston', 491, 10, -6991, 60, 'MST - BC (Creston)'
         c.timezone 'America/Dawson_Creek', 1793, 30, -3607, 30, 'MST - BC (Dawson Cr, Ft St John)'
         c.timezone 'America/Fort_Nelson', 294, 5, -1227, 10, 'MST - BC (Ft Nelson)'
+        c.timezone 'America/Whitehorse', 3643, 60, -2701, 20, 'MST - Yukon (east)'
+        c.timezone 'America/Dawson', 961, 15, -1673, 12, 'MST - Yukon (west)'
         c.timezone 'America/Vancouver', 739, 15, -7387, 60, 'Pacific - BC (most areas)'
-        c.timezone 'America/Whitehorse', 3643, 60, -2701, 20, 'Pacific - Yukon (east)'
-        c.timezone 'America/Dawson', 961, 15, -1673, 12, 'Pacific - Yukon (west)'
       end
       country 'CC', 'Cocos (Keeling) Islands' do |c|
         c.timezone 'Indian/Cocos', -73, 6, 1163, 12
@@ -695,8 +694,8 @@ module TZInfo
         c.timezone 'Europe/Kaliningrad', 3283, 60, 41, 2, 'MSK-01 - Kaliningrad'
         c.timezone 'Europe/Moscow', 66907, 1200, 8464, 225, 'MSK+00 - Moscow area'
         c.timezone 'Europe/Kirov', 293, 5, 993, 20, 'MSK+00 - Kirov'
+        c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'MSK+00 - Volgograd'
         c.timezone 'Europe/Astrakhan', 927, 20, 961, 20, 'MSK+01 - Astrakhan'
-        c.timezone 'Europe/Volgograd', 731, 15, 533, 12, 'MSK+01 - Volgograd'
         c.timezone 'Europe/Saratov', 1547, 30, 1381, 30, 'MSK+01 - Saratov'
         c.timezone 'Europe/Ulyanovsk', 163, 3, 242, 5, 'MSK+01 - Ulyanovsk'
         c.timezone 'Europe/Samara', 266, 5, 1003, 20, 'MSK+01 - Samara, Udmurtia'

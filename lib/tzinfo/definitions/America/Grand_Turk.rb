@@ -87,8 +87,7 @@ module TZInfo
           tz.transition 2013, 11, :o2, 1383458400
           tz.transition 2014, 3, :o3, 1394348400
           tz.transition 2014, 11, :o2, 1414908000
-          tz.transition 2015, 3, :o3, 1425798000
-          tz.transition 2015, 11, :o4, 1446357600
+          tz.transition 2015, 3, :o4, 1425798000
           tz.transition 2018, 3, :o3, 1520751600
           tz.transition 2018, 11, :o2, 1541311200
           tz.transition 2019, 3, :o3, 1552201200

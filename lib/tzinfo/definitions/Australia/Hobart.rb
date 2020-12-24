@@ -13,13 +13,17 @@ module TZInfo
           
           tz.transition 1895, 8, :o1, 52130241161, 21600
           tz.transition 1916, 9, :o2, 14526823, 6
-          tz.transition 1917, 3, :o1, 19370497, 8
+          tz.transition 1917, 3, :o1, 14527873, 6
+          tz.transition 1917, 10, :o2, 14529175, 6
+          tz.transition 1918, 3, :o1, 14529931, 6
+          tz.transition 1918, 10, :o2, 14531359, 6
+          tz.transition 1919, 3, :o1, 14532115, 6
           tz.transition 1941, 12, :o2, 14582161, 6
-          tz.transition 1942, 3, :o1, 19443577, 8
+          tz.transition 1942, 3, :o1, 14582683, 6
           tz.transition 1942, 9, :o2, 14583775, 6
-          tz.transition 1943, 3, :o1, 19446489, 8
+          tz.transition 1943, 3, :o1, 14584867, 6
           tz.transition 1943, 10, :o2, 14586001, 6
-          tz.transition 1944, 3, :o1, 19449401, 8
+          tz.transition 1944, 3, :o1, 14587051, 6
           tz.transition 1967, 9, :o2, 14638585, 6
           tz.transition 1968, 3, :o1, 14639677, 6
           tz.transition 1968, 10, :o2, 14640937, 6

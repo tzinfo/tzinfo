@@ -12,9 +12,11 @@ module TZInfo
           tz.offset :o2, 39600, 3600, :'+12'
           
           tz.transition 1912, 1, :o1, 52259343101, 21600
+          tz.transition 1973, 12, :o2, 125409600
+          tz.transition 1974, 3, :o1, 133876800
           tz.transition 1983, 9, :o2, 433256400
           tz.transition 1984, 3, :o1, 448977600
-          tz.transition 1984, 10, :o2, 467298000
+          tz.transition 1984, 9, :o2, 464706000
           tz.transition 1985, 3, :o1, 480427200
           tz.transition 1985, 9, :o2, 496760400
           tz.transition 1986, 3, :o1, 511876800
