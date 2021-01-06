@@ -32,6 +32,8 @@ jobs:
       dist: focal
     - rvm: 2.7.2
       dist: focal
+    - rvm: 3.0.0
+      dist: focal
     - rvm: ruby-head
       dist: focal
     - rvm: jruby-1.7.27
