@@ -425,10 +425,23 @@ module TestUtils
         # Ignore warnings from RubyGems >= 3.1.0 that cause test failures with
         # JRuby 9.2.9.0:
         # https://travis-ci.org/tzinfo/tzinfo/jobs/628170481#L2437
+        #
+        # Ignore warnings from JRuby 1.7 and 9.0 on modern versions of Java:
+        # https://github.com/tzinfo/tzinfo/runs/1664655982#step:8:1893
+        #
+        # Ignore untaint deprecation warnings from Bundler 1 on Ruby 3.0.
         actual_lines = actual_lines.reject do |l|
           l.start_with?('Gem::Specification#rubyforge_project= called from') ||
             l.start_with?('NOTE: Gem::Specification#rubyforge_project= is deprecated with no replacement.') ||
-            l.end_with?('warning: constant Gem::ConfigMap is deprecated')
+            l.end_with?('warning: constant Gem::ConfigMap is deprecated') ||
+            l.start_with?('unsupported Java version') ||
+            l.start_with?('WARNING: An illegal reflective access operation has occurred') ||
+            l.start_with?('WARNING: Illegal reflective access by') ||
+            l.start_with?('WARNING: Please consider reporting this to the maintainers of') ||
+            l.start_with?('WARNING: All illegal access operations will be denied in a future release') ||
+            l.start_with?('WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations') ||
+            l.start_with?('io/console on JRuby shells out to stty for most operations') ||
+            l =~ /\/bundler-1\..*\/lib\/bundler\/.*\.rb:\d+: warning: (Object|Pathname)#untaint is deprecated and will be removed in Ruby 3\.2\.\z/
         end
 
         if RUBY_ENGINE == 'jruby' && ENV['_JAVA_OPTIONS'] && actual_lines.first == "Picked up _JAVA_OPTIONS: #{ENV['_JAVA_OPTIONS']}"
