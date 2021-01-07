@@ -1,7 +1,7 @@
 TZInfo - Ruby Timezone Library
 ==============================
 
-[![RubyGems](https://img.shields.io/gem/v/tzinfo)](https://rubygems.org/gems/tzinfo) [![Travis CI Build](https://img.shields.io/travis/com/tzinfo/tzinfo/1.2?logo=travis)](https://travis-ci.com/tzinfo/tzinfo) [![AppVeyor Build](https://img.shields.io/appveyor/build/philr/tzinfo/1.2?logo=appveyor)](https://ci.appveyor.com/project/philr/tzinfo/branch/1.2)
+[![RubyGems](https://img.shields.io/gem/v/tzinfo?label=Gem)](https://rubygems.org/gems/tzinfo) [![Tests](https://github.com/tzinfo/tzinfo/workflows/Tests/badge.svg?branch=1.2&event=push)](https://github.com/tzinfo/tzinfo/actions?query=workflow%3ATests+branch%3A1.2+event%3Apush)
 
 [TZInfo](https://tzinfo.github.io) provides daylight savings aware
 transformations between times in different timezones.
