@@ -8,15 +8,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, windows-2019]
-        ruby: ['1.9.3', '2.0', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '3.0', jruby-1.7, jruby-9.0, jruby-9.1, jruby-9.2, truffleruby-20]
+        ruby: ['1.9.3', '2.0', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '3.0', jruby-1.7, jruby-9.0, jruby-9.1, jruby-9.2]
         architecture: [default]
         name_suffix: ['']
         experimental: [false]
         exclude:
           - os: windows-2019
             ruby: jruby-1.7
-          - os: windows-2019
-            ruby: truffleruby-20
         include:
           - os: windows-2019
             ruby: '2.0'
@@ -40,6 +38,11 @@ jobs:
             experimental: true
           - os: windows-2019
             ruby: jruby-head
+            achitecture: default
+            name_suffix: ' (experimental)'
+            experimental: true
+          - os: ubuntu-20.04
+            ruby: truffleruby-20
             achitecture: default
             name_suffix: ' (experimental)'
             experimental: true
