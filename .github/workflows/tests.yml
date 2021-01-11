@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   test:
-    name: ${{ matrix.ruby }} on ${{ matrix.os }}${{ matrix.name_suffix || '' }}
+    name: ${{ matrix.ruby }} on ${{ matrix.os }}${{ matrix.name_suffix }}
     strategy:
       matrix:
         os: [ubuntu-20.04, windows-2019]
