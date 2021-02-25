@@ -36,7 +36,7 @@ documentation for further details.
 ## Installation
 
 The TZInfo gem can be installed by running `gem install tzinfo` or by adding
-to `gem 'tzinfo'` to your `Gemfile` and running `bundle install`.
+`gem 'tzinfo'` to your `Gemfile` and running `bundle install`.
 
 To use the Ruby modules as the data source, TZInfo::Data will also need to be
 installed by running `gem install tzinfo-data` or by adding `gem 'tzinfo-data'`
