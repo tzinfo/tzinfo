@@ -6,12 +6,7 @@ module TZInfo
       module Syowa
         include TimezoneDefinition
         
-        timezone 'Antarctica/Syowa' do |tz|
-          tz.offset :o0, 0, 0, :'-00'
-          tz.offset :o1, 10800, 0, :'+03'
-          
-          tz.transition 1957, 1, :o1, 4871735, 2
-        end
+        linked_timezone 'Antarctica/Syowa', 'Asia/Riyadh'
       end
     end
   end

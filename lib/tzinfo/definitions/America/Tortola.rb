@@ -6,7 +6,7 @@ module TZInfo
       module Tortola
         include TimezoneDefinition
         
-        linked_timezone 'America/Tortola', 'America/Port_of_Spain'
+        linked_timezone 'America/Tortola', 'America/Puerto_Rico'
       end
     end
   end

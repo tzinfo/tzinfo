@@ -6,7 +6,7 @@ module TZInfo
       module Grenada
         include TimezoneDefinition
         
-        linked_timezone 'America/Grenada', 'America/Port_of_Spain'
+        linked_timezone 'America/Grenada', 'America/Puerto_Rico'
       end
     end
   end

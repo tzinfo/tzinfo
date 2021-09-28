@@ -9,12 +9,10 @@ module TZInfo
         timezone 'Pacific/Niue' do |tz|
           tz.offset :o0, -40780, 0, :LMT
           tz.offset :o1, -40800, 0, :'-1120'
-          tz.offset :o2, -41400, 0, :'-1130'
-          tz.offset :o3, -39600, 0, :'-11'
+          tz.offset :o2, -39600, 0, :'-11'
           
-          tz.transition 1901, 1, :o1, 10434467399, 4320
-          tz.transition 1951, 1, :o2, 87611327, 36
-          tz.transition 1978, 10, :o3, 276089400
+          tz.transition 1952, 10, :o1, 10516184519, 4320
+          tz.transition 1964, 7, :o2, 87788807, 36
         end
       end
     end

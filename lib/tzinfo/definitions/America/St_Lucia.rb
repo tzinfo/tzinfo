@@ -6,7 +6,7 @@ module TZInfo
       module St_Lucia
         include TimezoneDefinition
         
-        linked_timezone 'America/St_Lucia', 'America/Port_of_Spain'
+        linked_timezone 'America/St_Lucia', 'America/Puerto_Rico'
       end
     end
   end

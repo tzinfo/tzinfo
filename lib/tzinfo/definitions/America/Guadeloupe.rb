@@ -6,7 +6,7 @@ module TZInfo
       module Guadeloupe
         include TimezoneDefinition
         
-        linked_timezone 'America/Guadeloupe', 'America/Port_of_Spain'
+        linked_timezone 'America/Guadeloupe', 'America/Puerto_Rico'
       end
     end
   end

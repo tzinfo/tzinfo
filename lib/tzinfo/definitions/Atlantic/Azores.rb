@@ -84,6 +84,8 @@ module TZInfo
           tz.transition 1948, 10, :o2, 7298483, 3
           tz.transition 1949, 4, :o3, 7299029, 3
           tz.transition 1949, 10, :o2, 7299575, 3
+          tz.transition 1950, 4, :o3, 7300121, 3
+          tz.transition 1950, 10, :o2, 7300667, 3
           tz.transition 1951, 4, :o3, 7301213, 3
           tz.transition 1951, 10, :o2, 7301780, 3
           tz.transition 1952, 4, :o3, 7302326, 3

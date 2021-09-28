@@ -6,7 +6,7 @@ module TZInfo
       module Aruba
         include TimezoneDefinition
         
-        linked_timezone 'America/Aruba', 'America/Curacao'
+        linked_timezone 'America/Aruba', 'America/Puerto_Rico'
       end
     end
   end

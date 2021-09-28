@@ -6,7 +6,7 @@ module TZInfo
       module Coral_Harbour
         include TimezoneDefinition
         
-        linked_timezone 'America/Coral_Harbour', 'America/Atikokan'
+        linked_timezone 'America/Coral_Harbour', 'America/Panama'
       end
     end
   end

@@ -7,14 +7,15 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'America/Guyana' do |tz|
-          tz.offset :o0, -13960, 0, :LMT
-          tz.offset :o1, -13500, 0, :'-0345'
-          tz.offset :o2, -10800, 0, :'-03'
-          tz.offset :o3, -14400, 0, :'-04'
+          tz.offset :o0, -13959, 0, :LMT
+          tz.offset :o1, -14400, 0, :'-04'
+          tz.offset :o2, -13500, 0, :'-0345'
+          tz.offset :o3, -10800, 0, :'-03'
           
-          tz.transition 1915, 3, :o1, 5228404549, 2160
-          tz.transition 1975, 7, :o2, 176010300
-          tz.transition 1991, 1, :o3, 662698800
+          tz.transition 1911, 8, :o1, 7741598917, 3200
+          tz.transition 1915, 3, :o2, 7261673, 3
+          tz.transition 1975, 8, :o3, 176096700
+          tz.transition 1992, 3, :o1, 701841600
         end
       end
     end

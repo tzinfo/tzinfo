@@ -6,7 +6,7 @@ module TZInfo
       module St_Vincent
         include TimezoneDefinition
         
-        linked_timezone 'America/St_Vincent', 'America/Port_of_Spain'
+        linked_timezone 'America/St_Vincent', 'America/Puerto_Rico'
       end
     end
   end

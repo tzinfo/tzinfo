@@ -444,7 +444,7 @@ module TZInfo
       end
       country 'KI', 'Kiribati' do |c|
         c.timezone 'Pacific/Tarawa', 17, 12, 173, 1, 'Gilbert Islands'
-        c.timezone 'Pacific/Enderbury', -47, 15, -2053, 12, 'Phoenix Islands'
+        c.timezone 'Pacific/Kanton', -167, 60, -10303, 60, 'Phoenix Islands'
         c.timezone 'Pacific/Kiritimati', 28, 15, -472, 3, 'Line Islands'
       end
       country 'KM', 'Comoros' do |c|
@@ -815,7 +815,7 @@ module TZInfo
         c.timezone 'Africa/Tunis', 184, 5, 611, 60
       end
       country 'TO', 'Tonga' do |c|
-        c.timezone 'Pacific/Tongatapu', -127, 6, -1051, 6
+        c.timezone 'Pacific/Tongatapu', -317, 15, -876, 5
       end
       country 'TR', 'Turkey' do |c|
         c.timezone 'Europe/Istanbul', 2461, 60, 869, 30

@@ -6,7 +6,7 @@ module TZInfo
       module Dominica
         include TimezoneDefinition
         
-        linked_timezone 'America/Dominica', 'America/Port_of_Spain'
+        linked_timezone 'America/Dominica', 'America/Puerto_Rico'
       end
     end
   end

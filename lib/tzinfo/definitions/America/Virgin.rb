@@ -6,7 +6,7 @@ module TZInfo
       module Virgin
         include TimezoneDefinition
         
-        linked_timezone 'America/Virgin', 'America/Port_of_Spain'
+        linked_timezone 'America/Virgin', 'America/Puerto_Rico'
       end
     end
   end

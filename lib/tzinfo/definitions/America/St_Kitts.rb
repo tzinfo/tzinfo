@@ -6,7 +6,7 @@ module TZInfo
       module St_Kitts
         include TimezoneDefinition
         
-        linked_timezone 'America/St_Kitts', 'America/Port_of_Spain'
+        linked_timezone 'America/St_Kitts', 'America/Puerto_Rico'
       end
     end
   end

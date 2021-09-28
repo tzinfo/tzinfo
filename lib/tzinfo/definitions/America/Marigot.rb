@@ -6,7 +6,7 @@ module TZInfo
       module Marigot
         include TimezoneDefinition
         
-        linked_timezone 'America/Marigot', 'America/Port_of_Spain'
+        linked_timezone 'America/Marigot', 'America/Puerto_Rico'
       end
     end
   end
