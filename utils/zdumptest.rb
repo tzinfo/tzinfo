@@ -22,8 +22,8 @@ def resolve_ambiguity(periods, identifier, tzi_period)
 end
 
 STDIN.each {|line|
- if line =~ /^([^\s]+)\s+([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]+)\s[A-Z]+\s=\s([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]+)\s([A-Za-z0-9+\-]+)\sisdst=([01])/ then
-   begin
+  if line =~ /^([^\s]+)\s+([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]{1,4})\s[A-Z]+\s=\s([A-z][a-z]{2}\s[A-z][a-z]{2}\s+[0-9]+\s[0-9]+:[0-9]+:[0-9]+\s[0-9]{1,4})\s([A-Za-z0-9+\-]+)\sisdst=([01])/ then
+  begin
      zone_id = $1
      zone = Timezone.get(zone_id)
      utc = DateTime.parse($2)
