@@ -6,7 +6,7 @@ module TZInfo
       module Jan_Mayen
         include TimezoneDefinition
         
-        linked_timezone 'Atlantic/Jan_Mayen', 'Europe/Berlin'
+        linked_timezone 'Atlantic/Jan_Mayen', 'Europe/Oslo'
       end
     end
   end
