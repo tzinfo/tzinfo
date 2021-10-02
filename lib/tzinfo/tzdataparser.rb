@@ -107,7 +107,7 @@ module TZInfo
 
       files = Dir.entries(@input_dir).select do |file|
         file =~ /\A[^\.]+\z/ &&            
-          !%w(backzone calendars leapseconds version CONTRIBUTING LICENSE Makefile NEWS README SOURCE Theory version).include?(file) &&
+          !%w(backzone calendars leapseconds version CONTRIBUTING LICENSE Makefile NEWS README SECURITY SOURCE Theory version).include?(file) &&
           File.file?(File.join(@input_dir, file))
       end
     
