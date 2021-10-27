@@ -17,8 +17,8 @@ module TZInfo
     private_constant :JD_EPOCH
 
     class << self
-      # Returns a new {Timestamp} representing the (Gregorian calendar) date and
-      # time specified by the supplied parameters.
+      # Returns a new {Timestamp} representing the (proleptic Gregorian
+      # calendar) date and time specified by the supplied parameters.
       #
       # If `utc_offset` is `nil`, `:utc` or 0, the date and time parameters will
       # be interpreted as representing a UTC date and time. Otherwise the date
@@ -38,7 +38,7 @@ module TZInfo
       #   specified offset, an offset from UTC specified as an `Integer` number
       #   of seconds or the `Symbol` `:utc`).
       # @return [Timestamp] a new {Timestamp} representing the specified
-      #   (Gregorian calendar) date and time.
+      #   (proleptic Gregorian calendar) date and time.
       # @raise [ArgumentError] if either of `year`, `month`, `day`, `hour`,
       #   `minute`, or `second` is not an `Integer`.
       # @raise [ArgumentError] if `sub_second` is not a `Rational`, or the
@@ -86,7 +86,7 @@ module TZInfo
       # passed to the block. The block must then return a {Timestamp}, which
       # will be converted back to the type of the initial value. If the initial
       # value was a {Timestamp}, the block result will be returned. If the
-      # initial value was a {DateTime}, a Gregorian {DateTime} will be returned.
+      # initial value was a `DateTime`, a Gregorian `DateTime` will be returned.
       #
       # The UTC offset of `value` can either be preserved (the {Timestamp}
       # representation will have the same UTC offset as `value`), ignored (the
@@ -400,7 +400,7 @@ module TZInfo
 
     # Converts this {Timestamp} to a Gregorian `DateTime`.
     #
-    # @return [DateTime] a Gregorian DateTime representation of this
+    # @return [DateTime] a Gregorian `DateTime` representation of this
     #   {Timestamp}. If the UTC offset of this {Timestamp} is not specified, a
     #   UTC `DateTime` will be returned.
     def to_datetime
@@ -410,7 +410,7 @@ module TZInfo
     # Converts this {Timestamp} to an `Integer` number of seconds since
     # 1970-01-01 00:00:00 UTC (ignoring leap seconds).
     #
-    # @return [Integer] an Integer representation of this {Timestamp} (the
+    # @return [Integer] an `Integer` representation of this {Timestamp} (the
     #   number of seconds since 1970-01-01 00:00:00 UTC ignoring leap seconds).
     def to_i
       value
