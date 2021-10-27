@@ -298,6 +298,19 @@ class TCTimestamp < Minitest::Test
     assert_equal(1476316801, Timestamp.new(1476316801, Rational(1,10), 3600).to_i)
   end
 
+  def test_to_datetime_returns_gregorian
+    # 1582-10-15 is the start of the Gregorian calendar. The previous day was 1582-10-04 in the Julian calendar).
+    # TZInfo will always use the proleptic Gregorian calendar to return dates prior to 1582-10-15.
+    dt = Timestamp.new(-12219379200).to_datetime
+
+    # assert_equal_with_offset (assert_equal) will consider the Julian result 1582-10-04 to be equal to the Gregorian result 1582-10-14.
+    assert_equal_with_offset(DateTime.new(1582, 10, 14, 0, 0, 0, 0, Date::GREGORIAN), dt)
+    assert_equal(1582, dt.year)
+    assert_equal(10, dt.month)
+    assert_equal(14, dt.day)
+    assert(dt.gregorian?)
+  end
+
   def test_strftime
     # Timestamp#strftime calls Time#strftime. No need to test formats exhaustively.
     assert_equal('2016-10-13 00:00:00.100 +0000 %', Timestamp.new(1476316800, Rational(1,10)       ).strftime('%Y-%m-%d %H:%M:%S.%L %z %%'))
@@ -959,6 +972,21 @@ class TCTimestamp < Minitest::Test
     end
   end
 
+  def test_for_datetime_julian
+    # 1582-10-04 in the Julian calendar was followed by 1582-10-15 in the Gregorian calendar.
+    # TZInfo will interpret it as the equivalent day in the proleptic Gregorian calendar (1582-10-14).
+    for_test(DateTime.new(1582,10,4,0,0,0,0,Date::ITALY)) do |t|
+      assert_equal(-12219379200, t.value)
+    end
+  end
+
+  def test_for_datetime_gregorian
+    # The Gregorian calendar starts on 1582-10-15. Iterpret the day before using the proleptic Gregorian calendar.
+    for_test(DateTime.new(1582,10,14,0,0,0,0,Date::GREGORIAN)) do |t|
+      assert_equal(-12219379200, t.value)
+    end
+  end
+
   def test_for_time_like_ignore_offset
     for_test(TestUtils::TimeLike.new(1476316800, 0), :ignore) do |t|
       assert_equal(1476316800, t.value)
@@ -1174,6 +1202,20 @@ class TCTimestamp < Minitest::Test
     assert_equal_with_offset(DateTime.new(2016,10,13,0,0,Rational(11,10)),                Timestamp.for(DateTime.new(2016,10,13,0,0,0)) { Timestamp.new(1476316801, Rational(1,10), 0) })
     assert_equal_with_offset(DateTime.new(2016,10,13,1,0,1,Rational(1,24)),               Timestamp.for(DateTime.new(2016,10,13,0,0,0)) { Timestamp.new(1476316801, 0, 3600) })
     assert_equal_with_offset(DateTime.new(2016,10,13,1,0,Rational(11,10),Rational(1,24)), Timestamp.for(DateTime.new(2016,10,13,0,0,0)) { Timestamp.new(1476316801, Rational(1,10), 3600) })
+  end
+
+  def test_for_block_result_to_datetime_is_gregorian
+    # 1582-10-15 is the start of the Gregorian calendar. The previous day was 1582-10-04 in the Julian calendar).
+    # TZInfo will always use the proleptic Gregorian calendar to return dates prior to 1582-10-15.
+
+    dt = Timestamp.for(DateTime.new(2016,10,13,0,0,0)) { Timestamp.new(-12219379200) }
+
+    # assert_equal_with_offset (assert_equal) will consider the Julian result 1582-10-04 to be equal to the Gregorian result 1582-10-14.
+    assert_equal_with_offset(DateTime.new(1582,10,14,0,0,0,0,Date::GREGORIAN), dt)
+    assert_equal(1582, dt.year)
+    assert_equal(10, dt.month)
+    assert_equal(14, dt.day)
+    assert(dt.gregorian?)
   end
 
   def test_for_block_result_timestamp_subclass
