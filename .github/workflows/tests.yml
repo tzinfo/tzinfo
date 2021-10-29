@@ -20,27 +20,27 @@ jobs:
         include:
           - os: windows-2019
             ruby: '2.0'
-            achitecture: x86
+            architecture: x86
             name_suffix: ' (x86)'
             experimental: false
           - os: ubuntu-20.04
             ruby: head
-            achitecture: default
+            architecture: default
             name_suffix: ' (experimental)'
             experimental: true
           - os: ubuntu-20.04
             ruby: jruby-head
-            achitecture: default
+            architecture: default
             name_suffix: ' (experimental)'
             experimental: true
           - os: windows-2019
             ruby: head
-            achitecture: default
+            architecture: default
             name_suffix: ' (experimental)'
             experimental: true
           - os: windows-2019
             ruby: jruby-head
-            achitecture: default
+            architecture: default
             name_suffix: ' (experimental)'
             experimental: true
       fail-fast: false
