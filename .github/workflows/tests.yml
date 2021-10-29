@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, windows-2019]
-        ruby: ['1.8.7', '1.9.3', '2.0', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '3.0', jruby-1.7, jruby-9.0, jruby-9.1, jruby-9.2]
+        ruby: ['1.8.7', '1.9.3', '2.0', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '3.0', jruby-1.7, jruby-9.0, jruby-9.1, jruby-9.2, jruby-9.3]
         architecture: [default]
         name_suffix: ['']
         experimental: [false]
