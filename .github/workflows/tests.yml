@@ -48,13 +48,13 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     steps:
       - uses: actions/checkout@v2
-      - if: startsWith(matrix.ruby, '1.') || startsWith(matrix.ruby, '2.0') || startsWith(matrix.ruby, 'jruby-1.7') || startsWith(matrix.ruby, 'jruby-9.0')
+      - if: startsWith(matrix.ruby, '1.8') || (startsWith(matrix.ruby, '1.9') && startsWith(matrix.os, 'windows')) || (startsWith(matrix.ruby, '2.0') && startsWith(matrix.os, 'windows') && matrix.architecture == 'x86') || startsWith(matrix.ruby, 'jruby-1.7') || startsWith(matrix.ruby, 'jruby-9.0')
         uses: philr/setup-ruby@legacy-v1
         with:
           ruby-version: ${{ matrix.ruby }}
           architecture: ${{ matrix.architecture }}
           bundler-cache: true
-      - if: ${{ !(startsWith(matrix.ruby, '1.') || startsWith(matrix.ruby, '2.0') || startsWith(matrix.ruby, 'jruby-1.7') || startsWith(matrix.ruby, 'jruby-9.0')) }}
+      - if: ${{ !(startsWith(matrix.ruby, '1.8') || (startsWith(matrix.ruby, '1.9') && startsWith(matrix.os, 'windows')) || (startsWith(matrix.ruby, '2.0') && startsWith(matrix.os, 'windows') && matrix.architecture == 'x86') || startsWith(matrix.ruby, 'jruby-1.7') || startsWith(matrix.ruby, 'jruby-9.0')) }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
