@@ -3,6 +3,15 @@
 
 # The top level module for TZInfo.
 module TZInfo
+  class << self
+    # Force all timezone data to be loaded immediately. This is desirable in
+    # production environments to improve Copy-on-Write performance and to
+    # avoid flushing the constant cache every time a new timezone is accessed.
+    def eager_load!
+      Timezone.all.each(&:eager_load!)
+      nil
+    end
+  end
 end
 
 # Object#untaint is a deprecated no-op in Ruby >= 2.7 and will be removed in

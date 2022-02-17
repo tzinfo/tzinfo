@@ -72,6 +72,11 @@ module TZInfo
       TimezoneProxy.new(data)
     end
 
+    def eager_load!
+      real_timezone
+      nil
+    end
+
     private
 
     # Returns the real {Timezone} instance being proxied.
