@@ -8,7 +8,7 @@ module TZInfo
         
         timezone 'America/Punta_Arenas' do |tz|
           tz.offset :o0, -17020, 0, :LMT
-          tz.offset :o1, -16966, 0, :SMT
+          tz.offset :o1, -16965, 0, :SMT
           tz.offset :o2, -18000, 0, :'-05'
           tz.offset :o3, -14400, 0, :'-04'
           tz.offset :o4, -18000, 3600, :'-04'
@@ -16,11 +16,11 @@ module TZInfo
           tz.offset :o6, -10800, 0, :'-03'
           
           tz.transition 1890, 1, :o1, 10417112771, 4320
-          tz.transition 1910, 1, :o2, 104487049283, 43200
+          tz.transition 1910, 1, :o2, 4643868857, 1920
           tz.transition 1916, 7, :o1, 58105097, 24
-          tz.transition 1918, 9, :o3, 104623777283, 43200
+          tz.transition 1918, 9, :o3, 4649945657, 1920
           tz.transition 1919, 7, :o1, 7266422, 3
-          tz.transition 1927, 9, :o4, 104765386883, 43200
+          tz.transition 1927, 9, :o4, 4656239417, 1920
           tz.transition 1928, 4, :o2, 7276013, 3
           tz.transition 1928, 9, :o4, 58211777, 24
           tz.transition 1929, 4, :o2, 7277108, 3

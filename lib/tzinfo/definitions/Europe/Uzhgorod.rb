@@ -43,15 +43,15 @@ module TZInfo
           tz.transition 1989, 9, :o3, 622594800
           tz.transition 1990, 6, :o1, 646786800
           tz.transition 1991, 3, :o5, 670384800
-          tz.transition 1992, 3, :o6, 701820000
-          tz.transition 1992, 9, :o5, 717541200
-          tz.transition 1993, 3, :o6, 733269600
-          tz.transition 1993, 9, :o5, 748990800
-          tz.transition 1994, 3, :o6, 764719200
-          tz.transition 1994, 9, :o5, 780440400
-          tz.transition 1995, 3, :o6, 796179600
-          tz.transition 1995, 9, :o5, 811904400
-          tz.transition 1996, 3, :o6, 828234000
+          tz.transition 1992, 3, :o6, 701827200
+          tz.transition 1992, 9, :o5, 717552000
+          tz.transition 1993, 3, :o6, 733276800
+          tz.transition 1993, 9, :o5, 749001600
+          tz.transition 1994, 3, :o6, 764726400
+          tz.transition 1994, 9, :o5, 780451200
+          tz.transition 1995, 3, :o6, 796176000
+          tz.transition 1995, 9, :o5, 811900800
+          tz.transition 1996, 3, :o6, 828230400
           tz.transition 1996, 10, :o5, 846378000
           tz.transition 1997, 3, :o6, 859683600
           tz.transition 1997, 10, :o5, 877827600
