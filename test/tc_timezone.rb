@@ -213,7 +213,7 @@ class TCTimezone < Minitest::Test
   end
   
   def test_get_invalid
-    assert_raises(InvalidTimezoneIdentifier) { Timezone.get('../Definitions/UTC') }
+    assert_raises(InvalidTimezoneIdentifier) { Timezone.get('../definitions/UTC') }
   end
   
   def test_get_nil

@@ -51,6 +51,12 @@ class TCRubyDataSource < Minitest::Test
       @data_source.load_timezone_info('../Definitions/UTC')
     end
   end
+
+  def test_load_timezone_info_directory_traversal
+    test_data_depth = TZINFO_TEST_DATA_DIR.scan('/').size
+    payload_path = File.join(TESTS_DIR, 'assets', 'payload')
+    assert_raises(InvalidTimezoneIdentifier) { Timezone.get("foo\n#{'/..' * (test_data_depth + 4)}#{payload_path}") }
+  end
   
   def test_load_timezone_info_nil
     assert_raises(InvalidTimezoneIdentifier) do
