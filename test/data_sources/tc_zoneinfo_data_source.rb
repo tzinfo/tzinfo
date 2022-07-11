@@ -1082,6 +1082,25 @@ module DataSources
       end
     end
 
+    def test_timezone_identifiers_ignored_security_file
+      # Arch tzdata package includes a file named SECURITY giving instructions
+      # to report any security-related bug.
+
+      Dir.mktmpdir('tzinfo_test') do |dir|
+        FileUtils.touch(File.join(dir, 'zone.tab'))
+        FileUtils.touch(File.join(dir, 'iso3166.tab'))
+        FileUtils.cp(File.join(@data_source.zoneinfo_dir, 'EST'), File.join(dir, 'EST'))
+
+        File.open(File.join(dir, 'SECURITY'), 'w') do |f|
+          f.binmode
+          f.write("2013a\n")
+        end
+
+        data_source = ZoneinfoDataSource.new(dir)
+        assert_equal(['EST'], data_source.timezone_identifiers)
+      end
+    end
+
     def test_load_country_info
       info = @data_source.send(:load_country_info, 'GB')
       assert_equal('GB', info.code)
