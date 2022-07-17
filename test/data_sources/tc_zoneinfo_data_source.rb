@@ -1083,8 +1083,8 @@ module DataSources
     end
 
     def test_timezone_identifiers_ignored_security_file
-      # Arch tzdata package includes a file named SECURITY giving instructions
-      # to report any security-related bug.
+      # The Arch linux tzdata package includes a file named SECURITY giving
+      # instructions for reporting security-related bugs.
 
       Dir.mktmpdir('tzinfo_test') do |dir|
         FileUtils.touch(File.join(dir, 'zone.tab'))
@@ -1093,7 +1093,7 @@ module DataSources
 
         File.open(File.join(dir, 'SECURITY'), 'w') do |f|
           f.binmode
-          f.write("2013a\n")
+          f.write("Please report any sensitive security-related bugs...\n")
         end
 
         data_source = ZoneinfoDataSource.new(dir)
