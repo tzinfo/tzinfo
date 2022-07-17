@@ -109,7 +109,6 @@ module TZInfo
       'src',
       'timeconfig'
     ].freeze
-    private_constant :EXCLUDED_FILENAMES
 
     # Paths to be checked to find the system zoneinfo directory.
     @@search_path = DEFAULT_SEARCH_PATH.dup
