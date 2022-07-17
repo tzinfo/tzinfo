@@ -87,6 +87,37 @@ class TCDataSource < Minitest::Test
     end
   end
 
+  class PreloadTestDataSource < GetTimezoneIdentifiersTestDataSource
+    attr_reader :country_codes_called
+    attr_reader :loaded_timezones
+    attr_reader :loaded_countries
+
+    def initialize(data_timezone_identifiers, linked_timezone_identifiers, country_codes)
+      super(data_timezone_identifiers, linked_timezone_identifiers)
+      @country_codes = country_codes
+      @country_codes_called = 0
+      @loaded_timezones = []
+      @loaded_countries = []
+    end
+
+    protected
+
+    def country_codes
+      @country_codes_called += 1
+      @country_codes
+    end
+
+    def load_timezone_info(identifier)
+      @loaded_timezones << identifier
+      DataSources::TimezoneInfo.new(identifier)
+    end
+
+    def load_country_info(code)
+      @loaded_countries << code
+      DataSources::CountryInfo.new(code, "Country #{code}", [])
+    end
+  end
+
   def setup
     @orig_data_source = DataSource.get
     DataSource.set(InitDataSource.new)
@@ -548,5 +579,20 @@ class TCDataSource < Minitest::Test
       assert_match(/\bZZ\b/, error.message)
       assert_equal(Encoding::UTF_8, error.message.encoding)
     end
+  end
+
+  def test_preload
+    data_timezone_identifiers = ['Data/Zone1', 'Data/Zone2']
+    linked_timezone_identifiers = ['Linked/Zone1', 'Linked/Zone2']
+    all_timezone_identifiers = data_timezone_identifiers + linked_timezone_identifiers
+    country_codes = ['AA', 'BB', 'CC']
+    ds = PreloadTestDataSource.new(data_timezone_identifiers, linked_timezone_identifiers, country_codes)
+    assert_nil(ds.preload!)
+    assert_equal(1, ds.data_timezone_identifiers_called)
+    assert_equal(1, ds.linked_timezone_identifiers_called)
+    assert_equal(all_timezone_identifiers, ds.loaded_timezones)
+    assert_equal(all_timezone_identifiers, ds.instance_variable_get(:@timezone_identifiers))
+    assert_equal(1, ds.country_codes_called)
+    assert_equal(country_codes, ds.loaded_countries)
   end
 end
