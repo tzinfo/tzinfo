@@ -818,6 +818,25 @@ class TCZoneinfoDataSource < Minitest::Test
     end
   end
   
+  def test_timezone_identifiers_ignored_security_file
+    # The Arch linux tzdata package includes a file named SECURITY giving
+    # instructions for reporting security-related bugs.
+
+    Dir.mktmpdir('tzinfo_test') do |dir|
+      FileUtils.touch(File.join(dir, 'zone.tab'))
+      FileUtils.touch(File.join(dir, 'iso3166.tab'))
+      FileUtils.cp(File.join(@data_source.zoneinfo_dir, 'EST'), File.join(dir, 'EST'))
+
+      File.open(File.join(dir, 'SECURITY'), 'w') do |f|
+        f.binmode
+        f.write("Please report any sensitive security-related bugs...\n")
+      end
+
+      data_source = ZoneinfoDataSource.new(dir)
+      assert_equal(['EST'], data_source.timezone_identifiers)
+    end
+  end
+
   def test_load_country_info
     info = @data_source.load_country_info('GB')
     assert_equal('GB', info.code)

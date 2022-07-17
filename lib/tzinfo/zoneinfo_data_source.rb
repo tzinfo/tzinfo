@@ -87,6 +87,30 @@ module TZInfo
     # The default value of ZoneinfoDataSource.alternate_iso3166_tab_search_path.
     DEFAULT_ALTERNATE_ISO3166_TAB_SEARCH_PATH = ['/usr/share/misc/iso3166.tab', '/usr/share/misc/iso3166'].freeze
     
+    # File and directories in the top level zoneinfo directory that will be
+    # excluded from the list of available time zones:
+    #
+    #   - +VERSION is included on Mac OS X.
+    #   - leapseconds is a list of leap seconds.
+    #   - localtime is the current local timezone (may be a link).
+    #   - posix, posixrules and right are directories containing other versions
+    #     of the zoneinfo files.
+    #   - SECURITY is included in the Arch Linux tzdata package.
+    #   - src is a directory containing the tzdata source included on Solaris.
+    #   - timeconfig is a symlink included on Slackware.
+    EXCLUDED_FILENAMES = [
+      '+VERSION',
+      'leapseconds',
+      'localtime',
+      'posix',
+      'posixrules',
+      'right',
+      'SECURITY',
+      'src',
+      'timeconfig'
+    ].freeze
+    private_constant :EXCLUDED_FILENAMES
+
     # Paths to be checked to find the system zoneinfo directory.
     @@search_path = DEFAULT_SEARCH_PATH.dup
     
@@ -352,16 +376,8 @@ module TZInfo
     # identifiers.
     def load_timezone_index
       index = []
-      
-      # Ignoring particular files:
-      # +VERSION is included on Mac OS X.
-      # leapseconds is a list of leap seconds.
-        # localtime is the current local timezone (may be a link).
-      # posix, posixrules and right are directories containing other versions of the zoneinfo files.
-      # src is a directory containing the tzdata source included on Solaris.
-      # timeconfig is a symlink included on Slackware.
-      
-      enum_timezones(nil, ['+VERSION', 'leapseconds', 'localtime', 'posix', 'posixrules', 'right', 'src', 'timeconfig']) do |identifier|
+
+      enum_timezones(nil, EXCLUDED_FILENAMES) do |identifier|
         index << identifier
       end
       
