@@ -87,7 +87,7 @@ class TCDataSource < Minitest::Test
     end
   end
 
-  class PreloadTestDataSource < GetTimezoneIdentifiersTestDataSource
+  class EagerLoadTestDataSource < GetTimezoneIdentifiersTestDataSource
     attr_reader :country_codes_called
     attr_reader :loaded_timezones
     attr_reader :loaded_countries
@@ -581,13 +581,13 @@ class TCDataSource < Minitest::Test
     end
   end
 
-  def test_preload
+  def test_eager_load
     data_timezone_identifiers = ['Data/Zone1', 'Data/Zone2']
     linked_timezone_identifiers = ['Linked/Zone1', 'Linked/Zone2']
     all_timezone_identifiers = data_timezone_identifiers + linked_timezone_identifiers
     country_codes = ['AA', 'BB', 'CC']
-    ds = PreloadTestDataSource.new(data_timezone_identifiers, linked_timezone_identifiers, country_codes)
-    assert_nil(ds.preload!)
+    ds = EagerLoadTestDataSource.new(data_timezone_identifiers, linked_timezone_identifiers, country_codes)
+    assert_nil(ds.eager_load!)
     assert_equal(1, ds.data_timezone_identifiers_called)
     assert_equal(1, ds.linked_timezone_identifiers_called)
     assert_equal(all_timezone_identifiers, ds.loaded_timezones)
