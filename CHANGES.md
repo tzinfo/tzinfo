@@ -1,4 +1,4 @@
-Version 1.2.10 - 18-Jul-2022
+Version 1.2.10 - 19-Jul-2022
 ----------------------------
 
 * Fixed a relative path traversal bug that could cause arbitrary files to be
