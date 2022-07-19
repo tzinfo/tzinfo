@@ -1,3 +1,13 @@
+Version 1.2.10 - 18-Jul-2022
+----------------------------
+
+* Fixed a relative path traversal bug that could cause arbitrary files to be
+  loaded with require when used with RubyDataSource. Please refer to
+  https://github.com/tzinfo/tzinfo/security/advisories/GHSA-5cm2-9h8c-rvfx for
+  details. CVE-2022-31163.
+* Ignore the SECURITY file from Arch Linux's tzdata package. #134.
+
+
 Version 1.2.9 - 16-Dec-2020
 ---------------------------
 
