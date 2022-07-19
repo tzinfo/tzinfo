@@ -1,4 +1,5 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
+$:.unshift File.join(File.dirname(__FILE__), "in_load_path")
 require 'test/unit'
 require File.join(File.dirname(__FILE__), 'test_utils')
 require 'tzinfo'
@@ -97,7 +98,11 @@ class TCTimezone < Test::Unit::TestCase
   end
   
   def test_get_invalid
-    assert_raises(InvalidTimezoneIdentifier) { Timezone.get('../Definitions/UTC') }
+    assert_raises(InvalidTimezoneIdentifier) { Timezone.get('../definitions/UTC') }
+  end
+
+  def test_get_directory_traversal
+    assert_raises(InvalidTimezoneIdentifier) { Timezone.get("foo\n/../../../payload") }
   end
   
   def test_get_nil
