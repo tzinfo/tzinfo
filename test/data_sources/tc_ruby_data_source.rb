@@ -81,10 +81,10 @@ module DataSources
 
     def test_load_timezone_info_invalid
       error = assert_raises(InvalidTimezoneIdentifier) do
-        @data_source.send(:load_timezone_info, '../Definitions/UTC')
+        @data_source.send(:load_timezone_info, '../definitions/UTC')
       end
 
-      assert_match(/\W\.\.\/Definitions\/UTC\b/, error.message)
+      assert_match(/\W\.\.\/definitions\/UTC\b/, error.message)
     end
 
     def test_load_timezone_info_nil

@@ -468,10 +468,10 @@ module DataSources
 
     def test_load_timezone_info_invalid
       error = assert_raises(InvalidTimezoneIdentifier) do
-        @data_source.send(:load_timezone_info, '../Definitions/Europe/London')
+        @data_source.send(:load_timezone_info, '../zoneinfo/Europe/London')
       end
 
-      assert_match(/\W\.\.\/Definitions\/Europe\/London\b/, error.message)
+      assert_match(/\W\.\.\/zoneinfo\/Europe\/London\b/, error.message)
     end
 
     def test_load_timezone_info_nil
