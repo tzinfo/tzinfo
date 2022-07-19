@@ -48,7 +48,7 @@ class TCRubyDataSource < Minitest::Test
   
   def test_load_timezone_info_invalid
     assert_raises(InvalidTimezoneIdentifier) do
-      @data_source.load_timezone_info('../Definitions/UTC')
+      @data_source.load_timezone_info('../definitions/UTC')
     end
   end
 
