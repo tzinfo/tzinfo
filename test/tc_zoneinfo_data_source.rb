@@ -374,7 +374,7 @@ class TCZoneinfoDataSource < Minitest::Test
   
   def test_load_timezone_info_invalid
     assert_raises(InvalidTimezoneIdentifier) do
-      @data_source.load_timezone_info('../Definitions/Europe/London')
+      @data_source.load_timezone_info('../zoneinfo/Europe/London')
     end
   end
   
