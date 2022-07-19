@@ -182,6 +182,15 @@
   `TZInfo::Country.get('US').zone_identifiers` should be used instead.
 
 
+## Version 1.2.10 - 19-Jul-2022
+
+* Fixed a relative path traversal bug that could cause arbitrary files to be
+  loaded with `require` when used with `RubyDataSource`. Please refer to
+  <https://github.com/tzinfo/tzinfo/security/advisories/GHSA-5cm2-9h8c-rvfx> for
+  details. CVE-2022-31163.
+* Ignore the SECURITY file from Arch Linux's tzdata package. #134.
+
+
 ## Version 1.2.9 - 16-Dec-2020
 
 * Fixed an incorrect `InvalidTimezoneIdentifier` exception raised when loading a
@@ -338,6 +347,16 @@
 * Make the `start_transition`, `end_transition` and `offset` properties of
   `TimezonePeriod` protected. To access properties of the period, callers should
   use other `TimezonePeriod` instance methods instead (issue #7655).
+
+
+## Version 0.3.61 (tzdata v2022a) - 19-Jul-2022
+
+* Fixed a relative path traversal bug that could cause arbitrary files to be
+  loaded with `require` from the Ruby load path. Please refer to
+  <https://github.com/tzinfo/tzinfo/security/advisories/GHSA-5cm2-9h8c-rvfx> for
+  details. CVE-2022-31163.
+* Updated to tzdata version 2022a
+  (<https://mm.icann.org/pipermail/tz-announce/2022-March/000070.html>).
 
 
 ## Version 0.3.60 (tzdata v2021a) - 6-Feb-2021
