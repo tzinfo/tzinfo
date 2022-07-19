@@ -1,5 +1,9 @@
-== Version ?????? (tzdata v2022a) - ??????????
+== Version 0.3.61 (tzdata v2022a) - 19-Jul-2022
 
+* Fixed a relative path traversal bug that could cause arbitrary files to be
+  loaded with require from the Ruby load path. Please refer to
+  https://github.com/tzinfo/tzinfo/security/advisories/GHSA-5cm2-9h8c-rvfx for
+  details. CVE-2022-31163.
 * Updated to tzdata version 2022a
   (https://mm.icann.org/pipermail/tz-announce/2022-March/000070.html).
 
