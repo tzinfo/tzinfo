@@ -46,8 +46,6 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
-    env:
-      JAVA_OPTS: -Djdk.io.File.enableADS=true
     steps:
       - uses: actions/checkout@v2
       - if: startsWith(matrix.ruby, '1.8') || (startsWith(matrix.ruby, '1.9') && startsWith(matrix.os, 'windows')) || (startsWith(matrix.ruby, '2.0') && startsWith(matrix.os, 'windows') && matrix.architecture == 'x86') || startsWith(matrix.ruby, 'jruby-1.7') || startsWith(matrix.ruby, 'jruby-9.0')
