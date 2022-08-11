@@ -5,7 +5,7 @@ module TZInfo
     module Iceland
       include TimezoneDefinition
       
-      linked_timezone 'Iceland', 'Atlantic/Reykjavik'
+      linked_timezone 'Iceland', 'Africa/Abidjan'
     end
   end
 end

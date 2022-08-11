@@ -6,7 +6,7 @@ module TZInfo
       module Longyearbyen
         include TimezoneDefinition
         
-        linked_timezone 'Arctic/Longyearbyen', 'Europe/Oslo'
+        linked_timezone 'Arctic/Longyearbyen', 'Europe/Berlin'
       end
     end
   end

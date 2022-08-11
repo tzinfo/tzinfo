@@ -33,7 +33,7 @@ module TZInfo
           tz.transition 1942, 6, :o2, 7291535, 3
           tz.transition 1942, 8, :o3, 58333745, 24
           tz.transition 1946, 7, :o5, 7296050, 3
-          tz.transition 1946, 9, :o3, 19456517, 8
+          tz.transition 1946, 8, :o4, 19456493, 8
           tz.transition 1947, 4, :o2, 7296830, 3
           tz.transition 1947, 5, :o3, 7296983, 3
           tz.transition 1968, 11, :o5, 7320491, 3
@@ -142,7 +142,7 @@ module TZInfo
           tz.transition 2021, 4, :o3, 1617505200
           tz.transition 2021, 9, :o5, 1630814400
           tz.transition 2022, 4, :o3, 1648954800
-          tz.transition 2022, 9, :o5, 1662264000
+          tz.transition 2022, 9, :o5, 1662868800
           tz.transition 2023, 4, :o3, 1680404400
           tz.transition 2023, 9, :o5, 1693713600
           tz.transition 2024, 4, :o3, 1712458800

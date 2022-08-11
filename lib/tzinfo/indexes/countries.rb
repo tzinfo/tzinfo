@@ -184,7 +184,7 @@ module TZInfo
         c.timezone 'America/Yellowknife', 1249, 20, -2287, 20, 'Mountain - NT (central)'
         c.timezone 'America/Inuvik', 246059, 3600, -8023, 60, 'Mountain - NT (west)'
         c.timezone 'America/Creston', 491, 10, -6991, 60, 'MST - BC (Creston)'
-        c.timezone 'America/Dawson_Creek', 1793, 30, -3607, 30, 'MST - BC (Dawson Cr, Ft St John)'
+        c.timezone 'America/Dawson_Creek', 1673, 30, -3607, 30, 'MST - BC (Dawson Cr, Ft St John)'
         c.timezone 'America/Fort_Nelson', 294, 5, -1227, 10, 'MST - BC (Ft Nelson)'
         c.timezone 'America/Whitehorse', 3643, 60, -2701, 20, 'MST - Yukon (east)'
         c.timezone 'America/Dawson', 961, 15, -1673, 12, 'MST - Yukon (west)'
@@ -834,7 +834,7 @@ module TZInfo
       end
       country 'UA', 'Ukraine' do |c|
         c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'Crimea'
-        c.timezone 'Europe/Kiev', 1513, 30, 1831, 60, 'Ukraine (most areas)'
+        c.timezone 'Europe/Kyiv', 1513, 30, 1831, 60, 'Ukraine (most areas)'
         c.timezone 'Europe/Uzhgorod', 2917, 60, 223, 10, 'Transcarpathia'
         c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozhye and east Lugansk'
       end

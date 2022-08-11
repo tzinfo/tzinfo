@@ -6,12 +6,7 @@ module TZInfo
       module Kerguelen
         include TimezoneDefinition
         
-        timezone 'Indian/Kerguelen' do |tz|
-          tz.offset :o0, 0, 0, :'-00'
-          tz.offset :o1, 18000, 0, :'+05'
-          
-          tz.transition 1950, 1, :o1, 4866565, 2
-        end
+        linked_timezone 'Indian/Kerguelen', 'Indian/Maldives'
       end
     end
   end

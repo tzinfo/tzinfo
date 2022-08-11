@@ -6,12 +6,7 @@ module TZInfo
       module Reunion
         include TimezoneDefinition
         
-        timezone 'Indian/Reunion' do |tz|
-          tz.offset :o0, 13312, 0, :LMT
-          tz.offset :o1, 14400, 0, :'+04'
-          
-          tz.transition 1911, 5, :o1, 3265904267, 1350
-        end
+        linked_timezone 'Indian/Reunion', 'Asia/Dubai'
       end
     end
   end

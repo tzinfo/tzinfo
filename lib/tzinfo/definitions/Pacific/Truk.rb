@@ -6,7 +6,7 @@ module TZInfo
       module Truk
         include TimezoneDefinition
         
-        linked_timezone 'Pacific/Truk', 'Pacific/Chuuk'
+        linked_timezone 'Pacific/Truk', 'Pacific/Port_Moresby'
       end
     end
   end

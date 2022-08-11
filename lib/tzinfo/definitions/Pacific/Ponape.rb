@@ -6,7 +6,7 @@ module TZInfo
       module Ponape
         include TimezoneDefinition
         
-        linked_timezone 'Pacific/Ponape', 'Pacific/Pohnpei'
+        linked_timezone 'Pacific/Ponape', 'Pacific/Guadalcanal'
       end
     end
   end
