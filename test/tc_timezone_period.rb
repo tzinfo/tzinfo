@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCTimezonePeriod < Minitest::Test
+  include TZInfo
+
   class TestTimezonePeriod < TimezonePeriod
     attr_reader :start_transition
     attr_reader :end_transition

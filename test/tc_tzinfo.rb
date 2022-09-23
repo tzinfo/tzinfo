@@ -4,6 +4,8 @@
 require_relative 'test_utils'
 
 class TCTZInfo < Minitest::Test
+  include TZInfo
+
   def test_eager_load
     test_data_source = Minitest::Mock.new
     test_data_source.expect(:kind_of?, true, [DataSource])

@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCTimestampWithOffset < Minitest::Test
+  include TZInfo
+
   def new_timestamp(year, month, day, hour, minute, second, offset, klass = Timestamp)
     time = Time.new(year, month, day, hour, minute, second, offset == :utc ? 0 : offset)
     klass.new(time.to_i, time.subsec, offset)

@@ -3,10 +3,11 @@
 
 require_relative '../test_utils'
 
-include TZInfo
-
 module Format2
   class TCTimezoneDefiner < Minitest::Test
+    include TZInfo
+    include TZInfo.const_get(:Format2)
+
     def setup
       @string_deduper = StringDeduper.new
       @definer = TimezoneDefiner.new(@string_deduper)

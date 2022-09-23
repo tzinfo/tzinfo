@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCTimeWithOffset < Minitest::Test
+  include TZInfo
+
   def time_with_offset(year, month, day, hour, minute, second, tz_offset)
     TimeWithOffset.new(year, month, day, hour, minute, second, tz_offset.observed_utc_offset).set_timezone_offset(tz_offset)
   end

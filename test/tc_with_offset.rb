@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCWithOffset < Minitest::Test
+  include TZInfo
+
   class TestBaseClass
     attr_reader :format
     attr_accessor :strftime_result
@@ -17,7 +17,7 @@ class TCWithOffset < Minitest::Test
   end
 
   class TestClass < TestBaseClass
-    include WithOffset
+    include TZInfo::WithOffset
 
     attr_accessor :timezone_offset
 

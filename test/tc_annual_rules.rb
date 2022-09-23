@@ -3,9 +3,8 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCAnnualRules < Minitest::Test
+  include TZInfo
 
   def test_initialize
     std_offset = TimezoneOffset.new(0, 0, 'GMT')
@@ -92,7 +91,7 @@ class TCAnnualRules < Minitest::Test
     end
 
     def at(offset, year)
-      TimestampWithOffset.for(Time.new(year, @month, @day, 0, 0, 0, offset.observed_utc_offset)).set_timezone_offset(offset)
+      TZInfo::TimestampWithOffset.for(Time.new(year, @month, @day, 0, 0, 0, offset.observed_utc_offset)).set_timezone_offset(offset)
     end
   end
 end

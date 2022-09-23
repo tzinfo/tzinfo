@@ -210,11 +210,11 @@ module TestUtils
     end
 
     def time(year, month, day, hour, minute, second, sub_second = 0, utc_offset = nil)
-      Timestamp.create(year, month, day, hour, minute, second, sub_second, utc_offset)
+      TZInfo::Timestamp.create(year, month, day, hour, minute, second, sub_second, utc_offset)
     end
 
     def time_with_offset(offset, year, month, day, hour, minute, second, sub_second = 0)
-      TimestampWithOffset.create(year, month, day, hour, minute, second, sub_second, offset.observed_utc_offset).set_timezone_offset(offset)
+      TZInfo::TimestampWithOffset.create(year, month, day, hour, minute, second, sub_second, offset.observed_utc_offset).set_timezone_offset(offset)
     end
   end
 
@@ -499,7 +499,7 @@ module TestUtils
     # equal.
     def assert_equal_with_offset_and_timezone_offset(expected, actual)
       assert_equal_with_offset(expected, actual)
-      assert_kind_of(TimezoneOffset, actual.timezone_offset)
+      assert_kind_of(TZInfo::TimezoneOffset, actual.timezone_offset)
       assert_equal(expected.timezone_offset, actual.timezone_offset)
     end
 

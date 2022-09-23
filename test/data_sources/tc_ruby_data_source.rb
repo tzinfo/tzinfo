@@ -7,10 +7,11 @@ require_relative '../test_utils'
 # JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
 send(:using, TestUtils::TaintExt) if TestUtils.const_defined?(:TaintExt)
 
-include TZInfo
-
 module DataSources
   class TCRubyDataSource < Minitest::Test
+    include TZInfo
+    include TZInfo::DataSources
+
     def setup
       @data_source = RubyDataSource.new
     end

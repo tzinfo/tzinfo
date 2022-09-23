@@ -3,10 +3,10 @@
 
 require_relative '../test_utils'
 
-include TZInfo
-
 module Format2
   class TCCountryIndexDefinition < Minitest::Test
+    include TZInfo
+    include TZInfo.const_get(:Format2)
 
     def test_not_defined
       m = Module.new

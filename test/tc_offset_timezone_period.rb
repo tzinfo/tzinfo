@@ -3,9 +3,8 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCOffsetTimezonePeriod < Minitest::Test
+  include TZInfo
 
   def test_initialize
     o = TimezoneOffset.new(-7200, 3600, 'SPECIAL')

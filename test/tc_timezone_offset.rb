@@ -3,9 +3,8 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCTimezoneOffset < Minitest::Test
+  include TZInfo
 
   [:base_utc_offset, :utc_offset].each do |method|
     define_method("test_#{method}") do

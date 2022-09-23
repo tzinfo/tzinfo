@@ -3,9 +3,8 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCTransitionsTimezonePeriod < Minitest::Test
+  include TZInfo
 
   def test_initialize_start_end
     std = TimezoneOffset.new(-7200, 0, 'TEST')

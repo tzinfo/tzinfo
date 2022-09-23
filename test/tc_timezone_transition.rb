@@ -4,9 +4,8 @@
 require_relative 'test_utils'
 require 'date'
 
-include TZInfo
-
 class TCTimezoneTransition < Minitest::Test
+  include TZInfo
 
   def test_offset
     t = TimezoneTransition.new(TimezoneOffset.new(3600, 3600, 'TDT'),

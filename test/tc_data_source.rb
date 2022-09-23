@@ -4,9 +4,9 @@
 require_relative 'test_utils'
 require 'tmpdir'
 
-include TZInfo
-
 class TCDataSource < Minitest::Test
+  include TZInfo
+
   class InitDataSource < DataSource
   end
 
@@ -23,6 +23,8 @@ class TCDataSource < Minitest::Test
   end
 
   class GetTimezoneInfoTestDataSource < TestDataSource
+    include TZInfo
+
     protected
 
     def load_timezone_info(identifier)
@@ -33,6 +35,8 @@ class TCDataSource < Minitest::Test
   end
 
   class GetCountryInfoTestDataSource < TestDataSource
+    include TZInfo
+
     protected
 
     def load_country_info(code)
@@ -88,6 +92,8 @@ class TCDataSource < Minitest::Test
   end
 
   class EagerLoadTestDataSource < GetTimezoneIdentifiersTestDataSource
+    include TZInfo
+
     attr_reader :country_codes_called
     attr_reader :loaded_timezones
     attr_reader :loaded_countries

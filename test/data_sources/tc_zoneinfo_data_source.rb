@@ -6,15 +6,16 @@ require 'fileutils'
 require 'pathname'
 require 'tmpdir'
 
-include TZInfo
-
 # Use send as a workaround for erroneous 'wrong number of arguments' errors with
 # JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
 send(:using, TestUtils::TaintExt) if TestUtils.const_defined?(:TaintExt)
-send(:using, UntaintExt) if TZInfo.const_defined?(:UntaintExt)
+send(:using, TZInfo.const_get(:UntaintExt)) if TZInfo.const_defined?(:UntaintExt)
 
 module DataSources
   class TCZoneinfoDataSource < Minitest::Test
+    include TZInfo
+    include TZInfo::DataSources
+
     ZONEINFO_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', 'zoneinfo')).untaint
 
     def setup

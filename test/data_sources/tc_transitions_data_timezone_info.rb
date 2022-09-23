@@ -3,10 +3,11 @@
 
 require_relative '../test_utils'
 
-include TZInfo
-
 module DataSources
   class TCTransitionsDataTimezoneInfo < Minitest::Test
+    include TZInfo
+    include TZInfo::DataSources
+
     def test_initialize_transitions
       o1 = TimezoneOffset.new(-17900,    0, 'TESTLMT')
       o2 = TimezoneOffset.new(-18000, 3600, 'TESTD')

@@ -3,10 +3,11 @@
 
 require_relative '../test_utils'
 
-include TZInfo
-
 module DataSources
   class TCConstantOffsetDataTimezoneInfo < Minitest::Test
+    include TZInfo
+    include TZInfo::DataSources
+
     def test_initialize
       offset = TimezoneOffset.new(-17900, 0, 'TESTLMT')
       identifier = 'Test/Zone'.dup

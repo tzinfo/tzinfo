@@ -3,10 +3,11 @@
 
 require_relative '../test_utils'
 
-include TZInfo
-
 module Format2
   class TCCountryIndexDefiner < Minitest::Test
+    include TZInfo
+    include TZInfo.const_get(:Format2)
+
     def setup
       @identifier_deduper = StringDeduper.new
       @description_deduper = StringDeduper.new

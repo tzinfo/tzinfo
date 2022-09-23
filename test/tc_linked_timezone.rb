@@ -3,9 +3,8 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCLinkedTimezone < Minitest::Test
+  include TZInfo
 
   class TestTimezone < Timezone
     attr_reader :period_for_result

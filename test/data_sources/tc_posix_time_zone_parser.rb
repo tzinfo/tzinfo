@@ -3,18 +3,21 @@
 
 require_relative '../test_utils'
 
-include TZInfo
-
 # Use send as a workaround for erroneous 'wrong number of arguments' errors with
 # JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
 send(:using, TestUtils::TaintExt) if TestUtils.const_defined?(:TaintExt)
 
 module DataSources
   class TCPosixTimeZoneParser < Minitest::Test
+    include TZInfo
+    include TZInfo::DataSources
+
     HOUR = 3600
     MINUTE = 60
 
     class << self
+      include TZInfo::DataSources
+
       private
 
       def append_time_to_rule(day_rule, time)

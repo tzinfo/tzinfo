@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCInfoTimezone < Minitest::Test
+  include TZInfo
+
   def test_identifier
     tz = InfoTimezone.new(DataSources::TimezoneInfo.new('Test/Identifier'))
     assert_equal('Test/Identifier', tz.identifier)

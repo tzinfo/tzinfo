@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCTimezoneProxy < Minitest::Test
+  include TZInfo
+
   def assert_raises_invalid_timezone_identifier(identifier)
     error = assert_raises(InvalidTimezoneIdentifier) { yield }
     assert_match(Regexp.new('\b' + Regexp.escape(identifier) + '\b'), error.message)

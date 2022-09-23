@@ -4,14 +4,15 @@
 require_relative '../test_utils'
 require 'tempfile'
 
-include TZInfo
-
 # Use send as a workaround for erroneous 'wrong number of arguments' errors with
 # JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-send(:using, UntaintExt) if TZInfo.const_defined?(:UntaintExt)
+send(:using, TZInfo.const_get(:UntaintExt)) if TZInfo.const_defined?(:UntaintExt)
 
 module DataSources
   class TCZoneinfoReader < Minitest::Test
+    include TZInfo
+    include TZInfo::DataSources
+
     class FakePosixTimeZoneParser
       def initialize(&block)
         @on_parse = block

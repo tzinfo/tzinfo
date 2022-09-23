@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCTransitionRule < Minitest::Test
+  include TZInfo
+
   [-1, 0, 1].each do |transition_at|
     define_method "test_transition_at_#{transition_at}" do
       rule = TestTransitionRule.new(transition_at)
@@ -110,6 +110,7 @@ module BaseTransitionRuleTestHelper
 end
 
 class TCAbsoluteDayOfYearTransitionRule < Minitest::Test
+  include TZInfo
   include BaseTransitionRuleTestHelper
 
   [-1, 366, '0'].each do |value|
@@ -214,6 +215,7 @@ class TCAbsoluteDayOfYearTransitionRule < Minitest::Test
 end
 
 class TCJulianDayOfYearTransitionRule < Minitest::Test
+  include TZInfo
   include BaseTransitionRuleTestHelper
 
   [0, 366, '1'].each do |value|
@@ -357,6 +359,7 @@ module DayOfWeekTransitionRuleTestHelper
 end
 
 class TCDayOfMonthTransitionRule < Minitest::Test
+  include TZInfo
   include BaseTransitionRuleTestHelper
   include DayOfWeekTransitionRuleTestHelper
 
@@ -463,6 +466,7 @@ class TCDayOfMonthTransitionRule < Minitest::Test
 end
 
 class TCLastDayOfMonthTransitionRule < Minitest::Test
+  include TZInfo
   include BaseTransitionRuleTestHelper
   include DayOfWeekTransitionRuleTestHelper
 

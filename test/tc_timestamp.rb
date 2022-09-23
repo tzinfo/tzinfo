@@ -4,9 +4,9 @@
 require_relative 'test_utils'
 require 'date'
 
-include TZInfo
-
 class TCTimestamp < Minitest::Test
+  include TZInfo
+
   class TestTimestampSubclass < Timestamp
   end
 

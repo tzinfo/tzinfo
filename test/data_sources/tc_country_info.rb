@@ -3,10 +3,11 @@
 
 require_relative '../test_utils'
 
-include TZInfo
-
 module DataSources
   class TCCountryInfo < Minitest::Test
+    include TZInfo
+    include TZInfo::DataSources
+
     def test_initialize_nil_code
       error = assert_raises(ArgumentError) { CountryInfo.new(nil, 'Zzz', []) }
       assert_match(/\bcode\b/, error.message)

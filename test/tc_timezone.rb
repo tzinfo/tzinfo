@@ -3,14 +3,16 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 # Use send as a workaround for erroneous 'wrong number of arguments' errors with
 # JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
 send(:using, TestUtils::TaintExt) if TestUtils.const_defined?(:TaintExt)
 
 class TCTimezone < Minitest::Test
+  include TZInfo
+
   class << self
+    include TZInfo
+
     private
 
     def time_with_unspecified_offset_test(method)

@@ -3,10 +3,11 @@
 
 require_relative '../test_utils'
 
-include TZInfo
-
 module DataSources
   class TCLinkedTimezoneInfo < Minitest::Test
+    include TZInfo
+    include TZInfo::DataSources
+
     def test_initialize_nil_identifier
       error = assert_raises(ArgumentError) { LinkedTimezoneInfo.new(nil, 'Test/Linked') }
       assert_match(/\bidentifier\b/, error.message)

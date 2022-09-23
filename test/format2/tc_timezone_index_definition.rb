@@ -3,10 +3,11 @@
 
 require_relative '../test_utils'
 
-include TZInfo
-
 module Format2
   class TCTimezoneIndexDefinition < Minitest::Test
+    include TZInfo
+    include TZInfo.const_get(:Format2)
+
     def test_mixed
       m = Module.new
       m.send(:include, TimezoneIndexDefinition)

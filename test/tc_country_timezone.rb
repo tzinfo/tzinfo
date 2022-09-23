@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCCountryTimezone < Minitest::Test
+  include TZInfo
+
   def test_identifier
     ct = CountryTimezone.new('Europe/London', Rational(2059, 40), Rational(-5, 16))
     assert_equal('Europe/London', ct.identifier)

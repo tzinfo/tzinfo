@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCTimezoneMelbourne < Minitest::Test
+  include TZInfo
+
   def test_2004
     #Australia/Melbourne  Sat Mar 27 15:59:59 2004 UTC = Sun Mar 28 02:59:59 2004 AEDT isdst=1 gmtoff=39600
     #Australia/Melbourne  Sat Mar 27 16:00:00 2004 UTC = Sun Mar 28 02:00:00 2004 AEST isdst=0 gmtoff=36000

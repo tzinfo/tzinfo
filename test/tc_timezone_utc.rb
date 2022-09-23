@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCTimezoneUTC < Minitest::Test
+  include TZInfo
+
   def test_2004
     tz = Timezone.get('UTC')
 

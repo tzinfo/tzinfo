@@ -4,9 +4,9 @@
 require_relative 'test_utils'
 require 'concurrent'
 
-include TZInfo
-
 class TCStringDeduper < Minitest::Test
+  include TZInfo
+
   def test_string_deduper_dedupe
     dedupe_tests(StringDeduper.new)
   end

@@ -3,9 +3,8 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCDataTimezone < Minitest::Test
+  include TZInfo
 
   class TestTimezoneInfo < DataSources::TimezoneInfo
     attr_reader :timestamp

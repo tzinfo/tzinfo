@@ -3,9 +3,9 @@
 
 require_relative 'test_utils'
 
-include TZInfo
-
 class TCRubyTimeTimezone < Minitest::Test
+  include TZInfo
+
   def test_new_time_with_time_zone_paris
     check_can_create_time_with_time_zone
 
