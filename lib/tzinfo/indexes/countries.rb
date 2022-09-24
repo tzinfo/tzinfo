@@ -835,8 +835,6 @@ module TZInfo
       country 'UA', 'Ukraine' do |c|
         c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'Crimea'
         c.timezone 'Europe/Kyiv', 1513, 30, 1831, 60, 'Ukraine (most areas)'
-        c.timezone 'Europe/Uzhgorod', 2917, 60, 223, 10, 'Transcarpathia'
-        c.timezone 'Europe/Zaporozhye', 287, 6, 211, 6, 'Zaporozhye and east Lugansk'
       end
       country 'UG', 'Uganda' do |c|
         c.timezone 'Africa/Kampala', 19, 60, 389, 12
