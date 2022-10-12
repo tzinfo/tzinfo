@@ -7,7 +7,7 @@ module TZInfo
         include TimezoneDefinition
         
         timezone 'America/Matamoros' do |tz|
-          tz.offset :o0, -24000, 0, :LMT
+          tz.offset :o0, -23400, 0, :LMT
           tz.offset :o1, -21600, 0, :CST
           tz.offset :o2, -21600, 3600, :CDT
           
