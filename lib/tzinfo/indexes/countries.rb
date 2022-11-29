@@ -168,8 +168,7 @@ module TZInfo
         c.timezone 'America/Goose_Bay', 160, 3, -725, 12, 'Atlantic - Labrador (most areas)'
         c.timezone 'America/Blanc-Sablon', 617, 12, -3427, 60, 'AST - QC (Lower North Shore)'
         c.timezone 'America/Toronto', 873, 20, -4763, 60, 'Eastern - ON, QC (most areas)'
-        c.timezone 'America/Iqaluit', 956, 15, -1027, 15, 'Eastern - NU (most east areas)'
-        c.timezone 'America/Pangnirtung', 992, 15, -986, 15, 'Eastern - NU (Pangnirtung)'
+        c.timezone 'America/Iqaluit', 956, 15, -1027, 15, 'Eastern - NU (most areas)'
         c.timezone 'America/Atikokan', 175531, 3600, -54973, 600, 'EST - ON (Atikokan); NU (Coral H)'
         c.timezone 'America/Winnipeg', 2993, 60, -1943, 20, 'Central - ON (west); Manitoba'
         c.timezone 'America/Resolute', 33613, 450, -22759, 240, 'Central - NU (Resolute)'
@@ -568,17 +567,18 @@ module TZInfo
         c.timezone 'Africa/Blantyre', -947, 60, 35, 1
       end
       country 'MX', 'Mexico' do |c|
-        c.timezone 'America/Mexico_City', 97, 5, -1983, 20, 'Central Time'
-        c.timezone 'America/Cancun', 253, 12, -2603, 30, 'Eastern Standard Time - Quintana Roo'
-        c.timezone 'America/Merida', 629, 30, -5377, 60, 'Central Time - Campeche, Yucatan'
-        c.timezone 'America/Monterrey', 77, 3, -6019, 60, 'Central Time - Durango; Coahuila, Nuevo Leon, Tamaulipas (most areas)'
-        c.timezone 'America/Matamoros', 155, 6, -195, 2, 'Central Time US - Coahuila, Nuevo Leon, Tamaulipas (US border)'
-        c.timezone 'America/Mazatlan', 1393, 60, -1277, 12, 'Mountain Time - Baja California Sur, Nayarit, Sinaloa'
-        c.timezone 'America/Chihuahua', 859, 30, -1273, 12, 'Mountain Time - Chihuahua (most areas)'
-        c.timezone 'America/Ojinaga', 887, 30, -1253, 12, 'Mountain Time US - Chihuahua (US border)'
-        c.timezone 'America/Hermosillo', 436, 15, -3329, 30, 'Mountain Standard Time - Sonora'
-        c.timezone 'America/Tijuana', 488, 15, -7021, 60, 'Pacific Time US - Baja California'
-        c.timezone 'America/Bahia_Banderas', 104, 5, -421, 4, 'Central Time - Bahia de Banderas'
+        c.timezone 'America/Mexico_City', 97, 5, -1983, 20, 'Central Mexico'
+        c.timezone 'America/Cancun', 253, 12, -2603, 30, 'Quintana Roo'
+        c.timezone 'America/Merida', 629, 30, -5377, 60, 'Campeche, Yucatan'
+        c.timezone 'America/Monterrey', 77, 3, -6019, 60, 'Durango; Coahuila, Nuevo Leon, Tamaulipas (most areas)'
+        c.timezone 'America/Matamoros', 155, 6, -195, 2, 'Coahuila, Nuevo Leon, Tamaulipas (US border)'
+        c.timezone 'America/Chihuahua', 859, 30, -1273, 12, 'Chihuahua (most areas)'
+        c.timezone 'America/Ciudad_Juarez', 476, 15, -6389, 60, 'Chihuahua (US border - west)'
+        c.timezone 'America/Ojinaga', 887, 30, -1253, 12, 'Chihuahua (US border - east)'
+        c.timezone 'America/Mazatlan', 1393, 60, -1277, 12, 'Baja California Sur, Nayarit (most areas), Sinaloa'
+        c.timezone 'America/Bahia_Banderas', 104, 5, -421, 4, 'Bahia de Banderas'
+        c.timezone 'America/Hermosillo', 436, 15, -3329, 30, 'Sonora'
+        c.timezone 'America/Tijuana', 488, 15, -7021, 60, 'Baja California'
       end
       country 'MY', 'Malaysia' do |c|
         c.timezone 'Asia/Kuala_Lumpur', 19, 6, 1017, 10, 'Malaysia (peninsula)'
@@ -787,7 +787,7 @@ module TZInfo
       country 'TD', 'Chad' do |c|
         c.timezone 'Africa/Ndjamena', 727, 60, 301, 20
       end
-      country 'TF', 'French Southern & Antarctic Lands' do |c|
+      country 'TF', 'French Southern Territories' do |c|
         c.timezone 'Indian/Kerguelen', -17767, 360, 28087, 400
       end
       country 'TG', 'Togo' do |c|
