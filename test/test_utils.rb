@@ -28,7 +28,12 @@ if COVERAGE_ENABLED && defined?(COVERAGE_TYPE)
     false
   end
 
-  feature_support = [['deduping_string_unary_minus', string_unary_minus_does_dedupe]].map do |feature, available|
+  untaint_is_functional = Object.new.respond_to?(:untaint) && RUBY_VERSION < '2.7'
+
+  feature_support = [
+    ['deduping_string_unary_minus', string_unary_minus_does_dedupe],
+    ['functional_untaint', untaint_is_functional]
+  ].map do |feature, available|
     "#{available ? '' : 'no_'}#{feature}"
   end
 
@@ -509,16 +514,23 @@ module TestUtils
       assert_equal_with_offset(expected, actual)
       assert_equal(expected.class, actual.class)
     end
-  end
 
-  # Object#taint is a deprecated no-op in Ruby 2.7 and outputs a warning. It
-  # will be removed in 3.2. Silence the warning or supply a replacement.
-  if TZInfo.const_defined?(:UntaintExt)
-    module TaintExt
-      refine Object do
-        def taint
-          self
+    # Object#taint is deprecated in Ruby >= 2.7 and will be removed in 3.2.
+    # 2.7 makes it a no-op with a warning.
+    # Define a method that will skip for use in tests that deal with tainted
+    # objects.
+    if Object.respond_to?(:taint)
+      if RUBY_VERSION >= '2.7'
+        def skip_if_taint_is_undefined_or_no_op
+          skip('Object#taint is a no-op')
         end
+      else
+        def skip_if_taint_is_undefined_or_no_op
+        end
+      end
+    else
+      def skip_if_taint_is_undefined_or_no_op
+        skip('Object#taint is not defined')
       end
     end
   end

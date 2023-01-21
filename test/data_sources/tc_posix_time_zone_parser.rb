@@ -3,10 +3,6 @@
 
 require_relative '../test_utils'
 
-# Use send as a workaround for erroneous 'wrong number of arguments' errors with
-# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-send(:using, TestUtils::TaintExt) if TestUtils.const_defined?(:TaintExt)
-
 module DataSources
   class TCPosixTimeZoneParser < Minitest::Test
     include TZInfo
@@ -259,6 +255,8 @@ module DataSources
     end
 
     def test_parses_tainted_string_in_safe_mode_and_returns_untainted_abbreviations
+      skip_if_taint_is_undefined_or_no_op
+
       safe_test(unavailable: :skip) do
         result = @parser.parse('STD1DST,60,300'.dup.taint)
 

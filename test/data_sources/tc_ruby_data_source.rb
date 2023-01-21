@@ -3,10 +3,6 @@
 
 require_relative '../test_utils'
 
-# Use send as a workaround for erroneous 'wrong number of arguments' errors with
-# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-send(:using, TestUtils::TaintExt) if TestUtils.const_defined?(:TaintExt)
-
 module DataSources
   class TCRubyDataSource < Minitest::Test
     include TZInfo
@@ -123,6 +119,8 @@ module DataSources
     end
 
     def test_load_timezone_info_tainted
+      skip_if_taint_is_undefined_or_no_op
+
       safe_test(unavailable: :skip) do
         identifier = 'Europe/Amsterdam'.dup.taint
         assert(identifier.tainted?)
@@ -133,6 +131,8 @@ module DataSources
     end
 
     def test_load_timezone_info_tainted_and_frozen
+      skip_if_taint_is_undefined_or_no_op
+
       safe_test do
         info = @data_source.send(:load_timezone_info, 'Europe/Amsterdam'.dup.taint.freeze)
         assert_equal('Europe/Amsterdam', info.identifier)
@@ -232,6 +232,8 @@ module DataSources
     end
 
     def test_load_country_info_tainted
+      skip_if_taint_is_undefined_or_no_op
+
       safe_test(unavailable: :skip) do
         code = 'NL'.dup.taint
         assert(code.tainted?)
@@ -242,6 +244,8 @@ module DataSources
     end
 
     def test_load_country_info_tainted_and_frozen
+      skip_if_taint_is_undefined_or_no_op
+
       safe_test do
         info = @data_source.send(:load_country_info, 'NL'.dup.taint.freeze)
         assert_equal('NL', info.code)

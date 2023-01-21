@@ -6,17 +6,13 @@ require 'fileutils'
 require 'pathname'
 require 'tmpdir'
 
-# Use send as a workaround for erroneous 'wrong number of arguments' errors with
-# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-send(:using, TestUtils::TaintExt) if TestUtils.const_defined?(:TaintExt)
-send(:using, TZInfo.const_get(:UntaintExt)) if TZInfo.const_defined?(:UntaintExt)
-
 module DataSources
   class TCZoneinfoDataSource < Minitest::Test
     include TZInfo
     include TZInfo::DataSources
 
-    ZONEINFO_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', 'zoneinfo')).untaint
+    ZONEINFO_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', 'zoneinfo'))
+    RubyCoreSupport.untaint(ZONEINFO_DIR)
 
     def setup
       @orig_search_path = ZoneinfoDataSource.search_path.clone
@@ -788,6 +784,8 @@ module DataSources
     end
 
     def test_load_timezone_info_tainted
+      skip_if_taint_is_undefined_or_no_op
+
       safe_test(unavailable: :skip) do
         identifier = 'Europe/Amsterdam'.dup.taint
         assert(identifier.tainted?)
@@ -798,6 +796,8 @@ module DataSources
     end
 
     def test_load_timezone_info_tainted_and_frozen
+      skip_if_taint_is_undefined_or_no_op
+
       safe_test do
         info = @data_source.send(:load_timezone_info, 'Europe/Amsterdam'.dup.taint.freeze)
         assert_equal('Europe/Amsterdam', info.identifier)
@@ -805,6 +805,8 @@ module DataSources
     end
 
     def test_load_timezone_info_tainted_zoneinfo_dir_safe_mode
+      skip_if_taint_is_undefined_or_no_op
+
       safe_test(unavailable: :skip) do
         assert_raises(SecurityError) do
           ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
@@ -813,6 +815,7 @@ module DataSources
     end
 
     def test_load_timezone_info_tainted_zoneinfo_dir
+      skip_if_taint_is_undefined_or_no_op
       data_source = ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
       info = data_source.send(:load_timezone_info, 'Europe/London')
       assert_kind_of(TransitionsDataTimezoneInfo, info)
@@ -849,7 +852,7 @@ module DataSources
       entries = Dir.glob(File.join(directory, '**', '*'))
 
       entries = entries.select do |file|
-        file.untaint
+        RubyCoreSupport.untaint(file)
         File.file?(file)
       end
 
@@ -1149,6 +1152,8 @@ module DataSources
     end
 
     def test_load_country_info_tainted
+      skip_if_taint_is_undefined_or_no_op
+
       safe_test(unavailable: :skip) do
         code = 'NL'.dup.taint
         assert(code.tainted?)

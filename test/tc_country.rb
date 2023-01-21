@@ -3,10 +3,6 @@
 
 require_relative 'test_utils'
 
-# Use send as a workaround for erroneous 'wrong number of arguments' errors with
-# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-send(:using, TestUtils::TaintExt) if TestUtils.const_defined?(:TaintExt)
-
 class TCCountry < Minitest::Test
   include TZInfo
 
@@ -48,6 +44,7 @@ class TCCountry < Minitest::Test
   end
 
   def test_get_tainted_loaded
+    skip_if_taint_is_undefined_or_no_op
     Country.get('GB')
 
     safe_test(unavailable: :skip) do
@@ -60,6 +57,7 @@ class TCCountry < Minitest::Test
   end
 
   def test_get_tainted_and_frozen_loaded
+    skip_if_taint_is_undefined_or_no_op
     Country.get('GB')
 
     safe_test do
@@ -69,6 +67,8 @@ class TCCountry < Minitest::Test
   end
 
   def test_get_tainted_not_previously_loaded
+    skip_if_taint_is_undefined_or_no_op
+
     safe_test(unavailable: :skip) do
       code = 'GB'.dup.taint
       assert(code.tainted?)
@@ -79,6 +79,8 @@ class TCCountry < Minitest::Test
   end
 
   def test_get_tainted_and_frozen_not_previously_loaded
+    skip_if_taint_is_undefined_or_no_op
+
     safe_test do
       country = Country.get('GB'.dup.taint.freeze)
       assert_equal('GB', country.code)

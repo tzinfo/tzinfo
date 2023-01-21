@@ -4,10 +4,6 @@
 require_relative '../test_utils'
 require 'tempfile'
 
-# Use send as a workaround for erroneous 'wrong number of arguments' errors with
-# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-send(:using, TZInfo.const_get(:UntaintExt)) if TZInfo.const_defined?(:UntaintExt)
-
 module DataSources
   class TCZoneinfoReader < Minitest::Test
     include TZInfo
@@ -1257,7 +1253,7 @@ module DataSources
       tzif_test(offsets, []) do |path, format|
         safe_test do
           # Temp file path is tainted with Ruby >= 2.3 & < 2.7. Untaint for this test.
-          path.untaint
+          RubyCoreSupport.untaint(path)
 
           assert_equal(o0, @reader.read(path))
         end
@@ -1265,6 +1261,8 @@ module DataSources
     end
 
     def test_read_tainted_in_safe_mode
+      skip_if_taint_is_undefined_or_no_op
+
       offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
       tzif_test(offsets, []) do |path, format|
@@ -1278,6 +1276,8 @@ module DataSources
     end
 
     def test_read_abbreviations_not_tainted
+      skip_if_taint_is_undefined_or_no_op
+
       offsets = [{gmtoff: -12094, isdst: false, abbrev: 'LT'}]
 
       tzif_test(offsets, []) do |path, format|
