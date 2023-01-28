@@ -2,10 +2,6 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-# Use send as a workaround for erroneous 'wrong number of arguments' errors with
-# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-send(:using, TaintExt) if Module.const_defined?(:TaintExt)
-
 class TCRubyDataSource < Minitest::Test
   def setup
     @data_source = RubyDataSource.new
@@ -81,6 +77,7 @@ class TCRubyDataSource < Minitest::Test
   end
 
   def test_load_timezone_info_tainted
+    skip_if_taint_is_undefined_or_no_op
     skip_if_has_bug_14060
 
     safe_test(:unavailable => :skip) do
@@ -93,6 +90,7 @@ class TCRubyDataSource < Minitest::Test
   end
   
   def test_load_timezone_info_tainted_and_frozen
+    skip_if_taint_is_undefined_or_no_op
     skip_if_has_bug_14060
 
     safe_test do
@@ -149,6 +147,8 @@ class TCRubyDataSource < Minitest::Test
   end
   
   def test_load_country_info_tainted
+    skip_if_taint_is_undefined_or_no_op
+
     safe_test(:unavailable => :skip) do
       code = 'NL'.dup.taint
       assert(code.tainted?)
@@ -159,6 +159,8 @@ class TCRubyDataSource < Minitest::Test
   end
   
   def test_load_country_info_tainted_and_frozen
+    skip_if_taint_is_undefined_or_no_op
+
     safe_test do
       info = @data_source.load_country_info('NL'.dup.taint.freeze)
       assert_equal('NL', info.code)

@@ -2,10 +2,6 @@ require File.join(File.expand_path(File.dirname(__FILE__)), 'test_utils')
 
 include TZInfo
 
-# Use send as a workaround for erroneous 'wrong number of arguments' errors with
-# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-send(:using, TaintExt) if Module.const_defined?(:TaintExt)
-
 class TCTimezone < Minitest::Test
 
   class BlockCalled < StandardError
@@ -244,6 +240,7 @@ class TCTimezone < Minitest::Test
   end
   
   def test_get_tainted_loaded
+    skip_if_taint_is_undefined_or_no_op
     Timezone.get('Europe/Andorra')
   
     safe_test(:unavailable => :skip) do
@@ -256,6 +253,7 @@ class TCTimezone < Minitest::Test
   end
   
   def test_get_tainted_and_frozen_loaded
+    skip_if_taint_is_undefined_or_no_op
     Timezone.get('Europe/Andorra')
   
     safe_test do
@@ -265,6 +263,7 @@ class TCTimezone < Minitest::Test
   end
   
   def test_get_tainted_not_previously_loaded
+    skip_if_taint_is_undefined_or_no_op
     skip_if_has_bug_14060
 
     safe_test(:unavailable => :skip) do
@@ -277,6 +276,7 @@ class TCTimezone < Minitest::Test
   end
   
   def test_get_tainted_and_frozen_not_previously_loaded
+    skip_if_taint_is_undefined_or_no_op
     skip_if_has_bug_14060
 
     safe_test do

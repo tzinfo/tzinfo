@@ -108,6 +108,25 @@ module Kernel
       skip('Skipping test due to Ruby 2.4.4 being affected by Bug 14060 (see https://bugs.ruby-lang.org/issues/14060#note-5)')
     end
   end
+
+  # Object#taint is deprecated in Ruby >= 2.7 and will be removed in 3.2.
+  # 2.7 makes it a no-op with a warning.
+  # Define a method that will skip for use in tests that deal with tainted
+  # objects.
+  if Object.respond_to?(:taint)
+    if RUBY_VERSION >= '2.7'
+      def skip_if_taint_is_undefined_or_no_op
+        skip('Object#taint is a no-op')
+      end
+    else
+      def skip_if_taint_is_undefined_or_no_op
+      end
+    end
+  else
+    def skip_if_taint_is_undefined_or_no_op
+      skip('Object#taint is not defined')
+    end
+  end
   
   def assert_array_same_items(expected, actual, msg = nil)
     full_message = message(msg, '') { diff(expected, actual) }
@@ -179,19 +198,6 @@ module Kernel
     rescue => e
       full_message = message(msg) { exception_details(e, 'Exception raised: ') }
       assert(false, full_message)
-    end
-  end
-end
-
-
-# Object#taint is a deprecated no-op in Ruby 2.7 and outputs a warning. It will
-# be removed in 3.2. Silence the warning or supply a replacement.
-if TZInfo::RubyCoreSupport.const_defined?(:UntaintExt)
-  module TaintExt
-    refine Object do
-      def taint
-        self
-      end
     end
   end
 end

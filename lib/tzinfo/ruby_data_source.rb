@@ -1,8 +1,4 @@
 module TZInfo
-  # Use send as a workaround for erroneous 'wrong number of arguments' errors
-  # with JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-  send(:using, RubyCoreSupport::UntaintExt) if RubyCoreSupport.const_defined?(:UntaintExt)
-
   # A DataSource that loads data from the set of Ruby modules included in the
   # TZInfo::Data library (tzinfo-data gem).
   #
@@ -25,7 +21,7 @@ module TZInfo
         data_file = File.join('', 'tzinfo', 'data.rb')
         path = $".reverse_each.detect {|p| p.end_with?(data_file) }
         if path
-          @base_path = File.join(File.dirname(path), 'data').untaint
+          @base_path = RubyCoreSupport.untaint(File.join(File.dirname(path), 'data'))
         else
           @base_path = tzinfo_data
         end
@@ -45,7 +41,7 @@ module TZInfo
       # Untaint identifier after it has been reassigned to a new string. We
       # don't want to modify the original identifier. identifier may also be 
       # frozen and therefore cannot be untainted.
-      identifier.untaint
+      RubyCoreSupport.untaint(identifier)
       
       identifier = identifier.split('/')
       begin

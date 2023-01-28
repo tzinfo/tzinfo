@@ -1,12 +1,4 @@
 module TZInfo
-  # Use send as a workaround for an issue on JRuby 9.2.9.0 where using the
-  # refinement causes calls to RubyCoreSupport.file_open to fail to pass the
-  # block parameter.
-  #
-  # https://travis-ci.org/tzinfo/tzinfo/jobs/628812051#L1931
-  # https://github.com/jruby/jruby/issues/6009
-  send(:using, TZInfo::RubyCoreSupport::UntaintExt) if TZInfo::RubyCoreSupport.const_defined?(:UntaintExt)
-
   # An InvalidZoneinfoDirectory exception is raised if the DataSource is
   # set to a specific zoneinfo path, which is not a valid zoneinfo directory
   # (i.e. a directory containing index files named iso3166.tab and zone.tab
@@ -229,7 +221,7 @@ module TZInfo
           # Untaint path rather than identifier. We don't want to modify 
           # identifier. identifier may also be frozen and therefore cannot be
           # untainted.
-          path.untaint
+          RubyCoreSupport.untaint(path)
           
           begin
             ZoneinfoTimezoneInfo.new(identifier, path, @posix_tz_parser)
@@ -388,7 +380,7 @@ module TZInfo
     def enum_timezones(dir, exclude = [], &block)
       Dir.foreach(dir ? File.join(@zoneinfo_dir, dir) : @zoneinfo_dir) do |entry|
         unless entry =~ /\./ || exclude.include?(entry)
-          entry.untaint
+          RubyCoreSupport.untaint(entry)
           path = dir ? File.join(dir, entry) : entry
           full_path = File.join(@zoneinfo_dir, path)
  

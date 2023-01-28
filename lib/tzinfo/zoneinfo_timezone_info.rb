@@ -1,8 +1,4 @@
 module TZInfo
-  # Use send as a workaround for erroneous 'wrong number of arguments' errors
-  # with JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-  send(:using, RubyCoreSupport::UntaintExt) if RubyCoreSupport.const_defined?(:UntaintExt)
-
   # An InvalidZoneinfoFile exception is raised if an attempt is made to load an
   # invalid zoneinfo file.
   class InvalidZoneinfoFile < StandardError
@@ -351,7 +347,7 @@ module TZInfo
           std_offset = 0
         end
 
-        offset index, utc_offset, std_offset, offset[:abbr].untaint.to_sym
+        offset index, utc_offset, std_offset, RubyCoreSupport.untaint(offset[:abbr]).to_sym
       end
       
       # Parses a zoneinfo file and intializes the DataTimezoneInfo structures.

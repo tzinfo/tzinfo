@@ -5,10 +5,6 @@ require 'tempfile'
 
 include TZInfo
 
-# Use send as a workaround for erroneous 'wrong number of arguments' errors with
-# JRuby 9.0.5.0 when calling methods with Java implementations. See #114.
-send(:using, RubyCoreSupport::UntaintExt) if RubyCoreSupport.const_defined?(:UntaintExt)
-
 class TCZoneinfoTimezoneInfo < Minitest::Test
   class FakePosixTimeZoneParser
     def initialize(&block)
@@ -1281,7 +1277,7 @@ class TCZoneinfoTimezoneInfo < Minitest::Test
         
     tzif_test(offsets, []) do |path, format|
       # untaint only required for Ruby 1.9.2
-      path.untaint
+      RubyCoreSupport.untaint(path)
       
       safe_test do        
         info = ZoneinfoTimezoneInfo.new('Zone/three', path, @posix_tz_parser)

@@ -7,17 +7,8 @@ require 'tmpdir'
 
 include TZInfo
 
-# Use send as a workaround for an issue on JRuby 9.2.9.0 where using the
-# refinement causes calls to RubyCoreSupport.file_open to fail to pass the block
-# parameter.
-#
-# https://travis-ci.org/tzinfo/tzinfo/jobs/628812051#L1931
-# https://github.com/jruby/jruby/issues/6009
-send(:using, TZInfo::RubyCoreSupport::UntaintExt) if TZInfo::RubyCoreSupport.const_defined?(:UntaintExt)
-send(:using, TaintExt) if Module.const_defined?(:TaintExt)
-
 class TCZoneinfoDataSource < Minitest::Test
-  ZONEINFO_DIR = File.join(File.expand_path(File.dirname(__FILE__)), 'zoneinfo').untaint
+  ZONEINFO_DIR = RubyCoreSupport.untaint(File.join(File.expand_path(File.dirname(__FILE__)), 'zoneinfo'))
   
   def setup
     @orig_search_path = ZoneinfoDataSource.search_path.clone
@@ -662,6 +653,8 @@ class TCZoneinfoDataSource < Minitest::Test
   end
 
   def test_load_timezone_info_tainted
+    skip_if_taint_is_undefined_or_no_op
+
     safe_test(:unavailable => :skip) do
       identifier = 'Europe/Amsterdam'.dup.taint
       assert(identifier.tainted?)
@@ -672,6 +665,8 @@ class TCZoneinfoDataSource < Minitest::Test
   end
   
   def test_load_timezone_info_tainted_and_frozen
+    skip_if_taint_is_undefined_or_no_op
+
     safe_test do
       info = @data_source.load_timezone_info('Europe/Amsterdam'.dup.taint.freeze)
       assert_equal('Europe/Amsterdam', info.identifier)
@@ -679,6 +674,8 @@ class TCZoneinfoDataSource < Minitest::Test
   end
   
   def test_load_timezone_info_tainted_zoneinfo_dir_safe_mode
+    skip_if_taint_is_undefined_or_no_op
+
     safe_test(:unavailable => :skip) do
       assert_raises(SecurityError) do
         ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
@@ -687,6 +684,8 @@ class TCZoneinfoDataSource < Minitest::Test
   end
   
   def test_load_timezone_info_tainted_zoneinfo_dir
+    skip_if_taint_is_undefined_or_no_op
+
     data_source = ZoneinfoDataSource.new(@data_source.zoneinfo_dir.dup.taint)
     info = data_source.load_timezone_info('Europe/London')
     assert_kind_of(ZoneinfoTimezoneInfo, info)
@@ -697,7 +696,7 @@ class TCZoneinfoDataSource < Minitest::Test
     entries = Dir.glob(File.join(directory, '**', '*'))
     
     entries = entries.select do |file|
-      file.untaint
+      RubyCoreSupport.untaint(file)
       File.file?(file)
     end
        
@@ -868,6 +867,8 @@ class TCZoneinfoDataSource < Minitest::Test
   end
   
   def test_load_country_info_tainted
+    skip_if_taint_is_undefined_or_no_op
+
     safe_test(:unavailable => :skip) do
       code = 'NL'.dup.taint
       assert(code.tainted?)
@@ -878,6 +879,8 @@ class TCZoneinfoDataSource < Minitest::Test
   end
   
   def test_load_country_info_tainted_and_frozen
+    skip_if_taint_is_undefined_or_no_op
+
     safe_test do
       info = @data_source.load_country_info('NL'.dup.taint.freeze)
       assert_equal('NL', info.code)
