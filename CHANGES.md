@@ -2,7 +2,7 @@
 
 ## Version 2.0.6 - 28-Jan-2023
 
-* Eliminate Object#untaint deprecation warnings on JRuby 9.4.0.0. #145.
+* Eliminate `Object#untaint` deprecation warnings on JRuby 9.4.0.0. #145.
 
 
 ## Version 2.0.5 - 19-Jul-2022
@@ -201,7 +201,7 @@
 
 ## Version 1.2.11 - 28-Jan-2023
 
-* Eliminate Object#untaint deprecation warnings on JRuby 9.4.0.0. #145.
+* Eliminate `Object#untaint` deprecation warnings on JRuby 9.4.0.0. #145.
 
 
 ## Version 1.2.10 - 19-Jul-2022
