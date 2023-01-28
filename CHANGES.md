@@ -194,6 +194,11 @@
   `TZInfo::Country.get('US').zone_identifiers` should be used instead.
 
 
+## Version 1.2.11 - 28-Jan-2023
+
+* Eliminate Object#untaint deprecation warnings on JRuby 9.4.0.0. #145.
+
+
 ## Version 1.2.10 - 19-Jul-2022
 
 * Fixed a relative path traversal bug that could cause arbitrary files to be
