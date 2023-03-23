@@ -11,7 +11,9 @@ module TZInfo
           tz.offset :o1, 10800, 0, :'+03'
           tz.offset :o2, 14400, 0, :'+04'
           tz.offset :o3, 14400, 3600, :'+05'
-          tz.offset :o4, 10800, 3600, :'+04'
+          tz.offset :o4, 10800, 3600, :MSD
+          tz.offset :o5, 10800, 0, :MSK
+          tz.offset :o6, 14400, 0, :MSK
           
           tz.transition 1919, 7, :o1, 4844281, 2
           tz.transition 1930, 6, :o2, 19409187, 8
@@ -32,50 +34,50 @@ module TZInfo
           tz.transition 1988, 3, :o3, 575416800
           tz.transition 1988, 9, :o2, 591141600
           tz.transition 1989, 3, :o4, 606866400
-          tz.transition 1989, 9, :o1, 622594800
+          tz.transition 1989, 9, :o5, 622594800
           tz.transition 1990, 3, :o4, 638319600
-          tz.transition 1990, 9, :o1, 654649200
+          tz.transition 1990, 9, :o5, 654649200
           tz.transition 1991, 3, :o2, 670374000
           tz.transition 1992, 3, :o4, 701820000
-          tz.transition 1992, 9, :o1, 717548400
+          tz.transition 1992, 9, :o5, 717548400
           tz.transition 1993, 3, :o4, 733273200
-          tz.transition 1993, 9, :o1, 748998000
+          tz.transition 1993, 9, :o5, 748998000
           tz.transition 1994, 3, :o4, 764722800
-          tz.transition 1994, 9, :o1, 780447600
+          tz.transition 1994, 9, :o5, 780447600
           tz.transition 1995, 3, :o4, 796172400
-          tz.transition 1995, 9, :o1, 811897200
+          tz.transition 1995, 9, :o5, 811897200
           tz.transition 1996, 3, :o4, 828226800
-          tz.transition 1996, 10, :o1, 846370800
+          tz.transition 1996, 10, :o5, 846370800
           tz.transition 1997, 3, :o4, 859676400
-          tz.transition 1997, 10, :o1, 877820400
+          tz.transition 1997, 10, :o5, 877820400
           tz.transition 1998, 3, :o4, 891126000
-          tz.transition 1998, 10, :o1, 909270000
+          tz.transition 1998, 10, :o5, 909270000
           tz.transition 1999, 3, :o4, 922575600
-          tz.transition 1999, 10, :o1, 941324400
+          tz.transition 1999, 10, :o5, 941324400
           tz.transition 2000, 3, :o4, 954025200
-          tz.transition 2000, 10, :o1, 972774000
+          tz.transition 2000, 10, :o5, 972774000
           tz.transition 2001, 3, :o4, 985474800
-          tz.transition 2001, 10, :o1, 1004223600
+          tz.transition 2001, 10, :o5, 1004223600
           tz.transition 2002, 3, :o4, 1017529200
-          tz.transition 2002, 10, :o1, 1035673200
+          tz.transition 2002, 10, :o5, 1035673200
           tz.transition 2003, 3, :o4, 1048978800
-          tz.transition 2003, 10, :o1, 1067122800
+          tz.transition 2003, 10, :o5, 1067122800
           tz.transition 2004, 3, :o4, 1080428400
-          tz.transition 2004, 10, :o1, 1099177200
+          tz.transition 2004, 10, :o5, 1099177200
           tz.transition 2005, 3, :o4, 1111878000
-          tz.transition 2005, 10, :o1, 1130626800
+          tz.transition 2005, 10, :o5, 1130626800
           tz.transition 2006, 3, :o4, 1143327600
-          tz.transition 2006, 10, :o1, 1162076400
+          tz.transition 2006, 10, :o5, 1162076400
           tz.transition 2007, 3, :o4, 1174777200
-          tz.transition 2007, 10, :o1, 1193526000
+          tz.transition 2007, 10, :o5, 1193526000
           tz.transition 2008, 3, :o4, 1206831600
-          tz.transition 2008, 10, :o1, 1224975600
+          tz.transition 2008, 10, :o5, 1224975600
           tz.transition 2009, 3, :o4, 1238281200
-          tz.transition 2009, 10, :o1, 1256425200
+          tz.transition 2009, 10, :o5, 1256425200
           tz.transition 2010, 3, :o4, 1269730800
-          tz.transition 2010, 10, :o1, 1288479600
-          tz.transition 2011, 3, :o2, 1301180400
-          tz.transition 2014, 10, :o1, 1414274400
+          tz.transition 2010, 10, :o5, 1288479600
+          tz.transition 2011, 3, :o6, 1301180400
+          tz.transition 2014, 10, :o5, 1414274400
         end
       end
     end

@@ -175,9 +175,8 @@ module TZInfo
         c.timezone 'America/Rankin_Inlet', 3769, 60, -331499, 3600, 'Central - NU (central)'
         c.timezone 'America/Regina', 252, 5, -2093, 20, 'CST - SK (most areas)'
         c.timezone 'America/Swift_Current', 3017, 60, -647, 6, 'CST - SK (midwest)'
-        c.timezone 'America/Edmonton', 1071, 20, -1702, 15, 'Mountain - AB; BC (E); SK (W)'
+        c.timezone 'America/Edmonton', 1071, 20, -1702, 15, 'Mountain - AB; BC (E); NT (E); SK (W)'
         c.timezone 'America/Cambridge_Bay', 24881, 360, -37819, 360, 'Mountain - NU (west)'
-        c.timezone 'America/Yellowknife', 1249, 20, -2287, 20, 'Mountain - NT (central)'
         c.timezone 'America/Inuvik', 246059, 3600, -8023, 60, 'Mountain - NT (west)'
         c.timezone 'America/Creston', 491, 10, -6991, 60, 'MST - BC (Creston)'
         c.timezone 'America/Dawson_Creek', 1673, 30, -3607, 30, 'MST - BC (Dawson Cr, Ft St John)'
@@ -209,7 +208,7 @@ module TZInfo
         c.timezone 'Pacific/Rarotonga', -637, 30, -4793, 30
       end
       country 'CL', 'Chile' do |c|
-        c.timezone 'America/Santiago', -669, 20, -212, 3, 'Chile (most areas)'
+        c.timezone 'America/Santiago', -669, 20, -212, 3, 'most of Chile'
         c.timezone 'America/Punta_Arenas', -1063, 20, -851, 12, 'Region of Magallanes'
         c.timezone 'Pacific/Easter', -543, 20, -3283, 30, 'Easter Island'
       end
@@ -239,14 +238,14 @@ module TZInfo
         c.timezone 'Indian/Christmas', -125, 12, 6343, 60
       end
       country 'CY', 'Cyprus' do |c|
-        c.timezone 'Asia/Nicosia', 211, 6, 1001, 30, 'Cyprus (most areas)'
+        c.timezone 'Asia/Nicosia', 211, 6, 1001, 30, 'most of Cyprus'
         c.timezone 'Asia/Famagusta', 2107, 60, 679, 20, 'Northern Cyprus'
       end
       country 'CZ', 'Czech Republic' do |c|
         c.timezone 'Europe/Prague', 601, 12, 433, 30
       end
       country 'DE', 'Germany' do |c|
-        c.timezone 'Europe/Berlin', 105, 2, 401, 30, 'Germany (most areas)'
+        c.timezone 'Europe/Berlin', 105, 2, 401, 30, 'most of Germany'
         c.timezone 'Europe/Busingen', 477, 10, 521, 60, 'Busingen'
       end
       country 'DJ', 'Djibouti' do |c|
@@ -333,7 +332,7 @@ module TZInfo
         c.timezone 'Europe/Gibraltar', 542, 15, -107, 20
       end
       country 'GL', 'Greenland' do |c|
-        c.timezone 'America/Nuuk', 3851, 60, -776, 15, 'Greenland (most areas)'
+        c.timezone 'America/Nuuk', 3851, 60, -776, 15, 'most of Greenland'
         c.timezone 'America/Danmarkshavn', 2303, 30, -56, 3, 'National Park (east coast)'
         c.timezone 'America/Scoresbysund', 4229, 60, -659, 30, 'Scoresbysund/Ittoqqortoormiit'
         c.timezone 'America/Thule', 2297, 30, -4127, 60, 'Thule/Pituffik'
@@ -462,7 +461,7 @@ module TZInfo
         c.timezone 'America/Cayman', 193, 10, -4883, 60
       end
       country 'KZ', 'Kazakhstan' do |c|
-        c.timezone 'Asia/Almaty', 173, 4, 1539, 20, 'Kazakhstan (most areas)'
+        c.timezone 'Asia/Almaty', 173, 4, 1539, 20, 'most of Kazakhstan'
         c.timezone 'Asia/Qyzylorda', 224, 5, 982, 15, 'Qyzylorda/Kyzylorda/Kzyl-Orda'
         c.timezone 'Asia/Qostanay', 266, 5, 3817, 60, 'Qostanay/Kostanay/Kustanay'
         c.timezone 'Asia/Aqtobe', 3017, 60, 343, 6, 'Aqtobe/Aktobe'
@@ -522,7 +521,7 @@ module TZInfo
         c.timezone 'Indian/Antananarivo', -227, 12, 2851, 60
       end
       country 'MH', 'Marshall Islands' do |c|
-        c.timezone 'Pacific/Majuro', 143, 20, 856, 5, 'Marshall Islands (most areas)'
+        c.timezone 'Pacific/Majuro', 143, 20, 856, 5, 'most of Marshall Islands'
         c.timezone 'Pacific/Kwajalein', 109, 12, 502, 3, 'Kwajalein'
       end
       country 'MK', 'North Macedonia' do |c|
@@ -535,7 +534,7 @@ module TZInfo
         c.timezone 'Asia/Yangon', 1007, 60, 577, 6
       end
       country 'MN', 'Mongolia' do |c|
-        c.timezone 'Asia/Ulaanbaatar', 575, 12, 6413, 60, 'Mongolia (most areas)'
+        c.timezone 'Asia/Ulaanbaatar', 575, 12, 6413, 60, 'most of Mongolia'
         c.timezone 'Asia/Hovd', 2881, 60, 1833, 20, 'Bayan-Olgiy, Govi-Altai, Hovd, Uvs, Zavkhan'
         c.timezone 'Asia/Choibalsan', 721, 15, 229, 2, 'Dornod, Sukhbaatar'
       end
@@ -621,7 +620,7 @@ module TZInfo
         c.timezone 'Pacific/Niue', -1141, 60, -2039, 12
       end
       country 'NZ', 'New Zealand' do |c|
-        c.timezone 'Pacific/Auckland', -553, 15, 5243, 30, 'New Zealand (most areas)'
+        c.timezone 'Pacific/Auckland', -553, 15, 5243, 30, 'most of New Zealand'
         c.timezone 'Pacific/Chatham', -879, 20, -3531, 20, 'Chatham Islands'
       end
       country 'OM', 'Oman' do |c|
@@ -639,7 +638,7 @@ module TZInfo
         c.timezone 'Pacific/Gambier', -347, 15, -2699, 20, 'Gambier Islands'
       end
       country 'PG', 'Papua New Guinea' do |c|
-        c.timezone 'Pacific/Port_Moresby', -19, 2, 883, 6, 'Papua New Guinea (most areas)'
+        c.timezone 'Pacific/Port_Moresby', -19, 2, 883, 6, 'most of Papua New Guinea'
         c.timezone 'Pacific/Bougainville', -373, 60, 4667, 30, 'Bougainville'
       end
       country 'PH', 'Philippines' do |c|
@@ -711,7 +710,7 @@ module TZInfo
         c.timezone 'Asia/Ust-Nera', 232417, 3600, 10742, 75, 'MSK+07 - Oymyakonsky'
         c.timezone 'Asia/Magadan', 1787, 30, 754, 5, 'MSK+08 - Magadan'
         c.timezone 'Asia/Sakhalin', 1409, 30, 1427, 10, 'MSK+08 - Sakhalin Island'
-        c.timezone 'Asia/Srednekolymsk', 1012, 15, 9223, 60, 'MSK+08 - Sakha (E); North Kuril Is'
+        c.timezone 'Asia/Srednekolymsk', 1012, 15, 9223, 60, 'MSK+08 - Sakha (E); N Kuril Is'
         c.timezone 'Asia/Kamchatka', 3181, 60, 3173, 20, 'MSK+09 - Kamchatka'
         c.timezone 'Asia/Anadyr', 259, 4, 10649, 60, 'MSK+09 - Bering Sea'
       end
@@ -787,7 +786,7 @@ module TZInfo
       country 'TD', 'Chad' do |c|
         c.timezone 'Africa/Ndjamena', 727, 60, 301, 20
       end
-      country 'TF', 'French Southern Territories' do |c|
+      country 'TF', 'French S. Terr.' do |c|
         c.timezone 'Indian/Kerguelen', -17767, 360, 28087, 400
       end
       country 'TG', 'Togo' do |c|
@@ -831,7 +830,7 @@ module TZInfo
       end
       country 'UA', 'Ukraine' do |c|
         c.timezone 'Europe/Simferopol', 899, 20, 341, 10, 'Crimea'
-        c.timezone 'Europe/Kyiv', 1513, 30, 1831, 60, 'Ukraine (most areas)'
+        c.timezone 'Europe/Kyiv', 1513, 30, 1831, 60, 'most of Ukraine'
       end
       country 'UG', 'Uganda' do |c|
         c.timezone 'Africa/Kampala', 19, 60, 389, 12
@@ -860,7 +859,7 @@ module TZInfo
         c.timezone 'America/North_Dakota/Beulah', 56717, 1200, -916, 9, 'Central - ND (Mercer)'
         c.timezone 'America/Denver', 47687, 1200, -125981, 1200, 'Mountain (most areas)'
         c.timezone 'America/Boise', 157009, 3600, -46481, 400, 'Mountain - ID (south); OR (east)'
-        c.timezone 'America/Phoenix', 20069, 600, -16811, 150, 'MST - Arizona (except Navajo)'
+        c.timezone 'America/Phoenix', 20069, 600, -16811, 150, 'MST - AZ (except Navajo)'
         c.timezone 'America/Los_Angeles', 30647, 900, -212837, 1800, 'Pacific'
         c.timezone 'America/Anchorage', 44077, 720, -539641, 3600, 'Alaska (most areas)'
         c.timezone 'America/Juneau', 209887, 3600, -483911, 3600, 'Alaska - Juneau area'
@@ -868,7 +867,7 @@ module TZInfo
         c.timezone 'America/Metlakatla', 198457, 3600, -18947, 144, 'Alaska - Annette Island'
         c.timezone 'America/Yakutat', 214369, 3600, -251509, 1800, 'Alaska - Yakutat'
         c.timezone 'America/Nome', 58051, 900, -595463, 3600, 'Alaska (west)'
-        c.timezone 'America/Adak', 1297, 25, -635969, 3600, 'Aleutian Islands'
+        c.timezone 'America/Adak', 1297, 25, -635969, 3600, 'Alaska - western Aleutians'
         c.timezone 'Pacific/Honolulu', 15341, 720, -18943, 120, 'Hawaii'
       end
       country 'UY', 'Uruguay' do |c|

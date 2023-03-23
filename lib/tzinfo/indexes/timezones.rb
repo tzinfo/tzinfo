@@ -226,7 +226,7 @@ module TZInfo
       timezone 'America/Whitehorse'
       timezone 'America/Winnipeg'
       timezone 'America/Yakutat'
-      timezone 'America/Yellowknife'
+      linked_timezone 'America/Yellowknife'
       timezone 'Antarctica/Casey'
       timezone 'Antarctica/Davis'
       linked_timezone 'Antarctica/DumontDUrville'
