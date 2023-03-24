@@ -122,7 +122,7 @@ module TZInfo
           tz.transition 2021, 10, :o1, 1635627600
           tz.transition 2022, 3, :o2, 1648332000
           tz.transition 2022, 10, :o1, 1667077200
-          tz.transition 2023, 3, :o2, 1679781600
+          tz.transition 2023, 4, :o2, 1682028000
           tz.transition 2023, 10, :o1, 1698526800
           tz.transition 2024, 3, :o2, 1711836000
           tz.transition 2024, 10, :o1, 1729976400
