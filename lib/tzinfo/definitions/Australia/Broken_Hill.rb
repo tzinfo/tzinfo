@@ -182,6 +182,52 @@ module TZInfo
           tz.transition 2049, 4, :o3, 39512563, 16
           tz.transition 2049, 10, :o4, 39515475, 16
           tz.transition 2050, 4, :o3, 39518387, 16
+          tz.transition 2050, 10, :o4, 39521299, 16
+          tz.transition 2051, 4, :o3, 39524211, 16
+          tz.transition 2051, 9, :o4, 39527123, 16
+          tz.transition 2052, 4, :o3, 39530147, 16
+          tz.transition 2052, 10, :o4, 39533059, 16
+          tz.transition 2053, 4, :o3, 39535971, 16
+          tz.transition 2053, 10, :o4, 39538883, 16
+          tz.transition 2054, 4, :o3, 39541795, 16
+          tz.transition 2054, 10, :o4, 39544707, 16
+          tz.transition 2055, 4, :o3, 39547619, 16
+          tz.transition 2055, 10, :o4, 39550531, 16
+          tz.transition 2056, 4, :o3, 39553443, 16
+          tz.transition 2056, 9, :o4, 39556355, 16
+          tz.transition 2057, 3, :o3, 39559267, 16
+          tz.transition 2057, 10, :o4, 39562291, 16
+          tz.transition 2058, 4, :o3, 39565203, 16
+          tz.transition 2058, 10, :o4, 39568115, 16
+          tz.transition 2059, 4, :o3, 39571027, 16
+          tz.transition 2059, 10, :o4, 39573939, 16
+          tz.transition 2060, 4, :o3, 39576851, 16
+          tz.transition 2060, 10, :o4, 39579763, 16
+          tz.transition 2061, 4, :o3, 39582675, 16
+          tz.transition 2061, 10, :o4, 39585587, 16
+          tz.transition 2062, 4, :o3, 39588499, 16
+          tz.transition 2062, 9, :o4, 39591411, 16
+          tz.transition 2063, 3, :o3, 39594323, 16
+          tz.transition 2063, 10, :o4, 39597347, 16
+          tz.transition 2064, 4, :o3, 39600259, 16
+          tz.transition 2064, 10, :o4, 39603171, 16
+          tz.transition 2065, 4, :o3, 39606083, 16
+          tz.transition 2065, 10, :o4, 39608995, 16
+          tz.transition 2066, 4, :o3, 39611907, 16
+          tz.transition 2066, 10, :o4, 39614819, 16
+          tz.transition 2067, 4, :o3, 39617731, 16
+          tz.transition 2067, 10, :o4, 39620643, 16
+          tz.transition 2068, 3, :o3, 39623555, 16
+          tz.transition 2068, 10, :o4, 39626579, 16
+          tz.transition 2069, 4, :o3, 39629491, 16
+          tz.transition 2069, 10, :o4, 39632403, 16
+          tz.transition 2070, 4, :o3, 39635315, 16
+          tz.transition 2070, 10, :o4, 39638227, 16
+          tz.transition 2071, 4, :o3, 39641139, 16
+          tz.transition 2071, 10, :o4, 39644051, 16
+          tz.transition 2072, 4, :o3, 39646963, 16
+          tz.transition 2072, 10, :o4, 39649875, 16
+          tz.transition 2073, 4, :o3, 39652787, 16
         end
       end
     end
