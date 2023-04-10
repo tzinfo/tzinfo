@@ -374,7 +374,7 @@
 ## Version 0.3.62 (tzdata v2023c) - 10-Apr-2023
 
 * Updated to tzdata version 2023c
-  (https://mm.icann.org/pipermail/tz-announce/2023-March/000079.html).
+  (<https://mm.icann.org/pipermail/tz-announce/2023-March/000079.html>).
 * Increased the maximum year from 2050 to 2073 (include 50 years of future data
   to match tzinfo-data).
 
