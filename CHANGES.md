@@ -371,6 +371,14 @@
   use other `TimezonePeriod` instance methods instead (issue #7655).
 
 
+## Version 0.3.62 (tzdata v2023c) - 10-Apr-2023
+
+* Updated to tzdata version 2023c
+  (https://mm.icann.org/pipermail/tz-announce/2023-March/000079.html).
+* Increased the maximum year from 2050 to 2073 (include 50 years of future data
+  to match tzinfo-data).
+
+
 ## Version 0.3.61 (tzdata v2022a) - 19-Jul-2022
 
 * Fixed a relative path traversal bug that could cause arbitrary files to be
