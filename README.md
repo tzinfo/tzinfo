@@ -19,7 +19,7 @@ TZInfo requires a source of time zone data. There are two options:
 By default, TZInfo will attempt to use TZInfo::Data. If TZInfo::Data is not
 available (i.e. if `require 'tzinfo/data'` fails), then TZInfo will search for a
 zoneinfo directory instead (using the search path specified by
-`TZInfo::ZoneinfoDataSource::DEFAULT_SEARCH_PATH`).
+`TZInfo::DataSources::ZoneinfoDataSource::search_path`).
 
 If no data source can be found, a `TZInfo::DataSourceNotFound` exception will be
 raised when TZInfo is used. Further information is available
