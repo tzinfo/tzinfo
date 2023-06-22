@@ -17,14 +17,14 @@ module TZInfo
             tz.offset :o2, 36000, 3600, 'AEDT'
 
             tz.transition :o1, -2364111592
-            tz.transition :o2, -1672567140
-            tz.transition :o1, -1665392400
+            tz.transition :o2, -1672560000
+            tz.transition :o1, -1665388800
             tz.transition :o2, -883641600
-            tz.transition :o1, -876128400
+            tz.transition :o1, -876124800
             tz.transition :o2, -860400000
-            tz.transition :o1, -844678800
+            tz.transition :o1, -844675200
             tz.transition :o2, -828345600
-            tz.transition :o1, -813229200
+            tz.transition :o1, -813225600
             tz.transition :o2, 57686400
             tz.transition :o1, 67968000
             tz.transition :o2, 89136000
@@ -223,6 +223,12 @@ module TZInfo
             tz.transition :o1, 3132489600
             tz.transition :o2, 3148214400
             tz.transition :o1, 3163939200
+            tz.transition :o2, 3179664000
+            tz.transition :o1, 3195388800
+            tz.transition :o2, 3211113600
+            tz.transition :o1, 3226838400
+            tz.transition :o2, 3242563200
+            tz.transition :o1, 3258288000
           end
         end
       end

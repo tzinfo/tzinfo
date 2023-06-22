@@ -228,6 +228,12 @@ module TZInfo
             tz.transition :o2, 3150061200
             tz.transition :o3, 3163366800
             tz.transition :o2, 3181510800
+            tz.transition :o3, 3194816400
+            tz.transition :o2, 3212960400
+            tz.transition :o3, 3226266000
+            tz.transition :o2, 3245014800
+            tz.transition :o3, 3257715600
+            tz.transition :o2, 3276464400
           end
         end
       end

@@ -326,6 +326,12 @@ module TZInfo
             tz.transition :o1, 3150061200
             tz.transition :o2, 3163366800
             tz.transition :o1, 3181510800
+            tz.transition :o2, 3194816400
+            tz.transition :o1, 3212960400
+            tz.transition :o2, 3226266000
+            tz.transition :o1, 3245014800
+            tz.transition :o2, 3257715600
+            tz.transition :o1, 3276464400
           end
         end
       end

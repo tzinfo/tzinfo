@@ -787,10 +787,10 @@ module DataSources
       skip_if_taint_is_undefined_or_no_op
 
       safe_test(unavailable: :skip) do
-        identifier = 'Europe/Amsterdam'.dup.taint
+        identifier = 'Europe/Brussels'.dup.taint
         assert(identifier.tainted?)
         info = @data_source.send(:load_timezone_info, identifier)
-        assert_equal('Europe/Amsterdam', info.identifier)
+        assert_equal('Europe/Brussels', info.identifier)
         assert(identifier.tainted?)
       end
     end
@@ -799,8 +799,8 @@ module DataSources
       skip_if_taint_is_undefined_or_no_op
 
       safe_test do
-        info = @data_source.send(:load_timezone_info, 'Europe/Amsterdam'.dup.taint.freeze)
-        assert_equal('Europe/Amsterdam', info.identifier)
+        info = @data_source.send(:load_timezone_info, 'Europe/Brussels'.dup.taint.freeze)
+        assert_equal('Europe/Brussels', info.identifier)
       end
     end
 

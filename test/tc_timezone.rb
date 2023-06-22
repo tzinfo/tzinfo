@@ -296,8 +296,8 @@ class TCTimezone < Minitest::Test
     skip_if_taint_is_undefined_or_no_op
 
     safe_test do
-      tz = Timezone.get('Europe/Amsterdam'.dup.taint.freeze)
-      assert_equal('Europe/Amsterdam', tz.identifier)
+      tz = Timezone.get('Europe/Brussels'.dup.taint.freeze)
+      assert_equal('Europe/Brussels', tz.identifier)
     end
   end
 
