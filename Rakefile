@@ -11,10 +11,10 @@ rescue LoadError, RuntimeError
 end
 
 BASE_DIR = File.expand_path(File.dirname(__FILE__))
+GEMSPEC_PATH = File.join(BASE_DIR, 'tzinfo.gemspec')
+spec = TOPLEVEL_BINDING.eval(File.read(GEMSPEC_PATH), GEMSPEC_PATH)
 
 task default: [:test]
-
-spec = eval(File.read('tzinfo.gemspec'))
 
 class TZInfoPackageTask < Gem::PackageTask
   alias_method :orig_sh, :sh
