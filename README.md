@@ -46,7 +46,7 @@ to your `Gemfile`.
 ## IANA Time Zone Database
 
 The data returned and used by TZInfo is sourced from the
-[IANA Time Zone Database](http://www.iana.org/time-zones). The
+[IANA Time Zone Database](https://www.iana.org/time-zones). The
 [Theory and pragmatics of the tz code and data](https://data.iana.org/time-zones/theory.html)
 document gives details of how the data is organized and managed.
 
