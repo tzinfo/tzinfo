@@ -54,10 +54,19 @@ module TZInfo
           end
         end
 
+        data_file_amagi = File.join('', 'tzinfo', 'amagi.rb')
+        path_amagi = $".reverse_each.detect {|p| p.end_with?(data_file_amagi) }
+        if path_amagi
+          @base_path_amagi_timezone = RubyCoreSupport.untaint(File.join(File.dirname(path_amagi), 'amagi' ))
+        else
+          @base_path_amagi_timezone = 'tzinfo/amagi'
+        end
+
         require_index('timezones')
         require_index('countries')
+        require_data_amagi('customtimezone')
 
-        @data_timezone_identifiers = Data::Indexes::Timezones.data_timezones
+        @data_timezone_identifiers = Data::Indexes::Timezones.data_timezones + Amagi::Customtimezone.data_timezones
         @linked_timezone_identifiers = Data::Indexes::Timezones.linked_timezones
         @countries = Data::Indexes::Countries.countries
         @country_codes = @countries.keys.sort!.freeze
@@ -90,11 +99,18 @@ module TZInfo
         split_identifier = valid_identifier.gsub(/-/, '__m__').gsub(/\+/, '__p__').split('/')
 
         begin
-          require_definition(split_identifier)
+          if split_identifier == ["Amagi"]
+            require_definition_amagi("Amagi")
+            n = Amagi::Definitionamagitimezone
+            split_identifier.each {|part| n = n.const_get(part) }
+            n.get
+          else
+            require_definition(split_identifier)
+            m = Data::Definitions
 
-          m = Data::Definitions
-          split_identifier.each {|part| m = m.const_get(part) }
-          m.get
+            split_identifier.each {|part| m = m.const_get(part) }
+            m.get
+          end
         rescue LoadError, NameError => e
           raise InvalidTimezoneIdentifier, "#{e.message.encode(Encoding::UTF_8)} (loading #{valid_identifier})"
         end
@@ -115,6 +131,10 @@ module TZInfo
         require_data('definitions', *identifier)
       end
 
+      def require_definition_amagi(identifier)
+        require_data_amagi('defintionamagitimezone', *identifier)
+      end
+
       # Requires an index by its name.
       #
       # @param name [String] an index name.
@@ -127,6 +147,10 @@ module TZInfo
       # @param file [Array<String>] a relative path to a file to be required.
       def require_data(*file)
         require(File.join(@base_path, *file))
+      end
+
+      def require_data_amagi(*file)
+        require(File.join(@base_path_amagi_timezone, *file))
       end
 
       # @return [String] a `String` containing TZInfo::Data version infomation
