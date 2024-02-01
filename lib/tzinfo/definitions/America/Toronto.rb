@@ -64,12 +64,12 @@ module TZInfo
           tz.transition 1945, 9, :o1, 9726915, 4
           tz.transition 1946, 4, :o2, 58366531, 24
           tz.transition 1946, 9, :o1, 9728371, 4
-          tz.transition 1947, 4, :o2, 58375265, 24
-          tz.transition 1947, 9, :o1, 7297370, 3
-          tz.transition 1948, 4, :o2, 58384001, 24
-          tz.transition 1948, 9, :o1, 7298462, 3
-          tz.transition 1949, 4, :o2, 58392737, 24
-          tz.transition 1949, 11, :o1, 7299743, 3
+          tz.transition 1947, 4, :o2, 58375267, 24
+          tz.transition 1947, 9, :o1, 9729827, 4
+          tz.transition 1948, 4, :o2, 58384003, 24
+          tz.transition 1948, 9, :o1, 9731283, 4
+          tz.transition 1949, 4, :o2, 58392739, 24
+          tz.transition 1949, 11, :o1, 9732991, 4
           tz.transition 1950, 4, :o2, 58401643, 24
           tz.transition 1950, 11, :o1, 9734447, 4
           tz.transition 1951, 4, :o2, 58410379, 24
