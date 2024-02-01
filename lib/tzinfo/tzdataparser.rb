@@ -62,7 +62,7 @@ module TZInfo
     MIN_YEAR = 1800
     
     # Maximum year that will be considered.
-    MAX_YEAR = 2073
+    MAX_YEAR = 2074
     
     # Whether to generate zone definitions (set to false to stop zones being
     # generated).    
