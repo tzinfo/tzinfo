@@ -535,8 +535,7 @@ module TZInfo
       end
       country 'MN', 'Mongolia' do |c|
         c.timezone 'Asia/Ulaanbaatar', 575, 12, 6413, 60, 'most of Mongolia'
-        c.timezone 'Asia/Hovd', 2881, 60, 1833, 20, 'Bayan-Olgiy, Govi-Altai, Hovd, Uvs, Zavkhan'
-        c.timezone 'Asia/Choibalsan', 721, 15, 229, 2, 'Dornod, Sukhbaatar'
+        c.timezone 'Asia/Hovd', 2881, 60, 1833, 20, 'Bayan-Olgii, Hovd, Uvs'
       end
       country 'MO', 'Macau' do |c|
         c.timezone 'Asia/Macau', 7991, 360, 2725, 24

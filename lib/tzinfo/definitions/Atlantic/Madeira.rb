@@ -19,18 +19,18 @@ module TZInfo
           tz.transition 1912, 1, :o2, 58065661, 24
           tz.transition 1916, 6, :o3, 4842065, 2
           tz.transition 1916, 11, :o2, 58108045, 24
-          tz.transition 1917, 3, :o3, 4842577, 2
+          tz.transition 1917, 3, :o3, 58110925, 24
           tz.transition 1917, 10, :o2, 4843033, 2
-          tz.transition 1918, 3, :o3, 4843309, 2
+          tz.transition 1918, 3, :o3, 58119685, 24
           tz.transition 1918, 10, :o2, 4843763, 2
-          tz.transition 1919, 3, :o3, 4844037, 2
+          tz.transition 1919, 3, :o3, 58128445, 24
           tz.transition 1919, 10, :o2, 4844493, 2
-          tz.transition 1920, 3, :o3, 4844769, 2
+          tz.transition 1920, 3, :o3, 58137229, 24
           tz.transition 1920, 10, :o2, 4845225, 2
-          tz.transition 1921, 3, :o3, 4845499, 2
+          tz.transition 1921, 3, :o3, 58145989, 24
           tz.transition 1921, 10, :o2, 4845955, 2
           tz.transition 1924, 4, :o3, 4847785, 2
-          tz.transition 1924, 10, :o2, 4848147, 2
+          tz.transition 1924, 10, :o2, 4848127, 2
           tz.transition 1926, 4, :o3, 4849247, 2
           tz.transition 1926, 10, :o2, 4849583, 2
           tz.transition 1927, 4, :o3, 4849961, 2
@@ -56,7 +56,7 @@ module TZInfo
           tz.transition 1939, 4, :o3, 4858739, 2
           tz.transition 1939, 11, :o2, 4859173, 2
           tz.transition 1940, 2, :o3, 4859369, 2
-          tz.transition 1940, 10, :o2, 4859817, 2
+          tz.transition 1940, 10, :o2, 4859821, 2
           tz.transition 1941, 4, :o3, 4860181, 2
           tz.transition 1941, 10, :o2, 4860547, 2
           tz.transition 1942, 3, :o3, 4860867, 2
@@ -115,26 +115,17 @@ module TZInfo
           tz.transition 1964, 10, :o2, 19509381, 8
           tz.transition 1965, 4, :o3, 19510837, 8
           tz.transition 1965, 10, :o2, 19512293, 8
-          tz.transition 1966, 4, :o5, 19513749, 8
-          tz.transition 1977, 3, :o6, 228268800
-          tz.transition 1977, 9, :o5, 243993600
-          tz.transition 1978, 4, :o6, 260323200
-          tz.transition 1978, 10, :o5, 276048000
-          tz.transition 1979, 4, :o6, 291772800
-          tz.transition 1979, 9, :o5, 307501200
-          tz.transition 1980, 3, :o6, 323222400
-          tz.transition 1980, 9, :o5, 338950800
-          tz.transition 1981, 3, :o6, 354675600
-          tz.transition 1981, 9, :o5, 370400400
-          tz.transition 1982, 3, :o6, 386125200
-          tz.transition 1982, 9, :o5, 401850000
-          tz.transition 1983, 3, :o6, 417578400
-          tz.transition 1983, 9, :o5, 433299600
-          tz.transition 1984, 3, :o6, 449024400
-          tz.transition 1984, 9, :o5, 465354000
-          tz.transition 1985, 3, :o6, 481078800
-          tz.transition 1985, 9, :o5, 496803600
-          tz.transition 1986, 3, :o6, 512528400
+          tz.transition 1966, 4, :o3, 19513749, 8
+          tz.transition 1966, 10, :o5, 19515205, 8
+          tz.transition 1982, 4, :o6, 386726400
+          tz.transition 1982, 9, :o5, 401846400
+          tz.transition 1983, 3, :o6, 417571200
+          tz.transition 1983, 9, :o5, 433296000
+          tz.transition 1984, 3, :o6, 449020800
+          tz.transition 1984, 9, :o5, 465350400
+          tz.transition 1985, 3, :o6, 481075200
+          tz.transition 1985, 9, :o5, 496800000
+          tz.transition 1986, 3, :o6, 512524800
           tz.transition 1986, 9, :o5, 528253200
           tz.transition 1987, 3, :o6, 543978000
           tz.transition 1987, 9, :o5, 559702800

@@ -11,17 +11,14 @@ module TZInfo
           tz.offset :o1, -25200, 0, :MST
           tz.offset :o2, -21600, 0, :CST
           tz.offset :o3, -25200, 3600, :MDT
-          tz.offset :o4, -28800, 0, :PST
           
           tz.transition 1922, 1, :o1, 58153339, 24
-          tz.transition 1927, 6, :o2, 9700171, 4
+          tz.transition 1927, 6, :o2, 58201003, 24
           tz.transition 1930, 11, :o1, 9705183, 4
-          tz.transition 1931, 5, :o3, 9705855, 4
+          tz.transition 1931, 4, :o3, 58235083, 24
           tz.transition 1931, 10, :o1, 9706463, 4
           tz.transition 1932, 4, :o2, 58243171, 24
           tz.transition 1942, 4, :o1, 9721895, 4
-          tz.transition 1949, 1, :o4, 58390339, 24
-          tz.transition 1970, 1, :o1, 28800
           tz.transition 1996, 4, :o3, 828867600
           tz.transition 1996, 10, :o1, 846403200
           tz.transition 1997, 4, :o3, 860317200

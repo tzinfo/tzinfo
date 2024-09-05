@@ -11,18 +11,15 @@ module TZInfo
           tz.offset :o1, -25200, 0, :MST
           tz.offset :o2, -21600, 0, :CST
           tz.offset :o3, -25200, 3600, :MDT
-          tz.offset :o4, -28800, 0, :PST
-          tz.offset :o5, -21600, 3600, :CDT
+          tz.offset :o4, -21600, 3600, :CDT
           
           tz.transition 1922, 1, :o1, 58153339, 24
-          tz.transition 1927, 6, :o2, 9700171, 4
+          tz.transition 1927, 6, :o2, 58201003, 24
           tz.transition 1930, 11, :o1, 9705183, 4
-          tz.transition 1931, 5, :o3, 9705855, 4
+          tz.transition 1931, 4, :o3, 58235083, 24
           tz.transition 1931, 10, :o1, 9706463, 4
           tz.transition 1932, 4, :o2, 58243171, 24
           tz.transition 1942, 4, :o1, 9721895, 4
-          tz.transition 1949, 1, :o4, 58390339, 24
-          tz.transition 1970, 1, :o1, 28800
           tz.transition 1996, 4, :o3, 828867600
           tz.transition 1996, 10, :o1, 846403200
           tz.transition 1997, 4, :o3, 860317200
@@ -51,31 +48,31 @@ module TZInfo
           tz.transition 2008, 10, :o1, 1225008000
           tz.transition 2009, 4, :o3, 1238922000
           tz.transition 2009, 10, :o1, 1256457600
-          tz.transition 2010, 4, :o5, 1270371600
+          tz.transition 2010, 4, :o4, 1270371600
           tz.transition 2010, 10, :o2, 1288508400
-          tz.transition 2011, 4, :o5, 1301817600
+          tz.transition 2011, 4, :o4, 1301817600
           tz.transition 2011, 10, :o2, 1319958000
-          tz.transition 2012, 4, :o5, 1333267200
+          tz.transition 2012, 4, :o4, 1333267200
           tz.transition 2012, 10, :o2, 1351407600
-          tz.transition 2013, 4, :o5, 1365321600
+          tz.transition 2013, 4, :o4, 1365321600
           tz.transition 2013, 10, :o2, 1382857200
-          tz.transition 2014, 4, :o5, 1396771200
+          tz.transition 2014, 4, :o4, 1396771200
           tz.transition 2014, 10, :o2, 1414306800
-          tz.transition 2015, 4, :o5, 1428220800
+          tz.transition 2015, 4, :o4, 1428220800
           tz.transition 2015, 10, :o2, 1445756400
-          tz.transition 2016, 4, :o5, 1459670400
+          tz.transition 2016, 4, :o4, 1459670400
           tz.transition 2016, 10, :o2, 1477810800
-          tz.transition 2017, 4, :o5, 1491120000
+          tz.transition 2017, 4, :o4, 1491120000
           tz.transition 2017, 10, :o2, 1509260400
-          tz.transition 2018, 4, :o5, 1522569600
+          tz.transition 2018, 4, :o4, 1522569600
           tz.transition 2018, 10, :o2, 1540710000
-          tz.transition 2019, 4, :o5, 1554624000
+          tz.transition 2019, 4, :o4, 1554624000
           tz.transition 2019, 10, :o2, 1572159600
-          tz.transition 2020, 4, :o5, 1586073600
+          tz.transition 2020, 4, :o4, 1586073600
           tz.transition 2020, 10, :o2, 1603609200
-          tz.transition 2021, 4, :o5, 1617523200
+          tz.transition 2021, 4, :o4, 1617523200
           tz.transition 2021, 10, :o2, 1635663600
-          tz.transition 2022, 4, :o5, 1648972800
+          tz.transition 2022, 4, :o4, 1648972800
           tz.transition 2022, 10, :o2, 1667113200
         end
       end

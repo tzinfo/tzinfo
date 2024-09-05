@@ -5,10 +5,7 @@ module TZInfo
     module HST
       include TimezoneDefinition
       
-      timezone 'HST' do |tz|
-        tz.offset :o0, -36000, 0, :HST
-        
-      end
+      linked_timezone 'HST', 'Pacific/Honolulu'
     end
   end
 end
