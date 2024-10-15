@@ -437,6 +437,8 @@ module TestUtils
         # Ignore untaint deprecation warnings from Bundler 1 on Ruby 3.0.
         #
         # Ignore method redefined warnings from concurrent-ruby on JRuby 9.4.
+        #
+        # Ignore warnings about default gem removals.
         actual_lines = actual_lines.reject do |l|
           l.start_with?('Gem::Specification#rubyforge_project= called from') ||
             l.start_with?('NOTE: Gem::Specification#rubyforge_project= is deprecated with no replacement.') ||
@@ -449,7 +451,9 @@ module TestUtils
             l.start_with?('WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations') ||
             l.start_with?('io/console on JRuby shells out to stty for most operations') ||
             l =~ /\/bundler-1\..*\/lib\/bundler\/.*\.rb:\d+: warning: (Object|Pathname)#untaint is deprecated and will be removed in Ruby 3\.2\.\z/ ||
-            l =~ /\/lib\/concurrent-ruby\/concurrent\/executor\/java_thread_pool_executor\.rb:\d+: warning: method redefined; discarding old to_(f|int)\z/
+            l =~ /\/lib\/concurrent-ruby\/concurrent\/executor\/java_thread_pool_executor\.rb:\d+: warning: method redefined; discarding old to_(f|int)\z/ ||
+            l =~ /warning: .* was loaded from the standard library, but will no longer be part of the default gems starting from Ruby (\d+\.){3}\z/ ||
+            l =~ /\AYou can add .* to your Gemfile or gemspec to silence this warning\.\z/
         end
 
         if RUBY_ENGINE == 'jruby' && ENV['_JAVA_OPTIONS'] && actual_lines.first == "Picked up _JAVA_OPTIONS: #{ENV['_JAVA_OPTIONS']}"
