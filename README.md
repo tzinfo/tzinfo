@@ -66,7 +66,7 @@ The `all_identifiers` method returns a list of valid time zone identifiers:
 
 ```ruby
 identifiers = TZInfo::Timezone.all_identifiers
-# => ["Africa/Adibdjan", "Africa/Accra", ..., "Zulu"]
+# => ["Africa/Abidjan", "Africa/Accra", ..., "Zulu"]
 ```
 
 A `TZInfo::Timezone` instance representing an individual time zone can be
