@@ -452,7 +452,7 @@ module TestUtils
             l.start_with?('io/console on JRuby shells out to stty for most operations') ||
             l =~ /\/bundler-1\..*\/lib\/bundler\/.*\.rb:\d+: warning: (Object|Pathname)#untaint is deprecated and will be removed in Ruby 3\.2\.\z/ ||
             l =~ /\/lib\/concurrent-ruby\/concurrent\/executor\/java_thread_pool_executor\.rb:\d+: warning: method redefined; discarding old to_(f|int)\z/ ||
-            l =~ /warning: .* was loaded from the standard library, but will no longer be part of the default gems starting from Ruby (\d+\.){3}\z/ ||
+            l =~ /warning: .* was loaded from the standard library, but (will no longer be|is not) part of the default gems starting from Ruby (\d+\.){3}\z/ ||
             l =~ /\AYou can add .* to your Gemfile or gemspec to silence this warning\.\z/
         end
 
