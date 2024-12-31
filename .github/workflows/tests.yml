@@ -15,8 +15,6 @@ jobs:
         exclude:
           - os: windows-2022
             ruby: jruby-1.7
-          - os: windows-2022
-            ruby: '3.4'
         include:
           - os: windows-2022
             ruby: '2.0'
