@@ -220,6 +220,8 @@ module TZInfo
           tz.transition 2073, 11, :o4, 14871101, 6
           tz.transition 2074, 3, :o3, 19829143, 8
           tz.transition 2074, 11, :o4, 14873285, 6
+          tz.transition 2075, 3, :o3, 19832055, 8
+          tz.transition 2075, 11, :o4, 14875469, 6
         end
       end
     end

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MAXYEAR=2074
+MAXYEAR=2075
 
 if [ $# -ne 2 ]
 then
