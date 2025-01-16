@@ -641,7 +641,7 @@ module TZInfo
         c.timezone 'Pacific/Bougainville', -373, 60, 4667, 30, 'Bougainville'
       end
       country 'PH', 'Philippines' do |c|
-        c.timezone 'Asia/Manila', 175, 12, 121, 1
+        c.timezone 'Asia/Manila', 1094, 75, 108871, 900
       end
       country 'PK', 'Pakistan' do |c|
         c.timezone 'Asia/Karachi', 373, 15, 1341, 20
