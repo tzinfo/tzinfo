@@ -104,6 +104,7 @@ module TZInfo
       linked_timezone 'America/Coral_Harbour'
       linked_timezone 'America/Cordoba'
       timezone 'America/Costa_Rica'
+      timezone 'America/Coyhaique'
       linked_timezone 'America/Creston'
       timezone 'America/Cuiaba'
       linked_timezone 'America/Curacao'

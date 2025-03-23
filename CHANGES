@@ -1,7 +1,7 @@
-== Version ?????? (tzdata v2025a) - ???????????
+== Version ?????? (tzdata v2025b) - ???????????
 
-* Updated to tzdata version 2025a
-  (https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/message/MWII7R3HMCEDNUCIYQKSSTYYR7UWK4OQ/).
+* Updated to tzdata version 2025b
+  (https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/message/6JVHNHLB6I2WAYTQ75L6KEPEQHFXAJK3/).
 * Increased the maximum year from 2073 to 2075.
 
 
