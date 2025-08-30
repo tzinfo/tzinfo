@@ -10,9 +10,12 @@ time zone data and allows times to be converted using time zone rules.
 
 TZInfo requires a source of time zone data. There are two options:
 
-1. A zoneinfo directory containing timezone definition files. These files are
+1. A zoneinfo directory containing time zone definition files. These files are
    generated from the [IANA Time Zone Database](https://www.iana.org/time-zones)
-   using the `zic` utility. Most Unix-like systems include a zoneinfo directory.
+   using the `zic` utility. Most Unix-like systems include a zoneinfo directory,
+   typically contained within a package named tzdata. Note that some
+   distributions split legacy time zone definition files into a separate
+   tzdata-legacy package.
 2. The TZInfo::Data library (the tzinfo-data gem). TZInfo::Data contains a set
    of Ruby modules that are also generated from the IANA Time Zone Database.
 
