@@ -406,4 +406,4 @@ Please post any bugs, issues, feature requests or questions about TZInfo to the
 [GitHub issue tracker](https://github.com/tzinfo/tzinfo/issues).
 
 Issues with the underlying time zone data should be raised on the
-[Time Zone Database Discussion mailing list](https://mm.icann.org/mailman/listinfo/tz).
+[Time Zone Database discussion mailing list](https://lists.iana.org/postorius/lists/tz.iana.org/).
