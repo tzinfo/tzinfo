@@ -328,8 +328,8 @@ For further detail, please refer to the API documentation for the
 ## Time Zone Selection
 
 The Time Zone Database maintainers recommend that time zone identifiers are not
-made visible to end-users (see [Names of
-timezones](https://data.iana.org/time-zones/theory.html#naming)).
+made visible to end-users (see [Timezone
+identifiers](https://data.iana.org/time-zones/theory.html#naming)).
 
 Instead of displaying a list of time zone identifiers, time zones can be
 selected by the user's country. Call `TZInfo::Country.all` to obtain a list of
