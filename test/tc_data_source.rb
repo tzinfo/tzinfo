@@ -494,8 +494,8 @@ class TCDataSource < Minitest::Test
     assert_match(/\bfalse\b/, error.message)
   end
 
-  test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |identifier_encoding|
-    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |index_encoding|
+  test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1').each do |identifier_encoding|
+    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1').each do |index_encoding|
       define_method("test_validate_timezone_identifier_with_#{index_encoding.to_method}_encoded_index_and_#{identifier_encoding.to_method}_encoded_identifier") do
         data_identifiers = ['Test/One'.encode(index_encoding.name).freeze]
         ds = ValidateTimezoneIdentifierTestDataSource.new(data_identifiers, [], index_encoding.find)
@@ -567,12 +567,12 @@ class TCDataSource < Minitest::Test
     assert_match(/\bgb\b/, error.message)
   end
 
-  test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |code_encoding|
-    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |index_encoding|
+  test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1').each do |code_encoding|
+    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1').each do |index_encoding|
       define_method("test_lookup_country_info_with_#{index_encoding.to_method}_encoded_index_and_#{code_encoding.to_method}_encoded_identifier") do
         ds = LookupCountryInfoTestDataSource.new
         info = Object.new
-        hash = {'GB'.encode(index_encoding).freeze => info}
+        hash = {'GB'.encode(index_encoding.name).freeze => info}
         assert_same(info, ds.call_lookup_country_info(hash, 'GB'.encode(code_encoding.name).freeze, index_encoding.find))
       end
     end

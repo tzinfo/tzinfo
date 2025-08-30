@@ -835,7 +835,7 @@ module DataSources
       assert(!identifier.frozen?)
     end
 
-    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |encoding|
+    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1').each do |encoding|
       define_method("test_load_timezone_info_with_#{encoding.to_method}_encoded_identifier") do
         identifier = 'Europe/London'.encode(encoding.name).freeze
         info = @data_source.send(:load_timezone_info, identifier)
@@ -1450,7 +1450,7 @@ module DataSources
       end
     end
 
-    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1') do |encoding|
+    test_encodings('UTF-8', 'UTF-16', 'ISO-8859-1').each do |encoding|
       define_method("test_load_country_info_with_#{encoding.to_method}_encoded_code") do
         code = 'GB'.encode(encoding.name).freeze
         info = @data_source.send(:load_country_info, code)
