@@ -499,10 +499,18 @@ module TestUtils
         assert_nil_or_equal(expected.offset, actual.offset, 'offset')
       end
 
-      # Time (on MRI and Rubinius, but not JRuby) and Timestamp distinguish between
+      # Time (on MRI and Rubinius, but not JRuby < 9.1) and Timestamp distinguish between
       # UTC and a local time with 0 offset from UTC.
       if expected.respond_to?(:utc?)
-        assert_nil_or_equal(expected.utc?, actual.utc?, 'utc?')
+        begin
+          assert_nil_or_equal(expected.utc?, actual.utc?, 'utc?')
+        rescue Minitest::Assertion
+          if RUBY_ENGINE == 'jruby' && JRUBY_VERSION == '10.0.2.0' && expected.kind_of?(Time) && expected.utc? == false && actual.utc? && expected.utc_offset == 0
+            warn('Ignoring mismatched Time#utc? value (expected false, but found true). See https://github.com/jruby/jruby/issues/8998')
+          else
+            raise
+          end
+        end
       end
     end
 
