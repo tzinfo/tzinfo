@@ -1205,7 +1205,7 @@ class TCTimestamp < Minitest::Test
   end
 
   def test_for_block_result_to_datetime_is_gregorian
-    # 1582-10-15 is the start of the Gregorian calendar. The previous day was 1582-10-04 in the Julian calendar).
+    # 1582-10-15 is the start of the Gregorian calendar. The previous day was 1582-10-04 in the Julian calendar.
     # TZInfo will always use the proleptic Gregorian calendar to return dates prior to 1582-10-15.
 
     dt = Timestamp.for(DateTime.new(2016,10,13,0,0,0)) { Timestamp.new(-12219379200) }
