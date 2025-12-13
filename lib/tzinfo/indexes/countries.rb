@@ -201,7 +201,7 @@ module TZInfo
       country 'CH', 'Switzerland' do |c|
         c.timezone 'Europe/Zurich', 2843, 60, 128, 15
       end
-      country 'CI', 'Côte d\'Ivoire' do |c|
+      country 'CI', 'Côte d’Ivoire' do |c|
         c.timezone 'Africa/Abidjan', 319, 60, -121, 30
       end
       country 'CK', 'Cook Islands' do |c|
