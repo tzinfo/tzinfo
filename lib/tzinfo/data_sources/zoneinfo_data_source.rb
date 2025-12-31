@@ -67,7 +67,12 @@ module TZInfo
     # inaccurate.
     class ZoneinfoDataSource < DataSource
       # The default value of {ZoneinfoDataSource.search_path}.
-      DEFAULT_SEARCH_PATH = ['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'].freeze
+      DEFAULT_SEARCH_PATH = [
+        ENV['TZDIR'],
+        '/usr/share/zoneinfo',
+        '/usr/share/lib/zoneinfo',
+        '/etc/zoneinfo'
+      ].compact.uniq.freeze
       private_constant :DEFAULT_SEARCH_PATH
 
       # The default value of {ZoneinfoDataSource.alternate_iso3166_tab_search_path}.
