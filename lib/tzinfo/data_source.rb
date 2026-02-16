@@ -1,7 +1,7 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
-require 'concurrent'
+require 'concurrent/map'
 require 'thread'
 
 module TZInfo
