@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require_relative 'test_utils'
-require 'concurrent'
+require 'concurrent/map'
 
 class TCStringDeduper < Minitest::Test
   include TZInfo
