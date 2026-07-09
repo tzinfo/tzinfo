@@ -1,7 +1,7 @@
-== Version ?????? (tzdata v2026a) - ???????????
+== Version ?????? (tzdata v2026c) - ???????????
 
-* Updated to tzdata version 2026a
-  (https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/message/ASPLBE3A4BAEXIOQ3KZ6EJSJWBU6L53G/).
+* Updated to tzdata version 2026c
+  (https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/message/NVHSX2PAQIT44U5FCCEVNJJYXQMMTJSA/).
 * Increased the maximum year from 2073 to 2076.
 
 

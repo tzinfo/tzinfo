@@ -175,15 +175,15 @@ module TZInfo
         c.timezone 'America/Rankin_Inlet', 3769, 60, -331499, 3600, 'Central - NU (central)'
         c.timezone 'America/Regina', 252, 5, -2093, 20, 'CST - SK (most areas)'
         c.timezone 'America/Swift_Current', 3017, 60, -647, 6, 'CST - SK (midwest)'
-        c.timezone 'America/Edmonton', 1071, 20, -1702, 15, 'Mountain - AB, BC(E), NT(E), SK(W)'
+        c.timezone 'America/Edmonton', 1071, 20, -1702, 15, 'CST - AB, BC(E), NT(E), SK(W)'
         c.timezone 'America/Cambridge_Bay', 24881, 360, -37819, 360, 'Mountain - NU (west)'
         c.timezone 'America/Inuvik', 246059, 3600, -8023, 60, 'Mountain - NT (west)'
+        c.timezone 'America/Vancouver', 739, 15, -7387, 60, 'MST - BC (most areas)'
         c.timezone 'America/Creston', 491, 10, -6991, 60, 'MST - BC (Creston)'
         c.timezone 'America/Dawson_Creek', 1673, 30, -3607, 30, 'MST - BC (Dawson Cr, Ft St John)'
         c.timezone 'America/Fort_Nelson', 294, 5, -1227, 10, 'MST - BC (Ft Nelson)'
         c.timezone 'America/Whitehorse', 3643, 60, -2701, 20, 'MST - Yukon (east)'
         c.timezone 'America/Dawson', 961, 15, -1673, 12, 'MST - Yukon (west)'
-        c.timezone 'America/Vancouver', 739, 15, -7387, 60, 'Pacific - BC (most areas)'
       end
       country 'CC', 'Cocos (Keeling) Islands' do |c|
         c.timezone 'Indian/Cocos', -73, 6, 1163, 12
