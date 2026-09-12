@@ -177,7 +177,7 @@ module TZInfo
         c.timezone 'America/Swift_Current', 3017, 60, -647, 6, 'CST - SK (midwest)'
         c.timezone 'America/Edmonton', 1071, 20, -1702, 15, 'CST - AB, BC(E), NT(E), SK(W)'
         c.timezone 'America/Cambridge_Bay', 24881, 360, -37819, 360, 'Mountain - NU (west)'
-        c.timezone 'America/Inuvik', 246059, 3600, -8023, 60, 'Mountain - NT (west)'
+        c.timezone 'America/Inuvik', 246059, 3600, -8023, 60, 'CST - NT (west)'
         c.timezone 'America/Vancouver', 739, 15, -7387, 60, 'MST - BC (most areas)'
         c.timezone 'America/Creston', 491, 10, -6991, 60, 'MST - BC (Creston)'
         c.timezone 'America/Dawson_Creek', 1673, 30, -3607, 30, 'MST - BC (Dawson Cr, Ft St John)'
