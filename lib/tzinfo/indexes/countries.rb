@@ -170,7 +170,7 @@ module TZInfo
         c.timezone 'America/Toronto', 873, 20, -4763, 60, 'Eastern - ON & QC (most areas)'
         c.timezone 'America/Iqaluit', 956, 15, -1027, 15, 'Eastern - NU (most areas)'
         c.timezone 'America/Atikokan', 175531, 3600, -54973, 600, 'EST - ON (Atikokan), NU (Coral H)'
-        c.timezone 'America/Winnipeg', 2993, 60, -1943, 20, 'Central - ON (west), Manitoba'
+        c.timezone 'America/Winnipeg', 2993, 60, -1943, 20, 'EST - Manitoba, ON (northwest)'
         c.timezone 'America/Resolute', 33613, 450, -22759, 240, 'Central - NU (Resolute)'
         c.timezone 'America/Rankin_Inlet', 3769, 60, -331499, 3600, 'Central - NU (central)'
         c.timezone 'America/Regina', 252, 5, -2093, 20, 'CST - SK (most areas)'

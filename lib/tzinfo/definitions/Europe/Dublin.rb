@@ -36,7 +36,7 @@ module TZInfo
           tz.transition 1924, 4, :o5, 29086663, 12
           tz.transition 1924, 9, :o3, 29088595, 12
           tz.transition 1925, 4, :o5, 29091115, 12
-          tz.transition 1925, 10, :o3, 29093131, 12
+          tz.transition 1925, 9, :o3, 29092963, 12
           tz.transition 1926, 4, :o5, 29095483, 12
           tz.transition 1926, 10, :o3, 29097499, 12
           tz.transition 1927, 4, :o5, 29099767, 12
