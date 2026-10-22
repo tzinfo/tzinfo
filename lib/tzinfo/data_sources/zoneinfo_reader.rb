@@ -53,18 +53,6 @@ module TZInfo
         long >= 0x80000000 ? long - 0x100000000 : long
       end
 
-      # Translates a pair of unsigned 32-bit integers (as returned by unpack,
-      # most significant first) to a signed 64-bit integer.
-      #
-      # @param high [Integer] the most significant 32-bits.
-      # @param low [Integer] the least significant 32-bits.
-      # @return [Integer] {high} and {low} combined and translated to signed
-      #   64-bit.
-      def make_signed_int64(high, low)
-        unsigned = (high << 32) | low
-        unsigned >= 0x8000000000000000 ? unsigned - 0x10000000000000000 : unsigned
-      end
-
       # Reads the given number of bytes from the given file and checks that the
       # correct number of bytes could be read.
       #
@@ -374,8 +362,7 @@ module TZInfo
 
         transitions = if using_64bit
           timecnt.times.map do |i|
-            high, low = check_read(file, 8).unpack('NN'.freeze)
-            transition_time = make_signed_int64(high, low)
+            transition_time = check_read(file, 8).unpack('q>'.freeze)[0]
             {at: transition_time}
           end
         else
