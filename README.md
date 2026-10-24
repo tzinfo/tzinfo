@@ -371,8 +371,7 @@ claims.
 
 ## Compatibility
 
-TZInfo v2.0.0 requires a minimum of Ruby MRI 1.9.3 or JRuby 1.7 (in 1.9 mode or
-later).
+TZInfo v2.1.0 requires a minimum of Ruby MRI 2.3 or JRuby 9.1.
 
 
 ## Thread-Safety
