@@ -145,8 +145,6 @@ module TZInfo
           tz.transition 2025, 3, :o3, 1741496400
           tz.transition 2025, 11, :o2, 1762059600
           tz.transition 2026, 3, :o3, 1772946000
-          tz.transition 2026, 11, :o2, 1793509200
-          tz.transition 2027, 3, :o3, 1805000400
           tz.transition 2027, 11, :o2, 1825563600
           tz.transition 2028, 3, :o3, 1836450000
           tz.transition 2028, 11, :o2, 1857013200
