@@ -404,8 +404,9 @@ module TZInfo
           file.seek(ttisstdcnt + ttisutccnt, IO::SEEK_CUR) # + leapcnt * 8, but leapcnt is checked above and guaranteed to be 0.
           tz_string_start = check_read(file, 1)
           raise InvalidZoneinfoFile, "Expected newline starting POSIX-style TZ string in file '#{file.path}'." unless tz_string_start == "\n"
-          tz_string = file.readline("\n").force_encoding(Encoding::UTF_8)
-          raise InvalidZoneinfoFile, "Expected newline ending POSIX-style TZ string in file '#{file.path}'." unless tz_string.chomp!("\n")
+          tz_string = file.gets("\n")
+          raise InvalidZoneinfoFile, "Expected newline ending POSIX-style TZ string in file '#{file.path}'." unless tz_string && tz_string.chomp!("\n")
+          tz_string.force_encoding(Encoding::UTF_8)
 
           begin
             rules = @posix_tz_parser.parse(tz_string)
