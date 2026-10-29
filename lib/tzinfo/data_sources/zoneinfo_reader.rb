@@ -83,6 +83,18 @@ module TZInfo
         result
       end
 
+      # Validates count constraints imposed by the TZif format.
+      #
+      # @param file [IO] the file being processed.
+      # @param ttisutccnt [Integer] the number of UTC/local indicators.
+      # @param ttisstdcnt [Integer] the number of standard/wall indicators.
+      # @param typecnt [Integer] the number of local time types.
+      # @raise [InvalidZoneinfoFile] if a count is invalid.
+      def validate_header_counts(file, ttisutccnt, ttisstdcnt, typecnt)
+        raise InvalidZoneinfoFile, "Invalid standard/wall indicator count in file '#{file.path}'." unless ttisstdcnt == 0 || ttisstdcnt == typecnt
+        raise InvalidZoneinfoFile, "Invalid UTC/local indicator count in file '#{file.path}'." unless ttisutccnt == 0 || ttisutccnt == typecnt
+      end
+
       # Zoneinfo files don't include the offset from standard time (std_offset)
       # for DST periods. Derive the base offset (base_utc_offset) where DST is
       # observed from either the previous or next non-DST period.
@@ -348,6 +360,12 @@ module TZInfo
           raise InvalidZoneinfoFile, "The file '#{file.path}' does not start with the expected header."
         end
 
+        unless version == '2' || version == '3' || version == "\0"
+          raise InvalidZoneinfoFile, "The file '#{file.path}' contains a version of the zoneinfo format that is not currently supported."
+        end
+
+        validate_header_counts(file, ttisutccnt, ttisstdcnt, typecnt)
+
         if version == '2' || version == '3'
           # Skip the first 32-bit section and read the header of the second 64-bit section
           file.seek(timecnt * 5 + typecnt * 6 + charcnt + leapcnt * 8 + ttisstdcnt + ttisutccnt, IO::SEEK_CUR)
@@ -361,9 +379,8 @@ module TZInfo
             raise InvalidZoneinfoFile, "The file '#{file.path}' contains an invalid 64-bit section header."
           end
 
+          validate_header_counts(file, ttisutccnt, ttisstdcnt, typecnt)
           using_64bit = true
-        elsif version != '3' && version != '2' && version != "\0"
-          raise InvalidZoneinfoFile, "The file '#{file.path}' contains a version of the zoneinfo format that is not currently supported."
         else
           using_64bit = false
         end
@@ -390,18 +407,38 @@ module TZInfo
           transitions[i][:offset] = localtime_type
         end
 
+        raise InvalidZoneinfoFile, "Invalid local time type count in file '#{file.path}'." if typecnt == 0
+
         offsets = typecnt.times.map do |i|
           gmtoff, isdst, abbrind = check_read(file, 6).unpack('NCC'.freeze)
           gmtoff = make_signed_int32(gmtoff)
+          raise InvalidZoneinfoFile, "Invalid UTC offset in file '#{file.path}'." if gmtoff == -0x80000000
+          raise InvalidZoneinfoFile, "Invalid daylight saving time indicator in file '#{file.path}'." if isdst > 1
           isdst = isdst == 1
           {observed_utc_offset: gmtoff, is_dst: isdst, abbr_index: abbrind}
         end
 
         abbrev = check_read(file, charcnt)
+        standard_wall_indicators = check_read(file, ttisstdcnt)
+        utc_local_indicators = check_read(file, ttisutccnt)
+
+        unless standard_wall_indicators.each_byte.all? {|indicator| indicator <= 1 }
+          raise InvalidZoneinfoFile, "Invalid standard/wall indicator in file '#{file.path}'."
+        end
+
+        unless utc_local_indicators.each_byte.all? {|indicator| indicator <= 1 }
+          raise InvalidZoneinfoFile, "Invalid UTC/local indicator in file '#{file.path}'."
+        end
+
+        if ttisutccnt != 0
+          utc_local_indicators.each_byte.with_index do |indicator, i|
+            if indicator == 1 && (ttisstdcnt == 0 || standard_wall_indicators.getbyte(i) != 1)
+              raise InvalidZoneinfoFile, "Invalid UTC/local and standard/wall indicator combination in file '#{file.path}'."
+            end
+          end
+        end
 
         if using_64bit
-          # Skip to the POSIX-style TZ string.
-          file.seek(ttisstdcnt + ttisutccnt, IO::SEEK_CUR) # + leapcnt * 8, but leapcnt is checked above and guaranteed to be 0.
           tz_string_start = check_read(file, 1)
           raise InvalidZoneinfoFile, "Expected newline starting POSIX-style TZ string in file '#{file.path}'." unless tz_string_start == "\n"
           tz_string = file.readline("\n").force_encoding(Encoding::UTF_8)
