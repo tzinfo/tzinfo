@@ -23,10 +23,9 @@ class TCTransitionRule < Minitest::Test
   ].each do |(transition_at, expected_day, expected_hour, expected_minute, expected_second)|
     define_method "test_at_with_transition_at_#{transition_at}" do
       offset = TimezoneOffset.new(0, 0, 'TEST')
-      rule = TestTransitionRule.new(transition_at) do |o, y|
-        assert_same(offset, o)
+      rule = TestTransitionRule.new(transition_at) do |y|
         assert_equal(2020, y)
-        Time.new(2020, 3, 20, 0, 0, 0, 0)
+        days(2020, 3, 20)
       end
 
       result = rule.at(offset, 2020)
@@ -41,10 +40,9 @@ class TCTransitionRule < Minitest::Test
   [-7200, 0, 7200].each do |offset_seconds|
     define_method "test_at_with_offset_#{offset_seconds}" do
       offset = TimezoneOffset.new(offset_seconds, 0, 'TEST')
-      rule = TestTransitionRule.new(3600) do |o, y|
-        assert_same(offset, o)
+      rule = TestTransitionRule.new(3600) do |y|
         assert_equal(2020, y)
-        Time.new(2020, 3, 20, 0, 0, 0, offset_seconds)
+        days(2020, 3, 20)
       end
 
       result = rule.at(offset, 2020)
@@ -59,10 +57,9 @@ class TCTransitionRule < Minitest::Test
   [2020, 2021].each do |year|
     define_method "test_at_with_year_#{year}" do
       offset = TimezoneOffset.new(0, 0, 'TEST')
-      rule = TestTransitionRule.new(3600) do |o, y|
-        assert_same(offset, o)
+      rule = TestTransitionRule.new(3600) do |y|
         assert_equal(year, y)
-        Time.new(year, 3, 20, 0, 0, 0, 0)
+        days(year, 3, 20)
       end
 
       result = rule.at(offset, year)
@@ -74,6 +71,60 @@ class TCTransitionRule < Minitest::Test
     end
   end
 
+  [
+    [-1, 0, 19, 23, 59, 59],
+    [0, 0, 20, 0, 0, 0],
+    [86400, 0, 21, 0, 0, 0],
+    [3600, -7200, 20, 1, 0, 0],
+    [3600, 7200, 20, 1, 0, 0]
+  ].each do |(transition_at, offset_seconds, expected_day, expected_hour, expected_minute, expected_second)|
+    define_method "test_timestamp_value_with_transition_at_#{transition_at}_and_offset_#{offset_seconds}" do
+      offset = TimezoneOffset.new(offset_seconds, 0, 'TEST')
+      rule = TestTransitionRule.new(transition_at) do |y|
+        assert_equal(2020, y)
+        days(2020, 3, 20)
+      end
+
+      assert_equal(Time.new(2020, 3, expected_day, expected_hour, expected_minute, expected_second, offset_seconds).to_i, rule.timestamp_value(offset, 2020))
+    end
+  end
+
+  def test_days_since_epoch
+    rule = TestTransitionRule.new(0)
+
+    # Every day of a range of years around the Unix epoch and the Gregorian
+    # leap year exceptions, compared with Time.
+    [1600, 1700, 1899, 1900, 1901, 1968, 1969, 1970, 1971, 1972, 2000, 2024, 2038, 2100, 2400].each do |year|
+      (1..12).each do |month|
+        (1..31).each do |day|
+          next unless Date.valid_date?(year, month, day)
+          assert_equal(days(year, month, day), rule.send(:days_since_epoch, year, month, day), "#{year}-#{month}-#{day}")
+        end
+      end
+    end
+  end
+
+  def test_days_since_epoch_with_day_past_end_of_month
+    rule = TestTransitionRule.new(0)
+    assert_equal(days(2021, 3, 1), rule.send(:days_since_epoch, 2021, 2, 29))
+    assert_equal(days(2020, 2, 29), rule.send(:days_since_epoch, 2020, 2, 29))
+  end
+
+  def test_day_of_week_of
+    rule = TestTransitionRule.new(0)
+    (0..13).each do |day|
+      date = Time.utc(2020, 3, 1 + day)
+      assert_equal(date.wday, rule.send(:day_of_week_of, days(2020, 3, 1 + day)))
+    end
+    assert_equal(Time.utc(1969, 12, 31).wday, rule.send(:day_of_week_of, -1))
+  end
+
+  private
+
+  def days(year, month, day)
+    Time.utc(year, month, day).to_i / 86400
+  end
+
   class TestTransitionRule < TransitionRule
     def initialize(transition_at, &block)
       super(transition_at)
@@ -82,8 +133,8 @@ class TCTransitionRule < Minitest::Test
 
     protected
 
-    def get_day(offset, year)
-      @get_day.call(offset, year)
+    def get_day(year)
+      @get_day.call(year)
     end
   end
 end

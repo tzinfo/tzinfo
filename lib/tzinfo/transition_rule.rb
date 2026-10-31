@@ -35,8 +35,20 @@ module TZInfo
     #   time).
     # @return [TimestampWithOffset] the time at which the transition occurs.
     def at(offset, year)
-      day = get_day(offset, year)
-      TimestampWithOffset.set_timezone_offset(Timestamp.for(day + @transition_at), offset)
+      TimestampWithOffset.new(timestamp_value(offset, year), 0, offset.observed_utc_offset).set_timezone_offset(offset)
+    end
+
+    # Calculates the time of the transition from a given offset on a given year
+    # as a number of seconds since 1970-01-01 00:00:00 UTC, without creating
+    # the objects {at} returns.
+    #
+    # @param offset [TimezoneOffset] the current offset at the time the rule
+    #   will transition.
+    # @param year [Integer] the year in which the transition occurs (local
+    #   time).
+    # @return [Integer] the time at which the transition occurs.
+    def timestamp_value(offset, year)
+      get_day(year) * 86400 + @transition_at - offset.observed_utc_offset
     end
 
     # Determines if this {TransitionRule} is equal to another instance.
@@ -61,6 +73,32 @@ module TZInfo
     #  {hash}.
     def hash_args
       [@transition_at]
+    end
+
+    # Returns the number of days from 1970-01-01 to a date in the proleptic
+    # Gregorian calendar, negative for dates before 1970-01-01. Based on
+    # Howard Hinnant's `days_from_civil` algorithm. The day can be one past the
+    # end of the month (for example, 29 February on a non-leap year is 1 March).
+    #
+    # @param year [Integer] the year.
+    # @param month [Integer] the month (1 to 12).
+    # @param day [Integer] the day of the month.
+    # @return [Integer] the number of days from 1970-01-01.
+    def days_since_epoch(year, month, day)
+      year -= 1 if month <= 2
+      era = year / 400
+      year_of_era = year - era * 400
+      day_of_year = (153 * ((month + 9) % 12) + 2) / 5 + day - 1
+      day_of_era = year_of_era * 365 + year_of_era / 4 - year_of_era / 100 + day_of_year
+      era * 146097 + day_of_era - 719468
+    end
+
+    # Returns the day of the week of a number of days from 1970-01-01.
+    #
+    # @param days [Integer] the number of days from 1970-01-01.
+    # @return [Integer] the day of the week, 0 for Sunday to 6 for Saturday.
+    def day_of_week_of(days)
+      (days + 4) % 7
     end
   end
   private_constant :TransitionRule
@@ -157,16 +195,13 @@ module TZInfo
 
     protected
 
-    # Returns a `Time` representing midnight local time on the day specified by
-    # the rule for the given offset and year.
+    # Returns the day specified by the rule for the given year.
     #
-    # @param offset [TimezoneOffset] the current offset at the time of the
-    #  transition.
     # @param year [Integer] the year in which the transition occurs.
-    # @return [Time] midnight local time on the day specified by the rule for
-    #  the given offset and year.
-    def get_day(offset, year)
-      Time.new(year, 1, 1, 0, 0, 0, offset.observed_utc_offset) + seconds
+    # @return [Integer] the number of days from 1970-01-01 to the day specified
+    #  by the rule for the given year.
+    def get_day(year)
+      days_since_epoch(year, 1, 1) + seconds / 86400
     end
 
     # (see TransitionRule#hash_args)
@@ -230,19 +265,16 @@ module TZInfo
 
     protected
 
-    # Returns a `Time` representing midnight local time on the day specified by
-    # the rule for the given offset and year.
+    # Returns the day specified by the rule for the given year.
     #
-    # @param offset [TimezoneOffset] the current offset at the time of the
-    #  transition.
     # @param year [Integer] the year in which the transition occurs.
-    # @return [Time] midnight local time on the day specified by the rule for
-    #  the given offset and year.
-    def get_day(offset, year)
-      # Returns 1 March on non-leap years.
-      leap = Time.new(year, 2, 29, 0, 0, 0, offset.observed_utc_offset)
-      diff = seconds - LEAP
-      diff += 86400 if diff >= 0 && leap.mday == 29
+    # @return [Integer] the number of days from 1970-01-01 to the day specified
+    #  by the rule for the given year.
+    def get_day(year)
+      # 29 February is 1 March on non-leap years.
+      leap = days_since_epoch(year, 2, 29)
+      diff = (seconds - LEAP) / 86400
+      diff += 1 if diff >= 0 && leap != days_since_epoch(year, 3, 1)
       leap + diff
     end
 
@@ -361,25 +393,14 @@ module TZInfo
     #   Sunday.
     attr_reader :offset_start
 
-    # Returns a `Time` representing midnight local time on the day specified by
-    # the rule for the given offset and year.
+    # Returns the day specified by the rule for the given year.
     #
-    # @param offset [TimezoneOffset] the current offset at the time of the
-    #  transition.
     # @param year [Integer] the year in which the transition occurs.
-    # @return [Time] midnight local time on the day specified by the rule for
-    #  the given offset and year.
-    def get_day(offset, year)
-      candidate = Time.new(year, month, @offset_start, 0, 0, 0, offset.observed_utc_offset)
-      diff = day_of_week - candidate.wday
-
-      if diff < 0
-        candidate + (7 + diff) * 86400
-      elsif diff > 0
-        candidate + diff * 86400
-      else
-        candidate
-      end
+    # @return [Integer] the number of days from 1970-01-01 to the day specified
+    #  by the rule for the given year.
+    def get_day(year)
+      candidate = days_since_epoch(year, month, @offset_start)
+      candidate + (day_of_week - day_of_week_of(candidate)) % 7
     end
 
     # (see TransitionRule#hash_args)
@@ -424,31 +445,20 @@ module TZInfo
 
     protected
 
-    # Returns a `Time` representing midnight local time on the day specified by
-    # the rule for the given offset and year.
+    # Returns the day specified by the rule for the given year.
     #
-    # @param offset [TimezoneOffset] the current offset at the time of the
-    #  transition.
     # @param year [Integer] the year in which the transition occurs.
-    # @return [Time] midnight local time on the day specified by the rule for
-    #  the given offset and year.
-    def get_day(offset, year)
+    # @return [Integer] the number of days from 1970-01-01 to the day specified
+    #  by the rule for the given year.
+    def get_day(year)
       next_month = month + 1
       if next_month == 13
         year += 1
         next_month = 1
       end
 
-      candidate = Time.new(year, next_month, 1, 0, 0, 0, offset.observed_utc_offset) - 86400
-      diff = candidate.wday - day_of_week
-
-      if diff < 0
-        candidate - (diff + 7) * 86400
-      elsif diff > 0
-        candidate - diff * 86400
-      else
-        candidate
-      end
+      candidate = days_since_epoch(year, next_month, 1) - 1
+      candidate - (day_of_week_of(candidate) - day_of_week) % 7
     end
   end
   private_constant :LastDayOfMonthTransitionRule
