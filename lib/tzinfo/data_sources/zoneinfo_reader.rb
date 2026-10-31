@@ -361,9 +361,9 @@ module TZInfo
         end
 
         transition_times = if using_64bit
-          check_read(file, timecnt * 8).unpack('q>*'.freeze)
+          check_read(file, timecnt * 8).unpack('q>*')
         else
-          check_read(file, timecnt * 4).unpack('l>*'.freeze)
+          check_read(file, timecnt * 4).unpack('l>*')
         end
 
         transitions = transition_times.map! {|transition_time| {at: transition_time} }
