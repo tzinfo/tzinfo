@@ -66,8 +66,11 @@ module TZInfo
     # 2038-01-19 03:14:07. Any queries falling after this time may be
     # inaccurate.
     class ZoneinfoDataSource < DataSource
+      search_path = ['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo']
+      tzdir = ENV['TZDIR']
+
       # The default value of {ZoneinfoDataSource.search_path}.
-      DEFAULT_SEARCH_PATH = ['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'].freeze
+      DEFAULT_SEARCH_PATH = (tzdir && !tzdir.empty? ? [tzdir, *search_path].uniq : search_path).freeze
       private_constant :DEFAULT_SEARCH_PATH
 
       # The default value of {ZoneinfoDataSource.alternate_iso3166_tab_search_path}.
