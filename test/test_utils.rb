@@ -3,6 +3,11 @@
 
 raise 'Tests must be run with bundler, e.g. bundle exec rake test' unless defined?(Bundler)
 
+# Clear TZDIR if set. It's used by ZoneinfoDataSource to select the directory
+# and could affect test results. This must be done before ZoneinfoDataSource is
+# loaded.
+ENV['TZDIR'] = nil
+
 # Workaround an issue on JRuby where the stdlib directory can end up before the
 # minitest gem in the load path. This causes an old built-in version of minitest
 # to be loaded instead of the gem. https://github.com/jruby/jruby/issues/5038

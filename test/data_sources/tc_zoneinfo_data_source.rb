@@ -61,6 +61,64 @@ module DataSources
       assert_equal(['/tmp/zoneinfo4', '/tmp/zoneinfo5'], ZoneinfoDataSource.search_path)
     end
 
+    def test_default_search_path_with_tzdir_env_set
+      code = <<-EOF
+        puts TZInfo::DataSources::ZoneinfoDataSource.search_path
+      EOF
+
+      ENV['TZDIR'] = '/tmp/env-tzdir'
+      begin
+        assert_sub_process_returns(['/tmp/env-tzdir', '/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'], code)
+      ensure
+        ENV['TZDIR'] = nil
+      end
+    end
+
+    def test_default_search_path_with_tzdir_env_set_duplicating_standard_entry
+      code = <<-EOF
+        puts TZInfo::DataSources::ZoneinfoDataSource.search_path
+      EOF
+
+      ENV['TZDIR'] = '/usr/share/lib/zoneinfo'
+      begin
+        assert_sub_process_returns(['/usr/share/lib/zoneinfo', '/usr/share/zoneinfo', '/etc/zoneinfo'], code)
+      ensure
+        ENV['TZDIR'] = nil
+      end
+    end
+
+    def test_default_search_path_with_tzdir_env_set_to_empty
+      code = <<-EOF
+        puts TZInfo::DataSources::ZoneinfoDataSource.search_path
+      EOF
+
+      ENV['TZDIR'] = ''
+      begin
+        assert_sub_process_returns(['/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo'], code)
+      ensure
+        ENV['TZDIR'] = nil
+      end
+    end
+
+    def test_set_search_path_default_with_tzdir_env_set
+      code = <<-EOF
+        TZInfo::DataSources::ZoneinfoDataSource.search_path = ['/tmp/zoneinfo1', '/tmp/zoneinfo2']
+        puts TZInfo::DataSources::ZoneinfoDataSource.search_path
+        puts
+
+        TZInfo::DataSources::ZoneinfoDataSource.search_path = nil
+        puts TZInfo::DataSources::ZoneinfoDataSource.search_path
+        puts TZInfo::DataSources::ZoneinfoDataSource.search_path.frozen?
+      EOF
+
+      ENV['TZDIR'] = '/tmp/env-tzdir'
+      begin
+        assert_sub_process_returns(['/tmp/zoneinfo1', '/tmp/zoneinfo2', '', '/tmp/env-tzdir', '/usr/share/zoneinfo', '/usr/share/lib/zoneinfo', '/etc/zoneinfo', 'false'], code)
+      ensure
+        ENV['TZDIR'] = nil
+      end
+    end
+
     def test_default_alternate_iso3166_tab_search_path
       assert_equal(['/usr/share/misc/iso3166.tab', '/usr/share/misc/iso3166'], ZoneinfoDataSource.alternate_iso3166_tab_search_path)
       assert_equal(false, ZoneinfoDataSource.alternate_iso3166_tab_search_path.frozen?)
