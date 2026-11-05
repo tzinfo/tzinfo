@@ -84,6 +84,7 @@ module TZInfo
     #   {offset}, {previous_offset} and {timestamp_value} as this
     #   {TimezoneTransition}, otherwise `false`.
     def ==(tti)
+      return true if equal?(tti)
       tti.kind_of?(TimezoneTransition) &&
         offset == tti.offset && previous_offset == tti.previous_offset && timestamp_value == tti.timestamp_value
     end
