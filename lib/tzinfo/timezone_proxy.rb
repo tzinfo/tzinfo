@@ -33,7 +33,7 @@ module TZInfo
 
     # (see Timezone#period_for)
     def period_for(time)
-      real_timezone.period_for_utc(time)
+      real_timezone.period_for(time)
     end
 
     # (see Timezone#periods_for_local)
