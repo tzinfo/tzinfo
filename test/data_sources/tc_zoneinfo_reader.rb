@@ -1372,6 +1372,16 @@ module DataSources
       end
     end
 
+    def test_read_tz_string_missing_tz_string_and_end_newline
+      offsets = [{gmtoff: 0, isdst: false, abbrev: 'UTC'}]
+      rules = TimezoneOffset.new(0, 0, 'UTC')
+
+      tzif_test(offsets, [], rules: rules, min_format: 2, tz_string: '', omit_tz_string_end_new_line: true) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Expected newline ending POSIX-style TZ string in file '#{path}'.", error.message)
+      end
+    end
+
     [
       [false, 1, 0, 'TEST'],
       [false, 0, 1, 'TEST'],
