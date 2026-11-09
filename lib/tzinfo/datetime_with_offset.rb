@@ -59,13 +59,8 @@ module TZInfo
     # An overridden version of `DateTime#downto` that clears the associated
     # {TimezoneOffset} of the returned or yielded instances.
     def downto(min)
-      if block_given?
-        super {|dt| yield dt.clear_timezone_offset }
-      else
-        enum = super
-        enum.each {|dt| dt.clear_timezone_offset }
-        enum
-      end
+      return enum_for(__method__, min) unless block_given?
+      super {|dt| yield dt.clear_timezone_offset }
     end
 
     # An overridden version of `DateTime#england` that preserves the associated
@@ -119,25 +114,15 @@ module TZInfo
     # An overridden version of `DateTime#step` that clears the associated
     # {TimezoneOffset} of the returned or yielded instances.
     def step(limit, step = 1)
-      if block_given?
-        super {|dt| yield dt.clear_timezone_offset }
-      else
-        enum = super
-        enum.each {|dt| dt.clear_timezone_offset }
-        enum
-      end
+      return enum_for(__method__, limit, step) unless block_given?
+      super {|dt| yield dt.clear_timezone_offset }
     end
 
     # An overridden version of `DateTime#upto` that clears the associated
     # {TimezoneOffset} of the returned or yielded instances.
     def upto(max)
-      if block_given?
-        super {|dt| yield dt.clear_timezone_offset }
-      else
-        enum = super
-        enum.each {|dt| dt.clear_timezone_offset }
-        enum
-      end
+      return enum_for(__method__, max) unless block_given?
+      super {|dt| yield dt.clear_timezone_offset }
     end
 
     protected
