@@ -90,8 +90,8 @@ class TCAnnualRules < Minitest::Test
       @day = day
     end
 
-    def at(offset, year)
-      TZInfo::TimestampWithOffset.for(Time.new(year, @month, @day, 0, 0, 0, offset.observed_utc_offset)).set_timezone_offset(offset)
+    def timestamp_value(offset, year)
+      Time.new(year, @month, @day, 0, 0, 0, offset.observed_utc_offset).to_i
     end
   end
 end

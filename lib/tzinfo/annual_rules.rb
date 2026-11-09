@@ -63,8 +63,7 @@ module TZInfo
     # @param year [Integer] the year when the transition occurs.
     # @return [TimezoneTransition] the transition determined by the rule.
     def apply_rule(rule, from_offset, to_offset, year)
-      at = rule.at(from_offset, year)
-      TimezoneTransition.new(to_offset, from_offset, at.value)
+      TimezoneTransition.new(to_offset, from_offset, rule.timestamp_value(from_offset, year))
     end
   end
   private_constant :AnnualRules
