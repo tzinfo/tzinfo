@@ -22,6 +22,24 @@ module DataSources
     MIN_FORMAT = 1
     MAX_FORMAT = 3
 
+    def create_abbrevs(offsets, abbrev_separator)
+      abbrevs = offsets.collect {|o| o[:abbrev]}.uniq
+
+      if abbrevs.length > 0
+        abbrevs = abbrevs.collect {|a| a.encode(Encoding::UTF_8)}
+
+        if abbrevs.first.respond_to?(:bytesize)
+          abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.bytesize + abbrev_separator.bytesize}
+        else
+          abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.length + abbrev_separator.length}
+        end
+      else
+        abbrevs_length = 0
+      end
+
+      [abbrevs, abbrevs_length]
+    end
+
     def convert_times_to_i(items, key = :at)
       items.each do |item|
         if item[key].kind_of?(Time)
@@ -46,6 +64,19 @@ module DataSources
       pack_int64_network_order(values.collect {|value| value < 0 ? value + 0x10000000000000000 : value})
     end
 
+    def write_offsets(file, offsets, abbrevs, abbrev_offset_base)
+      offsets.each do |offset|
+        index = abbrevs.index(offset[:abbrev])
+        abbrev_offset = abbrev_offset_base
+        0.upto(index - 1) {|i| abbrev_offset += abbrevs[i].length + 1}
+
+        isdst = offset[:isdst]
+        isdst = isdst ? 1 : 0 unless isdst.kind_of?(Integer)
+
+        file.write([offset[:gmtoff], isdst, abbrev_offset].pack('NCC'))
+      end
+    end
+
     def write_tzif(format, offsets, transitions, tz_string, leaps, options = {})
 
       # Options for testing malformed zoneinfo files.
@@ -53,6 +84,11 @@ module DataSources
       section2_magic = options[:section2_magic]
       abbrev_separator = options[:abbrev_separator] || "\0"
       abbrev_offset_base = options[:abbrev_offset_base] || 0
+      is_std_indicators = options[:is_std_indicators] || Array.new(offsets.count, 0)
+      section2_is_std_indicators = options[:section2_is_std_indicators] || is_std_indicators
+      is_ut_indicators = options[:is_ut_indicators] || Array.new(offsets.count, 0)
+      section2_is_ut_indicators = options[:section2_is_ut_indicators] || is_ut_indicators
+      section2_offsets = options[:section2_offsets] || offsets
       omit_tz_string_start_new_line = options[:omit_tz_string_start_new_line]
       omit_tz_string_end_new_line = options[:omit_tz_string_end_new_line]
 
@@ -75,19 +111,7 @@ module DataSources
       convert_times_to_i(transitions)
       convert_times_to_i(leaps)
 
-      abbrevs = offsets.collect {|o| o[:abbrev]}.uniq
-
-      if abbrevs.length > 0
-        abbrevs = abbrevs.collect {|a| a.encode(Encoding::UTF_8)}
-
-        if abbrevs.first.respond_to?(:bytesize)
-          abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.bytesize + abbrev_separator.bytesize}
-        else
-          abbrevs_length = abbrevs.inject(0) {|sum, a| sum + a.length + abbrev_separator.length}
-        end
-      else
-        abbrevs_length = 0
-      end
+      abbrevs, abbrevs_length = create_abbrevs(offsets, abbrev_separator)
 
       b32_transitions = select_with_32bit_values(transitions)
       b32_leaps = select_with_32bit_values(leaps)
@@ -95,22 +119,24 @@ module DataSources
       Tempfile.open('tzinfo-test-zone') do |file|
         file.binmode
 
-        file.write(
-          [magic, offsets.length, offsets.length, leaps.length,
-          b32_transitions.length, offsets.length, abbrevs_length].pack('a5 x15 NNNNNN'))
+        header = [
+          magic,
+          is_ut_indicators.length,
+          is_std_indicators.length,
+          leaps.length,
+          b32_transitions.length,
+          offsets.length,
+          abbrevs_length
+        ]
+
+        file.write(header.pack('a5 x15 N6'))
 
         unless b32_transitions.empty?
           file.write(b32_transitions.collect {|t| t[:at]}.pack('N' * b32_transitions.length))
           file.write(b32_transitions.collect {|t| t[:offset_index]}.pack('C' * b32_transitions.length))
         end
 
-        offsets.each do |offset|
-          index = abbrevs.index(offset[:abbrev])
-          abbrev_offset = abbrev_offset_base
-          0.upto(index - 1) {|i| abbrev_offset += abbrevs[i].length + 1}
-
-          file.write([offset[:gmtoff], offset[:isdst] ? 1 : 0, abbrev_offset].pack('NCC'))
-        end
+        write_offsets(file, offsets, abbrevs, abbrev_offset_base)
 
         abbrevs.each do |a|
           file.write(a)
@@ -121,29 +147,37 @@ module DataSources
           file.write([leap[:at], leap[:seconds]].pack('NN'))
         end
 
-        unless offsets.empty?
-          file.write("\0" * offsets.length * 2)
+        unless is_std_indicators.empty?
+          file.write(is_std_indicators.pack('C*'))
+        end
+
+        unless is_ut_indicators.empty?
+          file.write(is_ut_indicators.pack('C*'))
         end
 
         if format >= 2
-          file.write(
-            [section2_magic, offsets.length, offsets.length, leaps.length,
-            transitions.length, offsets.length, abbrevs_length].pack('a5 x15 NNNNNN'))
+          section2_abbrevs, section2_abbrevs_length = section2_offsets.equal?(offsets) ? [abbrevs, abbrevs_length] : create_abbrevs(section2_offsets, abbrev_separator)
+
+          section2_header = [
+            section2_magic,
+            section2_is_ut_indicators.length,
+            section2_is_std_indicators.length,
+            leaps.length,
+            transitions.length,
+            section2_offsets.length,
+            section2_abbrevs_length
+          ]
+
+          file.write(section2_header.pack('a5 x15 N6'))
 
           unless transitions.empty?
             file.write(pack_int64_signed_network_order(transitions.collect {|t| t[:at]}))
             file.write(transitions.collect {|t| t[:offset_index]}.pack('C' * transitions.length))
           end
 
-          offsets.each do |offset|
-            index = abbrevs.index(offset[:abbrev])
-            abbrev_offset = abbrev_offset_base
-            0.upto(index - 1) {|i| abbrev_offset += abbrevs[i].length + 1}
+          write_offsets(file, section2_offsets, section2_abbrevs, abbrev_offset_base)
 
-            file.write([offset[:gmtoff], offset[:isdst] ? 1 : 0, abbrev_offset].pack('NCC'))
-          end
-
-          abbrevs.each do |a|
+          section2_abbrevs.each do |a|
             file.write(a)
             file.write(abbrev_separator)
           end
@@ -153,8 +187,12 @@ module DataSources
             file.write([leap[:seconds]].pack('N'))
           end
 
-          unless offsets.empty?
-            file.write("\0" * offsets.length * 2)
+          unless section2_is_std_indicators.empty?
+            file.write(section2_is_std_indicators.pack('C*'))
+          end
+
+          unless section2_is_ut_indicators.empty?
+            file.write(section2_is_ut_indicators.pack('C*'))
           end
 
           file.write("\n") unless omit_tz_string_start_new_line
@@ -329,13 +367,79 @@ module DataSources
       end
     end
 
-    def test_read_no_offsets
-      offsets = []
-      transitions = [{at: Time.utc(2000, 12, 31), offset_index: 0}]
+    def test_read_without_is_std_indicators
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}
+      ]
 
-      tzif_test(offsets, transitions) do |path, format|
+      transitions = [
+        {at: Time.utc(1971,  1,  2), offset_index: 1},
+      ]
+
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST')
+
+      t0 = TimezoneTransition.new(o1, o0, Time.utc(1971,  1,  2).to_i)
+
+      tzif_test(offsets, transitions, is_std_indicators: []) do |path, format|
+        assert_equal([t0], @reader.read(path))
+      end
+    end
+
+    def test_read_without_is_ut_indicators
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}
+      ]
+
+      transitions = [
+        {at: Time.utc(1971,  1,  2), offset_index: 1},
+      ]
+
+      o0 = TimezoneOffset.new(3542,    0, 'LMT')
+      o1 = TimezoneOffset.new(3600,    0, 'XST')
+
+      t0 = TimezoneTransition.new(o1, o0, Time.utc(1971,  1,  2).to_i)
+
+      tzif_test(offsets, transitions, is_ut_indicators: []) do |path, format|
+        assert_equal([t0], @reader.read(path))
+      end
+    end
+
+    def test_read_no_section1_offsets
+      section1_offsets = []
+
+      section2_offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}
+      ]
+
+      transitions = [
+        {at: Time.utc(1971,  1,  2), offset_index: 1},
+      ]
+
+      tzif_test(section1_offsets, transitions, section2_offsets: section2_offsets) do |path, format|
         error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
-        assert_equal("Invalid offset referenced by transition in file '#{path}'.", error.message)
+        assert_equal("Invalid local time type count in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_no_section2_offsets
+      section1_offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}
+      ]
+
+      section2_offsets = []
+
+      transitions = [
+        {at: Time.utc(1971,  1,  2), offset_index: 1},
+      ]
+
+      tzif_test(section1_offsets, transitions, min_format: 2, section2_offsets: section2_offsets) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid local time type count in file '#{path}'.", error.message)
       end
     end
 
@@ -411,6 +515,190 @@ module DataSources
 
         error = assert_raises(InvalidZoneinfoFile) { @reader.read(file.path) }
         assert_match(/Expected \d+ bytes reading/, error.message)
+      end
+    end
+
+    def test_read_too_few_section1_is_std_indicators
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, is_std_indicators: [0], section2_is_std_indicators: [0, 0]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid standard/wall indicator count in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_too_many_section1_is_std_indicators
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, is_std_indicators: [0, 0, 0], section2_is_std_indicators: [0, 0]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid standard/wall indicator count in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_too_few_section1_is_ut_indicators
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, is_ut_indicators: [0], section2_is_ut_indicators: [0, 0]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid UT/local indicator count in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_too_many_section1_is_ut_indicators
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, is_ut_indicators: [0, 0, 0], section2_is_ut_indicators: [0, 0]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid UT/local indicator count in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_too_few_section2_is_std_indicators
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, min_format: 2, section2_is_std_indicators: [0]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid standard/wall indicator count in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_too_many_section2_is_std_indicators
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, min_format: 2, section2_is_std_indicators: [0, 0, 0]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid standard/wall indicator count in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_too_few_section2_is_ut_indicators
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, min_format: 2, section2_is_ut_indicators: [0]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid UT/local indicator count in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_too_many_section2_is_ut_indicators
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, min_format: 2, section2_is_ut_indicators: [0, 0, 0]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid UT/local indicator count in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_invalid_is_std_indicator_value
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, is_std_indicators: [0, 2]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid standard/wall indicator in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_invalid_is_ut_indicator_value_for_standard_or_universal_time
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, is_std_indicators: [1, 1], is_ut_indicators: [0, 2]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid UT/local indicator in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_invalid_is_ut_indicator_value_for_wall_clock_time
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, is_ut_indicators: [0, 1]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid UT/local and standard/wall indicator combination in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_invalid_gmt_offset
+      # -2**31 is disallowed by RFC 9636.
+
+      offsets = [
+        {gmtoff: -2**31, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600,   isdst: false, abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions, is_ut_indicators: [0, 1]) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid UT offset in file '#{path}'.", error.message)
+      end
+    end
+
+    def test_read_invalid_dst_indicator_value
+      offsets = [
+        {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
+        {gmtoff: 3600, isdst: 2,     abbrev: 'XST'}]
+
+      transitions = [
+        {at: Time.utc(2000, 1, 1), offset_index: 1}]
+
+      tzif_test(offsets, transitions) do |path, format|
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
+        assert_equal("Invalid daylight saving time indicator in file '#{path}'.", error.message)
       end
     end
 
