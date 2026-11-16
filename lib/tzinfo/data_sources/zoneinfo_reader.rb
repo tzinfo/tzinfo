@@ -86,14 +86,14 @@ module TZInfo
       # Validates count constraints imposed by the TZif format.
       #
       # @param file [IO] the file being processed.
-      # @param ttisutccnt [Integer] the number of UTC/local indicators.
+      # @param ttisutccnt [Integer] the number of UT/local indicators.
       # @param ttisstdcnt [Integer] the number of standard/wall indicators.
       # @param typecnt [Integer] the number of local time types.
       # @raise [InvalidZoneinfoFile] if a count is invalid.
       def validate_header_counts(file, ttisutccnt, ttisstdcnt, typecnt)
         raise InvalidZoneinfoFile, "Invalid local time type count in file '#{file.path}'." unless typecnt > 0
         raise InvalidZoneinfoFile, "Invalid standard/wall indicator count in file '#{file.path}'." unless ttisstdcnt == 0 || ttisstdcnt == typecnt
-        raise InvalidZoneinfoFile, "Invalid UTC/local indicator count in file '#{file.path}'." unless ttisutccnt == 0 || ttisutccnt == typecnt
+        raise InvalidZoneinfoFile, "Invalid UT/local indicator count in file '#{file.path}'." unless ttisutccnt == 0 || ttisutccnt == typecnt
       end
 
       # Zoneinfo files don't include the offset from standard time (std_offset)
@@ -411,7 +411,7 @@ module TZInfo
         offsets = typecnt.times.map do |i|
           gmtoff, isdst, abbrind = check_read(file, 6).unpack('NCC'.freeze)
           gmtoff = make_signed_int32(gmtoff)
-          raise InvalidZoneinfoFile, "Invalid UTC offset in file '#{file.path}'." if gmtoff == -0x80000000
+          raise InvalidZoneinfoFile, "Invalid UT offset in file '#{file.path}'." if gmtoff == -0x80000000
           raise InvalidZoneinfoFile, "Invalid daylight saving time indicator in file '#{file.path}'." if isdst > 1
           isdst = isdst == 1
           {observed_utc_offset: gmtoff, is_dst: isdst, abbr_index: abbrind}
@@ -426,13 +426,13 @@ module TZInfo
         end
 
         unless utc_local_indicators.each_byte.all? {|indicator| indicator <= 1 }
-          raise InvalidZoneinfoFile, "Invalid UTC/local indicator in file '#{file.path}'."
+          raise InvalidZoneinfoFile, "Invalid UT/local indicator in file '#{file.path}'."
         end
 
         if ttisutccnt != 0
           utc_local_indicators.each_byte.with_index do |indicator, i|
             if indicator == 1 && (ttisstdcnt == 0 || standard_wall_indicators.getbyte(i) != 1)
-              raise InvalidZoneinfoFile, "Invalid UTC/local and standard/wall indicator combination in file '#{file.path}'."
+              raise InvalidZoneinfoFile, "Invalid UT/local and standard/wall indicator combination in file '#{file.path}'."
             end
           end
         end
