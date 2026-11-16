@@ -355,7 +355,7 @@ module TZInfo
       # @raise [InvalidZoneinfoFile] if the file is not a valid zoneinfo file.
       def parse(file)
         magic, version, ttisutccnt, ttisstdcnt, leapcnt, timecnt, typecnt, charcnt =
-          check_read(file, 44).unpack('a4 a x15 NNNNNN')
+          check_read(file, 44).unpack('a4 a x15 N6')
 
         if magic != 'TZif'
           raise InvalidZoneinfoFile, "The file '#{file.path}' does not start with the expected header."
@@ -374,7 +374,7 @@ module TZInfo
           prev_version = version
 
           magic, version, ttisutccnt, ttisstdcnt, leapcnt, timecnt, typecnt, charcnt =
-            check_read(file, 44).unpack('a4 a x15 NNNNNN')
+            check_read(file, 44).unpack('a4 a x15 N6')
 
           unless magic == 'TZif' && (version == prev_version)
             raise InvalidZoneinfoFile, "The file '#{file.path}' contains an invalid 64-bit section header."

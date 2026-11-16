@@ -132,8 +132,8 @@ module DataSources
         file.write(header.pack('a5 x15 N6'))
 
         unless b32_transitions.empty?
-          file.write(b32_transitions.collect {|t| t[:at]}.pack('N' * b32_transitions.length))
-          file.write(b32_transitions.collect {|t| t[:offset_index]}.pack('C' * b32_transitions.length))
+          file.write(b32_transitions.collect {|t| t[:at]}.pack('N*'))
+          file.write(b32_transitions.collect {|t| t[:offset_index]}.pack('C*'))
         end
 
         write_offsets(file, offsets, abbrevs, abbrev_offset_base)
@@ -172,7 +172,7 @@ module DataSources
 
           unless transitions.empty?
             file.write(pack_int64_signed_network_order(transitions.collect {|t| t[:at]}))
-            file.write(transitions.collect {|t| t[:offset_index]}.pack('C' * transitions.length))
+            file.write(transitions.collect {|t| t[:offset_index]}.pack('C*'))
           end
 
           write_offsets(file, section2_offsets, section2_abbrevs, abbrev_offset_base)
