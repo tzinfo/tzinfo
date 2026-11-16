@@ -335,7 +335,7 @@ module DataSources
 
       tzif_test(offsets, transitions) do |path, format|
         error = assert_raises(InvalidZoneinfoFile) { @reader.read(path) }
-        assert_equal("Invalid offset referenced by transition in file '#{path}'.", error.message)
+        assert_equal("Invalid local time type count in file '#{path}'.", error.message)
       end
     end
 

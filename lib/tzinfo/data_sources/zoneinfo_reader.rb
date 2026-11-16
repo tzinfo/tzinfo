@@ -91,6 +91,7 @@ module TZInfo
       # @param typecnt [Integer] the number of local time types.
       # @raise [InvalidZoneinfoFile] if a count is invalid.
       def validate_header_counts(file, ttisutccnt, ttisstdcnt, typecnt)
+        raise InvalidZoneinfoFile, "Invalid local time type count in file '#{file.path}'." unless typecnt > 0
         raise InvalidZoneinfoFile, "Invalid standard/wall indicator count in file '#{file.path}'." unless ttisstdcnt == 0 || ttisstdcnt == typecnt
         raise InvalidZoneinfoFile, "Invalid UTC/local indicator count in file '#{file.path}'." unless ttisutccnt == 0 || ttisutccnt == typecnt
       end
@@ -406,8 +407,6 @@ module TZInfo
           raise InvalidZoneinfoFile, "Invalid offset referenced by transition in file '#{file.path}'." if localtime_type >= typecnt
           transitions[i][:offset] = localtime_type
         end
-
-        raise InvalidZoneinfoFile, "Invalid local time type count in file '#{file.path}'." if typecnt == 0
 
         offsets = typecnt.times.map do |i|
           gmtoff, isdst, abbrind = check_read(file, 6).unpack('NCC'.freeze)
