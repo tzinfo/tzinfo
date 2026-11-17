@@ -253,7 +253,7 @@ module TZInfo
     # performance and to avoid flushing the constant cache every time a new
     # timezone or country is loaded from {DataSources::RubyDataSource}.
     def eager_load!
-      timezone_identifiers.each {|identifier| load_timezone_info(identifier) }
+      timezone_identifiers.each {|identifier| get_timezone_info(identifier) }
       country_codes.each {|code| load_country_info(code) }
       nil
     end
