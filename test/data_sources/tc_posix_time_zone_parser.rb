@@ -55,7 +55,9 @@ module DataSources
       ['HHMM+02:30', 'HHMM', -(2 * HOUR + 30 * MINUTE)],
       ['HHMSS-12:5:50', 'HHMSS', 12 * HOUR + 5 * MINUTE + 50],
       ['HHMMSS-12:05:50', 'HHMMSS', 12 * HOUR + 5 * MINUTE + 50],
-      ['HHMMS-12:05:7', 'HHMMS', 12 * HOUR + 5 * MINUTE + 7]
+      ['HHMMS-12:05:7', 'HHMMS', 12 * HOUR + 5 * MINUTE + 7],
+      ['MM-0:30', 'MM', 30 * MINUTE],
+      ['MM+0:30', 'MM', -30 * MINUTE]
     ]
 
     ABBREVIATIONS_WITH_OFFSETS.each do |(tz_string, expected_abbrev, expected_base_offset)|
@@ -93,6 +95,7 @@ module DataSources
       ['HHMSS-12:5:50SHHMSS-13:4:30', 'SHHMSS', 12 * HOUR + 5 * MINUTE + 50, 58 * MINUTE + 40],
       ['HHMMSS-12:05:50SHHMMSS-13:04:30', 'SHHMMSS', 12 * HOUR + 5 * MINUTE + 50, 58 * MINUTE + 40],
       ['HHMMS-12:05:7SHHMMSS-13:06:8', 'SHHMMSS', 12 * HOUR + 5 * MINUTE + 7, HOUR + MINUTE + 1],
+      ['Zero0SMM-0:30', 'SMM', 0, 30 * MINUTE],
     ].each do |(abbrevs_and_offsets, expected_abbrev, expected_base_offset, expected_std_offset)|
       define_method "test_dst_offset_#{abbrevs_and_offsets}" do
         result = @parser.parse(abbrevs_and_offsets + ',60,300')
@@ -122,8 +125,9 @@ module DataSources
       ['-2', -2 * HOUR],
       ['2:3:4', 2 * HOUR + 3 * MINUTE + 4],
       ['02:03:04', 2 * HOUR + 3 * MINUTE + 4],
-      ['-2:3:4', -2 * HOUR + 3 * MINUTE + 4], # 22:03:04 on the day prior to the one specified
-      ['-02:03:04', -2 * HOUR + 3 * MINUTE + 4],
+      ['-2:3:4', -(2 * HOUR + 3 * MINUTE + 4)], # 21:56:56 on the day prior to the one specified
+      ['-02:03:04', -(2 * HOUR + 3 * MINUTE + 4)],
+      ['-0:30', -30 * MINUTE],
       ['167', 167 * HOUR],
       ['-167', -167 * HOUR]
     ].each do |(time, expected_offset_from_midnight)|
