@@ -378,6 +378,16 @@ module TZInfo
           raise InvalidZoneinfoFile, "The file '#{file.path}' contains leap second data. TZInfo requires zoneinfo files that omit leap seconds."
         end
 
+        # The counts in the header determine the size of the reads that follow.
+        # Check that the file is long enough to contain the data before
+        # attempting to read it.
+        data_size = timecnt * (using_64bit ? 9 : 5) + typecnt * 6 + charcnt + ttisstdcnt + ttisutccnt
+        remaining_size = file.size - file.pos
+
+        if data_size > remaining_size
+          raise InvalidZoneinfoFile, "Expected #{data_size} bytes reading '#{file.path}', but got #{remaining_size} bytes"
+        end
+
         transition_times = if using_64bit
           check_read(file, timecnt * 8).unpack('q>*')
         else
