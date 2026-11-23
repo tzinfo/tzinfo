@@ -173,4 +173,35 @@ class TCTimezoneLondon < Minitest::Test
       assert_equal_with_offset(h.output_time(1970,1,1,0,0,0,0,:utc), tz.local_to_utc(h.time(1970,1,1,1,0,0)))
     end
   end
+
+  def test_after_eu_rules_start
+    # Europe/London switched to following EU rules at the start of 1996. With
+    # zic version 2023d and later, this causes an additional no-op GMT to GMT
+    # transition to be included in the zoneinfo file at midnight on 1 January
+    # 1996.
+    #
+    # From March 1996 onwards, the rules in the TZ string are used to define the
+    # transitions.
+    #
+    # See:
+    #   https://lists.iana.org/hyperkitty/list/tz@iana.org/message/6JJCZOBVVB7NZLILY35QPGLILC6ZHONB/
+    #   https://lists.iana.org/hyperkitty/list/tz@iana.org/message/QXBTA5ZKNC4U7A7GIBJGDVR7HLAILTKK/
+    #
+    # The additional no-op transition used to cause ZoneinfoReader to miss the
+    # transition back to GMT on October.
+    #
+    # Europe/London  Sun Mar 31 00:59:59 1996 UT = Sun Mar 31 00:59:59 1996 GMT isdst=0 gmtoff=0
+    # Europe/London  Sun Mar 31 01:00:00 1996 UT = Sun Mar 31 02:00:00 1996 BST isdst=1 gmtoff=3600
+    # Europe/London  Sun Oct 27 00:59:59 1996 UT = Sun Oct 27 01:59:59 1996 BST isdst=1 gmtoff=3600
+    # Europe/London  Sun Oct 27 01:00:00 1996 UT = Sun Oct 27 01:00:00 1996 GMT isdst=0 gmtoff=0
+
+    tz = Timezone.get('Europe/London')
+
+    time_types_test do |h|
+      assert_equal_with_offset(h.output_time(1996, 3,31,0,59,59,0,   0), tz.to_local(h.time(1996, 3,31,0,59,59,0,0)))
+      assert_equal_with_offset(h.output_time(1996, 3,31,2, 0, 0,0,3600), tz.to_local(h.time(1996, 3,31,1, 0, 0,0,0)))
+      assert_equal_with_offset(h.output_time(1996,10,27,1,59,59,0,3600), tz.to_local(h.time(1996,10,27,0,59,59,0,0)))
+      assert_equal_with_offset(h.output_time(1996,10,27,1, 0, 0,0,   0), tz.to_local(h.time(1996,10,27,1, 0, 0,0,0)))
+    end
+  end
 end

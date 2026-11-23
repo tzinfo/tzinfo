@@ -2050,6 +2050,168 @@ module DataSources
       end
     end
 
+    def test_read_tz_string_extends_transitions_starting_from_std_to_dst_with_additional_year_start_transition
+      offsets = [
+        {gmtoff:  7142, isdst: false, abbrev: 'LMT'},
+        {gmtoff:  7200, isdst: false, abbrev: 'XST'},
+        {gmtoff: 10800, isdst: true,  abbrev: 'XDT'}
+      ]
+
+      transitions = [
+        {at: Time.new(1971,  1,  2, 2, 0, 0,  7142), offset_index: 1},
+        {at: Time.new(1981,  4, 10, 1, 0, 0,  7200), offset_index: 2},
+        {at: Time.new(1981, 10, 27, 2, 0, 0, 10800), offset_index: 1},
+        {at: Time.new(1982,  1,  1, 0, 0, 0,     0), offset_index: 1},
+      ]
+
+      rules = AnnualRules.new(
+        TimezoneOffset.new(7200, 0, 'XST'),
+        TimezoneOffset.new(7200, 3600, 'XDT'),
+        JulianDayOfYearTransitionRule.new(100, 3600),
+        JulianDayOfYearTransitionRule.new(300, 7200)
+      )
+
+      o0 = TimezoneOffset.new(7142,    0, 'LMT')
+      o1 = TimezoneOffset.new(7200,    0, 'XST')
+      o2 = TimezoneOffset.new(7200, 3600, 'XDT')
+
+      t0 = TimezoneTransition.new(o1, o0, Time.new(1971,  1,  2, 2, 0, 0,  7142).to_i)
+      t1 = TimezoneTransition.new(o2, o1, Time.new(1981,  4, 10, 1, 0, 0,  7200).to_i)
+      t2 = TimezoneTransition.new(o1, o2, Time.new(1981, 10, 27, 2, 0, 0, 10800).to_i)
+      t3 = TimezoneTransition.new(o1, o1, Time.new(1982,  1,  1, 0, 0, 0,     0).to_i)
+
+      tn = 1982.upto(ZoneinfoReader.const_get(:GENERATE_UP_TO)).flat_map do |year|
+        [
+          TimezoneTransition.new(o2, o1, Time.new(year,  4, 10, 1, 0, 0, 7200).to_i),
+          TimezoneTransition.new(o1, o2, Time.new(year, 10, 27, 2, 0, 0, 10800).to_i)
+        ]
+      end
+
+      t = [t0,t1,t2,t3] + tn
+
+      tzif_test(offsets, transitions, rules: rules) do |path, format|
+        assert_equal(t, @reader.read(path))
+      end
+    end
+
+    def test_read_tz_string_extends_transitions_starting_from_dst_to_std_with_additional_year_start_transition
+      offsets = [
+        {gmtoff:  7142, isdst: false, abbrev: 'LMT'},
+        {gmtoff:  7200, isdst: false, abbrev: 'XST'},
+        {gmtoff: 10800, isdst: true,  abbrev: 'XDT'}
+      ]
+
+      transitions = [
+        {at: Time.new(1971,  1,  2, 2, 0, 0,  7142), offset_index: 1},
+        {at: Time.new(1981, 10, 27, 1, 0, 0,  7200), offset_index: 2},
+        {at: Time.new(1982,  1,  1, 0, 0, 0, 10800), offset_index: 2},
+      ]
+
+      rules = AnnualRules.new(
+        TimezoneOffset.new(7200, 0, 'XST'),
+        TimezoneOffset.new(7200, 3600, 'XDT'),
+        JulianDayOfYearTransitionRule.new(300, 3600),
+        JulianDayOfYearTransitionRule.new(100, 7200)
+      )
+
+      o0 = TimezoneOffset.new(7142,    0, 'LMT')
+      o1 = TimezoneOffset.new(7200,    0, 'XST')
+      o2 = TimezoneOffset.new(7200, 3600, 'XDT')
+
+      t0 = TimezoneTransition.new(o1, o0, Time.new(1971,  1,  2, 2, 0, 0,  7142).to_i)
+      t1 = TimezoneTransition.new(o2, o1, Time.new(1981, 10, 27, 1, 0, 0,  7200).to_i)
+      t2 = TimezoneTransition.new(o2, o2, Time.new(1982,  1,  1, 0, 0, 0, 10800).to_i)
+
+      tn = 1982.upto(ZoneinfoReader.const_get(:GENERATE_UP_TO)).flat_map do |year|
+        [
+          TimezoneTransition.new(o1, o2, Time.new(year,  4, 10, 2, 0, 0, 10800).to_i),
+          TimezoneTransition.new(o2, o1, Time.new(year, 10, 27, 1, 0, 0,  7200).to_i)
+        ]
+      end
+
+      t = [t0,t1,t2] + tn
+
+      tzif_test(offsets, transitions, rules: rules) do |path, format|
+        assert_equal(t, @reader.read(path))
+      end
+    end
+
+    def test_read_tz_string_extends_single_transition_with_same_offset_in_same_year_as_rule_with_change_to_dst
+      offsets = [
+        {gmtoff:    0, isdst: false, abbrev: '-00'},
+        {gmtoff:    0, isdst: false, abbrev: '+00'},
+        {gmtoff: 7200, isdst: true,  abbrev: '+02'}
+      ]
+
+      transitions = [
+        {at: Time.new(2005, 2, 12, 0, 0, 0, 0), offset_index: 1}
+      ]
+
+      rules = AnnualRules.new(
+        TimezoneOffset.new(0,    0, '+00'),
+        TimezoneOffset.new(0, 7200, '+02'),
+        JulianDayOfYearTransitionRule.new(100,    0),
+        JulianDayOfYearTransitionRule.new(300, 7200)
+      )
+
+      o0 = TimezoneOffset.new(0,    0, '-00')
+      o1 = TimezoneOffset.new(0,    0, '+00')
+      o2 = TimezoneOffset.new(0, 7200, '+02')
+
+      t0 = TimezoneTransition.new(o1, o0, Time.new(2005, 2, 12, 0, 0, 0, 0).to_i)
+
+      tn = 2005.upto(ZoneinfoReader.const_get(:GENERATE_UP_TO)).flat_map do |year|
+        [
+          TimezoneTransition.new(o2, o1, Time.new(year,  4, 10, 0, 0, 0,    0).to_i),
+          TimezoneTransition.new(o1, o2, Time.new(year, 10, 27, 2, 0, 0, 7200).to_i)
+        ]
+      end
+
+      t = [t0] + tn
+
+      tzif_test(offsets, transitions, rules: rules) do |path, format|
+        assert_equal(t, @reader.read(path))
+      end
+    end
+
+    def test_read_tz_string_extends_single_transition_with_same_offset_in_same_year_as_rule_with_change_from_dst
+      offsets = [
+        {gmtoff:    0, isdst: false, abbrev: '-00'},
+        {gmtoff:    0, isdst: false, abbrev: '+00'},
+        {gmtoff: 7200, isdst: true,  abbrev: '+02'}
+      ]
+
+      transitions = [
+        {at: Time.new(2005, 2, 12, 0, 0, 0, 0), offset_index: 2}
+      ]
+
+      rules = AnnualRules.new(
+        TimezoneOffset.new(0,    0, '+00'),
+        TimezoneOffset.new(0, 7200, '+02'),
+        JulianDayOfYearTransitionRule.new(300,    0),
+        JulianDayOfYearTransitionRule.new(100, 7200)
+      )
+
+      o0 = TimezoneOffset.new(0,    0, '-00')
+      o1 = TimezoneOffset.new(0,    0, '+00')
+      o2 = TimezoneOffset.new(0, 7200, '+02')
+
+      t0 = TimezoneTransition.new(o2, o0, Time.new(2005,  2, 12, 0, 0, 0, 0).to_i)
+
+      tn = 2005.upto(ZoneinfoReader.const_get(:GENERATE_UP_TO)).flat_map do |year|
+        [
+          TimezoneTransition.new(o1, o2, Time.new(year,  4, 10, 2, 0, 0, 7200).to_i),
+          TimezoneTransition.new(o2, o1, Time.new(year, 10, 27, 0, 0, 0,    0).to_i)
+        ]
+      end
+
+      t = [t0] + tn
+
+      tzif_test(offsets, transitions, rules: rules) do |path, format|
+        assert_equal(t.take(4), @reader.read(path).take(4))
+      end
+    end
+
     def test_read_tz_string_extends_transitions_negative_dst
       offsets = [
         {gmtoff:  7142, isdst: false, abbrev: 'LMT'},

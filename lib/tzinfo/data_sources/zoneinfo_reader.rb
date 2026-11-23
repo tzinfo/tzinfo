@@ -332,8 +332,8 @@ module TZInfo
           if last_year <= GENERATE_UP_TO
             rules = replace_with_existing_offsets(offsets, rules)
 
-            generated = rules.transitions(last_year).find_all do |t|
-              t.timestamp_value > last_defined.timestamp_value && !offset_matches_rule?(last_defined.offset, t.offset)
+            generated = rules.transitions(last_year).drop_while do |t|
+              t.timestamp_value <= last_defined.timestamp_value || offset_matches_rule?(last_defined.offset, t.offset)
             end
 
             generated += (last_year + 1).upto(GENERATE_UP_TO).flat_map {|y| rules.transitions(y) }
