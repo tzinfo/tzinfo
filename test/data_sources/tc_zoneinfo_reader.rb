@@ -518,6 +518,44 @@ module DataSources
       end
     end
 
+    def test_read_counts_exceed_file_size
+      # timecnt, typecnt and charcnt.
+      section1_counts = [
+        [0x10000000, 1, 4],
+        [0xffffffff, 1, 4],
+        [0, 0xffffffff, 4],
+        [0, 1, 0xffffffff]
+      ]
+
+      section1_counts.each do |timecnt, typecnt, charcnt|
+        Tempfile.open('tzinfo-test-zone') do |file|
+          file.binmode
+          file.write(['TZif', 0, 0, 0, timecnt, typecnt, charcnt].pack('a5 x15 N6'))
+          file.write("\0" * 16)
+          file.flush
+
+          expected_size = timecnt * 5 + typecnt * 6 + charcnt
+          error = assert_raises(InvalidZoneinfoFile) { @reader.read(file.path) }
+          assert_equal("Expected #{expected_size} bytes reading '#{file.path}', but got 16 bytes", error.message)
+        end
+      end
+    end
+
+    def test_read_section2_counts_exceed_file_size
+      Tempfile.open('tzinfo-test-zone') do |file|
+        file.binmode
+        file.write(['TZif2', 0, 0, 0, 0, 1, 4].pack('a5 x15 N6'))
+        file.write("\0" * 10)
+        file.write(['TZif2', 0, 0, 0, 0xffffffff, 1, 4].pack('a5 x15 N6'))
+        file.write("\0" * 16)
+        file.flush
+
+        expected_size = 0xffffffff * 9 + 10
+        error = assert_raises(InvalidZoneinfoFile) { @reader.read(file.path) }
+        assert_equal("Expected #{expected_size} bytes reading '#{file.path}', but got 16 bytes", error.message)
+      end
+    end
+
     def test_read_too_few_section1_is_std_indicators
       offsets = [
         {gmtoff: 3542, isdst: false, abbrev: 'LMT'},
