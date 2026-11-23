@@ -10,10 +10,7 @@ module TZInfo
       module EST
         include Format2::TimezoneDefinition
 
-        timezone 'EST' do |tz|
-          tz.offset :o0, -18000, 0, 'EST'
-
-        end
+        linked_timezone 'EST', 'America/Panama'
       end
     end
   end

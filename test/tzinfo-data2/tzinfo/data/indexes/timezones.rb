@@ -1,5 +1,4 @@
 # encoding: UTF-8
-# frozen_string_literal: true
 
 # This file contains data derived from the IANA Time Zone Database
 # (https://www.iana.org/time-zones).
@@ -110,6 +109,7 @@ module TZInfo
           i.linked_timezone 'America/Coral_Harbour'
           i.linked_timezone 'America/Cordoba'
           i.data_timezone 'America/Costa_Rica'
+          i.data_timezone 'America/Coyhaique'
           i.linked_timezone 'America/Creston'
           i.data_timezone 'America/Cuiaba'
           i.linked_timezone 'America/Curacao'
@@ -244,7 +244,7 @@ module TZInfo
           i.linked_timezone 'Antarctica/South_Pole'
           i.linked_timezone 'Antarctica/Syowa'
           i.data_timezone 'Antarctica/Troll'
-          i.linked_timezone 'Antarctica/Vostok'
+          i.data_timezone 'Antarctica/Vostok'
           i.linked_timezone 'Arctic/Longyearbyen'
           i.linked_timezone 'Asia/Aden'
           i.data_timezone 'Asia/Almaty'
@@ -265,7 +265,7 @@ module TZInfo
           i.linked_timezone 'Asia/Brunei'
           i.linked_timezone 'Asia/Calcutta'
           i.data_timezone 'Asia/Chita'
-          i.data_timezone 'Asia/Choibalsan'
+          i.linked_timezone 'Asia/Choibalsan'
           i.linked_timezone 'Asia/Chongqing'
           i.linked_timezone 'Asia/Chungking'
           i.data_timezone 'Asia/Colombo'
@@ -384,7 +384,7 @@ module TZInfo
           i.linked_timezone 'Brazil/DeNoronha'
           i.linked_timezone 'Brazil/East'
           i.linked_timezone 'Brazil/West'
-          i.data_timezone 'CET'
+          i.linked_timezone 'CET'
           i.data_timezone 'CST6CDT'
           i.linked_timezone 'Canada/Atlantic'
           i.linked_timezone 'Canada/Central'
@@ -397,8 +397,8 @@ module TZInfo
           i.linked_timezone 'Chile/Continental'
           i.linked_timezone 'Chile/EasterIsland'
           i.linked_timezone 'Cuba'
-          i.data_timezone 'EET'
-          i.data_timezone 'EST'
+          i.linked_timezone 'EET'
+          i.linked_timezone 'EST'
           i.data_timezone 'EST5EDT'
           i.linked_timezone 'Egypt'
           i.linked_timezone 'Eire'
@@ -509,7 +509,7 @@ module TZInfo
           i.linked_timezone 'GMT-0'
           i.linked_timezone 'GMT0'
           i.linked_timezone 'Greenwich'
-          i.data_timezone 'HST'
+          i.linked_timezone 'HST'
           i.linked_timezone 'Hongkong'
           i.linked_timezone 'Iceland'
           i.linked_timezone 'Indian/Antananarivo'
@@ -529,8 +529,8 @@ module TZInfo
           i.linked_timezone 'Japan'
           i.linked_timezone 'Kwajalein'
           i.linked_timezone 'Libya'
-          i.data_timezone 'MET'
-          i.data_timezone 'MST'
+          i.linked_timezone 'MET'
+          i.linked_timezone 'MST'
           i.data_timezone 'MST7MDT'
           i.linked_timezone 'Mexico/BajaNorte'
           i.linked_timezone 'Mexico/BajaSur'
@@ -606,7 +606,7 @@ module TZInfo
           i.linked_timezone 'UTC'
           i.linked_timezone 'Universal'
           i.linked_timezone 'W-SU'
-          i.data_timezone 'WET'
+          i.linked_timezone 'WET'
           i.linked_timezone 'Zulu'
         end
       end
