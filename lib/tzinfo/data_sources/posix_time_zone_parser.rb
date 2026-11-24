@@ -130,19 +130,20 @@ module TZInfo
       # @raise [InvalidPosixTimeZone] if the mm and ss values are greater than
       #   59.
       def get_offset_from_hms(h, m, s)
-        h = h.to_i
+        negative = h.start_with?('-')
+        h = h.to_i.abs
         m = m.to_i
         s = s.to_i
         raise InvalidPosixTimeZone, "Invalid minute #{m} in offset for POSIX-style time zone string." if m > 59
         raise InvalidPosixTimeZone, "Invalid second #{s} in offset for POSIX-style time zone string." if s > 59
-        magnitude = (h.abs * 60 + m) * 60 + s
-        h < 0 ? -magnitude : magnitude
+        magnitude = (h * 60 + m) * 60 + s
+        negative ? -magnitude : magnitude
       end
 
       # Returns the seconds from midnight from hh:mm:ss values. Hours can exceed
-      # 24 for a time on the following day. Hours can be negative to subtract
-      # hours from midnight on the given day. -02:33:12 represents 22:33:12 on
-      # the prior day.
+      # 24 for a time on the following day. The value can be negative to
+      # subtract from midnight on the given day. -02:33:12 represents 21:26:48
+      # on the prior day.
       #
       # @param h [String] the hour.
       # @param m [String] the minutes past the hour.
@@ -151,12 +152,14 @@ module TZInfo
       # @raise [InvalidPosixTimeZone] if the mm and ss values are greater than
       #   59.
       def get_seconds_after_midnight_from_hms(h, m, s)
-        h = h.to_i
+        negative = h.start_with?('-')
+        h = h.to_i.abs
         m = m.to_i
         s = s.to_i
         raise InvalidPosixTimeZone, "Invalid minute #{m} in time for POSIX-style time zone string." if m > 59
         raise InvalidPosixTimeZone, "Invalid second #{s} in time for POSIX-style time zone string." if s > 59
-        (h * 3600) + m * 60 + s
+        seconds = (h * 3600) + m * 60 + s
+        negative ? -seconds : seconds
       end
 
       # Scans for a pattern and raises an exception if the pattern does not
