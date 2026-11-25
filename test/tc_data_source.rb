@@ -51,6 +51,7 @@ class TCDataSource < Minitest::Test
     attr_reader :linked_timezone_identifiers_called
 
     def initialize(data_timezone_identifiers, linked_timezone_identifiers)
+      super()
       @data_timezone_identifiers = data_timezone_identifiers.each(&:freeze).freeze
       @linked_timezone_identifiers = linked_timezone_identifiers.each(&:freeze).freeze
       @data_timezone_identifiers_called = 0
@@ -600,5 +601,20 @@ class TCDataSource < Minitest::Test
     assert_equal(all_timezone_identifiers, ds.instance_variable_get(:@timezone_identifiers))
     assert_equal(1, ds.country_codes_called)
     assert_equal(country_codes, ds.loaded_countries)
+  end
+
+  def test_eager_load_keeps_timezones
+    data_timezone_identifiers = ['Data/Zone1', 'Data/Zone2']
+    linked_timezone_identifiers = ['Linked/Zone1', 'Linked/Zone2']
+    all_timezone_identifiers = data_timezone_identifiers + linked_timezone_identifiers
+    ds = EagerLoadTestDataSource.new(data_timezone_identifiers, linked_timezone_identifiers, [])
+    ds.eager_load!
+
+    all_timezone_identifiers.each do |identifier|
+      info = ds.get_timezone_info(identifier)
+      assert_equal(identifier, info.identifier)
+    end
+
+    assert_equal(all_timezone_identifiers, ds.loaded_timezones)
   end
 end
