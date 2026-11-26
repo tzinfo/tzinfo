@@ -61,8 +61,7 @@ module TZInfo
       # @return [Integer] {high} and {low} combined and translated to signed
       #   64-bit.
       def make_signed_int64(high, low)
-        unsigned = (high << 32) | low
-        unsigned >= 0x8000000000000000 ? unsigned - 0x10000000000000000 : unsigned
+        (make_signed_int32(high) << 32) | low
       end
 
       # Reads the given number of bytes from the given file and checks that the
